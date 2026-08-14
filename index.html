@@ -623,13 +623,25 @@ html[data-theme="dark"] .theme-toggle .ico-moon { transform: translateY(0) rotat
 /* ---------- Vorher / Nachher ---------- */
 .compare {
   position: relative; border-radius: var(--radius-lg); overflow: hidden;
-  aspect-ratio: 16 / 10; box-shadow: var(--shadow-3); background: #1b1b1b;
+  aspect-ratio: 16 / 10; box-shadow: var(--shadow-3); background: #2a211b;
   border: 1px solid var(--border);
   touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none;
+  /* Auf dem Handy volle Breite, auf größeren Displays bewusst zurückgenommen */
+  max-width: 900px; margin-inline: auto;
 }
-.compare__layer { position: absolute; inset: 0; }
-.compare__layer svg { width: 100%; height: 100%; }
+.compare__layer { position: absolute; inset: 0; isolation: isolate; }
 .compare__layer--after { clip-path: inset(0 0 0 var(--pos, 50%)); }
+/* Drei Ebenen je Seite, in dieser Reihenfolge übereinander:
+   gezeichnete Wand (greift, falls das Foto fehlt) · Fassadenfoto · Graffiti bzw. Glanz */
+.compare__base, .compare__photo, .compare__art, .compare__texture {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.compare__photo, .compare__texture { object-fit: cover; }
+/* Wandstruktur legt sich über die Farbe – lässt das Graffiti aufgesprüht wirken */
+.compare__texture { mix-blend-mode: soft-light; opacity: .8; pointer-events: none; }
+/* Nicht ladbare Bilder verschwinden, ohne den Platz zu verlieren */
+img.img-failed { visibility: hidden; }
+.compare__photo--clean { filter: brightness(1.07) saturate(1.06) contrast(1.02); }
 .compare__tag {
   position: absolute; top: 14px; z-index: 4;
   padding: .4rem .8rem; border-radius: var(--radius-full);
@@ -703,15 +715,33 @@ html[data-theme="dark"] .step__num { background: var(--brand-500); color: #04211
   position: relative; border-radius: var(--radius-md); overflow: hidden;
   aspect-ratio: 1 / 1; border: 1px solid rgba(255,255,255,.1);
   transition: transform .3s var(--ease-out), box-shadow .3s;
+  /* Ruhiger Untergrund, falls ein Bild noch lädt oder ausbleibt */
+  background: linear-gradient(150deg, #1d2b39, #16323d);
 }
 .material:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); }
-.material svg { width: 100%; height: 100%; transition: transform .5s var(--ease-out); }
-.material:hover svg { transform: scale(1.07); }
+.material img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .5s var(--ease-out);
+}
+.material:hover img { transform: scale(1.07); }
 .material__label {
   position: absolute; inset-inline: 0; bottom: 0; padding: 1.4rem .7rem .6rem;
   font-size: .74rem; font-weight: 750; color: #fff; line-height: 1.25;
   background: linear-gradient(transparent, rgba(5,10,18,.9));
 }
+
+/* Projektkarten im Spendentopf-Fenster */
+.project-card {
+  padding: 0; overflow: hidden;
+  background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.1);
+}
+.project-card img {
+  width: 100%; aspect-ratio: 10 / 7; object-fit: cover;
+  background: linear-gradient(150deg, #1d2b39, #16323d);
+}
+.project-card > div { padding: 1.1rem; }
+.project-card h4 { color: #fff; font-size: .98rem; }
+.project-card p { color: #9db3c2; font-size: .78rem; }
 
 /* ---------- Akkordeon (FAQ) ---------- */
 .accordion { display: grid; gap: .7rem; }
@@ -1390,119 +1420,191 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       <div class="section-head" data-reveal>
         <p class="eyebrow">Das Ergebnis</p>
         <h2>Ziehen Sie den Regler – und sehen Sie den Unterschied</h2>
-        <p>Schematische Darstellung einer Klinkerfassade vor und nach der Laserreinigung.
+        <p>Dieselbe Klinkerfassade vor und nach der Laserreinigung.
            Der Laser trägt die Farbschicht ab, ohne den Stein anzugreifen.</p>
       </div>
 
       <div data-reveal>
+        <p class="sr-only">
+          Interaktiver Vergleich: Links die Fassade mit Graffiti vor der Reinigung,
+          rechts dieselbe Fassade nach der Laserreinigung.
+        </p>
         <div class="compare" id="compare"
              role="group" aria-label="Vergleich vor und nach der Laserreinigung">
-          <!-- Vorher -->
+
+          <!-- Vorher: Fassadenfoto plus aufgetragenes Graffiti.
+               Die gezeichnete Wand darunter greift, falls das Foto nicht lädt. -->
           <div class="compare__layer compare__layer--before" aria-hidden="true">
-            <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" role="img"
-                 aria-label="Klinkerfassade mit Graffiti vor der Reinigung">
+            <svg class="compare__base" viewBox="0 0 1200 750" preserveAspectRatio="xMidYMid slice">
               <defs>
-                <pattern id="brickBefore" width="160" height="80" patternUnits="userSpaceOnUse">
-                  <rect width="160" height="80" fill="#c6bcae"/>
-                  <rect x="3" y="3" width="74" height="34" rx="2.5" fill="#a45737"/>
-                  <rect x="83" y="3" width="74" height="34" rx="2.5" fill="#98502f"/>
-                  <rect x="-37" y="43" width="74" height="34" rx="2.5" fill="#ab5f42"/>
-                  <rect x="43" y="43" width="74" height="34" rx="2.5" fill="#93492c"/>
-                  <rect x="123" y="43" width="74" height="34" rx="2.5" fill="#a75a3c"/>
+                <pattern id="brickBefore" width="200" height="100" patternUnits="userSpaceOnUse">
+                  <rect width="200" height="100" fill="#c6bcae"/>
+                  <rect x="4" y="4" width="92" height="42" rx="3" fill="#a45737"/>
+                  <rect x="104" y="4" width="92" height="42" rx="3" fill="#98502f"/>
+                  <rect x="-46" y="54" width="92" height="42" rx="3" fill="#ab5f42"/>
+                  <rect x="54" y="54" width="92" height="42" rx="3" fill="#93492c"/>
+                  <rect x="154" y="54" width="92" height="42" rx="3" fill="#a75a3c"/>
                 </pattern>
                 <filter id="noiseBefore" x="0" y="0" width="100%" height="100%">
                   <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/>
                   <feColorMatrix type="saturate" values="0"/>
                 </filter>
-                <radialGradient id="vigBefore" cx="50%" cy="42%" r="78%">
-                  <stop offset="55%" stop-color="#000" stop-opacity="0"/>
-                  <stop offset="100%" stop-color="#000" stop-opacity=".5"/>
-                </radialGradient>
-                <linearGradient id="grimeBefore" x1="0" y1="1" x2="0" y2="0">
-                  <stop offset="0%" stop-color="#2e2118" stop-opacity=".55"/>
-                  <stop offset="45%" stop-color="#2e2118" stop-opacity="0"/>
+              </defs>
+              <rect width="1200" height="750" fill="url(#brickBefore)"/>
+              <rect width="1200" height="750" fill="#fff" filter="url(#noiseBefore)" opacity=".32" style="mix-blend-mode:overlay"/>
+            </svg>
+
+            <img class="compare__photo" src="https://images.unsplash.com/photo-1495578942200-c5f5d2137def?auto=format&amp;fit=crop&amp;w=1400&amp;h=875&amp;q=80"
+                 alt="" width="1400" height="875" loading="lazy" decoding="async">
+
+            <svg class="compare__art" viewBox="0 0 1200 750" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <!-- Unruhige Kanten: grobe Verformung plus feines Kantenflirren -->
+                <filter id="cgRough" x="-25%" y="-25%" width="150%" height="150%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="5" seed="11" result="n"/>
+                  <feDisplacementMap in="SourceGraphic" in2="n" scale="11"
+                                     xChannelSelector="R" yChannelSelector="G" result="d"/>
+                  <feGaussianBlur in="d" stdDeviation="0.6"/>
+                </filter>
+                <!-- Sprühnebel rund um die Striche -->
+                <filter id="cgMist" x="-50%" y="-50%" width="200%" height="200%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="6" result="n"/>
+                  <feDisplacementMap in="SourceGraphic" in2="n" scale="26"/>
+                  <feGaussianBlur stdDeviation="19"/>
+                </filter>
+                <filter id="cgDust" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="4"/>
+                </filter>
+                <linearGradient id="cgGrime" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%"  stop-color="#2a1d13" stop-opacity=".44"/>
+                  <stop offset="38%" stop-color="#2a1d13" stop-opacity=".1"/>
+                  <stop offset="70%" stop-color="#2a1d13" stop-opacity="0"/>
                 </linearGradient>
+                <radialGradient id="cgVig" cx="50%" cy="42%" r="80%">
+                  <stop offset="60%" stop-color="#000" stop-opacity="0"/>
+                  <stop offset="100%" stop-color="#000" stop-opacity=".3"/>
+                </radialGradient>
+
+                <!-- Der Schriftzug einmal definiert, mehrfach verwendet -->
+                <g id="cgTag">
+                  <path d="M177 504 C192 357 288 324 327 456 C354 549 408 552 429 456 C456 336 540 333 561 489"/>
+                  <path d="M654 489 C654 366 732 330 777 381 C819 429 774 489 717 486 C777 489 831 522 807 582 C783 636 684 621 660 567"/>
+                  <path d="M894 522 L909 348 L1002 504 L1026 345"/>
+                </g>
               </defs>
 
-              <rect width="800" height="500" fill="url(#brickBefore)"/>
-              <rect width="800" height="500" fill="#fff" filter="url(#noiseBefore)" opacity=".32" style="mix-blend-mode:overlay"/>
-              <rect width="800" height="500" fill="url(#grimeBefore)"/>
+              <!-- Verschmutzung und Randabdunklung -->
+              <rect width="1200" height="750" fill="url(#cgGrime)"/>
+              <g fill="#241a12" opacity=".22" filter="url(#cgMist)">
+                <ellipse cx="150" cy="706" rx="240" ry="66"/>
+                <ellipse cx="1010" cy="720" rx="270" ry="56"/>
+              </g>
 
-              <!-- Graffiti: Lime-Outline -->
-              <g fill="none" stroke="#a3e635" stroke-width="44" stroke-linecap="round" stroke-linejoin="round" opacity=".95">
-                <path d="M118 336 C128 238 192 216 218 304 C236 366 272 368 286 304 C304 224 360 222 374 326"/>
-                <path d="M436 326 C436 244 488 220 518 254 C546 286 516 326 478 324 C518 326 554 348 538 388 C522 424 456 414 440 378"/>
-                <path d="M596 348 L606 232 L668 336 L684 230"/>
+              <!-- Sprühnebel: der feine Dunst, der beim Sprayen danebengeht -->
+              <g fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#cgMist)">
+                <g stroke="#d81b8c" stroke-width="96" opacity=".26"><use href="#cgTag"/></g>
+                <g stroke="#a3e635" stroke-width="118" opacity=".14"><use href="#cgTag"/></g>
               </g>
-              <!-- Graffiti: Magenta-Fill -->
-              <g fill="none" stroke="#d81b8c" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M118 336 C128 238 192 216 218 304 C236 366 272 368 286 304 C304 224 360 222 374 326"/>
-                <path d="M436 326 C436 244 488 220 518 254 C546 286 516 326 478 324 C518 326 554 348 538 388 C522 424 456 414 440 378"/>
-                <path d="M596 348 L606 232 L668 336 L684 230"/>
+
+              <!-- Die eigentliche Farbe. Leicht durchscheinend, damit die
+                   Wandstruktur nicht komplett zugedeckt wirkt. -->
+              <g opacity=".93">
+                <g fill="none" stroke="#8fd420" stroke-width="66" stroke-linecap="round" stroke-linejoin="round"
+                   filter="url(#cgRough)"><use href="#cgTag"/></g>
+                <g fill="none" stroke="#cc1a84" stroke-width="45" stroke-linecap="round" stroke-linejoin="round"
+                   filter="url(#cgRough)"><use href="#cgTag"/></g>
+                <g fill="none" stroke="#f472b6" stroke-width="9" stroke-linecap="round" opacity=".62"
+                   filter="url(#cgRough)">
+                  <path d="M207 450 C222 381 267 360 294 411"/>
+                  <path d="M678 444 C678 384 720 366 750 387"/>
+                  <path d="M909 450 L918 375"/>
+                </g>
+
+                <!-- Läufer, nach unten auslaufend -->
+                <g fill="#cc1a84" filter="url(#cgRough)">
+                  <path d="M251 498 C251 580 255 634 258 648 C261 634 265 580 265 498 Z"/>
+                <path d="M381.5 512 C381.5 563 385 590 387 604 C389 590 392.5 563 392.5 512 Z"/>
+                <path d="M520 506 C520 603 524 668 528 682 C532 668 536 603 536 506 Z"/>
+                <path d="M700 500 C700 551 703 578 705 592 C707 578 710 551 710 500 Z"/>
+                <path d="M803.5 586 C803.5 650 807 688 810 702 C813 688 816.5 650 816.5 586 Z"/>
+                <path d="M984 510 C984 579 987 622 990 636 C993 622 996 579 996 510 Z"/>
+                </g>
+                <g fill="#cc1a84">
+                  <circle cx="258" cy="648" r="9"/><circle cx="387" cy="604" r="7"/>
+                  <circle cx="528" cy="682" r="10"/><circle cx="705" cy="592" r="6.5"/>
+                  <circle cx="810" cy="702" r="8"/><circle cx="990" cy="636" r="7.5"/>
+                </g>
               </g>
-              <!-- Highlight -->
-              <g fill="none" stroke="#fb7fc4" stroke-width="7" stroke-linecap="round" opacity=".85">
-                <path d="M138 300 C148 254 178 240 196 274"/>
-                <path d="M452 296 C452 256 480 244 500 258"/>
-                <path d="M606 300 L612 250"/>
+
+              <!-- Zweiter Tag in Schwarz -->
+              <g fill="none" stroke="#12161d" stroke-width="16.5" stroke-linecap="round" stroke-linejoin="round"
+                 opacity=".68" filter="url(#cgRough)">
+                <path d="M90 672 C156 621 198 678 264 636 C321 600 372 663 438 627"/>
+                <path d="M1035 225 C1074 180 1116 237 1158 198"/>
               </g>
-              <!-- Läufer / Drips -->
-              <g stroke="#d81b8c" stroke-width="8" stroke-linecap="round">
-                <path d="M172 348 v78"/><path d="M258 352 v52"/><path d="M352 352 v96"/>
-                <path d="M470 350 v44"/><path d="M540 404 v58"/><path d="M660 352 v66"/>
+
+              <!-- Feiner Sprühstaub -->
+              <g fill="#12161d" opacity=".34" filter="url(#cgDust)">
+                <circle cx="147" cy="588" r="5"/><circle cx="606" cy="300" r="4"/>
+                <circle cx="1074" cy="450" r="5.5"/><circle cx="768" cy="264" r="3.5"/>
+                <circle cx="378" cy="273" r="4.5"/><circle cx="1068" cy="606" r="4"/>
+                <circle cx="90" cy="384" r="3.5"/><circle cx="564" cy="636" r="4.5"/>
               </g>
-              <g fill="#d81b8c">
-                <circle cx="172" cy="430" r="7"/><circle cx="258" cy="408" r="6"/>
-                <circle cx="352" cy="452" r="8"/><circle cx="540" cy="466" r="7"/>
-                <circle cx="660" cy="422" r="6.5"/>
+              <g fill="#cc1a84" opacity=".3" filter="url(#cgDust)">
+                <circle cx="480" cy="330" r="7"/><circle cx="855" cy="612" r="5.5"/>
+                <circle cx="612" cy="648" r="4.5"/><circle cx="336" cy="618" r="6"/>
+                <circle cx="1110" cy="396" r="5"/><circle cx="222" cy="342" r="4"/>
               </g>
-              <!-- Sprühnebel -->
-              <g fill="#111827" opacity=".5">
-                <circle cx="98" cy="392" r="3.4"/><circle cx="404" cy="200" r="2.8"/>
-                <circle cx="716" cy="300" r="3.8"/><circle cx="512" cy="176" r="2.4"/>
-                <circle cx="252" cy="182" r="3"/><circle cx="712" cy="404" r="2.6"/>
-                <circle cx="60" cy="256" r="2.4"/><circle cx="376" cy="424" r="3.2"/>
-              </g>
-              <!-- Schwarzer Zweit-Tag -->
-              <g fill="none" stroke="#12161d" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" opacity=".78">
-                <path d="M60 448 C104 414 132 452 176 424 C214 400 248 442 292 418"/>
-                <path d="M690 150 C716 120 744 158 772 132"/>
-              </g>
-              <rect width="800" height="500" fill="url(#vigBefore)"/>
+
+              <rect width="1200" height="750" fill="url(#cgVig)"/>
             </svg>
+
+            <!-- Dieselbe Aufnahme noch einmal, im Weichlicht-Modus über der Farbe:
+                 dadurch zeichnet sich die Wandstruktur durch das Graffiti ab. -->
+            <img class="compare__texture" src="https://images.unsplash.com/photo-1495578942200-c5f5d2137def?auto=format&amp;fit=crop&amp;w=1400&amp;h=875&amp;q=80"
+                 alt="" width="1400" height="875" loading="lazy" decoding="async" aria-hidden="true">
           </div>
 
-          <!-- Nachher -->
+          <!-- Nachher: dieselbe Aufnahme, gereinigt -->
           <div class="compare__layer compare__layer--after" aria-hidden="true">
-            <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" role="img"
-                 aria-label="Dieselbe Klinkerfassade nach der Laserreinigung: sauber und porenrein">
+            <svg class="compare__base" viewBox="0 0 1200 750" preserveAspectRatio="xMidYMid slice">
               <defs>
-                <pattern id="brickAfter" width="160" height="80" patternUnits="userSpaceOnUse">
-                  <rect width="160" height="80" fill="#ded5c8"/>
-                  <rect x="3" y="3" width="74" height="34" rx="2.5" fill="#c0684a"/>
-                  <rect x="83" y="3" width="74" height="34" rx="2.5" fill="#b45f3f"/>
-                  <rect x="-37" y="43" width="74" height="34" rx="2.5" fill="#c87152"/>
-                  <rect x="43" y="43" width="74" height="34" rx="2.5" fill="#af593b"/>
-                  <rect x="123" y="43" width="74" height="34" rx="2.5" fill="#c46c4c"/>
+                <pattern id="brickAfter" width="200" height="100" patternUnits="userSpaceOnUse">
+                  <rect width="200" height="100" fill="#ded5c8"/>
+                  <rect x="4" y="4" width="92" height="42" rx="3" fill="#c0684a"/>
+                  <rect x="104" y="4" width="92" height="42" rx="3" fill="#b45f3f"/>
+                  <rect x="-46" y="54" width="92" height="42" rx="3" fill="#c87152"/>
+                  <rect x="54" y="54" width="92" height="42" rx="3" fill="#af593b"/>
+                  <rect x="154" y="54" width="92" height="42" rx="3" fill="#c46c4c"/>
                 </pattern>
                 <filter id="noiseAfter" x="0" y="0" width="100%" height="100%">
                   <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
                   <feColorMatrix type="saturate" values="0"/>
                 </filter>
-                <radialGradient id="glowAfter" cx="50%" cy="40%" r="72%">
-                  <stop offset="0%" stop-color="#fff" stop-opacity=".22"/>
+              </defs>
+              <rect width="1200" height="750" fill="url(#brickAfter)"/>
+              <rect width="1200" height="750" fill="#fff" filter="url(#noiseAfter)" opacity=".2" style="mix-blend-mode:overlay"/>
+            </svg>
+
+            <img class="compare__photo compare__photo--clean" src="https://images.unsplash.com/photo-1495578942200-c5f5d2137def?auto=format&amp;fit=crop&amp;w=1400&amp;h=875&amp;q=80"
+                 alt="" width="1400" height="875" loading="lazy" decoding="async">
+
+            <img class="compare__texture" src="https://images.unsplash.com/photo-1495578942200-c5f5d2137def?auto=format&amp;fit=crop&amp;w=1400&amp;h=875&amp;q=80"
+                 alt="" width="1400" height="875" loading="lazy" decoding="async" aria-hidden="true">
+
+            <svg class="compare__art" viewBox="0 0 1200 750" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <radialGradient id="cgGlow" cx="50%" cy="40%" r="70%">
+                  <stop offset="0%" stop-color="#fff" stop-opacity=".2"/>
                   <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
                 </radialGradient>
-                <radialGradient id="vigAfter" cx="50%" cy="42%" r="82%">
-                  <stop offset="62%" stop-color="#000" stop-opacity="0"/>
-                  <stop offset="100%" stop-color="#000" stop-opacity=".3"/>
+                <radialGradient id="cgVigAfter" cx="50%" cy="42%" r="82%">
+                  <stop offset="64%" stop-color="#000" stop-opacity="0"/>
+                  <stop offset="100%" stop-color="#000" stop-opacity=".26"/>
                 </radialGradient>
               </defs>
-
-              <rect width="800" height="500" fill="url(#brickAfter)"/>
-              <rect width="800" height="500" fill="#fff" filter="url(#noiseAfter)" opacity=".2" style="mix-blend-mode:overlay"/>
-              <rect width="800" height="500" fill="url(#glowAfter)"/>
-              <rect width="800" height="500" fill="url(#vigAfter)"/>
+              <rect width="1200" height="750" fill="url(#cgGlow)"/>
+              <rect width="1200" height="750" fill="url(#cgVigAfter)"/>
             </svg>
           </div>
 
@@ -1519,9 +1621,11 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           <span class="compare__hint">Ziehen oder Pfeiltasten nutzen</span>
         </div>
 
-        <p class="soft" style="margin-top:1rem;text-align:center">
-          Schematische Illustration zur Veranschaulichung des Verfahrens – keine Fotografie eines konkreten Auftrags.
-          Echte Vorher-nachher-Fotos erhalten Sie auf Wunsch als Teil der Dokumentation.
+        <p class="soft" style="margin-top:1rem;text-align:center;max-width:62ch;margin-inline:auto">
+          Beide Seiten zeigen dieselbe Fassadenaufnahme; das Graffiti ist zur Veranschaulichung
+          aufgetragen. Es handelt sich also um eine Demonstration des Verfahrens, nicht um die
+          Dokumentation eines konkreten Auftrags. Echte Vorher-nachher-Fotos Ihres Objekts erhalten
+          Sie auf Wunsch als Teil der Dokumentation.
         </p>
       </div>
     </div>
@@ -1815,119 +1919,33 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
 
         <div class="materials" style="margin-top:2rem">
           <figure class="material">
-            <svg viewBox="0 0 200 200" role="img" aria-label="Klinker und Backstein">
-              <defs>
-                <pattern id="m1p" width="100" height="50" patternUnits="userSpaceOnUse">
-                  <rect width="100" height="50" fill="#cec5b7"/>
-                  <rect x="2" y="2" width="46" height="21" rx="2" fill="#a85a3c"/>
-                  <rect x="52" y="2" width="46" height="21" rx="2" fill="#9a4f31"/>
-                  <rect x="-23" y="27" width="46" height="21" rx="2" fill="#b06243"/>
-                  <rect x="27" y="27" width="46" height="21" rx="2" fill="#95492c"/>
-                  <rect x="77" y="27" width="46" height="21" rx="2" fill="#ad5d3f"/>
-                </pattern>
-                <filter id="m1n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3"/><feColorMatrix type="saturate" values="0"/></filter>
-              </defs>
-              <rect width="200" height="200" fill="url(#m1p)"/>
-              <rect width="200" height="200" fill="#fff" filter="url(#m1n)" opacity=".24" style="mix-blend-mode:overlay"/>
-            </svg>
+            <img src="https://images.unsplash.com/photo-1495578942200-c5f5d2137def?auto=format&amp;fit=crop&amp;w=600&amp;h=600&amp;q=80"
+                 alt="Klinkerfassade aus rotem Backstein" width="600" height="600" loading="lazy" decoding="async">
             <figcaption class="material__label">Klinker / Backstein</figcaption>
           </figure>
-
           <figure class="material">
-            <svg viewBox="0 0 200 200" role="img" aria-label="Naturstein und Sandstein">
-              <defs>
-                <filter id="m2n"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="5"/><feColorMatrix type="saturate" values="0"/></filter>
-              </defs>
-              <rect width="200" height="200" fill="#d9c9a8"/>
-              <rect width="200" height="200" fill="#fff" filter="url(#m2n)" opacity=".55" style="mix-blend-mode:overlay"/>
-              <g stroke="#b09a74" stroke-width="2.4" fill="none" opacity=".8">
-                <path d="M0 52h200M0 104h200M0 156h200M64 0v52M132 52v52M40 104v52M148 104v52M96 156v44M20 0v52"/>
-              </g>
-              <g fill="#00000018">
-                <circle cx="42" cy="30" r="3"/><circle cx="160" cy="78" r="2.4"/><circle cx="88" cy="130" r="3.4"/><circle cx="120" cy="180" r="2.6"/>
-              </g>
-            </svg>
+            <img src="https://images.unsplash.com/photo-1603621062552-1029ca1aece2?auto=format&amp;fit=crop&amp;w=600&amp;h=600&amp;q=80"
+                 alt="Natursteinmauer aus Sandstein" width="600" height="600" loading="lazy" decoding="async">
             <figcaption class="material__label">Naturstein / Sandstein</figcaption>
           </figure>
-
           <figure class="material">
-            <svg viewBox="0 0 200 200" role="img" aria-label="Sichtbeton">
-              <defs>
-                <filter id="m3n"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="4"/><feColorMatrix type="saturate" values="0"/></filter>
-                <linearGradient id="m3g" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#a9b0b6"/><stop offset="100%" stop-color="#868f96"/>
-                </linearGradient>
-              </defs>
-              <rect width="200" height="200" fill="url(#m3g)"/>
-              <rect width="200" height="200" fill="#fff" filter="url(#m3n)" opacity=".3" style="mix-blend-mode:overlay"/>
-              <g stroke="#6f777e" stroke-width="1.8" opacity=".7"><path d="M0 100h200M100 0v200"/></g>
-              <g fill="#5f676e" opacity=".8">
-                <circle cx="50" cy="50" r="5"/><circle cx="150" cy="50" r="5"/>
-                <circle cx="50" cy="150" r="5"/><circle cx="150" cy="150" r="5"/>
-              </g>
-              <g fill="#ffffff40"><circle cx="50" cy="48" r="2"/><circle cx="150" cy="48" r="2"/><circle cx="50" cy="148" r="2"/><circle cx="150" cy="148" r="2"/></g>
-            </svg>
+            <img src="https://images.unsplash.com/photo-1560780552-ba54683cb263?auto=format&amp;fit=crop&amp;w=600&amp;h=600&amp;q=80"
+                 alt="Sichtbetonwand mit Schalungsstruktur" width="600" height="600" loading="lazy" decoding="async">
             <figcaption class="material__label">Sichtbeton</figcaption>
           </figure>
-
           <figure class="material">
-            <svg viewBox="0 0 200 200" role="img" aria-label="Metall und Tore">
-              <defs>
-                <linearGradient id="m4g" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#7c858d"/><stop offset="22%" stop-color="#c3cbd2"/>
-                  <stop offset="48%" stop-color="#8b949c"/><stop offset="72%" stop-color="#cfd6dc"/>
-                  <stop offset="100%" stop-color="#79828a"/>
-                </linearGradient>
-                <filter id="m4n"><feTurbulence type="fractalNoise" baseFrequency="0.02 1.4" numOctaves="3"/><feColorMatrix type="saturate" values="0"/></filter>
-              </defs>
-              <rect width="200" height="200" fill="url(#m4g)"/>
-              <rect width="200" height="200" fill="#fff" filter="url(#m4n)" opacity=".22" style="mix-blend-mode:overlay"/>
-              <g stroke="#5c656d" stroke-width="3" opacity=".55"><path d="M40 0v200M100 0v200M160 0v200"/></g>
-              <g fill="#4e575f"><circle cx="20" cy="24" r="4"/><circle cx="70" cy="24" r="4"/><circle cx="130" cy="24" r="4"/><circle cx="180" cy="24" r="4"/>
-                <circle cx="20" cy="176" r="4"/><circle cx="70" cy="176" r="4"/><circle cx="130" cy="176" r="4"/><circle cx="180" cy="176" r="4"/></g>
-            </svg>
+            <img src="https://images.unsplash.com/photo-1501166222995-ff31c7e93cef?auto=format&amp;fit=crop&amp;w=600&amp;h=600&amp;q=80"
+                 alt="Metalltor mit lackierter Oberfläche" width="600" height="600" loading="lazy" decoding="async">
             <figcaption class="material__label">Metall / Tore</figcaption>
           </figure>
-
           <figure class="material">
-            <svg viewBox="0 0 200 200" role="img" aria-label="Historische und denkmalgeschützte Fassade">
-              <defs>
-                <filter id="m5n"><feTurbulence type="fractalNoise" baseFrequency=".06" numOctaves="4"/><feColorMatrix type="saturate" values="0"/></filter>
-              </defs>
-              <rect width="200" height="200" fill="#cfc0a4"/>
-              <rect width="200" height="200" fill="#fff" filter="url(#m5n)" opacity=".42" style="mix-blend-mode:overlay"/>
-              <g stroke="#a8977a" stroke-width="2" fill="none" opacity=".75"><path d="M0 34h200M0 168h200"/></g>
-              <path d="M64 168V96a36 36 0 0 1 72 0v72Z" fill="#3d4a58"/>
-              <path d="M64 168V96a36 36 0 0 1 72 0v72Z" fill="none" stroke="#8d7f66" stroke-width="6"/>
-              <g stroke="#8d7f66" stroke-width="4"><path d="M100 60v108M64 122h72"/></g>
-              <path d="M52 168h96v10H52z" fill="#b9a887"/>
-              <g fill="#8d7f66"><rect x="46" y="20" width="108" height="12" rx="3"/></g>
-            </svg>
+            <img src="https://images.unsplash.com/photo-1489910339994-ce69e94e4856?auto=format&amp;fit=crop&amp;w=600&amp;h=600&amp;q=80"
+                 alt="Historische Fassade eines denkmalgeschützten Gebäudes" width="600" height="600" loading="lazy" decoding="async">
             <figcaption class="material__label">Historische Fassade</figcaption>
           </figure>
-
           <figure class="material">
-            <svg viewBox="0 0 200 200" role="img" aria-label="Objekte und Kleinteile nach Prüfung">
-              <defs>
-                <linearGradient id="m6g" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#243244"/><stop offset="100%" stop-color="#101a26"/>
-                </linearGradient>
-                <linearGradient id="m6m" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#e2e8f0"/><stop offset="55%" stop-color="#94a3b8"/><stop offset="100%" stop-color="#cbd5e1"/>
-                </linearGradient>
-              </defs>
-              <rect width="200" height="200" fill="url(#m6g)"/>
-              <g transform="translate(100 100)">
-                <g fill="url(#m6m)">
-                  <path d="M-9-58h18l3 15a46 46 0 0 1 13 5l12-9 13 13-9 12a46 46 0 0 1 5 13l15 3v18l-15 3a46 46 0 0 1-5 13l9 12-13 13-12-9a46 46 0 0 1-13 5l-3 15h-18l-3-15a46 46 0 0 1-13-5l-12 9-13-13 9-12a46 46 0 0 1-5-13l-15-3v-18l15-3a46 46 0 0 1 5-13l-9-12 13-13 12 9a46 46 0 0 1 13-5Z"/>
-                </g>
-                <circle r="22" fill="#0f1a26"/>
-                <circle r="22" fill="none" stroke="#64748b" stroke-width="3"/>
-              </g>
-              <g fill="#2dd4bf" opacity=".85">
-                <circle cx="34" cy="34" r="3"/><circle cx="168" cy="46" r="2.4"/><circle cx="44" cy="164" r="2.6"/>
-              </g>
-            </svg>
+            <img src="https://images.unsplash.com/photo-1729584496196-af27b16009f5?auto=format&amp;fit=crop&amp;w=600&amp;h=600&amp;q=80"
+                 alt="Metallene Kleinteile als Beispiel für Objektreinigung" width="600" height="600" loading="lazy" decoding="async">
             <figcaption class="material__label">Objekt / Kleinteil</figcaption>
           </figure>
         </div>
@@ -2753,74 +2771,28 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       <p style="color:#8fa8b8;font-size:.85rem;margin-top:.4rem">Drei geplante Bereiche, in denen Clean Green Nature Köln aktiv mitgestalten möchte.</p>
 
       <div class="grid grid--3" style="margin-top:1.4rem;gap:1rem">
-        <article class="card" style="background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.1);padding:0;overflow:hidden">
-          <svg viewBox="0 0 300 170" style="width:100%;height:auto" role="img" aria-label="Illustration: Bepflanzung in der Stadt">
-            <rect width="300" height="170" fill="#0e2a24"/>
-            <g fill="#14532d" opacity=".55"><rect x="20" y="40" width="46" height="130" rx="3"/><rect x="240" y="26" width="42" height="144" rx="3"/></g>
-            <g fill="#0f766e" opacity=".35"><rect x="86" y="60" width="34" height="110" rx="3"/><rect x="190" y="52" width="38" height="118" rx="3"/></g>
-            <rect y="140" width="300" height="30" fill="#123f33"/>
-            <g transform="translate(150 140)">
-              <rect x="-4" y="-46" width="8" height="46" rx="3" fill="#7c5b3f"/>
-              <circle cx="0" cy="-58" r="26" fill="#22c55e"/><circle cx="-20" cy="-46" r="18" fill="#16a34a"/>
-              <circle cx="20" cy="-48" r="17" fill="#4ade80"/><circle cx="2" cy="-72" r="15" fill="#34d399"/>
-            </g>
-            <g transform="translate(80 148)"><rect x="-3" y="-26" width="6" height="26" rx="2" fill="#7c5b3f"/>
-              <circle cx="0" cy="-32" r="15" fill="#22c55e"/><circle cx="-11" cy="-26" r="10" fill="#16a34a"/></g>
-            <g transform="translate(222 150)"><rect x="-3" y="-22" width="6" height="22" rx="2" fill="#7c5b3f"/>
-              <circle cx="0" cy="-27" r="13" fill="#4ade80"/><circle cx="10" cy="-22" r="9" fill="#22c55e"/></g>
-          </svg>
-          <div style="padding:1.1rem">
-            <h4 style="color:#fff;font-size:.98rem">Gezielte Bepflanzungen</h4>
-            <p style="color:#9db3c2;font-size:.78rem">Mehr Grün für Kölner Straßenzüge und Fassaden – für besseres Stadtklima und mehr Lebensqualität vor Ort.</p>
+        <article class="card project-card">
+          <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&amp;fit=crop&amp;w=600&amp;h=420&amp;q=80"
+               alt="Neu gepflanzte Bäume und Grünflächen in einer Stadt" width="600" height="420" loading="lazy" decoding="async">
+          <div>
+            <h4>Gezielte Bepflanzungen</h4>
+            <p>Mehr Grün für Kölner Straßenzüge und Fassaden – für besseres Stadtklima und mehr Lebensqualität vor Ort.</p>
           </div>
         </article>
-
-        <article class="card" style="background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.1);padding:0;overflow:hidden">
-          <svg viewBox="0 0 300 170" style="width:100%;height:auto" role="img" aria-label="Illustration: luftreinigende Moosfassade">
-            <rect width="300" height="170" fill="#0b2620"/>
-            <rect x="40" y="20" width="220" height="150" fill="#16323d"/>
-            <g fill="#0f2833"><rect x="56" y="36" width="30" height="34" rx="3"/><rect x="214" y="36" width="30" height="34" rx="3"/>
-              <rect x="56" y="92" width="30" height="34" rx="3"/><rect x="214" y="92" width="30" height="34" rx="3"/></g>
-            <rect x="100" y="30" width="100" height="140" rx="4" fill="#14532d"/>
-            <g fill="#22c55e" opacity=".85">
-              <circle cx="118" cy="48" r="13"/><circle cx="146" cy="42" r="16"/><circle cx="176" cy="50" r="14"/>
-              <circle cx="112" cy="76" r="15"/><circle cx="144" cy="72" r="13"/><circle cx="180" cy="80" r="16"/>
-              <circle cx="120" cy="106" r="14"/><circle cx="152" cy="102" r="16"/><circle cx="182" cy="112" r="13"/>
-              <circle cx="114" cy="138" r="15"/><circle cx="148" cy="134" r="13"/><circle cx="180" cy="142" r="15"/>
-            </g>
-            <g fill="#4ade80" opacity=".6">
-              <circle cx="132" cy="60" r="8"/><circle cx="166" cy="94" r="9"/><circle cx="136" cy="120" r="7"/>
-            </g>
-            <g stroke="#5eead4" stroke-width="2" fill="none" opacity=".5">
-              <path d="M226 60c14-8 14 20 28 12M226 96c14-8 14 20 28 12"/>
-            </g>
-          </svg>
-          <div style="padding:1.1rem">
-            <h4 style="color:#fff;font-size:.98rem">Luftreinigende Moosfassaden</h4>
-            <p style="color:#9db3c2;font-size:.78rem">Moos kann Feinstaub binden und Umgebungskühlung unterstützen – als ökologische Ergänzung für geeignete urbane Flächen.</p>
+        <article class="card project-card">
+          <img src="https://images.unsplash.com/photo-1743148509752-9ea6072ea35f?auto=format&amp;fit=crop&amp;w=600&amp;h=420&amp;q=80"
+               alt="Begrünte Fassade mit Moos zur Luftreinigung" width="600" height="420" loading="lazy" decoding="async">
+          <div>
+            <h4>Luftreinigende Moosfassaden</h4>
+            <p>Moos kann Feinstaub binden und Umgebungskühlung unterstützen – als ökologische Ergänzung für geeignete urbane Flächen.</p>
           </div>
         </article>
-
-        <article class="card" style="background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.1);padding:0;overflow:hidden">
-          <svg viewBox="0 0 300 170" style="width:100%;height:auto" role="img" aria-label="Illustration: Unterstützung lokaler sozialer Projekte">
-            <rect width="300" height="170" fill="#101d2c"/>
-            <circle cx="150" cy="78" r="52" fill="#0f766e" opacity=".2"/>
-            <g transform="translate(150 92)">
-              <path d="M0 26c-16-13-34-25-34-42a17 17 0 0 1 34-7 17 17 0 0 1 34 7c0 17-18 29-34 42Z" fill="#2dd4bf"/>
-            </g>
-            <g fill="#93c5fd">
-              <circle cx="72" cy="70" r="14"/><path d="M50 118a22 22 0 0 1 44 0Z"/>
-            </g>
-            <g fill="#fcd77f">
-              <circle cx="228" cy="70" r="14"/><path d="M206 118a22 22 0 0 1 44 0Z"/>
-            </g>
-            <g fill="#5eead4" opacity=".8">
-              <circle cx="150" cy="150" r="4"/><circle cx="120" cy="152" r="3"/><circle cx="180" cy="152" r="3"/>
-            </g>
-          </svg>
-          <div style="padding:1.1rem">
-            <h4 style="color:#fff;font-size:.98rem">Lokale soziale Projekte</h4>
-            <p style="color:#9db3c2;font-size:.78rem">Unterstützung für ehrenamtliche Kölner Initiativen, u.&nbsp;a. im Bereich Jugendarbeit – dort, wo es direkt ankommt.</p>
+        <article class="card project-card">
+          <img src="https://images.unsplash.com/photo-1630068846062-3ffe78aa5049?auto=format&amp;fit=crop&amp;w=600&amp;h=420&amp;q=80"
+               alt="Ehrenamtliche bei einem lokalen sozialen Projekt" width="600" height="420" loading="lazy" decoding="async">
+          <div>
+            <h4>Lokale soziale Projekte</h4>
+            <p>Unterstützung für ehrenamtliche Kölner Initiativen, u.&nbsp;a. im Bereich Jugendarbeit – dort, wo es direkt ankommt.</p>
           </div>
         </article>
       </div>
@@ -2901,12 +2873,18 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
          berechtigtes Interesse liegt in der technisch fehlerfreien Bereitstellung und Sicherheit
          der Website.</p>
 
-      <h3>4. Keine externen Inhalte, Schriften oder CDNs</h3>
-      <p>Diese Website lädt <strong>keine</strong> Schriftarten, Skripte, Stylesheets oder Bilder von
-         externen Servern oder Content-Delivery-Netzwerken. Sämtliche Gestaltungselemente, Grafiken und
-         Programmbestandteile sind direkt in die Seite eingebettet bzw. werden vom eigenen Webspace
-         ausgeliefert. Beim reinen Aufruf dieser Seite werden daher keine Daten an Dritte übermittelt.
-         Die einzige Ausnahme ist das aktive Absenden des Kontaktformulars (siehe Ziffer 6).</p>
+      <h3>4. Externe Bildinhalte (Unsplash)</h3>
+      <p>Schriftarten, Skripte und Stylesheets werden auf dieser Website <strong>nicht</strong> von
+         externen Servern geladen, sondern sind vollständig in die Seite eingebettet. Eingebunden werden
+         lediglich einzelne Bildinhalte über den Dienst <em>Unsplash</em> (images.unsplash.com,
+         Unsplash Inc., USA). Beim Laden dieser Bilder wird Ihre IP-Adresse technisch bedingt an den
+         Anbieter übermittelt. Die Einbindung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO
+         (berechtigtes Interesse an einer anschaulichen Darstellung unserer Leistungen). Weitere
+         Informationen: <a href="https://unsplash.com/privacy" target="_blank" rel="noopener noreferrer">unsplash.com/privacy</a></p>
+      <p>Die Bilder werden verzögert geladen (<em>lazy loading</em>), also erst, wenn Sie den
+         entsprechenden Bereich der Seite tatsächlich erreichen. Darüber hinaus findet beim bloßen
+         Aufruf der Seite keine Datenübermittlung an Dritte statt; die weitere Ausnahme ist das aktive
+         Absenden des Kontaktformulars (siehe Ziffer 6).</p>
 
       <h3>5. Kontaktformular und E-Mail-Kontakt</h3>
       <p>Wenn Sie uns per Kontaktformular oder E-Mail kontaktieren, werden Ihre Angaben einschließlich der
@@ -3072,6 +3050,16 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       el.addEventListener('animationend', () => el.remove(), { once: true });
     }, 3200);
   }
+
+  /* ====================================================================
+     0b · Bilder, die nicht geladen werden konnten, ausblenden
+     Der Platz bleibt erhalten; darunter liegt jeweils eine gezeichnete
+     Ersatzdarstellung bzw. eine ruhige Hintergrundfläche.
+     ==================================================================== */
+  document.addEventListener('error', (e) => {
+    const el = e.target;
+    if (el && el.tagName === 'IMG') el.classList.add('img-failed');
+  }, true);
 
   /* ====================================================================
      1 · Farbmodus

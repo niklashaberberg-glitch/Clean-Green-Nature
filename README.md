@@ -3,8 +3,9 @@
 Einseitige Website für Laser-Graffitientfernung und Fassadenreinigung in Köln.
 
 Die komplette Seite steckt in **einer einzigen Datei** (`index.html`): HTML, CSS,
-JavaScript und sämtliche Grafiken. Es gibt keinen Build-Schritt, kein
-Framework, keine Abhängigkeiten. Hochladen genügt.
+JavaScript, alle Icons und Illustrationen. Es gibt keinen Build-Schritt, kein
+Framework, keine Abhängigkeiten. Hochladen genügt. Dazu kommen drei eigene
+Bilddateien im Ordner `images/` und einige Fotos von Unsplash – siehe unten.
 
 ## Dateien
 
@@ -24,20 +25,33 @@ Sobald die endgültige Domain feststeht: In `index.html`, `robots.txt` und
 `sitemap.xml` nach `clean-green-nature.de` suchen und ersetzen. Die Adresse
 steht dort in `canonical`, den Open-Graph-Angaben und den Strukturdaten.
 
-## Keine externen Aufrufe
+## Was von außen geladen wird
 
-Die Seite lädt beim Aufruf **nichts** von fremden Servern – keine Schriften,
-keine Icon-Bibliothek, kein CSS-Framework, keine Stockfotos. Das hat drei
-Effekte:
+Schriften, Icons, CSS und JavaScript stecken vollständig in der Datei – nichts
+davon kommt von fremden Servern. Nichts blockiert das Rendern, und kein fremder
+Dienst kann die Darstellung kaputt machen.
 
-* **Datenschutz** – ohne Aufruf des Kontaktformulars fließen keine Daten an
-  Dritte. Die Datenschutzerklärung in der Seite beschreibt genau das.
-* **Tempo** – ein einziger Seitenaufruf, nichts blockiert das Rendern.
-* **Verlässlichkeit** – kein fremder Dienst kann die Darstellung stören.
+Von außen kommen nur zwei Dinge:
 
-Die einzige Ausnahme ist der aktive Versand des Anfrageformulars. Dieses geht
-an **FormSubmit** (`formsubmit.co`) und landet als E-Mail bei
-`info@cleangreennature.de`.
+* **Bilder von Unsplash** (`images.unsplash.com`) – die Materialkacheln, die
+  drei Projektbilder im Spendentopf und die Fassade im Vorher/Nachher-Vergleich.
+  Alle mit `loading="lazy"`, werden also erst geladen, wenn der Besucher den
+  Bereich erreicht.
+* **Der Formularversand** an **FormSubmit** (`formsubmit.co`) – erst beim
+  aktiven Absenden, landet als E-Mail bei `info@cleangreennature.de`.
+
+Beides ist in Ziffer 4 und 6 der Datenschutzerklärung beschrieben.
+
+**Falls ein Bild nicht lädt:** Die Kacheln behalten ihre Größe und zeigen eine
+ruhige Farbfläche mit Beschriftung; beim Vorher/Nachher-Vergleich liegt eine
+gezeichnete Klinkerwand als Rückfallebene darunter. Ein Ausfall von Unsplash
+führt also nie zu Löchern im Layout.
+
+**Bilder gegen eigene Fotos tauschen:** Nach `images.unsplash.com` suchen und
+die `src`-Adresse durch den Pfad zum eigenen Bild ersetzen, z. B.
+`images/fassade-ehrenfeld.jpg`. Bitte auch den `alt`-Text anpassen. Sobald alle
+Unsplash-Adressen ersetzt sind, kann Ziffer 4 der Datenschutzerklärung
+entfallen.
 
 > **Hinweis zur ersten Anfrage:** FormSubmit verlangt eine einmalige
 > Bestätigung. Nach der allerersten abgesendeten Anfrage kommt eine E-Mail mit
@@ -98,6 +112,9 @@ sauberer Überschriftenhierarchie sowie vollständige Berücksichtigung von
 
 Ohne JavaScript bleiben alle Inhalte lesbar und das Formular absendbar; nur die
 interaktiven Zugaben entfallen.
+
+Der Vorher/Nachher-Vergleich ist auf dem Handy bildschirmfüllend und auf
+größeren Displays auf 900 px begrenzt.
 
 ## Getestet
 

@@ -4272,6 +4272,18 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     }, 3600);
   }
 
+  /* Notweg, wenn kein Speichern möglich ist: Inhalt zum Herauskopieren. */
+  function alsText(daten) {
+    dialog({
+      titel: 'Daten sichern',
+      breit: true,
+      inhalt: h`<p>In dieser Umgebung darf die Seite keine Datei ablegen. Der vollständige Stand steht
+        hier zum Kopieren – speichere ihn als <code>nestwerk-daten.json</code>.</p>
+        <label class="feld"><span class="nur-sr">Daten</span><textarea rows="12" id="daten-text" readonly>${daten}</textarea></label>`,
+      fuss: h`<button type="button" class="knopf" data-tu="kopieren" data-quelle="#daten-text">${ico('kopieren')}Kopieren</button>`
+    });
+  }
+
   let dialogSchliessen = null;
   function dialog(optionen) {
     const opt = optionen || {};
@@ -4603,6 +4615,25 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     },
     'daten-export'() {
       const daten = JSON.stringify(NW.store.get(), null, 2);
+
+      /* Eingebettet in einer Seitenhülle, die Downloads unterbindet, führt
+         ein gewöhnlicher Link ins Leere. Dort übernimmt die Speicher-
+         Schnittstelle der Umgebung, sonst der klassische Weg – und wenn
+         beides ausfällt, gibt es den Inhalt wenigstens zum Kopieren. */
+      const umgebung = window.claude;
+      if (umgebung && typeof umgebung.use === 'function') {
+        umgebung.use('downloads').then((downloads) => {
+          if (!downloads) { alsText(daten); return; }
+          return downloads.save({ filename: 'nestwerk-daten.json', data: daten })
+            .then(() => toast('Datei gesichert.', 'gut'),
+              (fehler) => {
+                if (fehler && fehler.code === 'declined') toast('Sicherung abgebrochen.');
+                else alsText(daten);
+              });
+        }, () => alsText(daten));
+        return;
+      }
+
       const blob = new Blob([daten], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);

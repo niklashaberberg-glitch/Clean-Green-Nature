@@ -563,7 +563,17 @@
 
   function start() {
     NW.store.laden();
-    document.body.innerHTML = schale();
+
+    /* Die App bekommt einen eigenen Wurzelknoten und rührt den Rest des
+       Dokuments nicht an. In der Einzeldatei stehen Stil und Skript im
+       body – ein Überschreiben von body.innerHTML würde beides mitreißen. */
+    let wurzel = document.getElementById('nestwerk');
+    if (!wurzel) {
+      wurzel = document.createElement('div');
+      wurzel.id = 'nestwerk';
+      document.body.appendChild(wurzel);
+    }
+    wurzel.innerHTML = schale();
 
     const s = NW.store.get();
     if (s.theme && s.theme !== 'auto') document.documentElement.setAttribute('data-theme', s.theme);

@@ -49,7 +49,7 @@ const kopfExtra =
   '<title>Nestwerk</title>\n' +
   '<meta name="description" content="Nestwerk führt Mietmarkt, Kaufangebote, WG-Zimmer und Wohnungstausch zusammen: mit Vergleichsmiete, Vertragslupe, Betrugserkennung, echten Monatskosten und Ringtausch über mehrere Haushalte.">';
 
-const inhalt = noscript + '\n<style>\n' + css + '\n</style>\n<script>\n' + js + '\n</script>';
+const inhalt = '<style>\n' + css + '\n</style>\n' + noscript + '\n<script>\n' + js + '\n</script>';
 
 const vollseite =
   '<!DOCTYPE html>\n<html lang="de">\n<head>\n' +

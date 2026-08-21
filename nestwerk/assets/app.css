@@ -369,6 +369,8 @@ input[type="range"] {
 
 /* ---------------------------- Seiten und Blöcke ---------------------------- */
 
+#nestwerk { display: block; }
+
 #haupt { display: block; min-height: 60vh; }
 #haupt:focus { outline: none; }
 

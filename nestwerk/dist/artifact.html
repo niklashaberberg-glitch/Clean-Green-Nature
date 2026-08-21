@@ -1,12 +1,4 @@
 <title>Nestwerk</title>
-<noscript>
-  <div style="max-width:640px;margin:12vh auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.6">
-    <h1>Nestwerk braucht JavaScript</h1>
-    <p>Die Anwendung rechnet vollständig im Browser: Suche, Bewertung, Kartendarstellung und Ringtausch
-      entstehen erst beim Aufruf. Ohne JavaScript lässt sich davon nichts anzeigen.</p>
-    <p>Es werden dabei keine Daten an einen Server gesendet – es gibt keinen.</p>
-  </div>
-</noscript>
 <style>
 /* =====================================================================
    Nestwerk – Gestaltung
@@ -378,6 +370,8 @@ input[type="range"] {
 .feld--regler { gap: .1em; }
 
 /* ---------------------------- Seiten und Blöcke ---------------------------- */
+
+#nestwerk { display: block; }
 
 #haupt { display: block; min-height: 60vh; }
 #haupt:focus { outline: none; }
@@ -1141,6 +1135,14 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .verlauf__achse { fill: var(--text-still); font-size: 11px; font-family: var(--schrift); }
 
 </style>
+<noscript>
+  <div style="max-width:640px;margin:12vh auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.6">
+    <h1>Nestwerk braucht JavaScript</h1>
+    <p>Die Anwendung rechnet vollständig im Browser: Suche, Bewertung, Kartendarstellung und Ringtausch
+      entstehen erst beim Aufruf. Ohne JavaScript lässt sich davon nichts anzeigen.</p>
+    <p>Es werden dabei keine Daten an einen Server gesendet – es gibt keinen.</p>
+  </div>
+</noscript>
 <script>
 /* ===== util.js ===== */
 /* =====================================================================
@@ -4627,7 +4629,17 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   function start() {
     NW.store.laden();
-    document.body.innerHTML = schale();
+
+    /* Die App bekommt einen eigenen Wurzelknoten und rührt den Rest des
+       Dokuments nicht an. In der Einzeldatei stehen Stil und Skript im
+       body – ein Überschreiben von body.innerHTML würde beides mitreißen. */
+    let wurzel = document.getElementById('nestwerk');
+    if (!wurzel) {
+      wurzel = document.createElement('div');
+      wurzel.id = 'nestwerk';
+      document.body.appendChild(wurzel);
+    }
+    wurzel.innerHTML = schale();
 
     const s = NW.store.get();
     if (s.theme && s.theme !== 'auto') document.documentElement.setAttribute('data-theme', s.theme);

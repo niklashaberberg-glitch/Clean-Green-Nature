@@ -1,3 +1,16 @@
+# Clean Green Nature
+
+Dieses Repository enthält zwei voneinander unabhängige Projekte:
+
+| Ordner | Was |
+|---|---|
+| Wurzel (`index.html`) | die Website von Clean Green Nature – siehe unten |
+| [`nestwerk/`](nestwerk/) | **Nestwerk**, eine Wohnungssuche, die Mietmarkt, Kauf, WG-Zimmer und Wohnungstausch in einer Oberfläche zusammenführt |
+
+Beide laufen ohne Build-Schritt, ohne Framework und ohne Abhängigkeiten.
+
+---
+
 # Clean Green Nature – Website
 
 Einseitige Website für Laser-Graffitientfernung und Fassadenreinigung in Köln.
@@ -145,3 +158,34 @@ interaktiven Zugaben entfallen.
 Chromium, Breiten von 320 px bis 1920 px, heller und dunkler Modus, mit und
 ohne JavaScript, Maus/Tastatur/Touch. Kein horizontaler Überlauf, keine
 Konsolenfehler, keine doppelten IDs.
+
+---
+
+# Nestwerk – Wohnungssuche
+
+Liegt in [`nestwerk/`](nestwerk/) und hat mit der Website nichts zu tun –
+eigener Ordner, eigene Dateien, eigene Dokumentation.
+
+Nestwerk führt zusammen, was sonst auf drei Portale verteilt ist: Mietmarkt,
+Kaufangebote, WG-Zimmer und Wohnungstausch. Ein Profil, eine Merkliste, eine
+Bewerbermappe für alle vier.
+
+**Zum Ausprobieren:** `nestwerk/dist/nestwerk.html` per Doppelklick öffnen.
+
+Was dabei über die Vorlagen hinausgeht:
+
+* **Ringtausch** – findet Tauschketten über zwei, drei oder vier Haushalte,
+  nicht nur den direkten Tausch, der praktisch nie zustande kommt.
+* **Vergleichsmiete** an jedem Inserat, mit Hinweis auf die Mietpreisbremse.
+* **Vertragslupe** – liest den Inseratstext auf Klauseln, die später Geld
+  kosten, und erklärt jede einzeln.
+* **Prüfhinweis** – erkennt die üblichen Muster erfundener Inserate.
+* **Echte Monatskosten** statt Warmmiete, inklusive Einmalkosten beim Einzug.
+* **Passung ohne bezahlte Plätze**, mit offengelegter Rechnung.
+* **WG-Passung** über sechs Dimensionen des Zusammenlebens.
+* **Mieten oder kaufen** – Vermögensvergleich über frei wählbare Jahre.
+* **Karte und Bilder selbst gezeichnet** – kein Kachelserver, keine fremden
+  Fotos, keine Nachverfolgung.
+
+Alles läuft im Browser. Kein Server, kein Konto, keine Übertragung an Dritte.
+Die vollständige Beschreibung steht in [`nestwerk/README.md`](nestwerk/README.md).

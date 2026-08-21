@@ -51,7 +51,7 @@
       "email": "info@cleangreennature.de",
       "telephone": "+491635021968",
       "priceRange": "€€",
-      "founder": { "@type": "Person", "name": "Niklas Haberberg" },
+      "founder": { "@type": "Person", "name": "Niklas Haberberg", "jobTitle": "Laserbeauftragter" },
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Plankgasse 34",
@@ -87,6 +87,9 @@
       "mainEntity": [
         { "@type": "Question", "name": "Ist die Laserreinigung auch für denkmalgeschützte Fassaden geeignet?", "acceptedAnswer": { "@type": "Answer", "text": "Ja – genau dafür ist die Methode besonders geeignet. Der Laser trägt ausschließlich die Farb- bzw. Schmutzschicht ab, ohne den historischen Untergrund wie Sandstein oder Klinker zu beschädigen. Im Preisrechner gibt es dafür eine eigene Kategorie, die den zusätzlichen Sorgfaltsaufwand berücksichtigt." } },
         { "@type": "Question", "name": "Was kostet die Graffitientfernung?", "acceptedAnswer": { "@type": "Answer", "text": "Das hängt von Fläche, Untergrund und Verschmutzungsgrad ab. Über den Online-Rechner erhalten Sie eine erste Richtpreis-Einschätzung. Das verbindliche Angebot erstellen wir nach kurzer Sichtung der Fläche." } },
+        { "@type": "Question", "name": "Nehmen Sie auch kleine Aufträge an?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Im Umkreis von rund 2 km um unseren Standort in Köln nehmen wir auch Kleinaufträge ohne Mindestauftragswert an, etwa ein einzelnes Tag am Garagentor, einen Briefkasten oder ein Schild. Bei größerer Entfernung wird ein Mindestauftragswert von 250 Euro berücksichtigt." } },
+        { "@type": "Question", "name": "Kann ich Fotos direkt mit der Anfrage mitschicken?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Im Anfrageformular lassen sich bis zu drei Dateien anhängen, je maximal 5 MB, als JPG, PNG, WEBP, HEIC oder PDF. Eine Gesamtaufnahme und eine Nahaufnahme reichen meist für eine belastbare Einschätzung." } },
+        { "@type": "Question", "name": "Was ist eine Probelaserung?", "acceptedAnswer": { "@type": "Answer", "text": "Vor dem eigentlichen Auftrag lasern wir eine kleine, möglichst unauffällige Teilstelle der Fläche, zum Beispiel an einer Kante oder im Sockelbereich. Es gibt keine feste Quadratmeter-Vorgabe; Sie sehen das Ergebnis auf Ihrem konkreten Untergrund, bevor Sie sich entscheiden." } },
         { "@type": "Question", "name": "Muss ich beim Termin vor Ort sein?", "acceptedAnswer": { "@type": "Answer", "text": "Zwingend notwendig ist das nicht, solange die zu reinigende Fläche frei zugänglich ist. Für die gemeinsame Abnahme am Ende empfehlen wir jedoch, dass Sie oder eine beauftragte Person kurz vor Ort sind." } },
         { "@type": "Question", "name": "Kann der Laser auch mehrere Farbschichten oder alten Lack entfernen?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Über die sogenannte Laserabtragsschwelle lassen sich auch mehrlagige Übermalungen Schicht für Schicht freilegen. Im Preisrechner ist das als Option „Mehrlagiges Graffiti / Altlack“ hinterlegt." } },
         { "@type": "Question", "name": "Übernimmt meine Versicherung die Kosten?", "acceptedAnswer": { "@type": "Answer", "text": "Das hängt vom individuellen Versicherungsvertrag ab, zum Beispiel Wohngebäude- oder Vandalismus-Versicherung. Wir empfehlen, dies vorab mit der Versicherung zu klären, und stellen gerne ein detailliertes Angebot inklusive Rechnung für die Einreichung aus." } },
@@ -620,69 +623,6 @@ html[data-theme="dark"] .theme-toggle .ico-moon { transform: translateY(0) rotat
 }
 .marquee__item svg { width: 17px; height: 17px; color: var(--brand); flex: none; }
 
-/* ---------- Vorher / Nachher ---------- */
-.compare {
-  position: relative; border-radius: var(--radius-lg); overflow: hidden;
-  aspect-ratio: 16 / 10; box-shadow: var(--shadow-3); background: #2a211b;
-  border: 1px solid var(--border);
-  touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none;
-  /* Auf dem Handy volle Breite, auf größeren Displays bewusst zurückgenommen */
-  max-width: 900px; margin-inline: auto;
-}
-.compare__layer { position: absolute; inset: 0; isolation: isolate; }
-.compare__layer--after { clip-path: inset(0 0 0 var(--pos, 50%)); }
-/* Drei Ebenen je Seite, in dieser Reihenfolge übereinander:
-   gezeichnete Wand (greift, falls das Foto fehlt) · Fassadenfoto · Graffiti bzw. Glanz */
-.compare__base, .compare__photo, .compare__art, .compare__texture {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-}
-.compare__photo, .compare__texture { object-fit: cover; }
-/* Wandstruktur legt sich über die Farbe – lässt das Graffiti aufgesprüht wirken */
-.compare__texture { mix-blend-mode: soft-light; opacity: .8; pointer-events: none; }
-/* Nicht ladbare Bilder verschwinden, ohne den Platz zu verlieren */
-img.img-failed { visibility: hidden; }
-.compare__photo--clean { filter: brightness(1.07) saturate(1.06) contrast(1.02); }
-.compare__tag {
-  position: absolute; top: 14px; z-index: 4;
-  padding: .4rem .8rem; border-radius: var(--radius-full);
-  font-size: .7rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
-  background: rgba(6,12,20,.72); color: #fff; border: 1px solid rgba(255,255,255,.16);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  pointer-events: none;
-}
-.compare__tag--before { left: 14px; }
-.compare__tag--after { right: 14px; color: var(--brand-300); border-color: rgba(45,212,191,.4); }
-.compare__handle {
-  position: absolute; top: 0; bottom: 0; left: var(--pos, 50%); width: 3px; z-index: 5;
-  background: rgba(255,255,255,.95); transform: translateX(-50%);
-  box-shadow: 0 0 0 1px rgba(0,0,0,.15), 0 0 22px rgba(45,212,191,.85);
-  cursor: ew-resize;
-}
-.compare__grip {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 48px; height: 48px; border-radius: 50%;
-  background: #fff; color: #0c1b28; display: grid; place-items: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,.4);
-  transition: transform .2s var(--ease-spring);
-}
-.compare__handle:focus-visible .compare__grip,
-.compare:hover .compare__grip { transform: translate(-50%, -50%) scale(1.09); }
-.compare__grip svg { width: 22px; height: 22px; }
-.compare__hint {
-  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); z-index: 4;
-  font-size: .72rem; font-weight: 700; color: #dbeafe;
-  background: rgba(6,12,20,.66); padding: .35rem .8rem; border-radius: var(--radius-full);
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-  pointer-events: none; transition: opacity .3s;
-}
-.compare.is-touched .compare__hint { opacity: 0; }
-
-/* Diagramm-Beschriftungen folgen dem Farbmodus */
-#laser-diagram text { font-family: var(--font-sans); }
-#laser-diagram .dg-label { fill: var(--text-soft); }
-#laser-diagram .dg-accent { fill: var(--brand); }
-#laser-diagram .dg-tick { stroke: var(--text-soft); }
-
 /* ---------- Prozessschritte ---------- */
 .steps { counter-reset: step; display: grid; gap: 1.25rem; position: relative; }
 @media (min-width: 640px)  { .steps { grid-template-columns: repeat(2, 1fr); } }
@@ -877,6 +817,61 @@ input[type="range"]:active::-webkit-slider-thumb { box-shadow: 0 0 0 8px color-m
 .check-card input { flex: none; width: 19px; height: 19px; margin-top: .15rem; accent-color: var(--brand-600); cursor: pointer; }
 .check-card strong { display: block; font-size: .9rem; font-weight: 750; }
 .check-card small { display: block; color: var(--text-soft); font-size: .76rem; line-height: 1.5; margin-top: .15rem; }
+
+/* Datei-Upload */
+.dropzone {
+  position: relative; display: flex; align-items: center; gap: 1rem;
+  padding: 1.1rem 1.2rem; border-radius: var(--radius-sm);
+  border: 2px dashed var(--border-strong); background: var(--surface-2);
+  cursor: pointer; transition: all .22s var(--ease-out);
+}
+.dropzone:hover { border-color: var(--brand); background: var(--brand-soft); }
+.dropzone.is-dragover {
+  border-color: var(--brand-500); background: var(--brand-soft);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-500) 18%, transparent);
+}
+.dropzone:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: 3px; }
+/* Das Feld selbst bleibt bedienbar, ist aber unsichtbar über der Fläche */
+.dropzone input[type="file"] {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: 0; cursor: pointer;
+}
+.dropzone__icon {
+  width: 44px; height: 44px; border-radius: var(--radius-xs); flex: none;
+  display: grid; place-items: center;
+  background: var(--surface); color: var(--brand); border: 1px solid var(--brand-line);
+}
+.dropzone__icon svg { width: 22px; height: 22px; }
+.dropzone__text strong { display: block; font-size: .9rem; font-weight: 750; }
+.dropzone__text small { display: block; color: var(--text-soft); font-size: .76rem; margin-top: .15rem; }
+
+.filelist { display: grid; gap: .5rem; margin-top: .7rem; }
+.filelist:empty { margin-top: 0; }
+.filerow {
+  display: flex; align-items: center; gap: .8rem;
+  padding: .55rem .7rem; border-radius: var(--radius-xs);
+  background: var(--surface-2); border: 1px solid var(--border);
+  animation: accIn .3s var(--ease-out);
+}
+.filerow__thumb {
+  width: 44px; height: 44px; border-radius: 8px; flex: none; object-fit: cover;
+  background: var(--surface-3); display: grid; place-items: center; color: var(--text-soft);
+}
+.filerow__thumb svg { width: 20px; height: 20px; }
+.filerow__meta { flex: 1; min-width: 0; }
+.filerow__meta b {
+  display: block; font-size: .82rem; font-weight: 650;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.filerow__meta span { font-size: .72rem; color: var(--text-soft); }
+.filerow__drop {
+  flex: none; width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center; color: var(--text-soft);
+  border: 1px solid var(--border); background: var(--surface);
+  transition: all .2s var(--ease-out);
+}
+.filerow__drop:hover { background: #e11d48; border-color: #e11d48; color: #fff; }
+.filerow__drop svg { width: 14px; height: 14px; }
 
 /* Preis-Box */
 .price-box {
@@ -1152,7 +1147,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
 /* ---------- Print ---------- */
 @media print {
   .header, .dock, .to-top, .progress-rail, .palette, .modal, .marquee,
-  .hero__beam, .hero__grid-bg, .compare, .mobile-nav, .toasts { display: none !important; }
+  .hero__beam, .hero__grid-bg, .mobile-nav, .toasts { display: none !important; }
   body { background: #fff; color: #000; }
   .hero { background: #fff !important; color: #000; padding-block: 1rem; }
   .hero h1, .hero p, .hero__stats dt { color: #000 !important; }
@@ -1198,7 +1193,6 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
   <symbol id="ic-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10.3c0 5.4-8 12.2-8 12.2s-8-6.8-8-12.2a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.8"/></symbol>
   <symbol id="ic-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.6-2.4h6.8L17 8h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z"/><circle cx="12" cy="14" r="3.6"/></symbol>
   <symbol id="ic-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M4.8 15.5A2 2 0 0 1 3.5 13.6V5.5a2 2 0 0 1 2-2h8.1c.8 0 1.5.4 1.8 1.1"/></symbol>
-  <symbol id="ic-drag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7 4.5 12 9 17M15 7l4.5 5-4.5 5"/></symbol>
   <symbol id="ic-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.2"/><path d="M12 11v5.5M12 7.8h.01"/></symbol>
   <symbol id="ic-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.2"/><path d="M12 6.8V12l3.4 2"/></symbol>
   <symbol id="ic-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5.5A1.5 1.5 0 0 1 5.5 4h8A1.5 1.5 0 0 1 15 5.5V21"/><path d="M15 10h3.5A1.5 1.5 0 0 1 20 11.5V21M2 21h20M7.5 8h4M7.5 12h4M7.5 16h4"/></symbol>
@@ -1222,7 +1216,6 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     </a>
 
     <nav class="nav" id="primary-nav" aria-label="Hauptnavigation">
-      <a class="nav__link" href="#ergebnis">Ergebnis</a>
       <a class="nav__link" href="#leistungen">Leistungen</a>
       <a class="nav__link" href="#technologie">Technologie</a>
       <a class="nav__link" href="#rechner">Rechner</a>
@@ -1255,7 +1248,6 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
      würde sonst zum Bezugsrahmen für position:fixed und das Panel kollabieren. -->
   <div class="mobile-nav" id="mobile-nav" hidden>
     <a href="#vorteile" data-mnav style="animation-delay:.04s">Vorteile <span>Warum Laser?</span></a>
-    <a href="#ergebnis" data-mnav style="animation-delay:.08s">Ergebnis <span>Vorher / Nachher</span></a>
     <a href="#leistungen" data-mnav style="animation-delay:.12s">Leistungen <span>5 Servicebereiche</span></a>
     <a href="#technologie" data-mnav style="animation-delay:.16s">Technologie <span>So arbeitet der Laser</span></a>
     <a href="#einsatzbereiche" data-mnav style="animation-delay:.2s">Einsatzbereiche <span>Materialien</span></a>
@@ -1307,10 +1299,10 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
             Kosten online schätzen
             <svg class="btn__arrow" aria-hidden="true"><use href="#ic-arrow-right"/></svg>
           </a>
-          <a class="btn btn--lg" href="#ergebnis"
+          <a class="btn btn--lg" href="#leistungen"
              style="background:rgba(255,255,255,.08);color:#eaf4f8;border-color:rgba(255,255,255,.18)">
-            <svg aria-hidden="true"><use href="#ic-drag"/></svg>
-            Ergebnis ansehen
+            <svg aria-hidden="true"><use href="#ic-layers"/></svg>
+            Leistungen ansehen
           </a>
         </div>
 
@@ -1339,7 +1331,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
             <svg aria-hidden="true"><use href="#ic-pin"/></svg> Köln &amp; Umland
           </div>
           <div class="hero__float hero__float--b">
-            <svg aria-hidden="true"><use href="#ic-shield"/></svg> Probefläche möglich
+            <svg aria-hidden="true"><use href="#ic-shield"/></svg> Probelaserung möglich
           </div>
         </div>
       </div>
@@ -1352,11 +1344,13 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       <div class="marquee__group" style="display:flex">
         <span class="marquee__item"><svg><use href="#ic-leaf"/></svg> Ohne Lösungsmittel &amp; Säuren</span>
         <span class="marquee__item"><svg><use href="#ic-shield"/></svg> Denkmalschutzgeeignet</span>
+        <span class="marquee__item"><svg><use href="#ic-bolt"/></svg> Laserbeauftragter im Einsatz</span>
         <span class="marquee__item"><svg><use href="#ic-bolt"/></svg> Berührungslose Ablation</span>
         <span class="marquee__item"><svg><use href="#ic-clipboard"/></svg> Dokumentation auf Wunsch</span>
         <span class="marquee__item"><svg><use href="#ic-pin"/></svg> Mobil in ganz Köln</span>
         <span class="marquee__item"><svg><use href="#ic-calendar"/></svg> GraffitiCare Abo</span>
-        <span class="marquee__item"><svg><use href="#ic-target"/></svg> Pilotfläche ab 1 m²</span>
+        <span class="marquee__item"><svg><use href="#ic-target"/></svg> Probelaserung vorab möglich</span>
+        <span class="marquee__item"><svg><use href="#ic-pin"/></svg> Kleinaufträge im 2-km-Umkreis</span>
         <span class="marquee__item"><svg><use href="#ic-building"/></svg> Für Hausverwaltungen &amp; WEGs</span>
       </div>
     </div>
@@ -1410,223 +1404,6 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           <p class="eyebrow" style="font-size:.62rem">Nachweisbar</p>
           <p style="color:var(--text);font-weight:700;font-size:.95rem;margin-top:.4rem">Auf Wunsch mit Fotodokumentation für Eigentümer &amp; Versicherung.</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== Vorher / Nachher ===================== -->
-  <section class="section section--alt section--line" id="ergebnis">
-    <div class="shell">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Das Ergebnis</p>
-        <h2>Ziehen Sie den Regler – und sehen Sie den Unterschied</h2>
-        <p>Dieselbe Klinkerfassade vor und nach der Laserreinigung.
-           Der Laser trägt die Farbschicht ab, ohne den Stein anzugreifen.</p>
-      </div>
-
-      <div data-reveal>
-        <p class="sr-only">
-          Interaktiver Vergleich: Links die Fassade mit Graffiti vor der Reinigung,
-          rechts dieselbe Fassade nach der Laserreinigung.
-        </p>
-        <div class="compare" id="compare"
-             role="group" aria-label="Vergleich vor und nach der Laserreinigung">
-
-          <!-- Vorher: Fassadenfoto plus aufgetragenes Graffiti.
-               Die gezeichnete Wand darunter greift, falls das Foto nicht lädt. -->
-          <div class="compare__layer compare__layer--before" aria-hidden="true">
-            <svg class="compare__base" viewBox="0 0 1200 750" preserveAspectRatio="xMidYMid slice">
-              <defs>
-                <pattern id="brickBefore" width="200" height="100" patternUnits="userSpaceOnUse">
-                  <rect width="200" height="100" fill="#c6bcae"/>
-                  <rect x="4" y="4" width="92" height="42" rx="3" fill="#a45737"/>
-                  <rect x="104" y="4" width="92" height="42" rx="3" fill="#98502f"/>
-                  <rect x="-46" y="54" width="92" height="42" rx="3" fill="#ab5f42"/>
-                  <rect x="54" y="54" width="92" height="42" rx="3" fill="#93492c"/>
-                  <rect x="154" y="54" width="92" height="42" rx="3" fill="#a75a3c"/>
-                </pattern>
-                <filter id="noiseBefore" x="0" y="0" width="100%" height="100%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/>
-                  <feColorMatrix type="saturate" values="0"/>
-                </filter>
-              </defs>
-              <rect width="1200" height="750" fill="url(#brickBefore)"/>
-              <rect width="1200" height="750" fill="#fff" filter="url(#noiseBefore)" opacity=".32" style="mix-blend-mode:overlay"/>
-            </svg>
-
-            <img class="compare__photo" src="https://images.unsplash.com/photo-1495578942200-c5f5d2137def?auto=format&amp;fit=crop&amp;w=1400&amp;h=875&amp;q=80"
-                 alt="" width="1400" height="875" loading="lazy" decoding="async">
-
-            <svg class="compare__art" viewBox="0 0 1200 750" preserveAspectRatio="xMidYMid slice">
-              <defs>
-                <!-- Unruhige Kanten: grobe Verformung plus feines Kantenflirren -->
-                <filter id="cgRough" x="-25%" y="-25%" width="150%" height="150%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="5" seed="11" result="n"/>
-                  <feDisplacementMap in="SourceGraphic" in2="n" scale="11"
-                                     xChannelSelector="R" yChannelSelector="G" result="d"/>
-                  <feGaussianBlur in="d" stdDeviation="0.6"/>
-                </filter>
-                <!-- Sprühnebel rund um die Striche -->
-                <filter id="cgMist" x="-50%" y="-50%" width="200%" height="200%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="6" result="n"/>
-                  <feDisplacementMap in="SourceGraphic" in2="n" scale="26"/>
-                  <feGaussianBlur stdDeviation="19"/>
-                </filter>
-                <filter id="cgDust" x="-30%" y="-30%" width="160%" height="160%">
-                  <feGaussianBlur stdDeviation="4"/>
-                </filter>
-                <linearGradient id="cgGrime" x1="0" y1="1" x2="0" y2="0">
-                  <stop offset="0%"  stop-color="#2a1d13" stop-opacity=".44"/>
-                  <stop offset="38%" stop-color="#2a1d13" stop-opacity=".1"/>
-                  <stop offset="70%" stop-color="#2a1d13" stop-opacity="0"/>
-                </linearGradient>
-                <radialGradient id="cgVig" cx="50%" cy="42%" r="80%">
-                  <stop offset="60%" stop-color="#000" stop-opacity="0"/>
-                  <stop offset="100%" stop-color="#000" stop-opacity=".3"/>
-                </radialGradient>
-
-                <!-- Der Schriftzug einmal definiert, mehrfach verwendet -->
-                <g id="cgTag">
-                  <path d="M177 504 C192 357 288 324 327 456 C354 549 408 552 429 456 C456 336 540 333 561 489"/>
-                  <path d="M654 489 C654 366 732 330 777 381 C819 429 774 489 717 486 C777 489 831 522 807 582 C783 636 684 621 660 567"/>
-                  <path d="M894 522 L909 348 L1002 504 L1026 345"/>
-                </g>
-              </defs>
-
-              <!-- Verschmutzung und Randabdunklung -->
-              <rect width="1200" height="750" fill="url(#cgGrime)"/>
-              <g fill="#241a12" opacity=".22" filter="url(#cgMist)">
-                <ellipse cx="150" cy="706" rx="240" ry="66"/>
-                <ellipse cx="1010" cy="720" rx="270" ry="56"/>
-              </g>
-
-              <!-- Sprühnebel: der feine Dunst, der beim Sprayen danebengeht -->
-              <g fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#cgMist)">
-                <g stroke="#d81b8c" stroke-width="96" opacity=".26"><use href="#cgTag"/></g>
-                <g stroke="#a3e635" stroke-width="118" opacity=".14"><use href="#cgTag"/></g>
-              </g>
-
-              <!-- Die eigentliche Farbe. Leicht durchscheinend, damit die
-                   Wandstruktur nicht komplett zugedeckt wirkt. -->
-              <g opacity=".93">
-                <g fill="none" stroke="#8fd420" stroke-width="66" stroke-linecap="round" stroke-linejoin="round"
-                   filter="url(#cgRough)"><use href="#cgTag"/></g>
-                <g fill="none" stroke="#cc1a84" stroke-width="45" stroke-linecap="round" stroke-linejoin="round"
-                   filter="url(#cgRough)"><use href="#cgTag"/></g>
-                <g fill="none" stroke="#f472b6" stroke-width="9" stroke-linecap="round" opacity=".62"
-                   filter="url(#cgRough)">
-                  <path d="M207 450 C222 381 267 360 294 411"/>
-                  <path d="M678 444 C678 384 720 366 750 387"/>
-                  <path d="M909 450 L918 375"/>
-                </g>
-
-                <!-- Läufer, nach unten auslaufend -->
-                <g fill="#cc1a84" filter="url(#cgRough)">
-                  <path d="M251 498 C251 580 255 634 258 648 C261 634 265 580 265 498 Z"/>
-                <path d="M381.5 512 C381.5 563 385 590 387 604 C389 590 392.5 563 392.5 512 Z"/>
-                <path d="M520 506 C520 603 524 668 528 682 C532 668 536 603 536 506 Z"/>
-                <path d="M700 500 C700 551 703 578 705 592 C707 578 710 551 710 500 Z"/>
-                <path d="M803.5 586 C803.5 650 807 688 810 702 C813 688 816.5 650 816.5 586 Z"/>
-                <path d="M984 510 C984 579 987 622 990 636 C993 622 996 579 996 510 Z"/>
-                </g>
-                <g fill="#cc1a84">
-                  <circle cx="258" cy="648" r="9"/><circle cx="387" cy="604" r="7"/>
-                  <circle cx="528" cy="682" r="10"/><circle cx="705" cy="592" r="6.5"/>
-                  <circle cx="810" cy="702" r="8"/><circle cx="990" cy="636" r="7.5"/>
-                </g>
-              </g>
-
-              <!-- Zweiter Tag in Schwarz -->
-              <g fill="none" stroke="#12161d" stroke-width="16.5" stroke-linecap="round" stroke-linejoin="round"
-                 opacity=".68" filter="url(#cgRough)">
-                <path d="M90 672 C156 621 198 678 264 636 C321 600 372 663 438 627"/>
-                <path d="M1035 225 C1074 180 1116 237 1158 198"/>
-              </g>
-
-              <!-- Feiner Sprühstaub -->
-              <g fill="#12161d" opacity=".34" filter="url(#cgDust)">
-                <circle cx="147" cy="588" r="5"/><circle cx="606" cy="300" r="4"/>
-                <circle cx="1074" cy="450" r="5.5"/><circle cx="768" cy="264" r="3.5"/>
-                <circle cx="378" cy="273" r="4.5"/><circle cx="1068" cy="606" r="4"/>
-                <circle cx="90" cy="384" r="3.5"/><circle cx="564" cy="636" r="4.5"/>
-              </g>
-              <g fill="#cc1a84" opacity=".3" filter="url(#cgDust)">
-                <circle cx="480" cy="330" r="7"/><circle cx="855" cy="612" r="5.5"/>
-                <circle cx="612" cy="648" r="4.5"/><circle cx="336" cy="618" r="6"/>
-                <circle cx="1110" cy="396" r="5"/><circle cx="222" cy="342" r="4"/>
-              </g>
-
-              <rect width="1200" height="750" fill="url(#cgVig)"/>
-            </svg>
-
-            <!-- Dieselbe Aufnahme noch einmal, im Weichlicht-Modus über der Farbe:
-                 dadurch zeichnet sich die Wandstruktur durch das Graffiti ab. -->
-            <img class="compare__texture" src="https://images.unsplash.com/photo-1495578942200-c5f5d2137def?auto=format&amp;fit=crop&amp;w=1400&amp;h=875&amp;q=80"
-                 alt="" width="1400" height="875" loading="lazy" decoding="async" aria-hidden="true">
-          </div>
-
-          <!-- Nachher: dieselbe Aufnahme, gereinigt -->
-          <div class="compare__layer compare__layer--after" aria-hidden="true">
-            <svg class="compare__base" viewBox="0 0 1200 750" preserveAspectRatio="xMidYMid slice">
-              <defs>
-                <pattern id="brickAfter" width="200" height="100" patternUnits="userSpaceOnUse">
-                  <rect width="200" height="100" fill="#ded5c8"/>
-                  <rect x="4" y="4" width="92" height="42" rx="3" fill="#c0684a"/>
-                  <rect x="104" y="4" width="92" height="42" rx="3" fill="#b45f3f"/>
-                  <rect x="-46" y="54" width="92" height="42" rx="3" fill="#c87152"/>
-                  <rect x="54" y="54" width="92" height="42" rx="3" fill="#af593b"/>
-                  <rect x="154" y="54" width="92" height="42" rx="3" fill="#c46c4c"/>
-                </pattern>
-                <filter id="noiseAfter" x="0" y="0" width="100%" height="100%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
-                  <feColorMatrix type="saturate" values="0"/>
-                </filter>
-              </defs>
-              <rect width="1200" height="750" fill="url(#brickAfter)"/>
-              <rect width="1200" height="750" fill="#fff" filter="url(#noiseAfter)" opacity=".2" style="mix-blend-mode:overlay"/>
-            </svg>
-
-            <img class="compare__photo compare__photo--clean" src="https://images.unsplash.com/photo-1495578942200-c5f5d2137def?auto=format&amp;fit=crop&amp;w=1400&amp;h=875&amp;q=80"
-                 alt="" width="1400" height="875" loading="lazy" decoding="async">
-
-            <img class="compare__texture" src="https://images.unsplash.com/photo-1495578942200-c5f5d2137def?auto=format&amp;fit=crop&amp;w=1400&amp;h=875&amp;q=80"
-                 alt="" width="1400" height="875" loading="lazy" decoding="async" aria-hidden="true">
-
-            <svg class="compare__art" viewBox="0 0 1200 750" preserveAspectRatio="xMidYMid slice">
-              <defs>
-                <radialGradient id="cgGlow" cx="50%" cy="40%" r="70%">
-                  <stop offset="0%" stop-color="#fff" stop-opacity=".2"/>
-                  <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
-                </radialGradient>
-                <radialGradient id="cgVigAfter" cx="50%" cy="42%" r="82%">
-                  <stop offset="64%" stop-color="#000" stop-opacity="0"/>
-                  <stop offset="100%" stop-color="#000" stop-opacity=".26"/>
-                </radialGradient>
-              </defs>
-              <rect width="1200" height="750" fill="url(#cgGlow)"/>
-              <rect width="1200" height="750" fill="url(#cgVigAfter)"/>
-            </svg>
-          </div>
-
-          <span class="compare__tag compare__tag--before">Vorher</span>
-          <span class="compare__tag compare__tag--after">Nachher</span>
-
-          <div class="compare__handle" id="compare-handle"
-               role="slider" tabindex="0"
-               aria-label="Vergleichsregler: vorher und nachher"
-               aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 Prozent gereinigt"
-               aria-orientation="horizontal">
-            <span class="compare__grip" aria-hidden="true"><svg><use href="#ic-drag"/></svg></span>
-          </div>
-          <span class="compare__hint">Ziehen oder Pfeiltasten nutzen</span>
-        </div>
-
-        <p class="soft" style="margin-top:1rem;text-align:center;max-width:62ch;margin-inline:auto">
-          Beide Seiten zeigen dieselbe Fassadenaufnahme; das Graffiti ist zur Veranschaulichung
-          aufgetragen. Es handelt sich also um eine Demonstration des Verfahrens, nicht um die
-          Dokumentation eines konkreten Auftrags. Echte Vorher-nachher-Fotos Ihres Objekts erhalten
-          Sie auf Wunsch als Teil der Dokumentation.
-        </p>
       </div>
     </div>
   </section>
@@ -2000,12 +1777,13 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           <svg aria-hidden="true"><use href="#ic-target"/></svg>
         </span>
         <div style="flex:1 1 22rem;min-width:0">
-          <h3 style="margin-bottom:.35rem">Noch unsicher? Starten Sie mit einem Pilotprojekt.</h3>
-          <p>Auf Wunsch reinigen wir zunächst probeweise <strong style="color:var(--text)">1&nbsp;m²</strong>
-             Ihrer Fläche. So machen Sie sich live und unverbindlich selbst ein Bild vom Ergebnis,
-             bevor Sie sich für den vollständigen Auftrag entscheiden.</p>
+          <h3 style="margin-bottom:.35rem">Noch unsicher? Starten Sie mit einer Probelaserung.</h3>
+          <p>Auf Wunsch lasern wir vorab eine <strong style="color:var(--text)">kleine, unauffällige
+             Teilstelle</strong> Ihrer Fläche – zum Beispiel an einer Kante, im Sockelbereich oder hinter
+             einem Fallrohr. Ohne Quadratmeter-Vorgabe: Es geht allein darum, dass Sie das Ergebnis auf
+             Ihrem Untergrund live und unverbindlich sehen, bevor Sie den vollständigen Auftrag vergeben.</p>
         </div>
-        <a class="btn btn--dark" href="#rechner" style="flex:none">Pilotprojekt anfragen</a>
+        <a class="btn btn--dark" href="#rechner" style="flex:none" data-preselect="probelaserung">Probelaserung anfragen</a>
       </div>
     </div>
   </section>
@@ -2041,7 +1819,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
         </div>
       </div>
 
-      <form id="quote-form" class="calc" novalidate
+      <form id="quote-form" class="calc" novalidate enctype="multipart/form-data"
             action="https://formsubmit.co/info@cleangreennature.de" method="POST" data-reveal>
         <input type="hidden" name="_subject" value="Neue Angebotsanfrage über die Clean Green Nature Website">
         <input type="hidden" name="_template" value="table">
@@ -2062,7 +1840,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
               <output class="range-out" id="area-out" for="area-range">1 m²</output>
             </div>
             <div class="presets" role="group" aria-label="Häufige Flächengrößen">
-              <button class="preset" type="button" data-area="1">1 m² Probe</button>
+              <button class="preset" type="button" data-area="1">1 m²</button>
               <button class="preset" type="button" data-area="5">5 m²</button>
               <button class="preset" type="button" data-area="15">15 m²</button>
               <button class="preset" type="button" data-area="40">40 m²</button>
@@ -2076,8 +1854,9 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
             <input id="distance-input" class="input" type="number" min="0" max="300" step="1" value="0"
                    inputmode="numeric" name="Entfernung_in_km">
             <p class="field__hint">
-              Der Mindestauftragswert von 250&nbsp;€ wird nur berücksichtigt, wenn die Entfernung
-              mehr als 10&nbsp;km beträgt.
+              <strong style="color:var(--brand)">Im Umkreis von 2&nbsp;km nehmen wir auch Kleinaufträge
+              ohne Mindestauftragswert an.</strong> Darüber hinaus wird ein Mindestauftragswert von
+              250&nbsp;€ berücksichtigt.
             </p>
           </div>
 
@@ -2127,7 +1906,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
             </div>
 
             <p class="price-note" id="min-order-note">
-              Weil die Entfernung über 10&nbsp;km beträgt, wird ein Mindestauftragswert von 250&nbsp;€ berücksichtigt.
+              Ab 2&nbsp;km Entfernung gilt ein Mindestauftragswert von 250&nbsp;€. Innerhalb von 2&nbsp;km entfällt er.
             </p>
             <p class="price-note" id="doc-price-note">
               Die Dokumentation ist eine kostenpflichtige Zusatzleistung und nicht im Richtpreis enthalten.
@@ -2176,6 +1955,12 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
 
           <p class="field__label" style="margin-bottom:.6rem">Interessante Zusatzleistungen</p>
           <div style="display:grid;gap:.6rem;margin-bottom:1.35rem">
+            <label class="check-card">
+              <input type="checkbox" id="pilot-check" name="Wunsch_Probelaserung"
+                     value="Ja, bitte vorab eine Probelaserung an einer kleinen Teilstelle">
+              <span><strong>Probelaserung vorab</strong>
+                <small>Wir lasern zuerst eine kleine, unauffällige Teilstelle, damit Sie das Ergebnis auf Ihrem Untergrund sehen.</small></span>
+            </label>
             <label class="check-card">
               <input type="checkbox" id="documentation-check" name="Interesse_Dokumentation"
                      value="Ja, bitte Dokumentation kostenpflichtig anbieten">
@@ -2237,14 +2022,36 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
                       placeholder="Objekt, gewünschte Reaktionszeit, Kontrollturnus, bekannte Hotspots, Dokumentationsbedarf oder sonstige Besonderheiten."></textarea>
           </div>
 
+          <!-- Fotos: helfen enorm bei der Einschätzung -->
+          <div class="field" data-field>
+            <span class="field__label" id="upload-label">
+              Fotos der Fläche <span class="soft" style="font-weight:600">(optional, sehr hilfreich)</span>
+            </span>
+
+            <label class="dropzone" id="dropzone" for="f-files">
+              <input id="f-files" type="file" name="attachment" multiple
+                     accept="image/jpeg,image/png,image/webp,image/heic,application/pdf"
+                     aria-labelledby="upload-label" aria-describedby="upload-hint">
+              <span class="dropzone__icon" aria-hidden="true"><svg><use href="#ic-camera"/></svg></span>
+              <span class="dropzone__text">
+                <strong>Fotos auswählen oder hierher ziehen</strong>
+                <small id="upload-hint">Bis zu 3 Dateien, je max. 5&nbsp;MB · JPG, PNG, WEBP, HEIC oder PDF</small>
+              </span>
+            </label>
+
+            <ul class="filelist" id="filelist" aria-live="polite"></ul>
+            <p class="error-text" id="upload-error"></p>
+            <p class="field__hint">
+              Eine Gesamtaufnahme und eine Nahaufnahme reichen meist schon für eine belastbare
+              Einschätzung. Alternativ können Sie Fotos auch später an
+              <a href="mailto:info@cleangreennature.de" style="color:var(--brand)">info@cleangreennature.de</a> senden.
+            </p>
+          </div>
+
           <div class="field">
             <label for="f-note">Weitere Informationen <span class="soft" style="font-weight:600">(optional)</span></label>
             <textarea id="f-note" class="textarea" name="Allgemeine_Beschreibung" rows="4"
                       placeholder="Ort, Untergrund, Verschmutzung, Gegenstand, gewünschter Zeitraum oder Motiv …"></textarea>
-            <p class="field__hint">
-              Tipp: Fotos helfen enorm bei der Einschätzung. Senden Sie diese gern zusätzlich an
-              <a href="mailto:info@cleangreennature.de" style="color:var(--brand)">info@cleangreennature.de</a>.
-            </p>
           </div>
 
           <label class="check-card" data-field style="margin-bottom:1.2rem">
@@ -2294,6 +2101,35 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           <p class="acc__a">Das hängt von Fläche, Untergrund und Verschmutzungsgrad ab. Nutzen Sie gerne unseren
             <a href="#rechner">Online-Rechner</a> für eine erste Richtpreis-Einschätzung – das finale,
             verbindliche Angebot erstellen wir nach kurzer Sichtung Ihrer Fläche.</p>
+        </details>
+        <details class="acc" name="faq">
+          <summary class="acc__q">Nehmen Sie auch kleine Aufträge an?
+            <svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></summary>
+          <p class="acc__a">Ja. Im Umkreis von rund 2&nbsp;km um unseren Standort in Köln nehmen wir auch
+            Kleinaufträge ohne Mindestauftragswert an – etwa ein einzelnes Tag am Garagentor, einen
+            Briefkasten, ein Schild oder eine kleine Fläche am Sockel. Bei größerer Entfernung wird ein
+            Mindestauftragswert von 250&nbsp;€ berücksichtigt, weil An- und Abfahrt sowie das Einrichten
+            vor Ort unabhängig von der Flächengröße anfallen. Wenn Sie unsicher sind: Foto schicken,
+            wir sagen Ihnen offen, ob sich der Weg lohnt.</p>
+        </details>
+        <details class="acc" name="faq">
+          <summary class="acc__q">Kann ich Fotos direkt mit der Anfrage mitschicken?
+            <svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></summary>
+          <p class="acc__a">Ja. Im <a href="#rechner">Anfrageformular</a> können Sie bis zu drei Dateien
+            anhängen (je maximal 5&nbsp;MB, als JPG, PNG, WEBP, HEIC oder PDF) – per Klick oder einfach
+            per Ziehen und Ablegen. Eine Gesamtaufnahme und eine Nahaufnahme reichen meist schon für eine
+            belastbare Einschätzung. Alternativ senden Sie Fotos jederzeit an
+            <a href="mailto:info@cleangreennature.de">info@cleangreennature.de</a>.</p>
+        </details>
+        <details class="acc" name="faq">
+          <summary class="acc__q">Was ist eine Probelaserung?
+            <svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></summary>
+          <p class="acc__a">Vor dem eigentlichen Auftrag lasern wir eine kleine, möglichst unauffällige
+            Teilstelle Ihrer Fläche – zum Beispiel an einer Kante, im Sockelbereich oder hinter einem
+            Fallrohr. Es gibt dabei keine feste Quadratmeter-Vorgabe; es geht allein darum, dass Sie das
+            Ergebnis auf Ihrem konkreten Untergrund sehen, bevor Sie sich entscheiden. Besonders
+            empfehlenswert ist das bei Naturstein, historischen Fassaden, versiegelten Belägen und
+            unklarem Materialaufbau.</p>
         </details>
         <details class="acc" name="faq">
           <summary class="acc__q">Muss ich beim Termin vor Ort sein?
@@ -2371,7 +2207,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           <div style="flex:none;position:relative">
             <div style="position:absolute;inset:-14px;border-radius:50%;background:var(--brand-500);filter:blur(30px);opacity:.22" aria-hidden="true"></div>
             <img src="images/niklas-haberberg.jpg"
-                 alt="Niklas Haberberg, Gründer von Clean Green Nature"
+                 alt="Niklas Haberberg, Gründer und Laserbeauftragter von Clean Green Nature"
                  width="150" height="150" loading="lazy" decoding="async"
                  style="position:relative;width:clamp(96px,18vw,150px);aspect-ratio:1;border-radius:50%;object-fit:cover;
                         border:3px solid rgba(45,212,191,.35);box-shadow:0 18px 40px rgba(0,0,0,.45)">
@@ -2379,15 +2215,24 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           <div style="flex:1 1 26rem;min-width:0">
             <p class="eyebrow" style="color:var(--brand-300)">Unsere Vision</p>
             <h2 style="font-size:var(--step-2);color:#fff;margin:.8rem 0 .9rem">
-              Präzision aus der Finanzwelt. Verantwortung aus der Immobilienpraxis.
+              Laserbeauftragter aus Überzeugung.
               <span class="gradient-text">Für ein saubereres Köln.</span>
             </h2>
             <p style="color:#9db3c2;font-size:var(--step--1);line-height:1.8">
-              Clean Green Nature verbindet kaufmännische Genauigkeit mit moderner, materialschonender
-              Lasertechnologie. Der Anspruch: nicht nur Flächen reinigen, sondern nachvollziehbare,
-              dokumentierbare und nachhaltige Lösungen schaffen – und langfristig auch Bepflanzungen,
-              luftreinigende Moosfassaden und lokale soziale Projekte unterstützen.
+              Als Laserbeauftragter verantworte ich bei Clean Green Nature den sicheren und
+              sachgerechten Einsatz der Lasertechnik – von der Beurteilung des Untergrunds über die
+              Wahl der Prozessparameter bis zu den Schutzmaßnahmen vor Ort. Der Anspruch: nicht nur
+              Flächen reinigen, sondern nachvollziehbare, materialschonende und nachhaltige Lösungen
+              schaffen.
             </p>
+            <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.2rem">
+              <span class="chip" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.28);color:var(--brand-300)">
+                <svg aria-hidden="true"><use href="#ic-bolt"/></svg> Laserbeauftragter
+              </span>
+              <span class="chip" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.28);color:var(--brand-300)">
+                <svg aria-hidden="true"><use href="#ic-shield"/></svg> Sicherheit &amp; Substanzerhalt
+              </span>
+            </div>
             <div style="display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.6rem">
               <button class="btn btn--primary btn--sm" type="button" data-modal-open="modal-vision">
                 Ganze Geschichte lesen <svg class="btn__arrow" aria-hidden="true"><use href="#ic-arrow-right"/></svg>
@@ -2543,7 +2388,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
             <li style="display:flex;gap:.7rem"><svg style="width:18px;height:18px;flex:none;margin-top:.2rem;color:var(--brand)" aria-hidden="true"><use href="#ic-check"/></svg>
               <span class="muted">Für wiederkehrende Fälle ist das GraffitiCare Abo möglich.</span></li>
             <li style="display:flex;gap:.7rem"><svg style="width:18px;height:18px;flex:none;margin-top:.2rem;color:var(--brand)" aria-hidden="true"><use href="#ic-check"/></svg>
-              <span class="muted">Für sensible Flächen empfehlen wir eine Prüfung oder Probefläche.</span></li>
+              <span class="muted">Für sensible Flächen empfehlen wir eine Prüfung oder Probelaserung.</span></li>
           </ul>
           <div style="display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.8rem">
             <a class="btn btn--dark" href="#rechner" data-modal-close>Richtpreis berechnen</a>
@@ -2656,32 +2501,39 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     <div class="modal__body">
       <div style="display:flex;flex-wrap:wrap;gap:2rem">
         <div style="flex:none;margin-inline:auto">
-          <img src="images/niklas-haberberg.jpg" alt="Niklas Haberberg, Gründer von Clean Green Nature"
+          <img src="images/niklas-haberberg.jpg" alt="Niklas Haberberg, Gründer und Laserbeauftragter von Clean Green Nature"
                width="180" height="180" loading="lazy" decoding="async"
                style="width:clamp(120px,22vw,180px);aspect-ratio:1;border-radius:50%;object-fit:cover;
                       border:3px solid rgba(45,212,191,.35);box-shadow:0 18px 40px rgba(0,0,0,.5)">
         </div>
         <div style="flex:1 1 24rem;min-width:0">
           <h3 style="font-size:var(--step-2);color:#fff;line-height:1.2">
-            Präzision aus der Finanzwelt. Verantwortung aus der Immobilienpraxis.
+            Laserbeauftragter aus Überzeugung.
             <span class="gradient-text">Für ein saubereres Köln.</span>
           </h3>
           <div style="display:grid;gap:1rem;margin-top:1.4rem;color:#b6c6d3;font-size:.92rem;line-height:1.8">
-            <p>Ich bin <strong style="color:#fff">Niklas Haberberg</strong>, Gründer von Clean Green Nature.
-              Mein fachlicher Hintergrund liegt in Controlling, Finanzmanagement, Wirtschaftsprüfung und
-              Konzernprozessen. Nach dem Master in Controlling &amp; Finanzmanagement an der CBS in Köln
-              führten mich Stationen in Wirtschaftsprüfung und Konzerncontrolling unter anderem zu Nexia
-              und REWE. Heute arbeite ich als Process Manager im Accounting bei der Peach Property Group
-              und bin damit täglich nah an den Themen Immobilien, Werterhalt und effiziente Prozesse.</p>
-            <p>Aus dieser Schnittstelle ist Clean Green Nature entstanden: In der Immobilienpraxis wird
-              schnell sichtbar, wie stark Graffiti, Vandalismus und ungepflegte Flächen den Eindruck,
-              den Wert und die Aufenthaltsqualität eines Objekts beeinflussen. Gleichzeitig sehe ich,
-              dass klassische Reinigungsverfahren häufig mit Chemie, Wasser, Schmutz oder unnötiger
-              Belastung für sensible Untergründe verbunden sind.</p>
-            <p>Clean Green Nature verbindet deshalb kaufmännische Genauigkeit mit moderner,
-              materialschonender Lasertechnologie. Unser Anspruch ist nicht nur, Flächen zu reinigen,
-              sondern nachvollziehbare, dokumentierbare und nachhaltige Lösungen für Eigentümer,
-              Hausverwaltungen, Gewerbeobjekte und die Stadt Köln zu schaffen.</p>
+            <p>Ich bin <strong style="color:#fff">Niklas Haberberg</strong>, Gründer von Clean Green Nature
+              und <strong style="color:#fff">Laserbeauftragter</strong>. Damit liegt die Verantwortung für
+              den sicheren und sachgerechten Einsatz unserer Lasertechnik direkt bei mir – und nicht bei
+              einem Subunternehmer, den Sie nie zu Gesicht bekommen.</p>
+            <p>Laserreinigung ist kein Gerät, das man einfach einschaltet. Entscheidend sind die
+              Beurteilung des Untergrunds, die Wahl der richtigen Prozessparameter und die Kenntnis der
+              Abtragsschwelle, ab der die Farbschicht verdampft, der Stein darunter aber unberührt bleibt.
+              Genau dort liegt der Unterschied zwischen einer sauberen Fassade und einem dauerhaften
+              Schaden an der Bausubstanz. Dazu gehören ebenso die Schutzmaßnahmen vor Ort: Absperrung des
+              Arbeitsbereichs, Augenschutz und die Beurteilung von Reflexionen an der Fassade.</p>
+            <p style="color:#fff;font-weight:750;font-size:1rem">
+              Warum Immobilien – und warum ausgerechnet Laser</p>
+            <p>Mein beruflicher Hintergrund liegt in Controlling und Finanzmanagement, mit einem Master in
+              Controlling &amp; Finanzmanagement an der CBS in Köln und Berührungspunkten zur
+              Immobilienwirtschaft. In der Praxis wird schnell sichtbar, wie stark Graffiti, Vandalismus
+              und ungepflegte Flächen den Eindruck, den Wert und die Aufenthaltsqualität eines Objekts
+              beeinflussen – und wie oft klassische Reinigungsverfahren mit Chemie, Schmutzwasser oder
+              unnötiger Belastung für sensible Untergründe einhergehen.</p>
+            <p>Aus dieser Beobachtung ist Clean Green Nature entstanden. Was ich aus dem kaufmännischen
+              Bereich mitbringe, ist die Genauigkeit: nachvollziehbare Angebote, saubere Dokumentation und
+              verlässliche Absprachen. Was den Ausschlag gibt, ist die Technik dahinter – und die
+              Verantwortung, sie richtig einzusetzen.</p>
             <p style="color:#fff;font-weight:750;font-size:1rem">
               Mehr als Reinigung: ein Beitrag für ein grüneres und sozialeres Köln</p>
             <p>Köln ist für mich mehr als ein Standort. Als ehrenamtlicher Jugendleiter bei den
@@ -2707,7 +2559,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           </p>
           <div style="border-left:3px solid var(--brand-500);padding-left:1rem;margin-top:1.8rem;
                       color:#8fa8b8;font-size:.85rem">
-            Niklas Haberberg<br><span style="opacity:.75">Inhaber Clean Green Nature</span>
+            Niklas Haberberg<br><span style="opacity:.75">Inhaber &amp; Laserbeauftragter, Clean Green Nature</span>
           </div>
         </div>
       </div>
@@ -2900,24 +2752,37 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
          Ihrer Anfrage an unsere E-Mail-Adresse verarbeitet. Weitere Informationen finden Sie unter:
          <a href="https://formsubmit.co/privacy.pdf" target="_blank" rel="noopener noreferrer">formsubmit.co/privacy.pdf</a></p>
 
-      <h3>7. SSL- bzw. TLS-Verschlüsselung</h3>
+      <h3>7. Optionaler Bild-Upload im Anfrageformular</h3>
+      <p>Sie können Ihrer Anfrage freiwillig bis zu drei Dateien (Fotos oder PDF) beifügen. Diese Angabe
+         ist optional; ohne sie können Sie das Formular ebenso absenden. Ausgewählte Dateien werden
+         zunächst nur lokal in Ihrem Browser zur Vorschau angezeigt und erst mit dem Absenden des
+         Formulars gemeinsam mit Ihren übrigen Angaben über FormSubmit an unser E-Mail-Postfach
+         übertragen. Bis zum Absenden können Sie jede Datei wieder entfernen.</p>
+      <p>Bitte übermitteln Sie ausschließlich Aufnahmen der zu reinigenden Fläche bzw. des Objekts und
+         keine Bilder, auf denen Personen, Kfz-Kennzeichen, Klingelschilder oder andere personenbezogene
+         Angaben erkennbar sind. Die Verarbeitung erfolgt zur Bearbeitung Ihrer Anfrage und zur
+         Angebotserstellung auf Grundlage von Art. 6 Abs. 1 lit. b bzw. lit. f DSGVO. Die Dateien werden
+         gelöscht, sobald sie für die Angebotserstellung oder Auftragsabwicklung nicht mehr benötigt
+         werden und keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
+
+      <h3>8. SSL- bzw. TLS-Verschlüsselung</h3>
       <p>Diese Website nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte
          eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie an der Adresszeile
          Ihres Browsers (<strong>https://</strong>) sowie am Schloss-Symbol.</p>
 
-      <h3>8. Cookies und lokale Speicherung</h3>
+      <h3>9. Cookies und lokale Speicherung</h3>
       <p>Diese Website verwendet keine Tracking- oder Marketing-Cookies. Gespeichert wird lediglich Ihre
          Auswahl für den hellen oder dunklen Anzeigemodus. Diese Information wird im lokalen Speicher
          (<em>localStorage</em>) Ihres Browsers unter dem Schlüssel <em>cgn-theme</em> abgelegt, verbleibt
          ausschließlich auf Ihrem Gerät und wird nicht an uns oder Dritte übertragen. Sie können diese
          Angabe jederzeit über die Einstellungen Ihres Browsers löschen.</p>
 
-      <h3>9. Speicherdauer</h3>
+      <h3>10. Speicherdauer</h3>
       <p>Personenbezogene Daten werden nur so lange gespeichert, wie dies zur Bearbeitung Ihrer Anfrage
          oder aufgrund gesetzlicher Aufbewahrungspflichten erforderlich ist. Nach Wegfall des jeweiligen
          Zwecks werden die Daten gelöscht.</p>
 
-      <h3>10. Ihre Rechte</h3>
+      <h3>11. Ihre Rechte</h3>
       <p>Sie haben nach der DSGVO folgende Rechte:</p>
       <ul>
         <li>Auskunft über Ihre gespeicherten Daten</li>
@@ -2931,19 +2796,19 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       <p>Zur Ausübung Ihrer Rechte genügt eine E-Mail an:
          <a href="mailto:info@cleangreennature.de">info@cleangreennature.de</a></p>
 
-      <h3>11. Beschwerderecht</h3>
+      <h3>12. Beschwerderecht</h3>
       <p>Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde über die Verarbeitung Ihrer
          personenbezogenen Daten zu beschweren.</p>
       <p><strong>Zuständige Aufsichtsbehörde:</strong><br>
          Landesbeauftragte für Datenschutz und Informationsfreiheit Nordrhein-Westfalen<br>
          Kavalleriestraße 2–4<br>40213 Düsseldorf</p>
 
-      <h3>12. Keine automatisierte Entscheidungsfindung</h3>
+      <h3>13. Keine automatisierte Entscheidungsfindung</h3>
       <p>Eine automatisierte Entscheidungsfindung oder ein Profiling gemäß Art. 22 DSGVO findet nicht statt.
          Der auf dieser Website angezeigte Richtpreis wird ausschließlich lokal in Ihrem Browser aus Ihren
          Eingaben berechnet und stellt keine Entscheidung im Sinne des Art. 22 DSGVO dar.</p>
 
-      <h3>13. Dienstleistungen von Clean Green Nature</h3>
+      <h3>14. Dienstleistungen von Clean Green Nature</h3>
       <p>Über diese Website informieren wir über unsere Leistungen insbesondere in den Bereichen:</p>
       <ul>
         <li>Laser-Graffitientfernung</li>
@@ -3019,7 +2884,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
   <div style="position:fixed;inset-inline:0;bottom:0;z-index:200;padding:1rem;text-align:center;
               background:#0f766e;color:#fff;font-size:.88rem">
     Diese Seite funktioniert auch ohne JavaScript. Interaktive Extras wie der Richtpreis-Rechner,
-    der Vorher-nachher-Vergleich und die Suche stehen dann jedoch nicht zur Verfügung.
+    und die Suche stehen dann jedoch nicht zur Verfügung.
     Sie erreichen uns jederzeit unter
     <a href="mailto:info@cleangreennature.de" style="color:#fff;text-decoration:underline">info@cleangreennature.de</a>.
   </div>
@@ -3342,7 +3207,6 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
 
   const INDEX = [
     { g: 'Bereiche', t: 'Vorteile der Laserreinigung', s: 'Chemiefrei, substanzerhaltend, ohne Phantom-Schatten', k: 'umwelt oeko vorteil nutzen chemie', i: 'ic-leaf', a: { type: 'scroll', to: '#vorteile' } },
-    { g: 'Bereiche', t: 'Vorher-nachher-Vergleich', s: 'Regler ziehen und das Ergebnis sehen', k: 'ergebnis before after slider vergleich demo', i: 'ic-drag', a: { type: 'scroll', to: '#ergebnis' } },
     { g: 'Bereiche', t: 'Alle Leistungen', s: 'Fünf Servicebereiche im Überblick', k: 'service angebot leistung uebersicht', i: 'ic-layers', a: { type: 'scroll', to: '#leistungen' } },
     { g: 'Bereiche', t: 'Technologie & Verfahren', s: 'Wie die Laserablation funktioniert', k: 'laser technik ablation physik schicht', i: 'ic-bolt', a: { type: 'scroll', to: '#technologie' } },
     { g: 'Bereiche', t: 'Einsatzbereiche & Materialien', s: 'Klinker, Naturstein, Beton, Metall, Denkmal', k: 'material untergrund stein beton metall klinker', i: 'ic-building', a: { type: 'scroll', to: '#einsatzbereiche' } },
@@ -3362,7 +3226,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     { g: 'Kontakt', t: 'E-Mail schreiben', s: 'info@cleangreennature.de', k: 'mail email schreiben nachricht', i: 'ic-mail', a: { type: 'href', href: 'mailto:info@cleangreennature.de' } },
     { g: 'Kontakt', t: 'Anrufen', s: '+49 163 5021968', k: 'telefon anrufen handy nummer', i: 'ic-phone', a: { type: 'href', href: 'tel:+491635021968' } },
 
-    { g: 'Über uns', t: 'Vision & Gründer', s: 'Die Geschichte hinter Clean Green Nature', k: 'vision niklas haberberg gruender ueber uns leitbild', i: 'ic-heart', a: { type: 'modal', id: 'modal-vision' } },
+    { g: 'Über uns', t: 'Vision & Gründer', s: 'Laserbeauftragter, Verantwortung und Anspruch', k: 'vision niklas haberberg gruender ueber uns leitbild laserbeauftragter sicherheit', i: 'ic-heart', a: { type: 'modal', id: 'modal-vision' } },
     { g: 'Über uns', t: 'Spendentopf & Projekte', s: 'Bepflanzungen, Moosfassaden, soziale Projekte', k: 'spende projekte moos gruen sozial paypal', i: 'ic-heart', a: { type: 'modal', id: 'modal-spendentopf' } },
 
     { g: 'Rechtliches', t: 'Impressum', s: 'Anbieterkennzeichnung nach § 5 DDG', k: 'impressum anbieter adresse', i: 'ic-doc', a: { type: 'modal', id: 'modal-impressum' } },
@@ -3550,73 +3414,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
   });
 
   /* ====================================================================
-     10 · Vorher-nachher-Regler
-     ==================================================================== */
-  const compare = $('#compare');
-  const handle  = $('#compare-handle');
-  if (compare && handle) {
-    let pos = 50, dragging = false;
-
-    function setPos(value) {
-      pos = Math.max(0, Math.min(100, value));
-      compare.style.setProperty('--pos', pos + '%');
-      handle.setAttribute('aria-valuenow', String(Math.round(pos)));
-      handle.setAttribute('aria-valuetext', Math.round(pos) + ' Prozent gereinigt');
-    }
-    function posFromEvent(e) {
-      const r = compare.getBoundingClientRect();
-      setPos(((e.clientX - r.left) / r.width) * 100);
-      compare.classList.add('is-touched');
-    }
-
-    setPos(50);
-
-    compare.addEventListener('pointerdown', (e) => {
-      dragging = true;
-      compare.setPointerCapture(e.pointerId);
-      posFromEvent(e);
-    });
-    compare.addEventListener('pointermove', (e) => { if (dragging) posFromEvent(e); });
-    ['pointerup', 'pointercancel'].forEach(type => {
-      compare.addEventListener(type, (e) => {
-        dragging = false;
-        if (compare.hasPointerCapture && compare.hasPointerCapture(e.pointerId)) {
-          compare.releasePointerCapture(e.pointerId);
-        }
-      });
-    });
-
-    handle.addEventListener('keydown', (e) => {
-      const step = e.shiftKey ? 10 : 3;
-      const map = { ArrowLeft: -step, ArrowRight: step, Home: -100, End: 100, PageDown: -15, PageUp: 15 };
-      if (!(e.key in map)) return;
-      e.preventDefault();
-      compare.classList.add('is-touched');
-      setPos(e.key === 'Home' ? 0 : e.key === 'End' ? 100 : pos + map[e.key]);
-    });
-
-    // Sanfte Vorführung, sobald der Bereich erstmals sichtbar wird
-    if (!reduceMotion && 'IntersectionObserver' in window) {
-      const demo = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          obs.disconnect();
-          const start = performance.now();
-          (function tick(now) {
-            if (dragging || compare.classList.contains('is-touched')) return;
-            const p = Math.min(1, (now - start) / 1800);
-            const eased = 1 - Math.pow(1 - p, 3);
-            setPos(18 + (50 - 18) * eased);
-            if (p < 1) requestAnimationFrame(tick);
-          })(start);
-        });
-      }, { threshold: 0.45 });
-      demo.observe(compare);
-    }
-  }
-
-  /* ====================================================================
-     11 · Laser-Diagramm
+     10 · Laser-Diagramm
      ==================================================================== */
   const diagram  = $('#laser-diagram');
   const laserHead = $('#laser-head');
@@ -3662,10 +3460,10 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
   }
 
   /* ====================================================================
-     12 · Richtpreis-Rechner
+     11 · Richtpreis-Rechner
      ==================================================================== */
   const MIN_ORDER_VALUE = 250;
-  const MIN_ORDER_DISTANCE_KM = 10;
+  const MIN_ORDER_DISTANCE_KM = 2;   // im Nahbereich nehmen wir auch Kleinaufträge an
 
   const areaRange   = $('#area-range');
   const areaOut     = $('#area-out');
@@ -3838,23 +3636,156 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     });
   }
 
-  // Direktwahl "GraffitiCare Abo anfragen"
-  $$('[data-preselect="graffiticare"]').forEach(btn => {
+  // Direktwahl über Buttons außerhalb des Formulars
+  const pilotCheck = $('#pilot-check');
+  const PRESELECT = {
+    graffiticare: { box: careCheck,  text: 'GraffitiCare Abo vorausgewählt', icon: 'ic-calendar' },
+    probelaserung:{ box: pilotCheck, text: 'Probelaserung vorausgewählt',    icon: 'ic-target' }
+  };
+  $$('[data-preselect]').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (!careCheck) return;
-      careCheck.checked = true;
+      const cfg = PRESELECT[btn.getAttribute('data-preselect')];
+      if (!cfg || !cfg.box) return;
+      cfg.box.checked = true;
       updatePrice();
-      setTimeout(() => toast('GraffitiCare Abo vorausgewählt', 'ic-calendar'), 400);
+      setTimeout(() => toast(cfg.text, cfg.icon), 400);
     });
   });
 
   /* ====================================================================
-     13 · Formular: Validierung & Versand
+     12 · Formular: Validierung & Versand
      ==================================================================== */
   const form       = $('#quote-form');
   const submitBtn  = $('#submit-btn');
   const formError  = $('#form-error');
   const successBox = $('#form-success');
+
+  /* --- Fotos anhängen: Auswahl, Prüfung, Vorschau, Entfernen --- */
+  const MAX_FILES = 3;
+  const MAX_BYTES = 5 * 1024 * 1024;
+  const OK_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif', 'application/pdf'];
+
+  const fileInput  = $('#f-files');
+  const dropzone   = $('#dropzone');
+  const fileList   = $('#filelist');
+  const uploadErr  = $('#upload-error');
+  let picked = [];               // die tatsächlich akzeptierten Dateien
+  const thumbUrls = [];          // erzeugte Objekt-URLs, damit sie freigegeben werden können
+
+  function humanSize(bytes) {
+    return bytes >= 1024 * 1024
+      ? (bytes / 1024 / 1024).toFixed(1).replace('.', ',') + ' MB'
+      : Math.max(1, Math.round(bytes / 1024)) + ' KB';
+  }
+
+  function showUploadError(msg) {
+    if (!uploadErr) return;
+    const wrap = uploadErr.closest('[data-field]');
+    if (!msg) { uploadErr.textContent = ''; if (wrap) wrap.classList.remove('has-error'); return; }
+    uploadErr.textContent = msg;
+    if (wrap) wrap.classList.add('has-error');
+  }
+
+  // Der Datei-Auswahlliste des Browsers lässt sich nur über ein DataTransfer-
+  // Objekt eine geänderte Auswahl zuweisen – anders ließen sich einzelne
+  // Dateien nicht wieder entfernen.
+  function syncInput() {
+    if (!fileInput) return;
+    try {
+      const dt = new DataTransfer();
+      picked.forEach(f => dt.items.add(f));
+      fileInput.files = dt.files;
+    } catch (e) {
+      /* Sehr alte Browser: Auswahl bleibt wie vom Nutzer getroffen. */
+    }
+  }
+
+  function renderFiles() {
+    if (!fileList) return;
+    thumbUrls.splice(0).forEach(URL.revokeObjectURL);
+    fileList.innerHTML = '';
+
+    picked.forEach((file, i) => {
+      const li = document.createElement('li');
+      li.className = 'filerow';
+
+      let thumb;
+      if (file.type.startsWith('image/') && file.type !== 'image/heic' && file.type !== 'image/heif') {
+        thumb = document.createElement('img');
+        thumb.className = 'filerow__thumb';
+        thumb.alt = '';
+        const url = URL.createObjectURL(file);
+        thumbUrls.push(url);
+        thumb.src = url;
+      } else {
+        thumb = document.createElement('span');
+        thumb.className = 'filerow__thumb';
+        thumb.innerHTML = '<svg aria-hidden="true"><use href="#ic-doc"/></svg>';
+      }
+
+      const meta = document.createElement('span');
+      meta.className = 'filerow__meta';
+      const name = document.createElement('b');
+      name.textContent = file.name;
+      const size = document.createElement('span');
+      size.textContent = humanSize(file.size);
+      meta.append(name, size);
+
+      const drop = document.createElement('button');
+      drop.type = 'button';
+      drop.className = 'filerow__drop';
+      drop.setAttribute('aria-label', file.name + ' entfernen');
+      drop.innerHTML = '<svg aria-hidden="true"><use href="#ic-x"/></svg>';
+      drop.addEventListener('click', () => {
+        picked.splice(i, 1);
+        syncInput();
+        renderFiles();
+        showUploadError('');
+        toast('Datei entfernt', 'ic-check-circle');
+      });
+
+      li.append(thumb, meta, drop);
+      fileList.appendChild(li);
+    });
+  }
+
+  function addFiles(incoming) {
+    const problems = [];
+    for (const file of incoming) {
+      if (picked.length >= MAX_FILES) { problems.push('Maximal ' + MAX_FILES + ' Dateien.'); break; }
+      if (!OK_TYPES.includes(file.type)) { problems.push('„' + file.name + '“ ist kein unterstütztes Format.'); continue; }
+      if (file.size > MAX_BYTES) { problems.push('„' + file.name + '“ ist größer als 5 MB.'); continue; }
+      if (picked.some(f => f.name === file.name && f.size === file.size)) continue;
+      picked.push(file);
+    }
+    syncInput();
+    renderFiles();
+    showUploadError(problems.length ? problems.join(' ') : '');
+    if (!problems.length && picked.length) toast(picked.length + ' Datei(en) angehängt', 'ic-camera');
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', () => {
+      const chosen = Array.from(fileInput.files || []);
+      // Der Browser hat die Auswahl bereits ersetzt: von vorn prüfen
+      picked = [];
+      addFiles(chosen);
+    });
+  }
+
+  if (dropzone) {
+    ['dragenter', 'dragover'].forEach(type =>
+      dropzone.addEventListener(type, (e) => {
+        e.preventDefault(); dropzone.classList.add('is-dragover');
+      }));
+    ['dragleave', 'drop'].forEach(type =>
+      dropzone.addEventListener(type, (e) => {
+        e.preventDefault(); dropzone.classList.remove('is-dragover');
+      }));
+    dropzone.addEventListener('drop', (e) => {
+      if (e.dataTransfer && e.dataTransfer.files) addFiles(Array.from(e.dataTransfer.files));
+    });
+  }
 
   function fieldWrap(input) {
     return input.closest('[data-field]') || input.closest('.field') || input.parentElement;
@@ -3885,6 +3816,49 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       });
     });
 
+    // Klassischer Formular-POST. Über _next kommt der Besucher anschließend
+    // auf genau diese Seite zurück, wo die Erfolgsmeldung angezeigt wird.
+    function submitNative() {
+      let next = form.querySelector('[name="_next"]');
+      if (!next) {
+        next = document.createElement('input');
+        next.type = 'hidden';
+        next.name = '_next';
+        form.appendChild(next);
+      }
+      const here = window.location.origin + window.location.pathname;
+      next.value = /^https?:/.test(here) ? here + '?anfrage=gesendet' : 'https://clean-green-nature.de/?anfrage=gesendet';
+
+      // Der Regler überträgt nur die nackte Zahl. Damit die E-Mail auf beiden
+      // Versandwegen gleich aussieht, wird er hier durch ein beschriftetes
+      // verstecktes Feld ersetzt.
+      if (areaRange && !areaRange.disabled) {
+        areaRange.disabled = true;
+        const area = document.createElement('input');
+        area.type = 'hidden';
+        area.name = 'Flaeche_in_qm';
+        area.value = nf.format(parseInt(areaRange.value, 10) || 1) + ' m²';
+        form.appendChild(area);
+      }
+
+      form.removeAttribute('novalidate');
+      HTMLFormElement.prototype.submit.call(form);
+    }
+
+    // Rückkehr von FormSubmit: Erfolgsmeldung zeigen, Adresszeile aufräumen
+    if (new URLSearchParams(window.location.search).get('anfrage') === 'gesendet') {
+      form.style.display = 'none';
+      if (successBox) {
+        successBox.classList.add('is-visible');
+        successBox.classList.add('is-revealed');
+      }
+      history.replaceState(null, '', window.location.pathname + '#rechner');
+      setTimeout(() => {
+        const sec = $('#rechner');
+        if (sec) sec.scrollIntoView({ behavior: 'auto', block: 'start' });
+      }, 60);
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (formError) { formError.style.display = 'none'; formError.textContent = ''; }
@@ -3910,10 +3884,17 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
         if (arrow) { arrow.outerHTML = '<span class="spinner" aria-hidden="true"></span>'; }
       }
 
+      // Mit Dateianhang geht es den klassischen Weg: der Hintergrundversand
+      // überträgt nur Text, Anhänge brauchen einen echten Formular-POST.
+      if (picked.length) {
+        submitNative();
+        return;
+      }
+
       // Nur Felder mit Inhalt übertragen – hält die E-Mail übersichtlich
       const payload = {};
       new FormData(form).forEach((value, key) => {
-        if (key === '_honey') return;
+        if (key === '_honey' || key === 'attachment') return;
         if (typeof value === 'string' && !value.trim()) return;
         payload[key] = payload[key] ? payload[key] + ', ' + value : value;
       });
@@ -3935,9 +3916,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
         }
         toast('Anfrage erfolgreich gesendet', 'ic-check-circle');
       } catch (err) {
-        // Fallback: klassischer Formularversand ohne JavaScript-Schicht
-        form.removeAttribute('novalidate');
-        HTMLFormElement.prototype.submit.call(form);
+        submitNative();   // Fallback: klassischer Formularversand
       }
 
       setTimeout(() => {
@@ -3954,6 +3933,10 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
   if (resetBtn && form && successBox) {
     resetBtn.addEventListener('click', () => {
       form.reset();
+      picked = [];
+      syncInput();
+      renderFiles();
+      showUploadError('');
       successBox.classList.remove('is-visible');
       form.style.display = '';
       $$('.has-error', form).forEach(el => el.classList.remove('has-error'));
@@ -3963,7 +3946,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
   }
 
   /* ====================================================================
-     14 · Kleinigkeiten
+     13 · Kleinigkeiten
      ==================================================================== */
   const yearEl = $('#year');
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());

@@ -33,19 +33,17 @@ Dienst kann die Darstellung kaputt machen.
 
 Von außen kommen nur zwei Dinge:
 
-* **Bilder von Unsplash** (`images.unsplash.com`) – die Materialkacheln, die
-  drei Projektbilder im Spendentopf und die Fassade im Vorher/Nachher-Vergleich.
-  Alle mit `loading="lazy"`, werden also erst geladen, wenn der Besucher den
-  Bereich erreicht.
+* **Bilder von Unsplash** (`images.unsplash.com`) – die sechs Materialkacheln
+  und die drei Projektbilder im Spendentopf. Alle mit `loading="lazy"`, werden
+  also erst geladen, wenn der Besucher den Bereich erreicht.
 * **Der Formularversand** an **FormSubmit** (`formsubmit.co`) – erst beim
   aktiven Absenden, landet als E-Mail bei `info@cleangreennature.de`.
 
-Beides ist in Ziffer 4 und 6 der Datenschutzerklärung beschrieben.
+Beides ist in Ziffer 4, 6 und 7 der Datenschutzerklärung beschrieben.
 
 **Falls ein Bild nicht lädt:** Die Kacheln behalten ihre Größe und zeigen eine
-ruhige Farbfläche mit Beschriftung; beim Vorher/Nachher-Vergleich liegt eine
-gezeichnete Klinkerwand als Rückfallebene darunter. Ein Ausfall von Unsplash
-führt also nie zu Löchern im Layout.
+ruhige Farbfläche mit Beschriftung. Ein Ausfall von Unsplash führt also nie zu
+Löchern im Layout.
 
 **Bilder gegen eigene Fotos tauschen:** Nach `images.unsplash.com` suchen und
 die `src`-Adresse durch den Pfad zum eigenen Bild ersetzen, z. B.
@@ -59,6 +57,33 @@ entfallen.
 > darauf werden Anfragen zugestellt. Am besten selbst einmal testweise
 > absenden, bevor die Seite live geht.
 
+## Fotos im Anfrageformular
+
+Interessenten können bis zu **3 Dateien** anhängen (je max. **5 MB**; JPG, PNG,
+WEBP, HEIC oder PDF) – per Klick oder per Ziehen und Ablegen. Vor dem Absenden
+sieht man Vorschaubilder und kann einzelne Dateien wieder entfernen.
+
+Der Versand läuft je nach Situation über zwei Wege:
+
+| Fall | Weg | Was der Besucher sieht |
+|---|---|---|
+| ohne Anhang | Hintergrundversand (AJAX) | Erfolgsmeldung direkt auf der Seite, kein Seitenwechsel |
+| mit Anhang | klassischer Formular-POST | kurzer Seitenwechsel zu FormSubmit, dann zurück auf die Seite mit Erfolgsmeldung |
+
+Der Rücksprung läuft über das Feld `_next`, das per JavaScript auf die aktuelle
+Adresse plus `?anfrage=gesendet` gesetzt wird. Das funktioniert dadurch auf
+jeder Domain, auch auf einer Testadresse – ohne dass etwas angepasst werden muss.
+
+> **Bitte einmal testen:** Anhänge übernimmt FormSubmit; wie viele Dateien pro
+> Anfrage tatsächlich zugestellt werden, entscheidet deren Dienst. Senden Sie
+> sich einmal selbst eine Anfrage mit **zwei** Fotos und prüfen Sie, ob beide
+> ankommen. Falls nur eines durchkommt, in `index.html` nach `MAX_FILES` suchen
+> und den Wert auf `1` setzen – der Hinweistext unter der Upload-Fläche muss
+> dann ebenfalls angepasst werden.
+
+Limits ändern: `MAX_FILES`, `MAX_BYTES` und `OK_TYPES` stehen im Skript
+direkt beieinander.
+
 ## Der Richtpreis-Rechner
 
 Die Rechnung läuft ausschließlich im Browser des Besuchers:
@@ -68,8 +93,10 @@ Grundwert  = Fläche (m²) × Untergrund-Ansatz (€/m²) × Verschmutzungsfakto
 Richtpreis = Grundwert × 0,95  bis  Grundwert × 1,15
 ```
 
-Liegt die Entfernung über 10 km und der Grundwert unter 250 €, wird mit dem
-Mindestauftragswert von 250 € gerechnet.
+**Kleinaufträge:** Bis 2 km Entfernung gibt es keinen Mindestauftragswert –
+auch ein einzelnes Tag am Garagentor ist damit ein normaler Auftrag. Erst über
+2 km greift der Mindestauftragswert von 250 €, sofern der Grundwert darunter
+liegt.
 
 **Preise anpassen:** Die Ansätze stehen als `data-price` direkt an den Optionen
 des Auswahlfeldes `#surface-select`, der Zuschlag für mehrlagige Verschmutzung
@@ -97,7 +124,7 @@ und `id="modal-agb"` markiert.
 | Funktion | Bedienung |
 |---|---|
 | Suche über die ganze Seite | `Strg`/`Cmd` + `K` oder `/`, sonst die Lupe |
-| Vorher/Nachher-Vergleich | ziehen, tippen oder Pfeiltasten |
+| Fotos anhängen | Klick auf die Fläche oder Dateien darauf ziehen |
 | Heller/dunkler Modus | Schalter in der Kopfzeile, folgt sonst dem System |
 | Fenster schließen | `Esc`, Klick daneben oder das ×-Symbol |
 | Angaben übernehmen | „Zusammenfassung kopieren“ unter dem Richtpreis |
@@ -105,16 +132,13 @@ und `id="modal-agb"` markiert.
 ## Barrierefreiheit
 
 Sprungmarke zum Inhalt, sichtbare Fokusrahmen, Fokusfalle und Fokusrückgabe in
-allen Fenstern, Bedienung per Tastatur für Vergleichsregler und Suche,
-`aria`-Auszeichnung für Regler, Menü und Dialoge, eine einzige `h1` mit
+allen Fenstern, vollständige Bedienbarkeit per Tastatur,
+`aria`-Auszeichnung für Menü, Dialoge und Statusmeldungen, eine einzige `h1` mit
 sauberer Überschriftenhierarchie sowie vollständige Berücksichtigung von
 `prefers-reduced-motion`.
 
 Ohne JavaScript bleiben alle Inhalte lesbar und das Formular absendbar; nur die
 interaktiven Zugaben entfallen.
-
-Der Vorher/Nachher-Vergleich ist auf dem Handy bildschirmfüllend und auf
-größeren Displays auf 900 px begrenzt.
 
 ## Getestet
 

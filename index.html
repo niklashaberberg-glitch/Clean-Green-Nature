@@ -79,7 +79,12 @@
       "provider": { "@id": "https://clean-green-nature.de/#business" },
       "areaServed": "Köln",
       "serviceType": "Wartungsabo Graffitientfernung",
-      "description": "Planbare Betreuung mit festem Jahrespreis, frei wählbarem Turnus und bevorzugter Terminvergabe für Hausverwaltungen, WEGs und Gewerbeobjekte."
+      "description": "Planbare Betreuung zum festen Monatspreis je Objekt, mit dokumentierten Sichtkontrollen, fester Reaktionszeit und digitaler Objektakte für Hausverwaltungen, WEGs, Gewerbeobjekte und Kommunen.",
+      "offers": [
+        { "@type": "Offer", "name": "GraffitiCare Basis", "price": "39", "priceCurrency": "EUR", "description": "2 Sichtkontrollen pro Jahr, bis 8 m² Entfernung je Objekt und Jahr, Rückmeldung innerhalb von 5 Werktagen.", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "39", "priceCurrency": "EUR", "unitCode": "MON", "referenceQuantity": { "@type": "QuantitativeValue", "value": "1", "unitText": "Objekt" } } },
+        { "@type": "Offer", "name": "GraffitiCare Aktiv", "price": "79", "priceCurrency": "EUR", "description": "4 Sichtkontrollen pro Jahr, bis 16 m² Entfernung je Objekt und Jahr, Rückmeldung innerhalb von 48 Stunden, Jahresreport für die Eigentümerversammlung.", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "79", "priceCurrency": "EUR", "unitCode": "MON", "referenceQuantity": { "@type": "QuantitativeValue", "value": "1", "unitText": "Objekt" } } },
+        { "@type": "Offer", "name": "GraffitiCare Komplett", "price": "139", "priceCurrency": "EUR", "description": "6 Sichtkontrollen pro Jahr, bis 32 m² Entfernung je Objekt und Jahr, Rückmeldung innerhalb von 24 Stunden, feste Ansprechperson und Direktabruf.", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "139", "priceCurrency": "EUR", "unitCode": "MON", "referenceQuantity": { "@type": "QuantitativeValue", "value": "1", "unitText": "Objekt" } } }
+      ]
     },
     {
       "@type": "FAQPage",
@@ -94,7 +99,7 @@
         { "@type": "Question", "name": "Kann der Laser auch mehrere Farbschichten oder alten Lack entfernen?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Über die sogenannte Laserabtragsschwelle lassen sich auch mehrlagige Übermalungen Schicht für Schicht freilegen. Im Preisrechner ist das als Option „Mehrlagiges Graffiti / Altlack“ hinterlegt." } },
         { "@type": "Question", "name": "Übernimmt meine Versicherung die Kosten?", "acceptedAnswer": { "@type": "Answer", "text": "Das hängt vom individuellen Versicherungsvertrag ab, zum Beispiel Wohngebäude- oder Vandalismus-Versicherung. Wir empfehlen, dies vorab mit der Versicherung zu klären, und stellen gerne ein detailliertes Angebot inklusive Rechnung für die Einreichung aus." } },
         { "@type": "Question", "name": "In welchem Gebiet sind Sie tätig?", "acceptedAnswer": { "@type": "Answer", "text": "Unser Schwerpunkt liegt in Köln. Bei Anfragen aus dem Kölner Umland prüfen wir das gerne individuell." } },
-        { "@type": "Question", "name": "Bieten Sie auch Rahmenverträge oder Wartungsabos an?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Im GraffitiCare Abo werden die jährlich anfallenden Reinigungstermine einmalig zu einem festen Jahrespreis vereinbart – ohne Zusatzkosten während der Laufzeit." } },
+        { "@type": "Question", "name": "Bieten Sie auch Rahmenverträge oder Wartungsabos an?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Das GraffitiCare Portfolio ist ein Objekt-Abo mit festem Monatspreis: Basis 39 Euro, Aktiv 79 Euro und Komplett 139 Euro je Objekt und Monat, jeweils netto. Enthalten sind dokumentierte Sichtkontrollen, eine feste Reaktionszeit und ein Flächenkontingent je Objekt und Jahr. Ab fünf Objekten greift eine Mengenstaffel von 5 bis 20 Prozent." } },
         { "@type": "Question", "name": "Was ist Clean Advertising per Laser?", "acceptedAnswer": { "@type": "Answer", "text": "Beim Clean Advertising wird kein Lack aufgetragen. Stattdessen wird vorhandene Verschmutzung mithilfe einer Schablone gezielt entfernt. So entsteht ein sauberes Logo oder ein Hinweis auf geeigneten Außenflächen. Vorab prüfen wir Untergrund, Eigentümer- bzw. Betreiberfreigabe und bei öffentlichen Flächen die Genehmigungssituation." } },
         { "@type": "Question", "name": "Kann ich Einfahrten oder Pflasterflächen mit Laser reinigen lassen?", "acceptedAnswer": { "@type": "Answer", "text": "Ja, nach vorheriger Material- und Verschmutzungsprüfung. Möglich sind Pflastereinfahrten, Betonplatten, Natursteinpflaster, Stellplätze, Hof- und Terrassenflächen, Treppen und Mauersockel. Bei großflächigem Moosbewuchs oder sehr alten Ölflecken empfehlen wir zuerst eine Probefläche." } },
         { "@type": "Question", "name": "Kann ich Gegenstände zur Laserreinigung vorbeibringen?", "acceptedAnswer": { "@type": "Answer", "text": "Ja, sofern Größe, Material und Verschmutzung geeignet sind. Kleine bis mittlere Gegenstände können nach Terminabsprache geprüft und gereinigt werden. Alternativ kommen wir bei größeren Objekten mobil zu Ihnen." } }
@@ -908,6 +913,34 @@ input[type="range"]:active::-webkit-slider-thumb { box-shadow: 0 0 0 8px color-m
 .price-breakdown div { display: flex; justify-content: space-between; gap: 1rem; color: #9db3c2; }
 .price-breakdown div b { color: #dceef2; font-weight: 700; text-align: right; }
 
+/* Tarifkarten & Portfolio-Rechner (GraffitiCare Portfolio) */
+.plan { position: relative; display: flex; flex-direction: column; height: 100%; }
+.plan--best { border-color: var(--brand-line); box-shadow: var(--shadow-2); }
+/* .card kappt Überstehendes (overflow:hidden), das Etikett sitzt daher innen. */
+.plan__badge {
+  position: absolute; top: clamp(1.1rem, .8rem + .8vw, 1.5rem); right: clamp(1.1rem, .8rem + .8vw, 1.5rem);
+  background: var(--brand-500); color: var(--on-brand);
+  font-size: .66rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase;
+  padding: .34rem .75rem; border-radius: var(--radius-full);
+}
+.plan__price { display: flex; align-items: baseline; flex-wrap: wrap; gap: .4rem; margin: .7rem 0 .25rem; }
+.plan__price b {
+  font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.25rem); font-weight: 850;
+  letter-spacing: -.02em; font-variant-numeric: tabular-nums; color: var(--text); line-height: 1;
+}
+.plan__price span { font-size: .8rem; font-weight: 700; color: var(--text-soft); }
+.plan__meta { font-size: .74rem; color: var(--text-soft); line-height: 1.6; }
+.plan__feat { display: grid; gap: .62rem; margin: 1.25rem 0 1.4rem; }
+.plan__feat li { display: flex; gap: .6rem; font-size: .82rem; line-height: 1.6; color: var(--text-muted); }
+.plan__feat li svg { width: 17px; height: 17px; flex: none; margin-top: .2rem; color: var(--brand); }
+.plan__feat li strong { color: var(--text); font-weight: 750; }
+.plan__foot { margin-top: auto; }
+.compare {
+  margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,.12);
+  font-size: .78rem; line-height: 1.6; text-align: left; color: #9db3c2;
+}
+.compare b { color: var(--brand-300); font-weight: 800; }
+
 .notice {
   padding: 1rem 1.15rem; border-radius: var(--radius-sm); font-size: .85rem; line-height: 1.65;
   background: var(--warn-bg); border: 1px solid var(--warn-line); color: var(--warn-text);
@@ -1218,6 +1251,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     <nav class="nav" id="primary-nav" aria-label="Hauptnavigation">
       <a class="nav__link" href="#leistungen">Leistungen</a>
       <a class="nav__link" href="#technologie">Technologie</a>
+      <a class="nav__link" href="#graffiticare">GraffitiCare</a>
       <a class="nav__link" href="#rechner">Rechner</a>
       <a class="nav__link" href="#faq">FAQ</a>
     </nav>
@@ -1254,7 +1288,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     <a href="#ablauf" data-mnav style="animation-delay:.24s">Ablauf <span>In 4 Schritten</span></a>
     <a href="#rechner" data-mnav style="animation-delay:.28s">Richtpreis-Rechner <span>Sofort kalkulieren</span></a>
     <a href="#faq" data-mnav style="animation-delay:.32s">FAQ <span>Häufige Fragen</span></a>
-    <a href="#" data-mnav data-modal-open="modal-rahmenvertrag" style="animation-delay:.36s">GraffitiCare Abo <span>Planbar sauber</span></a>
+    <a href="#graffiticare" data-mnav style="animation-delay:.36s">GraffitiCare Portfolio <span>Tarife ab 39 € je Objekt</span></a>
     <a href="#" data-mnav data-modal-open="modal-graffitientfernung-koeln" style="animation-delay:.4s">Graffitientfernung Köln <span>Lokaler Service</span></a>
     <a href="#" data-mnav data-modal-open="modal-vision" style="animation-delay:.44s">Vision <span>Über Clean Green Nature</span></a>
     <div class="mobile-nav__foot">
@@ -1454,12 +1488,13 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
         <article class="card" data-spotlight data-reveal style="--delay:400ms">
           <span class="icon-badge"><svg aria-hidden="true"><use href="#ic-calendar"/></svg></span>
           <h3>GraffitiCare Abo</h3>
-          <p>Regelmäßige Sichtkontrollen, bevorzugte Terminvergabe und schnelle Entfernung zu einem
-             festen Jahrespreis – für Hausverwaltungen, WEGs, Gewerbeobjekte und Kommunen.</p>
+          <p>Regelmäßige Sichtkontrollen, feste Reaktionszeit und schnelle Entfernung zum festen
+             Monatspreis je Objekt – <strong style="color:var(--text)">ab 39 € pro Objekt und
+             Monat</strong> für Hausverwaltungen, WEGs, Gewerbeobjekte und Kommunen.</p>
           <p style="margin-top:1rem">
-            <button class="btn btn--ghost btn--sm" type="button" data-modal-open="modal-rahmenvertrag">
-              Details ansehen <svg class="btn__arrow" aria-hidden="true"><use href="#ic-arrow-right"/></svg>
-            </button>
+            <a class="btn btn--ghost btn--sm" href="#graffiticare">
+              Tarife &amp; Portfolio-Rechner <svg class="btn__arrow" aria-hidden="true"><use href="#ic-arrow-right"/></svg>
+            </a>
           </p>
         </article>
       </div>
@@ -1525,13 +1560,13 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           <h3 style="color:#fff">GraffitiCare Abo für wiederkehrenden Bedarf</h3>
           <p style="color:#9db3c2">
             Für Hausverwaltungen, WEGs, Gewerbeimmobilien und Kommunen: regelmäßige Sichtkontrollen,
-            bevorzugte Terminvergabe, schnelle Entfernung und optionale Dokumentation in einem
-            planbaren Servicepaket.
+            feste Reaktionszeit, schnelle Entfernung und Dokumentation zum festen Monatspreis je
+            Objekt – ab 39&nbsp;€ netto, mit Mengenstaffel ab fünf Objekten.
           </p>
           <p style="margin-top:1.3rem">
-            <button class="btn btn--primary btn--sm" type="button" data-modal-open="modal-rahmenvertrag">
-              GraffitiCare ansehen <svg class="btn__arrow" aria-hidden="true"><use href="#ic-arrow-right"/></svg>
-            </button>
+            <a class="btn btn--primary btn--sm" href="#graffiticare">
+              Tarife &amp; Portfolio-Rechner <svg class="btn__arrow" aria-hidden="true"><use href="#ic-arrow-right"/></svg>
+            </a>
           </p>
         </div>
 
@@ -1788,6 +1823,223 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     </div>
   </section>
 
+  <!-- ===================== GraffitiCare Portfolio ===================== -->
+  <section class="section section--line" id="graffiticare">
+    <div class="shell">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Für Hausverwaltungen, WEGs, Gewerbe &amp; Kommunen</p>
+        <h2>GraffitiCare Portfolio: Sauberkeit als feste Monatsrate</h2>
+        <p>Ein Graffiti kostet Sie heute nicht nur die Reinigung, sondern Angebot einholen,
+           Beschluss abwarten, Rechnung prüfen. Im Portfolio-Abo entfällt dieser Ablauf komplett:
+           ein fester Monatsbetrag pro Objekt, feste Reaktionszeit, eine Sammelrechnung.</p>
+      </div>
+
+      <div class="grid grid--4" data-reveal style="margin-bottom:clamp(1.75rem,1rem+2.4vw,3rem)">
+        <div class="card">
+          <span class="icon-badge"><svg aria-hidden="true"><use href="#ic-clock"/></svg></span>
+          <h3>Feste Reaktionszeit</h3>
+          <p>Je nach Tarif melden wir uns innerhalb von 24 bis 48 Stunden mit einem Termin –
+             ohne dass Sie vorher ein Angebot anfordern müssen.</p>
+        </div>
+        <div class="card">
+          <span class="icon-badge"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></span>
+          <h3>Kein Einzelbeschluss</h3>
+          <p>Die Beauftragung ist mit dem Abo einmal geregelt. Bei einem Vorfall wird gereinigt,
+             statt zuerst eine Zustimmung einzuholen.</p>
+        </div>
+        <div class="card">
+          <span class="icon-badge"><svg aria-hidden="true"><use href="#ic-doc"/></svg></span>
+          <h3>Digitale Objektakte</h3>
+          <p>Jeder Einsatz mit Datum, Fläche und Vorher-/Nachher-Foto – verwendbar für
+             Versicherung, Anzeige und Eigentümerversammlung.</p>
+        </div>
+        <div class="card">
+          <span class="icon-badge"><svg aria-hidden="true"><use href="#ic-euro"/></svg></span>
+          <h3>Eine Sammelrechnung</h3>
+          <p>Alle betreuten Objekte auf einem Beleg, monatlich oder jährlich – statt einzelner
+             Rechnungen quer über das Jahr verteilt.</p>
+        </div>
+      </div>
+
+      <!-- ---------- Tarife ---------- -->
+      <div class="grid grid--3" data-reveal>
+        <article class="card plan" data-spotlight>
+          <p class="eyebrow">Basis</p>
+          <p class="plan__price"><b data-plan-price="basis">39 €</b><span>pro Objekt / Monat</span></p>
+          <p class="plan__meta">netto, 12 Monate Laufzeit · ab 5 Objekten mit Mengenstaffel</p>
+          <ul class="plan__feat">
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span><strong>2 Sichtkontrollen</strong> pro Jahr, dokumentiert</span></li>
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span><strong>Bis 8 m² Entfernung</strong> je Objekt und Jahr inklusive – rund zwei übliche Vorfälle</span></li>
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span>Rückmeldung <strong>innerhalb von 5 Werktagen</strong></span></li>
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span>Digitale Objektakte mit Vorher-/Nachher-Fotos</span></li>
+          </ul>
+          <p class="plan__foot">
+            <a class="btn btn--ghost btn--block" href="#rechner" data-portfolio-plan="basis">Basis anfragen</a>
+          </p>
+        </article>
+
+        <article class="card plan plan--best" data-spotlight>
+          <span class="plan__badge">Empfohlen</span>
+          <p class="eyebrow">Aktiv</p>
+          <p class="plan__price"><b data-plan-price="aktiv">79 €</b><span>pro Objekt / Monat</span></p>
+          <p class="plan__meta">netto, 12 Monate Laufzeit · der Standard für betreute Wohnanlagen</p>
+          <ul class="plan__feat">
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span><strong>4 Sichtkontrollen</strong> pro Jahr, quartalsweise</span></li>
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span><strong>Bis 16 m² Entfernung</strong> je Objekt und Jahr inklusive – rund vier übliche Vorfälle</span></li>
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span>Rückmeldung <strong>innerhalb von 48 Stunden</strong> (Werktage)</span></li>
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span>Fotodokumentation je Einsatz, geeignet zur Vorlage bei der Versicherung</span></li>
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span><strong>Jahresreport</strong> für Beirat und Eigentümerversammlung</span></li>
+          </ul>
+          <p class="plan__foot">
+            <a class="btn btn--primary btn--block" href="#rechner" data-portfolio-plan="aktiv">Aktiv anfragen</a>
+          </p>
+        </article>
+
+        <article class="card plan" data-spotlight>
+          <p class="eyebrow">Komplett</p>
+          <p class="plan__price"><b data-plan-price="komplett">139 €</b><span>pro Objekt / Monat</span></p>
+          <p class="plan__meta">netto, 12 Monate Laufzeit · für Hotspot-Lagen und Gewerbeobjekte</p>
+          <ul class="plan__feat">
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span><strong>6 Sichtkontrollen</strong> pro Jahr, alle zwei Monate</span></li>
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span><strong>Bis 32 m² Entfernung</strong> je Objekt und Jahr inklusive – rund acht übliche Vorfälle</span></li>
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span>Rückmeldung <strong>innerhalb von 24 Stunden</strong> (Werktage)</span></li>
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span>Feste Ansprechperson und Direktabruf durch Ihr Objektteam</span></li>
+            <li><svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+              <span>Schadens- und Anzeigedokumentation für Polizei und Versicherung</span></li>
+          </ul>
+          <p class="plan__foot">
+            <a class="btn btn--ghost btn--block" href="#rechner" data-portfolio-plan="komplett">Komplett anfragen</a>
+          </p>
+        </article>
+      </div>
+
+      <!-- ---------- Portfolio-Rechner ---------- -->
+      <div class="panel" data-reveal style="margin-top:clamp(1.5rem,1rem+2vw,2.5rem)">
+        <h3 class="panel__title"><span aria-hidden="true">€</span> Portfolio-Rechner</h3>
+        <p class="muted" style="font-size:var(--step--1);line-height:1.7;margin-bottom:1.6rem">
+          Rechnen Sie Ihren Bestand durch: Je mehr Objekte Sie einbringen, desto niedriger der
+          Preis je Objekt. Die Rechnung läuft nur in Ihrem Browser, es wird nichts übertragen.
+        </p>
+
+        <div class="grid grid--2" style="align-items:start">
+          <div>
+            <div class="field">
+              <span class="field__label" id="pf-count-label">Objekte im Portfolio</span>
+              <div class="range-row">
+                <input id="pf-count" type="range" min="1" max="150" value="12" step="1"
+                       aria-labelledby="pf-count-label" aria-describedby="pf-count-out">
+                <output class="range-out" id="pf-count-out" for="pf-count">12 Objekte</output>
+              </div>
+              <div class="presets" role="group" aria-label="Häufige Portfoliogrößen">
+                <button class="preset" type="button" data-pf-count="1">1</button>
+                <button class="preset" type="button" data-pf-count="5">5</button>
+                <button class="preset" type="button" data-pf-count="15">15</button>
+                <button class="preset" type="button" data-pf-count="40">40</button>
+                <button class="preset" type="button" data-pf-count="80">80</button>
+                <button class="preset" type="button" data-pf-count="150">150</button>
+              </div>
+              <p class="field__hint">Ein Objekt ist eine Adresse bzw. Liegenschaft – unabhängig von
+                 der Zahl der Wohneinheiten.</p>
+            </div>
+
+            <div class="field">
+              <label for="pf-plan">Tarif</label>
+              <select id="pf-plan" class="select">
+                <option data-price="39"  data-incl="8"  value="Basis">Basis – 39 € je Objekt/Monat</option>
+                <option data-price="79"  data-incl="16" value="Aktiv" selected>Aktiv – 79 € je Objekt/Monat (empfohlen)</option>
+                <option data-price="139" data-incl="32" value="Komplett">Komplett – 139 € je Objekt/Monat</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <span class="field__label" id="pf-inc-label">Graffiti-Vorfälle je Objekt und Jahr</span>
+              <div class="range-row">
+                <input id="pf-incidents" type="range" min="0" max="8" value="4" step="1"
+                       aria-labelledby="pf-inc-label" aria-describedby="pf-inc-out">
+                <output class="range-out" id="pf-inc-out" for="pf-incidents">4 Vorfälle</output>
+              </div>
+              <p class="field__hint">Nur für den Vergleich mit der Einzelbeauftragung, gerechnet mit
+                 rund 4&nbsp;m² und 280&nbsp;€ je Vorfall. Ein Schätzwert genügt – beim Objekttermin
+                 gleichen wir ihn mit der Realität ab.</p>
+            </div>
+
+            <div class="notice notice--info">
+              <strong>Mengenstaffel:</strong> ab 5 Objekten 5 %, ab 15 Objekten 10 %,
+              ab 40 Objekten 15 % und ab 100 Objekten 20 % Nachlass auf den Objektpreis.
+            </div>
+          </div>
+
+          <div>
+            <div class="price-box" aria-live="polite">
+              <p class="price-box__label">Ihr Portfolio pro Monat, netto</p>
+              <p class="price-box__value" id="pf-monthly">901 €</p>
+              <p class="price-box__note" id="pf-per-object">entspricht 75 € je Objekt und Monat</p>
+
+              <div class="price-breakdown">
+                <div><span>Listenpreis</span><b id="pf-list">948 €</b></div>
+                <div><span>Mengenstaffel</span><b id="pf-discount">−5 %</b></div>
+                <div><span>Jahreswert</span><b id="pf-yearly">10.807 €</b></div>
+                <div><span>Enthaltene Fläche</span><b id="pf-incl">192 m² pro Jahr</b></div>
+              </div>
+
+              <p class="compare" id="pf-compare">
+                Einzelbeauftragung bei 4 Vorfällen je Objekt: rund 13.440 € pro Jahr.
+              </p>
+            </div>
+
+            <p style="margin-top:1.2rem">
+              <a class="btn btn--primary btn--block btn--lg" href="#rechner" data-portfolio-request>
+                Portfolio-Angebot anfragen <svg class="btn__arrow" aria-hidden="true"><use href="#ic-arrow-right"/></svg>
+              </a>
+            </p>
+            <p class="soft" style="text-align:center;margin-top:.8rem">
+              Objektanzahl und Tarif werden in das Anfrageformular übernommen.
+            </p>
+          </div>
+        </div>
+
+        <p class="soft" style="margin-top:1.6rem;line-height:1.7">
+          Alle Preise netto zzgl. gesetzlicher Umsatzsteuer. Die enthaltene Fläche gilt je Objekt und
+          Vertragsjahr und ist innerhalb des Portfolios übertragbar. Darüber hinausgehende Flächen
+          rechnen wir zum Abo-Vorzugspreis ab – 20 % unter dem Richtpreis des
+          <a href="#rechner" style="color:var(--brand)">Einzelauftrag-Rechners</a>. Fassadenreinigung,
+          Einfahrten und Clean Advertising sind nicht Bestandteil des Abos und werden separat angeboten.
+        </p>
+      </div>
+
+      <!-- ---------- Ablauf für Verwaltungen ---------- -->
+      <div class="card" data-reveal
+           style="margin-top:clamp(1.5rem,1rem+2vw,2.5rem);background:var(--brand-soft);border-color:var(--brand-line);
+                  display:flex;flex-wrap:wrap;align-items:center;gap:1.5rem">
+        <span class="icon-badge" style="margin:0;background:var(--surface);flex:none">
+          <svg aria-hidden="true"><use href="#ic-building"/></svg>
+        </span>
+        <div style="flex:1 1 22rem;min-width:0">
+          <h3 style="margin-bottom:.35rem">Erst ein Objekt testen, dann das Portfolio</h3>
+          <p>Viele Verwaltungen starten mit <strong style="color:var(--text)">einem Problemobjekt für
+             drei Monate</strong>. Sie erhalten die Objektakte und den Nachweis, wie oft tatsächlich
+             etwas passiert. Passt das Ergebnis, wird der Rest des Bestands zum vereinbarten
+             Staffelpreis aufgenommen – ohne neue Verhandlung. Schicken Sie uns dafür einfach Ihre
+             Objektliste, wir kalkulieren daraus ein Angebot.</p>
+        </div>
+        <a class="btn btn--dark" href="#rechner" style="flex:none" data-portfolio-request>Objektliste einreichen</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== Rechner & Anfrage ===================== -->
   <section class="section" id="rechner">
     <div class="shell">
@@ -2013,6 +2265,13 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           <div class="notice notice--info reveal-block" id="graffiticare-details" style="margin-bottom:1.35rem">
             <p style="font-weight:750;margin-bottom:.8rem;color:var(--text)">Details zum GraffitiCare Abo</p>
             <div class="grid grid--2" style="gap:.7rem;margin-bottom:.7rem">
+              <input class="input" type="number" min="1" max="999" step="1" inputmode="numeric"
+                     id="care-count" name="GraffitiCare_Objektanzahl"
+                     placeholder="Anzahl Objekte, z. B. 12">
+              <input class="input" type="text" id="care-plan" name="GraffitiCare_Tarif"
+                     placeholder="Gewünschter Tarif, z. B. Aktiv">
+            </div>
+            <div class="grid grid--2" style="gap:.7rem;margin-bottom:.7rem">
               <input class="input" type="text" name="GraffitiCare_Flaeche_Objekt"
                      placeholder="Fläche / Objektumfang, z. B. 80 m² Fassade">
               <input class="input" type="text" name="GraffitiCare_Untergrund"
@@ -2162,11 +2421,12 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
         <details class="acc" name="faq">
           <summary class="acc__q">Bieten Sie auch Rahmenverträge oder Wartungsabos an?
             <svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></summary>
-          <p class="acc__a">Ja. Gerade für Hausverwaltungen, WEGs und Gewerbeobjekte lohnt sich ein GraffitiCare Abo:
-            Die jährlich anfallenden Reinigungstermine werden einmalig zu einem festen Jahrespreis vereinbart –
-            ohne Zusatzkosten während der Laufzeit. Nutzen Sie dafür die entsprechende Option im Formular oder
-            <button type="button" data-modal-open="modal-rahmenvertrag"
-                    style="color:var(--brand);text-decoration:underline;text-underline-offset:3px;font:inherit">erfahren Sie hier mehr</button>.</p>
+          <p class="acc__a">Ja. Für Hausverwaltungen, WEGs, Gewerbeobjekte und Kommunen gibt es das
+            <a href="#graffiticare" style="color:var(--brand)">GraffitiCare Portfolio</a>: ein Objekt-Abo mit
+            festem Monatspreis ab 39&nbsp;€ netto je Objekt – mit dokumentierten Sichtkontrollen, fester
+            Reaktionszeit, einem Flächenkontingent je Objekt und Jahr sowie einer Sammelrechnung statt
+            einzelner Beauftragungen. Ab fünf Objekten greift eine Mengenstaffel. Im Portfolio-Rechner
+            sehen Sie den Preis für Ihren Bestand sofort.</p>
         </details>
         <details class="acc" name="faq">
           <summary class="acc__q">Was ist Clean Advertising per Laser?
@@ -2280,7 +2540,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           <li><a href="#leistungen">Objekt-Laserreinigung</a></li>
           <li><a href="#leistungen">Einfahrten &amp; Pflasterflächen</a></li>
           <li><a href="#leistungen">Clean Advertising</a></li>
-          <li><button type="button" data-modal-open="modal-rahmenvertrag">GraffitiCare Abo</button></li>
+          <li><a href="#graffiticare">GraffitiCare Portfolio</a></li>
           <li><a href="graffitientfernung-koeln.html">Graffitientfernung Köln</a></li>
         </ul>
       </nav>
@@ -2460,9 +2720,11 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
               <span class="muted" style="font-size:.9rem"><strong style="color:var(--text)">Ideal für</strong> Hausverwaltungen, WEGs, Gewerbeobjekte und Privateigentümer mit wiederkehrendem Bedarf.</span></li>
           </ul>
           <p style="margin-top:1.8rem">
-            <a class="btn btn--dark" href="#rechner" data-modal-close data-preselect="graffiticare">
-              GraffitiCare Abo anfragen <svg class="btn__arrow" aria-hidden="true"><use href="#ic-arrow-right"/></svg>
+            <a class="btn btn--dark" href="#graffiticare" data-modal-close>
+              Tarife &amp; Portfolio-Rechner <svg class="btn__arrow" aria-hidden="true"><use href="#ic-arrow-right"/></svg>
             </a>
+            <a class="btn btn--ghost" href="#rechner" data-modal-close data-preselect="graffiticare"
+               style="margin-left:.6rem">GraffitiCare Abo anfragen</a>
           </p>
         </div>
         <div style="flex:1 1 17rem;min-width:0">
@@ -2873,7 +3135,29 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
          behördliche Freigaben sind vor Ausführung vorzulegen, sofern nicht ausdrücklich eine andere
          Unterstützung vereinbart wurde.</p>
 
-      <h3>§ 7 Gerichtsstand</h3>
+      <h3>§ 7 GraffitiCare Portfolio (Abo-Verträge)</h3>
+      <p>Für GraffitiCare-Verträge gilt ergänzend: Der Vertrag wird je Objekt zu dem im Angebot
+         genannten Monatspreis geschlossen und läuft zwölf Monate ab dem vereinbarten Beginn. Er
+         verlängert sich jeweils um zwölf Monate, wenn er nicht mit einer Frist von drei Monaten zum
+         Laufzeitende in Textform gekündigt wird. Die Abrechnung erfolgt monatlich oder – nach
+         Vereinbarung – jährlich im Voraus über alle betreuten Objekte.</p>
+      <p>Der im Tarif genannte Umfang an Sichtkontrollen und die enthaltene Reinigungsfläche gelten je
+         Objekt und Vertragsjahr. Nicht genutzte Fläche verfällt am Ende des Vertragsjahres, ist
+         innerhalb desselben Vertragsjahres jedoch zwischen den Objekten desselben Kunden übertragbar.
+         Über das Kontingent hinausgehende Flächen werden zum vereinbarten Vorzugspreis abgerechnet;
+         vor Ausführung erhält der Kunde einen Hinweis auf die voraussichtlichen Mehrkosten.</p>
+      <p>Die genannten Reaktionszeiten beziehen sich auf Werktage (Montag bis Freitag, ohne
+         gesetzliche Feiertage in Nordrhein-Westfalen) und bezeichnen die Rückmeldung mit einem
+         Terminvorschlag, nicht die Ausführung selbst. Die Ausführung setzt Zugang zur Fläche,
+         geeignete Witterung und die Mitwirkung nach § 3 voraus. Ein Mengennachlass wird auf Grundlage
+         der vereinbarten Objektzahl gewährt; verringert sich diese während der Laufzeit, kann der
+         Nachlass für die verbleibenden Objekte entsprechend angepasst werden. Objekte können zum
+         Beginn eines Vertragsjahres in Textform gegen andere Objekte des Kunden getauscht werden.
+         Preisanpassungen sind mit einer Ankündigungsfrist von drei Monaten zum Ende eines
+         Vertragsjahres möglich; der Kunde kann in diesem Fall zum Wirksamwerden der Anpassung
+         kündigen.</p>
+
+      <h3>§ 8 Gerichtsstand</h3>
       <p>Ist der Kunde Kaufmann, juristische Person des öffentlichen Rechts oder öffentlich-rechtliches
          Sondervermögen, ist der Gerichtsstand Köln.</p>
     </div>
@@ -3211,6 +3495,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     { g: 'Bereiche', t: 'Technologie & Verfahren', s: 'Wie die Laserablation funktioniert', k: 'laser technik ablation physik schicht', i: 'ic-bolt', a: { type: 'scroll', to: '#technologie' } },
     { g: 'Bereiche', t: 'Einsatzbereiche & Materialien', s: 'Klinker, Naturstein, Beton, Metall, Denkmal', k: 'material untergrund stein beton metall klinker', i: 'ic-building', a: { type: 'scroll', to: '#einsatzbereiche' } },
     { g: 'Bereiche', t: 'Ablauf in vier Schritten', s: 'Von der Anfrage bis zur Abnahme', k: 'prozess schritte termin ablauf', i: 'ic-clock', a: { type: 'scroll', to: '#ablauf' } },
+    { g: 'Bereiche', t: 'GraffitiCare Portfolio', s: 'Objekt-Abo für Verwaltungen: Tarife, Staffel, Portfolio-Rechner', k: 'abo objekt portfolio hausverwaltung weg monatlich tarif staffel', i: 'ic-calendar', a: { type: 'scroll', to: '#graffiticare' } },
     { g: 'Bereiche', t: 'Richtpreis-Rechner', s: 'Kosten in Sekunden schätzen', k: 'preis kosten rechner kalkulation angebot euro', i: 'ic-euro', a: { type: 'scroll', to: '#rechner' } },
     { g: 'Bereiche', t: 'Häufige Fragen', s: 'Antworten zu Preis, Denkmalschutz, Versicherung', k: 'faq fragen hilfe antwort', i: 'ic-info', a: { type: 'scroll', to: '#faq' } },
 
@@ -3219,7 +3504,8 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     { g: 'Leistungen', t: 'Objekt-Laserreinigung', s: 'Bring-in oder mobil vor Ort', k: 'objekt kleinteil metall werkzeug schild tor', i: 'ic-tools', a: { type: 'scroll', to: '#leistungen' } },
     { g: 'Leistungen', t: 'Einfahrten & Pflasterflächen', s: 'Öl, Rost, Gummiabrieb, Markierungsreste', k: 'einfahrt pflaster beton oel rost hof terrasse', i: 'ic-road', a: { type: 'scroll', to: '#leistungen' } },
     { g: 'Leistungen', t: 'Clean Advertising', s: 'Motive aus der Verschmutzung herauslasern', k: 'werbung reverse graffiti logo schablone', i: 'ic-megaphone', a: { type: 'scroll', to: '#leistungen' } },
-    { g: 'Leistungen', t: 'GraffitiCare Abo', s: 'Fester Jahrespreis, freier Turnus, Vorrang bei Terminen', k: 'abo rahmenvertrag wartung hausverwaltung weg', i: 'ic-calendar', a: { type: 'modal', id: 'modal-rahmenvertrag' } },
+    { g: 'Leistungen', t: 'GraffitiCare Portfolio', s: 'Tarife ab 39 € je Objekt und Monat, mit Portfolio-Rechner', k: 'abo tarif preis portfolio rahmenvertrag wartung hausverwaltung weg objekt monat', i: 'ic-calendar', a: { type: 'scroll', to: '#graffiticare' } },
+    { g: 'Leistungen', t: 'GraffitiCare Abo im Überblick', s: 'Fester Jahrespreis, freier Turnus, Vorrang bei Terminen', k: 'abo rahmenvertrag wartung details', i: 'ic-calendar', a: { type: 'modal', id: 'modal-rahmenvertrag' } },
     { g: 'Leistungen', t: 'Graffitientfernung Köln', s: 'Lokaler Service für Köln und Umland', k: 'koeln lokal stadt umland', i: 'ic-pin', a: { type: 'modal', id: 'modal-graffitientfernung-koeln' } },
 
     { g: 'Kontakt', t: 'Angebot anfragen', s: 'Direkt zum Formular springen', k: 'anfrage kontakt formular angebot senden', i: 'ic-arrow-right', a: { type: 'scroll', to: '#rechner' } },
@@ -3651,6 +3937,172 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       setTimeout(() => toast(cfg.text, cfg.icon), 400);
     });
   });
+
+  /* ====================================================================
+     11b · GraffitiCare Portfolio-Rechner
+     Maßgeblich für die Preise sind die data-Attribute an den Optionen von
+     #pf-plan. Die Preise in den Tarifkarten werden daraus gesetzt; der dort
+     hinterlegte Text ist nur die Anzeige, falls kein JavaScript läuft.
+     ==================================================================== */
+  const pfCount   = $('#pf-count');
+  const pfPlan    = $('#pf-plan');
+  const pfInc     = $('#pf-incidents');
+
+  if (pfCount && pfPlan && pfInc) {
+    // Mengenstaffel: ab dieser Objektzahl gilt dieser Nachlass.
+    const PF_TIERS = [
+      { from: 100, off: .20 },
+      { from:  40, off: .15 },
+      { from:  15, off: .10 },
+      { from:   5, off: .05 },
+      { from:   1, off: 0   }
+    ];
+    // Vergleichsgrundlage Einzelbeauftragung: durchschnittlicher Vorfall mit
+    // rund 4 m² und 280 € Rechnungsbetrag (zwischen Mindestauftragswert und
+    // größeren Flächen). Beide Werte hängen zusammen – wer den einen ändert,
+    // sollte den anderen mitziehen.
+    const PF_SINGLE_JOB = 280;
+    const PF_AREA_PER_INCIDENT = 4;
+
+    const pfCountOut = $('#pf-count-out');
+    const pfIncOut   = $('#pf-inc-out');
+    const pfMonthly  = $('#pf-monthly');
+    const pfPerObj   = $('#pf-per-object');
+    const pfList     = $('#pf-list');
+    const pfDiscount = $('#pf-discount');
+    const pfYearly   = $('#pf-yearly');
+    const pfInclOut  = $('#pf-incl');
+    const pfCompare  = $('#pf-compare');
+
+    const eur = n => nf.format(Math.round(n)) + ' €';
+    const plural = (n, one, many) => nf.format(n) + ' ' + (n === 1 ? one : many);
+
+    // Die Tarifkarten holen ihren Preis aus derselben Quelle wie der Rechner.
+    $$('[data-plan-price]').forEach(el => {
+      const key = el.getAttribute('data-plan-price');
+      const opt = $$('option', pfPlan).find(o => o.value.toLowerCase() === key);
+      if (opt) el.textContent = eur(parseFloat(opt.dataset.price) || 0);
+    });
+
+    function pfDiscountFor(count) {
+      return (PF_TIERS.find(t => count >= t.from) || { off: 0 }).off;
+    }
+
+    function pfState() {
+      const count = Math.max(1, parseInt(pfCount.value, 10) || 1);
+      const opt   = pfPlan.options[pfPlan.selectedIndex];
+      const price = parseFloat(opt.dataset.price) || 0;
+      const incl  = parseFloat(opt.dataset.incl) || 0;
+      const off   = pfDiscountFor(count);
+      const monthly = count * price * (1 - off);
+      return {
+        count, plan: opt.value, price, incl, off,
+        monthly, yearly: monthly * 12,
+        perObject: monthly / count,
+        incidents: Math.max(0, parseInt(pfInc.value, 10) || 0)
+      };
+    }
+
+    // Gefüllter Teil der Schieberegler (wie beim Richtpreis-Rechner).
+    function pfFill(el) {
+      const min = Number(el.min) || 0, max = Number(el.max) || 100;
+      const pct = max > min ? ((Number(el.value) - min) / (max - min)) * 100 : 0;
+      el.style.setProperty('--fill', pct + '%');
+    }
+
+    function pfUpdate() {
+      const st = pfState();
+      pfFill(pfCount); pfFill(pfInc);
+
+      if (pfCountOut) pfCountOut.textContent = plural(st.count, 'Objekt', 'Objekte');
+      if (pfIncOut)   pfIncOut.textContent   = plural(st.incidents, 'Vorfall', 'Vorfälle');
+      $$('[data-pf-count]').forEach(b =>
+        b.classList.toggle('is-active', Number(b.dataset.pfCount) === st.count));
+
+      if (pfMonthly)  pfMonthly.textContent  = eur(st.monthly);
+      if (pfPerObj)   pfPerObj.textContent   = 'entspricht ' + eur(st.perObject) + ' je Objekt und Monat';
+      if (pfList)     pfList.textContent     = eur(st.count * st.price);
+      if (pfDiscount) pfDiscount.textContent = st.off ? '−' + Math.round(st.off * 100) + ' %' : 'ab 5 Objekten';
+      if (pfYearly)   pfYearly.textContent   = eur(st.yearly);
+      if (pfInclOut)  pfInclOut.textContent  = nf.format(st.incl * st.count) + ' m² pro Jahr';
+
+      if (pfCompare) {
+        const single  = st.count * st.incidents * PF_SINGLE_JOB;
+        const savings = single - st.yearly;
+        // Kleinster Tarif, dessen Flächenkontingent die angegebene Häufigkeit trägt.
+        const need = st.incidents * PF_AREA_PER_INCIDENT;
+        const fit  = $$('option', pfPlan)
+          .map(o => ({ name: o.value, incl: parseFloat(o.dataset.incl) || 0 }))
+          .sort((a, b) => a.incl - b.incl)
+          .find(o => o.incl >= need);
+
+        let html;
+        if (st.incidents === 0) {
+          html = 'Ohne Vorfälle zahlen Sie für Sichtkontrolle, Dokumentation und die zugesagte ' +
+            'Reaktionszeit. Bleibt ein Objekt dauerhaft unauffällig, tauschen wir es zum ' +
+            'Vertragsjahr gegen ein anderes Objekt Ihres Bestands.';
+        } else if (savings > 0) {
+          html = 'Einzelbeauftragung bei ' + plural(st.incidents, 'Vorfall', 'Vorfällen') +
+            ' je Objekt: rund ' + eur(single) + ' pro Jahr. Ihr Vorteil im Abo: <b>' + eur(savings) +
+            ' pro Jahr</b> – dazu entfallen Angebote, Einzelbeschlüsse und Einzelrechnungen.';
+        } else {
+          html = 'Einzelbeauftragung bei ' + plural(st.incidents, 'Vorfall', 'Vorfällen') +
+            ' je Objekt: rund ' + eur(single) + ' pro Jahr. Bei dieser Häufigkeit liegt das Abo ' +
+            'rechnerisch <b>' + eur(-savings) + ' darüber</b> – dafür sind Kontrolle, ' +
+            'Dokumentation und feste Reaktionszeit enthalten.';
+        }
+
+        if (st.incidents > 0) {
+          if (!fit) {
+            html += ' Bei mehr als ' + nf.format(st.incidents) + ' Vorfällen im Jahr rechnen wir ' +
+              'das Objekt individuell – dann lohnt sich meist zusätzlich ein Schutzanstrich an den Hotspots.';
+          } else if (fit.name !== st.plan) {
+            html += ' Für diese Häufigkeit genügt der Tarif <b>' + fit.name + '</b>.';
+          } else {
+            html += ' Der Tarif <b>' + st.plan + '</b> passt zu dieser Häufigkeit.';
+          }
+        }
+        pfCompare.innerHTML = html;
+      }
+    }
+
+    [pfCount, pfPlan, pfInc].forEach(el => {
+      el.addEventListener('input', pfUpdate);
+      el.addEventListener('change', pfUpdate);
+    });
+    $$('[data-pf-count]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        pfCount.value = btn.dataset.pfCount;
+        pfUpdate();
+      });
+    });
+    pfUpdate();
+
+    /* --- Übergabe an das Anfrageformular --- */
+    const careCount = $('#care-count');
+    const carePlan  = $('#care-plan');
+
+    function pfHandover(planKey) {
+      if (planKey) {
+        const opt = $$('option', pfPlan).find(o => o.value.toLowerCase() === planKey);
+        if (opt) { pfPlan.value = opt.value; pfUpdate(); }
+      }
+      const st = pfState();
+      if (careCheck) careCheck.checked = true;
+      updatePrice();                       // schaltet den GraffitiCare-Block frei
+      if (careCount) careCount.value = st.count;
+      if (carePlan)  carePlan.value  = st.plan + ' – kalkuliert ' + eur(st.monthly) +
+        ' pro Monat netto' + (st.off ? ' (inkl. ' + Math.round(st.off * 100) + ' % Mengenstaffel)' : '');
+      setTimeout(() => toast('Tarif ' + st.plan + ' übernommen', 'ic-calendar'), 400);
+    }
+
+    $$('[data-portfolio-plan]').forEach(btn => {
+      btn.addEventListener('click', () => pfHandover(btn.getAttribute('data-portfolio-plan')));
+    });
+    $$('[data-portfolio-request]').forEach(btn => {
+      btn.addEventListener('click', () => pfHandover(null));
+    });
+  }
 
   /* ====================================================================
      12 · Formular: Validierung & Versand

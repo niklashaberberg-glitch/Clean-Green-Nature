@@ -109,6 +109,39 @@ als `data-mult` an `#layer-select`. Beispiel:
 Mindestauftragswert und Entfernungsgrenze stehen im Skript als
 `MIN_ORDER_VALUE` und `MIN_ORDER_DISTANCE_KM`.
 
+## Der Portfolio-Rechner (GraffitiCare)
+
+Der Abschnitt `#graffiticare` verkauft das Abo als Objekt-Abo mit festem Monatspreis.
+Die Rechnung läuft wie beim Richtpreis-Rechner nur im Browser:
+
+```
+Monatspreis = Objekte × Tarifpreis × (1 − Mengenstaffel)
+```
+
+**Tarifpreise ändern:** Maßgeblich sind die `data-price` (€ je Objekt und Monat) und
+`data-incl` (enthaltene m² je Objekt und Jahr) an den Optionen des Auswahlfeldes
+`#pf-plan`. Die Preise in den drei Tarifkarten werden daraus gesetzt; der dort
+hinterlegte Text ist nur die Anzeige, falls kein JavaScript läuft. Wer die Preise
+ändert, sollte daher auch den Text in den Karten und die Angaben in den Strukturdaten
+(`"@id": ".../#service-graffiticare"`) anpassen.
+
+**Mengenstaffel** steht im Skript als `PF_TIERS`, die Vergleichsrechnung gegen die
+Einzelbeauftragung als `PF_SINGLE_JOB` (Rechnungsbetrag je Vorfall) und
+`PF_AREA_PER_INCIDENT` (Fläche je Vorfall). Beide Werte hängen zusammen: Wer den einen
+ändert, sollte den anderen mitziehen, sonst passen Kontingente und Vergleich nicht mehr
+zusammen. Aus ihnen leitet der Rechner auch die Tarifempfehlung ab.
+
+Die Schaltflächen `data-portfolio-plan` und `data-portfolio-request` springen zum
+Anfrageformular, setzen dort den Haken „GraffitiCare Abo“ und tragen Objektanzahl und
+Tarif in die Felder `GraffitiCare_Objektanzahl` und `GraffitiCare_Tarif` ein.
+
+> **Vor dem Livegang:** Die Tarife sind ein kalkulierter Vorschlag – Herleitung,
+> Deckungsbeitrag und Vertriebsweg stehen in
+> [`GESCHAEFTSMODELL-GRAFFITICARE.md`](GESCHAEFTSMODELL-GRAFFITICARE.md). Bitte gegen die
+> eigenen Kosten gegenrechnen. Ebenso ist § 7 der AGB (Laufzeit, Kontingent,
+> Reaktionszeit, Preisanpassung) ein Entwurf und sollte einmal juristisch geprüft werden,
+> bevor die Seite online geht.
+
 ## Texte ändern
 
 Alle Texte stehen als normaler HTML-Fließtext in `index.html`. Die Abschnitte

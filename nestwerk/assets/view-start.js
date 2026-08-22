@@ -6,7 +6,7 @@
 (function (NW) {
   'use strict';
 
-  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store, M = NW.match;
+  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store, M = NW.match, P = NW.plan;
   const h = U.html, raw = U.raw, ico = U.svg;
 
   function begruessung() {
@@ -40,9 +40,17 @@
       text: 'seit dem letzten Blick hinzugekommen', ziel: 'agenten', knopf: 'Ansehen'
     });
 
+    const faellig = S.nachfassFaellig();
+    if (faellig.length) out.push({
+      icon: 'verlauf', dringend: true,
+      titel: faellig.length + ' ' + U.plural(faellig.length, 'Anfrage wartet', 'Anfragen warten') + ' seit Tagen auf Antwort',
+      text: 'Die älteste liegt ' + faellig[0].tage + ' Tage – eine kurze Nachfrage kostet nichts.',
+      ziel: 'merkliste', knopf: 'Ansehen'
+    });
+
     const ungelesen = U.sum(s.threads.map((t) => t.ungelesen));
     if (ungelesen) out.push({
-      icon: 'nachricht', dringend: true, titel: ungelesen + ' ' + U.plural(ungelesen, 'neue Nachricht', '{n} neue Nachrichten'),
+      icon: 'nachricht', dringend: true, titel: ungelesen + ' ' + U.plural(ungelesen, 'neue Nachricht', 'neue Nachrichten'),
       text: 'Anbieter warten auf eine Antwort', ziel: 'nachrichten', knopf: 'Öffnen'
     });
 
@@ -54,8 +62,14 @@
     const fehlend = Object.keys(s.profil.unterlagen).filter((k) => !s.profil.unterlagen[k] && k !== 'wbs' && k !== 'buergschaft');
     if (s.profilAngelegt && fehlend.length) out.push({
       icon: 'blatt', dringend: false, titel: 'Bewerbermappe unvollständig',
-      text: fehlend.length + ' ' + U.plural(fehlend.length, 'Unterlage fehlt', '{n} Unterlagen fehlen') + ' – wer sie parat hat, ist schneller.',
+      text: fehlend.length + ' ' + U.plural(fehlend.length, 'Unterlage fehlt', 'Unterlagen fehlen') + ' – wer sie parat hat, ist schneller.',
       ziel: 'profil', knopf: 'Ergänzen'
+    });
+
+    if (!s.profil.nettoEinkommen) out.push({
+      icon: 'euro', dringend: false, titel: 'Wie viel Miete kannst du tragen?',
+      text: 'Zwei Grenzen entscheiden: dein Budget und die Regel, die Vermieter anwenden.',
+      ziel: 'leistbarkeit', knopf: 'Ausrechnen'
     });
 
     if (!s.meinTausch && s.filter.arten.indexOf('tausch') >= 0) out.push({
@@ -66,7 +80,7 @@
     if (s.einzugsdatum) {
       const plan = S.umzugsPlan().filter((a) => !a.erledigt && a.faellig <= U.isoDate(U.addDays(NW.now(), 14)));
       if (plan.length) out.push({
-        icon: 'umzug', dringend: true, titel: plan.length + ' ' + U.plural(plan.length, 'Umzugsaufgabe', '{n} Umzugsaufgaben') + ' in den nächsten 14 Tagen',
+        icon: 'umzug', dringend: true, titel: plan.length + ' ' + U.plural(plan.length, 'Umzugsaufgabe', 'Umzugsaufgaben') + ' in den nächsten 14 Tagen',
         text: plan[0].label, ziel: 'umzug', knopf: 'Plan öffnen'
       });
     }
@@ -184,9 +198,35 @@
             <article><span class="vorteile__zeichen">${ico('ziel')}</span>
               <b>Reihenfolge ohne Bezahlung</b>
               <p>Sortiert wird nach deinem Profil. Es gibt keine gekauften Plätze, und die Bewertung legt offen,
-                warum etwas oben steht.</p></article>
+                warum etwas oben steht. Auch Plus kauft keinen Platz weiter oben.</p></article>
+            <article><span class="vorteile__zeichen">${ico('kopieren')}</span>
+              <b>Doppelte Inserate erkennen</b>
+              <p>Dieselbe Wohnung steht oft zweimal im Angebot, von zwei Maklern. Nestwerk merkt das und sagt es,
+                bevor du dich zweimal bewirbst.</p></article>
+            <article><span class="vorteile__zeichen">${ico('werkzeug')}</span>
+              <b>Auch nach dem Einzug</b>
+              <p>Übergabeprotokoll, Umzugsplan und die Prüfung der Nebenkostenabrechnung – die Werkzeuge hören
+                nicht auf, wenn der Vertrag unterschrieben ist.</p></article>
           </div>
         </section>
+
+        <section class="block">
+          <div class="block__kopfzeile">
+            <h2>${ico('werkzeug')}Werkzeuge</h2>
+            <a class="link" href="#/werkzeuge">alle ansehen</a>
+          </div>
+          <p class="block__unter">Rechnen und prüfen – von der ersten Frage „was kann ich mir leisten“ bis zur
+            Nebenkostenabrechnung zwei Jahre später.</p>
+          <div class="werkzeuge werkzeuge--klein">
+            ${NW.viewWerkzeuge.KATALOG.slice(0, 4).map((k) => h`<a class="werkzeugkachel" href="#/${k.route}">
+              <span class="werkzeugkachel__zeichen">${ico(k.icon)}</span>
+              <b>${k.name}${k.plus ? ui.badge('Plus', 'info') : ''}</b>
+              <p>${U.truncate(k.text, 90)}</p>
+            </a>`)}
+          </div>
+        </section>
+
+        ${!P.istPlus() ? ui.anzeige('start', 'breit') : ''}
 
         ${gesehen.length ? h`<section class="block">
           <div class="block__kopfzeile"><h2>${ico('verlauf')}Zuletzt angesehen</h2></div>

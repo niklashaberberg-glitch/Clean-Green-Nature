@@ -166,8 +166,10 @@
 
   const slug = (s) => norm(s).replace(/\s+/g, '-');
 
-  function plural(n, one, many) {
-    return n === 1 ? one : many.replace('{n}', num(n));
+  /* Liefert nur das Wort, nie die Zahl – die schreibt die Aufrufstelle
+     davor. Alles andere führt unweigerlich zu „2 2 Funde“. */
+  function plural(n, ein, viele) {
+    return Number(n) === 1 ? ein : viele;
   }
 
   function truncate(s, n) {

@@ -577,6 +577,42 @@
       verketten(gemischt.slice(7, 9));
     }
 
+    /* Doppelte Inserate: Auf echten Portalen steht dieselbe Wohnung
+       regelmäßig zweimal – vom Eigentümer und vom beauftragten Makler,
+       oder von zwei Maklern zugleich. Wer das nicht merkt, bewirbt sich
+       zweimal auf dasselbe Objekt und wirkt unentschlossen. Damit die
+       Erkennung etwas zu erkennen hat, kommen ein paar Paare hinein. */
+    const doppelbar = listings.filter((l) => (l.kind === 'miete' || l.kind === 'kauf') && !l.verdacht);
+    U.pickN(r, doppelbar, Math.min(7, doppelbar.length)).forEach((original) => {
+      const zwilling = JSON.parse(JSON.stringify(original));
+      zwilling.id = 'dup-' + (++idCounter).toString(36).padStart(3, '0');
+      /* Wer als Zweiter inseriert, ist meist der Makler – und rundet den
+         Preis leicht anders. */
+      const aufschlag = U.between(r, -0.03, 0.04);
+      if (zwilling.kind === 'kauf') {
+        zwilling.kaufpreis = Math.round(zwilling.kaufpreis * (1 + aufschlag) / 1000) * 1000;
+      } else {
+        zwilling.kalt = Math.round(zwilling.kalt * (1 + aufschlag));
+        zwilling.warm = zwilling.kalt + zwilling.nebenkosten + zwilling.heizkosten;
+      }
+      zwilling.flaeche = original.flaeche + U.pick(r, [0, 0, 1, -1]);
+      zwilling.wohnflaeche = zwilling.flaeche;
+      zwilling.anbieter = makeAnbieter(r, original.anbieter.art === 'makler' ? 'privat' : 'makler', zwilling.stadt);
+      zwilling.strasse = 'Nähe ' + U.pick(r, STRASSEN);
+      zwilling.stats = {
+        aufrufe: Math.round(original.stats.aufrufe * U.between(r, 0.3, 1.4)),
+        bewerber: Math.round(original.stats.bewerber * U.between(r, 0.3, 1.3)),
+        online: dateOffset(-U.intBetween(r, 0, 30))
+      };
+      zwilling.besichtigungen = [];
+      /* Anderer Text, gleiche Wohnung – so sieht es in der Praxis aus. */
+      zwilling.beschreibung = U.pick(r, T_EROEFFNUNG[zwilling.baujahr < 1949 ? 'altbau' : zwilling.baujahr < 2000 ? 'nachkrieg' : 'modern']) +
+        ' ' + U.dec(zwilling.zimmer) + ' Zimmer auf ' + zwilling.flaeche + ' m² in ' + zwilling.viertel + '. ' +
+        U.pick(r, T_ZUSTAND) + ' ' + U.pick(r, T_LAGE) + ' ' + U.pick(r, T_FORMAL);
+      zwilling.quirks = [];
+      listings.push(zwilling);
+    });
+
     listings.forEach((l, i) => { l.nr = i + 1; });
     return listings;
   }

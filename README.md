@@ -180,12 +180,33 @@ Was dabei über die Vorlagen hinausgeht:
 * **Vertragslupe** – liest den Inseratstext auf Klauseln, die später Geld
   kosten, und erklärt jede einzeln.
 * **Prüfhinweis** – erkennt die üblichen Muster erfundener Inserate.
+* **Chancen ehrlich** – trennt, was du beeinflussen kannst (deine Bewerbung)
+  von dem, was du nicht beeinflussen kannst (der Andrang).
+* **Doppelte Inserate** – dieselbe Wohnung von zwei Maklern wird erkannt.
 * **Echte Monatskosten** statt Warmmiete, inklusive Einmalkosten beim Einzug.
 * **Passung ohne bezahlte Plätze**, mit offengelegter Rechnung.
 * **WG-Passung** über sechs Dimensionen des Zusammenlebens.
-* **Mieten oder kaufen** – Vermögensvergleich über frei wählbare Jahre.
+* **Werkzeuge fürs ganze Wohnen** – Leistbarkeit, Wohngeld, Wohnberechtigungs-
+  schein, Umzugsplan, Übergabeprotokoll, Nebenkostenprüfung, Marktdaten.
 * **Karte und Bilder selbst gezeichnet** – kein Kachelserver, keine fremden
   Fotos, keine Nachverfolgung.
+
+## Das Geschäftsmodell
+
+Ein freier Tarif mit Anzeigen und ein Abo für 7,90 € im Monat. Die Aufteilung
+folgt einem einzigen Satz:
+
+> **Plus bezahlt Zeitersparnis bei häufiger Nutzung – niemals einen Vorteil
+> gegenüber anderen Bewerbern.**
+
+Frei bleibt deshalb alles, was schützt (Betrugserkennung, Vergleichsmiete,
+Chancen), alles, was gerechnet werden muss (Leistbarkeit, Wohngeld, WBS,
+Nebenkosten, Übergabe), und die vollständige Suche. Plus kostet, was jemand
+zehnmal am Tag anfasst: mehrere Suchaufträge, Serienbewerbung, die vollständige
+Vertragslupe, Ringtauschketten, Marktdaten – und keine Anzeigen.
+
+Ausdrücklich **nicht** käuflich: bessere Platzierung, Vorrang bei Vermietern,
+Frühzugang zu Inseraten. Genau das verkaufen die meisten Portale.
 
 Alles läuft im Browser. Kein Server, kein Konto, keine Übertragung an Dritte.
 Die vollständige Beschreibung steht in [`nestwerk/README.md`](nestwerk/README.md).

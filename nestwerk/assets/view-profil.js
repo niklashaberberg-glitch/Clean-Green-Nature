@@ -6,7 +6,7 @@
 (function (NW) {
   'use strict';
 
-  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store, M = NW.match;
+  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store, M = NW.match, P = NW.plan;
   const h = U.html, raw = U.raw, ico = U.svg;
 
   /* ================================================================
@@ -150,6 +150,9 @@
               <button type="button" class="knopf knopf--still" data-tu="anker-neu">${ico('plus')}Hinzufügen</button>
             </div>
           </div>
+          ${p.anker.length >= P.grenze('anker') ? h`<p class="filter__hinweis">${ico('schloss')}
+            Im freien Tarif ist ein Ankerpunkt möglich. <a href="#/plus">Mit Plus beliebig viele</a> –
+            praktisch, wenn Arbeit, Kita und Familie in verschiedenen Ecken liegen.</p>` : ''}
           <label class="feld"><span>Verkehrsmittel für die Rechnung</span>
             <select data-tu-change="profil-text" data-feld="verkehrsmittel">
               ${Object.keys(U.TRAVEL).map((k) => h`<option value="${k}" ${p.verkehrsmittel === k ? 'selected' : ''}>${U.TRAVEL[k].label}</option>`)}
@@ -451,16 +454,51 @@
       '</svg>');
   }
 
+  function rechnerOben(w, e) {
+    const vorne = e.vermoegenKauf > e.vermoegenMiete;
+    const abstand = Math.abs(e.vermoegenKauf - e.vermoegenMiete);
+    return h`<div class="ergebnis-gross">
+        <div>
+          <b class="${vorne ? 'is-vorne' : ''}">${U.eur(e.vermoegenKauf)}</b>
+          <span>Vermögen nach ${w.jahre} Jahren mit Kauf</span>
+          <i>Immobilienwert ${U.eur(e.immobilienwert)} minus Restschuld ${U.eur(e.restschuld)}</i>
+        </div>
+        <div>
+          <b class="${!vorne ? 'is-vorne' : ''}">${U.eur(e.vermoegenMiete)}</b>
+          <span>Vermögen nach ${w.jahre} Jahren mit Miete</span>
+          <i>angelegtes Eigenkapital plus monatliche Differenz bei ${U.dec(w.anlage)} % Rendite</i>
+        </div>
+      </div>
+      <p class="ergebnis-satz">
+        ${vorne ? 'Der Kauf liegt nach ' + w.jahre + ' Jahren um ' + U.eur(abstand) + ' vorn.'
+        : 'Mieten und anlegen liegt nach ' + w.jahre + ' Jahren um ' + U.eur(abstand) + ' vorn.'}
+      </p>
+      ${verlaufGrafik(e.verlauf)}
+      <p class="verlauf__legende">
+        <span class="verlauf__punkt verlauf__punkt--kauf"></span>Kauf
+        <span class="verlauf__punkt verlauf__punkt--miete"></span>Miete plus Anlage
+      </p>`;
+  }
+
+  function rechnerZahlen(w, e) {
+    return h`<div><b>${U.eur(e.nebenkosten)}</b><span>Kaufnebenkosten (${U.dec(e.grest)} % Grunderwerbsteuer, 2 % Notar, ${U.dec(w.makler)} % Makler)</span></div>
+      <div><b>${U.eur(e.darlehen)}</b><span>Darlehen</span></div>
+      <div><b>${U.eur(e.rate)}</b><span>Annuität im Monat</span></div>
+      <div><b>${U.eur(e.erstesJahrRate)}</b><span>echte Monatsbelastung mit Hausgeld und Rücklage</span></div>
+      <div><b>${U.eur(e.zinsSumme)}</b><span>gezahlte Zinsen in ${w.jahre} Jahren</span></div>
+      <div><b>${U.eur(e.restschuld)}</b><span>Restschuld nach ${w.jahre} Jahren</span></div>
+      <div><b>${U.eur(e.mieteGesamt)}</b><span>gezahlte Miete in ${w.jahre} Jahren</span></div>
+      <div><b>${U.eur(e.kaeuferAusgaben)}</b><span>Ausgaben als Käufer in ${w.jahre} Jahren</span></div>`;
+  }
+
   function rechner() {
     const w = rWerte;
     const e = rechnen(w);
-    const vorne = e.vermoegenKauf > e.vermoegenMiete;
-    const abstand = Math.abs(e.vermoegenKauf - e.vermoegenMiete);
 
     const feld = (name, label, min, max, step, einheit) => h`<label class="feld feld--regler">
       <span>${label} <b>${einheit === '€' ? U.eur(w[name]) : U.dec(w[name]) + (einheit || '')}</b></span>
       <input type="range" min="${min}" max="${max}" step="${step}" value="${w[name]}"
-        data-tu-input="rechner" data-feld="${name}"></label>`;
+        data-tu-input="rechner" data-feld="${name}" data-einheit="${einheit || ''}"></label>`;
 
     return {
       titel: 'Mieten oder kaufen',
@@ -471,29 +509,7 @@
             investiert jeden Monat die Differenz zur Kaufrate. Verglichen wird am Ende das Vermögen, nicht das Gefühl.</p>
         </header>
 
-        <section class="block block--betont">
-          <div class="ergebnis-gross">
-            <div>
-              <b class="${vorne ? 'is-vorne' : ''}">${U.eur(e.vermoegenKauf)}</b>
-              <span>Vermögen nach ${w.jahre} Jahren mit Kauf</span>
-              <i>Immobilienwert ${U.eur(e.immobilienwert)} minus Restschuld ${U.eur(e.restschuld)}</i>
-            </div>
-            <div>
-              <b class="${!vorne ? 'is-vorne' : ''}">${U.eur(e.vermoegenMiete)}</b>
-              <span>Vermögen nach ${w.jahre} Jahren mit Miete</span>
-              <i>angelegtes Eigenkapital plus monatliche Differenz bei ${U.dec(w.anlage)} % Rendite</i>
-            </div>
-          </div>
-          <p class="ergebnis-satz">
-            ${vorne ? 'Der Kauf liegt nach ' + w.jahre + ' Jahren um ' + U.eur(abstand) + ' vorn.'
-        : 'Mieten und anlegen liegt nach ' + w.jahre + ' Jahren um ' + U.eur(abstand) + ' vorn.'}
-          </p>
-          ${verlaufGrafik(e.verlauf)}
-          <p class="verlauf__legende">
-            <span class="verlauf__punkt verlauf__punkt--kauf"></span>Kauf
-            <span class="verlauf__punkt verlauf__punkt--miete"></span>Miete plus Anlage
-          </p>
-        </section>
+        <section class="block block--betont" id="rechner-oben">${rechnerOben(w, e)}</section>
 
         <section class="block">
           <h2>Die Immobilie</h2>
@@ -525,16 +541,7 @@
 
         <section class="block">
           <h2>Zahlen im Detail</h2>
-          <div class="kennzahlen">
-            <div><b>${U.eur(e.nebenkosten)}</b><span>Kaufnebenkosten (${U.dec(e.grest)} % Grunderwerbsteuer, 2 % Notar, ${U.dec(w.makler)} % Makler)</span></div>
-            <div><b>${U.eur(e.darlehen)}</b><span>Darlehen</span></div>
-            <div><b>${U.eur(e.rate)}</b><span>Annuität im Monat</span></div>
-            <div><b>${U.eur(e.erstesJahrRate)}</b><span>echte Monatsbelastung mit Hausgeld und Rücklage</span></div>
-            <div><b>${U.eur(e.zinsSumme)}</b><span>gezahlte Zinsen in ${w.jahre} Jahren</span></div>
-            <div><b>${U.eur(e.restschuld)}</b><span>Restschuld nach ${w.jahre} Jahren</span></div>
-            <div><b>${U.eur(e.mieteGesamt)}</b><span>gezahlte Miete in ${w.jahre} Jahren</span></div>
-            <div><b>${U.eur(e.kaeuferAusgaben)}</b><span>Ausgaben als Käufer in ${w.jahre} Jahren</span></div>
-          </div>
+          <div class="kennzahlen" id="rechner-zahlen">${rechnerZahlen(w, e)}</div>
           <p class="fein">Ohne Steuern, Sondertilgung, Modernisierungsstau und Umzugskosten. Die Rechnung reagiert
             empfindlich auf Wertsteigerung und Anlagerendite – schieb beide Regler bewusst, nicht optimistisch.</p>
           <p><button type="button" class="link" data-tu="rechner-zurueck">Werte zurücksetzen</button></p>
@@ -585,6 +592,10 @@
   });
 
   A_('anker-neu', () => {
+    if (S.get().profil.anker.length >= P.grenze('anker')) {
+      ui.AKTIONEN.sperre({ dataset: { leistung: 'anker' } });
+      return;
+    }
     const name = (U.$('#anker-name').value || '').trim();
     const key = U.$('#anker-ort').value;
     const d = NW.geo.districtByKey[key];
@@ -693,12 +704,25 @@
     ui.toast('Inserat gelöscht.');
   });
 
-  A_('rechner', U.debounce((el) => {
-    rWerte[el.dataset.feld] = Number(el.value);
-    ui.neuZeichnen();
-  }, 160));
+  /* Nur die Ergebnisbereiche austauschen. Würde die ganze Seite neu
+     entstehen, bräche jeder Regler mitten im Ziehen ab. */
+  function rechnerAktualisieren() {
+    const e = rechnen(rWerte);
+    const oben = U.$('#rechner-oben');
+    if (oben) oben.innerHTML = String(rechnerOben(rWerte, e));
+    const zahlen = U.$('#rechner-zahlen');
+    if (zahlen) zahlen.innerHTML = String(rechnerZahlen(rWerte, e));
+  }
 
-  A_('rechner-land', (el) => { rWerte.bundesland = el.value; ui.neuZeichnen(); });
+  A_('rechner', (el) => {
+    rWerte[el.dataset.feld] = Number(el.value);
+    const einheit = el.dataset.einheit || '';
+    NW.viewWerkzeuge.reglerText(el, einheit === '€' ? U.eur(rWerte[el.dataset.feld])
+      : U.dec(rWerte[el.dataset.feld]) + einheit);
+    rechnerAktualisieren();
+  });
+
+  A_('rechner-land', (el) => { rWerte.bundesland = el.value; rechnerAktualisieren(); });
   A_('rechner-zurueck', () => { rWerte = Object.assign({}, R_VORGABE); ui.neuZeichnen(); ui.toast('Werte zurückgesetzt.'); });
 
   ui.ansichten.profil = profil;

@@ -7,14 +7,19 @@
 (function (NW) {
   'use strict';
 
-  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store, M = NW.match;
+  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store, M = NW.match, P = NW.plan;
   const h = U.html, raw = U.raw, ico = U.svg;
 
   let sicht = { nurMeine: false, maxLaenge: 4, minGuete: 60 };
 
   /* ------------------------- Ringgrafik ------------------------- */
 
+  /* Jede Grafik bringt ihre eigene Pfeilspitze mit – mehrere Ringe auf
+     einer Seite dürfen sich nicht dieselbe Kennung teilen. */
+  let grafikNummer = 0;
+
   function ringGrafik(r) {
+    const spitze = 'pfeilspitze-' + (++grafikNummer);
     const n = r.knoten.length;
     const g = 260, mitte = g / 2, radius = g / 2 - 52;
     const punkte = r.knoten.map((k, i) => {
@@ -31,7 +36,7 @@
       const kr = 1 - (r.kanten[i] ? r.kanten[i].wert : 1);
       const farbe = kr < 0.12 ? 'var(--gut)' : kr < 0.3 ? 'var(--warn)' : 'var(--schlecht)';
       pfeile += '<path d="M' + ax.toFixed(1) + ' ' + ay.toFixed(1) + 'L' + bx.toFixed(1) + ' ' + by.toFixed(1) +
-        '" stroke="' + farbe + '" stroke-width="2.4" marker-end="url(#pfeilspitze)"/>';
+        '" stroke="' + farbe + '" stroke-width="2.4" marker-end="url(#' + spitze + ')"/>';
     });
     let knoten = '';
     punkte.forEach((p, i) => {
@@ -40,7 +45,7 @@
         '<text y="5">' + (p.k.eigen ? 'Du' : String.fromCharCode(65 + i)) + '</text></g>';
     });
     return raw('<svg class="ringgrafik" viewBox="0 0 ' + g + ' ' + g + '" role="img" aria-label="Tauschkette mit ' + n + ' Beteiligten">' +
-      '<defs><marker id="pfeilspitze" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">' +
+      '<defs><marker id="' + spitze + '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">' +
       '<path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs>' +
       pfeile + knoten + '</svg>');
   }
@@ -122,13 +127,19 @@
         <div><b>${M.ringeFuer(alle, m.id).length}</b><span>Ketten insgesamt</span></div>
       </div>
       ${schrauben.length ? h`<h3>Was mehr Ketten bringen würde</h3>
-        <ul class="schrauben">
-          ${schrauben.slice(0, 4).map((s2) => h`<li>
-            <span>${s2.label}</span>
-            <b>+${s2.gewinn} ${U.plural(s2.gewinn, 'Kette', 'Ketten')}</b>
-          </li>`)}
-        </ul>
-        <p class="fein">Nestwerk hat jede Lockerung einzeln durchgerechnet – das sind keine Schätzungen.</p>` : ''}
+        ${P.darf('stellschrauben')
+        ? h`<ul class="schrauben">
+            ${schrauben.slice(0, 4).map((s2) => h`<li>
+              <span>${s2.label}</span>
+              <b>+${s2.gewinn} ${U.plural(s2.gewinn, 'Kette', 'Ketten')}</b>
+            </li>`)}
+          </ul>
+          <p class="fein">Nestwerk hat jede Lockerung einzeln durchgerechnet – das sind keine Schätzungen.</p>`
+        : h`<ul class="schrauben schrauben--verdeckt">
+            ${schrauben.slice(0, 4).map((s2) => h`<li><span>${s2.label}</span><b>+? Ketten</b></li>`)}
+          </ul>
+          ${ui.sperrHinweis('stellschrauben', 'Nestwerk hat jede dieser Lockerungen einzeln durchgerechnet. '
+          + 'Mit Plus siehst du, wie viele zusätzliche Ketten jede einzelne öffnet.')}`}` : ''}
     </section>`;
   }
 
@@ -137,6 +148,12 @@
   function ansicht() {
     const s = S.get();
     const angebote = NW.data.listings.filter((x) => x.kind === 'tausch').concat(s.meinTausch ? [s.meinTausch] : []);
+    const erlaubt = P.grenze('ringLaenge');
+    if (sicht.maxLaenge > erlaubt) sicht.maxLaenge = erlaubt;
+    /* Auch im freien Tarif wird alles gerechnet – nur nicht alles gezeigt.
+       Wer nicht weiß, was ihm entgeht, kann nicht entscheiden. */
+    const gesamt = M.ringe(angebote, { maxLen: 4, minWert: 0.5 });
+    const laengere = gesamt.filter((r) => r.laenge > erlaubt);
     let alle = M.ringe(angebote, { maxLen: sicht.maxLaenge, minWert: 0.5 });
     alle = alle.filter((r) => r.wert * 100 >= sicht.minGuete);
     if (sicht.nurMeine) alle = alle.filter((r) => r.knoten.some((k) => k.eigen));
@@ -167,7 +184,8 @@
               <span>nur Ketten mit meinem Angebot</span></label>
             <label class="feld feld--flach"><span>höchstens</span>
               <select data-tu-change="ring-laenge">
-                ${[2, 3, 4].map((n) => h`<option value="${n}" ${sicht.maxLaenge === n ? 'selected' : ''}>${n} Beteiligte</option>`)}
+                ${[2, 3, 4].map((n) => h`<option value="${n}" ${sicht.maxLaenge === n ? 'selected' : ''}
+                  ${n > erlaubt ? 'disabled' : ''}>${n} Beteiligte${n > erlaubt ? ' – Plus' : ''}</option>`)}
               </select></label>
             <label class="feld feld--regler"><span>Güte ab ${sicht.minGuete} %</span>
               <input type="range" min="50" max="100" step="5" value="${sicht.minGuete}" data-tu-input="ring-guete"></label>
@@ -176,6 +194,21 @@
           ${alle.length ? h`<div class="ringliste-gross">${alle.slice(0, 12).map((r, i) => ringKarte(r, i))}</div>`
         : h`<div class="leer">${ico('ring')}<h3>Keine Kette in dieser Einstellung</h3>
             <p>Senk die Mindestgüte, erlaub längere Ketten oder lockere dein eigenes Angebot.</p></div>`}
+
+          ${laengere.length ? h`<div class="ringsperre">
+            <h3>${ico('schloss')}${laengere.length} weitere ${U.plural(laengere.length, 'Kette', 'Ketten')} über drei und vier Haushalte</h3>
+            <p>Der direkte Tausch scheitert fast immer daran, dass zwei Menschen exakt das Gegenteil voneinander
+              wollen. Genau deshalb sind die längeren Ketten der eigentliche Nutzen – gerade sind
+              ${laengere.filter((r) => r.laenge === 3).length} Dreier- und
+              ${laengere.filter((r) => r.laenge === 4).length} Viererketten offen.</p>
+            <ul class="ringsperre__liste">
+              ${laengere.slice(0, 3).map((r) => h`<li>
+                <b>${r.laenge}er-Ring</b>
+                <span>${r.knoten.map(() => '•').join(' → ')} → •</span>
+                <em>${Math.round(r.wert * 100)} % Güte</em></li>`)}
+            </ul>
+            ${ui.sperrHinweis('ring')}
+          </div>` : ''}
         </section>
 
         <section class="block">

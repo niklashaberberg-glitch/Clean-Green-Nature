@@ -72,6 +72,11 @@
     gesehen: [],
     einzugsdatum: '',
     umzug: {},
+    protokoll: {},          /* Übergabeprotokoll: Räume, Zähler, Mängel */
+    werkzeuge: {},          /* zuletzt eingegebene Werte der Rechner */
+    tarif: 'frei',
+    tarifIntervall: 'monat',
+    tarifSeit: '',
     theme: 'auto',
     ansicht: 'liste',
     hinweiseGelesen: {},
@@ -157,7 +162,7 @@
 
   /* ------------------------- Vergleich ------------------------- */
 
-  const MAX_VERGLEICH = 4;
+  const maxVergleich = () => (NW.plan ? NW.plan.grenze('vergleich') : 4);
 
   function imVergleich(id) { return get().vergleich.indexOf(id) >= 0; }
 
@@ -166,9 +171,11 @@
     const i = s.vergleich.indexOf(id);
     let meldung = '';
     update((st) => {
+      const grenze = maxVergleich();
       if (i >= 0) { st.vergleich.splice(i, 1); meldung = 'Aus dem Vergleich entfernt.'; }
-      else if (st.vergleich.length >= MAX_VERGLEICH) { meldung = 'Es lassen sich höchstens ' + MAX_VERGLEICH + ' Objekte vergleichen.'; }
-      else { st.vergleich.push(id); meldung = 'Zum Vergleich hinzugefügt.'; }
+      else if (st.vergleich.length >= grenze) {
+        meldung = 'gesperrt:vergleich';
+      } else { st.vergleich.push(id); meldung = 'Zum Vergleich hinzugefügt.'; }
     }, 'vergleich');
     return meldung;
   }
@@ -176,6 +183,7 @@
   /* ------------------------- Suchagenten ------------------------- */
 
   function agentAnlegen(name, filter) {
+    if (NW.plan && get().agenten.length >= NW.plan.grenze('suchauftraege')) return null;
     const id = 'ag-' + Date.now().toString(36);
     update((s) => {
       s.agenten.push({
@@ -313,6 +321,46 @@
     update((s) => { s.umzug[id] = wert; }, 'umzug');
   }
 
+  /* ------------------------- Nachfassen ------------------------- */
+
+  /* Angeschrieben, keine Antwort, und es liegt lange genug zurück:
+     genau der Moment, in dem die meisten Bewerbungen im Sand verlaufen. */
+  const NACHFASS_TAGE = 4;
+
+  function nachfassFaellig() {
+    const s = get();
+    return Object.keys(s.merkliste).map((id) => {
+      const e = s.merkliste[id];
+      if (e.status !== 'kontakt') return null;
+      const thread = s.threads.find((t) => t.listingId === id);
+      if (!thread || !thread.nachrichten.length) return null;
+      const letzte = thread.nachrichten[thread.nachrichten.length - 1];
+      if (letzte.von !== 'ich') return null;
+      const tage = U.daysSince(letzte.zeit);
+      if (tage < NACHFASS_TAGE) return null;
+      if (e.nachgefasst) return null;
+      return { id, listing: NW.data.byId[id], tage, thread };
+    }).filter(Boolean).sort((a, b) => b.tage - a.tage);
+  }
+
+  function nachgefasst(id) {
+    update((s) => { if (s.merkliste[id]) s.merkliste[id].nachgefasst = U.isoDate(NW.now()); }, 'merkliste');
+  }
+
+  /* ------------------------- Übergabeprotokoll ------------------------- */
+
+  function protokollSetzen(feld, wert) {
+    update((s) => { s.protokoll[feld] = wert; }, 'protokoll');
+  }
+
+  /* ------------------------- Werte der Rechner ------------------------- */
+
+  function werkzeugSetzen(name, werte) {
+    update((s) => { s.werkzeuge[name] = Object.assign({}, s.werkzeuge[name], werte); }, 'werkzeuge');
+  }
+
+  const werkzeugWerte = (name, vorgabe) => Object.assign({}, vorgabe, get().werkzeuge[name] || {});
+
   /* ------------------------- Zurücksetzen ------------------------- */
 
   function zuruecksetzen() {
@@ -323,7 +371,7 @@
   }
 
   NW.store = {
-    PIPELINE, UMZUG_VORLAGE, BESICHTIGUNG_FRAGEN, MAX_VERGLEICH,
+    PIPELINE, UMZUG_VORLAGE, BESICHTIGUNG_FRAGEN, maxVergleich, NACHFASS_TAGE,
     get, set, update, on, laden, speichern,
     gemerkt, merken, setStatus, setNotiz,
     imVergleich, vergleichen,
@@ -331,6 +379,7 @@
     threadFuer, anschreiben, threadGelesen,
     terminBuchen, terminAbsagen, checkSetzen,
     inseratAnlegen, inseratLoeschen, gesehenMerken,
-    umzugsPlan, umzugSetzen, zuruecksetzen
+    umzugsPlan, umzugSetzen, zuruecksetzen,
+    nachfassFaellig, nachgefasst, protokollSetzen, werkzeugSetzen, werkzeugWerte
   };
 })(window.NW = window.NW || {});

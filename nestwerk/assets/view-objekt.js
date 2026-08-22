@@ -6,7 +6,7 @@
 (function (NW) {
   'use strict';
 
-  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store, M = NW.match;
+  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store, M = NW.match, P = NW.plan, W = NW.werkzeuge;
   const h = U.html, raw = U.raw, ico = U.svg;
 
   let bildIndex = 0;
@@ -133,11 +133,15 @@
       </section>`;
     }
     const zahl = { kritisch: 'schlecht', achtung: 'warn', info: 'info' };
+    const grenze = P.grenze('lupeFunde');
+    const gezeigt = funde.slice(0, grenze === Infinity ? funde.length : grenze);
+    const versteckt = funde.length - gezeigt.length;
     return h`<section class="block" id="lupe">
       <h2>${ico('blatt')}Vertragslupe</h2>
-      <p class="block__unter">Nestwerk liest den Inseratstext auf Formulierungen, die im Mietvertrag Geld oder Rechte kosten können.</p>
+      <p class="block__unter">Nestwerk liest den Inseratstext auf Formulierungen, die im Mietvertrag Geld oder Rechte kosten können.
+        ${funde.length} ${U.plural(funde.length, 'Fund', 'Funde')} in diesem Inserat.</p>
       <ul class="lupe">
-        ${funde.map((f) => h`<li class="lupe__fund lupe__fund--${zahl[f.bewertung]}">
+        ${gezeigt.map((f) => h`<li class="lupe__fund lupe__fund--${zahl[f.bewertung]}">
           <details ${f.bewertung === 'kritisch' ? 'open' : ''}>
             <summary>
               ${ui.badge(f.bewertung === 'kritisch' ? 'kritisch' : f.bewertung === 'achtung' ? 'genau lesen' : 'zur Kenntnis', zahl[f.bewertung])}
@@ -148,6 +152,15 @@
             <p class="fein">${f.quelle}</p>
           </details>
         </li>`)}
+        ${versteckt > 0 ? h`<li class="lupe__fund lupe__fund--gesperrt">
+          <div class="lupe__verdeckt">
+            ${funde.slice(gezeigt.length).map((f) => h`<span class="lupe__titel-verdeckt">
+              ${ui.badge(f.bewertung === 'kritisch' ? 'kritisch' : f.bewertung === 'achtung' ? 'genau lesen' : 'zur Kenntnis',
+        zahl[f.bewertung])}<b>${f.titel}</b></span>`)}
+          </div>
+          ${ui.sperrHinweis('lupe', versteckt + ' weitere ' + U.plural(versteckt, 'Klausel wurde', 'Klauseln wurden')
+        + ' gefunden. Die Titel siehst du oben – die Erläuterung, warum das Geld kostet und was dagegen hilft, gehört zu Plus.')}
+        </li>` : ''}
       </ul>
       <p class="fein">Allgemeine Hinweise zur Einordnung, keine Rechtsberatung. Im Zweifel hilft ein Mieterverein
         oder eine Anwältin für Mietrecht.</p>
@@ -180,6 +193,78 @@
           <li>Wer nur schriftlich kommuniziert und Termine ablehnt, hat meist keine Wohnung.</li>
         </ul></div>
       </div>` : ''}
+    </section>`;
+  }
+
+  /* ------------------------- Chancen ------------------------- */
+
+  function chancenBlock(l) {
+    if (l.kind === 'kauf') return '';
+    const c = W.chancen(l, S.get().profil);
+    const ton = { gut: 'gut', mittel: 'warn', schwach: 'schlecht' }[c.stufe];
+    const andrangTon = { keiner: 'gut', gering: 'gut', 'spürbar': 'neutral', hoch: 'warn', 'sehr hoch': 'schlecht' }[c.andrang];
+    return h`<section class="block" id="chancen">
+      <h2>${ico('ziel')}Wie stehen deine Chancen?</h2>
+      <p class="block__unter">Zwei Dinge entscheiden, und nur eines davon hast du in der Hand.
+        Deshalb stehen sie hier getrennt.</p>
+      <div class="chancenkopf">
+        <div class="ampel ampel--${ton}">
+          <div class="ampel__zahl">${ico(c.staerke === 'schwach' ? 'warnung' : 'pruefen')}</div>
+          <div>
+            <b>Deine Bewerbung: ${c.staerke}</b>
+            <p>Das kannst du ändern – die Punkte unten sagen wie.</p>
+          </div>
+        </div>
+        <div class="ampel ampel--${ui.ampelFarbe(andrangTon)}">
+          <div class="ampel__zahl">${c.mitbewerber}</div>
+          <div>
+            <b>Andrang: ${c.andrang}</b>
+            <p>Darauf hast du keinen Einfluss${c.mitbewerber > 1 ? ' – rechnerisch ' + c.prozent + ' von 100' : ''}.</p>
+          </div>
+        </div>
+      </div>
+      <p class="chancen__satz">${c.satz}</p>
+      <ul class="chancen">
+        ${c.faktoren.map((f) => h`<li class="chancen__${f.wirkung}">
+          ${ico(f.wirkung === 'plus' ? 'pruefen' : f.wirkung === 'minus' ? 'warnung' : 'info')}
+          <span><b>${f.label}</b> ${f.text}</span>
+        </li>`)}
+      </ul>
+      ${c.tipps.length ? h`<h3>Was du jetzt tun kannst</h3>
+        <ul class="pruef">
+          ${c.tipps.map((t) => h`<li>${ico('blitz')}<span>${t}</span></li>`)}
+        </ul>` : ''}
+      <p class="fein">Die Schätzung geht von der Zahl der Interessenten aus und gewichtet dein Profil dagegen.
+        Sie kennt nicht, wen die Vermieterseite tatsächlich sympathisch findet – das entscheidet oft mehr als jede Zahl.
+        Und sie ist kein Grund, es nicht zu versuchen: Auch eine Wohnung mit hundert Interessenten wird an genau
+        eine Person vergeben.</p>
+    </section>`;
+  }
+
+  /* ------------------------- Doppelte Inserate ------------------------- */
+
+  function duplikatBlock(l) {
+    const treffer = W.duplikate(l);
+    if (!treffer.length) return '';
+    return h`<section class="block block--warn" id="duplikate">
+      <h2>${ico('kopieren')}Diese Wohnung steht möglicherweise mehrfach im Angebot</h2>
+      <p class="block__unter">Gleiche Fläche, gleicher Zuschnitt, fast gleicher Preis im selben Viertel.
+        Bevor du dich zweimal auf dieselbe Wohnung bewirbst, vergleich die Angaben.</p>
+      <ul class="duplikate">
+        ${treffer.map((d) => h`<li>
+          <a class="duplikate__bild" href="#/objekt/${d.listing.id}" aria-hidden="true" tabindex="-1">
+            ${raw(NW.img.make(d.listing, 0))}</a>
+          <div>
+            <b><a href="#/objekt/${d.listing.id}">${d.listing.titel}</a></b>
+            <span>${d.listing.anbieter.name} · ${U.eur(d.listing.kind === 'kauf' ? d.listing.kaufpreis : d.listing.warm)}
+              ${d.listing.kind === 'kauf' ? '' : 'warm'} · ${d.merkmale.join(', ')}</span>
+            <i>${d.deutung}</i>
+          </div>
+          <span class="duplikate__wert">${d.sicherheit} %</span>
+        </li>`)}
+      </ul>
+      <p class="fein">Zwei Anfragen zum selben Objekt wirken bei der Vermieterseite unentschlossen. Such dir den
+        Weg aus, der dir mehr Auskunft gibt – meist der direkte Eigentümer.</p>
     </section>`;
   }
 
@@ -386,7 +471,7 @@
       const dieser = gebucht && gebucht.id === t.id;
       return h`<li class="${dieser ? 'is-gebucht' : ''}">
             <div><b>${U.dateDE(t.datum)}</b><span>${t.zeit} Uhr · ${t.art}</span></div>
-            <span class="termine__frei">${frei} ${U.plural(frei, 'Platz frei', '{n} Plätze frei')}</span>
+            <span class="termine__frei">${frei} ${U.plural(frei, 'Platz frei', 'Plätze frei')}</span>
             <button type="button" class="knopf knopf--klein ${dieser ? 'knopf--still' : ''}"
               data-tu="termin-buchen" data-id="${l.id}" data-termin="${t.id}" ${dieser ? 'disabled' : ''}>
               ${dieser ? 'gebucht' : 'nehmen'}</button>
@@ -517,7 +602,7 @@
                 ${l.befristetBis ? h`<div><dt>Befristet bis</dt><dd>${U.dateDE(l.befristetBis)}</dd></div>` : ''}
                 <div><dt>Heizung</dt><dd>${l.energie.heizung}</dd></div>
                 <div><dt>Energie</dt><dd>${ui.energieBalken(l.energie.klasse)} ${l.energie.kwh} kWh/(m²·a), ${l.energie.art}</dd></div>
-                ${l.kind !== 'kauf' ? h`<div><dt>Kaution</dt><dd>${l.kaution ? l.kaution + ' ' + U.plural(l.kaution, 'Kaltmiete', '{n} Kaltmieten') + ' (' + U.eur(l.kalt * l.kaution) + ')' : 'keine'}</dd></div>` : ''}
+                ${l.kind !== 'kauf' ? h`<div><dt>Kaution</dt><dd>${l.kaution ? l.kaution + ' ' + U.plural(l.kaution, 'Kaltmiete', 'Kaltmieten') + ' (' + U.eur(l.kalt * l.kaution) + ')' : 'keine'}</dd></div>` : ''}
                 ${l.kind === 'kauf' && l.hausgeld ? h`<div><dt>Hausgeld</dt><dd>${U.eur(l.hausgeld)} im Monat</dd></div>` : ''}
                 <div><dt>Provision</dt><dd>${l.provision ? U.dec(l.provision) + (l.kind === 'kauf' ? ' % des Kaufpreises' : ' Kaltmieten') : 'provisionsfrei'}</dd></div>
                 <div><dt>Online seit</dt><dd>${U.since(l.stats.online)}</dd></div>
@@ -538,8 +623,10 @@
             </section>
 
             ${risikoBlock(l, b.risiko)}
+            ${duplikatBlock(l)}
             ${spiegelBlock(l, b.mietCheck, b.kaufCheck)}
             ${klauselBlock(l)}
+            ${chancenBlock(l)}
             ${kostenBlock(l, k)}
             ${finanzBlock(l, k)}
             ${wgBlock(l, b)}
@@ -559,7 +646,12 @@
               </div>
               ${eintrag ? h`<label class="feld"><span>Deine Notiz</span>
                 <textarea rows="3" data-tu-input="notiz" data-id="${l.id}" placeholder="Was ist dir aufgefallen?">${eintrag.notiz || ''}</textarea></label>` : ''}
+              <p class="haftbox__expose">
+                <button type="button" class="link" data-tu="expose" data-id="${l.id}">
+                  ${ico('blatt')}Exposé als Datei${P.darf('exposeExport') ? '' : ' (Plus)'}</button>
+              </p>
             </div>
+            ${ui.anzeige('objekt-' + l.id, 'schmal')}
           </aside>
         </div>
       </div>`,
@@ -614,6 +706,89 @@
     } else {
       ui.AKTIONEN.kopieren({ dataset: { text } });
     }
+  });
+
+  A_('expose', (el) => {
+    if (!P.darf('exposeExport')) {
+      ui.AKTIONEN.sperre({ dataset: { leistung: 'expose' } });
+      return;
+    }
+    const l = NW.data.byId[el.dataset.id];
+    const s = S.get();
+    const b = A.bewerten(l, s.profil), k = A.kosten(l, s.profil);
+    const c = l.kind !== 'kauf' ? W.chancen(l, s.profil) : null;
+    const funde = A.klauselCheck(l);
+    const z = [];
+    const linie = () => z.push('-'.repeat(64));
+
+    z.push(l.titel);
+    linie();
+    z.push(l.strasse + ', ' + l.viertel + ', ' + l.stadt);
+    z.push('Stand: ' + U.dateDE(U.isoDate(NW.now())) + ' · Nestwerk');
+    z.push('');
+    z.push('ECKDATEN');
+    z.push('  Zimmer:        ' + U.dec(l.zimmer));
+    z.push('  Fläche:        ' + l.flaeche + ' m²');
+    z.push('  Etage:         ' + (l.etage === 0 ? 'Erdgeschoss' : l.etage >= l.etagen ? 'Dachgeschoss' : l.etage + '. OG') + ' von ' + l.etagen);
+    z.push('  Baujahr:       ' + l.baujahr + (l.saniert ? ' (saniert)' : ''));
+    z.push('  Energie:       ' + l.energie.klasse + ', ' + l.energie.kwh + ' kWh/(m²·a), ' + l.energie.heizung);
+    z.push('  Frei ab:       ' + U.dateDE(l.freiAb));
+    z.push('  Ausstattung:   ' + l.ausstattung.join(', '));
+    z.push('');
+    z.push('KOSTEN');
+    k.monatlich.forEach((m) => z.push('  ' + m.label.padEnd(34) + U.eur(m.betrag).padStart(12)));
+    z.push('  ' + 'Monatlich insgesamt'.padEnd(34) + U.eur(k.monatSumme).padStart(12));
+    z.push('');
+    k.einmalig.forEach((m) => z.push('  ' + m.label.padEnd(34) + U.eur(m.betrag).padStart(12)));
+    z.push('  ' + 'Einmalig insgesamt'.padEnd(34) + U.eur(k.einmalSumme).padStart(12));
+    z.push('  ' + 'Erstes Jahr'.padEnd(34) + U.eur(k.erstesJahr).padStart(12));
+    if (k.quote) z.push('  Mietbelastungsquote: ' + k.quote + ' %');
+    z.push('');
+    if (b.mietCheck) {
+      z.push('PREIS IM VERGLEICH');
+      z.push('  ' + U.dec(b.mietCheck.proQm) + ' €/m² gegenüber ' + U.dec(b.mietCheck.referenz) + ' €/m² Vergleichswert');
+      z.push('  ' + (b.mietCheck.diff >= 0 ? '+' : '') + b.mietCheck.diff + ' % – ' + b.mietCheck.urteil);
+      if (b.mietCheck.mietpreisbremse) z.push('  Bei greifender Mietpreisbremse wären rund ' + U.eur(b.mietCheck.zulaessig) + ' Kaltmiete zulässig.');
+      z.push('');
+    }
+    if (b.risiko.gruende.length) {
+      z.push('PRÜFHINWEIS (' + b.risiko.stufe + ')');
+      b.risiko.gruende.forEach((g) => z.push('  - ' + g.grund));
+      z.push('');
+    }
+    if (funde.length) {
+      z.push('VERTRAGSLUPE');
+      funde.forEach((f) => {
+        z.push('  [' + f.bewertung + '] ' + f.titel + ' (' + f.quelle + ')');
+        z.push('      „' + f.fundstelle + '“');
+        z.push('      ' + f.erklaerung);
+      });
+      z.push('');
+    }
+    if (c) {
+      z.push('CHANCEN');
+      z.push('  Geschätzt ' + c.prozent + ' % bei ' + c.mitbewerber + ' weiteren Interessenten.');
+      c.faktoren.forEach((f) => z.push('  ' + (f.wirkung === 'plus' ? '+' : f.wirkung === 'minus' ? '-' : '·') + ' ' + f.label + ': ' + f.text));
+      z.push('');
+    }
+    z.push('PASSUNG ZU DEINEM PROFIL: ' + b.score + ' von 100');
+    b.teile.forEach((t) => z.push('  ' + t.label.padEnd(20) + Math.round(t.anteil * 100) + ' %  ' + t.text));
+    z.push('');
+    z.push('ANBIETER');
+    z.push('  ' + l.anbieter.name + ' · antwortet in ' + l.anbieter.quote + ' % der Fälle');
+    z.push('');
+    if (S.get().merkliste[l.id] && S.get().merkliste[l.id].notiz) {
+      z.push('EIGENE NOTIZ');
+      z.push('  ' + S.get().merkliste[l.id].notiz);
+      z.push('');
+    }
+    z.push('BESCHREIBUNG');
+    z.push('  ' + l.beschreibung.replace(/(.{1,72})(\s|$)/g, '$1\n  ').trim());
+    z.push('');
+    linie();
+    z.push('Erzeugt mit Nestwerk. Vorführfassung mit erzeugtem Beispielbestand.');
+
+    ui.dateiSichern('expose-' + U.slug(l.titel).slice(0, 40) + '.txt', z.join('\n'), 'text/plain;charset=utf-8');
   });
 
   A_('kosten-anpassen', () => {

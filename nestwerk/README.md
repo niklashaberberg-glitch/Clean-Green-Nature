@@ -9,6 +9,58 @@ Dritte. Alles, was du eingibst, bleibt im Speicher deines Geräts.
 
 ---
 
+## Das Geschäftsmodell in einem Satz
+
+> **Plus bezahlt Zeitersparnis bei häufiger Nutzung – niemals einen Vorteil
+> gegenüber anderen Bewerbern.**
+
+Daraus folgt die ganze Aufteilung:
+
+* **Frei bleibt, was schützt.** Prüfhinweis gegen Betrug, Vergleichsmiete,
+  Mietpreisbremse, die ehrliche Chancen-Einschätzung, das Erkennen doppelt
+  eingestellter Wohnungen. Betrugsschutz hinter eine Bezahlschranke zu stellen
+  wäre zynisch.
+* **Frei bleibt, was gerechnet werden muss.** Leistbarkeit, Wohngeld, WBS,
+  echte Monatskosten, Nebenkostenprüfung, Übergabeprotokoll, Umzugsplan. Das
+  braucht man ein paarmal im Leben – dafür ein Abo zu verlangen wäre unverschämt.
+* **Frei bleibt die vollständige Suche.** Alle Inserate, alle vier
+  Angebotsarten, Karte, Passung, Merkliste. Finanziert über Anzeigen.
+* **Plus kostet, was jemand zehnmal am Tag anfasst.** Mehrere Suchaufträge,
+  Serienbewerbung, Vertragslupe vollständig, Ringtausch über drei und vier
+  Haushalte, mehrere Ankerpunkte, Marktdaten, Route für Besichtigungen,
+  Erinnerung ans Nachfassen – und keine Anzeigen.
+
+**Was Plus ausdrücklich nicht kauft:** keine bessere Platzierung in der
+Trefferliste, keinen Vorrang bei Vermietern, keinen Frühzugang zu Inseraten,
+keine Daten anderer Nutzer. Genau das verkaufen die meisten Portale – und genau
+deshalb ist ihre Trefferreihenfolge nicht nachvollziehbar.
+
+| | Nestwerk frei | Nestwerk Plus |
+|---|---|---|
+| Preis | 0 € | 7,90 € im Monat, 69 € im Jahr |
+| Suche, Karte, Passung | vollständig | vollständig |
+| Prüfhinweis, Vergleichsmiete, Chancen | vollständig | vollständig |
+| Alle Rechner und Prüfhilfen | vollständig | vollständig |
+| Anzeigen | ja | nein |
+| Suchaufträge | 1 | unbegrenzt |
+| Ankerpunkte für Fahrzeiten | 1 | unbegrenzt |
+| Objekte im Vergleich | 2 | 6 |
+| Vertragslupe | erster Fund | alle Funde mit Erläuterung |
+| Ringtausch | direkte Tausche | Ketten über drei und vier Haushalte |
+| Serienbewerbung, Nachfass-Erinnerung, Route | – | ja |
+| Marktdaten und Preisverlauf | – | ja |
+| Exposé als Datei | – | ja |
+
+Die Anzeigen im freien Tarif sind immer als Anzeige gekennzeichnet, sehen nie
+aus wie ein Inserat und stehen nie in der Trefferreihenfolge. Welche erscheint,
+entscheidet sich im Browser anhand der Stelle auf der Seite – nicht anhand des
+Profils. Es gibt keinen Server, an den Daten gehen könnten.
+
+In der Vorführung lässt sich Plus oben rechts mit einem Klick an- und
+abschalten, damit beide Welten vergleichbar sind.
+
+---
+
 ## Sofort ausprobieren
 
 ```
@@ -123,6 +175,75 @@ Feste Zeitfenster statt Massenbesichtigung, dazu eine Checkliste mit sechzehn
 Fragen von Schimmel über Wasserdruck bis zur letzten Nebenkostenabrechnung.
 Notizen und Haken lassen sich als Text herauskopieren.
 
+### Wie stehen deine Chancen?
+
+Die meisten Portale sagen dazu nichts, weil die ehrliche Antwort unangenehm
+ist. Nestwerk trennt, was der Mensch in der Hand hat, von dem, was er nicht in
+der Hand hat: **die Stärke deiner Bewerbung** (Einkommen zur Kaltmiete,
+Unterlagen, Zeitpunkt, Belegung, WBS) und **den Andrang** (wie viele sich
+bereits gemeldet haben). Nur das Erste kannst du ändern – deshalb steht es
+links und in der Ampel, und darunter stehen konkrete Schritte.
+
+Eine einzige Prozentzahl würde beides vermischen und nur entmutigen.
+
+### Doppelt eingestellte Wohnungen erkennen
+
+Dieselbe Wohnung steht auf Portalen regelmäßig zweimal – vom Eigentümer und
+vom beauftragten Makler, oder von zwei Maklern zugleich. Wer das nicht merkt,
+bewirbt sich zweimal auf dasselbe Objekt und wirkt unentschlossen. Nestwerk
+vergleicht Fläche, Zuschnitt, Baujahr, Etage, Lage und Preis und benennt die
+Übereinstimmungen.
+
+### Nebenkostenabrechnung prüfen
+
+Der Katalog der Betriebskostenverordnung ist abschließend: 15 Posten dürfen
+umgelegt werden, 8 häufig auftauchende nicht – auch dann nicht, wenn der
+Mietvertrag es behauptet. Nestwerk stellt beide Listen gegenüber, rechnet die
+Summen und prüft die beiden Fristen, an denen die meisten Abrechnungen
+scheitern: zwölf Monate für den Zugang, zwölf Monate für deine Einwendungen.
+Am Ende steht ein vorformulierter Widerspruch.
+
+### Übergabeprotokoll
+
+Der wichtigste Zettel des ganzen Umzugs, und fast überall passiert er auf einem
+Blatt Papier. Zählerstände mit Nummer, Schlüssel nach Art gezählt, jeder Raum
+einzeln mit Zustand und Mängeln. Am Ende ein sauberer Text zum Ausdrucken.
+Was hier nicht steht, gilt später als nicht vorhanden.
+
+### Was kann ich mir leisten?
+
+Zwei Grenzen, die ständig verwechselt werden: was dein Haushalt tragen kann
+(die 30-Prozent-Faustregel) und was Vermieter sehen wollen (das Dreifache der
+Kaltmiete als Netto). Nestwerk zeigt beide, sagt welche die engere ist, und
+rechnet für jede Stadt aus, wie groß die Wohnung damit sein dürfte.
+
+### Wohnberechtigungsschein und Wohngeld
+
+Beide Leistungen bleiben massenhaft ungenutzt, weil viele annehmen, sie stünden
+ihnen nicht zu.
+
+Beim **WBS** rechnet Nestwerk den fiddligen Teil – das maßgebliche
+Jahreseinkommen mit Werbungskosten-, Steuer-, Kranken- und Rentenpauschale und
+den Freibeträgen – und stellt es der Einkommensgrenze gegenüber. Die Grenze
+setzen aber die Länder selbst und weichen erheblich voneinander ab. Deshalb
+rechnet Nestwerk nicht heimlich mit einer Zahl, sondern legt sie offen und
+macht sie änderbar; voreingestellt ist der Bundesrahmen aus § 9 WoFG.
+
+Beim **Wohngeld** gibt es bewusst keinen Eurobetrag. Die Höhe folgt einer Formel
+mit Beiwerten, die je nach Haushaltsgröße verschieden sind und regelmäßig
+geändert werden, und hängt zusätzlich an der Mietstufe der Gemeinde. Eine
+ausgedachte Zahl wäre schlimmer als keine – sie würde vom Antrag abhalten oder
+falsche Hoffnung machen. Nestwerk prüft stattdessen die Ausschlussgründe, ordnet
+Einkommen und Mietbelastung ein und sagt, wo der Betrag herkommt.
+
+### Marktdaten und Preisverlauf
+
+Angebotsmieten je Quadratmeter, Monat für Monat über drei Jahre, für jedes
+Viertel. Bis zu drei Viertel nebeneinander, dazu der Stadtdurchschnitt als
+Bezugslinie. Die Farben der drei Reihen sind auf Farbfehlsichtigkeit geprüft –
+alle Paare, hell und dunkel – und jede Linie trägt zusätzlich am Ende ihren
+Namen. Es gibt eine Tabellenansicht für alle, die lieber Zahlen lesen.
+
 ### Weitere Werkzeuge
 
 * **Vergleich** – bis zu vier Objekte in einer Tabelle, mit dem jeweils besten
@@ -138,6 +259,14 @@ Notizen und Haken lassen sich als Text herauskopieren.
   eigene Tauschangebot geht sofort in die Ringsuche ein.
 * **Nachrichten** – Verläufe je Inserat, mit der Antwortquote des Anbieters
   daneben.
+* **Nachfassen** – wer angeschrieben hat und seit Tagen nichts hört, bekommt
+  eine Erinnerung und einen vorformulierten Text.
+* **Serienbewerbung** – aus der Merkliste heraus, mit einem eigenen Anschreiben
+  je Objekt. Ausdrücklich keine Rundmail: Wer erkennbar hundertfach kopiert,
+  wird aussortiert.
+* **Besichtigungen als Route** – Termine eines Tages nach kürzestem Weg
+  geordnet, mit Fahrzeiten dazwischen und einer Warnung, wenn zwei Termine
+  zeitlich nicht zusammenpassen.
 
 ---
 
@@ -175,7 +304,10 @@ nestwerk/
     data.js             erzeugt den Beispielbestand
     analyse.js          Vergleichsmiete, Risiko, Klauseln, Kosten, Passung
     match.js            WG-Passung und Ringsuche
+    werkzeuge.js        Chancen, Doppel-Erkennung, Preisreihen, Leistbarkeit,
+                        WBS, Wohngeld, Betriebskosten, Routenplanung
     store.js            Zustand und Speicherung
+    plan.js             Tarife, Grenzen, Anzeigen
     karte.js            die Karte
     ui.js               Schale, Router, geteilte Bausteine
     view-*.js           die einzelnen Ansichten
@@ -197,14 +329,19 @@ hängt sich an ein einziges globales `NW` und benutzt nur, was vorher da war.
 | Grunderwerbsteuer je Bundesland | `assets/analyse.js`, `GRUNDERWERB` |
 | Aufgaben im Umzugsplan | `assets/store.js`, `UMZUG_VORLAGE` |
 | Fragen der Besichtigungs-Checkliste | `assets/store.js`, `BESICHTIGUNG_FRAGEN` |
+| Preise, Grenzen und Leistungen der Tarife | `assets/plan.js`, `TARIFE` und `GRENZEN` |
+| Anzeigen im freien Tarif | `assets/plan.js`, `ANZEIGEN` |
+| Katalog der Betriebskosten | `assets/werkzeuge.js`, `BETRIEBSKOSTEN` |
+| Einkommensgrenze für den WBS | `assets/werkzeuge.js`, `WBS_BUND` |
 | Farben, Abstände, Rundungen | `assets/app.css`, ganz oben unter „Token“ |
+| Diagrammfarben | `assets/app.css`, Abschnitt „Diagramme“ – nach Änderung mit dem Palettenprüfer nachrechnen |
 
 ## Bedienung
 
 | Funktion | Bedienung |
 |---|---|
 | Schnellsuche | `Strg`/`Cmd` + `K`, oder `/` |
-| Hauptbereiche | Tasten `1` bis `6` |
+| Hauptbereiche | Tasten `1` bis `7` |
 | Merken / Vergleichen | `M` und `V` auf einer Objektseite |
 | Fenster schließen | `Esc` |
 | Karte | Ziehen, Mausrad, `+`/`−`, Pfeiltasten bei Fokus |
@@ -236,5 +373,16 @@ ersetzen keine Beratung.
 ## Getestet
 
 Chromium, 320 px bis 1920 px, hell und dunkel, Maus, Tastatur und Touch,
-aufgeteilt und als Einzeldatei über `file://`. Keine Konsolenfehler, keine
-doppelten IDs, kein waagerechter Überlauf.
+aufgeteilt und als Einzeldatei über `file://` sowie eingebettet in eine fremde
+Seitenhülle.
+
+Automatisch geprüft über alle 19 Ansichten, in beiden Tarifen: keine
+Konsolenfehler, keine doppelten IDs, genau eine `h1` je Ansicht, kein
+Bedienelement ohne Beschriftung, kein Eingabefeld ohne Label, kein waagerechter
+Überlauf bei 390 px. Zusätzlich geprüft: Regler lassen sich ziehen, ohne dass
+die Eingabe abbricht, Textfelder behalten beim Tippen den Fokus, und keine
+Zahl erscheint doppelt.
+
+Die Diagrammfarben sind mit einem Palettenprüfer gegen Farbfehlsichtigkeit
+gerechnet – alle Paare, hell und dunkel, ΔE ≥ 9 unter Deuteranopie,
+Protanopie und Tritanopie.

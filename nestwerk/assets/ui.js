@@ -60,7 +60,12 @@
     dach: '<path d="M3 12l9-8 9 8"/><path d="M6 11v9h12v-9"/><path d="M10 20v-5h4v5"/>',
     check: '<path d="M5 12l5 5 9-10"/>',
     verlauf: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
-    speichern: '<path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7M8 20v-6h8v6"/>'
+    speichern: '<path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7M8 20v-6h8v6"/>',
+    werkzeug: '<path d="M14.7 6.3a4 4 0 015.3 5L21 12l-9 9-4-4 9-9z"/><path d="M6.5 10.5l-3 3 4 4 3-3"/>',
+    schloss: '<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/>',
+    plus5: '<path d="M12 3l2.6 6.2 6.4.5-4.9 4.2 1.5 6.1L12 16.8 6.4 20l1.5-6.1L3 9.7l6.4-.5z"/>',
+    trend: '<path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v5h-5"/>',
+    route: '<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3 3 0 010 6H9a3 3 0 000 6h6.5"/>'
   };
 
   function sprite() {
@@ -173,6 +178,48 @@
   }
 
   /* ================================================================
+     Tarifsperren und Anzeigen
+     ================================================================ */
+
+  /* Eine Sperre zeigt immer, was dahinterliegt – nie nur ein Schloss.
+     Wer nicht sieht, was ihm fehlt, kann nicht entscheiden. */
+  function sperrHinweis(leistungId, text) {
+    const l = NW.plan.leistung(leistungId) || {};
+    return h`<div class="sperre">
+      <span class="sperre__zeichen">${ico('schloss')}</span>
+      <div class="sperre__text">
+        <b>${l.name || 'Mit Plus verfügbar'}</b>
+        <p>${text || (l.frei + ' im freien Tarif, ' + l.plus + ' mit Plus.')}</p>
+      </div>
+      <button type="button" class="knopf knopf--klein" data-tu="sperre" data-leistung="${leistungId}">Ansehen</button>
+    </div>`;
+  }
+
+  /* Anzeigen sind immer gekennzeichnet und sehen nie aus wie ein Inserat. */
+  function anzeige(schluessel, variante) {
+    const a = NW.plan.anzeige(schluessel);
+    if (!a) return '';
+    return h`<aside class="anzeige anzeige--${variante || 'breit'}" aria-label="Anzeige">
+      <div class="anzeige__kopf">
+        <span class="anzeige__marke">Anzeige</span>
+        <button type="button" class="anzeige__warum" data-tu="warum-werbung" aria-label="Warum sehe ich das?">?</button>
+      </div>
+      <div class="anzeige__koerper">
+        <span class="anzeige__zeichen">${ico(a.icon)}</span>
+        <div>
+          <b>${a.titel}</b>
+          <p>${a.text}</p>
+          <span class="anzeige__absender">${a.absender}</span>
+        </div>
+      </div>
+      <div class="anzeige__fuss">
+        <button type="button" class="knopf knopf--klein knopf--still" data-tu="anzeige-klick">${a.ruf}</button>
+        <a class="link" href="#/plus">ohne Anzeigen lesen</a>
+      </div>
+    </aside>`;
+  }
+
+  /* ================================================================
      Meldungen und Dialoge
      ================================================================ */
 
@@ -194,15 +241,42 @@
   }
 
   /* Notweg, wenn kein Speichern möglich ist: Inhalt zum Herauskopieren. */
-  function alsText(daten) {
+  function alsText(daten, dateiname) {
     dialog({
-      titel: 'Daten sichern',
+      titel: 'Datei sichern',
       breit: true,
-      inhalt: h`<p>In dieser Umgebung darf die Seite keine Datei ablegen. Der vollständige Stand steht
-        hier zum Kopieren – speichere ihn als <code>nestwerk-daten.json</code>.</p>
-        <label class="feld"><span class="nur-sr">Daten</span><textarea rows="12" id="daten-text" readonly>${daten}</textarea></label>`,
+      inhalt: h`<p>In dieser Umgebung darf die Seite keine Datei ablegen. Der vollständige Inhalt steht
+        hier zum Kopieren – speichere ihn als <code>${dateiname || 'nestwerk-daten.json'}</code>.</p>
+        <label class="feld"><span class="nur-sr">Inhalt</span><textarea rows="12" id="daten-text" readonly>${daten}</textarea></label>`,
       fuss: h`<button type="button" class="knopf" data-tu="kopieren" data-quelle="#daten-text">${ico('kopieren')}Kopieren</button>`
     });
+  }
+
+  /* Drei Wege, eine Datei loszuwerden: die Speicher-Schnittstelle der
+     Umgebung, der klassische Link, und zur Not der Text zum Kopieren.
+     Eingebettet in einer Hülle läuft ein Download-Link sonst ins Leere. */
+  function dateiSichern(dateiname, inhalt, mime) {
+    const umgebung = window.claude;
+    if (umgebung && typeof umgebung.use === 'function') {
+      umgebung.use('downloads').then((downloads) => {
+        if (!downloads) { alsText(inhalt, dateiname); return; }
+        return downloads.save({ filename: dateiname, data: inhalt })
+          .then(() => toast('Datei gesichert.', 'gut'),
+            (fehler) => {
+              if (fehler && fehler.code === 'declined') toast('Sicherung abgebrochen.');
+              else alsText(inhalt, dateiname);
+            });
+      }, () => alsText(inhalt, dateiname));
+      return;
+    }
+    const blob = new Blob([inhalt], { type: mime || 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = dateiname;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    toast('Datei gesichert.', 'gut');
   }
 
   let dialogSchliessen = null;
@@ -308,12 +382,13 @@
      ================================================================ */
 
   const NAV = [
-    { route: 'start', label: 'Start', icon: 'dach' },
-    { route: 'suche', label: 'Suchen', icon: 'suche' },
-    { route: 'tausch', label: 'Ringtausch', icon: 'ring' },
-    { route: 'merkliste', label: 'Merkliste', icon: 'herz' },
-    { route: 'nachrichten', label: 'Nachrichten', icon: 'nachricht' },
-    { route: 'profil', label: 'Profil', icon: 'person' }
+    { route: 'start', label: 'Start', icon: 'dach', unten: true },
+    { route: 'suche', label: 'Suchen', icon: 'suche', unten: true },
+    { route: 'tausch', label: 'Ringtausch', icon: 'ring', unten: true },
+    { route: 'werkzeuge', label: 'Werkzeuge', icon: 'werkzeug', unten: true },
+    { route: 'merkliste', label: 'Merkliste', icon: 'herz', unten: true },
+    { route: 'nachrichten', label: 'Nachrichten', icon: 'nachricht', unten: true },
+    { route: 'profil', label: 'Profil', icon: 'person', unten: false }
   ];
 
   function schale() {
@@ -338,13 +413,19 @@
           <a class="ikon-btn" href="#/vergleich" title="Vergleich" aria-label="Vergleich">${ico('waage')}<b class="zaehler" data-zaehler="vergleich" hidden></b></a>
           <button type="button" class="ikon-btn" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
             ${ico('sonne', 'nur-hell')}${ico('mond', 'nur-dunkel')}</button>
-          <a class="knopf knopf--klein" href="#/inserieren">${ico('plus')}<span>Inserieren</span></a>
+          <a class="tarifknopf ${NW.plan.istPlus() ? 'is-plus' : ''}" href="#/plus"
+            title="${NW.plan.istPlus() ? 'Nestwerk Plus aktiv' : 'Tarife ansehen'}">
+            ${NW.plan.istPlus() ? raw(ico('plus5').__raw + '<span>Plus</span>') : raw('<span>Plus entdecken</span>')}</a>
+          <a class="knopf knopf--klein nur-breit" href="#/inserieren">${ico('plus')}<span>Inserieren</span></a>
         </div>
       </div>
     </header>
     <main id="haupt" tabindex="-1"></main>
     <nav class="unten" aria-label="Hauptbereiche">
-      ${NAV.map((n) => h`<a href="#/${n.route}" data-route="${n.route}">${ico(n.icon)}<span>${n.label}</span></a>`)}
+      ${NAV.filter((n) => n.unten).map((n) => h`<a href="#/${n.route}" data-route="${n.route}">
+        ${ico(n.icon)}<span>${n.label}</span>
+        ${n.route === 'merkliste' ? raw('<b class="zaehler zaehler--eck" data-zaehler="merkliste" hidden></b>') : ''}
+        ${n.route === 'nachrichten' ? raw('<b class="zaehler zaehler--eck" data-zaehler="nachrichten" hidden></b>') : ''}</a>`)}
     </nav>
     <footer class="fuss">
       <p><b>Nestwerk</b> führt Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche zusammen.</p>
@@ -352,6 +433,8 @@
       Rechtliche Erläuterungen sind allgemeine Hinweise und ersetzen keine Beratung.
       Deine Eingaben bleiben im Browser dieses Geräts.</p>
       <p class="fuss__links">
+        <a href="#/plus">Tarife</a>
+        <a href="#/werkzeuge">Werkzeuge</a>
         <button type="button" class="link" data-tu="hilfe">Tastaturbefehle</button>
         <button type="button" class="link" data-tu="daten">Meine Daten</button>
       </p>
@@ -363,6 +446,19 @@
 
   function aktualisiereZaehler() {
     const s = NW.store.get();
+
+    /* Der Kopf entsteht nur einmal beim Start; der Tarifknopf darin muss
+       einem Wechsel trotzdem folgen. */
+    const tarifknopf = U.$('.tarifknopf');
+    if (tarifknopf) {
+      const plus = NW.plan.istPlus();
+      tarifknopf.classList.toggle('is-plus', plus);
+      tarifknopf.title = plus ? 'Nestwerk Plus aktiv' : 'Tarife ansehen';
+      tarifknopf.innerHTML = plus
+        ? ico('plus5').__raw + '<span>Plus</span>'
+        : '<span>Plus entdecken</span>';
+    }
+
     const setze = (name, wert) => {
       U.$$('[data-zaehler="' + name + '"]').forEach((el) => {
         el.textContent = wert > 99 ? '99+' : wert;
@@ -429,7 +525,14 @@
         { route: 'agenten', label: 'Suchaufträge', icon: 'glocke' },
         { route: 'umzug', label: 'Umzugsplan', icon: 'umzug' },
         { route: 'inserieren', label: 'Inserat aufgeben', icon: 'plus' },
-        { route: 'rechner', label: 'Kostenrechner', icon: 'rechner' }
+        { route: 'rechner', label: 'Mieten oder kaufen', icon: 'rechner' },
+        { route: 'leistbarkeit', label: 'Was kann ich mir leisten?', icon: 'euro' },
+        { route: 'wbs', label: 'Wohnberechtigungsschein', icon: 'blatt' },
+        { route: 'wohngeld', label: 'Wohngeld prüfen', icon: 'euro' },
+        { route: 'nebenkosten', label: 'Nebenkosten prüfen', icon: 'lupe' },
+        { route: 'uebergabe', label: 'Übergabeprotokoll', icon: 'schluessel' },
+        { route: 'markt', label: 'Marktdaten und Preisverlauf', icon: 'trend' },
+        { route: 'plus', label: 'Tarife', icon: 'plus5' }
       ]).forEach((nav) => {
         if (!n || U.norm(nav.label).indexOf(n) >= 0) out.push({ art: 'bereich', label: nav.label, icon: nav.icon, ziel: nav.route });
       });
@@ -494,10 +597,70 @@
     },
     vergleich(el) {
       const meldung = NW.store.vergleichen(el.dataset.id);
-      toast(meldung, meldung.indexOf('höchstens') >= 0 ? 'schlecht' : 'info');
+      if (meldung === 'gesperrt:vergleich') {
+        AKTIONEN.sperre({ dataset: { leistung: 'vergleich' } });
+        return;
+      }
+      toast(meldung, 'info');
       neuZeichnen();
     },
     theme() { themeWechseln(); },
+
+    sperre(el) {
+      const id = el.dataset.leistung;
+      const l = NW.plan.leistung(id) || { name: 'Diese Funktion' };
+      const t = NW.plan.TARIFE.plus;
+      dialog({
+        titel: l.name,
+        inhalt: h`<p class="sperre__gross">${ico('schloss')}</p>
+          <p><b>Im freien Tarif:</b> ${l.frei}<br><b>Mit Plus:</b> ${l.plus}</p>
+          ${l.warum ? h`<p class="fein">${l.warum}</p>` : ''}
+          <p>${t.zeile}</p>
+          <p class="sperre__preis"><b>${U.eur2(t.preisMonat)}</b> im Monat, monatlich kündbar –
+            oder ${U.eur(t.preisJahr)} im Jahr.</p>
+          <div class="hinweisbox">${ico('info')}
+            <div><b>Was Plus nicht kauft</b>
+            <p>Keine bessere Platzierung, keinen Vorrang bei Vermietern und keinen Frühzugang zu Inseraten.
+              Alle sehen jedes Inserat in derselben Sekunde.</p></div>
+          </div>`,
+        fuss: h`<a class="knopf knopf--still" href="#/plus" data-tu="dialog-zu">Alle Unterschiede ansehen</a>
+          <button type="button" class="knopf" data-tu="plus-testen">${ico('plus5')}Plus in dieser Vorführung aktivieren</button>`
+      });
+    },
+
+    'plus-testen'() {
+      NW.plan.wechseln('plus', 'monat');
+      dialogZu();
+      toast('Plus ist aktiv. In der Vorführung kostenlos und jederzeit umschaltbar.', 'gut');
+      neuZeichnen();
+    },
+
+    'plus-beenden'() {
+      NW.plan.wechseln('frei');
+      toast('Zurück im freien Tarif.');
+      neuZeichnen();
+    },
+
+    'warum-werbung'() {
+      dialog({
+        titel: 'Warum sehe ich Anzeigen?',
+        inhalt: h`<p>Nestwerk ist im freien Tarif vollständig nutzbar – die Suche, die Karte, der Prüfhinweis,
+            die Vergleichsmiete und alle Rechner. Bezahlt wird das über Anzeigen.</p>
+          <p><b>Was wir dabei nicht tun:</b></p>
+          <ul class="liste-schlicht">
+            <li>Anzeigen sehen nie aus wie ein Inserat und stehen nie in der Trefferreihenfolge.</li>
+            <li>Kein Werbetreibender bekommt Einfluss darauf, welche Wohnungen dir angezeigt werden.</li>
+            <li>Es werden keine Daten über dich an Werbetreibende gegeben – die Auswahl entsteht im Browser.</li>
+          </ul>
+          <p class="fein">In dieser Vorführung sind alle Anzeigen erfunden und führen nirgendwohin.</p>`,
+        fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Verstanden</button>
+          <a class="knopf" href="#/plus" data-tu="dialog-zu">Ohne Anzeigen lesen</a>`
+      });
+    },
+
+    'anzeige-klick'() {
+      toast('Beispielanzeige – sie führt in dieser Vorführung nirgendwohin.');
+    },
     palette() { paletteOeffnen(); },
     'palette-zu'() { paletteZu(); },
     'dialog-zu'() { dialogZu(); },
@@ -508,7 +671,7 @@
           <dt><kbd>Strg</kbd>+<kbd>K</kbd></dt><dd>Schnellsuche über Bereiche, Städte, Viertel und Inserate</dd>
           <dt><kbd>/</kbd></dt><dd>Schnellsuche, wenn kein Eingabefeld aktiv ist</dd>
           <dt><kbd>Esc</kbd></dt><dd>Fenster und Schnellsuche schließen</dd>
-          <dt><kbd>1</kbd>…<kbd>6</kbd></dt><dd>Direkt in einen Hauptbereich springen</dd>
+          <dt><kbd>1</kbd>…<kbd>7</kbd></dt><dd>Direkt in einen Hauptbereich springen</dd>
           <dt><kbd>M</kbd></dt><dd>Auf einer Objektseite: merken</dd>
           <dt><kbd>V</kbd></dt><dd>Auf einer Objektseite: zum Vergleich</dd>
           <dt>Karte</dt><dd>Ziehen zum Verschieben, Mausrad oder <kbd>+</kbd>/<kbd>−</kbd> zum Zoomen, Pfeiltasten bei Fokus</dd>
@@ -535,35 +698,9 @@
       });
     },
     'daten-export'() {
-      const daten = JSON.stringify(NW.store.get(), null, 2);
-
-      /* Eingebettet in einer Seitenhülle, die Downloads unterbindet, führt
-         ein gewöhnlicher Link ins Leere. Dort übernimmt die Speicher-
-         Schnittstelle der Umgebung, sonst der klassische Weg – und wenn
-         beides ausfällt, gibt es den Inhalt wenigstens zum Kopieren. */
-      const umgebung = window.claude;
-      if (umgebung && typeof umgebung.use === 'function') {
-        umgebung.use('downloads').then((downloads) => {
-          if (!downloads) { alsText(daten); return; }
-          return downloads.save({ filename: 'nestwerk-daten.json', data: daten })
-            .then(() => toast('Datei gesichert.', 'gut'),
-              (fehler) => {
-                if (fehler && fehler.code === 'declined') toast('Sicherung abgebrochen.');
-                else alsText(daten);
-              });
-        }, () => alsText(daten));
-        return;
-      }
-
-      const blob = new Blob([daten], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'nestwerk-daten.json';
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
-      toast('Datei gesichert.', 'gut');
+      dateiSichern('nestwerk-daten.json', JSON.stringify(NW.store.get(), null, 2), 'application/json');
     },
+
     'daten-loeschen'() {
       if (!confirm('Merkliste, Profil, Suchaufträge und Nachrichten werden gelöscht. Fortfahren?')) return;
       NW.store.zuruecksetzen();
@@ -646,7 +783,7 @@
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); paletteOeffnen(); return; }
       if (inFeld) return;
       if (e.key === '/') { e.preventDefault(); paletteOeffnen(); return; }
-      if (e.key >= '1' && e.key <= '6' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      if (e.key >= '1' && e.key <= '7' && !e.ctrlKey && !e.metaKey && !e.altKey) {
         const n = NAV[Number(e.key) - 1];
         if (n) { e.preventDefault(); gehe(n.route); }
       }
@@ -661,6 +798,7 @@
     start, gehe, zeichnen, neuZeichnen, toast, dialog, dialogZu,
     badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
     ART_LABEL, ART_ICON, ico, aktionRegistrieren, AKTIONEN,
+    sperrHinweis, anzeige, NAV, dateiSichern,
     aktualisiereZaehler, themeSetzen, paletteOeffnen, kartenMarken, preisZeile
   });
 })(window.NW = window.NW || {});

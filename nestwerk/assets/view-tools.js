@@ -5,7 +5,7 @@
 (function (NW) {
   'use strict';
 
-  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store;
+  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store, P = NW.plan, W = NW.werkzeuge;
   const h = U.html, raw = U.raw, ico = U.svg;
 
   /* ================================================================
@@ -55,6 +55,14 @@
     const spalten = S.PIPELINE.map((p) => ({
       p, eintraege: ids.filter((id) => s.merkliste[id].status === p.id)
     }));
+    const faellig = S.nachfassFaellig();
+    const termine = ids.map((id) => {
+      const e = s.merkliste[id];
+      if (!e.termin) return null;
+      const l = NW.data.byId[id];
+      if (!l) return null;
+      return { id, datum: e.termin.datum, zeit: e.termin.zeit, listing: l, titel: l.titel };
+    }).filter(Boolean).sort((a, b) => (a.datum + a.zeit).localeCompare(b.datum + b.zeit));
     const gesamt = ids.length;
     const beworben = ids.filter((id) => ['kontakt', 'termin', 'unterlagen', 'zusage'].indexOf(s.merkliste[id].status) >= 0).length;
     const zusagen = ids.filter((id) => s.merkliste[id].status === 'zusage').length;
@@ -76,6 +84,42 @@
           <div><b>${quote} %</b><span>Erfolgsquote</span></div>
         </div>
 
+        ${faellig.length ? h`<section class="block ${P.darf('nachfassen') ? 'block--betont' : ''}">
+          <h2>${ico('verlauf')}Nachfassen</h2>
+          ${P.darf('nachfassen')
+        ? h`<p class="block__unter">Angeschrieben, keine Antwort. Eine freundliche Nachfrage nach ein paar Tagen
+              bringt erfahrungsgemäß mehr als jede zweite ausbleibende Antwort erwarten lässt.</p>
+            <ul class="nachfass">
+              ${faellig.map((f) => h`<li>
+                ${ico('nachricht')}
+                <div><b><a href="#/objekt/${f.id}">${U.truncate(f.listing.titel, 46)}</a></b>
+                  <span>seit ${f.tage} Tagen ohne Antwort · ${f.listing.anbieter.name}</span></div>
+                <button type="button" class="knopf knopf--klein" data-tu="nachfassen" data-id="${f.id}">Nachricht öffnen</button>
+              </li>`)}
+            </ul>`
+        : h`<p class="block__unter">${faellig.length} deiner Anfragen ${U.plural(faellig.length, 'ist', 'sind')}
+              seit mehreren Tagen unbeantwortet.</p>
+            ${ui.sperrHinweis('nachfassen', 'Mit Plus sagt Nestwerk dir, welche Anfrage wie lange liegt, und '
+          + 'formuliert die Nachfrage vor. Ohne Plus musst du selbst mitzählen.')}`}
+        </section>` : ''}
+
+        ${termine.length > 1 ? h`<section class="block">
+          <h2>${ico('route')}Besichtigungen ordnen</h2>
+          ${P.darf('tagesplan') ? tagesplanBlock(termine) : h`
+            <p class="block__unter">Du hast ${termine.length} Besichtigungstermine.</p>
+            ${ui.sperrHinweis('tagesplan', 'Mit Plus ordnet Nestwerk deine Termine zu einer Route, rechnet die '
+        + 'Fahrzeiten dazwischen und warnt, wenn zwei Termine zeitlich nicht zusammenpassen.')}`}
+        </section>` : ''}
+
+        ${P.darf('serienbewerbung') && ids.filter((id) => s.merkliste[id].status === 'gemerkt').length > 1
+        ? h`<section class="block">
+          <h2>${ico('nachricht')}Serienbewerbung</h2>
+          <p class="block__unter">${ids.filter((id) => s.merkliste[id].status === 'gemerkt').length} Objekte
+            stehen auf „gemerkt“. Nestwerk schreibt für jedes ein eigenes Anschreiben aus deinem Profil –
+            angepasst an Titel, Lage und Preis, nicht als Rundmail.</p>
+          <button type="button" class="knopf" data-tu="serie">${ico('nachricht')}Anschreiben vorbereiten</button>
+        </section>` : ''}
+
         <div class="tafel">
           ${spalten.map((sp) => h`<section class="tafel__spalte" aria-label="${sp.p.label}">
             <header class="tafel__kopf tafel__kopf--${sp.p.farbe}">
@@ -88,10 +132,39 @@
           </section>`)}
         </div>
 
+        ${!P.istPlus() ? ui.anzeige('merkliste', 'breit') : ''}
+
         <p class="fein">Der Status lässt sich in jeder Karte umstellen. Nestwerk zählt daraus deine Erfolgsquote –
           nützlich, um zu merken, ob die Suche zu eng oder das Anschreiben zu blass ist.</p>
       </div>`
     };
+  }
+
+  function tagesplanBlock(termine) {
+    const nachTag = {};
+    termine.forEach((t) => { (nachTag[t.datum] = nachTag[t.datum] || []).push(t); });
+    const tage = Object.keys(nachTag).sort();
+    return h`<p class="block__unter">Nach kürzestem Weg geordnet. Wo zwei Termine zeitlich nicht zusammenpassen,
+        steht es dabei.</p>
+      ${tage.map((tag) => {
+      const plan = W.tagesplan(nachTag[tag]);
+      return h`<div class="tagesplan">
+          <h3>${U.dateDE(tag)}${plan.gesamtMinuten ? h` <i>${U.minutesLabel(plan.gesamtMinuten)} unterwegs</i>` : ''}</h3>
+          <ol class="tagesplan__liste">
+            ${plan.reihenfolge.map((r, i) => h`<li>
+              <span class="tagesplan__zeit">${r.termin.zeit}</span>
+              <div>
+                <b><a href="#/objekt/${r.termin.id}">${U.truncate(r.termin.titel, 42)}</a></b>
+                <span>${r.termin.listing.viertel}, ${r.termin.listing.stadt}</span>
+              </div>
+              ${i ? h`<i class="tagesplan__fahrt">${ico('zug')}${U.minutesLabel(r.fahrtMinuten)}</i>` : ''}
+            </li>`)}
+          </ol>
+          ${plan.konflikte.map((k) => h`<p class="warn-meldung">${ico('warnung')}
+            Zwischen ${k.a.zeit} und ${k.b.zeit} fehlen rund ${k.fehlt} Minuten. Verschieb einen der beiden Termine.</p>`)}
+        </div>`;
+    })}
+      <p class="fein">Fahrzeiten mit öffentlichen Verkehrsmitteln geschätzt, 30 Minuten je Besichtigung eingerechnet.</p>`;
   }
 
   /* ================================================================
@@ -108,7 +181,7 @@
           <header class="seite__kopf"><h1>${ico('waage')}Vergleich</h1></header>
           <div class="leer">${ico('waage')}
             <h3>Noch nichts im Vergleich</h3>
-            <p>Bis zu ${S.MAX_VERGLEICH} Objekte lassen sich nebeneinanderstellen – mit echten Monatskosten,
+            <p>Bis zu ${S.maxVergleich()} Objekte lassen sich nebeneinanderstellen – mit echten Monatskosten,
               Vergleichsmiete und Passung in einer Tabelle.</p>
             <p><a class="knopf" href="#/suche">${ico('suche')}Objekte suchen</a></p></div>
         </div>`
@@ -153,7 +226,8 @@
       html: h`<div class="seite">
         <header class="seite__kopf">
           <h1>${ico('waage')}Vergleich</h1>
-          <p class="seite__unter">${objekte.length} von ${S.MAX_VERGLEICH} Plätzen belegt. Der jeweils beste Wert je Zeile ist hervorgehoben.</p>
+          <p class="seite__unter">${objekte.length} von ${S.maxVergleich()} Plätzen belegt. Der jeweils beste Wert je Zeile ist hervorgehoben.
+            ${!P.istPlus() ? raw('<a href="#/plus">Mit Plus sind es sechs.</a>') : ''}</p>
         </header>
         <div class="vergleich__rolle">
           <table class="vergleich">
@@ -219,8 +293,15 @@
       html: h`<div class="seite seite--schmal">
         <header class="seite__kopf">
           <h1>${ico('glocke')}Suchaufträge</h1>
-          <p class="seite__unter">Gespeicherte Filter. Was seit dem letzten Öffnen dazugekommen ist, steht oben.</p>
+          <p class="seite__unter">Gespeicherte Filter. Was seit dem letzten Öffnen dazugekommen ist, steht oben.
+            ${P.grenze('suchauftraege') === Infinity
+        ? 'Mit Plus kannst du beliebig viele anlegen.'
+        : s.agenten.length + ' von ' + P.grenze('suchauftraege') + ' im freien Tarif belegt.'}</p>
         </header>
+        ${!P.istPlus() ? h`<div class="block">
+          ${ui.sperrHinweis('suchauftraege', 'Wer in mehreren Städten oder Preisklassen sucht, braucht mehr als '
+        + 'einen Auftrag. Mit Plus sind es beliebig viele – alle mit sofortiger Meldung.')}
+        </div>` : ''}
         ${s.agenten.map((a) => {
         const t = S.agentTreffer(a);
         return h`<section class="agent ${a.aktiv ? '' : 'is-aus'}">
@@ -397,6 +478,99 @@
      ================================================================ */
 
   const A_ = ui.aktionRegistrieren;
+
+  A_('nachfassen', (el) => {
+    const id = el.dataset.id;
+    const l = NW.data.byId[id];
+    const f = S.nachfassFaellig().find((x) => x.id === id);
+    const tage = f ? f.tage : S.NACHFASS_TAGE;
+    const p = S.get().profil;
+    const text = 'Guten Tag,\n\n' +
+      'vor ' + tage + ' Tagen hatte ich mich auf Ihr Inserat „' + l.titel + '“ gemeldet. ' +
+      'Da ich noch keine Rückmeldung habe, frage ich kurz nach: Ist die Wohnung noch verfügbar?\n\n' +
+      'Falls sie bereits vergeben ist, freue ich mich über eine kurze Nachricht – dann kann ich weitersuchen. ' +
+      'Falls nicht, stehe ich für einen Besichtigungstermin gern zur Verfügung; meine Unterlagen habe ich vollständig vorliegen.\n\n' +
+      'Viele Grüße\n' + (p.name || '');
+    ui.dialog({
+      titel: 'Nachfassen',
+      breit: true,
+      inhalt: h`<p class="block__unter">Kurz, freundlich, mit einem einfachen Ausweg für die Gegenseite –
+          so bekommt man am ehesten überhaupt eine Antwort.</p>
+        <label class="feld"><span>Nachricht</span><textarea rows="10" id="nachfass-text">${text}</textarea></label>`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="nachfass-erledigt" data-id="${id}">Nur als erledigt merken</button>
+        <button type="button" class="knopf" data-tu="nachfass-senden" data-id="${id}">${ico('nachricht')}Absenden</button>`
+    });
+  });
+
+  A_('nachfass-senden', (el) => {
+    const text = (U.$('#nachfass-text') || {}).value || '';
+    if (!text.trim()) return;
+    S.anschreiben(el.dataset.id, text);
+    S.nachgefasst(el.dataset.id);
+    ui.dialogZu();
+    ui.toast('Nachfrage abgeschickt.', 'gut');
+    ui.neuZeichnen();
+  });
+
+  A_('nachfass-erledigt', (el) => {
+    S.nachgefasst(el.dataset.id);
+    ui.dialogZu();
+    ui.neuZeichnen();
+  });
+
+  A_('serie', () => {
+    const s = S.get();
+    const ids = Object.keys(s.merkliste).filter((id) => s.merkliste[id].status === 'gemerkt' && NW.data.byId[id]);
+    if (!ids.length) { ui.toast('Nichts auf „gemerkt“.'); return; }
+    ui.dialog({
+      titel: 'Serienbewerbung',
+      breit: true,
+      inhalt: h`<p>Für jedes Objekt entsteht ein eigenes Anschreiben aus deinem Profil – mit Titel, Lage und
+          Einzugstermin des jeweiligen Inserats. Keine Rundmail: Wer erkennbar hundertfach kopiert, wird aussortiert.</p>
+        <ul class="serienliste">
+          ${ids.map((id) => {
+        const l = NW.data.byId[id];
+        return h`<li>
+              <label class="schalter"><input type="checkbox" checked data-serie="${id}">
+                <span><b>${U.truncate(l.titel, 44)}</b>
+                  <i>${l.viertel}, ${l.stadt} · ${U.eur(l.kind === 'kauf' ? l.kaufpreis : l.warm)}
+                    ${l.kind === 'kauf' ? '' : 'warm'} · ${l.anbieter.name}</i></span></label>
+            </li>`;
+      })}
+        </ul>
+        <label class="feld"><span>Zusatz für alle Anschreiben (freiwillig)</span>
+          <textarea rows="3" id="serie-zusatz" placeholder="Etwas, das für alle gilt – etwa der frühestmögliche Einzugstermin."></textarea></label>`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Abbrechen</button>
+        <button type="button" class="knopf" data-tu="serie-senden">${ico('nachricht')}Alle ausgewählten absenden</button>`
+    });
+  });
+
+  A_('serie-senden', () => {
+    const zusatz = ((U.$('#serie-zusatz') || {}).value || '').trim();
+    const gewaehlt = U.$$('[data-serie]').filter((el) => el.checked).map((el) => el.dataset.serie);
+    if (!gewaehlt.length) { ui.toast('Nichts ausgewählt.', 'schlecht'); return; }
+    const p = S.get().profil;
+    gewaehlt.forEach((id) => {
+      const l = NW.data.byId[id];
+      const anrede = l.anbieter.art === 'privat' ? 'Hallo ' + l.anbieter.name.split(' ')[0] + ',' : 'Guten Tag,';
+      const text = anrede + '\n\n' +
+        'Ihr Inserat „' + l.titel + '“ in ' + l.viertel + ' passt sehr gut zu dem, was ich suche.' +
+        (p.name ? ' Ich heiße ' + p.name + '.' : '') +
+        (p.beruf ? ' Ich arbeite als ' + p.beruf + '.' : '') +
+        (p.haushalt > 1 ? ' Wir sind ' + p.haushalt + ' Personen.' : ' Ich würde allein einziehen.') +
+        (p.nettoEinkommen ? ' Mein Nettoeinkommen liegt bei rund ' + U.eur(p.nettoEinkommen) + ' im Monat.' : '') +
+        (p.einzugAb ? ' Einziehen könnte ich ab ' + U.dateDE(p.einzugAb) + '.' : '') +
+        '\n\n' + (p.vorstellung ? p.vorstellung + '\n\n' : '') +
+        (zusatz ? zusatz + '\n\n' : '') +
+        'Selbstauskunft, Einkommensnachweise und Mietschuldenfreiheitsbescheinigung bringe ich zur Besichtigung mit. ' +
+        'Nennen Sie mir gern zwei Termine, die Ihnen passen.\n\n' +
+        'Viele Grüße\n' + (p.name || '');
+      S.anschreiben(id, text);
+    });
+    ui.dialogZu();
+    ui.toast(gewaehlt.length + ' ' + U.plural(gewaehlt.length, 'Anschreiben', 'Anschreiben') + ' abgeschickt.', 'gut');
+    ui.neuZeichnen();
+  });
 
   A_('vergleich-kopieren', () => {
     const s = S.get();

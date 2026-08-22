@@ -6,7 +6,7 @@
 (function (NW) {
   'use strict';
 
-  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store;
+  const U = NW.util, ui = NW.ui, A = NW.analyse, S = NW.store, P = NW.plan;
   const h = U.html, raw = U.raw, ico = U.svg;
 
   let karte = null;
@@ -31,6 +31,7 @@
     ['preis', 'Preis aufsteigend'],
     ['preisAb', 'Preis absteigend'],
     ['preisqm', 'Preis je m²'],
+    ['gesamtkosten', 'Echte Monatskosten'],
     ['flaeche', 'Größte Fläche'],
     ['fairness', 'Fairster Preis'],
     ['chance', 'Beste Aussicht'],
@@ -211,6 +212,9 @@
 
       <div class="filter__fuss">
         <button type="button" class="knopf knopf--voll" data-tu="agent-aus-filter">${ico('glocke')}Als Suchauftrag merken</button>
+        ${s.agenten.length >= P.grenze('suchauftraege')
+        ? h`<p class="filter__hinweis">${ico('schloss')}Im freien Tarif ist ein Suchauftrag möglich.
+            <a href="#/plus">Mit Plus unbegrenzt viele.</a></p>` : ''}
       </div>
     </form>`;
   }
@@ -253,8 +257,12 @@
     if (!bewertet.length) return leerHinweis(S.get().filter);
     const teil = bewertet.slice(0, sichtbar);
     const rest = bewertet.length - teil.length;
+    /* Anzeigen sitzen zwischen den Treffern, nie in der Reihenfolge:
+       sie haben eine eigene Gestalt und tragen immer ihre Kennzeichnung. */
+    const abstand = NW.plan.ANZEIGE_ABSTAND;
     return h`<div class="ergebnisse__liste">
-      ${teil.map((x) => ui.inseratsKarte(x.l, x.b))}
+      ${teil.map((x, i) => h`${ui.inseratsKarte(x.l, x.b)}${(i + 1) % abstand === 0 && i + 1 < teil.length
+        ? ui.anzeige('treffer-' + Math.floor(i / abstand), 'breit') : ''}`)}
     </div>
     ${rest > 0 ? h`<div class="mehr">
       <button type="button" class="knopf knopf--still" data-tu="mehr-zeigen">
@@ -506,6 +514,10 @@
   A_('lockern-arten', () => { filterAendern({ arten: ['miete', 'kauf', 'wg', 'tausch'] }); ui.neuZeichnen(); });
 
   A_('agent-aus-filter', () => {
+    if (S.get().agenten.length >= P.grenze('suchauftraege')) {
+      ui.AKTIONEN.sperre({ dataset: { leistung: 'suchauftraege' } });
+      return;
+    }
     const f = S.get().filter;
     const teile = [];
     if (f.staedte.length) teile.push(f.staedte.join('/'));
@@ -525,9 +537,13 @@
 
   A_('agent-speichern', () => {
     const name = (U.$('#agent-name') || {}).value || 'Suchauftrag';
-    S.agentAnlegen(name, S.get().filter);
+    if (!S.agentAnlegen(name, S.get().filter)) {
+      ui.dialogZu();
+      ui.AKTIONEN.sperre({ dataset: { leistung: 'suchauftraege' } });
+      return;
+    }
     ui.dialogZu();
-    ui.toast('Suchauftrag angelegt.', 'gut');
+    ui.toast('Suchauftrag angelegt. Beim nächsten Besuch steht hier, was neu ist.', 'gut');
     ui.aktualisiereZaehler();
   });
 

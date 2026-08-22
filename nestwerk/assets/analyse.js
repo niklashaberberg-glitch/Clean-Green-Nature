@@ -239,7 +239,7 @@
       const state = (G.cityByName[l.stadt] || {}).state || 'NRW';
       const grest = GRUNDERWERB[state] || 6.0;
       monatlich.push({ label: 'Hausgeld / Rücklage', betrag: l.hausgeld || Math.round(l.flaeche * 3.4), hinweis: l.type === 'haus' ? 'geschätzte Instandhaltungsrücklage' : 'Wohngeld laut Angebot' });
-      monatlich.push({ label: 'Strom (' + personen + ' ' + U.plural(personen, 'Person', '{n} Personen') + ')', betrag: strom });
+      monatlich.push({ label: 'Strom (' + personen + ' ' + U.plural(personen, 'Person', 'Personen') + ')', betrag: strom });
       monatlich.push({ label: 'Internet', betrag: INTERNET });
       monatlich.push({ label: 'Rundfunkbeitrag', betrag: RUNDFUNK });
       monatlich.push({ label: 'Wohngebäude-/Hausratversicherung', betrag: l.type === 'haus' ? 42 : 14 });
@@ -251,7 +251,7 @@
       monatlich.push({ label: 'Kaltmiete', betrag: l.kalt });
       monatlich.push({ label: 'Nebenkosten', betrag: l.nebenkosten });
       monatlich.push({ label: 'Heizkosten', betrag: l.heizkosten });
-      monatlich.push({ label: 'Strom (' + personen + ' ' + U.plural(personen, 'Person', '{n} Personen') + ')', betrag: strom });
+      monatlich.push({ label: 'Strom (' + personen + ' ' + U.plural(personen, 'Person', 'Personen') + ')', betrag: strom });
       if (l.kind !== 'wg') {
         monatlich.push({ label: 'Internet', betrag: INTERNET });
         monatlich.push({ label: 'Rundfunkbeitrag', betrag: RUNDFUNK });
@@ -260,7 +260,7 @@
         monatlich.push({ label: 'Anteil Internet und Rundfunk', betrag: Math.round((INTERNET + RUNDFUNK) / (l.wg ? l.wg.groesse : 3)) });
       }
       if (l.quirks && l.quirks.indexOf('moebel') >= 0) monatlich.push({ label: 'Möblierungszuschlag', betrag: 180 });
-      einmalig.push({ label: 'Kaution (' + l.kaution + ' ' + U.plural(l.kaution, 'Kaltmiete', '{n} Kaltmieten') + ')', betrag: l.kalt * l.kaution, rueck: true });
+      einmalig.push({ label: 'Kaution (' + l.kaution + ' ' + U.plural(l.kaution, 'Kaltmiete', 'Kaltmieten') + ')', betrag: l.kalt * l.kaution, rueck: true });
       if (l.provision > 0) einmalig.push({ label: 'Courtage (' + U.dec(l.provision) + ' Kaltmieten)', betrag: Math.round(l.kalt * l.provision * 1.19) });
       if (l.quirks && l.quirks.indexOf('abstand') >= 0) einmalig.push({ label: 'Abstandszahlung Küche', betrag: 4500 });
       if (!l.ausstattung.includes('Einbauküche') && l.kind !== 'wg') einmalig.push({ label: 'Küche anschaffen', betrag: 2600 });
@@ -409,7 +409,7 @@
     /* Chancen: viele Bewerber senken die Aussicht spürbar */
     const bewerber = l.stats.bewerber;
     const chance = bewerber < 5 ? 1 : bewerber < 20 ? 0.8 : bewerber < 60 ? 0.55 : bewerber < 120 ? 0.3 : 0.15;
-    add('chance', 'Aussicht', chance, 1, bewerber + ' ' + U.plural(bewerber, 'Interessent', '{n} Interessenten'));
+    add('chance', 'Aussicht', chance, 1, bewerber + ' ' + U.plural(bewerber, 'Interessent', 'Interessenten'));
 
     /* Anbieterqualität */
     const anb = (l.anbieter.quote / 100) * 0.7 + (l.anbieter.verifiziert ? 0.3 : 0);
@@ -520,6 +520,8 @@
       preis: (a, b) => (a.l.kind === 'kauf' ? a.l.kaufpreis : a.l.warm) - (b.l.kind === 'kauf' ? b.l.kaufpreis : b.l.warm),
       preisAb: (a, b) => (b.l.kind === 'kauf' ? b.l.kaufpreis : b.l.warm) - (a.l.kind === 'kauf' ? a.l.kaufpreis : a.l.warm),
       preisqm: (a, b) => (a.l.kind === 'kauf' ? a.l.kaufpreis : a.l.kalt) / a.l.flaeche - (b.l.kind === 'kauf' ? b.l.kaufpreis : b.l.kalt) / b.l.flaeche,
+      /* Nicht die Warmmiete, sondern alles, was monatlich abfließt. */
+      gesamtkosten: (a, b) => kosten(a.l, profil).monatSumme - kosten(b.l, profil).monatSumme,
       neu: (a, b) => b.l.stats.online.localeCompare(a.l.stats.online),
       flaeche: (a, b) => b.l.flaeche - a.l.flaeche,
       zimmer: (a, b) => b.l.zimmer - a.l.zimmer,

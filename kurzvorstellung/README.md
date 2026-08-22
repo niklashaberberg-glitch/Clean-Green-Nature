@@ -41,16 +41,22 @@ Die Tokens oben in der Datei entsprechen den Marken-Tokens aus `../index.html`
 
 ## Logo
 
-Als kleine Marke steht das Blatt-Symbol der Website in Kopf- und Fußzeile.
-Sobald `cgc-logo-icon.png` vorliegt: Datei in diesen Ordner legen und die drei
-`<span class="mark">…</span>`-Blöcke ersetzen durch
-
-```html
-<img class="mark" src="cgc-logo-icon.png" alt="Clean Green Nature">
+```
+cgn-emblem.png   das runde Emblem, außen freigestellt (256 × 256)
+cgn-logo.png     das vollständige Logo mit Schriftzug, freigestellt
 ```
 
-Bei der hellen Variante zusätzlich `mark--light` behalten, damit Größe und Radius
-stimmen.
+Beides ist aus der Logodatei herausgelöst. Im Dokument steht das **Emblem** in
+den Kopfzeilen beider Seiten – auf Seite 1 mit 12 mm auf weißer Scheibe, auf
+Seite 2 mit 10 mm. Eingebettet ist es als Data-URI in der Regel `.mark` im
+Stylesheet, also nur einmal in der Datei; die vier Marken verweisen darauf.
+
+In den Fußzeilen steht bewusst **kein** Emblem: Bei rund 6 mm ist die Zeichnung
+im Kreis zu detailreich und wird zum Fleck. Dort trägt der Schriftzug allein.
+
+Emblem austauschen: neue Datei als `cgn-emblem.png` ablegen und die Data-URI in
+`.mark` neu erzeugen –
+`base64 -w0 cgn-emblem.png` und den Inhalt zwischen `base64,` und `")` ersetzen.
 
 ## Preise
 

@@ -34,16 +34,18 @@ Der Effekt auf beiden Seiten:
 Grundannahmen, mit denen die Website rechnet:
 
 * Ein üblicher Vorfall umfasst rund **4 m²** (Tag am Sockel, Garagentor, Briefkastenanlage).
-* Als Einzelauftrag kostet das rund **280 €** – zwischen dem Mindestauftragswert von
-  250 € und größeren Flächen.
+* Als Einzelauftrag kostet das **250 €** – 4 m² Klinker ergeben nach dem Richtpreis-Rechner
+  180 €, ab 2 km Entfernung greift aber der Mindestauftragswert von 250 €. Ein Objekt aus
+  einem Portfolio liegt praktisch immer weiter weg. Der Vergleich auf der Website rechnet
+  deshalb mit genau dieser Zahl – aus der eigenen Preisliste, nicht aus einer Annahme.
 
 Daraus ergeben sich die Kontingente: enthaltene Fläche = erwartete Vorfälle × 4 m².
 
 | Tarif | Preis je Objekt/Monat | enthalten je Jahr | ausgelegt auf | Einzelauftrag wäre | Kundenvorteil |
 |---|---|---|---|---|---|
-| Basis | 39 € netto | 8 m², 2 Kontrollen | 2 Vorfälle | 560 € | −16 % |
-| Aktiv | 79 € netto | 16 m², 4 Kontrollen | 4 Vorfälle | 1.120 € | −15 % |
-| Komplett | 139 € netto | 32 m², 6 Kontrollen | 8 Vorfälle | 2.240 € | −26 % |
+| Basis | 35 € netto | 8 m², 2 Kontrollen | 2 Vorfälle | 500 € | −16 % |
+| Aktiv | 69 € netto | 16 m², 4 Kontrollen | 4 Vorfälle | 1.000 € | −17 % |
+| Komplett | 129 € netto | 32 m², 6 Kontrollen | 8 Vorfälle | 2.000 € | −23 % |
 
 Mengenstaffel auf den Objektpreis: ab 5 Objekten 5 %, ab 15 Objekten 10 %,
 ab 40 Objekten 15 %, ab 100 Objekten 20 %.
@@ -60,9 +62,14 @@ Stunde vor Ort, Maschine, Verbrauch) und rund 25 € je Sichtkontrolle in der Ko
 
 | Tarif | Erlös/Jahr | Kosten bei Auslegung | Deckungsbeitrag |
 |---|---|---|---|
-| Basis | 468 € | 2 × 120 € + 2 × 25 € = 290 € | 178 € (38 %) |
-| Aktiv | 948 € | 4 × 120 € + 4 × 25 € = 580 € | 368 € (39 %) |
-| Komplett | 1.668 € | 8 × 120 € + 6 × 25 € = 1.110 € | 558 € (33 %) |
+| Basis | 420 € | 2 × 120 € + 2 × 25 € = 290 € | 130 € (31 %) |
+| Aktiv | 828 € | 4 × 120 € + 4 × 25 € = 580 € | 248 € (30 %) |
+| Komplett | 1.548 € | 8 × 120 € + 6 × 25 € = 1.110 € | 438 € (28 %) |
+
+Die Deckungsbeiträge gelten für den Auslegungsfall. Bleibt ein Objekt darunter – und das
+ist der Normalfall, weil kaum ein Basis-Objekt wirklich zweimal im Jahr getroffen wird –
+steigt der Deckungsbeitrag. Genau davon lebt das Modell: bezahlt wird die Bereitschaft,
+gearbeitet wird nach Bedarf.
 
 Die Marge kommt aus der Bündelung: Wer an einem Tag zwölf Objekte derselben Verwaltung
 in Ehrenfeld abfährt, hat kaum Anfahrtszeit. Ein Einzelauftrag quer durch Köln hat sie
@@ -71,26 +78,31 @@ in jedem Einsatz.
 ## 3 · Der Weg zur Million
 
 1 Mio. $ sind rund 900.000 €. Bei einem Tarifmix aus 30 % Basis, 55 % Aktiv und
-15 % Komplett und durchschnittlich 10 % Mengenstaffel bleiben rund **68 € je Objekt und
-Monat**, also etwa **816 € Jahresumsatz je Objekt**. Rechnet man 20 % Zusatzumsatz
+15 % Komplett und durchschnittlich 10 % Mengenstaffel bleiben rund **59 € je Objekt und
+Monat**, also etwa **710 € Jahresumsatz je Objekt**. Rechnet man 20 % Zusatzumsatz
 außerhalb des Kontingents dazu (größere Flächen, Fassaden, Einfahrten), sind es rund
-**980 € je Objekt und Jahr**.
+**850 € je Objekt und Jahr**.
 
-**900.000 € ÷ 980 € ≈ 920 Objekte unter Vertrag.**
+**900.000 € ÷ 850 € ≈ 1.060 Objekte unter Vertrag.**
 
 Realistischer Aufbau:
 
 | | Objekte | wiederkehrender Umsatz | nötige Teams |
 |---|---|---|---|
-| Jahr 1 | 120 (3–4 Verwaltungen) | ca. 118.000 € | 1 |
-| Jahr 2 | 400 | ca. 390.000 € | 2 |
-| Jahr 3 | 920 | ca. 900.000 € | 3–4 |
+| Jahr 1 | 120 (3–4 Verwaltungen) | ca. 102.000 € | 1 |
+| Jahr 2 | 400 | ca. 340.000 € | 2 |
+| Jahr 3 | 1.060 | ca. 900.000 € | 3–4 |
 
-Kapazitätsprobe für Jahr 3: 920 Objekte × Ø 2,5 Vorfälle = rund 2.300 Einsätze im Jahr.
-Bei 5 gebündelten Einsätzen pro Tag sind das etwa 460 Einsatztage, also gut zwei Teams.
-Dazu rund 3.700 Sichtkontrollen; in der Kontrollrunde schafft ein Team 15 Objekte am
-Tag, macht rund 250 Tage – ein weiteres Team. Plus Disposition. Das Modell finanziert
+Kapazitätsprobe für Jahr 3: 1.060 Objekte × Ø 2,5 Vorfälle = rund 2.650 Einsätze im Jahr.
+Bei 5 gebündelten Einsätzen pro Tag sind das etwa 530 Einsatztage, also gut zwei Teams.
+Dazu rund 4.200 Sichtkontrollen; in der Kontrollrunde schafft ein Team 15 Objekte am
+Tag, macht rund 280 Tage – ein weiteres Team. Plus Disposition. Das Modell finanziert
 diese Teams aus im Voraus abgerechnetem Umsatz, nicht aus Hoffnung auf Aufträge.
+
+Wer die Million schneller will, dreht nicht am Preis, sondern am Mix: Gewerbeobjekte und
+Hotspot-Lagen im Tarif Komplett bringen das Dreifache eines Basis-Objekts, und
+Zusatzflächen außerhalb des Kontingents laufen ohnehin zum Vorzugspreis über dieselbe
+Route.
 
 Das ist kein Plan für nächsten Monat, sondern eine realistische Drei-Jahres-Kurve. Die
 erste Stufe – rund 100 Objekte und damit gut 100.000 € wiederkehrend – ist mit einem
@@ -127,7 +139,7 @@ Nach Priorität:
 > Bisher heißt das jedes Mal: Angebot einholen, Freigabe abwarten, Einzelrechnung prüfen.
 >
 > Wir entfernen Graffiti mit mobiler Laserreinigung – chemiefrei, ohne Schmutzwasser,
-> auch auf Klinker und Naturstein. Im GraffitiCare Portfolio kostet ein Objekt ab 39 €
+> auch auf Klinker und Naturstein. Im GraffitiCare Portfolio kostet ein Objekt ab 35 €
 > im Monat: mit festen Sichtkontrollen, zugesagter Reaktionszeit, dokumentierten
 > Einsätzen und einer Sammelrechnung für alle Objekte.
 >
@@ -154,7 +166,7 @@ Jahresreport als Beschlussvorlage für die nächste Eigentümerversammlung.
 
 | Einwand | Antwort |
 |---|---|
-| „Bei uns passiert das selten.“ | Dann Basis, 39 €. Der Rechner zeigt offen, ab welcher Häufigkeit sich das lohnt – bei einem Vorfall im Jahr sagen wir das auch. |
+| „Bei uns passiert das selten.“ | Dann Basis, 35 €. Der Rechner zeigt offen, ab welcher Häufigkeit sich das lohnt – bei einem Vorfall im Jahr sagen wir das auch. |
 | „Wir haben schon eine Firma.“ | Was zahlen Sie je Einsatz, und wie lange dauert es bis zum Termin? Wir vergleichen mit einer Jahresrechnung, nicht mit einem Einzelpreis. |
 | „Das muss die Versammlung beschließen.“ | Wir liefern die Beschlussvorlage: Objektakte, Kostenvergleich, Jahresreport. |
 | „Zu teuer.“ | Nicht gegen null vergleichen, sondern gegen die Einzelrechnungen des letzten Jahres. Lassen Sie uns die durchgehen. |
@@ -180,7 +192,7 @@ Jahresreport als Beschlussvorlage für die nächste Eigentümerversammlung.
 * **Rosinenpickerei.** Nur Problemobjekte im Vertrag – Gegenmittel ist die 60-%-Regel.
 * **Zu großes Versprechen.** 24 Stunden Reaktionszeit im Tarif Komplett muss auch im
   Urlaub und bei Krankheit halten. Lieber 48 Stunden zusagen und schneller sein.
-* **Kontingent zu großzügig.** Wer bei Basis 20 m² verschenkt, arbeitet umsonst. Die
+* **Kontingent zu großzügig.** Wer bei Basis 20 m² statt 8 m² verschenkt, arbeitet umsonst. Die
   Kontingente jährlich gegen die echten Einsatzzahlen prüfen.
 * **Wachstum ohne Team.** Ab etwa 150 Objekten reicht eine Person nicht mehr für
   Kontrollrunden und Einsätze gleichzeitig. Einstellung planen, bevor die Reaktionszeit

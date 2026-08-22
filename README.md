@@ -125,11 +125,15 @@ hinterlegte Text ist nur die Anzeige, falls kein JavaScript läuft. Wer die Prei
 ändert, sollte daher auch den Text in den Karten und die Angaben in den Strukturdaten
 (`"@id": ".../#service-graffiticare"`) anpassen.
 
-**Mengenstaffel** steht im Skript als `PF_TIERS`, die Vergleichsrechnung gegen die
-Einzelbeauftragung als `PF_SINGLE_JOB` (Rechnungsbetrag je Vorfall) und
-`PF_AREA_PER_INCIDENT` (Fläche je Vorfall). Beide Werte hängen zusammen: Wer den einen
-ändert, sollte den anderen mitziehen, sonst passen Kontingente und Vergleich nicht mehr
-zusammen. Aus ihnen leitet der Rechner auch die Tarifempfehlung ab.
+**Mengenstaffel** steht im Skript als `PF_TIERS`. Die Vergleichsrechnung gegen die
+Einzelbeauftragung hat nur eine eigene Annahme: `PF_AREA_PER_INCIDENT`, also die Fläche
+eines üblichen Vorfalls (4 m²). Der Preis dafür kommt aus der Preisliste der Seite selbst
+– dem Quadratmeter-Ansatz der ersten Option von `#surface-select` und dem
+Mindestauftragswert `MIN_ORDER_VALUE`. Wer die Preise im Richtpreis-Rechner ändert,
+ändert damit automatisch auch den Vergleich; auseinanderlaufen können die beiden nicht.
+Aus derselben Fläche leitet der Rechner die Tarifempfehlung ab: Er nennt den kleinsten
+Tarif, dessen Kontingent die angegebene Häufigkeit trägt – auch dann, wenn das ein
+günstigerer Tarif ist als der gerade gewählte.
 
 Die Schaltflächen `data-portfolio-plan` und `data-portfolio-request` springen zum
 Anfrageformular, setzen dort den Haken „GraffitiCare Abo“ und tragen Objektanzahl und

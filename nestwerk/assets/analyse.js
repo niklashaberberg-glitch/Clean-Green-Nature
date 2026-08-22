@@ -463,6 +463,40 @@
     };
   }
 
+  /* Das Profil ist die eine Stelle, an der jemand seine Suche beschreibt.
+     Daraus einen Filter zu bauen, ist genau die Arbeit, die niemand
+     zweimal machen sollte. */
+  function filterAusProfil(profil, vorlage) {
+    const f = vorlage ? JSON.parse(JSON.stringify(vorlage)) : leerFilter();
+    const p = profil || {};
+    if (p.staedte && p.staedte.length) f.staedte = p.staedte.slice();
+    if (p.viertel && p.viertel.length) f.viertel = p.viertel.slice();
+    if (p.budgetWarm) f.preisMax = p.budgetWarm;
+    if (p.zimmerMin) f.zimmerMin = p.zimmerMin;
+    if (p.flaecheMin) f.flaecheMin = p.flaecheMin;
+    if (p.einzugAb) f.freiBis = p.einzugAb;
+    if (p.mussHaben && p.mussHaben.length) f.ausstattung = p.mussHaben.slice();
+    if (p.arten && p.arten.length) f.arten = p.arten.slice();
+    return f;
+  }
+
+  /* Wo Filter und Profil auseinanderlaufen – damit die Suche darauf
+     hinweisen kann, statt es stillschweigend zu ignorieren. */
+  function profilAbweichung(filter, profil) {
+    const p = profil || {}, ab = [];
+    if (p.staedte && p.staedte.length && filter.staedte.length &&
+      p.staedte.join() !== filter.staedte.join()) {
+      ab.push({ feld: 'staedte', label: 'Städte', profil: p.staedte.join(', '), filter: filter.staedte.join(', ') });
+    }
+    if (p.budgetWarm && filter.preisMax && filter.preisMax !== p.budgetWarm) {
+      ab.push({ feld: 'preisMax', label: 'Budget', profil: p.budgetWarm + ' €', filter: filter.preisMax + ' €' });
+    }
+    if (p.flaecheMin && filter.flaecheMin && filter.flaecheMin !== p.flaecheMin) {
+      ab.push({ feld: 'flaecheMin', label: 'Fläche', profil: p.flaecheMin + ' m²', filter: filter.flaecheMin + ' m²' });
+    }
+    return ab;
+  }
+
   function passtText(l, q) {
     if (!q) return true;
     const worte = U.norm(q).split(' ').filter(Boolean);
@@ -542,19 +576,32 @@
   }
 
   /* Marktüberblick zur aktuellen Trefferliste. */
+  /* WG-Zimmer kosten je m² systematisch mehr als Wohnungen. Beides in
+     einen Mittelwert zu werfen erzeugt eine Zahl, die für keine der
+     beiden Welten stimmt – deshalb getrennt. Und unter drei Treffern
+     gibt es überhaupt keinen sinnvollen Mittelwert. */
+  const MARKT_MINDEST = 3;
+
   function marktLage(treffer) {
     if (!treffer.length) return null;
-    const mieten = treffer.filter((l) => l.kind !== 'kauf');
-    const werte = mieten.map((l) => l.kalt / l.flaeche).sort((a, b) => a - b);
-    const warm = mieten.map((l) => l.warm).sort((a, b) => a - b);
-    const med = (arr) => arr.length ? arr[Math.floor(arr.length / 2)] : 0;
+    const med = (arr) => arr.length ? arr.slice().sort((a, b) => a - b)[Math.floor(arr.length / 2)] : 0;
+    const wohnungen = treffer.filter((l) => l.kind === 'miete' || l.kind === 'tausch');
+    const zimmer = treffer.filter((l) => l.kind === 'wg');
+    const kauf = treffer.filter((l) => l.kind === 'kauf');
+
     return {
       anzahl: treffer.length,
-      medianQm: Math.round(med(werte) * 100) / 100,
-      medianWarm: Math.round(med(warm)),
+      genugFuerMittel: treffer.length >= MARKT_MINDEST,
+      wohnungen: wohnungen.length,
+      zimmer: zimmer.length,
+      kauf: kauf.length,
+      medianQm: wohnungen.length >= MARKT_MINDEST ? Math.round(med(wohnungen.map((l) => l.kalt / l.flaeche)) * 100) / 100 : null,
+      medianWarm: wohnungen.length >= MARKT_MINDEST ? Math.round(med(wohnungen.map((l) => l.warm))) : null,
+      medianZimmerWarm: zimmer.length >= MARKT_MINDEST ? Math.round(med(zimmer.map((l) => l.warm))) : null,
+      medianKauf: kauf.length >= MARKT_MINDEST ? Math.round(med(kauf.map((l) => l.kaufpreis))) : null,
       neu7: treffer.filter((l) => U.daysSince(l.stats.online) <= 7).length,
       provisionsfrei: treffer.filter((l) => l.provision === 0).length,
-      medianBewerber: med(treffer.map((l) => l.stats.bewerber).sort((a, b) => a - b))
+      medianBewerber: treffer.length >= MARKT_MINDEST ? med(treffer.map((l) => l.stats.bewerber)) : null
     };
   }
 
@@ -562,6 +609,6 @@
     ENERGIE_RANG, GRUNDERWERB,
     mietCheck, kaufCheck, risikoCheck, klauselCheck, KLAUSELN,
     kosten, finanzierung, bewerten, pendelZeit,
-    leerFilter, filtern, sortieren, marktLage, passtText
+    leerFilter, filterAusProfil, profilAbweichung, filtern, sortieren, marktLage, passtText
   };
 })(window.NW = window.NW || {});

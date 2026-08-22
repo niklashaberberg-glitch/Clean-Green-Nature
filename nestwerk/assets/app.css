@@ -140,6 +140,10 @@
 
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
+/* Der Browser verschiebt sonst eigenmächtig die Leseposition, wenn sich
+   Inhalt oberhalb ändert – bei einem Neuaufbau ist das genau falsch. */
+#haupt { overflow-anchor: none; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -402,7 +406,9 @@ input[type="range"] {
   font-size: .88rem;
 }
 .hinweisbox > .ico { color: var(--akzent); margin-top: .15em; }
-.hinweisbox b { display: block; }
+/* Nur die Überschrift der Box steht allein – nicht jede Hervorhebung
+   mitten im Satz. Sonst zerreißt es Sätze wie „bis 900 € warm“. */
+.hinweisbox > div > b:first-child { display: block; }
 
 .gut-meldung, .warn-meldung, .info-meldung {
   display: flex; align-items: flex-start; gap: .5em; padding: .7em .9em; margin: 10px 0;
@@ -1460,3 +1466,26 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .chancenkopf .ampel { margin: 0; }
 .chancenkopf .ampel__zahl .ico { width: 30px; height: 30px; }
 .chancen__satz { font-size: .95rem; }
+
+/* Bezug zwischen Profil und Filter */
+.profilbezug { padding: 10px 0; border-bottom: 1px solid var(--rand); margin-bottom: 4px; }
+.profilbezug__abweichung { display: flex; gap: .4em; align-items: flex-start; margin: 8px 0 0; font-size: .78rem; color: var(--warn); }
+.profilbezug__abweichung .ico { flex: none; width: 14px; height: 14px; margin-top: .12em; }
+
+/* Wenige Treffer */
+.wenig { display: flex; gap: .7em; align-items: flex-start; padding: .9em 1em; margin-top: 14px;
+  background: var(--flaeche2); border: 1px dashed var(--rand-stark); border-radius: var(--r); }
+.wenig > .ico { flex: none; color: var(--text-still); margin-top: .1em; }
+.wenig b { display: block; }
+.wenig p { margin: .1em 0 0; font-size: .87rem; color: var(--text-leise); }
+.leer__tun .knopf em { font-style: normal; margin-left: .5em; padding: .05em .4em; border-radius: 999px;
+  background: var(--gut-hell); color: var(--gut); font-size: .78rem; font-weight: 700; }
+.markt__wenig { color: var(--text-still); font-style: italic; }
+.leer__gross { margin-top: 16px; padding-top: 12px; border-top: 1px dashed var(--rand-stark); }
+.leer__gross p { font-size: .84rem; color: var(--text-still); margin-bottom: 8px; }
+.toast.is-frisch { animation: toast-frisch 200ms ease-out; }
+@keyframes toast-frisch { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+.gespeichert { display: inline-flex; align-items: center; gap: .35em; margin-top: .5em;
+  font-size: .8rem; color: var(--text-still); transition: color var(--tempo); }
+.gespeichert .ico { width: 14px; height: 14px; }
+.gespeichert.is-frisch { color: var(--gut); }

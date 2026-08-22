@@ -63,6 +63,7 @@
     profil: JSON.parse(JSON.stringify(NW.data.profilVorlage)),
     profilAngelegt: false,
     filter: NW.analyse.leerFilter(),
+    filterBeruehrt: false,   /* solange false, folgt die Suche dem Profil */
     merkliste: {},          /* id -> { status, notiz, hinzu, termin, checkliste } */
     vergleich: [],
     agenten: [],
@@ -307,9 +308,17 @@
 
   /* ------------------------- Umzug ------------------------- */
 
+  /* Das Einzugsdatum steht schon im Profil – danach noch einmal zu
+     fragen wäre reine Doppelarbeit. */
+  function einzugsdatum() {
+    const s = get();
+    return s.einzugsdatum || s.profil.einzugAb || '';
+  }
+
   function umzugsPlan() {
     const s = get();
-    const datum = s.einzugsdatum ? new Date(s.einzugsdatum + 'T12:00:00') : null;
+    const roh = einzugsdatum();
+    const datum = roh ? new Date(roh + 'T12:00:00') : null;
     return UMZUG_VORLAGE.map((a) => ({
       id: a.id, label: a.label, gruppe: a.gruppe, hinweis: a.hinweis, wann: a.wann,
       faellig: datum ? U.isoDate(U.addDays(datum, a.wann)) : null,
@@ -359,7 +368,33 @@
     update((s) => { s.werkzeuge[name] = Object.assign({}, s.werkzeuge[name], werte); }, 'werkzeuge');
   }
 
-  const werkzeugWerte = (name, vorgabe) => Object.assign({}, vorgabe, get().werkzeuge[name] || {});
+  /* Was das Profil sicher weiß, muss in keinem Rechner erneut eingetippt
+     werden. Angaben, die das Profil nicht kennt, bleiben bei der Vorgabe. */
+  function ausProfil(name) {
+    const p = get().profil;
+    if (name === 'leistbarkeit') {
+      const o = {};
+      if (p.nettoEinkommen) o.netto = p.nettoEinkommen;
+      if (p.haushalt) o.haushalt = p.haushalt;
+      if (p.eigenkapital) o.eigenkapital = p.eigenkapital;
+      return o;
+    }
+    if (name === 'wohngeld') {
+      const o = {};
+      if (p.haushalt) o.personen = p.haushalt;
+      if (p.budgetWarm) o.miete = p.budgetWarm;
+      return o;
+    }
+    if (name === 'wbs') {
+      const o = {};
+      if (p.haushalt) o.personen = p.haushalt;
+      return o;
+    }
+    return {};
+  }
+
+  const werkzeugWerte = (name, vorgabe) =>
+    Object.assign({}, vorgabe, ausProfil(name), get().werkzeuge[name] || {});
 
   /* ------------------------- Zurücksetzen ------------------------- */
 
@@ -379,7 +414,7 @@
     threadFuer, anschreiben, threadGelesen,
     terminBuchen, terminAbsagen, checkSetzen,
     inseratAnlegen, inseratLoeschen, gesehenMerken,
-    umzugsPlan, umzugSetzen, zuruecksetzen,
+    umzugsPlan, umzugSetzen, einzugsdatum, zuruecksetzen,
     nachfassFaellig, nachgefasst, protokollSetzen, werkzeugSetzen, werkzeugWerte
   };
 })(window.NW = window.NW || {});

@@ -142,6 +142,10 @@
 
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
+/* Der Browser verschiebt sonst eigenmächtig die Leseposition, wenn sich
+   Inhalt oberhalb ändert – bei einem Neuaufbau ist das genau falsch. */
+#haupt { overflow-anchor: none; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -404,7 +408,9 @@ input[type="range"] {
   font-size: .88rem;
 }
 .hinweisbox > .ico { color: var(--akzent); margin-top: .15em; }
-.hinweisbox b { display: block; }
+/* Nur die Überschrift der Box steht allein – nicht jede Hervorhebung
+   mitten im Satz. Sonst zerreißt es Sätze wie „bis 900 € warm“. */
+.hinweisbox > div > b:first-child { display: block; }
 
 .gut-meldung, .warn-meldung, .info-meldung {
   display: flex; align-items: flex-start; gap: .5em; padding: .7em .9em; margin: 10px 0;
@@ -1462,6 +1468,29 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .chancenkopf .ampel { margin: 0; }
 .chancenkopf .ampel__zahl .ico { width: 30px; height: 30px; }
 .chancen__satz { font-size: .95rem; }
+
+/* Bezug zwischen Profil und Filter */
+.profilbezug { padding: 10px 0; border-bottom: 1px solid var(--rand); margin-bottom: 4px; }
+.profilbezug__abweichung { display: flex; gap: .4em; align-items: flex-start; margin: 8px 0 0; font-size: .78rem; color: var(--warn); }
+.profilbezug__abweichung .ico { flex: none; width: 14px; height: 14px; margin-top: .12em; }
+
+/* Wenige Treffer */
+.wenig { display: flex; gap: .7em; align-items: flex-start; padding: .9em 1em; margin-top: 14px;
+  background: var(--flaeche2); border: 1px dashed var(--rand-stark); border-radius: var(--r); }
+.wenig > .ico { flex: none; color: var(--text-still); margin-top: .1em; }
+.wenig b { display: block; }
+.wenig p { margin: .1em 0 0; font-size: .87rem; color: var(--text-leise); }
+.leer__tun .knopf em { font-style: normal; margin-left: .5em; padding: .05em .4em; border-radius: 999px;
+  background: var(--gut-hell); color: var(--gut); font-size: .78rem; font-weight: 700; }
+.markt__wenig { color: var(--text-still); font-style: italic; }
+.leer__gross { margin-top: 16px; padding-top: 12px; border-top: 1px dashed var(--rand-stark); }
+.leer__gross p { font-size: .84rem; color: var(--text-still); margin-bottom: 8px; }
+.toast.is-frisch { animation: toast-frisch 200ms ease-out; }
+@keyframes toast-frisch { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+.gespeichert { display: inline-flex; align-items: center; gap: .35em; margin-top: .5em;
+  font-size: .8rem; color: var(--text-still); transition: color var(--tempo); }
+.gespeichert .ico { width: 14px; height: 14px; }
+.gespeichert.is-frisch { color: var(--gut); }
 
 </style>
 <noscript>
@@ -2895,24 +2924,29 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   /* ------------------------- Eigenes Profil ------------------------- */
 
+  /* Das Profil startet leer. Erfundene Vorgaben wären bequem, aber sie
+     lenken die Suche, ohne dass jemand sie gewählt hätte – ein
+     vorbelegtes Pflichtmerkmal blendet stillschweigend Wohnungen aus,
+     und ein erfundenes Einkommen verfälscht die Chancenrechnung.
+     Was hier steht, hat der Mensch selbst eingetragen. */
   const profilVorlage = {
     name: '',
-    alter: 29,
+    alter: null,
     geschlecht: 'egal',
     beruf: '',
     haushalt: 1,
-    nettoEinkommen: 2600,
+    nettoEinkommen: 0,
     raucher: false,
     haustiere: 'keine',
     /* Suchauftrag */
-    staedte: ['Köln'],
+    staedte: [],
     viertel: [],
     arten: ['miete', 'wg'],
-    budgetWarm: 1100,
-    zimmerMin: 1.5,
-    flaecheMin: 40,
-    mussHaben: ['Waschmaschinenanschluss'],
-    schoenWaere: ['Balkon', 'Einbauküche'],
+    budgetWarm: 0,
+    zimmerMin: null,
+    flaecheMin: null,
+    mussHaben: [],
+    schoenWaere: [],
     einzugAb: '',
     /* Anker für Pendelzeiten */
     anker: [],
@@ -2930,25 +2964,11 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   /* ------------------------- Erste Nachrichten ------------------------- */
 
+  /* Ein frisch geöffnetes Konto hat keine Nachrichten. Vorbelegte
+     Verläufe würden behaupten, jemand warte auf eine Antwort, obwohl
+     noch nie jemand angeschrieben wurde. */
   function startThreads() {
-    const r = U.rng(SEED + 99);
-    const kandidaten = listings.filter((l) => !l.verdacht).slice(0, 400);
-    const auswahl = U.pickN(r, kandidaten, 3);
-    return auswahl.map((l, i) => ({
-      id: 'th-' + i,
-      listingId: l.id,
-      partner: l.anbieter.name,
-      ungelesen: i === 0 ? 1 : 0,
-      nachrichten: [
-        {
-          von: 'partner',
-          zeit: dateOffset(-(3 - i)),
-          text: i === 0
-            ? 'Hallo, danke für Ihr Interesse an ' + l.titel + '. Es sind noch Termine frei – passt Ihnen einer der vorgeschlagenen Zeitpunkte?'
-            : 'Guten Tag, die Wohnung ist weiterhin verfügbar. Melden Sie sich gern bei Fragen.'
-        }
-      ]
-    }));
+    return [];
   }
 
   NW.data = {
@@ -3425,6 +3445,40 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     };
   }
 
+  /* Das Profil ist die eine Stelle, an der jemand seine Suche beschreibt.
+     Daraus einen Filter zu bauen, ist genau die Arbeit, die niemand
+     zweimal machen sollte. */
+  function filterAusProfil(profil, vorlage) {
+    const f = vorlage ? JSON.parse(JSON.stringify(vorlage)) : leerFilter();
+    const p = profil || {};
+    if (p.staedte && p.staedte.length) f.staedte = p.staedte.slice();
+    if (p.viertel && p.viertel.length) f.viertel = p.viertel.slice();
+    if (p.budgetWarm) f.preisMax = p.budgetWarm;
+    if (p.zimmerMin) f.zimmerMin = p.zimmerMin;
+    if (p.flaecheMin) f.flaecheMin = p.flaecheMin;
+    if (p.einzugAb) f.freiBis = p.einzugAb;
+    if (p.mussHaben && p.mussHaben.length) f.ausstattung = p.mussHaben.slice();
+    if (p.arten && p.arten.length) f.arten = p.arten.slice();
+    return f;
+  }
+
+  /* Wo Filter und Profil auseinanderlaufen – damit die Suche darauf
+     hinweisen kann, statt es stillschweigend zu ignorieren. */
+  function profilAbweichung(filter, profil) {
+    const p = profil || {}, ab = [];
+    if (p.staedte && p.staedte.length && filter.staedte.length &&
+      p.staedte.join() !== filter.staedte.join()) {
+      ab.push({ feld: 'staedte', label: 'Städte', profil: p.staedte.join(', '), filter: filter.staedte.join(', ') });
+    }
+    if (p.budgetWarm && filter.preisMax && filter.preisMax !== p.budgetWarm) {
+      ab.push({ feld: 'preisMax', label: 'Budget', profil: p.budgetWarm + ' €', filter: filter.preisMax + ' €' });
+    }
+    if (p.flaecheMin && filter.flaecheMin && filter.flaecheMin !== p.flaecheMin) {
+      ab.push({ feld: 'flaecheMin', label: 'Fläche', profil: p.flaecheMin + ' m²', filter: filter.flaecheMin + ' m²' });
+    }
+    return ab;
+  }
+
   function passtText(l, q) {
     if (!q) return true;
     const worte = U.norm(q).split(' ').filter(Boolean);
@@ -3504,19 +3558,32 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   }
 
   /* Marktüberblick zur aktuellen Trefferliste. */
+  /* WG-Zimmer kosten je m² systematisch mehr als Wohnungen. Beides in
+     einen Mittelwert zu werfen erzeugt eine Zahl, die für keine der
+     beiden Welten stimmt – deshalb getrennt. Und unter drei Treffern
+     gibt es überhaupt keinen sinnvollen Mittelwert. */
+  const MARKT_MINDEST = 3;
+
   function marktLage(treffer) {
     if (!treffer.length) return null;
-    const mieten = treffer.filter((l) => l.kind !== 'kauf');
-    const werte = mieten.map((l) => l.kalt / l.flaeche).sort((a, b) => a - b);
-    const warm = mieten.map((l) => l.warm).sort((a, b) => a - b);
-    const med = (arr) => arr.length ? arr[Math.floor(arr.length / 2)] : 0;
+    const med = (arr) => arr.length ? arr.slice().sort((a, b) => a - b)[Math.floor(arr.length / 2)] : 0;
+    const wohnungen = treffer.filter((l) => l.kind === 'miete' || l.kind === 'tausch');
+    const zimmer = treffer.filter((l) => l.kind === 'wg');
+    const kauf = treffer.filter((l) => l.kind === 'kauf');
+
     return {
       anzahl: treffer.length,
-      medianQm: Math.round(med(werte) * 100) / 100,
-      medianWarm: Math.round(med(warm)),
+      genugFuerMittel: treffer.length >= MARKT_MINDEST,
+      wohnungen: wohnungen.length,
+      zimmer: zimmer.length,
+      kauf: kauf.length,
+      medianQm: wohnungen.length >= MARKT_MINDEST ? Math.round(med(wohnungen.map((l) => l.kalt / l.flaeche)) * 100) / 100 : null,
+      medianWarm: wohnungen.length >= MARKT_MINDEST ? Math.round(med(wohnungen.map((l) => l.warm))) : null,
+      medianZimmerWarm: zimmer.length >= MARKT_MINDEST ? Math.round(med(zimmer.map((l) => l.warm))) : null,
+      medianKauf: kauf.length >= MARKT_MINDEST ? Math.round(med(kauf.map((l) => l.kaufpreis))) : null,
       neu7: treffer.filter((l) => U.daysSince(l.stats.online) <= 7).length,
       provisionsfrei: treffer.filter((l) => l.provision === 0).length,
-      medianBewerber: med(treffer.map((l) => l.stats.bewerber).sort((a, b) => a - b))
+      medianBewerber: treffer.length >= MARKT_MINDEST ? med(treffer.map((l) => l.stats.bewerber)) : null
     };
   }
 
@@ -3524,7 +3591,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     ENERGIE_RANG, GRUNDERWERB,
     mietCheck, kaufCheck, risikoCheck, klauselCheck, KLAUSELN,
     kosten, finanzierung, bewerten, pendelZeit,
-    leerFilter, filtern, sortieren, marktLage, passtText
+    leerFilter, filterAusProfil, profilAbweichung, filtern, sortieren, marktLage, passtText
   };
 })(window.NW = window.NW || {});
 
@@ -3785,6 +3852,13 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const faktoren = [];
     const tipps = [];
 
+    /* Ohne Angaben weiß Nestwerk nichts – und tut dann besser so, als
+       wüsste es nichts, statt eine schwache Bewerbung zu unterstellen.
+       Wer gerade erst angekommen ist, hat nicht schlechte Chancen,
+       sondern noch kein Profil. */
+    const unterlagenDa = Object.keys(p.unterlagen || {}).filter((k) => p.unterlagen[k]).length;
+    const kenntNichts = !p.nettoEinkommen && !unterlagenDa;
+
     /* Ausgangspunkt: Wer hat sich sonst noch beworben? */
     const mitbewerber = Math.max(0, l.stats.bewerber);
     let chance = 1 / (mitbewerber + 1);
@@ -3868,6 +3942,22 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
     chance = U.clamp(chance * vielfach, 0.005, 0.85);
     const prozent = Math.round(chance * 100);
+
+    if (kenntNichts) {
+      return {
+        prozent, mitbewerber, faktoren: faktoren.filter((f) => f.label === 'Zeitpunkt' || f.label === 'Anbieter'),
+        tipps: ['Trag Einkommen und vorhandene Unterlagen im Profil ein – danach kann Nestwerk deine Chancen wirklich einschätzen.']
+          .concat(l.besichtigungen.length ? ['Nimm einen der hinterlegten Termine sofort – gebuchte Termine kommen vor formlosen Anfragen.'] : []),
+        staerke: 'unbekannt', andrang: mitbewerber === 0 ? 'keiner' : mitbewerber < 8 ? 'gering'
+          : mitbewerber < 30 ? 'spürbar' : mitbewerber < 80 ? 'hoch' : 'sehr hoch',
+        stufe: 'unbekannt',
+        satz: 'Über deine Bewerbung weiß Nestwerk noch nichts – ohne Einkommen und Unterlagen im Profil lässt sich '
+          + 'nichts einschätzen. Was feststeht: '
+          + (mitbewerber === 0 ? 'Bisher hat sich niemand sonst gemeldet.'
+            : mitbewerber === 1 ? 'Bisher hat sich eine weitere Person gemeldet.'
+              : 'Es haben sich bereits ' + mitbewerber + ' andere gemeldet.')
+      };
+    }
 
     /* Zwei Dinge, die nichts miteinander zu tun haben, und die deshalb
        getrennt gehören: Wie gut deine Bewerbung ist – das kannst du
@@ -4336,7 +4426,34 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     return { reihenfolge, gesamtMinuten: Math.round(fahrt), konflikte };
   }
 
+  /* Ein Anschreiben, das Unterlagen zusagt, die es nicht gibt, fliegt
+     spätestens bei der Besichtigung auf. Der Satz richtet sich deshalb
+     nach der tatsächlichen Mappe. Schufa und Ausweis bleiben bewusst
+     draußen: Die gehören erst dazu, wenn die Wohnung ernsthaft in
+     Betracht kommt. */
+  const UNTERLAGEN_NAMEN = {
+    selbstauskunft: 'die Selbstauskunft',
+    gehaltsnachweise: 'die letzten drei Einkommensnachweise',
+    mietschuldenfrei: 'die Mietschuldenfreiheitsbescheinigung',
+    buergschaft: 'eine Bürgschaft',
+    wbs: 'den Wohnberechtigungsschein'
+  };
+
+  function unterlagenSatz(profil) {
+    const u = (profil && profil.unterlagen) || {};
+    const da = Object.keys(UNTERLAGEN_NAMEN).filter((k) => u[k]).map((k) => UNTERLAGEN_NAMEN[k]);
+    if (!da.length) {
+      return 'Meine Unterlagen stelle ich zusammen, sobald ein Termin steht.';
+    }
+    const liste = da.length === 1 ? da[0]
+      : da.slice(0, -1).join(', ') + ' und ' + da[da.length - 1];
+    const satz = liste.charAt(0).toUpperCase() + liste.slice(1) + ' bringe ich zur Besichtigung mit.';
+    const fehlt = Object.keys(UNTERLAGEN_NAMEN).filter((k) => !u[k] && k !== 'buergschaft' && k !== 'wbs');
+    return fehlt.length ? satz + ' Was darüber hinaus nötig ist, reiche ich kurzfristig nach.' : satz;
+  }
+
   NW.werkzeuge = {
+    unterlagenSatz,
     chancen, duplikate, preisreihe, preisvergleich,
     leistbarkeit, wbsPruefung, WBS_BUND, WBS_ABZUEGE,
     wohngeldPruefung, WOHNGELD_AUSSCHLUSS,
@@ -4411,6 +4528,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     profil: JSON.parse(JSON.stringify(NW.data.profilVorlage)),
     profilAngelegt: false,
     filter: NW.analyse.leerFilter(),
+    filterBeruehrt: false,   /* solange false, folgt die Suche dem Profil */
     merkliste: {},          /* id -> { status, notiz, hinzu, termin, checkliste } */
     vergleich: [],
     agenten: [],
@@ -4655,9 +4773,17 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   /* ------------------------- Umzug ------------------------- */
 
+  /* Das Einzugsdatum steht schon im Profil – danach noch einmal zu
+     fragen wäre reine Doppelarbeit. */
+  function einzugsdatum() {
+    const s = get();
+    return s.einzugsdatum || s.profil.einzugAb || '';
+  }
+
   function umzugsPlan() {
     const s = get();
-    const datum = s.einzugsdatum ? new Date(s.einzugsdatum + 'T12:00:00') : null;
+    const roh = einzugsdatum();
+    const datum = roh ? new Date(roh + 'T12:00:00') : null;
     return UMZUG_VORLAGE.map((a) => ({
       id: a.id, label: a.label, gruppe: a.gruppe, hinweis: a.hinweis, wann: a.wann,
       faellig: datum ? U.isoDate(U.addDays(datum, a.wann)) : null,
@@ -4707,7 +4833,33 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     update((s) => { s.werkzeuge[name] = Object.assign({}, s.werkzeuge[name], werte); }, 'werkzeuge');
   }
 
-  const werkzeugWerte = (name, vorgabe) => Object.assign({}, vorgabe, get().werkzeuge[name] || {});
+  /* Was das Profil sicher weiß, muss in keinem Rechner erneut eingetippt
+     werden. Angaben, die das Profil nicht kennt, bleiben bei der Vorgabe. */
+  function ausProfil(name) {
+    const p = get().profil;
+    if (name === 'leistbarkeit') {
+      const o = {};
+      if (p.nettoEinkommen) o.netto = p.nettoEinkommen;
+      if (p.haushalt) o.haushalt = p.haushalt;
+      if (p.eigenkapital) o.eigenkapital = p.eigenkapital;
+      return o;
+    }
+    if (name === 'wohngeld') {
+      const o = {};
+      if (p.haushalt) o.personen = p.haushalt;
+      if (p.budgetWarm) o.miete = p.budgetWarm;
+      return o;
+    }
+    if (name === 'wbs') {
+      const o = {};
+      if (p.haushalt) o.personen = p.haushalt;
+      return o;
+    }
+    return {};
+  }
+
+  const werkzeugWerte = (name, vorgabe) =>
+    Object.assign({}, vorgabe, ausProfil(name), get().werkzeuge[name] || {});
 
   /* ------------------------- Zurücksetzen ------------------------- */
 
@@ -4727,7 +4879,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     threadFuer, anschreiben, threadGelesen,
     terminBuchen, terminAbsagen, checkSetzen,
     inseratAnlegen, inseratLoeschen, gesehenMerken,
-    umzugsPlan, umzugSetzen, zuruecksetzen,
+    umzugsPlan, umzugSetzen, einzugsdatum, zuruecksetzen,
     nachfassFaellig, nachgefasst, protokollSetzen, werkzeugSetzen, werkzeugWerte
   };
 })(window.NW = window.NW || {});
@@ -5510,21 +5662,45 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
      Meldungen und Dialoge
      ================================================================ */
 
-  let toastTimer = null;
+  const TOAST_MAX = 3;
+
+  /* Meldungen dürfen sich nicht stapeln. Wer ein Formular ausfüllt,
+     löst schnell ein Dutzend gleicher Hinweise aus – und sieht dann eine
+     Wand aus Meldungen statt der Seite. Deshalb: gleiche Meldung wird
+     aufgefrischt statt verdoppelt, und mehr als drei gleichzeitig gibt
+     es nie. */
   function toast(text, art) {
     const box = U.$('#toasts');
     if (!box) return;
+
+    const vorhanden = U.$$('.toast', box).find((t) => t.dataset.text === String(text));
+    if (vorhanden) {
+      vorhanden.classList.remove('is-weg');
+      vorhanden.classList.add('is-frisch');
+      setTimeout(() => vorhanden.classList.remove('is-frisch'), 200);
+      planeAbgang(vorhanden);
+      return;
+    }
+
     const el = document.createElement('div');
     el.className = 'toast toast--' + (art || 'info');
+    el.dataset.text = String(text);
     el.setAttribute('role', 'status');
     el.innerHTML = h`${ico(art === 'schlecht' ? 'warnung' : art === 'gut' ? 'pruefen' : 'info')}<span>${text}</span>`;
     box.appendChild(el);
-    clearTimeout(toastTimer);
-    setTimeout(() => {
+
+    const alle = U.$$('.toast', box);
+    if (alle.length > TOAST_MAX) alle.slice(0, alle.length - TOAST_MAX).forEach((x) => x.remove());
+    planeAbgang(el);
+  }
+
+  function planeAbgang(el) {
+    clearTimeout(Number(el.dataset.timer));
+    el.dataset.timer = String(setTimeout(() => {
       el.classList.add('is-weg');
       el.addEventListener('transitionend', () => el.remove(), { once: true });
       setTimeout(() => el.remove(), 800);
-    }, 3600);
+    }, 3600));
   }
 
   /* Notweg, wenn kein Speichern möglich ist: Inhalt zum Herauskopieren. */
@@ -5657,12 +5833,74 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     });
 
     if (ergebnis.danach) ergebnis.danach(haupt);
-    if (wechsel) window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    /* Nur bei einem echten Ansichtswechsel nach oben – nicht bei jedem
+       Neuaufbau derselben Seite. */
+    if (wechsel && !erzwingen) scrolleSofort(0);
     aktualisiereZaehler();
   }
 
-  /* Wiederaufbau der aktuellen Ansicht nach Zustandsänderung. */
-  function neuZeichnen() { zeichnen(true); }
+  /* Wiederaufbau der aktuellen Ansicht nach einer Zustandsänderung.
+
+     Die Ansicht wird komplett neu gebaut – deshalb muss hier bewahrt
+     werden, was sonst verlorenginge: die Stelle, an der jemand gerade
+     liest, und der Tastaturfokus. Ohne das springt die Seite bei jedem
+     Klick aufs Herz, und wer mit der Tastatur bedient, landet wieder
+     ganz am Anfang. */
+  function merkmalDesFokus() {
+    const el = document.activeElement;
+    if (!el || el === document.body || !document.getElementById('haupt')) return null;
+    if (!document.getElementById('haupt').contains(el)) return null;
+    const d = el.dataset || {};
+    return {
+      id: el.id || null,
+      tu: d.tu || d.tuChange || d.tuInput || null,
+      datenId: d.id || null,
+      feld: d.feld || null,
+      wert: d.wert || null,
+      auswahl: el.selectionStart != null ? [el.selectionStart, el.selectionEnd] : null
+    };
+  }
+
+  function fokusWiederherstellen(m) {
+    if (!m) return;
+    let ziel = null;
+    if (m.id) ziel = document.getElementById(m.id);
+    if (!ziel && m.tu) {
+      const kandidaten = U.$$('[data-tu="' + m.tu + '"],[data-tu-change="' + m.tu + '"],[data-tu-input="' + m.tu + '"]');
+      ziel = kandidaten.find((el) => {
+        const d = el.dataset;
+        return (!m.datenId || d.id === m.datenId) && (!m.feld || d.feld === m.feld) && (!m.wert || d.wert === m.wert);
+      }) || null;
+    }
+    if (!ziel) return;
+    try {
+      ziel.focus({ preventScroll: true });
+      if (m.auswahl && ziel.setSelectionRange) ziel.setSelectionRange(m.auswahl[0], m.auswahl[1]);
+    } catch (e) { /* manche Elemente lassen sich nicht fokussieren */ }
+  }
+
+  /* Sprungfrei scrollen: Für Sprungmarken ist weiches Scrollen richtig,
+     beim Wiederherstellen nach einem Neuaufbau wäre es eine sichtbare
+     Rutschpartie. Deshalb hier ausdrücklich ohne Animation. */
+  function scrolleSofort(y) {
+    try {
+      window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+    } catch (e) {
+      const wurzel = document.documentElement;
+      const alt = wurzel.style.scrollBehavior;
+      wurzel.style.scrollBehavior = 'auto';
+      window.scrollTo(0, y);
+      wurzel.style.scrollBehavior = alt;
+    }
+  }
+
+  function neuZeichnen() {
+    const y = window.scrollY;
+    const fokus = merkmalDesFokus();
+    zeichnen(true);
+    scrolleSofort(y);
+    fokusWiederherstellen(fokus);
+  }
 
   /* ================================================================
      Kopf und Navigation
@@ -6428,11 +6666,22 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       : [];
     const hatAnker = s.profil.anker && s.profil.anker.length;
 
+    const abweichung = s.profilAngelegt ? A.profilAbweichung(f, s.profil) : [];
+
     return h`<form class="filter" data-tu-submit="filter-abschicken">
       <div class="filter__kopf">
         <h2>Filter</h2>
         <button type="button" class="link" data-tu="filter-leeren">Zurücksetzen</button>
       </div>
+
+      ${s.profilAngelegt ? h`<div class="profilbezug">
+        <button type="button" class="knopf knopf--still knopf--klein knopf--voll" data-tu="filter-aus-profil">
+          ${ico('person')}Aus meinem Profil füllen</button>
+        ${abweichung.length ? h`<p class="profilbezug__abweichung">
+          ${ico('info')}Weicht ab: ${abweichung.map((a) => a.label + ' (Profil: ' + a.profil + ')').join(', ')}</p>` : ''}
+      </div>` : h`<p class="filter__hinweis filter__hinweis--tipp">
+        ${ico('person')}Leg ein <a href="#/profil">Profil</a> an, dann füllt Nestwerk diese Filter von selbst –
+        und du musst nichts zweimal eintippen.</p>`}
 
       <fieldset class="filter__gruppe">
         <legend>Städte</legend>
@@ -6562,38 +6811,150 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const m = A.marktLage(treffer);
     if (!m) return '';
     return h`<div class="markt">
-      <span><b>${U.num(m.anzahl)}</b> Treffer</span>
-      ${m.medianQm ? h`<span><b>${U.dec(m.medianQm)} €/m²</b> mittlere Kaltmiete</span>` : ''}
-      ${m.medianWarm ? h`<span><b>${U.eur(m.medianWarm)}</b> mittlere Warmmiete</span>` : ''}
+      <span><b>${U.num(m.anzahl)}</b> ${U.plural(m.anzahl, 'Treffer', 'Treffer')}</span>
+      ${m.medianWarm ? h`<span><b>${U.eur(m.medianWarm)}</b> mittlere Warmmiete
+        ${m.medianQm ? h`(${U.dec(m.medianQm)} €/m² kalt)` : ''}</span>` : ''}
+      ${m.medianZimmerWarm ? h`<span><b>${U.eur(m.medianZimmerWarm)}</b> mittleres WG-Zimmer</span>` : ''}
+      ${m.medianKauf ? h`<span><b>${U.eur(m.medianKauf)}</b> mittlerer Kaufpreis</span>` : ''}
       <span><b>${m.neu7}</b> neu in 7 Tagen</span>
-      <span><b>${m.medianBewerber}</b> Interessenten im Mittel</span>
+      ${m.medianBewerber !== null ? h`<span><b>${m.medianBewerber}</b> Interessenten im Mittel</span>` : ''}
+      ${!m.genugFuerMittel ? h`<span class="markt__wenig">zu wenige Treffer für Mittelwerte</span>` : ''}
     </div>`;
   }
 
   /* ------------------------- Ergebnisliste ------------------------- */
 
+  /* Ein Vorschlag, der die Lage nicht ändert, ist keiner. Deshalb wird
+     jede Lockerung vorab durchgerechnet und mit ihrem Ertrag beschriftet.
+     Was nichts bringt, taucht gar nicht erst auf. */
+  /* Jede Lockerung steht genau einmal hier: mit Beschriftung, Bedingung
+     und Wirkung. Anzeige und Knopfdruck greifen auf dieselbe Stelle zu,
+     sodass der Knopf nie etwas anderes tut, als sein Text verspricht.
+
+     Entscheidend ist das Feld `schmerz`: Ein Vorschlag allein nach Ertrag
+     zu sortieren führt dazu, dass „such doch in einer anderen Stadt“ ganz
+     oben steht – der Vorschlag bringt naturgemäß die meisten Treffer und
+     ist zugleich der einzige, der die Suche im Kern verändert. Wer wegen
+     einer Stelle nach Köln zieht, ist mit fünf Berliner Wohnungen nicht
+     geholfen. Deshalb wird Ertrag gegen Schmerz abgewogen, und was die
+     Suche grundlegend umdeutet, steht immer hinten und sagt das auch. */
+  const LOCKERUNGEN = [
+    {
+      tu: 'lockern-preis', gilt: (f) => !!f.preisMax, schmerz: 3,
+      /* In Stufen versuchen, bis eine wirklich Treffer bringt. */
+      stufen: [1.1, 1.25, 1.5],
+      label: (f, wert) => 'Budget auf ' + U.eur(wert) + ' anheben',
+      wert: (f, stufe) => Math.round(f.preisMax * stufe / 10) * 10,
+      aendern: (k, wert) => { k.preisMax = wert; }
+    },
+    { tu: 'lockern-ausstattung', gilt: (f) => f.ausstattung.length > 0, schmerz: 1,
+      label: () => 'Ausstattungswünsche zurücksetzen', aendern: (k) => { k.ausstattung = []; } },
+    { tu: 'lockern-viertel', gilt: (f) => f.viertel.length > 0, schmerz: 2,
+      label: () => 'ganze Stadt statt einzelner Viertel', aendern: (k) => { k.viertel = []; } },
+    { tu: 'lockern-flaeche', gilt: (f) => !!f.flaecheMin, schmerz: 2,
+      label: (f) => Math.max(15, f.flaecheMin - 10) + ' m² statt ' + f.flaecheMin + ' m²',
+      aendern: (k, w, f) => { k.flaecheMin = Math.max(15, f.flaecheMin - 10); } },
+    { tu: 'lockern-zimmer', gilt: (f) => !!f.zimmerMin && f.zimmerMin > 1, schmerz: 2,
+      label: () => 'ein halbes Zimmer weniger',
+      aendern: (k, w, f) => { k.zimmerMin = Math.max(1, f.zimmerMin - 0.5); } },
+    { tu: 'lockern-pendel', gilt: (f) => !!f.maxPendel, schmerz: 3,
+      label: (f) => 'Arbeitsweg bis ' + Math.round(f.maxPendel * 1.6) + ' Min. zulassen',
+      aendern: (k, w, f) => { k.maxPendel = Math.round(f.maxPendel * 1.6); } },
+    { tu: 'lockern-umkreis', gilt: (f) => !!f.umkreis, schmerz: 2,
+      label: (f) => 'Umkreis auf ' + U.dec(Math.min(25, f.umkreis.km * 2)) + ' km',
+      aendern: (k, w, f) => { if (k.umkreis) k.umkreis.km = Math.min(25, f.umkreis.km * 2); } },
+    { tu: 'lockern-arten', gilt: (f) => f.arten.indexOf('wg') < 0, schmerz: 4, gross: true,
+      label: () => 'auch WG-Zimmer zeigen',
+      aendern: (k) => { k.arten = U.uniq(k.arten.concat(['wg'])); } },
+    { tu: 'lockern-staedte', gilt: (f) => f.staedte.length > 0, schmerz: 5, gross: true,
+      label: () => 'auch in anderen Städten suchen', aendern: (k) => { k.staedte = []; k.viertel = []; } },
+    { tu: 'lockern-energie', gilt: (f) => !!f.energieMax, schmerz: 1,
+      label: () => 'Energieklasse offen lassen', aendern: (k) => { k.energieMax = null; } },
+    { tu: 'lockern-provision', gilt: (f) => f.provisionsfrei, schmerz: 3,
+      label: () => 'auch Inserate mit Provision zeigen', aendern: (k) => { k.provisionsfrei = false; } },
+    { tu: 'lockern-anbieter', gilt: (f) => f.anbieterArt.length > 0, schmerz: 2,
+      label: () => 'alle Anbieterarten zulassen', aendern: (k) => { k.anbieterArt = []; } }
+    /* Bewusst nicht dabei: den Prüfhinweis abschalten. Betrugsschutz ist
+       keine Stellschraube, an der man dreht, um mehr Treffer zu bekommen. */
+  ];
+
+  function zaehle(f) {
+    const s = S.get();
+    return A.filtern(NW.data.listings.concat(s.eigeneInserate), f, s.profil).length;
+  }
+
+  /* Liefert für eine Lockerung den konkreten Zielwert und den Ertrag –
+     oder null, wenn sie nichts ändert. */
+  function pruefeLockerung(eintrag, f, jetzt) {
+    if (!eintrag.gilt(f)) return null;
+    const stufen = eintrag.stufen || [null];
+    for (let i = 0; i < stufen.length; i++) {
+      const wert = eintrag.wert ? eintrag.wert(f, stufen[i]) : null;
+      const kopie = JSON.parse(JSON.stringify(f));
+      eintrag.aendern(kopie, wert, f);
+      const neu = zaehle(kopie);
+      if (neu > jetzt) {
+        return {
+          tu: eintrag.tu, label: eintrag.label(f, wert), wert,
+          gewinn: neu - jetzt, danach: neu,
+          schmerz: eintrag.schmerz || 2, gross: !!eintrag.gross
+        };
+      }
+    }
+    return null;
+  }
+
+  function lockerungen(f) {
+    const jetzt = zaehle(f);
+    const alle = LOCKERUNGEN.map((e) => pruefeLockerung(e, f, jetzt)).filter(Boolean);
+    /* Ertrag je Einheit Schmerz. Was die Suche grundlegend umdeutet
+       (andere Stadt, andere Wohnform), rutscht ans Ende. */
+    const sanft = alle.filter((x) => !x.gross).sort((a, b) => b.gewinn / b.schmerz - a.gewinn / a.schmerz);
+    const gross = alle.filter((x) => x.gross).sort((a, b) => b.gewinn - a.gewinn);
+    return sanft.slice(0, 3).concat(gross.slice(0, sanft.length ? 1 : 2));
+  }
+
+  function lockerungsKnoepfe(f) {
+    const vorschlaege = lockerungen(f);
+    if (!vorschlaege.length) return '';
+    const sanft = vorschlaege.filter((v) => !v.gross);
+    const gross = vorschlaege.filter((v) => v.gross);
+    return h`${sanft.length ? h`<div class="leer__tun">
+        ${sanft.map((v) => h`<button type="button" class="knopf knopf--still" data-tu="${v.tu}">
+          ${v.label}<em>+${v.gewinn}</em></button>`)}
+      </div>` : ''}
+      ${gross.length ? h`<div class="leer__gross">
+        <p>${sanft.length ? 'Wenn das nicht reicht' : 'Es hilft nur noch'} – das ändert deine Suche allerdings grundlegend:</p>
+        <div class="leer__tun">
+          ${gross.map((v) => h`<button type="button" class="knopf knopf--still" data-tu="${v.tu}">
+            ${v.label}<em>+${v.gewinn}</em></button>`)}
+        </div>
+      </div>` : ''}`;
+  }
+
   function leerHinweis(f) {
-    const vorschlaege = [];
-    if (f.preisMax) vorschlaege.push({ label: 'Preisgrenze um 15 % anheben', tu: 'lockern-preis' });
-    if (f.ausstattung.length) vorschlaege.push({ label: 'Ausstattungswünsche zurücksetzen', tu: 'lockern-ausstattung' });
-    if (f.viertel.length) vorschlaege.push({ label: 'ganze Stadt statt einzelner Viertel', tu: 'lockern-viertel' });
-    if (f.maxPendel) vorschlaege.push({ label: 'längeren Arbeitsweg zulassen', tu: 'lockern-pendel' });
-    if (f.umkreis) vorschlaege.push({ label: 'Umkreis verdoppeln', tu: 'lockern-umkreis' });
-    if (f.arten.length < 4) vorschlaege.push({ label: 'alle vier Angebotsarten einbeziehen', tu: 'lockern-arten' });
+    const vorschlaege = lockerungen(f);
     return h`<div class="leer">
       ${ico('lupe')}
       <h3>Keine Treffer</h3>
-      <p>Die Filter zusammen lassen nichts übrig. Diese Stellschrauben helfen am schnellsten:</p>
-      <div class="leer__tun">
-        ${vorschlaege.map((v) => h`<button type="button" class="knopf knopf--still" data-tu="${v.tu}">${v.label}</button>`)}
-      </div>
+      <p>${vorschlaege.length
+        ? 'Die Filter zusammen lassen nichts übrig. Diese Änderungen bringen sofort Treffer – die Zahl dahinter sagt, wie viele:'
+        : 'Die Filter zusammen lassen nichts übrig, und keine einzelne Lockerung reicht aus. Setz die Filter zurück und fang enger an.'}</p>
+      ${lockerungsKnoepfe(f)}
+      ${!vorschlaege.length ? h`<p><button type="button" class="knopf" data-tu="filter-leeren">Filter zurücksetzen</button></p>` : ''}
     </div>`;
   }
 
+  const WENIG = 4;
+
   function ergebnisListe(bewertet) {
-    if (!bewertet.length) return leerHinweis(S.get().filter);
+    const f = S.get().filter;
+    if (!bewertet.length) return leerHinweis(f);
     const teil = bewertet.slice(0, sichtbar);
     const rest = bewertet.length - teil.length;
+    /* Zwei Treffer sind fast so wenig wie keiner – die Hilfe darf nicht
+       erst bei null erscheinen. */
+    const knapp = bewertet.length < WENIG ? lockerungsKnoepfe(f) : '';
     /* Anzeigen sitzen zwischen den Treffern, nie in der Reihenfolge:
        sie haben eine eigene Gestalt und tragen immer ihre Kennzeichnung. */
     const abstand = NW.plan.ANZEIGE_ABSTAND;
@@ -6601,6 +6962,13 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       ${teil.map((x, i) => h`${ui.inseratsKarte(x.l, x.b)}${(i + 1) % abstand === 0 && i + 1 < teil.length
         ? ui.anzeige('treffer-' + Math.floor(i / abstand), 'breit') : ''}`)}
     </div>
+    ${knapp ? h`<div class="wenig">
+      ${ico('lupe')}
+      <div>
+        <b>Nur ${bewertet.length} ${U.plural(bewertet.length, 'Treffer', 'Treffer')}</b>
+        <p>So findest du mehr – die Zahl sagt, wie viele dazukommen:</p>
+      </div>
+    </div>${knapp}` : ''}
     ${rest > 0 ? h`<div class="mehr">
       <button type="button" class="knopf knopf--still" data-tu="mehr-zeigen">
         ${ico('pfeilUnten')}Weitere ${Math.min(SEITE, rest)} von ${U.num(rest)} zeigen</button>
@@ -6650,6 +7018,14 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const s = S.get();
     const f = s.filter;
 
+    /* Solange niemand die Filter angefasst hat, folgt die Suche dem
+       Profil. Wer einmal selbst filtert, behält die Kontrolle. */
+    if (!s.filterBeruehrt && s.profilAngelegt) {
+      const abgeleitet = A.filterAusProfil(s.profil, f);
+      Object.assign(f, abgeleitet);
+      S.set({ filter: f }, 'filter');
+    }
+
     /* Parameter aus der Adresse übernehmen, z. B. aus der Schnellsuche. */
     if (route.params.stadt) { f.staedte = [route.params.stadt]; f.viertel = []; }
     if (route.params.viertel) {
@@ -6658,7 +7034,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     }
     if (route.params.q !== undefined) f.q = route.params.q;
     if (route.params.art) f.arten = route.params.art.split(',');
-    if (Object.keys(route.params).length) S.set({ filter: f }, 'filter');
+    if (Object.keys(route.params).length) S.set({ filter: f, filterBeruehrt: true }, 'filter');
 
     const bewertet = rechnen();
     const ansichtsart = s.ansicht;
@@ -6741,7 +7117,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   function filterAendern(patch) {
     const f = Object.assign(S.get().filter, patch);
     sichtbar = SEITE;
-    S.set({ filter: f }, 'filter');
+    S.set({ filter: f, filterBeruehrt: true }, 'filter');
   }
 
   const A_ = ui.aktionRegistrieren;
@@ -6761,7 +7137,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const i = f.arten.indexOf(el.dataset.wert);
     if (i >= 0) { if (f.arten.length > 1) f.arten.splice(i, 1); }
     else f.arten.push(el.dataset.wert);
-    S.set({ filter: f }, 'filter');
+    S.set({ filter: f, filterBeruehrt: true }, 'filter');
     ui.neuZeichnen();
   });
 
@@ -6796,7 +7172,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     if (i >= 0) liste.splice(i, 1); else liste.push(wert);
     f[feld] = liste;
     if (feld === 'staedte') f.viertel = f.viertel.filter((v) => f.staedte.indexOf(v.split('|')[0]) >= 0);
-    S.set({ filter: f }, 'filter');
+    S.set({ filter: f, filterBeruehrt: true }, 'filter');
     if (feld === 'staedte') ui.neuZeichnen();
     else { el.classList.toggle('is-an'); el.setAttribute('aria-pressed', el.classList.contains('is-an') ? 'true' : 'false'); aktualisieren(); }
   });
@@ -6808,9 +7184,20 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const arten = S.get().filter.arten;
     const neu = A.leerFilter();
     neu.arten = arten;
-    S.set({ filter: neu }, 'filter');
+    sichtbar = SEITE;
+    S.set({ filter: neu, filterBeruehrt: false }, 'filter');
     ui.neuZeichnen();
     ui.toast('Filter zurückgesetzt.');
+  });
+
+  A_('filter-aus-profil', () => {
+    const s = S.get();
+    const neu = A.filterAusProfil(s.profil, s.filter);
+    sichtbar = SEITE;
+    S.set({ filter: neu, filterBeruehrt: true }, 'filter');
+    ui.neuZeichnen();
+    const treffer = A.filtern(NW.data.listings.concat(s.eigeneInserate), neu, s.profil).length;
+    ui.toast('Filter aus deinem Profil übernommen – ' + treffer + ' ' + U.plural(treffer, 'Treffer', 'Treffer') + '.', 'gut');
   });
 
   A_('filter-abschicken', () => aktualisieren());
@@ -6824,8 +7211,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       titel: 'Filter',
       breit: true,
       inhalt: filterPanel(),
-      fuss: h`<button type="button" class="knopf knopf--voll" data-tu="dialog-zu">
-        <span id="treffer-anzahl">${U.num(letzteTreffer.length)}</span>&nbsp;Treffer zeigen</button>`,
+      fuss: h`<button type="button" class="knopf knopf--voll" data-tu="dialog-zu"><span
+        id="treffer-anzahl">${U.num(letzteTreffer.length)}</span>&nbsp;Treffer zeigen</button>`,
       beimSchliessen: () => ui.neuZeichnen()
     });
   });
@@ -6842,13 +7229,20 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     if (anzeige) anzeige.textContent = U.dec(f.umkreis.km) + ' km um den gesetzten Punkt';
   }, 120));
 
-  /* Lockerungen aus dem Leer-Zustand */
-  A_('lockern-preis', () => { const f = S.get().filter; f.preisMax = Math.round(f.preisMax * 1.15); S.set({ filter: f }); ui.neuZeichnen(); });
-  A_('lockern-ausstattung', () => { filterAendern({ ausstattung: [] }); ui.neuZeichnen(); });
-  A_('lockern-viertel', () => { filterAendern({ viertel: [] }); ui.neuZeichnen(); });
-  A_('lockern-pendel', () => { const f = S.get().filter; f.maxPendel = Math.round((f.maxPendel || 30) * 1.6); S.set({ filter: f }); ui.neuZeichnen(); });
-  A_('lockern-umkreis', () => { const f = S.get().filter; if (f.umkreis) f.umkreis.km = Math.min(25, f.umkreis.km * 2); S.set({ filter: f }); ui.neuZeichnen(); });
-  A_('lockern-arten', () => { filterAendern({ arten: ['miete', 'kauf', 'wg', 'tausch'] }); ui.neuZeichnen(); });
+  /* Eine Aktion für alle Lockerungen – sie rechnet dieselbe Änderung
+     noch einmal, damit Knopf und Beschriftung nicht auseinanderfallen. */
+  LOCKERUNGEN.forEach((eintrag) => {
+    A_(eintrag.tu, () => {
+      const f = S.get().filter;
+      const treffer = pruefeLockerung(eintrag, f, zaehle(f));
+      if (!treffer) { ui.toast('Das allein bringt keine weiteren Treffer.'); return; }
+      eintrag.aendern(f, treffer.wert, JSON.parse(JSON.stringify(f)));
+      sichtbar = SEITE;
+      S.set({ filter: f, filterBeruehrt: true }, 'filter');
+      ui.neuZeichnen();
+      ui.toast(treffer.danach + ' ' + U.plural(treffer.danach, 'Treffer', 'Treffer') + ' nach der Änderung.', 'gut');
+    });
+  });
 
   A_('agent-aus-filter', () => {
     if (S.get().agenten.length >= P.grenze('suchauftraege')) {
@@ -7092,18 +7486,20 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   function chancenBlock(l) {
     if (l.kind === 'kauf') return '';
     const c = W.chancen(l, S.get().profil);
-    const ton = { gut: 'gut', mittel: 'warn', schwach: 'schlecht' }[c.stufe];
+    const ton = { gut: 'gut', mittel: 'warn', schwach: 'schlecht', unbekannt: 'neutral' }[c.stufe];
     const andrangTon = { keiner: 'gut', gering: 'gut', 'spürbar': 'neutral', hoch: 'warn', 'sehr hoch': 'schlecht' }[c.andrang];
     return h`<section class="block" id="chancen">
       <h2>${ico('ziel')}Wie stehen deine Chancen?</h2>
       <p class="block__unter">Zwei Dinge entscheiden, und nur eines davon hast du in der Hand.
         Deshalb stehen sie hier getrennt.</p>
       <div class="chancenkopf">
-        <div class="ampel ampel--${ton}">
-          <div class="ampel__zahl">${ico(c.staerke === 'schwach' ? 'warnung' : 'pruefen')}</div>
+        <div class="ampel ampel--${ui.ampelFarbe(ton)}">
+          <div class="ampel__zahl">${ico(c.staerke === 'schwach' ? 'warnung' : c.staerke === 'unbekannt' ? 'info' : 'pruefen')}</div>
           <div>
-            <b>Deine Bewerbung: ${c.staerke}</b>
-            <p>Das kannst du ändern – die Punkte unten sagen wie.</p>
+            <b>${c.staerke === 'unbekannt' ? 'Deine Bewerbung: noch nicht einschätzbar' : 'Deine Bewerbung: ' + c.staerke}</b>
+            <p>${c.staerke === 'unbekannt'
+        ? 'Dafür fehlen Nestwerk noch Angaben aus deinem Profil.'
+        : 'Das kannst du ändern – die Punkte unten sagen wie.'}</p>
           </div>
         </div>
         <div class="ampel ampel--${ui.ampelFarbe(andrangTon)}">
@@ -7792,7 +8188,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       'Ihr Inserat „' + l.titel + '“ passt sehr gut zu dem, was ich suche. ' +
       (wer.length ? wer.join(', ').replace(/^i/, 'I') + '. ' : '') + haushalt + ' ' + einkommen + ' ' + wann + wg + '\n\n' +
       (p.vorstellung ? p.vorstellung + '\n\n' : '') +
-      'Selbstauskunft, Einkommensnachweise und Mietschuldenfreiheitsbescheinigung bringe ich zur Besichtigung mit. ' +
+      W.unterlagenSatz(p) + ' ' +
       'Nennen Sie mir gern zwei Termine, die Ihnen passen.\n\n' +
       'Viele Grüße\n' + (p.name || '');
   }
@@ -8527,6 +8923,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   function umzug() {
     const s = S.get();
+    const datum = S.einzugsdatum();
     const plan = S.umzugsPlan();
     const erledigt = plan.filter((a) => a.erledigt).length;
     const gruppen = {};
@@ -8544,9 +8941,10 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
         <section class="block">
           <label class="feld"><span>Geplanter Einzug</span>
-            <input type="date" value="${s.einzugsdatum}" data-tu-change="umzug-datum"></label>
-          ${s.einzugsdatum ? h`<p class="fein">Die Kündigung der alten Wohnung müsste spätestens am
-            ${U.dateDE(U.isoDate(U.addDays(new Date(s.einzugsdatum + 'T12:00:00'), -90)))} raus sein –
+            <input type="date" value="${datum}" data-tu-change="umzug-datum"></label>
+          ${datum ? h`<p class="fein">${!s.einzugsdatum ? 'Übernommen aus deinem Profil. ' : ''}Die Kündigung der alten
+            Wohnung müsste spätestens am
+            ${U.dateDE(U.isoDate(U.addDays(new Date(datum + 'T12:00:00'), -90)))} raus sein –
             drei Monate Frist, zum Monatsende, spätestens am dritten Werktag des Monats.</p>` : ''}
           <div class="fortschritt">
             <div class="fortschritt__spur"><i style="width:${Math.round(erledigt / plan.length * 100)}%"></i></div>
@@ -8664,7 +9062,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         (p.einzugAb ? ' Einziehen könnte ich ab ' + U.dateDE(p.einzugAb) + '.' : '') +
         '\n\n' + (p.vorstellung ? p.vorstellung + '\n\n' : '') +
         (zusatz ? zusatz + '\n\n' : '') +
-        'Selbstauskunft, Einkommensnachweise und Mietschuldenfreiheitsbescheinigung bringe ich zur Besichtigung mit. ' +
+        W.unterlagenSatz(p) + ' ' +
         'Nennen Sie mir gern zwei Termine, die Ihnen passen.\n\n' +
         'Viele Grüße\n' + (p.name || '');
       S.anschreiben(id, text);
@@ -8808,6 +9206,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <h1>${ico('person')}Dein Profil</h1>
           <p class="seite__unter">Nestwerk sortiert und rechnet ausschließlich mit diesen Angaben.
             Sie liegen im Speicher dieses Browsers – es gibt keinen Server und kein Konto.</p>
+          <p class="gespeichert" id="profil-gespeichert" aria-live="polite">${ico('speichern')}Änderungen werden sofort übernommen</p>
         </header>
 
         <section class="block">
@@ -9310,12 +9709,27 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   const A_ = ui.aktionRegistrieren;
 
+  /* Das Profil speichert bei jeder Änderung. Eine Meldung je Feld wäre
+     eine Wand aus Hinweisen – deshalb nur eine ruhige Zeile, die sagt,
+     dass gespeichert wurde. */
   function profilSpeichern(fn) {
     S.update((s) => { fn(s.profil); s.profilAngelegt = true; }, 'profil');
+    gespeichertZeigen();
   }
 
-  A_('profil-text', (el) => { profilSpeichern((p) => { p[el.dataset.feld] = el.value; }); ui.toast('Profil gespeichert.'); });
-  A_('profil-zahl', (el) => { profilSpeichern((p) => { p[el.dataset.feld] = el.value === '' ? null : Number(el.value); }); ui.toast('Profil gespeichert.'); });
+  function gespeichertZeigen() {
+    const el = U.$('#profil-gespeichert');
+    if (!el) return;
+    const jetzt = new Date();
+    el.innerHTML = String(h`${ico('pruefen')}Automatisch gespeichert um
+      ${jetzt.getHours() + ':' + String(jetzt.getMinutes()).padStart(2, '0')} Uhr`);
+    el.classList.add('is-frisch');
+    clearTimeout(Number(el.dataset.timer));
+    el.dataset.timer = String(setTimeout(() => el.classList.remove('is-frisch'), 1400));
+  }
+
+  A_('profil-text', (el) => { profilSpeichern((p) => { p[el.dataset.feld] = el.value; }); });
+  A_('profil-zahl', (el) => { profilSpeichern((p) => { p[el.dataset.feld] = el.value === '' ? null : Number(el.value); }); });
   A_('profil-schalter', (el) => { profilSpeichern((p) => { p[el.dataset.feld] = el.checked; }); });
   A_('profil-unterlage', (el) => { profilSpeichern((p) => { p.unterlagen[el.dataset.feld] = el.checked; }); });
 
@@ -9572,6 +9986,33 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   const L_VORGABE = { netto: 2600, haushalt: 1, rateSonstige: 0, eigenkapital: 40000, zins: 3.7, tilgung: 2 };
 
+  /* Der häufigste stille Fehler: Man sucht mit einem Budget, das die
+     eigene Rechnung gar nicht hergibt – und wundert sich über Absagen.
+     Deshalb stellt der Rechner beides gegenüber und bietet an, das
+     Suchbudget in einem Schritt zu korrigieren. */
+  function budgetAbgleich(e) {
+    const p = S.get().profil;
+    if (!p.budgetWarm || !e.warmBequem) return '';
+    const abstand = p.budgetWarm - e.warmGrenze;
+    if (abstand <= 0) {
+      return h`<p class="gut-meldung">${ico('pruefen')}Dein Suchbudget von ${U.eur(p.budgetWarm)} liegt innerhalb
+        dessen, was dein Haushalt trägt. Damit suchst du realistisch.</p>`;
+    }
+    return h`<div class="hinweisbox">${ico('warnung')}
+      <div><b>Dein Suchbudget liegt über dieser Rechnung</b>
+      <p>Im Profil suchst du bis <b>${U.eur(p.budgetWarm)}</b> warm. Bequem wären
+        ${U.eur(e.warmBequem)}, die Schmerzgrenze liegt bei ${U.eur(e.warmGrenze)} –
+        du bist also ${U.eur(abstand)} darüber. Das kann eine bewusste Entscheidung sein;
+        oft ist es aber schlicht nie nachgerechnet worden.</p>
+      <p class="werkzeug__weiter">
+        <button type="button" class="knopf knopf--klein" data-tu="budget-uebernehmen" data-wert="${e.warmBequem}">
+          Suchbudget auf ${U.eur(e.warmBequem)} setzen</button>
+        <button type="button" class="knopf knopf--klein knopf--still" data-tu="budget-uebernehmen" data-wert="${e.warmGrenze}">
+          auf ${U.eur(e.warmGrenze)} setzen</button>
+      </p></div>
+    </div>`;
+  }
+
   function leistbarkeitErgebnis() {
     const w = S.werkzeugWerte('leistbarkeit', L_VORGABE);
     const e = W.leistbarkeit(w);
@@ -9594,6 +10035,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         : 'Bei ' + U.eur(e.kaltVermieter) + ' wäre die Vermieterregel noch nicht erreicht; enger ist dein eigenes Budget mit ' + U.eur(e.kaltAusBudget) + '.'}</p>
         </div>
       </div>
+
+      ${budgetAbgleich(e)}
 
       <h3>Wie groß darf die Wohnung sein?</h3>
       <p class="fein">Bei ${U.eur(e.kaltMoeglich)} Kaltmiete – das sind ${U.eur(e.warmBequem)} warm abzüglich
@@ -9673,11 +10116,11 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const e = W.wbsPruefung(w);
     const ton = e.ergebnis === 'wahrscheinlich' ? 'gut' : e.ergebnis === 'knapp' ? 'warn' : 'schlecht';
     return h`<div class="ampel ampel--${ton}">
-        <div class="ampel__zahl">${Math.round(e.quote * 100)} %</div>
+        <div class="ampel__zahl">${e.abstand >= 0 ? U.eur(e.abstand) : '+' + U.eur(-e.abstand)}</div>
         <div>
           <b>${e.ergebnis === 'wahrscheinlich' ? 'Anspruch wahrscheinlich'
         : e.ergebnis === 'knapp' ? 'Knapp an der Grenze' : 'Anspruch unwahrscheinlich'}</b>
-          <p>${e.satz}</p>
+          <p>${e.abstand >= 0 ? 'so viel Luft hast du bis zur Grenze. ' : 'so weit liegst du über der Grenze. '}${e.satz}</p>
         </div>
       </div>
 
@@ -9786,7 +10229,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
       ${e.belastung ? h`<p>Deine Warmmiete frisst <b>${e.belastung} %</b> deines Bruttoeinkommens.
         ${e.belastung >= 30 ? 'Das ist eine hohe Belastung – genau dafür ist Wohngeld gedacht.'
-        : 'Unterhalb von etwa 25 % wird Wohngeld selten bewilligt.'}</p>` : ''}
+        : e.belastung >= 25 ? 'Das liegt im Bereich, in dem Wohngeld in Frage kommt, wenn das Einkommen niedrig genug ist.'
+          : 'Unter etwa einem Viertel des Einkommens wird Wohngeld nur selten bewilligt.'}</p>` : ''}
 
       <div class="hinweisbox">${ico('warnung')}
         <div><b>Warum hier kein Eurobetrag steht</b>
@@ -9847,6 +10291,17 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     S.werkzeugSetzen('leistbarkeit', patch);
     malen('leistbarkeit-ergebnis', leistbarkeitErgebnis());
   }, 220));
+
+  A_('budget-uebernehmen', (el) => {
+    const wert = Number(el.dataset.wert) || 0;
+    S.update((st) => { st.profil.budgetWarm = wert; }, 'profil');
+    /* Auch der Filter soll folgen, wenn er noch nichts Eigenes sagt. */
+    S.update((st) => {
+      if (!st.filterBeruehrt || !st.filter.preisMax || st.filter.preisMax > wert) st.filter.preisMax = wert;
+    }, 'filter');
+    ui.neuZeichnen();
+    ui.toast('Suchbudget auf ' + U.eur(wert) + ' gesetzt – Profil und Suche sind angepasst.', 'gut');
+  });
 
   A_('wbs', U.debounce((el) => {
     const patch = {}; patch[el.dataset.feld] = Number(el.value) || 0;
@@ -10695,11 +11150,11 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   let intervall = 'monat';
 
   function preisZeile(tarif) {
-    if (tarif.preisMonat === 0) return h`<b>0 €</b><span>dauerhaft</span>`;
+    if (tarif.preisMonat === 0) return h`<b>0 €</b> <span>dauerhaft</span>`;
     if (intervall === 'jahr') {
-      return h`<b>${U.eur2(tarif.preisJahr / 12)}</b><span>im Monat, ${U.eur(tarif.preisJahr)} im Jahr</span>`;
+      return h`<b>${U.eur2(tarif.preisJahr / 12)}</b> <span>im Monat, ${U.eur(tarif.preisJahr)} im Jahr</span>`;
     }
-    return h`<b>${U.eur2(tarif.preisMonat)}</b><span>im Monat, monatlich kündbar</span>`;
+    return h`<b>${U.eur2(tarif.preisMonat)}</b> <span>im Monat, monatlich kündbar</span>`;
   }
 
   function ersparnis() {

@@ -201,18 +201,20 @@
   function chancenBlock(l) {
     if (l.kind === 'kauf') return '';
     const c = W.chancen(l, S.get().profil);
-    const ton = { gut: 'gut', mittel: 'warn', schwach: 'schlecht' }[c.stufe];
+    const ton = { gut: 'gut', mittel: 'warn', schwach: 'schlecht', unbekannt: 'neutral' }[c.stufe];
     const andrangTon = { keiner: 'gut', gering: 'gut', 'spürbar': 'neutral', hoch: 'warn', 'sehr hoch': 'schlecht' }[c.andrang];
     return h`<section class="block" id="chancen">
       <h2>${ico('ziel')}Wie stehen deine Chancen?</h2>
       <p class="block__unter">Zwei Dinge entscheiden, und nur eines davon hast du in der Hand.
         Deshalb stehen sie hier getrennt.</p>
       <div class="chancenkopf">
-        <div class="ampel ampel--${ton}">
-          <div class="ampel__zahl">${ico(c.staerke === 'schwach' ? 'warnung' : 'pruefen')}</div>
+        <div class="ampel ampel--${ui.ampelFarbe(ton)}">
+          <div class="ampel__zahl">${ico(c.staerke === 'schwach' ? 'warnung' : c.staerke === 'unbekannt' ? 'info' : 'pruefen')}</div>
           <div>
-            <b>Deine Bewerbung: ${c.staerke}</b>
-            <p>Das kannst du ändern – die Punkte unten sagen wie.</p>
+            <b>${c.staerke === 'unbekannt' ? 'Deine Bewerbung: noch nicht einschätzbar' : 'Deine Bewerbung: ' + c.staerke}</b>
+            <p>${c.staerke === 'unbekannt'
+        ? 'Dafür fehlen Nestwerk noch Angaben aus deinem Profil.'
+        : 'Das kannst du ändern – die Punkte unten sagen wie.'}</p>
           </div>
         </div>
         <div class="ampel ampel--${ui.ampelFarbe(andrangTon)}">
@@ -901,7 +903,7 @@
       'Ihr Inserat „' + l.titel + '“ passt sehr gut zu dem, was ich suche. ' +
       (wer.length ? wer.join(', ').replace(/^i/, 'I') + '. ' : '') + haushalt + ' ' + einkommen + ' ' + wann + wg + '\n\n' +
       (p.vorstellung ? p.vorstellung + '\n\n' : '') +
-      'Selbstauskunft, Einkommensnachweise und Mietschuldenfreiheitsbescheinigung bringe ich zur Besichtigung mit. ' +
+      W.unterlagenSatz(p) + ' ' +
       'Nennen Sie mir gern zwei Termine, die Ihnen passen.\n\n' +
       'Viele Grüße\n' + (p.name || '');
   }

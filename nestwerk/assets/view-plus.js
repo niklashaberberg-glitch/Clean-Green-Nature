@@ -12,11 +12,11 @@
   let intervall = 'monat';
 
   function preisZeile(tarif) {
-    if (tarif.preisMonat === 0) return h`<b>0 €</b><span>dauerhaft</span>`;
+    if (tarif.preisMonat === 0) return h`<b>0 €</b> <span>dauerhaft</span>`;
     if (intervall === 'jahr') {
-      return h`<b>${U.eur2(tarif.preisJahr / 12)}</b><span>im Monat, ${U.eur(tarif.preisJahr)} im Jahr</span>`;
+      return h`<b>${U.eur2(tarif.preisJahr / 12)}</b> <span>im Monat, ${U.eur(tarif.preisJahr)} im Jahr</span>`;
     }
-    return h`<b>${U.eur2(tarif.preisMonat)}</b><span>im Monat, monatlich kündbar</span>`;
+    return h`<b>${U.eur2(tarif.preisMonat)}</b> <span>im Monat, monatlich kündbar</span>`;
   }
 
   function ersparnis() {

@@ -425,6 +425,7 @@
 
   function umzug() {
     const s = S.get();
+    const datum = S.einzugsdatum();
     const plan = S.umzugsPlan();
     const erledigt = plan.filter((a) => a.erledigt).length;
     const gruppen = {};
@@ -442,9 +443,10 @@
 
         <section class="block">
           <label class="feld"><span>Geplanter Einzug</span>
-            <input type="date" value="${s.einzugsdatum}" data-tu-change="umzug-datum"></label>
-          ${s.einzugsdatum ? h`<p class="fein">Die Kündigung der alten Wohnung müsste spätestens am
-            ${U.dateDE(U.isoDate(U.addDays(new Date(s.einzugsdatum + 'T12:00:00'), -90)))} raus sein –
+            <input type="date" value="${datum}" data-tu-change="umzug-datum"></label>
+          ${datum ? h`<p class="fein">${!s.einzugsdatum ? 'Übernommen aus deinem Profil. ' : ''}Die Kündigung der alten
+            Wohnung müsste spätestens am
+            ${U.dateDE(U.isoDate(U.addDays(new Date(datum + 'T12:00:00'), -90)))} raus sein –
             drei Monate Frist, zum Monatsende, spätestens am dritten Werktag des Monats.</p>` : ''}
           <div class="fortschritt">
             <div class="fortschritt__spur"><i style="width:${Math.round(erledigt / plan.length * 100)}%"></i></div>
@@ -562,7 +564,7 @@
         (p.einzugAb ? ' Einziehen könnte ich ab ' + U.dateDE(p.einzugAb) + '.' : '') +
         '\n\n' + (p.vorstellung ? p.vorstellung + '\n\n' : '') +
         (zusatz ? zusatz + '\n\n' : '') +
-        'Selbstauskunft, Einkommensnachweise und Mietschuldenfreiheitsbescheinigung bringe ich zur Besichtigung mit. ' +
+        W.unterlagenSatz(p) + ' ' +
         'Nennen Sie mir gern zwei Termine, die Ihnen passen.\n\n' +
         'Viele Grüße\n' + (p.name || '');
       S.anschreiben(id, text);

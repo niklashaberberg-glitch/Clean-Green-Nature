@@ -85,6 +85,33 @@
 
   const L_VORGABE = { netto: 2600, haushalt: 1, rateSonstige: 0, eigenkapital: 40000, zins: 3.7, tilgung: 2 };
 
+  /* Der häufigste stille Fehler: Man sucht mit einem Budget, das die
+     eigene Rechnung gar nicht hergibt – und wundert sich über Absagen.
+     Deshalb stellt der Rechner beides gegenüber und bietet an, das
+     Suchbudget in einem Schritt zu korrigieren. */
+  function budgetAbgleich(e) {
+    const p = S.get().profil;
+    if (!p.budgetWarm || !e.warmBequem) return '';
+    const abstand = p.budgetWarm - e.warmGrenze;
+    if (abstand <= 0) {
+      return h`<p class="gut-meldung">${ico('pruefen')}Dein Suchbudget von ${U.eur(p.budgetWarm)} liegt innerhalb
+        dessen, was dein Haushalt trägt. Damit suchst du realistisch.</p>`;
+    }
+    return h`<div class="hinweisbox">${ico('warnung')}
+      <div><b>Dein Suchbudget liegt über dieser Rechnung</b>
+      <p>Im Profil suchst du bis <b>${U.eur(p.budgetWarm)}</b> warm. Bequem wären
+        ${U.eur(e.warmBequem)}, die Schmerzgrenze liegt bei ${U.eur(e.warmGrenze)} –
+        du bist also ${U.eur(abstand)} darüber. Das kann eine bewusste Entscheidung sein;
+        oft ist es aber schlicht nie nachgerechnet worden.</p>
+      <p class="werkzeug__weiter">
+        <button type="button" class="knopf knopf--klein" data-tu="budget-uebernehmen" data-wert="${e.warmBequem}">
+          Suchbudget auf ${U.eur(e.warmBequem)} setzen</button>
+        <button type="button" class="knopf knopf--klein knopf--still" data-tu="budget-uebernehmen" data-wert="${e.warmGrenze}">
+          auf ${U.eur(e.warmGrenze)} setzen</button>
+      </p></div>
+    </div>`;
+  }
+
   function leistbarkeitErgebnis() {
     const w = S.werkzeugWerte('leistbarkeit', L_VORGABE);
     const e = W.leistbarkeit(w);
@@ -107,6 +134,8 @@
         : 'Bei ' + U.eur(e.kaltVermieter) + ' wäre die Vermieterregel noch nicht erreicht; enger ist dein eigenes Budget mit ' + U.eur(e.kaltAusBudget) + '.'}</p>
         </div>
       </div>
+
+      ${budgetAbgleich(e)}
 
       <h3>Wie groß darf die Wohnung sein?</h3>
       <p class="fein">Bei ${U.eur(e.kaltMoeglich)} Kaltmiete – das sind ${U.eur(e.warmBequem)} warm abzüglich
@@ -186,11 +215,11 @@
     const e = W.wbsPruefung(w);
     const ton = e.ergebnis === 'wahrscheinlich' ? 'gut' : e.ergebnis === 'knapp' ? 'warn' : 'schlecht';
     return h`<div class="ampel ampel--${ton}">
-        <div class="ampel__zahl">${Math.round(e.quote * 100)} %</div>
+        <div class="ampel__zahl">${e.abstand >= 0 ? U.eur(e.abstand) : '+' + U.eur(-e.abstand)}</div>
         <div>
           <b>${e.ergebnis === 'wahrscheinlich' ? 'Anspruch wahrscheinlich'
         : e.ergebnis === 'knapp' ? 'Knapp an der Grenze' : 'Anspruch unwahrscheinlich'}</b>
-          <p>${e.satz}</p>
+          <p>${e.abstand >= 0 ? 'so viel Luft hast du bis zur Grenze. ' : 'so weit liegst du über der Grenze. '}${e.satz}</p>
         </div>
       </div>
 
@@ -299,7 +328,8 @@
 
       ${e.belastung ? h`<p>Deine Warmmiete frisst <b>${e.belastung} %</b> deines Bruttoeinkommens.
         ${e.belastung >= 30 ? 'Das ist eine hohe Belastung – genau dafür ist Wohngeld gedacht.'
-        : 'Unterhalb von etwa 25 % wird Wohngeld selten bewilligt.'}</p>` : ''}
+        : e.belastung >= 25 ? 'Das liegt im Bereich, in dem Wohngeld in Frage kommt, wenn das Einkommen niedrig genug ist.'
+          : 'Unter etwa einem Viertel des Einkommens wird Wohngeld nur selten bewilligt.'}</p>` : ''}
 
       <div class="hinweisbox">${ico('warnung')}
         <div><b>Warum hier kein Eurobetrag steht</b>
@@ -360,6 +390,17 @@
     S.werkzeugSetzen('leistbarkeit', patch);
     malen('leistbarkeit-ergebnis', leistbarkeitErgebnis());
   }, 220));
+
+  A_('budget-uebernehmen', (el) => {
+    const wert = Number(el.dataset.wert) || 0;
+    S.update((st) => { st.profil.budgetWarm = wert; }, 'profil');
+    /* Auch der Filter soll folgen, wenn er noch nichts Eigenes sagt. */
+    S.update((st) => {
+      if (!st.filterBeruehrt || !st.filter.preisMax || st.filter.preisMax > wert) st.filter.preisMax = wert;
+    }, 'filter');
+    ui.neuZeichnen();
+    ui.toast('Suchbudget auf ' + U.eur(wert) + ' gesetzt – Profil und Suche sind angepasst.', 'gut');
+  });
 
   A_('wbs', U.debounce((el) => {
     const patch = {}; patch[el.dataset.feld] = Number(el.value) || 0;

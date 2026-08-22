@@ -623,24 +623,29 @@
 
   /* ------------------------- Eigenes Profil ------------------------- */
 
+  /* Das Profil startet leer. Erfundene Vorgaben wären bequem, aber sie
+     lenken die Suche, ohne dass jemand sie gewählt hätte – ein
+     vorbelegtes Pflichtmerkmal blendet stillschweigend Wohnungen aus,
+     und ein erfundenes Einkommen verfälscht die Chancenrechnung.
+     Was hier steht, hat der Mensch selbst eingetragen. */
   const profilVorlage = {
     name: '',
-    alter: 29,
+    alter: null,
     geschlecht: 'egal',
     beruf: '',
     haushalt: 1,
-    nettoEinkommen: 2600,
+    nettoEinkommen: 0,
     raucher: false,
     haustiere: 'keine',
     /* Suchauftrag */
-    staedte: ['Köln'],
+    staedte: [],
     viertel: [],
     arten: ['miete', 'wg'],
-    budgetWarm: 1100,
-    zimmerMin: 1.5,
-    flaecheMin: 40,
-    mussHaben: ['Waschmaschinenanschluss'],
-    schoenWaere: ['Balkon', 'Einbauküche'],
+    budgetWarm: 0,
+    zimmerMin: null,
+    flaecheMin: null,
+    mussHaben: [],
+    schoenWaere: [],
     einzugAb: '',
     /* Anker für Pendelzeiten */
     anker: [],
@@ -658,25 +663,11 @@
 
   /* ------------------------- Erste Nachrichten ------------------------- */
 
+  /* Ein frisch geöffnetes Konto hat keine Nachrichten. Vorbelegte
+     Verläufe würden behaupten, jemand warte auf eine Antwort, obwohl
+     noch nie jemand angeschrieben wurde. */
   function startThreads() {
-    const r = U.rng(SEED + 99);
-    const kandidaten = listings.filter((l) => !l.verdacht).slice(0, 400);
-    const auswahl = U.pickN(r, kandidaten, 3);
-    return auswahl.map((l, i) => ({
-      id: 'th-' + i,
-      listingId: l.id,
-      partner: l.anbieter.name,
-      ungelesen: i === 0 ? 1 : 0,
-      nachrichten: [
-        {
-          von: 'partner',
-          zeit: dateOffset(-(3 - i)),
-          text: i === 0
-            ? 'Hallo, danke für Ihr Interesse an ' + l.titel + '. Es sind noch Termine frei – passt Ihnen einer der vorgeschlagenen Zeitpunkte?'
-            : 'Guten Tag, die Wohnung ist weiterhin verfügbar. Melden Sie sich gern bei Fragen.'
-        }
-      ]
-    }));
+    return [];
   }
 
   NW.data = {

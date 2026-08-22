@@ -223,21 +223,45 @@
      Meldungen und Dialoge
      ================================================================ */
 
-  let toastTimer = null;
+  const TOAST_MAX = 3;
+
+  /* Meldungen dürfen sich nicht stapeln. Wer ein Formular ausfüllt,
+     löst schnell ein Dutzend gleicher Hinweise aus – und sieht dann eine
+     Wand aus Meldungen statt der Seite. Deshalb: gleiche Meldung wird
+     aufgefrischt statt verdoppelt, und mehr als drei gleichzeitig gibt
+     es nie. */
   function toast(text, art) {
     const box = U.$('#toasts');
     if (!box) return;
+
+    const vorhanden = U.$$('.toast', box).find((t) => t.dataset.text === String(text));
+    if (vorhanden) {
+      vorhanden.classList.remove('is-weg');
+      vorhanden.classList.add('is-frisch');
+      setTimeout(() => vorhanden.classList.remove('is-frisch'), 200);
+      planeAbgang(vorhanden);
+      return;
+    }
+
     const el = document.createElement('div');
     el.className = 'toast toast--' + (art || 'info');
+    el.dataset.text = String(text);
     el.setAttribute('role', 'status');
     el.innerHTML = h`${ico(art === 'schlecht' ? 'warnung' : art === 'gut' ? 'pruefen' : 'info')}<span>${text}</span>`;
     box.appendChild(el);
-    clearTimeout(toastTimer);
-    setTimeout(() => {
+
+    const alle = U.$$('.toast', box);
+    if (alle.length > TOAST_MAX) alle.slice(0, alle.length - TOAST_MAX).forEach((x) => x.remove());
+    planeAbgang(el);
+  }
+
+  function planeAbgang(el) {
+    clearTimeout(Number(el.dataset.timer));
+    el.dataset.timer = String(setTimeout(() => {
       el.classList.add('is-weg');
       el.addEventListener('transitionend', () => el.remove(), { once: true });
       setTimeout(() => el.remove(), 800);
-    }, 3600);
+    }, 3600));
   }
 
   /* Notweg, wenn kein Speichern möglich ist: Inhalt zum Herauskopieren. */
@@ -370,12 +394,74 @@
     });
 
     if (ergebnis.danach) ergebnis.danach(haupt);
-    if (wechsel) window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    /* Nur bei einem echten Ansichtswechsel nach oben – nicht bei jedem
+       Neuaufbau derselben Seite. */
+    if (wechsel && !erzwingen) scrolleSofort(0);
     aktualisiereZaehler();
   }
 
-  /* Wiederaufbau der aktuellen Ansicht nach Zustandsänderung. */
-  function neuZeichnen() { zeichnen(true); }
+  /* Wiederaufbau der aktuellen Ansicht nach einer Zustandsänderung.
+
+     Die Ansicht wird komplett neu gebaut – deshalb muss hier bewahrt
+     werden, was sonst verlorenginge: die Stelle, an der jemand gerade
+     liest, und der Tastaturfokus. Ohne das springt die Seite bei jedem
+     Klick aufs Herz, und wer mit der Tastatur bedient, landet wieder
+     ganz am Anfang. */
+  function merkmalDesFokus() {
+    const el = document.activeElement;
+    if (!el || el === document.body || !document.getElementById('haupt')) return null;
+    if (!document.getElementById('haupt').contains(el)) return null;
+    const d = el.dataset || {};
+    return {
+      id: el.id || null,
+      tu: d.tu || d.tuChange || d.tuInput || null,
+      datenId: d.id || null,
+      feld: d.feld || null,
+      wert: d.wert || null,
+      auswahl: el.selectionStart != null ? [el.selectionStart, el.selectionEnd] : null
+    };
+  }
+
+  function fokusWiederherstellen(m) {
+    if (!m) return;
+    let ziel = null;
+    if (m.id) ziel = document.getElementById(m.id);
+    if (!ziel && m.tu) {
+      const kandidaten = U.$$('[data-tu="' + m.tu + '"],[data-tu-change="' + m.tu + '"],[data-tu-input="' + m.tu + '"]');
+      ziel = kandidaten.find((el) => {
+        const d = el.dataset;
+        return (!m.datenId || d.id === m.datenId) && (!m.feld || d.feld === m.feld) && (!m.wert || d.wert === m.wert);
+      }) || null;
+    }
+    if (!ziel) return;
+    try {
+      ziel.focus({ preventScroll: true });
+      if (m.auswahl && ziel.setSelectionRange) ziel.setSelectionRange(m.auswahl[0], m.auswahl[1]);
+    } catch (e) { /* manche Elemente lassen sich nicht fokussieren */ }
+  }
+
+  /* Sprungfrei scrollen: Für Sprungmarken ist weiches Scrollen richtig,
+     beim Wiederherstellen nach einem Neuaufbau wäre es eine sichtbare
+     Rutschpartie. Deshalb hier ausdrücklich ohne Animation. */
+  function scrolleSofort(y) {
+    try {
+      window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+    } catch (e) {
+      const wurzel = document.documentElement;
+      const alt = wurzel.style.scrollBehavior;
+      wurzel.style.scrollBehavior = 'auto';
+      window.scrollTo(0, y);
+      wurzel.style.scrollBehavior = alt;
+    }
+  }
+
+  function neuZeichnen() {
+    const y = window.scrollY;
+    const fokus = merkmalDesFokus();
+    zeichnen(true);
+    scrolleSofort(y);
+    fokusWiederherstellen(fokus);
+  }
 
   /* ================================================================
      Kopf und Navigation

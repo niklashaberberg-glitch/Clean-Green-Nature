@@ -23,6 +23,13 @@
     const faktoren = [];
     const tipps = [];
 
+    /* Ohne Angaben weiß Nestwerk nichts – und tut dann besser so, als
+       wüsste es nichts, statt eine schwache Bewerbung zu unterstellen.
+       Wer gerade erst angekommen ist, hat nicht schlechte Chancen,
+       sondern noch kein Profil. */
+    const unterlagenDa = Object.keys(p.unterlagen || {}).filter((k) => p.unterlagen[k]).length;
+    const kenntNichts = !p.nettoEinkommen && !unterlagenDa;
+
     /* Ausgangspunkt: Wer hat sich sonst noch beworben? */
     const mitbewerber = Math.max(0, l.stats.bewerber);
     let chance = 1 / (mitbewerber + 1);
@@ -106,6 +113,22 @@
 
     chance = U.clamp(chance * vielfach, 0.005, 0.85);
     const prozent = Math.round(chance * 100);
+
+    if (kenntNichts) {
+      return {
+        prozent, mitbewerber, faktoren: faktoren.filter((f) => f.label === 'Zeitpunkt' || f.label === 'Anbieter'),
+        tipps: ['Trag Einkommen und vorhandene Unterlagen im Profil ein – danach kann Nestwerk deine Chancen wirklich einschätzen.']
+          .concat(l.besichtigungen.length ? ['Nimm einen der hinterlegten Termine sofort – gebuchte Termine kommen vor formlosen Anfragen.'] : []),
+        staerke: 'unbekannt', andrang: mitbewerber === 0 ? 'keiner' : mitbewerber < 8 ? 'gering'
+          : mitbewerber < 30 ? 'spürbar' : mitbewerber < 80 ? 'hoch' : 'sehr hoch',
+        stufe: 'unbekannt',
+        satz: 'Über deine Bewerbung weiß Nestwerk noch nichts – ohne Einkommen und Unterlagen im Profil lässt sich '
+          + 'nichts einschätzen. Was feststeht: '
+          + (mitbewerber === 0 ? 'Bisher hat sich niemand sonst gemeldet.'
+            : mitbewerber === 1 ? 'Bisher hat sich eine weitere Person gemeldet.'
+              : 'Es haben sich bereits ' + mitbewerber + ' andere gemeldet.')
+      };
+    }
 
     /* Zwei Dinge, die nichts miteinander zu tun haben, und die deshalb
        getrennt gehören: Wie gut deine Bewerbung ist – das kannst du
@@ -574,7 +597,34 @@
     return { reihenfolge, gesamtMinuten: Math.round(fahrt), konflikte };
   }
 
+  /* Ein Anschreiben, das Unterlagen zusagt, die es nicht gibt, fliegt
+     spätestens bei der Besichtigung auf. Der Satz richtet sich deshalb
+     nach der tatsächlichen Mappe. Schufa und Ausweis bleiben bewusst
+     draußen: Die gehören erst dazu, wenn die Wohnung ernsthaft in
+     Betracht kommt. */
+  const UNTERLAGEN_NAMEN = {
+    selbstauskunft: 'die Selbstauskunft',
+    gehaltsnachweise: 'die letzten drei Einkommensnachweise',
+    mietschuldenfrei: 'die Mietschuldenfreiheitsbescheinigung',
+    buergschaft: 'eine Bürgschaft',
+    wbs: 'den Wohnberechtigungsschein'
+  };
+
+  function unterlagenSatz(profil) {
+    const u = (profil && profil.unterlagen) || {};
+    const da = Object.keys(UNTERLAGEN_NAMEN).filter((k) => u[k]).map((k) => UNTERLAGEN_NAMEN[k]);
+    if (!da.length) {
+      return 'Meine Unterlagen stelle ich zusammen, sobald ein Termin steht.';
+    }
+    const liste = da.length === 1 ? da[0]
+      : da.slice(0, -1).join(', ') + ' und ' + da[da.length - 1];
+    const satz = liste.charAt(0).toUpperCase() + liste.slice(1) + ' bringe ich zur Besichtigung mit.';
+    const fehlt = Object.keys(UNTERLAGEN_NAMEN).filter((k) => !u[k] && k !== 'buergschaft' && k !== 'wbs');
+    return fehlt.length ? satz + ' Was darüber hinaus nötig ist, reiche ich kurzfristig nach.' : satz;
+  }
+
   NW.werkzeuge = {
+    unterlagenSatz,
     chancen, duplikate, preisreihe, preisvergleich,
     leistbarkeit, wbsPruefung, WBS_BUND, WBS_ABZUEGE,
     wohngeldPruefung, WOHNGELD_AUSSCHLUSS,

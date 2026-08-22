@@ -54,6 +54,7 @@
           <h1>${ico('person')}Dein Profil</h1>
           <p class="seite__unter">Nestwerk sortiert und rechnet ausschließlich mit diesen Angaben.
             Sie liegen im Speicher dieses Browsers – es gibt keinen Server und kein Konto.</p>
+          <p class="gespeichert" id="profil-gespeichert" aria-live="polite">${ico('speichern')}Änderungen werden sofort übernommen</p>
         </header>
 
         <section class="block">
@@ -556,12 +557,27 @@
 
   const A_ = ui.aktionRegistrieren;
 
+  /* Das Profil speichert bei jeder Änderung. Eine Meldung je Feld wäre
+     eine Wand aus Hinweisen – deshalb nur eine ruhige Zeile, die sagt,
+     dass gespeichert wurde. */
   function profilSpeichern(fn) {
     S.update((s) => { fn(s.profil); s.profilAngelegt = true; }, 'profil');
+    gespeichertZeigen();
   }
 
-  A_('profil-text', (el) => { profilSpeichern((p) => { p[el.dataset.feld] = el.value; }); ui.toast('Profil gespeichert.'); });
-  A_('profil-zahl', (el) => { profilSpeichern((p) => { p[el.dataset.feld] = el.value === '' ? null : Number(el.value); }); ui.toast('Profil gespeichert.'); });
+  function gespeichertZeigen() {
+    const el = U.$('#profil-gespeichert');
+    if (!el) return;
+    const jetzt = new Date();
+    el.innerHTML = String(h`${ico('pruefen')}Automatisch gespeichert um
+      ${jetzt.getHours() + ':' + String(jetzt.getMinutes()).padStart(2, '0')} Uhr`);
+    el.classList.add('is-frisch');
+    clearTimeout(Number(el.dataset.timer));
+    el.dataset.timer = String(setTimeout(() => el.classList.remove('is-frisch'), 1400));
+  }
+
+  A_('profil-text', (el) => { profilSpeichern((p) => { p[el.dataset.feld] = el.value; }); });
+  A_('profil-zahl', (el) => { profilSpeichern((p) => { p[el.dataset.feld] = el.value === '' ? null : Number(el.value); }); });
   A_('profil-schalter', (el) => { profilSpeichern((p) => { p[el.dataset.feld] = el.checked; }); });
   A_('profil-unterlage', (el) => { profilSpeichern((p) => { p.unterlagen[el.dataset.feld] = el.checked; }); });
 

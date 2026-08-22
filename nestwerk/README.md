@@ -93,6 +93,27 @@ Energieklasse, sechzehn Ausstattungsmerkmale, Einzugstermin, Anbieterart,
 Provisionsfreiheit, freier Umkreis auf der Karte und – sobald ein Ankerpunkt
 im Profil steht – die maximale Fahrzeit zur Arbeit.
 
+### Ein Profil, das überall gilt
+
+Das Profil ist die einzige Stelle, an der jemand seine Suche beschreibt.
+Städte, Budget, Zimmer, Fläche und Einzugstermin wandern von dort in die
+Suchfilter, das Einkommen in den Leistbarkeitsrechner, die Haushaltsgröße in
+Wohngeld und WBS, der Einzugstermin in den Umzugsplan, die Bewerbermappe ins
+Anschreiben. Wer einmal filtert, behält die Kontrolle – ab dann folgt die Suche
+nicht mehr automatisch, sondern nur noch auf Knopfdruck („Aus meinem Profil
+füllen“), und ein Hinweis zeigt, wo Filter und Profil auseinanderlaufen.
+
+Das Profil startet dabei **leer**. Erfundene Vorgaben wären bequem, lenken die
+Suche aber, ohne dass jemand sie gewählt hätte: Ein vorbelegtes Pflichtmerkmal
+blendet stillschweigend Wohnungen aus, ein erfundenes Einkommen verfälscht die
+Chancenrechnung. Solange nichts eingetragen ist, sagt Nestwerk bei den Chancen
+ausdrücklich „noch nicht einschätzbar“ – statt eine schwache Bewerbung zu
+unterstellen, die es gar nicht beurteilen kann.
+
+Umgekehrt gleicht der Leistbarkeitsrechner ab: Wer mit einem Budget sucht, das
+die eigene Rechnung nicht hergibt, bekommt das gesagt – mit einem Knopf, der
+Profil und Suche in einem Schritt korrigiert.
+
 ### Eine Reihenfolge, die sich erklärt
 
 Es gibt keine bezahlten Plätze. Jedes Inserat bekommt eine Passung von 0 bis
@@ -100,6 +121,21 @@ Es gibt keine bezahlten Plätze. Jedes Inserat bekommt eine Passung von 0 bis
 Ausstattung, Energie, Arbeitsweg, Preis-Leistung. Auf der Objektseite steht
 aufgeschlüsselt, welcher Teil wie viel beigetragen hat. Über der Trefferliste
 erklärt ein Aufklapper, warum das erste Ergebnis das erste ist.
+
+### Wenn nichts passt
+
+Bei null oder sehr wenigen Treffern rechnet Nestwerk jede mögliche Lockerung
+einzeln durch und zeigt nur die, die wirklich Treffer bringen – mit der Zahl
+dahinter. Entscheidend ist die Reihenfolge: Sortiert wird nicht nach Ertrag,
+sondern nach Ertrag **gegen Eingriffstiefe**. „Such doch in einer anderen
+Stadt“ bringt naturgemäß die meisten Treffer und ist zugleich der einzige
+Vorschlag, der die Suche im Kern verändert – wer wegen einer neuen Stelle nach
+Köln zieht, ist mit fünf Berliner Wohnungen nicht geholfen. Solche Vorschläge
+stehen deshalb abgesetzt am Ende und sagen ausdrücklich, dass sie die Suche
+grundlegend ändern.
+
+Nicht dabei: den Prüfhinweis abschalten. Betrugsschutz ist keine Stellschraube,
+an der man dreht, um mehr Treffer zu bekommen.
 
 ### Vergleichsmiete statt Bauchgefühl
 
@@ -161,6 +197,10 @@ Aus dem Profil entsteht ein vorformuliertes Anschreiben, das sich vor dem
 Absenden ändern lässt. Daneben steht, welche Unterlagen bereitliegen und
 welche fehlen – mit dem Hinweis, dass Schufa und Ausweiskopie vor der
 Besichtigung bei niemandem etwas zu suchen haben.
+
+Der Brief sagt dabei nur zu, was tatsächlich vorliegt. Ein Anschreiben, das
+Unterlagen verspricht, die es nicht gibt, fliegt spätestens bei der
+Besichtigung auf.
 
 ### Bewerbungstafel
 
@@ -382,6 +422,14 @@ Bedienelement ohne Beschriftung, kein Eingabefeld ohne Label, kein waagerechter
 Überlauf bei 390 px. Zusätzlich geprüft: Regler lassen sich ziehen, ohne dass
 die Eingabe abbricht, Textfelder behalten beim Tippen den Fokus, und keine
 Zahl erscheint doppelt.
+
+Dazu ein durchgespielter Weg einer erfundenen Nutzerin – von der leeren Seite
+über Profil, Suche, Bewerbung und Rechner bis zum Umzugsplan. Automatische
+Tests sagen, ob etwas funktioniert; nur das Durchspielen sagt, ob es
+zusammenpasst. Gefunden und behoben wurden dabei unter anderem: eine Wand aus
+gestapelten Meldungen beim Ausfüllen des Profils, ein verlorener Tastaturfokus
+beim Merken, ein springender Bildlauf nach jeder Zustandsänderung und ein
+Lockerungsvorschlag, der die Nutzerin an den falschen Ort geführt hätte.
 
 Die Diagrammfarben sind mit einem Palettenprüfer gegen Farbfehlsichtigkeit
 gerechnet – alle Paare, hell und dunkel, ΔE ≥ 9 unter Deuteranopie,

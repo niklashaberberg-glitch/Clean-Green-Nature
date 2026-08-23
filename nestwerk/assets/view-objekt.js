@@ -27,7 +27,9 @@
           aria-selected="${i === bildIndex ? 'true' : 'false'}" data-tu="bild-zu" data-i="${i}"
           aria-label="${NW.img.caption(l, i)}">${raw(NW.img.make(l, i))}</button>`)}
       </div>
-      <p class="galerie__hinweis">${ico('info')}Die Ansichten sind schematische Zeichnungen aus den Objektdaten, keine Fotos.</p>
+      ${NW.img.istGezeichnet(l)
+      ? h`<p class="galerie__hinweis">${ico('info')}Die Ansichten sind schematische Zeichnungen aus den Objektdaten, keine Fotos.</p>`
+      : h`<p class="galerie__hinweis">${ico('info')}Fotos aus dem Inserat. Sie liegen im Speicher dieses Geräts und wurden vor dem Ablegen verkleinert.</p>`}
     </div>`;
   }
 
@@ -72,7 +74,34 @@
 
   /* ------------------------- Vergleichsmiete ------------------------- */
 
-  function spiegelBlock(l, mc, kc) {
+  function spiegelBlock(l, mc, kc, bc) {
+    if (bc) {
+      const g = l.grund || {};
+      return h`<section class="block" id="spiegel">
+        <h2>${ico('waage')}Preis im Vergleich</h2>
+        <div class="kennzahlen">
+          <div><b>${U.num(bc.proQm)} €</b><span>je m² Grundstück</span></div>
+          <div><b>${U.num(bc.referenz)} €</b><span>abgeleiteter Bodenwert ${l.viertel}</span></div>
+          <div><b class="ton ton--${ui.ampelFarbe(bc.ton)}">${bc.diff >= 0 ? '+' : ''}${bc.diff} %</b><span>${bc.urteil}</span></div>
+          <div><b>${U.num(bc.bebaubar)} m²</b><span>überbaubar bei GRZ ${U.dec(g.grz || 0)}</span></div>
+          <div><b>${U.num(bc.geschossflaeche)} m²</b><span>Geschossfläche bei GFZ ${U.dec(g.gfz || 0)}</span></div>
+        </div>
+        ${bc.abschlag ? h`<p class="warn-meldung">${ico('warnung')}
+          <span><b>${bc.abschlag} % Abschlag üblich.</b> „${g.baulandArt}“ ist nicht dasselbe wie
+          voll erschlossenes Bauland: Bis zur Bebaubarkeit fehlen hier noch Schritte, deren Dauer und Kosten
+          niemand zusagen kann.</span></p>` : ''}
+        ${/kein Bebauungsplan|Außenbereich/.test(g.bplan || '') ? h`<div class="hinweisbox">${ico('warnung')}
+          <div><b>Ohne Bebauungsplan entscheidet die Umgebung</b>
+          <p>Innerhalb eines im Zusammenhang bebauten Ortsteils richtet sich die Zulässigkeit nach § 34 BauGB –
+            das Vorhaben muss sich in die Eigenart der näheren Umgebung einfügen. Im Außenbereich nach § 35 BauGB
+            ist Wohnbebauung nur ausnahmsweise zulässig. Vor dem Kauf gehört eine <b>Bauvoranfrage</b> gestellt;
+            sie kostet wenig und beantwortet verbindlich, was gebaut werden darf.</p></div>
+        </div>` : ''}
+        <p class="fein">Der Bodenwert ist hier aus dem örtlichen Kaufpreisniveau abgeleitet, kein amtlicher
+          Bodenrichtwert. Den führt der Gutachterausschuss der Gemeinde; die Auskunft ist meist kostenlos und
+          in den meisten Bundesländern online abrufbar.</p>
+      </section>`;
+    }
     if (mc) {
       const pos = U.clamp(50 + mc.diff * 1.4, 3, 97);
       return h`<section class="block" id="spiegel">
@@ -577,7 +606,7 @@
         ${galerie(l)}
 
         <div class="objekt__tun">
-          <button type="button" class="knopf" data-tu="anschreiben" data-id="${l.id}">${ico('nachricht')}Anschreiben</button>
+          <button type="button" class="knopf" data-tu="anschreiben" data-id="${l.id}">${ico('nachricht')}${anfrageWort(l)}</button>
           <button type="button" class="knopf knopf--still ${gemerkt ? 'is-an' : ''}" data-tu="merken" data-id="${l.id}"
             aria-pressed="${gemerkt ? 'true' : 'false'}">${ico('herz')}${gemerkt ? 'Gemerkt' : 'Merken'}</button>
           <button type="button" class="knopf knopf--still ${imVergleich ? 'is-an' : ''}" data-tu="vergleich" data-id="${l.id}"
@@ -595,15 +624,24 @@
             <section class="block" id="eckdaten">
               <h2>${ico('haus')}Eckdaten</h2>
               <dl class="fakten">
+                ${l.type === 'grundstueck' ? h`
+                <div><dt>Grundstück</dt><dd>${U.num(l.grundstueck || l.flaeche)} m²</dd></div>
+                <div><dt>Art</dt><dd>${(l.grund || {}).baulandArt || 'Bauland'}</dd></div>
+                <div><dt>Bebauungsplan</dt><dd>${(l.grund || {}).bplan || 'unbekannt'}</dd></div>
+                <div><dt>GRZ / GFZ</dt><dd>${U.dec((l.grund || {}).grz || 0)} / ${U.dec((l.grund || {}).gfz || 0)}</dd></div>
+                <div><dt>Erschließung</dt><dd>${(l.grund || {}).erschliessung || 'unbekannt'}</dd></div>
+                <div><dt>Verfügbar ab</dt><dd>${U.daysSince(l.freiAb) > 0 ? 'sofort' : U.dateDE(l.freiAb)}</dd></div>` : h`
                 <div><dt>Zimmer</dt><dd>${U.dec(l.zimmer)}</dd></div>
                 <div><dt>${l.kind === 'wg' ? 'Zimmergröße' : 'Wohnfläche'}</dt><dd>${l.flaeche} m²</dd></div>
                 ${l.kind === 'wg' ? h`<div><dt>Wohnung gesamt</dt><dd>${l.wohnflaeche} m²</dd></div>` : ''}
-                <div><dt>Etage</dt><dd>${l.etage === 0 ? 'Erdgeschoss' : l.etage >= l.etagen ? 'Dachgeschoss' : l.etage + '. OG'} von ${l.etagen}</dd></div>
+                ${l.grundstueck ? h`<div><dt>Grundstück</dt><dd>${U.num(l.grundstueck)} m²</dd></div>` : ''}
+                ${l.bauweise ? h`<div><dt>Bauweise</dt><dd>${l.bauweise}</dd></div>` : ''}
+                ${l.type === 'haus' ? '' : h`<div><dt>Etage</dt><dd>${l.etage === 0 ? 'Erdgeschoss' : l.etage >= l.etagen ? 'Dachgeschoss' : l.etage + '. OG'} von ${l.etagen}</dd></div>`}
                 <div><dt>Baujahr</dt><dd>${l.baujahr}${l.saniert ? ' · saniert' : ''}</dd></div>
                 <div><dt>Frei ab</dt><dd>${U.daysSince(l.freiAb) > 0 ? 'sofort' : U.dateDE(l.freiAb)}</dd></div>
                 ${l.befristetBis ? h`<div><dt>Befristet bis</dt><dd>${U.dateDE(l.befristetBis)}</dd></div>` : ''}
                 <div><dt>Heizung</dt><dd>${l.energie.heizung}</dd></div>
-                <div><dt>Energie</dt><dd>${ui.energieBalken(l.energie.klasse)} ${l.energie.kwh} kWh/(m²·a), ${l.energie.art}</dd></div>
+                <div><dt>Energie</dt><dd>${ui.energieBalken(l.energie.klasse)} ${l.energie.kwh} kWh/(m²·a), ${l.energie.art}</dd></div>`}
                 ${l.kind !== 'kauf' ? h`<div><dt>Kaution</dt><dd>${l.kaution ? l.kaution + ' ' + U.plural(l.kaution, 'Kaltmiete', 'Kaltmieten') + ' (' + U.eur(l.kalt * l.kaution) + ')' : 'keine'}</dd></div>` : ''}
                 ${l.kind === 'kauf' && l.hausgeld ? h`<div><dt>Hausgeld</dt><dd>${U.eur(l.hausgeld)} im Monat</dd></div>` : ''}
                 <div><dt>Provision</dt><dd>${l.provision ? U.dec(l.provision) + (l.kind === 'kauf' ? ' % des Kaufpreises' : ' Kaltmieten') : 'provisionsfrei'}</dd></div>
@@ -626,7 +664,7 @@
 
             ${risikoBlock(l, b.risiko)}
             ${duplikatBlock(l)}
-            ${spiegelBlock(l, b.mietCheck, b.kaufCheck)}
+            ${spiegelBlock(l, b.mietCheck, b.kaufCheck, b.bodenCheck)}
             ${klauselBlock(l)}
             ${chancenBlock(l)}
             ${kostenBlock(l, k)}
@@ -643,7 +681,7 @@
             <div class="haftbox">
               ${passungBlock(l, b)}
               <div class="haftbox__tun">
-                <button type="button" class="knopf knopf--voll" data-tu="anschreiben" data-id="${l.id}">${ico('nachricht')}Anschreiben</button>
+                <button type="button" class="knopf knopf--voll" data-tu="anschreiben" data-id="${l.id}">${ico('nachricht')}${anfrageWort(l)}</button>
                 <a class="knopf knopf--still knopf--voll" href="#kosten">${ico('rechner')}${U.eur(k.monatSumme)} echte Monatskosten</a>
               </div>
               ${eintrag ? h`<label class="feld"><span>Deine Notiz</span>
@@ -729,13 +767,26 @@
     z.push('Stand: ' + U.dateDE(U.isoDate(NW.now())) + ' · Nestwerk');
     z.push('');
     z.push('ECKDATEN');
-    z.push('  Zimmer:        ' + U.dec(l.zimmer));
-    z.push('  Fläche:        ' + l.flaeche + ' m²');
-    z.push('  Etage:         ' + (l.etage === 0 ? 'Erdgeschoss' : l.etage >= l.etagen ? 'Dachgeschoss' : l.etage + '. OG') + ' von ' + l.etagen);
-    z.push('  Baujahr:       ' + l.baujahr + (l.saniert ? ' (saniert)' : ''));
-    z.push('  Energie:       ' + l.energie.klasse + ', ' + l.energie.kwh + ' kWh/(m²·a), ' + l.energie.heizung);
-    z.push('  Frei ab:       ' + U.dateDE(l.freiAb));
-    z.push('  Ausstattung:   ' + l.ausstattung.join(', '));
+    if (l.type === 'grundstueck') {
+      const g = l.grund || {};
+      z.push('  Grundstück:    ' + U.num(l.grundstueck || l.flaeche) + ' m²');
+      z.push('  Art:           ' + (g.baulandArt || 'Bauland'));
+      z.push('  Bebauungsplan: ' + (g.bplan || 'unbekannt'));
+      z.push('  GRZ / GFZ:     ' + U.dec(g.grz || 0) + ' / ' + U.dec(g.gfz || 0));
+      z.push('  Erschließung:  ' + (g.erschliessung || 'unbekannt'));
+      z.push('  Verfügbar ab:  ' + U.dateDE(l.freiAb));
+    } else {
+      z.push('  Zimmer:        ' + U.dec(l.zimmer));
+      z.push('  Fläche:        ' + l.flaeche + ' m²');
+      if (l.grundstueck) z.push('  Grundstück:    ' + U.num(l.grundstueck) + ' m²');
+      if (l.type !== 'haus') {
+        z.push('  Etage:         ' + (l.etage === 0 ? 'Erdgeschoss' : l.etage >= l.etagen ? 'Dachgeschoss' : l.etage + '. OG') + ' von ' + l.etagen);
+      }
+      z.push('  Baujahr:       ' + l.baujahr + (l.saniert ? ' (saniert)' : ''));
+      if (l.energie) z.push('  Energie:       ' + l.energie.klasse + ', ' + l.energie.kwh + ' kWh/(m²·a), ' + l.energie.heizung);
+      z.push('  Frei ab:       ' + U.dateDE(l.freiAb));
+      z.push('  Ausstattung:   ' + l.ausstattung.join(', '));
+    }
     z.push('');
     z.push('KOSTEN');
     k.monatlich.forEach((m) => z.push('  ' + m.label.padEnd(34) + U.eur(m.betrag).padStart(12)));
@@ -866,13 +917,23 @@
     const namen = { schufa: 'Schufa-Auskunft', gehaltsnachweise: 'Gehaltsnachweise', ausweis: 'Ausweiskopie',
       mietschuldenfrei: 'Mietschuldenfreiheit', buergschaft: 'Bürgschaft', selbstauskunft: 'Selbstauskunft', wbs: 'WBS' };
     const vorlage = anschreibenText(l, p);
+    const kauf = istKaufAnfrage(l);
     ui.dialog({
-      titel: 'Anschreiben',
+      titel: kauf ? 'Anfrage' : 'Anschreiben',
       breit: true,
-      inhalt: h`<p class="block__unter">Nestwerk hat aus deinem Profil einen Vorschlag geschrieben. Ändere ihn, bis er nach dir klingt.</p>
+      inhalt: h`<p class="block__unter">${kauf
+        ? 'Nestwerk hat die Fragen zusammengestellt, deren Antworten den Preis mitbestimmen. Streich, was du '
+        + 'schon weißt, und ergänze, was dir wichtig ist.'
+        : 'Nestwerk hat aus deinem Profil einen Vorschlag geschrieben. Ändere ihn, bis er nach dir klingt.'}</p>
         <label class="feld"><span>Nachricht</span>
           <textarea rows="12" id="anschreiben-text">${vorlage}</textarea></label>
-        <fieldset class="filter__gruppe"><legend>Bewerbermappe</legend>
+        ${kauf ? h`<div class="hinweisbox">${ico('info')}
+          <div><b>Einkommen und Bonität gehören nicht in die erste Anfrage</b>
+          <p>Beim Kauf verhandelst du. Wer gleich zu Beginn schreibt, was er verdient und wie viel Eigenkapital
+            er hat, gibt seine Verhandlungsposition ohne Not preis. Ein Finanzierungsnachweis wird üblicherweise
+            erst verlangt, wenn es konkret wird – und dann reicht die Bestätigung der Bank über eine Summe, nicht
+            deine Gehaltsabrechnung.</p></div>
+        </div>` : h`<fieldset class="filter__gruppe"><legend>Bewerbermappe</legend>
           <p class="fein">Was du mitschickst, entscheidet oft mehr als der Text. Fehlende Unterlagen erst
             nach der Besichtigung nachreichen – vorher gehören Ausweis und Schufa niemandem.</p>
           <ul class="mappe">
@@ -882,13 +943,20 @@
           ${fehlt.length ? h`<p class="warn-meldung">${ico('warnung')}Es fehlen: ${fehlt.map((f) => namen[f]).join(', ')}.
             <a href="#/profil">Im Profil ergänzen</a></p>` : h`<p class="gut-meldung">${ico('pruefen')}Deine Mappe ist vollständig.</p>`}
         </fieldset>
-        ${NW.viewTresor ? NW.viewTresor.freigabeAbschnitt(l.id, l.anbieter.name) : ''}`,
+        ${NW.viewTresor ? NW.viewTresor.freigabeAbschnitt(l.id, l.anbieter.name) : ''}`}`,
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="anschreiben-kopieren">${ico('kopieren')}Text kopieren</button>
         <button type="button" class="knopf" data-tu="anschreiben-senden" data-id="${l.id}">${ico('nachricht')}Absenden</button>`
     });
   });
 
+  /* Beim Kauf heißt es nicht „bewerben“. Wer sein Nettoeinkommen und die
+     Selbstauskunft in die erste Anfrage zu einem Grundstück schreibt,
+     verrät ohne Not seine Verhandlungsposition. */
+  const istKaufAnfrage = (l) => l.kind === 'kauf';
+  const anfrageWort = (l) => istKaufAnfrage(l) ? 'Anfragen' : 'Anschreiben';
+
   function anschreibenText(l, p) {
+    if (istKaufAnfrage(l)) return anfrageText(l, p);
     const anrede = l.anbieter.art === 'privat' ? 'Hallo ' + l.anbieter.name.split(' ')[0] + ','
       : 'Guten Tag,';
     const wer = [];
@@ -907,6 +975,31 @@
       W.unterlagenSatz(p) + ' ' +
       'Nennen Sie mir gern zwei Termine, die Ihnen passen.\n\n' +
       'Viele Grüße\n' + (p.name || '');
+  }
+
+  function anfrageText(l, p) {
+    const anrede = l.anbieter.art === 'privat' ? 'Hallo ' + l.anbieter.name.split(' ')[0] + ',' : 'Guten Tag,';
+    const grund = l.type === 'grundstueck'
+      ? 'ich interessiere mich für Ihr Grundstücksangebot „' + l.titel + '“.'
+      : 'ich interessiere mich für Ihr Angebot „' + l.titel + '“.';
+    /* Die Fragen, die vor jeder Besichtigung geklärt gehören und deren
+       Antworten den Preis mitbestimmen. */
+    const fragen = l.type === 'grundstueck'
+      ? ['Liegt ein aktueller Auszug aus dem Baulastenverzeichnis vor?',
+        'Sind die Erschließungsbeiträge nach § 127 BauGB vollständig gezahlt?',
+        'Gibt es Altlastenverdacht oder ein Bodengutachten?',
+        'Welche Dienstbarkeiten und Rechte sind in Abteilung II des Grundbuchs eingetragen?',
+        'Gilt ein Bebauungsplan, und wenn ja: mit welcher Grund- und Geschossflächenzahl?']
+      : ['Wie hoch sind Hausgeld und Instandhaltungsrücklage, und was ist darin enthalten?',
+        'Welche Beschlüsse und Sonderumlagen stehen aus den letzten drei Eigentümerversammlungen an?',
+        'Liegt der Energieausweis vor, und wann wurde die Heizung zuletzt erneuert?',
+        'Gibt es Wohnrechte, Nießbrauch oder Dienstbarkeiten im Grundbuch?',
+        'Ist das Objekt vermietet, und wenn ja: zu welchen Konditionen?'];
+    return anrede + '\n\n' + grund + ' Bevor wir einen Besichtigungstermin vereinbaren, hätte ich einige '
+      + 'Fragen:\n\n'
+      + fragen.map((x, i) => (i + 1) + '. ' + x).join('\n')
+      + '\n\nÜber die Unterlagen dazu würde ich mich freuen. Für eine Besichtigung nennen Sie mir gern zwei '
+      + 'Termine, die Ihnen passen.\n\nViele Grüße\n' + (p.name || '');
   }
 
   A_('anschreiben-kopieren', () => {

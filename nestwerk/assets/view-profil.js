@@ -246,6 +246,116 @@
      Inserieren
      ================================================================ */
 
+  /* ------------------------- Inserieren -------------------------
+
+     Sechs Angebotsarten aus zwei Merkmalen: kind (miete, kauf, wg,
+     tausch) und type (wohnung, haus, zimmer, grundstueck). Die Tabelle
+     hält beides zusammen und sagt zugleich, welche Feldgruppen die Art
+     braucht – sonst müsste jede Stelle im Formular ihre eigene Bedingung
+     mitschleppen und würde bei der siebten Art vergessen. */
+  const ARTEN = [
+    { id: 'miete', kind: 'miete', type: 'wohnung', icon: 'schluessel', label: 'Wohnung vermieten',
+      gruppen: ['wohnung', 'miete'] },
+    { id: 'wg', kind: 'wg', type: 'zimmer', icon: 'wg', label: 'WG-Zimmer',
+      gruppen: ['wohnung', 'miete'] },
+    { id: 'tausch', kind: 'tausch', type: 'wohnung', icon: 'tausch', label: 'Wohnung tauschen',
+      gruppen: ['wohnung', 'miete', 'tausch'] },
+    { id: 'kauf-wohnung', kind: 'kauf', type: 'wohnung', icon: 'haus', label: 'Wohnung verkaufen',
+      gruppen: ['wohnung', 'kauf'] },
+    { id: 'kauf-haus', kind: 'kauf', type: 'haus', icon: 'dach', label: 'Haus verkaufen',
+      gruppen: ['wohnung', 'kauf', 'haus'] },
+    { id: 'kauf-grundstueck', kind: 'kauf', type: 'grundstueck', icon: 'karte', label: 'Grundstück verkaufen',
+      gruppen: ['kauf', 'grundstueck'] }
+  ];
+
+  const artNach = (id) => ARTEN.find((a) => a.id === id) || ARTEN[0];
+
+  /* ------------------------- Bilder zum Inserat -------------------------
+
+     Ein Inserat ohne Fotos wird kaum angeklickt – das gilt beim Vermieten
+     wie beim Verkaufen. Die Dateien bleiben auf diesem Gerät, deshalb
+     werden sie vor dem Ablegen verkleinert: Ein Foto aus einer heutigen
+     Kamera hat gut vier Megabyte, und der Speicher eines Browsers fasst
+     insgesamt oft nur fünf. Verkleinert auf 1.400 Pixel Kantenlänge und
+     als JPEG mit 78 Prozent Güte bleiben davon rund 150 Kilobyte, ohne
+     dass man den Unterschied sieht. */
+
+  const BILD_MAX = 10;
+  const BILD_KANTE = 1400;
+  const BILD_GUETE = 0.78;
+  const BILD_TYPEN = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
+
+  /* Zwischenspeicher, solange das Formular offen ist. */
+  let neueBilder = [];
+
+  function verkleinern(datei) {
+    return new Promise((gut, schlecht) => {
+      const url = URL.createObjectURL(datei);
+      const bild = new Image();
+      bild.onload = () => {
+        try {
+          const faktor = Math.min(1, BILD_KANTE / Math.max(bild.naturalWidth, bild.naturalHeight));
+          const b = Math.max(1, Math.round(bild.naturalWidth * faktor));
+          const hh = Math.max(1, Math.round(bild.naturalHeight * faktor));
+          const leinwand = document.createElement('canvas');
+          leinwand.width = b; leinwand.height = hh;
+          const stift = leinwand.getContext('2d');
+          stift.drawImage(bild, 0, 0, b, hh);
+          URL.revokeObjectURL(url);
+          gut({ datei: leinwand.toDataURL('image/jpeg', BILD_GUETE), breite: b, hoehe: hh, text: '' });
+        } catch (e) { URL.revokeObjectURL(url); schlecht(e); }
+      };
+      bild.onerror = () => { URL.revokeObjectURL(url); schlecht(new Error('Die Datei ließ sich nicht lesen.')); };
+      bild.src = url;
+    });
+  }
+
+  const bildGroesse = (b) => Math.round(b.datei.length * 0.75 / 1024) + ' kB';
+
+  function bilderBlock() {
+    return h`<fieldset class="filter__gruppe bilder"><legend>Fotos</legend>
+      <p class="fein">Inserate mit Fotos werden deutlich häufiger geöffnet. Bis zu ${BILD_MAX} Bilder,
+        JPG, PNG, WEBP oder HEIC. Das erste ist das Titelbild.</p>
+      <div class="bilder__wahl">
+        <input type="file" id="inserat-bilder" class="nur-sr" accept="image/*" multiple
+          data-tu-change="inserat-bilder">
+        <label for="inserat-bilder" class="knopf knopf--still">${ico('plus')}Bilder hochladen</label>
+        <i id="inserat-bilder-zahl">${neueBilder.length
+      ? neueBilder.length + ' ' + U.plural(neueBilder.length, 'Bild', 'Bilder') + ' gewählt'
+      : 'noch keine gewählt'}</i>
+      </div>
+      <ul class="bilder__liste" id="inserat-bilder-liste">${bilderListe()}</ul>
+      <p class="fein">Die Bilder werden beim Ablegen auf ${U.num(BILD_KANTE)} Pixel Kantenlänge verkleinert und
+        bleiben im Speicher dieses Geräts. Sie werden nirgendwohin übertragen – es gibt keinen Server.</p>
+      <div class="hinweisbox">${ico('warnung')}
+        <div><b>Was auf ein Inseratsfoto nicht gehört</b>
+        <p>Keine Personen ohne deren Einwilligung, keine Kennzeichen, keine Namensschilder an Klingel oder
+          Briefkasten, keine Post auf dem Tisch. Wer die Wohnung noch bewohnt, sollte vorher gefragt werden:
+          Fotos der Innenräume dürfen ohne Zustimmung der Mietpartei nicht veröffentlicht werden.</p></div>
+      </div>
+    </fieldset>`;
+  }
+
+  function bilderListe() {
+    if (!neueBilder.length) return '';
+    return h`${neueBilder.map((b, i) => h`<li>
+      <img src="${b.datei}" alt="Vorschau ${i + 1}">
+      <div>
+        <b>${i === 0 ? 'Titelbild' : 'Bild ' + (i + 1)}</b>
+        <span>${b.breite} × ${b.hoehe} · ${bildGroesse(b)}</span>
+        <input type="text" class="bilder__text" data-tu-input="inserat-bildtext" data-i="${i}"
+          value="${b.text || ''}" placeholder="Bildunterschrift (freiwillig)"
+          aria-label="Bildunterschrift für Bild ${i + 1}">
+      </div>
+      <span class="bilder__tun">
+        <button type="button" class="ikon-btn" data-tu="inserat-bild-vor" data-i="${i}"
+          ${i === 0 ? 'disabled' : ''} aria-label="Bild ${i + 1} nach vorn">${ico('zurueck')}</button>
+        <button type="button" class="ikon-btn" data-tu="inserat-bild-weg" data-i="${i}"
+          aria-label="Bild ${i + 1} entfernen">${ico('muell')}</button>
+      </span>
+    </li>`)}`;
+  }
+
   function inserieren() {
     const s = S.get();
     return {
@@ -253,8 +363,9 @@
       html: h`<div class="seite seite--schmal">
         <header class="seite__kopf">
           <h1>${ico('plus')}Inserat aufgeben</h1>
-          <p class="seite__unter">Ob Wohnung, WG-Zimmer oder Tauschangebot – ein Formular für alles.
-            Das Inserat bleibt auf diesem Gerät und taucht in deiner Suche und im Ringtausch auf.</p>
+          <p class="seite__unter">Vermieten, verkaufen, ein Zimmer anbieten oder tauschen – ein Formular für
+            alles. Das Inserat bleibt auf diesem Gerät und taucht in deiner Suche, in der Karte und im
+            Ringtausch auf.</p>
         </header>
 
         ${s.eigeneInserate.length ? h`<section class="block">
@@ -271,25 +382,28 @@
         <form class="block" data-tu-submit="inserat-speichern" id="inserat-form">
           <h2>Neues Inserat</h2>
 
-          <fieldset class="filter__gruppe"><legend>Art</legend>
+          <fieldset class="filter__gruppe"><legend>Art des Angebots</legend>
             <div class="chips">
-              ${[['miete', 'Wohnung vermieten'], ['wg', 'WG-Zimmer'], ['tausch', 'Wohnung tauschen']].map((o, i) =>
-        h`<label class="chip chip--radio"><input type="radio" name="kind" value="${o[0]}" ${i === 0 ? 'checked' : ''}
-                  data-tu-change="inserat-art"> ${o[1]}</label>`)}
+              ${ARTEN.map((o, i) =>
+        h`<label class="chip chip--radio"><input type="radio" name="art" value="${o.id}" ${i === 0 ? 'checked' : ''}
+                  data-tu-change="inserat-art"> ${ico(o.icon)}${o.label}</label>`)}
             </div>
           </fieldset>
 
-          <div class="formraster">
+          <div class="formraster" data-gruppe="ort">
             <label class="feld"><span>Stadt und Viertel</span>
               <select name="viertelKey" required>
                 ${NW.geo.DISTRICTS.map((d) => h`<option value="${d.key}">${d.city} – ${d.name}</option>`)}
               </select></label>
             <label class="feld"><span>Straße (ungefähr)</span>
               <input type="text" name="strasse" placeholder="Nähe Beispielstraße"></label>
+          </div>
+
+          <div class="formraster" data-gruppe="wohnung">
             <label class="feld"><span>Zimmer</span>
-              <input type="number" name="zimmer" min="1" max="9" step="0.5" value="2" required></label>
-            <label class="feld"><span>Fläche in m²</span>
-              <input type="number" name="flaeche" min="8" max="400" value="60" required></label>
+              <input type="number" name="zimmer" min="1" max="9" step="0.5" value="2"></label>
+            <label class="feld"><span>Wohnfläche in m²</span>
+              <input type="number" name="flaeche" min="8" max="900" value="60"></label>
             <label class="feld"><span>Etage</span>
               <input type="number" name="etage" min="0" max="20" value="1"></label>
             <label class="feld"><span>Etagen im Haus</span>
@@ -299,10 +413,46 @@
             <label class="feld"><span>Heizung</span>
               <select name="heizung">
                 ${['Gas-Zentralheizung', 'Fernwärme', 'Wärmepumpe', 'Öl-Zentralheizung', 'Gasetagenheizung', 'Pelletheizung'].map((x) =>
+        h`<option>${x}</option>`)}
+              </select></label>
+          </div>
+
+          <div class="formraster" data-gruppe="haus">
+            <label class="feld"><span>Grundstücksfläche in m²</span>
+              <input type="number" name="grundstueck" min="0" max="20000" value="420"></label>
+            <label class="feld"><span>Bauweise</span>
+              <select name="bauweise">
+                ${['freistehend', 'Doppelhaushälfte', 'Reihenmittelhaus', 'Reihenendhaus', 'Bungalow', 'Stadtvilla'].map((x) =>
           h`<option>${x}</option>`)}
               </select></label>
+          </div>
+
+          <div class="formraster" data-gruppe="grundstueck">
+            <label class="feld"><span>Grundstücksfläche in m²</span>
+              <input type="number" name="gflaeche" min="30" max="100000" value="600"></label>
+            <label class="feld"><span>Art des Grundstücks</span>
+              <select name="baulandArt">
+                ${['Bauland, voll erschlossen', 'Bauland, teilerschlossen', 'Bauland, unerschlossen',
+            'Bauerwartungsland', 'Gartenland', 'Wohnbaugrundstück mit Altbestand'].map((x) => h`<option>${x}</option>`)}
+              </select></label>
+            <label class="feld"><span>Bebauungsplan</span>
+              <select name="bplan">
+                ${['liegt vor', 'im Verfahren', 'kein Bebauungsplan – § 34 BauGB', 'Außenbereich – § 35 BauGB'].map((x) =>
+            h`<option>${x}</option>`)}
+              </select></label>
+            <label class="feld"><span>Grundflächenzahl (GRZ)</span>
+              <input type="number" name="grz" min="0" max="1" step="0.05" value="0.4"></label>
+            <label class="feld"><span>Geschossflächenzahl (GFZ)</span>
+              <input type="number" name="gfz" min="0" max="3" step="0.1" value="0.8"></label>
+            <label class="feld"><span>Erschließungskosten</span>
+              <select name="erschliessung">
+                ${['bereits bezahlt', 'noch offen', 'anteilig offen', 'unbekannt'].map((x) => h`<option>${x}</option>`)}
+              </select></label>
+          </div>
+
+          <div class="formraster" data-gruppe="miete">
             <label class="feld"><span>Kaltmiete</span>
-              <input type="number" name="kalt" min="0" step="10" value="750" required></label>
+              <input type="number" name="kalt" min="0" step="10" value="750"></label>
             <label class="feld"><span>Nebenkosten</span>
               <input type="number" name="nebenkosten" min="0" step="10" value="140"></label>
             <label class="feld"><span>Heizkosten</span>
@@ -313,19 +463,39 @@
               <input type="date" name="freiAb" value="${U.isoDate(U.addDays(NW.now(), 30))}"></label>
           </div>
 
-          <fieldset class="filter__gruppe"><legend>Ausstattung</legend>
+          <div class="formraster" data-gruppe="kauf">
+            <label class="feld"><span>Kaufpreis</span>
+              <input type="number" name="kaufpreis" min="0" step="1000" value="350000"></label>
+            <label class="feld"><span>Käuferprovision in Prozent</span>
+              <input type="number" name="provision" min="0" max="8" step="0.01" value="0"></label>
+            <label class="feld" data-gruppe="wohnung"><span>Hausgeld im Monat</span>
+              <input type="number" name="hausgeld" min="0" step="10" value="260"></label>
+            <label class="feld"><span>Bezugsfrei ab</span>
+              <input type="date" name="freiAbKauf" value="${U.isoDate(U.addDays(NW.now(), 90))}"></label>
+          </div>
+
+          <div class="hinweisbox" data-gruppe="kauf">${ico('info')}
+            <div><b>Provision und Kosten beim Kauf</b>
+            <p>Seit dem 23. Dezember 2020 gilt bei Wohnungen und Einfamilienhäusern an Verbraucher: Die
+              Maklerprovision wird geteilt, und die Käuferseite zahlt höchstens so viel wie die Verkäuferseite
+              (§§ 656c, 656d BGB). Für Grundstücke und Mehrfamilienhäuser gilt das nicht. Nestwerk rechnet die
+              Nebenkosten des Erwerbs – Grunderwerbsteuer nach Bundesland, Notar und Grundbuch – bei jedem
+              Angebot durch und zeigt sie neben dem Kaufpreis.</p></div>
+          </div>
+
+          <fieldset class="filter__gruppe" data-gruppe="wohnung"><legend>Ausstattung</legend>
             <div class="chips">
               ${NW.data.AUSSTATTUNG.slice(0, 22).map((a) =>
-            h`<label class="chip chip--radio"><input type="checkbox" name="ausstattung" value="${a}"> ${a}</label>`)}
+              h`<label class="chip chip--radio"><input type="checkbox" name="ausstattung" value="${a}"> ${a}</label>`)}
             </div>
           </fieldset>
 
-          <fieldset class="filter__gruppe" id="tausch-felder" hidden><legend>Tauschwunsch</legend>
+          <fieldset class="filter__gruppe" data-gruppe="tausch"><legend>Tauschwunsch</legend>
             <label class="feld"><span>Grund für den Tausch</span>
               <input type="text" name="grund" placeholder="z. B. neuer Job in Leipzig"></label>
             <div class="chips">
               ${NW.data.staedte.map((c) =>
-              h`<label class="chip chip--radio"><input type="checkbox" name="wunschStadt" value="${c}"> ${c}</label>`)}
+                h`<label class="chip chip--radio"><input type="checkbox" name="wunschStadt" value="${c}"> ${c}</label>`)}
             </div>
             <div class="formraster">
               <label class="feld"><span>Zimmer mindestens</span><input type="number" name="tZimmer" min="1" step="0.5" value="2"></label>
@@ -334,6 +504,8 @@
             </div>
             <label class="schalter"><input type="checkbox" name="ringOk" checked><span>auch Ringtausch über mehrere Haushalte</span></label>
           </fieldset>
+
+          ${bilderBlock()}
 
           <label class="feld"><span>Beschreibung</span>
             <textarea name="beschreibung" rows="5" placeholder="Was sollte man über die Wohnung und die Nachbarschaft wissen?"></textarea></label>
@@ -347,7 +519,11 @@
 
           <button type="submit" class="knopf knopf--voll">${ico('speichern')}Inserat anlegen</button>
         </form>
-      </div>`
+      </div>`,
+      /* Die Feldgruppen richten sich nach der Art. Beim ersten Aufbau
+         muss das einmal von Hand geschehen – danach erledigt es der
+         Wechsel der Auswahl. */
+      danach() { gruppenZeigen((U.$('input[name="art"]:checked') || {}).value || 'miete'); }
     };
   }
 
@@ -635,9 +811,74 @@
     ui.neuZeichnen();
   });
 
-  A_('inserat-art', (el) => {
-    const felder = U.$('#tausch-felder');
-    if (felder) felder.hidden = el.value !== 'tausch';
+  /* Zeigt nur die Feldgruppen, die zur gewählten Art gehören. Ein
+     verstecktes Feld bleibt im Formular und liefert weiter seinen Wert –
+     das ist gewollt: Wer zwischen Vermieten und Verkaufen hin- und
+     herschaltet, verliert dabei nichts. */
+  function gruppenZeigen(artId) {
+    const a = artNach(artId);
+    U.$$('[data-gruppe]').forEach((el) => {
+      const noetig = el.dataset.gruppe.split(' ').every((g) => g === 'ort' || a.gruppen.indexOf(g) >= 0);
+      el.hidden = !noetig;
+      /* Pflichtfelder einer verborgenen Gruppe würden das Absenden
+         blockieren, ohne dass man sähe, warum. */
+      U.$$('input,select,textarea', el).forEach((f) => { f.disabled = !noetig; });
+    });
+  }
+
+  A_('inserat-art', (el) => { gruppenZeigen(el.value); });
+
+  A_('inserat-bilder', (el) => {
+    const dateien = Array.from(el.files || []);
+    el.value = '';
+    if (!dateien.length) return;
+    const platz = BILD_MAX - neueBilder.length;
+    if (platz <= 0) { ui.toast('Mehr als ' + BILD_MAX + ' Bilder gehen nicht.', 'schlecht'); return; }
+    const nehmen = dateien.slice(0, platz);
+    if (dateien.length > platz) {
+      ui.toast('Nur die ersten ' + platz + ' ' + U.plural(platz, 'Datei', 'Dateien') + ' wurden übernommen.', 'schlecht');
+    }
+    const falsch = nehmen.filter((d) => d.type && BILD_TYPEN.indexOf(d.type) < 0);
+    if (falsch.length) { ui.toast('Erlaubt sind JPG, PNG, WEBP und HEIC.', 'schlecht'); }
+
+    Promise.all(nehmen.filter((d) => !d.type || BILD_TYPEN.indexOf(d.type) >= 0).map(verkleinern))
+      .then((neue) => {
+        neueBilder = neueBilder.concat(neue);
+        bilderNeuZeichnen();
+        ui.toast(neue.length + ' ' + U.plural(neue.length, 'Bild', 'Bilder') + ' übernommen und verkleinert.', 'gut');
+      })
+      .catch((e) => ui.toast(e.message || 'Ein Bild ließ sich nicht lesen.', 'schlecht'));
+  });
+
+  /* Nur die Bilderliste neu setzen, nicht die ganze Seite: Sonst wäre
+     jede Eingabe im Formular darüber wieder weg. */
+  function bilderNeuZeichnen() {
+    const liste = U.$('#inserat-bilder-liste');
+    if (liste) liste.innerHTML = String(bilderListe());
+    const zahl = U.$('#inserat-bilder-zahl');
+    if (zahl) {
+      zahl.textContent = neueBilder.length
+        ? neueBilder.length + ' ' + U.plural(neueBilder.length, 'Bild', 'Bilder') + ' gewählt'
+        : 'noch keine gewählt';
+    }
+  }
+
+  A_('inserat-bildtext', (el) => {
+    const b = neueBilder[Number(el.dataset.i)];
+    if (b) b.text = el.value.slice(0, 120);
+  });
+
+  A_('inserat-bild-weg', (el) => {
+    neueBilder.splice(Number(el.dataset.i), 1);
+    bilderNeuZeichnen();
+  });
+
+  A_('inserat-bild-vor', (el) => {
+    const i = Number(el.dataset.i);
+    if (i <= 0) return;
+    const b = neueBilder.splice(i, 1)[0];
+    neueBilder.splice(i - 1, 0, b);
+    bilderNeuZeichnen();
   });
 
   A_('inserat-speichern', (el) => {
@@ -645,46 +886,87 @@
     const key = f.get('viertelKey');
     const d = NW.geo.districtByKey[key];
     if (!d) { ui.toast('Bitte ein Viertel wählen.', 'schlecht'); return; }
-    const kind = f.get('kind') || 'miete';
-    const zimmer = Number(f.get('zimmer')) || 2;
-    const flaeche = Number(f.get('flaeche')) || 50;
-    const kalt = Number(f.get('kalt')) || 0;
-    const nk = Number(f.get('nebenkosten')) || 0;
-    const heiz = Number(f.get('heizkosten')) || 0;
-    const baujahr = Number(f.get('baujahr')) || 1970;
+
+    const art = artNach(f.get('art'));
+    const kind = art.kind, typ = art.type;
+    const istKauf = kind === 'kauf';
+    const istGrund = typ === 'grundstueck';
+
+    const zahl = (name, ersatz) => {
+      const v = Number(f.get(name));
+      return Number.isFinite(v) && f.get(name) !== null && f.get(name) !== '' ? v : ersatz;
+    };
+
+    const zimmer = istGrund ? 0 : zahl('zimmer', 2);
+    const gflaeche = istGrund ? zahl('gflaeche', 600) : zahl('grundstueck', 0);
+    /* Beim Grundstück ist die Fläche das Grundstück selbst – sonst hätte
+       jede Auswertung, die durch die Fläche teilt, eine Null im Nenner. */
+    const flaeche = istGrund ? gflaeche : zahl('flaeche', 50);
+    const kalt = istKauf ? 0 : zahl('kalt', 0);
+    const nk = istKauf ? 0 : zahl('nebenkosten', 0);
+    const heiz = istKauf ? 0 : zahl('heizkosten', 0);
+    const kaufpreis = istKauf ? zahl('kaufpreis', 0) : 0;
+    const hausgeld = istKauf && typ === 'wohnung' ? zahl('hausgeld', 0) : 0;
+    const provision = istKauf ? zahl('provision', 0) : 0;
+    const baujahr = istGrund ? 0 : zahl('baujahr', 1970);
     const heizung = f.get('heizung') || 'Gas-Zentralheizung';
-    const ausstattung = f.getAll('ausstattung');
+    const ausstattung = istGrund ? [] : f.getAll('ausstattung');
     const kwh = baujahr >= 2020 ? 55 : baujahr >= 2000 ? 95 : baujahr >= 1978 ? 125 : 168;
     const p = S.get().profil;
 
+    const titel = istGrund
+      ? U.num(gflaeche) + ' m² ' + (String(f.get('baulandArt') || 'Bauland').split(',')[0]) + ' – ' + d.name
+      : typ === 'haus'
+        ? (f.get('bauweise') || 'Haus') + ', ' + U.dec(zimmer) + ' Zi., ' + flaeche + ' m² – ' + d.name
+        : kind === 'wg' ? flaeche + ' m² Zimmer – ' + d.name
+          : U.dec(zimmer) + '-Zimmer-Wohnung' + (kind === 'tausch' ? ' zum Tausch' : '') + ' – ' + d.name;
+
     const daten = {
-      kind,
-      type: kind === 'wg' ? 'zimmer' : 'wohnung',
-      titel: (kind === 'wg' ? flaeche + ' m² Zimmer' : kind === 'tausch' ? U.dec(zimmer) + '-Zimmer-Wohnung zum Tausch'
-        : U.dec(zimmer) + '-Zimmer-Wohnung') + ' – ' + d.name,
+      kind, type: typ,
+      titel,
       stadt: d.city, viertel: d.name, viertelKey: d.key,
       strasse: f.get('strasse') || 'Nähe ' + d.name,
       lat: d.lat, lng: d.lng,
-      zimmer, flaeche, wohnflaeche: flaeche,
-      etage: Number(f.get('etage')) || 0, etagen: Number(f.get('etagen')) || 4,
+      zimmer, flaeche, wohnflaeche: istGrund ? 0 : flaeche,
+      grundstueck: gflaeche,
+      etage: istGrund ? 0 : zahl('etage', 0), etagen: istGrund ? 0 : zahl('etagen', 4),
       baujahr, saniert: false,
       kalt, nebenkosten: nk, heizkosten: heiz, warm: kalt + nk + heiz,
-      kaufpreis: 0, hausgeld: 0, provision: 0, kaution: Number(f.get('kaution')) || 0,
-      energie: { klasse: kwh <= 75 ? 'B' : kwh <= 100 ? 'C' : kwh <= 130 ? 'D' : kwh <= 160 ? 'E' : 'F', kwh, art: 'Bedarfsausweis', heizung, ausweisBis: U.isoDate(U.addDays(NW.now(), 3000)) },
+      kaufpreis, hausgeld, provision,
+      kaution: istKauf ? 0 : zahl('kaution', 0),
+      /* Ein Grundstück hat keinen Energieausweis – § 80 GEG verlangt ihn
+         nur für Gebäude. Eine erfundene Klasse hinzuschreiben wäre falsch. */
+      energie: istGrund ? null : {
+        klasse: kwh <= 75 ? 'B' : kwh <= 100 ? 'C' : kwh <= 130 ? 'D' : kwh <= 160 ? 'E' : 'F',
+        kwh, art: 'Bedarfsausweis', heizung, ausweisBis: U.isoDate(U.addDays(NW.now(), 3000))
+      },
       ausstattung,
-      freiAb: f.get('freiAb') || U.isoDate(NW.now()),
+      freiAb: (istKauf ? f.get('freiAbKauf') : f.get('freiAb')) || U.isoDate(NW.now()),
       befristetBis: null,
       beschreibung: f.get('beschreibung') || 'Keine weitere Beschreibung hinterlegt.',
+      bilder: neueBilder.slice(),
       quirks: [],
       anbieter: {
         name: p.name || 'Du', art: 'privat', stadt: d.city, quote: 100, antwortStd: 4,
         verifiziert: true, seit: U.isoDate(NW.now()), inserate: 1, bewertung: 0, bewertungen: 0
       },
       stats: { aufrufe: 0, bewerber: 0, online: U.isoDate(NW.now()) },
-      vergleichsmiete: NW.geo.vergleichsmiete(d.key, flaeche, baujahr, false),
+      vergleichsmiete: istKauf ? 0 : NW.geo.vergleichsmiete(d.key, flaeche, baujahr, false),
       besichtigungen: [],
       verdacht: false
     };
+
+    if (typ === 'haus') daten.bauweise = f.get('bauweise') || 'freistehend';
+
+    if (istGrund) {
+      daten.grund = {
+        baulandArt: f.get('baulandArt') || 'Bauland, voll erschlossen',
+        bplan: f.get('bplan') || 'liegt vor',
+        grz: zahl('grz', 0.4),
+        gfz: zahl('gfz', 0.8),
+        erschliessung: f.get('erschliessung') || 'unbekannt'
+      };
+    }
 
     if (kind === 'wg') {
       daten.wg = {
@@ -703,9 +985,9 @@
         grund: f.get('grund') || 'Veränderung.',
         suche: {
           staedte: staedte.length ? staedte : [d.city],
-          zimmerMin: Number(f.get('tZimmer')) || 1,
-          flaecheMin: Number(f.get('tFlaeche')) || 30,
-          warmMax: Number(f.get('tWarm')) || 1200,
+          zimmerMin: zahl('tZimmer', 1),
+          flaecheMin: zahl('tFlaeche', 30),
+          warmMax: zahl('tWarm', 1200),
           wunschAusstattung: []
         },
         flexibelAb: daten.freiAb,
@@ -714,8 +996,18 @@
       };
     }
 
-    const id = S.inseratAnlegen(daten);
-    ui.toast('Inserat angelegt.', 'gut');
+    let id;
+    try {
+      id = S.inseratAnlegen(daten);
+    } catch (e) {
+      /* Der Browserspeicher ist begrenzt; Bilder füllen ihn am schnellsten. */
+      ui.toast('Der Speicher dieses Browsers ist voll. Entferne einige Bilder oder ältere Inserate.', 'schlecht');
+      return;
+    }
+    neueBilder = [];
+    ui.toast(daten.bilder.length
+      ? 'Inserat mit ' + daten.bilder.length + ' ' + U.plural(daten.bilder.length, 'Bild', 'Bildern') + ' angelegt.'
+      : 'Inserat angelegt.', 'gut');
     ui.gehe(kind === 'tausch' ? 'tausch' : 'objekt/' + id);
   });
 

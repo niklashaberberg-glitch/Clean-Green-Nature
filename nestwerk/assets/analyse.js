@@ -53,8 +53,40 @@
     };
   }
 
+  /* Ein unbebautes Grundstück gegen den Quadratmeterpreis einer Wohnung
+     zu stellen, wäre grober Unfug – Wohnfläche und Grundstücksfläche sind
+     zwei verschiedene Größen. Und ein Kaufpreisfaktor in Jahresmieten
+     ergibt keinen Sinn, wenn nichts vermietet werden kann. Deshalb eine
+     eigene Prüfung mit einem abgeleiteten Bodenwert. */
+  function bodenCheck(l) {
+    if (l.kind !== 'kauf' || l.type !== 'grundstueck') return null;
+    const flaeche = l.grundstueck || l.flaeche || 1;
+    const proQm = l.kaufpreis / flaeche;
+    /* Der Bodenanteil am Kaufpreis einer Wohnung liegt je nach Lage bei
+       gut einem Fünftel bis einem Drittel. Daraus lässt sich ein grober
+       Bodenwert ableiten – ein amtlicher Bodenrichtwert ist das nicht. */
+    const referenz = Math.round(G.vergleichskaufpreis(l.viertelKey, 90, 2000) * 0.24);
+    const diff = referenz > 0 ? (proQm - referenz) / referenz * 100 : 0;
+    const g = l.grund || {};
+    /* Erschließung und Baurecht schlagen stark auf den Wert durch. */
+    const abschlag = (/unerschlossen/.test(g.baulandArt || '') ? 25 : /teilerschlossen/.test(g.baulandArt || '') ? 12 : 0)
+      + (/Bauerwartungsland/.test(g.baulandArt || '') ? 45 : 0)
+      + (/Gartenland/.test(g.baulandArt || '') ? 60 : 0);
+    let urteil, ton;
+    if (diff < -12) { urteil = 'unter dem Bodenwert der Lage'; ton = 'gut'; }
+    else if (diff <= 10) { urteil = 'im Rahmen der Lage'; ton = 'neutral'; }
+    else if (diff <= 25) { urteil = 'über dem Bodenwert der Lage'; ton = 'mittel'; }
+    else { urteil = 'deutlich über dem Bodenwert der Lage'; ton = 'schlecht'; }
+    return {
+      proQm: Math.round(proQm), referenz, diff: Math.round(diff), urteil, ton,
+      flaeche, abschlag,
+      bebaubar: Math.round(flaeche * (g.grz || 0)),
+      geschossflaeche: Math.round(flaeche * (g.gfz || 0))
+    };
+  }
+
   function kaufCheck(l) {
-    if (l.kind !== 'kauf') return null;
+    if (l.kind !== 'kauf' || l.type === 'grundstueck') return null;
     const proQm = l.kaufpreis / l.flaeche;
     const referenz = G.vergleichskaufpreis(l.viertelKey, l.flaeche, l.baujahr);
     const diff = referenz > 0 ? (proQm - referenz) / referenz * 100 : 0;
@@ -235,7 +267,22 @@
     const monatlich = [];
     const einmalig = [];
 
-    if (l.kind === 'kauf') {
+    if (l.kind === 'kauf' && l.type === 'grundstueck') {
+      /* Ein unbebautes Grundstück hat weder Hausgeld noch Strom, Internet
+         oder Rundfunkbeitrag. Es kostet Grundsteuer und, je nach Lage,
+         noch Erschließung – alles andere entsteht erst mit dem Haus. */
+      const state = (G.cityByName[l.stadt] || {}).state || 'NRW';
+      const grest = GRUNDERWERB[state] || 6.0;
+      const flaeche = l.grundstueck || l.flaeche || 1;
+      monatlich.push({ label: 'Grundsteuer (geschätzt)', betrag: Math.max(4, Math.round(l.kaufpreis * 0.0012 / 12)) });
+      einmalig.push({ label: 'Grunderwerbsteuer (' + U.dec(grest) + ' % in ' + state + ')', betrag: Math.round(l.kaufpreis * grest / 100) });
+      einmalig.push({ label: 'Notar und Grundbuch (rund 2 %)', betrag: Math.round(l.kaufpreis * 0.02) });
+      if (l.provision > 0) einmalig.push({ label: 'Maklercourtage (' + U.dec(l.provision) + ' %)', betrag: Math.round(l.kaufpreis * l.provision / 100) });
+      if ((l.grund || {}).erschliessung !== 'bereits bezahlt') {
+        einmalig.push({ label: 'Erschließung (grobe Schätzung)', betrag: Math.round(flaeche * 55) });
+      }
+      einmalig.push({ label: 'Vermessung und Bodengutachten', betrag: 3200 });
+    } else if (l.kind === 'kauf') {
       const state = (G.cityByName[l.stadt] || {}).state || 'NRW';
       const grest = GRUNDERWERB[state] || 6.0;
       monatlich.push({ label: 'Hausgeld / Rücklage', betrag: l.hausgeld || Math.round(l.flaeche * 3.4), hinweis: l.type === 'haus' ? 'geschätzte Instandhaltungsrücklage' : 'Wohngeld laut Angebot' });
@@ -372,10 +419,13 @@
         (schoen.length ? (muss.length ? ', ' : '') + schoenOk + ' von ' + schoen.length + ' Wunsch' : ''));
     }
 
-    /* Energie */
-    const rang = ENERGIE_RANG[l.energie.klasse];
-    add('energie', 'Energie', U.clamp(1 - rang / 8, 0, 1), gw.energie,
-      'Klasse ' + l.energie.klasse + ' · ' + l.energie.kwh + ' kWh/(m²·a)');
+    /* Energie – ein Grundstück hat keinen Ausweis, und einen zu erfinden
+       wäre schlimmer, als das Kriterium wegzulassen. */
+    if (l.energie) {
+      const rang = ENERGIE_RANG[l.energie.klasse];
+      add('energie', 'Energie', U.clamp(1 - rang / 8, 0, 1), gw.energie,
+        'Klasse ' + l.energie.klasse + ' · ' + l.energie.kwh + ' kWh/(m²·a)');
+    }
 
     /* Pendeln */
     const pz = pendelZeit(l, p);
@@ -386,8 +436,12 @@
     }
 
     /* Preisfairness */
-    const mc = mietCheck(l), kc = kaufCheck(l);
-    if (mc) {
+    const mc = mietCheck(l), kc = kaufCheck(l), bc = bodenCheck(l);
+    if (bc) {
+      const v = bc.diff <= -10 ? 1 : bc.diff <= 6 ? 0.85 : bc.diff <= 18 ? 0.5 : 0.2;
+      add('fairness', 'Preis-Leistung', v, gw.fairness,
+        U.num(bc.proQm) + ' €/m² Boden, ' + (bc.diff >= 0 ? '+' : '') + bc.diff + ' % zur Lage');
+    } else if (mc) {
       const v = mc.diff <= -12 ? 1 : mc.diff <= 5 ? 0.85 : mc.diff <= 15 ? 0.5 : mc.diff <= 25 ? 0.25 : 0.05;
       add('fairness', 'Preis-Leistung', v, gw.fairness,
         (mc.diff >= 0 ? '+' : '') + mc.diff + ' % zur Vergleichsmiete');
@@ -430,7 +484,7 @@
     return {
       score: Math.round(U.clamp(score, 0, 100)),
       teile: teile.sort((a, b) => b.gewicht * b.anteil - a.gewicht * a.anteil),
-      risiko, mietCheck: mc, kaufCheck: kc, wg: wgTeil,
+      risiko, mietCheck: mc, kaufCheck: kc, bodenCheck: bc, wg: wgTeil,
       pendel: pz,
       fehlendePflicht
     };
@@ -522,7 +576,9 @@
       if (f.flaecheMin != null && l.flaeche < f.flaecheMin) return false;
       if (f.flaecheMax != null && l.flaeche > f.flaecheMax) return false;
       if (f.baujahrMin != null && l.baujahr < f.baujahrMin) return false;
-      if (f.energieMax && ENERGIE_RANG[l.energie.klasse] > ENERGIE_RANG[f.energieMax]) return false;
+      /* Wer nach Energieklasse filtert, sucht ein Gebäude – ein
+         Grundstück fällt dann folgerichtig heraus. */
+      if (f.energieMax && (!l.energie || ENERGIE_RANG[l.energie.klasse] > ENERGIE_RANG[f.energieMax])) return false;
 
       if (f.ausstattung.length && !f.ausstattung.every((a) => l.ausstattung.indexOf(a) >= 0)) return false;
       if (f.freiBis && l.freiAb > f.freiBis) return false;
@@ -560,8 +616,8 @@
       flaeche: (a, b) => b.l.flaeche - a.l.flaeche,
       zimmer: (a, b) => b.l.zimmer - a.l.zimmer,
       fairness: (a, b) => {
-        const fa = a.b.mietCheck ? a.b.mietCheck.diff : a.b.kaufCheck ? a.b.kaufCheck.diff : 0;
-        const fb = b.b.mietCheck ? b.b.mietCheck.diff : b.b.kaufCheck ? b.b.kaufCheck.diff : 0;
+        const wieFair = (x) => (x.mietCheck || x.kaufCheck || x.bodenCheck || { diff: 0 }).diff;
+        const fa = wieFair(a.b), fb = wieFair(b.b);
         return fa - fb;
       },
       chance: (a, b) => a.l.stats.bewerber - b.l.stats.bewerber,
@@ -607,7 +663,7 @@
 
   NW.analyse = {
     ENERGIE_RANG, GRUNDERWERB,
-    mietCheck, kaufCheck, risikoCheck, klauselCheck, KLAUSELN,
+    mietCheck, kaufCheck, bodenCheck, risikoCheck, klauselCheck, KLAUSELN,
     kosten, finanzierung, bewerten, pendelZeit,
     leerFilter, filterAusProfil, profilAbweichung, filtern, sortieren, marktLage, passtText
   };

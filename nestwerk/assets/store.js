@@ -290,6 +290,17 @@
     const id = 'mein-' + Date.now().toString(36);
     const eintrag = Object.assign({ id, eigen: true, erstellt: U.isoDate(NW.now()) }, daten);
     update((s) => { s.eigeneInserate.push(eintrag); if (eintrag.kind === 'tausch') s.meinTausch = eintrag; }, 'inserate');
+    /* Bilder können den Speicher des Browsers sprengen. Passiert das,
+       wird das Inserat wieder zurückgenommen statt halb angelegt zu
+       bleiben – ein Eintrag, den ein Neuladen verschluckt, wäre schlimmer
+       als eine ehrliche Fehlermeldung. */
+    if (!U.saveStore(state)) {
+      state.eigeneInserate = state.eigeneInserate.filter((x) => x.id !== id);
+      if (state.meinTausch && state.meinTausch.id === id) state.meinTausch = null;
+      U.saveStore(state);
+      melden('inserate');
+      throw new Error('Der Speicher reicht nicht.');
+    }
     NW.data.byId[id] = eintrag;
     return id;
   }

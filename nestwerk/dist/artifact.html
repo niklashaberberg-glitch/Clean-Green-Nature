@@ -11,27 +11,39 @@
 :root {
   color-scheme: light;
 
-  --papier: #f6f7f6;
+  /* Der Farbton ist bewusst kein Grünblau. Fast jedes deutsche
+     Wohnungsportal arbeitet mit Orangerot oder Petrol; wer daneben genauso
+     aussieht, wird für eine Kopie gehalten. Nestwerk steht deshalb auf
+     einem tiefen Indigoviolett mit Beere als Zweitfarbe – und auf kühlen,
+     leicht violett gebrochenen Grauwerten statt der üblichen grünstichigen.
+     Alle Werte hier sind nachgerechnet, nicht geschätzt: Fließtext
+     mindestens 4,5 zu 1 gegen jede Fläche, Ränder von Bedienelementen
+     mindestens 3 zu 1, Diagrammfarben auch bei Farbfehlsichtigkeit
+     unterscheidbar. */
+
+  --papier: #f5f4fa;
   --flaeche: #ffffff;
-  --flaeche2: #f0f2f1;
-  --flaeche3: #e6e9e8;
-  /* Eigene Grundfarbe für Werbung: warm statt grün, damit ein Auge sie
-     von Inhalt unterscheidet, ohne dass sie lauter wird. */
-  --werbung: #faf6ef;
-  --rand: #dcdfde;
-  --rand-stark: #c3c8c6;
+  --flaeche2: #efeef7;
+  --flaeche3: #e4e2f0;
+  /* Eigene Grundfarbe für Werbung: warm gegen kühle Umgebung, damit ein
+     Auge sie von Inhalt unterscheidet, ohne dass sie lauter wird. */
+  --werbung: #fdf7f0;
+  --rand: #dfdcec;
+  --rand-stark: #bfbbd4;
+  /* Der Rand eines Bedienelements muss es erkennbar machen – 3 zu 1 nach
+     WCAG 1.4.11. Ein Strukturstrich darf leiser sein, ein Eingabefeld
+     nicht: Wer den Rahmen nicht sieht, sieht das Feld nicht. */
+  --rand-feld: #756f92;
 
-  --text: #16211f;
-  --text-leise: #58635f;
-  /* Nachgerechnet gegen alle vier Flächen: der frühere Wert #7c8783 kam
-     nur auf 3,0 bis 3,7 zu 1 und war damit für Fließtext zu blass. */
-  --text-still: #626d69;
+  --text: #191630;
+  --text-leise: #4e4870;
+  --text-still: #575173;
 
-  --akzent: #0f766e;
-  --akzent-hell: #d7efec;
-  --akzent-tief: #0b544e;
-  --akzent2: #b45309;
-  --akzent2-hell: #fdefd9;
+  --akzent: #4a32c4;
+  --akzent-hell: #e7e3fb;
+  --akzent-tief: #37248f;
+  --akzent2: #a32a72;
+  --akzent2-hell: #fbe3f0;
   /* Schrift auf gefüllter Akzentfläche. Als Token, nicht als Dunkel-
      Sonderregel: Solche Regeln brauchen hohe Spezifität und überfahren
      dann Abwandlungen wie .knopf--still, deren Fläche gar nicht gefüllt
@@ -39,8 +51,9 @@
   --auf-akzent: #ffffff;
   --auf-akzent2: #ffffff;
 
-  /* Statusfarben stehen meist auf ihrer eigenen hellen Fläche –
-     dort galt es nachzuschärfen, nicht auf Weiß. */
+  /* Statusfarben bleiben konventionell: Grün, Gelb und Rot bedeuten
+     überall dasselbe, und sie umzufärben, um zum Markenton zu passen,
+     würde Verständlichkeit gegen Geschmack tauschen. */
   --gut: #0f6b33;
   --gut-hell: #dcf5e3;
   --warn: #96450a;
@@ -48,20 +61,22 @@
   --schlecht: #b91c1c;
   --auf-schlecht: #ffffff;
   --schlecht-hell: #fbe2e2;
-  --info: #1d4ed8;
-  --info-hell: #dde6fd;
+  --info: #0d6a86;
+  --info-hell: #d9eef5;
 
-  --miete: #0f766e;
-  --kauf: #4338ca;
-  --wg: #7c3aed;
-  --tausch: #b45309;
+  /* Diagrammfarben: vier Familien mit deutlichem Abstand, geprüft auch
+     unter Prot-, Deuter- und Tritanopie. */
+  --miete: #4a32c4;
+  --kauf: #0b6f7e;
+  --wg: #ab2168;
+  --tausch: #7d5a06;
 
   --r-klein: 8px;
   --r: 14px;
   --r-gross: 22px;
 
-  --schatten: 0 1px 2px rgba(16, 33, 31, .06), 0 4px 14px rgba(16, 33, 31, .06);
-  --schatten-hoch: 0 12px 40px rgba(16, 33, 31, .16);
+  --schatten: 0 1px 2px rgba(25, 22, 48, .07), 0 4px 14px rgba(25, 22, 48, .07);
+  --schatten-hoch: 0 12px 40px rgba(25, 22, 48, .18);
 
   --kopf-hoehe: 60px;
   --breite: 1420px;
@@ -78,25 +93,25 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --papier: #0d1413;
-    --flaeche: #141d1c;
-    --flaeche2: #1b2625;
-    --flaeche3: #24312f;
-    --werbung: #221f18;
-    --rand: #2b3836;
-    --rand-stark: #3d4c49;
+    --papier: #100e1a;
+    --flaeche: #191627;
+    --flaeche2: #221e33;
+    --flaeche3: #2c2741;
+    --werbung: #241f1a;
+    --rand: #332e4a;
+    --rand-stark: #494263;
+    --rand-feld: #8a83a8;
+    --text: #ece9f7;
+    --text-leise: #aca6c6;
+    --text-still: #9c96b8;
 
-    --text: #e8efed;
-    --text-leise: #a3b0ad;
-    --text-still: #93a09c;
-
-    --akzent: #2dd4bf;
-    --akzent-hell: #10312e;
-    --akzent-tief: #5eead4;
-    --akzent2: #fbbf24;
-    --akzent2-hell: #33270a;
-    --auf-akzent: #06201d;
-    --auf-akzent2: #201603;
+    --akzent: #a99bff;
+    --akzent-hell: #241d4d;
+    --akzent-tief: #c4b9ff;
+    --akzent2: #f191c4;
+    --akzent2-hell: #3a1730;
+    --auf-akzent: #17123a;
+    --auf-akzent2: #2e0c22;
 
     --gut: #4ade80;
     --gut-hell: #12301d;
@@ -105,38 +120,41 @@
     --schlecht: #f87171;
     --auf-schlecht: #2b0f0f;
     --schlecht-hell: #341616;
-    --info: #7aa5fb;
-    --info-hell: #131f38;
+    --info: #5fc6e3;
+    --info-hell: #0d2c38;
 
-    --miete: #2dd4bf;
-    --kauf: #a5b4fc;
-    --wg: #c4b5fd;
-    --tausch: #fbbf24;
+    --miete: #a99bff;
+    --kauf: #4fd6cf;
+    --wg: #f57aa8;
+    --tausch: #f9c46a;
 
-    --schatten: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 16px rgba(0, 0, 0, .35);
-    --schatten-hoch: 0 16px 48px rgba(0, 0, 0, .6);
+    --schatten: 0 1px 2px rgba(0, 0, 0, .45), 0 4px 16px rgba(0, 0, 0, .4);
+    --schatten-hoch: 0 16px 48px rgba(0, 0, 0, .65);
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --papier: #0d1413;
-  --flaeche: #141d1c;
-  --flaeche2: #1b2625;
-  --flaeche3: #24312f;
-  --werbung: #221f18;
-  --rand: #2b3836;
-  --rand-stark: #3d4c49;
-  --text: #e8efed;
-  --text-leise: #a3b0ad;
-  --text-still: #93a09c;
-  --akzent: #2dd4bf;
-  --akzent-hell: #10312e;
-  --akzent-tief: #5eead4;
-  --akzent2: #fbbf24;
-  --akzent2-hell: #33270a;
-  --auf-akzent: #06201d;
-  --auf-akzent2: #201603;
+--papier: #100e1a;
+  --flaeche: #191627;
+  --flaeche2: #221e33;
+  --flaeche3: #2c2741;
+  --werbung: #241f1a;
+  --rand: #332e4a;
+  --rand-stark: #494263;
+  --rand-feld: #8a83a8;
+  --text: #ece9f7;
+  --text-leise: #aca6c6;
+  --text-still: #9c96b8;
+
+  --akzent: #a99bff;
+  --akzent-hell: #241d4d;
+  --akzent-tief: #c4b9ff;
+  --akzent2: #f191c4;
+  --akzent2-hell: #3a1730;
+  --auf-akzent: #17123a;
+  --auf-akzent2: #2e0c22;
+
   --gut: #4ade80;
   --gut-hell: #12301d;
   --warn: #fbbf24;
@@ -144,14 +162,17 @@
   --schlecht: #f87171;
   --auf-schlecht: #2b0f0f;
   --schlecht-hell: #341616;
-  --info: #7aa5fb;
-  --info-hell: #131f38;
-  --miete: #2dd4bf;
-  --kauf: #a5b4fc;
-  --wg: #c4b5fd;
-  --tausch: #fbbf24;
-  --schatten: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 16px rgba(0, 0, 0, .35);
-  --schatten-hoch: 0 16px 48px rgba(0, 0, 0, .6);
+  --info: #5fc6e3;
+  --info-hell: #0d2c38;
+
+  --miete: #a99bff;
+  --kauf: #4fd6cf;
+  --wg: #f57aa8;
+  --tausch: #f9c46a;
+
+  --schatten: 0 1px 2px rgba(0, 0, 0, .45), 0 4px 16px rgba(0, 0, 0, .4);
+  --schatten-hoch: 0 16px 48px rgba(0, 0, 0, .65);
+
 }
 
 /* ---------------------------- Grundlage ---------------------------- */
@@ -296,7 +317,7 @@ svg { display: block; }
 }
 .knopf:hover { background: var(--akzent-tief); border-color: var(--akzent-tief); }
 .knopf:active { transform: translateY(1px); }
-.knopf--still { background: var(--flaeche); color: var(--text); border-color: var(--rand-stark); }
+.knopf--still { background: var(--flaeche); color: var(--text); border-color: var(--rand-feld); }
 .knopf--still:hover { background: var(--flaeche2); border-color: var(--text-still); color: var(--text); }
 .knopf--still.is-an { background: var(--akzent-hell); border-color: var(--akzent); color: var(--akzent); }
 /* Wie bei --auf-akzent: Die Schrift auf gefüllter Warnfläche ist ein Token,
@@ -327,7 +348,7 @@ svg { display: block; }
 
 .chip {
   display: inline-flex; align-items: center; gap: .35em;
-  padding: .34em .72em; border: 1px solid var(--rand-stark); border-radius: 999px;
+  padding: .34em .72em; border: 1px solid var(--rand-feld); border-radius: 999px;
   background: var(--flaeche); color: var(--text-leise);
   font: inherit; font-size: .82rem; cursor: pointer; text-decoration: none;
   transition: background var(--tempo), color var(--tempo), border-color var(--tempo);
@@ -351,7 +372,7 @@ svg { display: block; }
 
 input[type="text"], input[type="search"], input[type="number"], input[type="date"], select, textarea {
   width: 100%; padding: .55em .7em;
-  border: 1px solid var(--rand-stark); border-radius: var(--r-klein);
+  border: 1px solid var(--rand-feld); border-radius: var(--r-klein);
   background: var(--flaeche); color: var(--text);
   font: inherit; font-size: .92rem;
   transition: border-color var(--tempo), box-shadow var(--tempo);
@@ -566,7 +587,7 @@ input[type="range"] {
 .suche__arten { display: flex; gap: 6px; flex-wrap: wrap; }
 .art {
   display: inline-flex; align-items: center; gap: .4em;
-  padding: .5em .9em; border: 1px solid var(--rand-stark); border-radius: 999px;
+  padding: .5em .9em; border: 1px solid var(--rand-feld); border-radius: 999px;
   background: var(--flaeche); color: var(--text-leise); font: inherit; font-size: .88rem; font-weight: 550; cursor: pointer;
   transition: all var(--tempo);
 }
@@ -582,7 +603,7 @@ input[type="range"] {
 .suche__stellen { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .suche__stellen select { min-width: 170px; }
 
-.umschalter { display: inline-flex; border: 1px solid var(--rand-stark); border-radius: var(--r-klein); overflow: hidden; }
+.umschalter { display: inline-flex; border: 1px solid var(--rand-feld); border-radius: var(--r-klein); overflow: hidden; }
 .umschalter button {
   display: grid; place-items: center; width: 40px; height: 38px; padding: 0;
   background: var(--flaeche); border: 0; border-right: 1px solid var(--rand); color: var(--text-leise); cursor: pointer;
@@ -1198,7 +1219,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
 .tarifknopf {
   display: inline-flex; align-items: center; gap: .3em;
-  padding: .4em .75em; border: 1px solid var(--rand-stark); border-radius: 999px;
+  padding: .4em .75em; border: 1px solid var(--rand-feld); border-radius: 999px;
   color: var(--text-leise); text-decoration: none; font-size: .82rem; font-weight: 600;
   white-space: nowrap;
   transition: border-color var(--tempo), color var(--tempo), background var(--tempo);
@@ -1247,7 +1268,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 /* 24 Pixel sind die Untergrenze für ein Bedienelement (WCAG 2.2, 2.5.8) –
    auch für eines, das bewusst leise sein soll. */
 .anzeige__warum { width: 24px; height: 24px; padding: 0; margin-left: auto; flex: none;
-  border: 1px solid var(--rand-stark); border-radius: 50%; background: none;
+  border: 1px solid var(--rand-feld); border-radius: 50%; background: none;
   color: var(--text-still); font-size: .72rem; cursor: pointer; line-height: 1; }
 .anzeige__warum:hover { border-color: var(--akzent); color: var(--akzent); }
 .anzeige__inhalt { display: flex; gap: .7em; width: 100%; padding: 0; border: 0; background: none;
@@ -1751,6 +1772,33 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .band p b { color: var(--text); }
 .band .knopf { flex: none; }
 .band .ikon-btn { flex: none; width: 30px; height: 30px; }
+
+/* =====================================================================
+   Bilder im Inserat
+   ===================================================================== */
+
+.bilder__wahl { display: flex; flex-wrap: wrap; gap: .6em .8em; align-items: center; margin: .6em 0; }
+.bilder__wahl > label { flex: none; cursor: pointer; }
+.bilder__wahl > i { font-style: normal; font-size: .82rem; color: var(--text-leise); }
+.bilder__wahl > input:focus-visible + label { outline: 2px solid var(--akzent); outline-offset: 2px; }
+
+.bilder__liste { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 8px; }
+.bilder__liste:empty { display: none; }
+.bilder__liste li { display: flex; flex-wrap: wrap; gap: .7em; align-items: center; padding: .6em .7em;
+  border: 1px solid var(--rand); border-radius: var(--r-klein); background: var(--flaeche); }
+.bilder__liste img { flex: none; width: 78px; height: 58px; object-fit: cover;
+  border-radius: var(--r-klein); background: var(--flaeche2); }
+.bilder__liste li > div { flex: 1 1 12em; min-width: 0; }
+.bilder__liste b { display: block; font-size: .86rem; }
+.bilder__liste span { display: block; font-size: .76rem; color: var(--text-still); }
+.bilder__text { width: 100%; margin-top: .35em; padding: .3em .5em; font: inherit; font-size: .8rem;
+  border: 1px solid var(--rand); border-radius: var(--r-klein); background: var(--flaeche2); color: var(--text); }
+.bilder__tun { flex: none; display: flex; gap: 4px; }
+
+/* Eigene Fotos stehen an derselben Stelle wie die Zeichnungen und müssen
+   deshalb genauso füllen. */
+.eigenbild { display: block; width: 100%; height: 100%; object-fit: cover; }
+.galerie__gross .eigenbild { max-height: 460px; }
 
 </style>
 <noscript>
@@ -2260,14 +2308,25 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   const U = NW.util;
 
+  /* Sechs Farbfamilien für Abwechslung im Bestand – aber alle aus derselben
+     Verwandtschaft wie die Oberfläche. Vorher stand hier ein Grün-Orange-
+     Satz aus einer früheren Fassung; neben dem Indigo der Anwendung sah das
+     aus, als gehörten Bild und Seite nicht zusammen. */
   const PALETTES = [
-    { sky: ['#dbeafe', '#eff6ff'], wall: '#cbd5e1', wall2: '#94a3b8', warm: '#f8fafc', accent: '#0f766e', dark: '#334155', green: '#65a30d' },
-    { sky: ['#fee2e2', '#fff7ed'], wall: '#e7d3c4', wall2: '#c9ab95', warm: '#fffaf5', accent: '#b45309', dark: '#44403c', green: '#4d7c0f' },
-    { sky: ['#dcfce7', '#f0fdf4'], wall: '#d5ded0', wall2: '#a8b8a0', warm: '#fbfdf9', accent: '#15803d', dark: '#3f4a3c', green: '#166534' },
-    { sky: ['#ede9fe', '#f5f3ff'], wall: '#d8d5e4', wall2: '#a9a3c0', warm: '#faf9ff', accent: '#6d28d9', dark: '#3b3552', green: '#7c3aed' },
-    { sky: ['#cffafe', '#ecfeff'], wall: '#cddfe3', wall2: '#93b4bd', warm: '#f7fdfe', accent: '#0e7490', dark: '#2f4550', green: '#0891b2' },
-    { sky: ['#fef9c3', '#fefce8'], wall: '#e6dfc4', wall2: '#bcb08a', warm: '#fffdf2', accent: '#a16207', dark: '#453f2e', green: '#65a30d' }
+    /* Indigo */
+    { sky: ['#e4e0fb', '#f3f1fe'], wall: '#d5d1e6', wall2: '#a8a2c4', warm: '#faf9ff', accent: '#4a32c4', dark: '#332d4d', green: '#3f8f5f' },
+    /* Petrol */
+    { sky: ['#d6eef4', '#eef8fb'], wall: '#cdd9de', wall2: '#93a9b3', warm: '#f7fcfd', accent: '#0b6f7e', dark: '#2c4249', green: '#2f7d5a' },
+    /* Beere */
+    { sky: ['#fbe1ee', '#fef4f8'], wall: '#e3d3dc', wall2: '#bfa2b2', warm: '#fffafc', accent: '#ab2168', dark: '#4a3040', green: '#4d7c4f' },
+    /* Sand */
+    { sky: ['#f7ecd9', '#fdf8ef'], wall: '#e4dac6', wall2: '#bcae92', warm: '#fffdf7', accent: '#7d5a06', dark: '#453c2c', green: '#5d7f3a' },
+    /* Nachtblau */
+    { sky: ['#dbe4fb', '#eff3fe'], wall: '#ccd3e4', wall2: '#98a4c2', warm: '#f9faff', accent: '#2f4dae', dark: '#2f3856', green: '#3d7f6a' },
+    /* Salbei */
+    { sky: ['#e0efe6', '#f2f9f4'], wall: '#d2ded6', wall2: '#9fb2a7', warm: '#fafdfb', accent: '#276b52', dark: '#33453c', green: '#3f7a4e' }
   ];
+
 
   function paletteFor(seed) { return PALETTES[seed % PALETTES.length]; }
 
@@ -2510,9 +2569,15 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   /* Welche Bildfolge zu welchem Inseratstyp passt. */
   function sequenceFor(listing) {
     if (listing.kind === 'wg') return ['raum', 'kueche', 'bad', 'fassade', 'umgebung'];
+    if (listing.type === 'grundstueck') return ['umgebung', 'grundriss'];
     if (listing.type === 'haus') return ['fassade', 'raum', 'kueche', 'grundriss', 'umgebung', 'bad'];
     return ['raum', 'fassade', 'kueche', 'bad', 'grundriss', 'umgebung'];
   }
+
+  /* Eigene Fotos schlagen die Zeichnung. Sie liegen als Datenverweis am
+     Inserat und ersetzen die gesamte Folge – halb gezeichnet, halb
+     fotografiert wäre nur verwirrend. */
+  const eigeneBilder = (l) => (l && Array.isArray(l.bilder) && l.bilder.length) ? l.bilder : null;
 
   const CAPTIONS = {
     fassade: 'Außenansicht', raum: 'Wohnbereich', grundriss: 'Grundriss (schematisch)',
@@ -2527,6 +2592,12 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
      jedem Aufruf eine eigene Nummer – sonst kollidieren zwei Ausgaben
      desselben Bildes auf einer Seite. */
   function make(listing, index) {
+    const eigen = eigeneBilder(listing);
+    if (eigen) {
+      const b = eigen[index % eigen.length];
+      return '<img class="eigenbild" src="' + U.esc(b.datei) + '" alt="' + U.esc(b.text || 'Foto zum Inserat') +
+        '" loading="lazy" decoding="async">';
+    }
     const seq = sequenceFor(listing);
     const name = seq[index % seq.length];
     const key = listing.id + ':' + name;
@@ -2540,8 +2611,19 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     return vorlage.split('__ID__').join('nw' + (++laufendeNummer) + '-');
   }
 
-  function count(listing) { return sequenceFor(listing).length; }
-  function caption(listing, index) { return CAPTIONS[sequenceFor(listing)[index % sequenceFor(listing).length]]; }
+  function count(listing) {
+    const eigen = eigeneBilder(listing);
+    return eigen ? eigen.length : sequenceFor(listing).length;
+  }
+
+  function caption(listing, index) {
+    const eigen = eigeneBilder(listing);
+    if (eigen) return eigen[index % eigen.length].text || 'Eigenes Foto';
+    return CAPTIONS[sequenceFor(listing)[index % sequenceFor(listing).length]];
+  }
+
+  /* Sagt der Oberfläche, ob der Hinweis „schematische Zeichnung“ passt. */
+  const istGezeichnet = (listing) => !eigeneBilder(listing);
 
   /* Rundes Profilbild aus Initialen. */
   function avatar(name, size) {
@@ -2555,7 +2637,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       U.esc(initials) + '</text></svg>';
   }
 
-  NW.img = { make, count, caption, avatar, paletteFor };
+  NW.img = { make, count, caption, avatar, paletteFor, istGezeichnet };
 })(window.NW = window.NW || {});
 
 /* ===== ring-bild.js ===== */
@@ -3519,8 +3601,40 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     };
   }
 
+  /* Ein unbebautes Grundstück gegen den Quadratmeterpreis einer Wohnung
+     zu stellen, wäre grober Unfug – Wohnfläche und Grundstücksfläche sind
+     zwei verschiedene Größen. Und ein Kaufpreisfaktor in Jahresmieten
+     ergibt keinen Sinn, wenn nichts vermietet werden kann. Deshalb eine
+     eigene Prüfung mit einem abgeleiteten Bodenwert. */
+  function bodenCheck(l) {
+    if (l.kind !== 'kauf' || l.type !== 'grundstueck') return null;
+    const flaeche = l.grundstueck || l.flaeche || 1;
+    const proQm = l.kaufpreis / flaeche;
+    /* Der Bodenanteil am Kaufpreis einer Wohnung liegt je nach Lage bei
+       gut einem Fünftel bis einem Drittel. Daraus lässt sich ein grober
+       Bodenwert ableiten – ein amtlicher Bodenrichtwert ist das nicht. */
+    const referenz = Math.round(G.vergleichskaufpreis(l.viertelKey, 90, 2000) * 0.24);
+    const diff = referenz > 0 ? (proQm - referenz) / referenz * 100 : 0;
+    const g = l.grund || {};
+    /* Erschließung und Baurecht schlagen stark auf den Wert durch. */
+    const abschlag = (/unerschlossen/.test(g.baulandArt || '') ? 25 : /teilerschlossen/.test(g.baulandArt || '') ? 12 : 0)
+      + (/Bauerwartungsland/.test(g.baulandArt || '') ? 45 : 0)
+      + (/Gartenland/.test(g.baulandArt || '') ? 60 : 0);
+    let urteil, ton;
+    if (diff < -12) { urteil = 'unter dem Bodenwert der Lage'; ton = 'gut'; }
+    else if (diff <= 10) { urteil = 'im Rahmen der Lage'; ton = 'neutral'; }
+    else if (diff <= 25) { urteil = 'über dem Bodenwert der Lage'; ton = 'mittel'; }
+    else { urteil = 'deutlich über dem Bodenwert der Lage'; ton = 'schlecht'; }
+    return {
+      proQm: Math.round(proQm), referenz, diff: Math.round(diff), urteil, ton,
+      flaeche, abschlag,
+      bebaubar: Math.round(flaeche * (g.grz || 0)),
+      geschossflaeche: Math.round(flaeche * (g.gfz || 0))
+    };
+  }
+
   function kaufCheck(l) {
-    if (l.kind !== 'kauf') return null;
+    if (l.kind !== 'kauf' || l.type === 'grundstueck') return null;
     const proQm = l.kaufpreis / l.flaeche;
     const referenz = G.vergleichskaufpreis(l.viertelKey, l.flaeche, l.baujahr);
     const diff = referenz > 0 ? (proQm - referenz) / referenz * 100 : 0;
@@ -3701,7 +3815,22 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const monatlich = [];
     const einmalig = [];
 
-    if (l.kind === 'kauf') {
+    if (l.kind === 'kauf' && l.type === 'grundstueck') {
+      /* Ein unbebautes Grundstück hat weder Hausgeld noch Strom, Internet
+         oder Rundfunkbeitrag. Es kostet Grundsteuer und, je nach Lage,
+         noch Erschließung – alles andere entsteht erst mit dem Haus. */
+      const state = (G.cityByName[l.stadt] || {}).state || 'NRW';
+      const grest = GRUNDERWERB[state] || 6.0;
+      const flaeche = l.grundstueck || l.flaeche || 1;
+      monatlich.push({ label: 'Grundsteuer (geschätzt)', betrag: Math.max(4, Math.round(l.kaufpreis * 0.0012 / 12)) });
+      einmalig.push({ label: 'Grunderwerbsteuer (' + U.dec(grest) + ' % in ' + state + ')', betrag: Math.round(l.kaufpreis * grest / 100) });
+      einmalig.push({ label: 'Notar und Grundbuch (rund 2 %)', betrag: Math.round(l.kaufpreis * 0.02) });
+      if (l.provision > 0) einmalig.push({ label: 'Maklercourtage (' + U.dec(l.provision) + ' %)', betrag: Math.round(l.kaufpreis * l.provision / 100) });
+      if ((l.grund || {}).erschliessung !== 'bereits bezahlt') {
+        einmalig.push({ label: 'Erschließung (grobe Schätzung)', betrag: Math.round(flaeche * 55) });
+      }
+      einmalig.push({ label: 'Vermessung und Bodengutachten', betrag: 3200 });
+    } else if (l.kind === 'kauf') {
       const state = (G.cityByName[l.stadt] || {}).state || 'NRW';
       const grest = GRUNDERWERB[state] || 6.0;
       monatlich.push({ label: 'Hausgeld / Rücklage', betrag: l.hausgeld || Math.round(l.flaeche * 3.4), hinweis: l.type === 'haus' ? 'geschätzte Instandhaltungsrücklage' : 'Wohngeld laut Angebot' });
@@ -3838,10 +3967,13 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         (schoen.length ? (muss.length ? ', ' : '') + schoenOk + ' von ' + schoen.length + ' Wunsch' : ''));
     }
 
-    /* Energie */
-    const rang = ENERGIE_RANG[l.energie.klasse];
-    add('energie', 'Energie', U.clamp(1 - rang / 8, 0, 1), gw.energie,
-      'Klasse ' + l.energie.klasse + ' · ' + l.energie.kwh + ' kWh/(m²·a)');
+    /* Energie – ein Grundstück hat keinen Ausweis, und einen zu erfinden
+       wäre schlimmer, als das Kriterium wegzulassen. */
+    if (l.energie) {
+      const rang = ENERGIE_RANG[l.energie.klasse];
+      add('energie', 'Energie', U.clamp(1 - rang / 8, 0, 1), gw.energie,
+        'Klasse ' + l.energie.klasse + ' · ' + l.energie.kwh + ' kWh/(m²·a)');
+    }
 
     /* Pendeln */
     const pz = pendelZeit(l, p);
@@ -3852,8 +3984,12 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     }
 
     /* Preisfairness */
-    const mc = mietCheck(l), kc = kaufCheck(l);
-    if (mc) {
+    const mc = mietCheck(l), kc = kaufCheck(l), bc = bodenCheck(l);
+    if (bc) {
+      const v = bc.diff <= -10 ? 1 : bc.diff <= 6 ? 0.85 : bc.diff <= 18 ? 0.5 : 0.2;
+      add('fairness', 'Preis-Leistung', v, gw.fairness,
+        U.num(bc.proQm) + ' €/m² Boden, ' + (bc.diff >= 0 ? '+' : '') + bc.diff + ' % zur Lage');
+    } else if (mc) {
       const v = mc.diff <= -12 ? 1 : mc.diff <= 5 ? 0.85 : mc.diff <= 15 ? 0.5 : mc.diff <= 25 ? 0.25 : 0.05;
       add('fairness', 'Preis-Leistung', v, gw.fairness,
         (mc.diff >= 0 ? '+' : '') + mc.diff + ' % zur Vergleichsmiete');
@@ -3896,7 +4032,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     return {
       score: Math.round(U.clamp(score, 0, 100)),
       teile: teile.sort((a, b) => b.gewicht * b.anteil - a.gewicht * a.anteil),
-      risiko, mietCheck: mc, kaufCheck: kc, wg: wgTeil,
+      risiko, mietCheck: mc, kaufCheck: kc, bodenCheck: bc, wg: wgTeil,
       pendel: pz,
       fehlendePflicht
     };
@@ -3988,7 +4124,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       if (f.flaecheMin != null && l.flaeche < f.flaecheMin) return false;
       if (f.flaecheMax != null && l.flaeche > f.flaecheMax) return false;
       if (f.baujahrMin != null && l.baujahr < f.baujahrMin) return false;
-      if (f.energieMax && ENERGIE_RANG[l.energie.klasse] > ENERGIE_RANG[f.energieMax]) return false;
+      /* Wer nach Energieklasse filtert, sucht ein Gebäude – ein
+         Grundstück fällt dann folgerichtig heraus. */
+      if (f.energieMax && (!l.energie || ENERGIE_RANG[l.energie.klasse] > ENERGIE_RANG[f.energieMax])) return false;
 
       if (f.ausstattung.length && !f.ausstattung.every((a) => l.ausstattung.indexOf(a) >= 0)) return false;
       if (f.freiBis && l.freiAb > f.freiBis) return false;
@@ -4026,8 +4164,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       flaeche: (a, b) => b.l.flaeche - a.l.flaeche,
       zimmer: (a, b) => b.l.zimmer - a.l.zimmer,
       fairness: (a, b) => {
-        const fa = a.b.mietCheck ? a.b.mietCheck.diff : a.b.kaufCheck ? a.b.kaufCheck.diff : 0;
-        const fb = b.b.mietCheck ? b.b.mietCheck.diff : b.b.kaufCheck ? b.b.kaufCheck.diff : 0;
+        const wieFair = (x) => (x.mietCheck || x.kaufCheck || x.bodenCheck || { diff: 0 }).diff;
+        const fa = wieFair(a.b), fb = wieFair(b.b);
         return fa - fb;
       },
       chance: (a, b) => a.l.stats.bewerber - b.l.stats.bewerber,
@@ -4073,7 +4211,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   NW.analyse = {
     ENERGIE_RANG, GRUNDERWERB,
-    mietCheck, kaufCheck, risikoCheck, klauselCheck, KLAUSELN,
+    mietCheck, kaufCheck, bodenCheck, risikoCheck, klauselCheck, KLAUSELN,
     kosten, finanzierung, bewerten, pendelZeit,
     leerFilter, filterAusProfil, profilAbweichung, filtern, sortieren, marktLage, passtText
   };
@@ -5239,6 +5377,17 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const id = 'mein-' + Date.now().toString(36);
     const eintrag = Object.assign({ id, eigen: true, erstellt: U.isoDate(NW.now()) }, daten);
     update((s) => { s.eigeneInserate.push(eintrag); if (eintrag.kind === 'tausch') s.meinTausch = eintrag; }, 'inserate');
+    /* Bilder können den Speicher des Browsers sprengen. Passiert das,
+       wird das Inserat wieder zurückgenommen statt halb angelegt zu
+       bleiben – ein Eintrag, den ein Neuladen verschluckt, wäre schlimmer
+       als eine ehrliche Fehlermeldung. */
+    if (!U.saveStore(state)) {
+      state.eigeneInserate = state.eigeneInserate.filter((x) => x.id !== id);
+      if (state.meinTausch && state.meinTausch.id === id) state.meinTausch = null;
+      U.saveStore(state);
+      melden('inserate');
+      throw new Error('Der Speicher reicht nicht.');
+    }
     NW.data.byId[id] = eintrag;
     return id;
   }
@@ -6238,7 +6387,10 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   const G = NW.geo;
 
   const W = 1000, H = 700;
-  const FARBEN = { miete: '#0f766e', kauf: '#4338ca', wg: '#7c3aed', tausch: '#b45309' };
+  /* Die Kartenfarben sind dieselben wie in den Diagrammen und stehen
+     deshalb auch an derselben Stelle. Als Verweis auf die Token statt als
+     Kopie: Sonst blieben sie im Dunkelmodus auf den hellen Werten stehen. */
+  const FARBEN = { miete: 'var(--miete)', kauf: 'var(--kauf)', wg: 'var(--wg)', tausch: 'var(--tausch)' };
 
   function projizieren(lat, lng, lat0) {
     return { x: lng * Math.cos(lat0 * Math.PI / 180) * 111.32, y: -lat * 110.57 };
@@ -6645,6 +6797,20 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   const ART_LABEL = { miete: 'Miete', kauf: 'Kauf', wg: 'WG-Zimmer', tausch: 'Tausch' };
   const ART_ICON = { miete: 'schluessel', kauf: 'haus', wg: 'wg', tausch: 'tausch' };
 
+  /* Die Art allein reicht als Beschriftung nicht mehr: „Kauf“ steht über
+     einer Wohnung, einem Haus und einem Grundstück gleichermaßen, und das
+     sind drei sehr verschiedene Dinge. */
+  function artLabel(l) {
+    if (l.kind === 'kauf') {
+      return l.type === 'grundstueck' ? 'Grundstück' : l.type === 'haus' ? 'Haus' : 'Eigentumswohnung';
+    }
+    if (l.kind === 'miete' && l.type === 'haus') return 'Haus zur Miete';
+    return ART_LABEL[l.kind];
+  }
+
+  const artIcon = (l) =>
+    l.type === 'grundstueck' ? 'karte' : l.type === 'haus' ? 'dach' : ART_ICON[l.kind];
+
   function badge(text, art, symbol) {
     return h`<span class="badge badge--${art || 'neutral'}">${symbol ? ico(symbol) : ''}${text}</span>`;
   }
@@ -6704,16 +6870,23 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const gemerkt = NW.store.gemerkt(l.id);
     const imVergleich = NW.store.imVergleich(l.id);
     const eck = [];
-    eck.push(U.dec(l.zimmer) + ' Zi.');
-    eck.push(l.flaeche + ' m²');
-    if (l.kind === 'wg') eck.push('WG mit ' + l.wg.groesse);
-    else eck.push(l.etage === 0 ? 'EG' : l.etage >= l.etagen ? 'DG' : l.etage + '. OG');
+    if (l.type === 'grundstueck') {
+      eck.push(U.num(l.grundstueck || l.flaeche) + ' m² Grund');
+      eck.push(String((l.grund || {}).baulandArt || 'Bauland').split(',')[0]);
+      eck.push('GRZ ' + U.dec((l.grund || {}).grz || 0));
+    } else {
+      eck.push(U.dec(l.zimmer) + ' Zi.');
+      eck.push(l.flaeche + ' m²');
+      if (l.kind === 'wg') eck.push('WG mit ' + l.wg.groesse);
+      else if (l.type === 'haus') eck.push(l.grundstueck ? U.num(l.grundstueck) + ' m² Grund' : 'Haus');
+      else eck.push(l.etage === 0 ? 'EG' : l.etage >= l.etagen ? 'DG' : l.etage + '. OG');
+    }
     eck.push('ab ' + U.dateDE(l.freiAb));
 
     return h`<article class="karte-inserat ${opt.kompakt ? 'is-kompakt' : ''}" data-id="${l.id}">
       <a class="karte-inserat__bild" href="#/objekt/${l.id}" aria-label="${l.titel} ansehen">
         ${raw(NW.img.make(l, 0))}
-        <span class="karte-inserat__art">${ico(ART_ICON[l.kind])}${ART_LABEL[l.kind]}</span>
+        <span class="karte-inserat__art">${ico(artIcon(l))}${artLabel(l)}</span>
         ${b ? h`<span class="karte-inserat__ring">${passungsRing(b.score)}</span>` : ''}
       </a>
       <div class="karte-inserat__text">
@@ -7526,7 +7699,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   Object.assign(ui, {
     start, gehe, zeichnen, neuZeichnen, toast, dialog, dialogZu,
     badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
-    ART_LABEL, ART_ICON, ico, aktionRegistrieren, AKTIONEN,
+    ART_LABEL, ART_ICON, artLabel, artIcon, ico, aktionRegistrieren, AKTIONEN,
     sperrHinweis, anzeige, NAV, dateiSichern,
     aktualisiereZaehler, themeSetzen, paletteOeffnen, kartenMarken, preisZeile
   });
@@ -8527,7 +8700,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           aria-selected="${i === bildIndex ? 'true' : 'false'}" data-tu="bild-zu" data-i="${i}"
           aria-label="${NW.img.caption(l, i)}">${raw(NW.img.make(l, i))}</button>`)}
       </div>
-      <p class="galerie__hinweis">${ico('info')}Die Ansichten sind schematische Zeichnungen aus den Objektdaten, keine Fotos.</p>
+      ${NW.img.istGezeichnet(l)
+      ? h`<p class="galerie__hinweis">${ico('info')}Die Ansichten sind schematische Zeichnungen aus den Objektdaten, keine Fotos.</p>`
+      : h`<p class="galerie__hinweis">${ico('info')}Fotos aus dem Inserat. Sie liegen im Speicher dieses Geräts und wurden vor dem Ablegen verkleinert.</p>`}
     </div>`;
   }
 
@@ -8572,7 +8747,34 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   /* ------------------------- Vergleichsmiete ------------------------- */
 
-  function spiegelBlock(l, mc, kc) {
+  function spiegelBlock(l, mc, kc, bc) {
+    if (bc) {
+      const g = l.grund || {};
+      return h`<section class="block" id="spiegel">
+        <h2>${ico('waage')}Preis im Vergleich</h2>
+        <div class="kennzahlen">
+          <div><b>${U.num(bc.proQm)} €</b><span>je m² Grundstück</span></div>
+          <div><b>${U.num(bc.referenz)} €</b><span>abgeleiteter Bodenwert ${l.viertel}</span></div>
+          <div><b class="ton ton--${ui.ampelFarbe(bc.ton)}">${bc.diff >= 0 ? '+' : ''}${bc.diff} %</b><span>${bc.urteil}</span></div>
+          <div><b>${U.num(bc.bebaubar)} m²</b><span>überbaubar bei GRZ ${U.dec(g.grz || 0)}</span></div>
+          <div><b>${U.num(bc.geschossflaeche)} m²</b><span>Geschossfläche bei GFZ ${U.dec(g.gfz || 0)}</span></div>
+        </div>
+        ${bc.abschlag ? h`<p class="warn-meldung">${ico('warnung')}
+          <span><b>${bc.abschlag} % Abschlag üblich.</b> „${g.baulandArt}“ ist nicht dasselbe wie
+          voll erschlossenes Bauland: Bis zur Bebaubarkeit fehlen hier noch Schritte, deren Dauer und Kosten
+          niemand zusagen kann.</span></p>` : ''}
+        ${/kein Bebauungsplan|Außenbereich/.test(g.bplan || '') ? h`<div class="hinweisbox">${ico('warnung')}
+          <div><b>Ohne Bebauungsplan entscheidet die Umgebung</b>
+          <p>Innerhalb eines im Zusammenhang bebauten Ortsteils richtet sich die Zulässigkeit nach § 34 BauGB –
+            das Vorhaben muss sich in die Eigenart der näheren Umgebung einfügen. Im Außenbereich nach § 35 BauGB
+            ist Wohnbebauung nur ausnahmsweise zulässig. Vor dem Kauf gehört eine <b>Bauvoranfrage</b> gestellt;
+            sie kostet wenig und beantwortet verbindlich, was gebaut werden darf.</p></div>
+        </div>` : ''}
+        <p class="fein">Der Bodenwert ist hier aus dem örtlichen Kaufpreisniveau abgeleitet, kein amtlicher
+          Bodenrichtwert. Den führt der Gutachterausschuss der Gemeinde; die Auskunft ist meist kostenlos und
+          in den meisten Bundesländern online abrufbar.</p>
+      </section>`;
+    }
     if (mc) {
       const pos = U.clamp(50 + mc.diff * 1.4, 3, 97);
       return h`<section class="block" id="spiegel">
@@ -9077,7 +9279,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         ${galerie(l)}
 
         <div class="objekt__tun">
-          <button type="button" class="knopf" data-tu="anschreiben" data-id="${l.id}">${ico('nachricht')}Anschreiben</button>
+          <button type="button" class="knopf" data-tu="anschreiben" data-id="${l.id}">${ico('nachricht')}${anfrageWort(l)}</button>
           <button type="button" class="knopf knopf--still ${gemerkt ? 'is-an' : ''}" data-tu="merken" data-id="${l.id}"
             aria-pressed="${gemerkt ? 'true' : 'false'}">${ico('herz')}${gemerkt ? 'Gemerkt' : 'Merken'}</button>
           <button type="button" class="knopf knopf--still ${imVergleich ? 'is-an' : ''}" data-tu="vergleich" data-id="${l.id}"
@@ -9095,15 +9297,24 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             <section class="block" id="eckdaten">
               <h2>${ico('haus')}Eckdaten</h2>
               <dl class="fakten">
+                ${l.type === 'grundstueck' ? h`
+                <div><dt>Grundstück</dt><dd>${U.num(l.grundstueck || l.flaeche)} m²</dd></div>
+                <div><dt>Art</dt><dd>${(l.grund || {}).baulandArt || 'Bauland'}</dd></div>
+                <div><dt>Bebauungsplan</dt><dd>${(l.grund || {}).bplan || 'unbekannt'}</dd></div>
+                <div><dt>GRZ / GFZ</dt><dd>${U.dec((l.grund || {}).grz || 0)} / ${U.dec((l.grund || {}).gfz || 0)}</dd></div>
+                <div><dt>Erschließung</dt><dd>${(l.grund || {}).erschliessung || 'unbekannt'}</dd></div>
+                <div><dt>Verfügbar ab</dt><dd>${U.daysSince(l.freiAb) > 0 ? 'sofort' : U.dateDE(l.freiAb)}</dd></div>` : h`
                 <div><dt>Zimmer</dt><dd>${U.dec(l.zimmer)}</dd></div>
                 <div><dt>${l.kind === 'wg' ? 'Zimmergröße' : 'Wohnfläche'}</dt><dd>${l.flaeche} m²</dd></div>
                 ${l.kind === 'wg' ? h`<div><dt>Wohnung gesamt</dt><dd>${l.wohnflaeche} m²</dd></div>` : ''}
-                <div><dt>Etage</dt><dd>${l.etage === 0 ? 'Erdgeschoss' : l.etage >= l.etagen ? 'Dachgeschoss' : l.etage + '. OG'} von ${l.etagen}</dd></div>
+                ${l.grundstueck ? h`<div><dt>Grundstück</dt><dd>${U.num(l.grundstueck)} m²</dd></div>` : ''}
+                ${l.bauweise ? h`<div><dt>Bauweise</dt><dd>${l.bauweise}</dd></div>` : ''}
+                ${l.type === 'haus' ? '' : h`<div><dt>Etage</dt><dd>${l.etage === 0 ? 'Erdgeschoss' : l.etage >= l.etagen ? 'Dachgeschoss' : l.etage + '. OG'} von ${l.etagen}</dd></div>`}
                 <div><dt>Baujahr</dt><dd>${l.baujahr}${l.saniert ? ' · saniert' : ''}</dd></div>
                 <div><dt>Frei ab</dt><dd>${U.daysSince(l.freiAb) > 0 ? 'sofort' : U.dateDE(l.freiAb)}</dd></div>
                 ${l.befristetBis ? h`<div><dt>Befristet bis</dt><dd>${U.dateDE(l.befristetBis)}</dd></div>` : ''}
                 <div><dt>Heizung</dt><dd>${l.energie.heizung}</dd></div>
-                <div><dt>Energie</dt><dd>${ui.energieBalken(l.energie.klasse)} ${l.energie.kwh} kWh/(m²·a), ${l.energie.art}</dd></div>
+                <div><dt>Energie</dt><dd>${ui.energieBalken(l.energie.klasse)} ${l.energie.kwh} kWh/(m²·a), ${l.energie.art}</dd></div>`}
                 ${l.kind !== 'kauf' ? h`<div><dt>Kaution</dt><dd>${l.kaution ? l.kaution + ' ' + U.plural(l.kaution, 'Kaltmiete', 'Kaltmieten') + ' (' + U.eur(l.kalt * l.kaution) + ')' : 'keine'}</dd></div>` : ''}
                 ${l.kind === 'kauf' && l.hausgeld ? h`<div><dt>Hausgeld</dt><dd>${U.eur(l.hausgeld)} im Monat</dd></div>` : ''}
                 <div><dt>Provision</dt><dd>${l.provision ? U.dec(l.provision) + (l.kind === 'kauf' ? ' % des Kaufpreises' : ' Kaltmieten') : 'provisionsfrei'}</dd></div>
@@ -9126,7 +9337,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
             ${risikoBlock(l, b.risiko)}
             ${duplikatBlock(l)}
-            ${spiegelBlock(l, b.mietCheck, b.kaufCheck)}
+            ${spiegelBlock(l, b.mietCheck, b.kaufCheck, b.bodenCheck)}
             ${klauselBlock(l)}
             ${chancenBlock(l)}
             ${kostenBlock(l, k)}
@@ -9143,7 +9354,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             <div class="haftbox">
               ${passungBlock(l, b)}
               <div class="haftbox__tun">
-                <button type="button" class="knopf knopf--voll" data-tu="anschreiben" data-id="${l.id}">${ico('nachricht')}Anschreiben</button>
+                <button type="button" class="knopf knopf--voll" data-tu="anschreiben" data-id="${l.id}">${ico('nachricht')}${anfrageWort(l)}</button>
                 <a class="knopf knopf--still knopf--voll" href="#kosten">${ico('rechner')}${U.eur(k.monatSumme)} echte Monatskosten</a>
               </div>
               ${eintrag ? h`<label class="feld"><span>Deine Notiz</span>
@@ -9229,13 +9440,26 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     z.push('Stand: ' + U.dateDE(U.isoDate(NW.now())) + ' · Nestwerk');
     z.push('');
     z.push('ECKDATEN');
-    z.push('  Zimmer:        ' + U.dec(l.zimmer));
-    z.push('  Fläche:        ' + l.flaeche + ' m²');
-    z.push('  Etage:         ' + (l.etage === 0 ? 'Erdgeschoss' : l.etage >= l.etagen ? 'Dachgeschoss' : l.etage + '. OG') + ' von ' + l.etagen);
-    z.push('  Baujahr:       ' + l.baujahr + (l.saniert ? ' (saniert)' : ''));
-    z.push('  Energie:       ' + l.energie.klasse + ', ' + l.energie.kwh + ' kWh/(m²·a), ' + l.energie.heizung);
-    z.push('  Frei ab:       ' + U.dateDE(l.freiAb));
-    z.push('  Ausstattung:   ' + l.ausstattung.join(', '));
+    if (l.type === 'grundstueck') {
+      const g = l.grund || {};
+      z.push('  Grundstück:    ' + U.num(l.grundstueck || l.flaeche) + ' m²');
+      z.push('  Art:           ' + (g.baulandArt || 'Bauland'));
+      z.push('  Bebauungsplan: ' + (g.bplan || 'unbekannt'));
+      z.push('  GRZ / GFZ:     ' + U.dec(g.grz || 0) + ' / ' + U.dec(g.gfz || 0));
+      z.push('  Erschließung:  ' + (g.erschliessung || 'unbekannt'));
+      z.push('  Verfügbar ab:  ' + U.dateDE(l.freiAb));
+    } else {
+      z.push('  Zimmer:        ' + U.dec(l.zimmer));
+      z.push('  Fläche:        ' + l.flaeche + ' m²');
+      if (l.grundstueck) z.push('  Grundstück:    ' + U.num(l.grundstueck) + ' m²');
+      if (l.type !== 'haus') {
+        z.push('  Etage:         ' + (l.etage === 0 ? 'Erdgeschoss' : l.etage >= l.etagen ? 'Dachgeschoss' : l.etage + '. OG') + ' von ' + l.etagen);
+      }
+      z.push('  Baujahr:       ' + l.baujahr + (l.saniert ? ' (saniert)' : ''));
+      if (l.energie) z.push('  Energie:       ' + l.energie.klasse + ', ' + l.energie.kwh + ' kWh/(m²·a), ' + l.energie.heizung);
+      z.push('  Frei ab:       ' + U.dateDE(l.freiAb));
+      z.push('  Ausstattung:   ' + l.ausstattung.join(', '));
+    }
     z.push('');
     z.push('KOSTEN');
     k.monatlich.forEach((m) => z.push('  ' + m.label.padEnd(34) + U.eur(m.betrag).padStart(12)));
@@ -9366,13 +9590,23 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const namen = { schufa: 'Schufa-Auskunft', gehaltsnachweise: 'Gehaltsnachweise', ausweis: 'Ausweiskopie',
       mietschuldenfrei: 'Mietschuldenfreiheit', buergschaft: 'Bürgschaft', selbstauskunft: 'Selbstauskunft', wbs: 'WBS' };
     const vorlage = anschreibenText(l, p);
+    const kauf = istKaufAnfrage(l);
     ui.dialog({
-      titel: 'Anschreiben',
+      titel: kauf ? 'Anfrage' : 'Anschreiben',
       breit: true,
-      inhalt: h`<p class="block__unter">Nestwerk hat aus deinem Profil einen Vorschlag geschrieben. Ändere ihn, bis er nach dir klingt.</p>
+      inhalt: h`<p class="block__unter">${kauf
+        ? 'Nestwerk hat die Fragen zusammengestellt, deren Antworten den Preis mitbestimmen. Streich, was du '
+        + 'schon weißt, und ergänze, was dir wichtig ist.'
+        : 'Nestwerk hat aus deinem Profil einen Vorschlag geschrieben. Ändere ihn, bis er nach dir klingt.'}</p>
         <label class="feld"><span>Nachricht</span>
           <textarea rows="12" id="anschreiben-text">${vorlage}</textarea></label>
-        <fieldset class="filter__gruppe"><legend>Bewerbermappe</legend>
+        ${kauf ? h`<div class="hinweisbox">${ico('info')}
+          <div><b>Einkommen und Bonität gehören nicht in die erste Anfrage</b>
+          <p>Beim Kauf verhandelst du. Wer gleich zu Beginn schreibt, was er verdient und wie viel Eigenkapital
+            er hat, gibt seine Verhandlungsposition ohne Not preis. Ein Finanzierungsnachweis wird üblicherweise
+            erst verlangt, wenn es konkret wird – und dann reicht die Bestätigung der Bank über eine Summe, nicht
+            deine Gehaltsabrechnung.</p></div>
+        </div>` : h`<fieldset class="filter__gruppe"><legend>Bewerbermappe</legend>
           <p class="fein">Was du mitschickst, entscheidet oft mehr als der Text. Fehlende Unterlagen erst
             nach der Besichtigung nachreichen – vorher gehören Ausweis und Schufa niemandem.</p>
           <ul class="mappe">
@@ -9382,13 +9616,20 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           ${fehlt.length ? h`<p class="warn-meldung">${ico('warnung')}Es fehlen: ${fehlt.map((f) => namen[f]).join(', ')}.
             <a href="#/profil">Im Profil ergänzen</a></p>` : h`<p class="gut-meldung">${ico('pruefen')}Deine Mappe ist vollständig.</p>`}
         </fieldset>
-        ${NW.viewTresor ? NW.viewTresor.freigabeAbschnitt(l.id, l.anbieter.name) : ''}`,
+        ${NW.viewTresor ? NW.viewTresor.freigabeAbschnitt(l.id, l.anbieter.name) : ''}`}`,
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="anschreiben-kopieren">${ico('kopieren')}Text kopieren</button>
         <button type="button" class="knopf" data-tu="anschreiben-senden" data-id="${l.id}">${ico('nachricht')}Absenden</button>`
     });
   });
 
+  /* Beim Kauf heißt es nicht „bewerben“. Wer sein Nettoeinkommen und die
+     Selbstauskunft in die erste Anfrage zu einem Grundstück schreibt,
+     verrät ohne Not seine Verhandlungsposition. */
+  const istKaufAnfrage = (l) => l.kind === 'kauf';
+  const anfrageWort = (l) => istKaufAnfrage(l) ? 'Anfragen' : 'Anschreiben';
+
   function anschreibenText(l, p) {
+    if (istKaufAnfrage(l)) return anfrageText(l, p);
     const anrede = l.anbieter.art === 'privat' ? 'Hallo ' + l.anbieter.name.split(' ')[0] + ','
       : 'Guten Tag,';
     const wer = [];
@@ -9407,6 +9648,31 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       W.unterlagenSatz(p) + ' ' +
       'Nennen Sie mir gern zwei Termine, die Ihnen passen.\n\n' +
       'Viele Grüße\n' + (p.name || '');
+  }
+
+  function anfrageText(l, p) {
+    const anrede = l.anbieter.art === 'privat' ? 'Hallo ' + l.anbieter.name.split(' ')[0] + ',' : 'Guten Tag,';
+    const grund = l.type === 'grundstueck'
+      ? 'ich interessiere mich für Ihr Grundstücksangebot „' + l.titel + '“.'
+      : 'ich interessiere mich für Ihr Angebot „' + l.titel + '“.';
+    /* Die Fragen, die vor jeder Besichtigung geklärt gehören und deren
+       Antworten den Preis mitbestimmen. */
+    const fragen = l.type === 'grundstueck'
+      ? ['Liegt ein aktueller Auszug aus dem Baulastenverzeichnis vor?',
+        'Sind die Erschließungsbeiträge nach § 127 BauGB vollständig gezahlt?',
+        'Gibt es Altlastenverdacht oder ein Bodengutachten?',
+        'Welche Dienstbarkeiten und Rechte sind in Abteilung II des Grundbuchs eingetragen?',
+        'Gilt ein Bebauungsplan, und wenn ja: mit welcher Grund- und Geschossflächenzahl?']
+      : ['Wie hoch sind Hausgeld und Instandhaltungsrücklage, und was ist darin enthalten?',
+        'Welche Beschlüsse und Sonderumlagen stehen aus den letzten drei Eigentümerversammlungen an?',
+        'Liegt der Energieausweis vor, und wann wurde die Heizung zuletzt erneuert?',
+        'Gibt es Wohnrechte, Nießbrauch oder Dienstbarkeiten im Grundbuch?',
+        'Ist das Objekt vermietet, und wenn ja: zu welchen Konditionen?'];
+    return anrede + '\n\n' + grund + ' Bevor wir einen Besichtigungstermin vereinbaren, hätte ich einige '
+      + 'Fragen:\n\n'
+      + fragen.map((x, i) => (i + 1) + '. ' + x).join('\n')
+      + '\n\nÜber die Unterlagen dazu würde ich mich freuen. Für eine Besichtigung nennen Sie mir gern zwei '
+      + 'Termine, die Ihnen passen.\n\nViele Grüße\n' + (p.name || '');
   }
 
   A_('anschreiben-kopieren', () => {
@@ -9982,8 +10248,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       { label: 'Zimmer', wert: (d) => U.dec(d.l.zimmer), zahl: (d) => d.l.zimmer, hoch: true },
       { label: 'Fläche', wert: (d) => d.l.flaeche + ' m²', zahl: (d) => d.l.flaeche, hoch: true },
       { label: 'Baujahr', wert: (d) => String(d.l.baujahr) + (d.l.saniert ? ' (san.)' : ''), zahl: (d) => d.l.baujahr, hoch: true },
-      { label: 'Energie', wert: (d) => d.l.energie.klasse + ' · ' + d.l.energie.kwh + ' kWh', zahl: (d) => -A.ENERGIE_RANG[d.l.energie.klasse], hoch: true },
-      { label: 'Heizung', wert: (d) => d.l.energie.heizung },
+      { label: 'Energie', wert: (d) => d.l.energie ? d.l.energie.klasse + ' · ' + d.l.energie.kwh + ' kWh' : 'entfällt',
+        zahl: (d) => d.l.energie ? -A.ENERGIE_RANG[d.l.energie.klasse] : -99, hoch: true },
+      { label: 'Heizung', wert: (d) => d.l.energie ? d.l.energie.heizung : 'entfällt' },
       { label: 'Etage', wert: (d) => (d.l.etage === 0 ? 'EG' : d.l.etage >= d.l.etagen ? 'DG' : d.l.etage + '. OG') + ' von ' + d.l.etagen },
       { label: 'Kaution', wert: (d) => d.l.kind === 'kauf' ? '–' : d.l.kaution ? U.eur(d.l.kalt * d.l.kaution) : 'keine', zahl: (d) => d.l.kalt * d.l.kaution, hoch: false },
       { label: 'Provision', wert: (d) => d.l.provision ? U.dec(d.l.provision) + (d.l.kind === 'kauf' ? ' %' : ' KM') : 'frei', zahl: (d) => d.l.provision, hoch: false },
@@ -10688,6 +10955,116 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
      Inserieren
      ================================================================ */
 
+  /* ------------------------- Inserieren -------------------------
+
+     Sechs Angebotsarten aus zwei Merkmalen: kind (miete, kauf, wg,
+     tausch) und type (wohnung, haus, zimmer, grundstueck). Die Tabelle
+     hält beides zusammen und sagt zugleich, welche Feldgruppen die Art
+     braucht – sonst müsste jede Stelle im Formular ihre eigene Bedingung
+     mitschleppen und würde bei der siebten Art vergessen. */
+  const ARTEN = [
+    { id: 'miete', kind: 'miete', type: 'wohnung', icon: 'schluessel', label: 'Wohnung vermieten',
+      gruppen: ['wohnung', 'miete'] },
+    { id: 'wg', kind: 'wg', type: 'zimmer', icon: 'wg', label: 'WG-Zimmer',
+      gruppen: ['wohnung', 'miete'] },
+    { id: 'tausch', kind: 'tausch', type: 'wohnung', icon: 'tausch', label: 'Wohnung tauschen',
+      gruppen: ['wohnung', 'miete', 'tausch'] },
+    { id: 'kauf-wohnung', kind: 'kauf', type: 'wohnung', icon: 'haus', label: 'Wohnung verkaufen',
+      gruppen: ['wohnung', 'kauf'] },
+    { id: 'kauf-haus', kind: 'kauf', type: 'haus', icon: 'dach', label: 'Haus verkaufen',
+      gruppen: ['wohnung', 'kauf', 'haus'] },
+    { id: 'kauf-grundstueck', kind: 'kauf', type: 'grundstueck', icon: 'karte', label: 'Grundstück verkaufen',
+      gruppen: ['kauf', 'grundstueck'] }
+  ];
+
+  const artNach = (id) => ARTEN.find((a) => a.id === id) || ARTEN[0];
+
+  /* ------------------------- Bilder zum Inserat -------------------------
+
+     Ein Inserat ohne Fotos wird kaum angeklickt – das gilt beim Vermieten
+     wie beim Verkaufen. Die Dateien bleiben auf diesem Gerät, deshalb
+     werden sie vor dem Ablegen verkleinert: Ein Foto aus einer heutigen
+     Kamera hat gut vier Megabyte, und der Speicher eines Browsers fasst
+     insgesamt oft nur fünf. Verkleinert auf 1.400 Pixel Kantenlänge und
+     als JPEG mit 78 Prozent Güte bleiben davon rund 150 Kilobyte, ohne
+     dass man den Unterschied sieht. */
+
+  const BILD_MAX = 10;
+  const BILD_KANTE = 1400;
+  const BILD_GUETE = 0.78;
+  const BILD_TYPEN = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
+
+  /* Zwischenspeicher, solange das Formular offen ist. */
+  let neueBilder = [];
+
+  function verkleinern(datei) {
+    return new Promise((gut, schlecht) => {
+      const url = URL.createObjectURL(datei);
+      const bild = new Image();
+      bild.onload = () => {
+        try {
+          const faktor = Math.min(1, BILD_KANTE / Math.max(bild.naturalWidth, bild.naturalHeight));
+          const b = Math.max(1, Math.round(bild.naturalWidth * faktor));
+          const hh = Math.max(1, Math.round(bild.naturalHeight * faktor));
+          const leinwand = document.createElement('canvas');
+          leinwand.width = b; leinwand.height = hh;
+          const stift = leinwand.getContext('2d');
+          stift.drawImage(bild, 0, 0, b, hh);
+          URL.revokeObjectURL(url);
+          gut({ datei: leinwand.toDataURL('image/jpeg', BILD_GUETE), breite: b, hoehe: hh, text: '' });
+        } catch (e) { URL.revokeObjectURL(url); schlecht(e); }
+      };
+      bild.onerror = () => { URL.revokeObjectURL(url); schlecht(new Error('Die Datei ließ sich nicht lesen.')); };
+      bild.src = url;
+    });
+  }
+
+  const bildGroesse = (b) => Math.round(b.datei.length * 0.75 / 1024) + ' kB';
+
+  function bilderBlock() {
+    return h`<fieldset class="filter__gruppe bilder"><legend>Fotos</legend>
+      <p class="fein">Inserate mit Fotos werden deutlich häufiger geöffnet. Bis zu ${BILD_MAX} Bilder,
+        JPG, PNG, WEBP oder HEIC. Das erste ist das Titelbild.</p>
+      <div class="bilder__wahl">
+        <input type="file" id="inserat-bilder" class="nur-sr" accept="image/*" multiple
+          data-tu-change="inserat-bilder">
+        <label for="inserat-bilder" class="knopf knopf--still">${ico('plus')}Bilder hochladen</label>
+        <i id="inserat-bilder-zahl">${neueBilder.length
+      ? neueBilder.length + ' ' + U.plural(neueBilder.length, 'Bild', 'Bilder') + ' gewählt'
+      : 'noch keine gewählt'}</i>
+      </div>
+      <ul class="bilder__liste" id="inserat-bilder-liste">${bilderListe()}</ul>
+      <p class="fein">Die Bilder werden beim Ablegen auf ${U.num(BILD_KANTE)} Pixel Kantenlänge verkleinert und
+        bleiben im Speicher dieses Geräts. Sie werden nirgendwohin übertragen – es gibt keinen Server.</p>
+      <div class="hinweisbox">${ico('warnung')}
+        <div><b>Was auf ein Inseratsfoto nicht gehört</b>
+        <p>Keine Personen ohne deren Einwilligung, keine Kennzeichen, keine Namensschilder an Klingel oder
+          Briefkasten, keine Post auf dem Tisch. Wer die Wohnung noch bewohnt, sollte vorher gefragt werden:
+          Fotos der Innenräume dürfen ohne Zustimmung der Mietpartei nicht veröffentlicht werden.</p></div>
+      </div>
+    </fieldset>`;
+  }
+
+  function bilderListe() {
+    if (!neueBilder.length) return '';
+    return h`${neueBilder.map((b, i) => h`<li>
+      <img src="${b.datei}" alt="Vorschau ${i + 1}">
+      <div>
+        <b>${i === 0 ? 'Titelbild' : 'Bild ' + (i + 1)}</b>
+        <span>${b.breite} × ${b.hoehe} · ${bildGroesse(b)}</span>
+        <input type="text" class="bilder__text" data-tu-input="inserat-bildtext" data-i="${i}"
+          value="${b.text || ''}" placeholder="Bildunterschrift (freiwillig)"
+          aria-label="Bildunterschrift für Bild ${i + 1}">
+      </div>
+      <span class="bilder__tun">
+        <button type="button" class="ikon-btn" data-tu="inserat-bild-vor" data-i="${i}"
+          ${i === 0 ? 'disabled' : ''} aria-label="Bild ${i + 1} nach vorn">${ico('zurueck')}</button>
+        <button type="button" class="ikon-btn" data-tu="inserat-bild-weg" data-i="${i}"
+          aria-label="Bild ${i + 1} entfernen">${ico('muell')}</button>
+      </span>
+    </li>`)}`;
+  }
+
   function inserieren() {
     const s = S.get();
     return {
@@ -10695,8 +11072,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       html: h`<div class="seite seite--schmal">
         <header class="seite__kopf">
           <h1>${ico('plus')}Inserat aufgeben</h1>
-          <p class="seite__unter">Ob Wohnung, WG-Zimmer oder Tauschangebot – ein Formular für alles.
-            Das Inserat bleibt auf diesem Gerät und taucht in deiner Suche und im Ringtausch auf.</p>
+          <p class="seite__unter">Vermieten, verkaufen, ein Zimmer anbieten oder tauschen – ein Formular für
+            alles. Das Inserat bleibt auf diesem Gerät und taucht in deiner Suche, in der Karte und im
+            Ringtausch auf.</p>
         </header>
 
         ${s.eigeneInserate.length ? h`<section class="block">
@@ -10713,25 +11091,28 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         <form class="block" data-tu-submit="inserat-speichern" id="inserat-form">
           <h2>Neues Inserat</h2>
 
-          <fieldset class="filter__gruppe"><legend>Art</legend>
+          <fieldset class="filter__gruppe"><legend>Art des Angebots</legend>
             <div class="chips">
-              ${[['miete', 'Wohnung vermieten'], ['wg', 'WG-Zimmer'], ['tausch', 'Wohnung tauschen']].map((o, i) =>
-        h`<label class="chip chip--radio"><input type="radio" name="kind" value="${o[0]}" ${i === 0 ? 'checked' : ''}
-                  data-tu-change="inserat-art"> ${o[1]}</label>`)}
+              ${ARTEN.map((o, i) =>
+        h`<label class="chip chip--radio"><input type="radio" name="art" value="${o.id}" ${i === 0 ? 'checked' : ''}
+                  data-tu-change="inserat-art"> ${ico(o.icon)}${o.label}</label>`)}
             </div>
           </fieldset>
 
-          <div class="formraster">
+          <div class="formraster" data-gruppe="ort">
             <label class="feld"><span>Stadt und Viertel</span>
               <select name="viertelKey" required>
                 ${NW.geo.DISTRICTS.map((d) => h`<option value="${d.key}">${d.city} – ${d.name}</option>`)}
               </select></label>
             <label class="feld"><span>Straße (ungefähr)</span>
               <input type="text" name="strasse" placeholder="Nähe Beispielstraße"></label>
+          </div>
+
+          <div class="formraster" data-gruppe="wohnung">
             <label class="feld"><span>Zimmer</span>
-              <input type="number" name="zimmer" min="1" max="9" step="0.5" value="2" required></label>
-            <label class="feld"><span>Fläche in m²</span>
-              <input type="number" name="flaeche" min="8" max="400" value="60" required></label>
+              <input type="number" name="zimmer" min="1" max="9" step="0.5" value="2"></label>
+            <label class="feld"><span>Wohnfläche in m²</span>
+              <input type="number" name="flaeche" min="8" max="900" value="60"></label>
             <label class="feld"><span>Etage</span>
               <input type="number" name="etage" min="0" max="20" value="1"></label>
             <label class="feld"><span>Etagen im Haus</span>
@@ -10741,10 +11122,46 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             <label class="feld"><span>Heizung</span>
               <select name="heizung">
                 ${['Gas-Zentralheizung', 'Fernwärme', 'Wärmepumpe', 'Öl-Zentralheizung', 'Gasetagenheizung', 'Pelletheizung'].map((x) =>
+        h`<option>${x}</option>`)}
+              </select></label>
+          </div>
+
+          <div class="formraster" data-gruppe="haus">
+            <label class="feld"><span>Grundstücksfläche in m²</span>
+              <input type="number" name="grundstueck" min="0" max="20000" value="420"></label>
+            <label class="feld"><span>Bauweise</span>
+              <select name="bauweise">
+                ${['freistehend', 'Doppelhaushälfte', 'Reihenmittelhaus', 'Reihenendhaus', 'Bungalow', 'Stadtvilla'].map((x) =>
           h`<option>${x}</option>`)}
               </select></label>
+          </div>
+
+          <div class="formraster" data-gruppe="grundstueck">
+            <label class="feld"><span>Grundstücksfläche in m²</span>
+              <input type="number" name="gflaeche" min="30" max="100000" value="600"></label>
+            <label class="feld"><span>Art des Grundstücks</span>
+              <select name="baulandArt">
+                ${['Bauland, voll erschlossen', 'Bauland, teilerschlossen', 'Bauland, unerschlossen',
+            'Bauerwartungsland', 'Gartenland', 'Wohnbaugrundstück mit Altbestand'].map((x) => h`<option>${x}</option>`)}
+              </select></label>
+            <label class="feld"><span>Bebauungsplan</span>
+              <select name="bplan">
+                ${['liegt vor', 'im Verfahren', 'kein Bebauungsplan – § 34 BauGB', 'Außenbereich – § 35 BauGB'].map((x) =>
+            h`<option>${x}</option>`)}
+              </select></label>
+            <label class="feld"><span>Grundflächenzahl (GRZ)</span>
+              <input type="number" name="grz" min="0" max="1" step="0.05" value="0.4"></label>
+            <label class="feld"><span>Geschossflächenzahl (GFZ)</span>
+              <input type="number" name="gfz" min="0" max="3" step="0.1" value="0.8"></label>
+            <label class="feld"><span>Erschließungskosten</span>
+              <select name="erschliessung">
+                ${['bereits bezahlt', 'noch offen', 'anteilig offen', 'unbekannt'].map((x) => h`<option>${x}</option>`)}
+              </select></label>
+          </div>
+
+          <div class="formraster" data-gruppe="miete">
             <label class="feld"><span>Kaltmiete</span>
-              <input type="number" name="kalt" min="0" step="10" value="750" required></label>
+              <input type="number" name="kalt" min="0" step="10" value="750"></label>
             <label class="feld"><span>Nebenkosten</span>
               <input type="number" name="nebenkosten" min="0" step="10" value="140"></label>
             <label class="feld"><span>Heizkosten</span>
@@ -10755,19 +11172,39 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
               <input type="date" name="freiAb" value="${U.isoDate(U.addDays(NW.now(), 30))}"></label>
           </div>
 
-          <fieldset class="filter__gruppe"><legend>Ausstattung</legend>
+          <div class="formraster" data-gruppe="kauf">
+            <label class="feld"><span>Kaufpreis</span>
+              <input type="number" name="kaufpreis" min="0" step="1000" value="350000"></label>
+            <label class="feld"><span>Käuferprovision in Prozent</span>
+              <input type="number" name="provision" min="0" max="8" step="0.01" value="0"></label>
+            <label class="feld" data-gruppe="wohnung"><span>Hausgeld im Monat</span>
+              <input type="number" name="hausgeld" min="0" step="10" value="260"></label>
+            <label class="feld"><span>Bezugsfrei ab</span>
+              <input type="date" name="freiAbKauf" value="${U.isoDate(U.addDays(NW.now(), 90))}"></label>
+          </div>
+
+          <div class="hinweisbox" data-gruppe="kauf">${ico('info')}
+            <div><b>Provision und Kosten beim Kauf</b>
+            <p>Seit dem 23. Dezember 2020 gilt bei Wohnungen und Einfamilienhäusern an Verbraucher: Die
+              Maklerprovision wird geteilt, und die Käuferseite zahlt höchstens so viel wie die Verkäuferseite
+              (§§ 656c, 656d BGB). Für Grundstücke und Mehrfamilienhäuser gilt das nicht. Nestwerk rechnet die
+              Nebenkosten des Erwerbs – Grunderwerbsteuer nach Bundesland, Notar und Grundbuch – bei jedem
+              Angebot durch und zeigt sie neben dem Kaufpreis.</p></div>
+          </div>
+
+          <fieldset class="filter__gruppe" data-gruppe="wohnung"><legend>Ausstattung</legend>
             <div class="chips">
               ${NW.data.AUSSTATTUNG.slice(0, 22).map((a) =>
-            h`<label class="chip chip--radio"><input type="checkbox" name="ausstattung" value="${a}"> ${a}</label>`)}
+              h`<label class="chip chip--radio"><input type="checkbox" name="ausstattung" value="${a}"> ${a}</label>`)}
             </div>
           </fieldset>
 
-          <fieldset class="filter__gruppe" id="tausch-felder" hidden><legend>Tauschwunsch</legend>
+          <fieldset class="filter__gruppe" data-gruppe="tausch"><legend>Tauschwunsch</legend>
             <label class="feld"><span>Grund für den Tausch</span>
               <input type="text" name="grund" placeholder="z. B. neuer Job in Leipzig"></label>
             <div class="chips">
               ${NW.data.staedte.map((c) =>
-              h`<label class="chip chip--radio"><input type="checkbox" name="wunschStadt" value="${c}"> ${c}</label>`)}
+                h`<label class="chip chip--radio"><input type="checkbox" name="wunschStadt" value="${c}"> ${c}</label>`)}
             </div>
             <div class="formraster">
               <label class="feld"><span>Zimmer mindestens</span><input type="number" name="tZimmer" min="1" step="0.5" value="2"></label>
@@ -10776,6 +11213,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             </div>
             <label class="schalter"><input type="checkbox" name="ringOk" checked><span>auch Ringtausch über mehrere Haushalte</span></label>
           </fieldset>
+
+          ${bilderBlock()}
 
           <label class="feld"><span>Beschreibung</span>
             <textarea name="beschreibung" rows="5" placeholder="Was sollte man über die Wohnung und die Nachbarschaft wissen?"></textarea></label>
@@ -10789,7 +11228,11 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
           <button type="submit" class="knopf knopf--voll">${ico('speichern')}Inserat anlegen</button>
         </form>
-      </div>`
+      </div>`,
+      /* Die Feldgruppen richten sich nach der Art. Beim ersten Aufbau
+         muss das einmal von Hand geschehen – danach erledigt es der
+         Wechsel der Auswahl. */
+      danach() { gruppenZeigen((U.$('input[name="art"]:checked') || {}).value || 'miete'); }
     };
   }
 
@@ -11077,9 +11520,74 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     ui.neuZeichnen();
   });
 
-  A_('inserat-art', (el) => {
-    const felder = U.$('#tausch-felder');
-    if (felder) felder.hidden = el.value !== 'tausch';
+  /* Zeigt nur die Feldgruppen, die zur gewählten Art gehören. Ein
+     verstecktes Feld bleibt im Formular und liefert weiter seinen Wert –
+     das ist gewollt: Wer zwischen Vermieten und Verkaufen hin- und
+     herschaltet, verliert dabei nichts. */
+  function gruppenZeigen(artId) {
+    const a = artNach(artId);
+    U.$$('[data-gruppe]').forEach((el) => {
+      const noetig = el.dataset.gruppe.split(' ').every((g) => g === 'ort' || a.gruppen.indexOf(g) >= 0);
+      el.hidden = !noetig;
+      /* Pflichtfelder einer verborgenen Gruppe würden das Absenden
+         blockieren, ohne dass man sähe, warum. */
+      U.$$('input,select,textarea', el).forEach((f) => { f.disabled = !noetig; });
+    });
+  }
+
+  A_('inserat-art', (el) => { gruppenZeigen(el.value); });
+
+  A_('inserat-bilder', (el) => {
+    const dateien = Array.from(el.files || []);
+    el.value = '';
+    if (!dateien.length) return;
+    const platz = BILD_MAX - neueBilder.length;
+    if (platz <= 0) { ui.toast('Mehr als ' + BILD_MAX + ' Bilder gehen nicht.', 'schlecht'); return; }
+    const nehmen = dateien.slice(0, platz);
+    if (dateien.length > platz) {
+      ui.toast('Nur die ersten ' + platz + ' ' + U.plural(platz, 'Datei', 'Dateien') + ' wurden übernommen.', 'schlecht');
+    }
+    const falsch = nehmen.filter((d) => d.type && BILD_TYPEN.indexOf(d.type) < 0);
+    if (falsch.length) { ui.toast('Erlaubt sind JPG, PNG, WEBP und HEIC.', 'schlecht'); }
+
+    Promise.all(nehmen.filter((d) => !d.type || BILD_TYPEN.indexOf(d.type) >= 0).map(verkleinern))
+      .then((neue) => {
+        neueBilder = neueBilder.concat(neue);
+        bilderNeuZeichnen();
+        ui.toast(neue.length + ' ' + U.plural(neue.length, 'Bild', 'Bilder') + ' übernommen und verkleinert.', 'gut');
+      })
+      .catch((e) => ui.toast(e.message || 'Ein Bild ließ sich nicht lesen.', 'schlecht'));
+  });
+
+  /* Nur die Bilderliste neu setzen, nicht die ganze Seite: Sonst wäre
+     jede Eingabe im Formular darüber wieder weg. */
+  function bilderNeuZeichnen() {
+    const liste = U.$('#inserat-bilder-liste');
+    if (liste) liste.innerHTML = String(bilderListe());
+    const zahl = U.$('#inserat-bilder-zahl');
+    if (zahl) {
+      zahl.textContent = neueBilder.length
+        ? neueBilder.length + ' ' + U.plural(neueBilder.length, 'Bild', 'Bilder') + ' gewählt'
+        : 'noch keine gewählt';
+    }
+  }
+
+  A_('inserat-bildtext', (el) => {
+    const b = neueBilder[Number(el.dataset.i)];
+    if (b) b.text = el.value.slice(0, 120);
+  });
+
+  A_('inserat-bild-weg', (el) => {
+    neueBilder.splice(Number(el.dataset.i), 1);
+    bilderNeuZeichnen();
+  });
+
+  A_('inserat-bild-vor', (el) => {
+    const i = Number(el.dataset.i);
+    if (i <= 0) return;
+    const b = neueBilder.splice(i, 1)[0];
+    neueBilder.splice(i - 1, 0, b);
+    bilderNeuZeichnen();
   });
 
   A_('inserat-speichern', (el) => {
@@ -11087,46 +11595,87 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const key = f.get('viertelKey');
     const d = NW.geo.districtByKey[key];
     if (!d) { ui.toast('Bitte ein Viertel wählen.', 'schlecht'); return; }
-    const kind = f.get('kind') || 'miete';
-    const zimmer = Number(f.get('zimmer')) || 2;
-    const flaeche = Number(f.get('flaeche')) || 50;
-    const kalt = Number(f.get('kalt')) || 0;
-    const nk = Number(f.get('nebenkosten')) || 0;
-    const heiz = Number(f.get('heizkosten')) || 0;
-    const baujahr = Number(f.get('baujahr')) || 1970;
+
+    const art = artNach(f.get('art'));
+    const kind = art.kind, typ = art.type;
+    const istKauf = kind === 'kauf';
+    const istGrund = typ === 'grundstueck';
+
+    const zahl = (name, ersatz) => {
+      const v = Number(f.get(name));
+      return Number.isFinite(v) && f.get(name) !== null && f.get(name) !== '' ? v : ersatz;
+    };
+
+    const zimmer = istGrund ? 0 : zahl('zimmer', 2);
+    const gflaeche = istGrund ? zahl('gflaeche', 600) : zahl('grundstueck', 0);
+    /* Beim Grundstück ist die Fläche das Grundstück selbst – sonst hätte
+       jede Auswertung, die durch die Fläche teilt, eine Null im Nenner. */
+    const flaeche = istGrund ? gflaeche : zahl('flaeche', 50);
+    const kalt = istKauf ? 0 : zahl('kalt', 0);
+    const nk = istKauf ? 0 : zahl('nebenkosten', 0);
+    const heiz = istKauf ? 0 : zahl('heizkosten', 0);
+    const kaufpreis = istKauf ? zahl('kaufpreis', 0) : 0;
+    const hausgeld = istKauf && typ === 'wohnung' ? zahl('hausgeld', 0) : 0;
+    const provision = istKauf ? zahl('provision', 0) : 0;
+    const baujahr = istGrund ? 0 : zahl('baujahr', 1970);
     const heizung = f.get('heizung') || 'Gas-Zentralheizung';
-    const ausstattung = f.getAll('ausstattung');
+    const ausstattung = istGrund ? [] : f.getAll('ausstattung');
     const kwh = baujahr >= 2020 ? 55 : baujahr >= 2000 ? 95 : baujahr >= 1978 ? 125 : 168;
     const p = S.get().profil;
 
+    const titel = istGrund
+      ? U.num(gflaeche) + ' m² ' + (String(f.get('baulandArt') || 'Bauland').split(',')[0]) + ' – ' + d.name
+      : typ === 'haus'
+        ? (f.get('bauweise') || 'Haus') + ', ' + U.dec(zimmer) + ' Zi., ' + flaeche + ' m² – ' + d.name
+        : kind === 'wg' ? flaeche + ' m² Zimmer – ' + d.name
+          : U.dec(zimmer) + '-Zimmer-Wohnung' + (kind === 'tausch' ? ' zum Tausch' : '') + ' – ' + d.name;
+
     const daten = {
-      kind,
-      type: kind === 'wg' ? 'zimmer' : 'wohnung',
-      titel: (kind === 'wg' ? flaeche + ' m² Zimmer' : kind === 'tausch' ? U.dec(zimmer) + '-Zimmer-Wohnung zum Tausch'
-        : U.dec(zimmer) + '-Zimmer-Wohnung') + ' – ' + d.name,
+      kind, type: typ,
+      titel,
       stadt: d.city, viertel: d.name, viertelKey: d.key,
       strasse: f.get('strasse') || 'Nähe ' + d.name,
       lat: d.lat, lng: d.lng,
-      zimmer, flaeche, wohnflaeche: flaeche,
-      etage: Number(f.get('etage')) || 0, etagen: Number(f.get('etagen')) || 4,
+      zimmer, flaeche, wohnflaeche: istGrund ? 0 : flaeche,
+      grundstueck: gflaeche,
+      etage: istGrund ? 0 : zahl('etage', 0), etagen: istGrund ? 0 : zahl('etagen', 4),
       baujahr, saniert: false,
       kalt, nebenkosten: nk, heizkosten: heiz, warm: kalt + nk + heiz,
-      kaufpreis: 0, hausgeld: 0, provision: 0, kaution: Number(f.get('kaution')) || 0,
-      energie: { klasse: kwh <= 75 ? 'B' : kwh <= 100 ? 'C' : kwh <= 130 ? 'D' : kwh <= 160 ? 'E' : 'F', kwh, art: 'Bedarfsausweis', heizung, ausweisBis: U.isoDate(U.addDays(NW.now(), 3000)) },
+      kaufpreis, hausgeld, provision,
+      kaution: istKauf ? 0 : zahl('kaution', 0),
+      /* Ein Grundstück hat keinen Energieausweis – § 80 GEG verlangt ihn
+         nur für Gebäude. Eine erfundene Klasse hinzuschreiben wäre falsch. */
+      energie: istGrund ? null : {
+        klasse: kwh <= 75 ? 'B' : kwh <= 100 ? 'C' : kwh <= 130 ? 'D' : kwh <= 160 ? 'E' : 'F',
+        kwh, art: 'Bedarfsausweis', heizung, ausweisBis: U.isoDate(U.addDays(NW.now(), 3000))
+      },
       ausstattung,
-      freiAb: f.get('freiAb') || U.isoDate(NW.now()),
+      freiAb: (istKauf ? f.get('freiAbKauf') : f.get('freiAb')) || U.isoDate(NW.now()),
       befristetBis: null,
       beschreibung: f.get('beschreibung') || 'Keine weitere Beschreibung hinterlegt.',
+      bilder: neueBilder.slice(),
       quirks: [],
       anbieter: {
         name: p.name || 'Du', art: 'privat', stadt: d.city, quote: 100, antwortStd: 4,
         verifiziert: true, seit: U.isoDate(NW.now()), inserate: 1, bewertung: 0, bewertungen: 0
       },
       stats: { aufrufe: 0, bewerber: 0, online: U.isoDate(NW.now()) },
-      vergleichsmiete: NW.geo.vergleichsmiete(d.key, flaeche, baujahr, false),
+      vergleichsmiete: istKauf ? 0 : NW.geo.vergleichsmiete(d.key, flaeche, baujahr, false),
       besichtigungen: [],
       verdacht: false
     };
+
+    if (typ === 'haus') daten.bauweise = f.get('bauweise') || 'freistehend';
+
+    if (istGrund) {
+      daten.grund = {
+        baulandArt: f.get('baulandArt') || 'Bauland, voll erschlossen',
+        bplan: f.get('bplan') || 'liegt vor',
+        grz: zahl('grz', 0.4),
+        gfz: zahl('gfz', 0.8),
+        erschliessung: f.get('erschliessung') || 'unbekannt'
+      };
+    }
 
     if (kind === 'wg') {
       daten.wg = {
@@ -11145,9 +11694,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         grund: f.get('grund') || 'Veränderung.',
         suche: {
           staedte: staedte.length ? staedte : [d.city],
-          zimmerMin: Number(f.get('tZimmer')) || 1,
-          flaecheMin: Number(f.get('tFlaeche')) || 30,
-          warmMax: Number(f.get('tWarm')) || 1200,
+          zimmerMin: zahl('tZimmer', 1),
+          flaecheMin: zahl('tFlaeche', 30),
+          warmMax: zahl('tWarm', 1200),
           wunschAusstattung: []
         },
         flexibelAb: daten.freiAb,
@@ -11156,8 +11705,18 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       };
     }
 
-    const id = S.inseratAnlegen(daten);
-    ui.toast('Inserat angelegt.', 'gut');
+    let id;
+    try {
+      id = S.inseratAnlegen(daten);
+    } catch (e) {
+      /* Der Browserspeicher ist begrenzt; Bilder füllen ihn am schnellsten. */
+      ui.toast('Der Speicher dieses Browsers ist voll. Entferne einige Bilder oder ältere Inserate.', 'schlecht');
+      return;
+    }
+    neueBilder = [];
+    ui.toast(daten.bilder.length
+      ? 'Inserat mit ' + daten.bilder.length + ' ' + U.plural(daten.bilder.length, 'Bild', 'Bildern') + ' angelegt.'
+      : 'Inserat angelegt.', 'gut');
     ui.gehe(kind === 'tausch' ? 'tausch' : 'objekt/' + id);
   });
 

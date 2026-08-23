@@ -83,6 +83,20 @@
   const ART_LABEL = { miete: 'Miete', kauf: 'Kauf', wg: 'WG-Zimmer', tausch: 'Tausch' };
   const ART_ICON = { miete: 'schluessel', kauf: 'haus', wg: 'wg', tausch: 'tausch' };
 
+  /* Die Art allein reicht als Beschriftung nicht mehr: „Kauf“ steht über
+     einer Wohnung, einem Haus und einem Grundstück gleichermaßen, und das
+     sind drei sehr verschiedene Dinge. */
+  function artLabel(l) {
+    if (l.kind === 'kauf') {
+      return l.type === 'grundstueck' ? 'Grundstück' : l.type === 'haus' ? 'Haus' : 'Eigentumswohnung';
+    }
+    if (l.kind === 'miete' && l.type === 'haus') return 'Haus zur Miete';
+    return ART_LABEL[l.kind];
+  }
+
+  const artIcon = (l) =>
+    l.type === 'grundstueck' ? 'karte' : l.type === 'haus' ? 'dach' : ART_ICON[l.kind];
+
   function badge(text, art, symbol) {
     return h`<span class="badge badge--${art || 'neutral'}">${symbol ? ico(symbol) : ''}${text}</span>`;
   }
@@ -142,16 +156,23 @@
     const gemerkt = NW.store.gemerkt(l.id);
     const imVergleich = NW.store.imVergleich(l.id);
     const eck = [];
-    eck.push(U.dec(l.zimmer) + ' Zi.');
-    eck.push(l.flaeche + ' m²');
-    if (l.kind === 'wg') eck.push('WG mit ' + l.wg.groesse);
-    else eck.push(l.etage === 0 ? 'EG' : l.etage >= l.etagen ? 'DG' : l.etage + '. OG');
+    if (l.type === 'grundstueck') {
+      eck.push(U.num(l.grundstueck || l.flaeche) + ' m² Grund');
+      eck.push(String((l.grund || {}).baulandArt || 'Bauland').split(',')[0]);
+      eck.push('GRZ ' + U.dec((l.grund || {}).grz || 0));
+    } else {
+      eck.push(U.dec(l.zimmer) + ' Zi.');
+      eck.push(l.flaeche + ' m²');
+      if (l.kind === 'wg') eck.push('WG mit ' + l.wg.groesse);
+      else if (l.type === 'haus') eck.push(l.grundstueck ? U.num(l.grundstueck) + ' m² Grund' : 'Haus');
+      else eck.push(l.etage === 0 ? 'EG' : l.etage >= l.etagen ? 'DG' : l.etage + '. OG');
+    }
     eck.push('ab ' + U.dateDE(l.freiAb));
 
     return h`<article class="karte-inserat ${opt.kompakt ? 'is-kompakt' : ''}" data-id="${l.id}">
       <a class="karte-inserat__bild" href="#/objekt/${l.id}" aria-label="${l.titel} ansehen">
         ${raw(NW.img.make(l, 0))}
-        <span class="karte-inserat__art">${ico(ART_ICON[l.kind])}${ART_LABEL[l.kind]}</span>
+        <span class="karte-inserat__art">${ico(artIcon(l))}${artLabel(l)}</span>
         ${b ? h`<span class="karte-inserat__ring">${passungsRing(b.score)}</span>` : ''}
       </a>
       <div class="karte-inserat__text">
@@ -964,7 +985,7 @@
   Object.assign(ui, {
     start, gehe, zeichnen, neuZeichnen, toast, dialog, dialogZu,
     badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
-    ART_LABEL, ART_ICON, ico, aktionRegistrieren, AKTIONEN,
+    ART_LABEL, ART_ICON, artLabel, artIcon, ico, aktionRegistrieren, AKTIONEN,
     sperrHinweis, anzeige, NAV, dateiSichern,
     aktualisiereZaehler, themeSetzen, paletteOeffnen, kartenMarken, preisZeile
   });

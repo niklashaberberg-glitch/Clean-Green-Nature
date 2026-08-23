@@ -11,7 +11,10 @@
   const G = NW.geo;
 
   const W = 1000, H = 700;
-  const FARBEN = { miete: '#0f766e', kauf: '#4338ca', wg: '#7c3aed', tausch: '#b45309' };
+  /* Die Kartenfarben sind dieselben wie in den Diagrammen und stehen
+     deshalb auch an derselben Stelle. Als Verweis auf die Token statt als
+     Kopie: Sonst blieben sie im Dunkelmodus auf den hellen Werten stehen. */
+  const FARBEN = { miete: 'var(--miete)', kauf: 'var(--kauf)', wg: 'var(--wg)', tausch: 'var(--tausch)' };
 
   function projizieren(lat, lng, lat0) {
     return { x: lng * Math.cos(lat0 * Math.PI / 180) * 111.32, y: -lat * 110.57 };

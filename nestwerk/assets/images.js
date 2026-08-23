@@ -9,14 +9,25 @@
 
   const U = NW.util;
 
+  /* Sechs Farbfamilien für Abwechslung im Bestand – aber alle aus derselben
+     Verwandtschaft wie die Oberfläche. Vorher stand hier ein Grün-Orange-
+     Satz aus einer früheren Fassung; neben dem Indigo der Anwendung sah das
+     aus, als gehörten Bild und Seite nicht zusammen. */
   const PALETTES = [
-    { sky: ['#dbeafe', '#eff6ff'], wall: '#cbd5e1', wall2: '#94a3b8', warm: '#f8fafc', accent: '#0f766e', dark: '#334155', green: '#65a30d' },
-    { sky: ['#fee2e2', '#fff7ed'], wall: '#e7d3c4', wall2: '#c9ab95', warm: '#fffaf5', accent: '#b45309', dark: '#44403c', green: '#4d7c0f' },
-    { sky: ['#dcfce7', '#f0fdf4'], wall: '#d5ded0', wall2: '#a8b8a0', warm: '#fbfdf9', accent: '#15803d', dark: '#3f4a3c', green: '#166534' },
-    { sky: ['#ede9fe', '#f5f3ff'], wall: '#d8d5e4', wall2: '#a9a3c0', warm: '#faf9ff', accent: '#6d28d9', dark: '#3b3552', green: '#7c3aed' },
-    { sky: ['#cffafe', '#ecfeff'], wall: '#cddfe3', wall2: '#93b4bd', warm: '#f7fdfe', accent: '#0e7490', dark: '#2f4550', green: '#0891b2' },
-    { sky: ['#fef9c3', '#fefce8'], wall: '#e6dfc4', wall2: '#bcb08a', warm: '#fffdf2', accent: '#a16207', dark: '#453f2e', green: '#65a30d' }
+    /* Indigo */
+    { sky: ['#e4e0fb', '#f3f1fe'], wall: '#d5d1e6', wall2: '#a8a2c4', warm: '#faf9ff', accent: '#4a32c4', dark: '#332d4d', green: '#3f8f5f' },
+    /* Petrol */
+    { sky: ['#d6eef4', '#eef8fb'], wall: '#cdd9de', wall2: '#93a9b3', warm: '#f7fcfd', accent: '#0b6f7e', dark: '#2c4249', green: '#2f7d5a' },
+    /* Beere */
+    { sky: ['#fbe1ee', '#fef4f8'], wall: '#e3d3dc', wall2: '#bfa2b2', warm: '#fffafc', accent: '#ab2168', dark: '#4a3040', green: '#4d7c4f' },
+    /* Sand */
+    { sky: ['#f7ecd9', '#fdf8ef'], wall: '#e4dac6', wall2: '#bcae92', warm: '#fffdf7', accent: '#7d5a06', dark: '#453c2c', green: '#5d7f3a' },
+    /* Nachtblau */
+    { sky: ['#dbe4fb', '#eff3fe'], wall: '#ccd3e4', wall2: '#98a4c2', warm: '#f9faff', accent: '#2f4dae', dark: '#2f3856', green: '#3d7f6a' },
+    /* Salbei */
+    { sky: ['#e0efe6', '#f2f9f4'], wall: '#d2ded6', wall2: '#9fb2a7', warm: '#fafdfb', accent: '#276b52', dark: '#33453c', green: '#3f7a4e' }
   ];
+
 
   function paletteFor(seed) { return PALETTES[seed % PALETTES.length]; }
 
@@ -259,9 +270,15 @@
   /* Welche Bildfolge zu welchem Inseratstyp passt. */
   function sequenceFor(listing) {
     if (listing.kind === 'wg') return ['raum', 'kueche', 'bad', 'fassade', 'umgebung'];
+    if (listing.type === 'grundstueck') return ['umgebung', 'grundriss'];
     if (listing.type === 'haus') return ['fassade', 'raum', 'kueche', 'grundriss', 'umgebung', 'bad'];
     return ['raum', 'fassade', 'kueche', 'bad', 'grundriss', 'umgebung'];
   }
+
+  /* Eigene Fotos schlagen die Zeichnung. Sie liegen als Datenverweis am
+     Inserat und ersetzen die gesamte Folge – halb gezeichnet, halb
+     fotografiert wäre nur verwirrend. */
+  const eigeneBilder = (l) => (l && Array.isArray(l.bilder) && l.bilder.length) ? l.bilder : null;
 
   const CAPTIONS = {
     fassade: 'Außenansicht', raum: 'Wohnbereich', grundriss: 'Grundriss (schematisch)',
@@ -276,6 +293,12 @@
      jedem Aufruf eine eigene Nummer – sonst kollidieren zwei Ausgaben
      desselben Bildes auf einer Seite. */
   function make(listing, index) {
+    const eigen = eigeneBilder(listing);
+    if (eigen) {
+      const b = eigen[index % eigen.length];
+      return '<img class="eigenbild" src="' + U.esc(b.datei) + '" alt="' + U.esc(b.text || 'Foto zum Inserat') +
+        '" loading="lazy" decoding="async">';
+    }
     const seq = sequenceFor(listing);
     const name = seq[index % seq.length];
     const key = listing.id + ':' + name;
@@ -289,8 +312,19 @@
     return vorlage.split('__ID__').join('nw' + (++laufendeNummer) + '-');
   }
 
-  function count(listing) { return sequenceFor(listing).length; }
-  function caption(listing, index) { return CAPTIONS[sequenceFor(listing)[index % sequenceFor(listing).length]]; }
+  function count(listing) {
+    const eigen = eigeneBilder(listing);
+    return eigen ? eigen.length : sequenceFor(listing).length;
+  }
+
+  function caption(listing, index) {
+    const eigen = eigeneBilder(listing);
+    if (eigen) return eigen[index % eigen.length].text || 'Eigenes Foto';
+    return CAPTIONS[sequenceFor(listing)[index % sequenceFor(listing).length]];
+  }
+
+  /* Sagt der Oberfläche, ob der Hinweis „schematische Zeichnung“ passt. */
+  const istGezeichnet = (listing) => !eigeneBilder(listing);
 
   /* Rundes Profilbild aus Initialen. */
   function avatar(name, size) {
@@ -304,5 +338,5 @@
       U.esc(initials) + '</text></svg>';
   }
 
-  NW.img = { make, count, caption, avatar, paletteFor };
+  NW.img = { make, count, caption, avatar, paletteFor, istGezeichnet };
 })(window.NW = window.NW || {});

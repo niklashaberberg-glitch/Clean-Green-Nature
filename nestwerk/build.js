@@ -59,10 +59,10 @@ const vollseite =
   '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n' +
   kopfExtra + '\n' +
   '<meta name="robots" content="noindex">\n' +
-  '<meta name="theme-color" content="#0f766e" media="(prefers-color-scheme: light)">\n' +
-  '<meta name="theme-color" content="#0d1413" media="(prefers-color-scheme: dark)">\n' +
+  '<meta name="theme-color" content="#4a32c4" media="(prefers-color-scheme: light)">\n' +
+  '<meta name="theme-color" content="#100e1a" media="(prefers-color-scheme: dark)">\n' +
   '<meta name="color-scheme" content="light dark">\n' +
-  '<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 32 32\'%3E%3Crect width=\'32\' height=\'32\' rx=\'7\' fill=\'%230f766e\'/%3E%3Cpath d=\'M5 16L16 6l11 10\' stroke=\'%23fff\' stroke-width=\'2.6\' fill=\'none\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3Cpath d=\'M8 14.5V26h16V14.5\' stroke=\'%23fff\' stroke-width=\'2.6\' fill=\'none\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3Ccircle cx=\'16\' cy=\'20\' r=\'3.2\' stroke=\'%23fff\' stroke-width=\'2.6\' fill=\'none\'/%3E%3C/svg%3E">\n' +
+  '<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 32 32\'%3E%3Crect width=\'32\' height=\'32\' rx=\'7\' fill=\'%234a32c4\'/%3E%3Cpath d=\'M5 16L16 6l11 10\' stroke=\'%23fff\' stroke-width=\'2.6\' fill=\'none\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3Cpath d=\'M8 14.5V26h16V14.5\' stroke=\'%23fff\' stroke-width=\'2.6\' fill=\'none\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3Ccircle cx=\'16\' cy=\'20\' r=\'3.2\' stroke=\'%23fff\' stroke-width=\'2.6\' fill=\'none\'/%3E%3C/svg%3E">\n' +
   '</head>\n<body>\n' + inhalt + '\n</body>\n</html>\n';
 
 /* Für die Artifact-Veröffentlichung: nur Seiteninhalt, aber mit <title>,

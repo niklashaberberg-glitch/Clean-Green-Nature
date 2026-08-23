@@ -254,6 +254,55 @@ weiterreichen könnte, und der Abrufzähler liefe für alle zusammen.
 Der Tresor liegt vollständig im freien Tarif. Wer für Datenschutz zahlen muss,
 hat keinen.
 
+### Inserieren: vermieten, verkaufen, tauschen
+
+Sechs Angebotsarten aus einem Formular: Wohnung vermieten, WG-Zimmer,
+Wohnung tauschen, **Wohnung verkaufen, Haus verkaufen, Grundstück
+verkaufen**. Welche Felder erscheinen, richtet sich nach der Art – beim
+Verkauf Kaufpreis, Käuferprovision und Hausgeld statt Kaltmiete und Kaution,
+beim Haus zusätzlich Grundstücksfläche und Bauweise.
+
+Ein Grundstück ist dabei kein Sonderfall mit ausgegrauten Feldern, sondern
+ein eigener Objekttyp. Es hat keine Zimmer, keine Etage und **keinen
+Energieausweis** – § 80 GEG verlangt ihn nur für Gebäude, und eine erfundene
+Klasse hinzuschreiben wäre schlechter, als das Feld wegzulassen. Stattdessen:
+Grundstücksfläche, Art des Baulands, Bebauungsplan, Grund- und
+Geschossflächenzahl, Erschließung.
+
+Die Bewertung folgt: Ein unbebautes Grundstück gegen den Quadratmeterpreis
+einer Wohnung zu stellen wäre grober Unfug, und ein Kaufpreisfaktor in
+Jahresmieten ergibt keinen Sinn, wenn nichts vermietet werden kann. Deshalb
+rechnet Nestwerk hier gegen einen aus dem örtlichen Preisniveau abgeleiteten
+Bodenwert, zeigt die überbaubare Fläche aus GRZ und GFZ und weist auf die
+Bauvoranfrage hin, wenn kein Bebauungsplan vorliegt. Die Kostenrechnung kennt
+den Unterschied ebenfalls: Grunderwerbsteuer und Notar ja, Hausgeld und
+Rundfunkbeitrag nein, dafür Erschließung und Bodengutachten.
+
+Beim Kauf heißt es außerdem nicht „Anschreiben“, sondern **Anfragen** – mit
+den fünf Fragen, deren Antworten den Preis mitbestimmen, und ohne
+Einkommensangabe. Wer beim Kauf gleich schreibt, was er verdient, gibt seine
+Verhandlungsposition ohne Not preis.
+
+### Fotos im Inserat
+
+Ein Knopf im Formular, bis zu zehn Bilder. Sie werden im Browser auf 1.400
+Pixel Kantenlänge verkleinert und als JPEG abgelegt – ein Foto aus einer
+heutigen Kamera hat gut vier Megabyte, und der Speicher eines Browsers fasst
+insgesamt oft nur fünf. Danach bleiben rund 150 Kilobyte, ohne dass man den
+Unterschied sieht.
+
+Das erste Bild ist das Titelbild, die Reihenfolge lässt sich ändern, jedes
+Bild kann eine Unterschrift bekommen. Wo Fotos liegen, ersetzen sie die
+gezeichneten Ansichten vollständig – halb gezeichnet, halb fotografiert wäre
+nur verwirrend – und der Hinweis unter der Galerie ändert sich mit. Reicht
+der Speicher nicht, wird das Inserat wieder zurückgenommen statt halb
+angelegt zu bleiben.
+
+Dazu steht im Formular, was auf ein Inseratsfoto nicht gehört: keine Personen
+ohne Einwilligung, keine Kennzeichen, keine Namensschilder an Klingel oder
+Briefkasten. Fotos bewohnter Innenräume dürfen ohne Zustimmung der Mietpartei
+nicht veröffentlicht werden.
+
 ### Ringtausch in vier Bildern
 
 Der Ringtausch war bisher in Sätzen erklärt, und Sätze reichen dafür nicht:
@@ -376,6 +425,32 @@ Namen. Es gibt eine Tabellenansicht für alle, die lieber Zahlen lesen.
 
 ---
 
+## Farben
+
+Der Farbton ist bewusst kein Grünblau. Fast jedes deutsche Wohnungsportal
+arbeitet mit Orangerot oder Petrol; wer daneben genauso aussieht, wird für
+eine Kopie gehalten. Nestwerk steht deshalb auf einem tiefen **Indigoviolett**
+mit **Beere** als Zweitfarbe, auf kühlen, leicht violett gebrochenen
+Grauwerten – und die gezeichneten Ansichten der Wohnungen ziehen mit.
+
+Statusfarben bleiben konventionell: Grün, Gelb und Rot bedeuten überall
+dasselbe. Sie umzufärben, damit sie zum Markenton passen, würde
+Verständlichkeit gegen Geschmack tauschen.
+
+Jeder Wert ist nachgerechnet, nicht geschätzt. `node scripts/farben-pruefen.js
+assets/app.css` liest die Token aus dem Stylesheet und meldet:
+
+* Fließtext unter 4,5 zu 1 gegen irgendeine der fünf Flächen
+* Schrift auf gefüllter Fläche unter 4,5 zu 1
+* **Ränder von Bedienelementen unter 3 zu 1** (WCAG 1.4.11). Dafür gibt es
+  ein eigenes Token `--rand-feld`: Ein Strukturstrich darf leise sein, ein
+  Eingabefeld nicht – wer den Rahmen nicht sieht, sieht das Feld nicht.
+  Beim alten Stand lag dieser Wert bei 1,7 zu 1.
+* Diagrammfarben mit einem Abstand unter ΔE 9 (CIEDE2000) – geprüft normal
+  und unter Prot-, Deuter- und Tritanopie. Beim alten Stand lagen Kauf und
+  WG im Dunkelmodus bei ΔE 1,4 und waren damit für einen erheblichen Teil
+  der Menschen nicht zu unterscheiden.
+
 ## Werbung
 
 Zwei Anforderungen, die sich widersprechen, und beide gelten: **leise** und
@@ -444,6 +519,8 @@ Ladezeit und ohne kaputte Platzhalter.
 nestwerk/
   index.html            lädt die Einzelteile, kein Build nötig
   build.js              baut daraus die Einzeldatei (node build.js)
+  scripts/
+    farben-pruefen.js   rechnet Kontraste und Farbabstände nach
   dist/
     nestwerk.html       vollständige Seite in einer Datei
     artifact.html       nur der Seiteninhalt, zum Einbetten
@@ -451,7 +528,7 @@ nestwerk/
     app.css             Design-System, hell und dunkel
     util.js             Formate, DOM-Hilfen, Geo, Speicher
     geo.js              10 Städte, 83 Viertel, Vergleichswerte
-    images.js           die selbst gezeichneten Ansichten
+    images.js           gezeichnete Ansichten und eigene Fotos
     data.js             erzeugt den Beispielbestand
     analyse.js          Vergleichsmiete, Risiko, Klauseln, Kosten, Passung
     match.js            WG-Passung und Ringsuche

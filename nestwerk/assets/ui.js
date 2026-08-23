@@ -423,6 +423,7 @@
 
     if (ergebnis.danach) ergebnis.danach(haupt);
     bandZeichnen();
+    if (NW.viewHilfe) NW.viewHilfe.zeichnen(false);
     /* Nur bei einem echten Ansichtswechsel nach oben – nicht bei jedem
        Neuaufbau derselben Seite. */
     if (wechsel && !erzwingen) scrolleSofort(0);
@@ -558,6 +559,7 @@
         <a href="#/recht/barrierefreiheit">Barrierefreiheit</a>
       </p>
       <p class="fuss__links">
+        <button type="button" class="link" data-tu="hilfe-oeffnen">Hilfe</button>
         <a href="#/plus">Tarife</a>
         <a href="#/werkzeuge">Werkzeuge</a>
         <a href="#/tresor">Dokumententresor</a>
@@ -565,6 +567,7 @@
         <button type="button" class="link" data-tu="daten">Meine Daten</button>
       </p>
     </footer>
+    <div id="hilfe" class="hilfe"></div>
     <div id="dialog" class="dialog" hidden></div>
     <div id="toasts" class="toasts" aria-live="polite"></div>
     <div id="palette" class="palette" hidden></div>`;
@@ -706,7 +709,8 @@
         { route: 'recht/datenschutz', label: 'Datenschutz', icon: 'schloss' },
         { route: 'recht/agb', label: 'AGB', icon: 'blatt' },
         { route: 'recht/widerruf', label: 'Widerruf', icon: 'zurueck' },
-        { route: 'recht/kuendigen', label: 'Verträge kündigen', icon: 'x' }
+        { route: 'recht/kuendigen', label: 'Verträge kündigen', icon: 'x' },
+        { route: 'hilfe', label: 'Hilfe und häufige Fragen', icon: 'nachricht' }
       ]).forEach((nav) => {
         if (!n || U.norm(nav.label).indexOf(n) >= 0) out.push({ art: 'bereich', label: nav.label, icon: nav.icon, ziel: nav.route });
       });

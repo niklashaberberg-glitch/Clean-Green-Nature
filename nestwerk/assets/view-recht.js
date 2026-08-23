@@ -274,11 +274,18 @@
           <p>Anzeigen sind stets als solche gekennzeichnet (§ 5a Abs. 4 des Gesetzes gegen den unlauteren
             Wettbewerb) und werden nie im Erscheinungsbild eines Inserats dargestellt.</p>
 
-          <h2>7. Kontaktaufnahme</h2>
+          <h2>7. Kontaktaufnahme und Hilfe</h2>
           <p>Schreibst du per E-Mail, verarbeitet der Anbieter die Angaben aus deiner Nachricht, um sie zu
             beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO bei vertragsbezogenen Anfragen, sonst
             Art. 6 Abs. 1 lit. f DSGVO. Die Nachrichten werden gelöscht, sobald die Anfrage abschließend
             bearbeitet ist und keine gesetzlichen Aufbewahrungsfristen entgegenstehen.</p>
+          <p>Die Hilfe in der Anwendung beantwortet Fragen <b>im Browser</b>; dabei wird nichts übertragen.
+            Führt sie nicht weiter, kannst du die Zusammenfassung an ${rw('service', 'Service-Postfach')}
+            weitergeben. Das geschieht nur auf deinen ausdrücklichen Klick, über dein eigenes E-Mail-Programm –
+            und <b>der vollständige Text wird dir vorher angezeigt</b>. Übertragen wird ausschließlich, was
+            dort steht: deine Fragen, die Themen der gegebenen Antworten, dein Freitext und die Kontaktangaben,
+            die du selbst einträgst. Profil, Merkliste und die Inhalte des Dokumententresors sind nicht
+            enthalten und werden auch nicht angehängt.</p>
 
           <h2>8. Bezahlung von Nestwerk Plus</h2>
           <p>Für bezahlte Verträge werden die zur Abwicklung nötigen Daten verarbeitet: Name, E-Mail-Adresse,
@@ -811,6 +818,7 @@ Datum: __________________
     ['land', 'Land', '', 'text'],
     ['email', 'E-Mail-Adresse', 'Pflichtangabe nach § 5 DDG', 'email'],
     ['telefon', 'Telefonnummer', 'der übliche zweite Kontaktweg', 'tel'],
+    ['service', 'Postfach des Service-Teams', 'wohin die Hilfe Anfragen weiterleitet', 'email'],
     ['ustId', 'Umsatzsteuer-Identifikationsnummer', 'nur falls vorhanden – Kleinunternehmer haben meist keine', 'text'],
     ['gewerbeamt', 'Stelle der Gewerbeanmeldung', 'etwa „Gewerbeamt der Stadt …“', 'text'],
     ['aufsichtsbehoerde', 'Datenschutz-Aufsichtsbehörde', 'die Behörde des Bundeslandes, in dem du sitzt', 'text'],

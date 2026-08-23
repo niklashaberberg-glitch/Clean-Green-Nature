@@ -18,12 +18,12 @@ const dist = path.join(wurzel, 'dist');
 
 const SKRIPTE = [
   'util.js', 'geo.js', 'images.js', 'ring-bild.js', 'data.js',
-  'analyse.js', 'match.js', 'werkzeuge.js', 'store.js', 'plan.js', 'tresor.js', 'recht.js',
+  'analyse.js', 'match.js', 'werkzeuge.js', 'store.js', 'plan.js', 'tresor.js', 'recht.js', 'hilfe.js',
   'karte.js', 'ui.js',
   'view-start.js', 'view-suche.js', 'view-objekt.js',
   'view-tausch.js', 'view-tools.js', 'view-profil.js',
   'view-werkzeuge.js', 'view-werkzeuge2.js', 'view-markt.js', 'view-plus.js',
-  'view-tresor.js', 'view-recht.js',
+  'view-tresor.js', 'view-recht.js', 'view-hilfe.js',
   'app.js'
 ];
 

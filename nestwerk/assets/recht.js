@@ -31,6 +31,10 @@
     land: 'Deutschland',
     email: '',
     telefon: '',
+    /* Postfach des Service-Teams. Getrennt von der Impressumsadresse:
+       Die eine ist Pflichtangabe, die andere ein Arbeitsweg – und wer
+       beides vermischt, kann später keine davon ändern. */
+    service: 'info@nestwerk.de',
     ustId: '',                  /* § 27a UStG – bei Kleinunternehmern meist keine */
     kleinunternehmer: true,     /* § 19 UStG: kein Ausweis von Umsatzsteuer */
     handelsregister: '',        /* Kleingewerbe: keins */
@@ -122,6 +126,14 @@
         + 'verlangt dafür kein Erfolgshonorar von Vermietenden – das spricht dagegen, dass eine Erlaubnis nötig '
         + 'ist. Sobald aber eine Provision im Erfolgsfall fließt, sieht es anders aus. Diese Frage gehört vor '
         + 'dem Start einmal schriftlich geklärt, am besten beim zuständigen Ordnungs- oder Gewerbeamt.'
+    },
+    {
+      titel: 'Domain und Postfach müssen dir gehören',
+      text: 'Die Hilfe leitet Anfragen an info@nestwerk.de weiter. Bevor das erste Mal jemand darauf antwortet, '
+        + 'muss die Domain registriert und das Postfach eingerichtet sein – und jemand muss es lesen. Ein '
+        + 'Kontaktweg, der ins Leere geht, ist schlimmer als keiner: Nach § 5 DDG muss die Kontaktaufnahme '
+        + 'tatsächlich möglich sein, und wer binnen weniger Tage nicht antwortet, verliert mehr als eine '
+        + 'Anfrage.'
     },
     {
       titel: 'Auftragsverarbeitung mit dem Hoster',

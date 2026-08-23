@@ -511,6 +511,60 @@ Dazu drei Regeln, die nicht verhandelbar sind:
 * Neben jeder Anzeige steht ein **„?“**, das genau das erklärt, und ein Weg zum
   anzeigenfreien Tarif.
 
+## Hilfe
+
+Unten rechts hängt auf jeder Seite ein Hilfefenster; unter `#/hilfe` stehen
+dieselben Antworten als vollständige Seite.
+
+**Das ist kein Sprachmodell**, und die Anwendung sagt das auch. Es gibt keinen
+Server und nichts, was „versteht": Es gibt 22 hinterlegte Antworten und einen
+Abgleich, der die Frage der passendsten zuordnet. Für einen Hilfebereich ist
+das meistens besser – die Antworten stimmen, weil jemand sie geschrieben hat,
+sie verweisen an die richtige Stelle in der Anwendung, und sie erfinden
+nichts.
+
+Einige Antworten kennen den tatsächlichen Stand: Auf „Wie kündige ich?"
+antwortet die Hilfe anders, wenn Plus über einen Gründerplatz läuft
+(dann gibt es nichts zu kündigen), als bei einem bezahlten Vertrag.
+
+Am Abgleich waren zwei Dinge die eigentliche Arbeit, beide sprachbedingt:
+
+* **Komposita.** „Wohnungstausch", „Nebenkostenabrechnung",
+  „Mietpreisbremse" – ein Abgleich, der nur den Wortanfang prüft, findet
+  davon nichts. Schlagworte werden deshalb auch mitten im Wort gesucht.
+* **Umlautplural.** „Aufträge" wird zu `auftraege`, der Singular zu
+  `auftrag`. Jedes Wort wird in drei Formen verglichen: wie geschrieben,
+  gestemmt, und beides ohne Umlautrest.
+
+Dazu Muster für Fälle, die aus Einzelwörtern nicht hervorgehen: „Kaution
+vorab" ist eine Betrugsfrage, keine Frage zur zulässigen Kautionshöhe.
+
+**Wo der Abgleich unsicher ist, rät er nicht.** Liegen zwei Themen fast
+gleichauf, fragt er nach; findet er nichts, sagt er das und bietet den Weg
+zum Menschen an. Ein Prüflauf über 44 Beispielfragen ordnet alle richtig zu –
+und weist Unbekanntes als unbekannt aus.
+
+### Weitergabe ans Service-Team
+
+Führt die Hilfe nicht weiter, fasst sie das Gespräch zusammen und übergibt es
+an `info@nestwerk.de`. Die Zusammenfassung enthält Vorgangsnummer, Datum, die
+gestellten Fragen, die Titel der gezeigten Antworten samt Rückmeldung
+(„hat geholfen" / „hat nicht geholfen"), das Freitext-Anliegen und die
+Kontaktangaben, die man selbst einträgt.
+
+Nicht enthalten: Profil, Merkliste, Suchaufträge und alles aus dem
+Dokumententresor.
+
+Verschickt wird über das E-Mail-Programm des Geräts. Das ist keine Notlösung,
+sondern datenschutzrechtlich die saubere Variante: **Es verlässt nichts das
+Gerät, bevor jemand bewusst auf Senden klickt**, und der vollständige Text
+steht vorher sichtbar da. Wo kein Mailprogramm eingerichtet ist, lässt sich
+derselbe Text kopieren oder als Datei sichern. Im Betrieb würde ein Server
+das übernehmen; die Zusammenfassung wäre dieselbe.
+
+Die Zieladresse steht in `assets/recht.js` unter `service` und ist unter
+`#/recht/angaben` änderbar.
+
 ## Rechtliches
 
 Unter `#/recht` liegen Impressum (§ 5 DDG), Datenschutzerklärung (Art. 13/14
@@ -576,6 +630,7 @@ nestwerk/
     plan.js             Tarife, Grenzen, Gründerplätze, Anzeigen
     tresor.js           Verschlüsselung, Ablage, befristete Freigaben
     recht.js            Betreiberangaben, Pflichtfelder, Preishinweise
+    hilfe.js            Wissensbasis der Hilfe und der Abgleich
     karte.js            die Karte
     ui.js               Schale, Router, geteilte Bausteine
     view-*.js           die einzelnen Ansichten

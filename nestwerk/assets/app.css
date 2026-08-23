@@ -1859,3 +1859,84 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .anfragen__demo .ico { flex: none; width: 14px; height: 14px; margin-top: .15em; }
 
 .eigene li > .knopf { flex: none; }
+
+/* =====================================================================
+   Hilfe
+   Das Fenster liegt über der Seite, aber unter Dialogen und Meldungen –
+   eine Hilfe, die den Dialog verdeckt, den sie erklären soll, wäre
+   sinnlos. Auf schmalen Geräten weicht der Knopf der unteren Leiste aus.
+   ===================================================================== */
+
+.hilfe { position: fixed; right: 16px; bottom: 16px; z-index: 100;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  pointer-events: none; }
+.hilfe > * { pointer-events: auto; }
+
+.hilfe__knopf { order: 2; display: inline-flex; align-items: center; gap: .45em;
+  padding: .7em 1.05em; border: 0; border-radius: 999px;
+  background: var(--akzent); color: var(--auf-akzent);
+  font: inherit; font-size: .9rem; font-weight: 600; cursor: pointer;
+  box-shadow: var(--schatten-hoch); transition: transform var(--tempo); }
+.hilfe__knopf:hover { transform: translateY(-1px); }
+.hilfe__knopf .ico { width: 19px; height: 19px; }
+.hilfe__knopf.is-offen .hilfe__knopfwort { display: none; }
+.hilfe__knopf.is-offen { padding: .7em; }
+
+.hilfe__fenster { order: 1; display: flex; flex-direction: column;
+  width: min(400px, calc(100vw - 32px)); max-height: min(72vh, 620px);
+  border: 1px solid var(--rand); border-radius: var(--r-gross);
+  background: var(--flaeche); box-shadow: var(--schatten-hoch); overflow: hidden; }
+.hilfe__kopf { display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: .8em 1em; border-bottom: 1px solid var(--rand); background: var(--flaeche2); }
+.hilfe__kopf b { display: block; font-size: .98rem; }
+.hilfe__kopf span { display: block; font-size: .76rem; color: var(--text-still); }
+.hilfe__koerper { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  padding: 12px; }
+
+.hilfe__verlauf { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.hb { display: flex; gap: .55em; align-items: flex-start; }
+.hb--ich { justify-content: flex-end; }
+.hb--frei { display: block; }
+.hb__zeichen { flex: none; display: grid; place-items: center; width: 26px; height: 26px;
+  border-radius: 50%; background: var(--akzent-hell); color: var(--akzent); }
+.hb__zeichen .ico { width: 15px; height: 15px; }
+.hb__text { max-width: 88%; padding: .6em .8em; border-radius: var(--r);
+  background: var(--flaeche2); font-size: .87rem; line-height: 1.6; }
+.hb--ich .hb__text { background: var(--akzent); color: var(--auf-akzent); border-bottom-right-radius: 4px; }
+.hb--bot .hb__text { border-bottom-left-radius: 4px; }
+.hb__text p { margin: 0 0 .5em; }
+.hb__text p:last-child { margin-bottom: 0; }
+.hb__titel { display: block; margin-bottom: .25em; font-size: .9rem; }
+.hb__ziele, .hb__chips { display: flex; flex-wrap: wrap; gap: 6px; margin: .55em 0 0; }
+.hb__nutzen { display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  margin: .6em 0 0; padding-top: .5em; border-top: 1px solid var(--rand); font-size: .8rem; }
+.hb__nutzen > span { color: var(--text-still); }
+.hb__quittung { display: flex; gap: .35em; align-items: center; margin: .5em 0 0;
+  font-size: .8rem; color: var(--gut); }
+.hb__quittung .ico { width: 15px; height: 15px; }
+
+.hilfe__eingabe { display: flex; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--rand); }
+.hilfe__eingabe input { flex: 1 1 auto; min-width: 0; }
+.hilfe__eingabe .ikon-btn { flex: none; background: var(--akzent); color: var(--auf-akzent); }
+.hilfe__eingabe .ikon-btn:hover { background: var(--akzent-tief); color: var(--auf-akzent); }
+
+.hilfe__fuss { display: flex; flex-wrap: wrap; gap: .4em 1em; align-items: center;
+  padding: .6em 1em .8em; border-top: 1px solid var(--rand); background: var(--flaeche2);
+  font-size: .8rem; }
+.hilfe__fuss .link { display: inline-flex; align-items: center; gap: .3em; min-height: 24px; }
+.hilfe__fuss .ico { width: 15px; height: 15px; }
+
+.hilfeliste { display: grid; gap: 8px; }
+.hilfeliste__antwort { margin: 0 .9em .9em 2em; font-size: .88rem; line-height: 1.65; color: var(--text-leise); }
+.hilfeliste__antwort p { margin: 0 0 .6em; }
+.hilfeliste__antwort b { color: var(--text); }
+
+@media (max-width: 900px) {
+  /* Über der unteren Leiste, nicht darunter. */
+  .hilfe { right: 12px; bottom: calc(58px + env(safe-area-inset-bottom, 0px) + 10px); }
+  .hilfe__fenster { max-height: 62vh; }
+}
+@media (max-width: 400px) {
+  .hilfe__knopfwort { display: none; }
+  .hilfe__knopf { padding: .7em; }
+}

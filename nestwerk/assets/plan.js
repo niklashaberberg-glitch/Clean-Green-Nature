@@ -132,11 +132,82 @@
     'Keine Werbung, die sich als Inserat ausgibt – Anzeigen sind immer als solche gekennzeichnet.'
   ];
 
+  /* ------------------------- Gründerplätze -------------------------
+
+     Die ersten zehntausend Anmeldungen bekommen Plus ein Jahr lang ohne
+     Bezahlung. Kein Abo, das sich verlängert, keine hinterlegte Karte:
+     Nach dem Jahr endet der Platz von selbst und die Anwendung fällt in
+     den freien Tarif zurück. Wer dann bezahlen will, entscheidet sich neu.
+
+     Was in dieser Vorführung fehlt, ist die zentrale Stelle, die zählt.
+     Ohne Server kann kein Browser wissen, wie viele Plätze anderswo schon
+     vergeben sind. Der Zähler unten ist deshalb ausdrücklich eine
+     Hochrechnung aus der Zeit seit dem Start – und die Anwendung sagt das
+     an jeder Stelle dazu, an der sie ihn zeigt. Im Betrieb vergibt der
+     Server die Nummer, und zwar genau einmal. */
+
+  const GRUENDER = {
+    plaetze: 10000,
+    monate: 12,
+    start: '2026-08-01',
+    /* Für die Hochrechnung: So viele Plätze gehen im Schnitt am Tag weg.
+       Eine Annahme, keine Messung. */
+    proTag: 140
+  };
+
+  const gruender = () => NW.store.get().gruender || { nummer: 0, seit: '', bis: '' };
+
+  function gruenderAktiv() {
+    const g = gruender();
+    return !!(g.nummer && g.bis && new Date(g.bis) > NW.now());
+  }
+
+  function gruenderTageRest() {
+    const g = gruender();
+    if (!g.bis) return 0;
+    return Math.max(0, Math.ceil((new Date(g.bis) - NW.now()) / 86400000));
+  }
+
+  /* Hochgerechnet, nicht gezählt – siehe oben. */
+  function gruenderVergeben() {
+    const tage = Math.max(0, Math.floor((NW.now() - new Date(GRUENDER.start)) / 86400000));
+    const geschaetzt = Math.min(GRUENDER.plaetze - 1, Math.round(tage * GRUENDER.proTag));
+    return gruender().nummer ? Math.max(geschaetzt, gruender().nummer) : geschaetzt;
+  }
+
+  const gruenderFrei = () => Math.max(0, GRUENDER.plaetze - gruenderVergeben());
+
+  /* Vergibt den eigenen Platz. Gibt die Nummer zurück oder 0, wenn nichts
+     mehr frei ist oder schon einer vergeben wurde. */
+  function gruenderSichern() {
+    if (gruender().nummer) return 0;
+    if (!gruenderFrei()) return 0;
+    const nummer = gruenderVergeben() + 1;
+    const bis = new Date(NW.now().getTime());
+    bis.setMonth(bis.getMonth() + GRUENDER.monate);
+    NW.store.set({ gruender: { nummer, seit: U.isoDate(NW.now()), bis: U.isoDate(bis) } }, 'tarif');
+    return nummer;
+  }
+
+  function gruenderAufgeben() {
+    NW.store.set({ gruender: { nummer: 0, seit: '', bis: '' } }, 'tarif');
+  }
+
   /* ------------------------- Zustand ------------------------- */
 
   function aktuell() {
     const s = NW.store.get();
-    return s.tarif === 'plus' ? 'plus' : 'frei';
+    if (s.tarif === 'plus') return 'plus';
+    return gruenderAktiv() ? 'plus' : 'frei';
+  }
+
+  /* Woher Plus kommt – die Oberfläche muss beides auseinanderhalten
+     können, sonst bietet sie einem Gründer ein Abo an, das er nicht
+     braucht, oder verschweigt ihm, dass sein Jahr ausläuft. */
+  function plusQuelle() {
+    const s = NW.store.get();
+    if (s.tarif === 'plus') return 'bezahlt';
+    return gruenderAktiv() ? 'gruender' : null;
   }
 
   const istPlus = () => aktuell() === 'plus';
@@ -216,7 +287,9 @@
   const ANZEIGE_ABSTAND = 6;
 
   NW.plan = {
-    TARIFE, GRENZEN, LEISTUNGEN, NICHT_KAEUFLICH, ANZEIGEN, ANZEIGE_ABSTAND,
-    aktuell, istPlus, grenze, darf, leistung, wechseln, anzeige
+    TARIFE, GRENZEN, LEISTUNGEN, NICHT_KAEUFLICH, ANZEIGEN, ANZEIGE_ABSTAND, GRUENDER,
+    aktuell, istPlus, plusQuelle, grenze, darf, leistung, wechseln, anzeige,
+    gruender, gruenderAktiv, gruenderTageRest, gruenderVergeben, gruenderFrei,
+    gruenderSichern, gruenderAufgeben
   };
 })(window.NW = window.NW || {});

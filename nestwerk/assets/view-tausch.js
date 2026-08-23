@@ -170,6 +170,9 @@
           <p class="seite__unter">Beim direkten Tausch müssen zwei Menschen exakt das Gegenteil voneinander wollen –
             das passiert fast nie. In einer Kette reicht es, wenn jeder die Wohnung des Nächsten möchte.
             Nestwerk durchsucht alle Angebote nach solchen geschlossenen Ketten.</p>
+          <p class="werkzeug__weiter">
+            <button type="button" class="knopf knopf--still" data-tu="ring-erklaeren">
+              ${ico('ring')}In vier Bildern erklärt</button></p>
         </header>
 
         ${meinAngebot()}
@@ -224,6 +227,9 @@
           </ol>
           <p class="fein">Ein Anspruch auf Zustimmung besteht nicht. Manche Vermieter verlangen dieselben
             Unterlagen wie bei jeder Neuvermietung – die Bewerbermappe im Profil hilft auch hier.</p>
+          <p class="werkzeug__weiter">
+            <button type="button" class="knopf knopf--klein knopf--still" data-tu="ring-erklaeren">
+              ${ico('ring')}Das Ganze als Bild</button></p>
         </section>
 
         <section class="block">
@@ -268,6 +274,63 @@
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="kopieren" data-quelle="#ring-text">${ico('kopieren')}Kopieren</button>
         <button type="button" class="knopf" data-tu="dialog-zu">Schließen</button>`
     });
+  });
+
+  /* ------------------------- Ringtausch erklärt -------------------------
+     Ein Dialog, vier Bilder. Der Inhalt wird an Ort und Stelle getauscht
+     statt einen neuen Dialog zu öffnen – sonst springt der Fokus bei
+     jedem Schritt zurück an den Anfang. */
+
+  let schritt = 0;
+
+  function erklaerungInhalt() {
+    const s = NW.ringBild.SCHRITTE[schritt];
+    return h`<div class="ringerklaerung">
+      <ol class="ringerklaerung__punkte">
+        ${NW.ringBild.SCHRITTE.map((x, i) => h`<li class="${i === schritt ? 'is-an' : i < schritt ? 'is-durch' : ''}">
+          <button type="button" data-tu="ring-schritt" data-n="${i}"
+            aria-current="${i === schritt ? 'step' : 'false'}"><span class="nur-sr">Schritt ${i + 1}: ${x.titel}</span></button>
+        </li>`)}
+      </ol>
+      <figure class="ringerklaerung__bild">
+        ${raw(s.bild())}
+        <figcaption><b>${s.titel}</b> ${s.text}</figcaption>
+      </figure>
+    </div>`;
+  }
+
+  function erklaerungZeichnen() {
+    const ziel = U.$('#ring-erklaerung');
+    if (ziel) ziel.innerHTML = String(erklaerungInhalt());
+    const fuss = U.$('#ring-erklaerung-fuss');
+    if (fuss) fuss.innerHTML = String(erklaerungFuss());
+  }
+
+  function erklaerungFuss() {
+    const letzter = schritt >= NW.ringBild.SCHRITTE.length - 1;
+    return h`<button type="button" class="knopf knopf--still" data-tu="ring-schritt" data-n="${schritt - 1}"
+        ${schritt === 0 ? 'disabled' : ''}>${ico('zurueck')}Zurück</button>
+      <span class="fein">Schritt ${schritt + 1} von ${NW.ringBild.SCHRITTE.length}</span>
+      ${letzter
+        ? h`<button type="button" class="knopf" data-tu="dialog-zu">Verstanden</button>`
+        : h`<button type="button" class="knopf" data-tu="ring-schritt" data-n="${schritt + 1}">Weiter${ico('chevron')}</button>`}`;
+  }
+
+  A_('ring-erklaeren', () => {
+    schritt = 0;
+    ui.dialog({
+      titel: 'Wie ein Ringtausch funktioniert',
+      breit: true,
+      inhalt: h`<div id="ring-erklaerung">${erklaerungInhalt()}</div>`,
+      fuss: h`<div class="ringerklaerung__fuss" id="ring-erklaerung-fuss">${erklaerungFuss()}</div>`
+    });
+  });
+
+  A_('ring-schritt', (el) => {
+    const n = Number(el.dataset.n);
+    if (n < 0 || n >= NW.ringBild.SCHRITTE.length) return;
+    schritt = n;
+    erklaerungZeichnen();
   });
 
   A_('tausch-weg', () => {

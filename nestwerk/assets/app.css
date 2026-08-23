@@ -13,6 +13,9 @@
   --flaeche: #ffffff;
   --flaeche2: #f0f2f1;
   --flaeche3: #e6e9e8;
+  /* Eigene Grundfarbe für Werbung: warm statt grün, damit ein Auge sie
+     von Inhalt unterscheidet, ohne dass sie lauter wird. */
+  --werbung: #faf6ef;
   --rand: #dcdfde;
   --rand-stark: #c3c8c6;
 
@@ -41,6 +44,7 @@
   --warn: #96450a;
   --warn-hell: #fdefd9;
   --schlecht: #b91c1c;
+  --auf-schlecht: #ffffff;
   --schlecht-hell: #fbe2e2;
   --info: #1d4ed8;
   --info-hell: #dde6fd;
@@ -76,6 +80,7 @@
     --flaeche: #141d1c;
     --flaeche2: #1b2625;
     --flaeche3: #24312f;
+    --werbung: #221f18;
     --rand: #2b3836;
     --rand-stark: #3d4c49;
 
@@ -96,6 +101,7 @@
     --warn: #fbbf24;
     --warn-hell: #33270a;
     --schlecht: #f87171;
+    --auf-schlecht: #2b0f0f;
     --schlecht-hell: #341616;
     --info: #7aa5fb;
     --info-hell: #131f38;
@@ -116,6 +122,7 @@
   --flaeche: #141d1c;
   --flaeche2: #1b2625;
   --flaeche3: #24312f;
+  --werbung: #221f18;
   --rand: #2b3836;
   --rand-stark: #3d4c49;
   --text: #e8efed;
@@ -133,6 +140,7 @@
   --warn: #fbbf24;
   --warn-hell: #33270a;
   --schlecht: #f87171;
+  --auf-schlecht: #2b0f0f;
   --schlecht-hell: #341616;
   --info: #7aa5fb;
   --info-hell: #131f38;
@@ -289,8 +297,11 @@ svg { display: block; }
 .knopf--still { background: var(--flaeche); color: var(--text); border-color: var(--rand-stark); }
 .knopf--still:hover { background: var(--flaeche2); border-color: var(--text-still); color: var(--text); }
 .knopf--still.is-an { background: var(--akzent-hell); border-color: var(--akzent); color: var(--akzent); }
-.knopf--gefahr { background: var(--schlecht); border-color: var(--schlecht); color: #fff; }
-.knopf--gefahr:hover { background: color-mix(in srgb, var(--schlecht) 82%, #000); border-color: currentColor; }
+/* Wie bei --auf-akzent: Die Schrift auf gefüllter Warnfläche ist ein Token,
+   keine Sonderregel für dunkel. Weiß auf dem helleren Rot des Dunkelmodus
+   kam nur auf 2,8 zu 1. */
+.knopf--gefahr { background: var(--schlecht); border-color: var(--schlecht); color: var(--auf-schlecht); }
+.knopf--gefahr:hover { background: color-mix(in srgb, var(--schlecht) 84%, var(--auf-schlecht)); border-color: currentColor; }
 .knopf--klein { padding: .4em .72em; font-size: .84rem; }
 .knopf--voll { width: 100%; }
 .knopf[disabled] { opacity: .5; cursor: default; }
@@ -410,6 +421,9 @@ input[type="range"] {
 .block--betont { border-color: var(--akzent); background: linear-gradient(var(--akzent-hell), transparent 130px), var(--flaeche); }
 .block--warn { border-color: var(--warn); background: linear-gradient(var(--warn-hell), transparent 130px), var(--flaeche); }
 .block--schlecht { border-color: var(--schlecht); background: linear-gradient(var(--schlecht-hell), transparent 160px), var(--flaeche); }
+/* Ein grünes Warndreieck über einer Warnmeldung liest sich als Entwarnung. */
+.block--warn > h2 > .ico { color: var(--warn); }
+.block--schlecht > h2 > .ico { color: var(--schlecht); }
 .block--info { border-color: var(--info); }
 
 .hinweisbox {
@@ -1038,7 +1052,12 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .dialog__box.is-breit { width: min(880px, 100%); }
 .dialog__kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 1em 1.2em; border-bottom: 1px solid var(--rand); }
 .dialog__kopf h2 { margin: 0; font-size: 1.1rem; }
-.dialog__inhalt { padding: 1.2em; overflow-y: auto; }
+/* min-height: 0 ist hier Pflicht, nicht Feinschliff: In einer Flex-Spalte
+   steht min-height von Haus aus auf auto, also auf Inhaltshöhe. Ohne diese
+   Zeile schrumpft der Bereich nicht, overflow-y greift nie, und der Kasten
+   schneidet lange Dialoge unten einfach ab. */
+.dialog__inhalt { flex: 1 1 auto; min-height: 0; padding: 1.2em; overflow-y: auto;
+  overscroll-behavior: contain; }
 .dialog__fuss { display: flex; justify-content: flex-end; gap: 8px; padding: .9em 1.2em; border-top: 1px solid var(--rand); background: var(--flaeche2); flex-wrap: wrap; }
 
 .toasts { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 140; display: grid; gap: 8px; width: min(420px, calc(100vw - 32px)); }
@@ -1204,28 +1223,46 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .sperre__preis { padding: .6em .9em; background: var(--akzent-hell); border-radius: var(--r-klein); }
 .sperre__preis b { font-size: 1.2rem; color: var(--akzent); }
 
+/* Werbung: leise, aber unverwechselbar.
+
+   Zwei Anforderungen, die sich widersprechen – und beide gelten. Leise
+   heißt: kein Kasten, der lauter ist als ein Inserat, keine gefüllte
+   Fläche, kein Knopf in Akzentfarbe. Unverwechselbar heißt: Man darf
+   keine Sekunde im Zweifel sein, dass es Werbung ist. Gelöst über eine
+   eigene Grundfarbe, einen Streifen an der Kante und das Wort „Anzeige“
+   in Versalien darüber – nicht über Lautstärke. */
 .anzeige {
-  border: 1px solid var(--rand); border-radius: var(--r);
-  background: repeating-linear-gradient(135deg, var(--flaeche2) 0 12px, var(--flaeche) 12px 24px);
-  overflow: hidden;
+  margin: 4px 0; padding: .55em .9em .7em 1em;
+  border: 1px solid var(--rand); border-left: 3px solid var(--rand-stark);
+  border-radius: var(--r-klein); background: var(--werbung);
 }
-.anzeige--breit { margin: 4px 0; }
 .anzeige--schmal { margin-top: 14px; }
-.anzeige__kopf { display: flex; align-items: center; justify-content: space-between;
-  padding: .35em .7em; border-bottom: 1px solid var(--rand); background: var(--flaeche); }
-.anzeige__marke { font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text-still); }
-.anzeige__warum { width: 20px; height: 20px; padding: 0; border: 1px solid var(--rand-stark); border-radius: 50%;
-  background: none; color: var(--text-still); font-size: .72rem; cursor: pointer; line-height: 1; }
+.anzeige__kopf { display: flex; align-items: center; gap: .6em; margin: 0 0 .2em; }
+.anzeige__marke { font-size: .64rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase;
+  color: var(--text-still); }
+.anzeige__art { font-size: .7rem; color: var(--text-still); }
+.anzeige__art::before { content: '·'; margin-right: .5em; }
+/* 24 Pixel sind die Untergrenze für ein Bedienelement (WCAG 2.2, 2.5.8) –
+   auch für eines, das bewusst leise sein soll. */
+.anzeige__warum { width: 24px; height: 24px; padding: 0; margin-left: auto; flex: none;
+  border: 1px solid var(--rand-stark); border-radius: 50%; background: none;
+  color: var(--text-still); font-size: .72rem; cursor: pointer; line-height: 1; }
 .anzeige__warum:hover { border-color: var(--akzent); color: var(--akzent); }
-.anzeige__koerper { display: flex; gap: .8em; padding: .9em 1em; background: var(--flaeche); }
-.anzeige__zeichen { display: grid; place-items: center; width: 38px; height: 38px; flex: none;
-  border-radius: var(--r-klein); background: var(--flaeche3); color: var(--text-leise); }
-.anzeige__koerper b { display: block; font-size: .95rem; }
-.anzeige__koerper p { margin: .15em 0; font-size: .85rem; color: var(--text-leise); }
-.anzeige__absender { font-size: .76rem; color: var(--text-still); }
-.anzeige__fuss { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
-  padding: .55em 1em; background: var(--flaeche); border-top: 1px solid var(--rand); font-size: .8rem; }
-.anzeige__fuss .link { min-height: 24px; display: inline-flex; align-items: center; }
+.anzeige__inhalt { display: flex; gap: .7em; width: 100%; padding: 0; border: 0; background: none;
+  font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.anzeige__zeichen { display: grid; place-items: center; width: 30px; height: 30px; flex: none;
+  border-radius: var(--r-klein); background: var(--flaeche); color: var(--text-leise); }
+.anzeige__wort { min-width: 0; }
+.anzeige__wort b { display: block; font-size: .88rem; font-weight: 600; }
+.anzeige__wort i { display: block; margin-top: .1em; font-style: normal; font-size: .81rem; color: var(--text-leise); }
+.anzeige__wort em { display: inline-flex; align-items: center; gap: .15em; margin-top: .3em;
+  font-style: normal; font-size: .75rem; color: var(--text-still); }
+.anzeige__wort em .ico { width: 13px; height: 13px; }
+.anzeige__inhalt:hover .anzeige__wort b { text-decoration: underline; }
+.anzeige__inhalt:hover .anzeige__wort em { color: var(--akzent); }
+.anzeige__ohne { display: inline-flex; align-items: center; min-height: 24px; margin-top: .25em;
+  font-size: .74rem; color: var(--text-still); }
+.anzeige__ohne:hover { color: var(--akzent); }
 
 /* ---------------------------- Preisseite ---------------------------- */
 
@@ -1589,3 +1626,126 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .tresor__aufnahme { padding: 10px; }
   .freigabeliste__tun { gap: .5em .8em; }
 }
+
+/* =====================================================================
+   Rechtstexte
+   Lange Fließtexte brauchen andere Regeln als Oberflächen: engeres Maß,
+   mehr Zeilenabstand, klare Absatzabstände. Und Lücken, die man sieht.
+   ===================================================================== */
+
+.rechtspfad { margin: 0 0 .5em; font-size: .84rem; }
+.rechtspfad a { display: inline-flex; align-items: center; gap: .3em; color: var(--text-leise); }
+.rechtspfad a:hover { color: var(--akzent); }
+.rechtspfad .ico { width: 15px; height: 15px; }
+
+.rechtstext { max-width: 62ch; line-height: 1.72; }
+.rechtstext h2 { margin: 1.7em 0 .5em; font-size: 1.02rem; padding-bottom: .3em;
+  border-bottom: 1px solid var(--rand); }
+.rechtstext h2:first-child { margin-top: 0; }
+.rechtstext p { margin: 0 0 .85em; font-size: .92rem; }
+.rechtstext .pruef { margin: .5em 0 1em; }
+.rechtstext .pruef li { font-size: .9rem; line-height: 1.6; }
+.rechtstext .pruef .ico { color: var(--text-still); }
+.rechtstext__adresse { font-style: normal; padding: .8em 1em; border-left: 3px solid var(--akzent);
+  background: var(--flaeche2); border-radius: 0 var(--r-klein) var(--r-klein) 0; }
+.rechtstext__muster { margin: .6em 0 1em; padding: 1em; overflow-x: auto; white-space: pre;
+  border: 1px dashed var(--rand-stark); border-radius: var(--r-klein); background: var(--flaeche2);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .78rem; line-height: 1.55; }
+
+.rechtsliste { display: grid; grid-template-columns: minmax(min(140px, 40%), auto) minmax(0, 1fr);
+  gap: .35em .9em; margin: .3em 0 1em; font-size: .92rem; }
+.rechtsliste dt { font-weight: 600; color: var(--text-leise); }
+.rechtsliste dd { margin: 0; overflow-wrap: anywhere; }
+
+/* Eine fehlende Pflichtangabe darf nicht wie Text aussehen. */
+/* Kein nowrap: Auf 320 Pixeln passt „[E-Mail-Adresse eintragen]“ nicht in
+   eine Zeile und schob sich sonst über den rechten Rand hinaus. */
+.luecke { padding: .06em .45em; border-radius: var(--r-klein); background: var(--schlecht-hell);
+  color: var(--schlecht); font-weight: 600; font-size: .92em; overflow-wrap: anywhere; }
+.pflicht { margin-left: .4em; padding: .05em .4em; border-radius: 999px; background: var(--schlecht-hell);
+  color: var(--schlecht); font-size: .68rem; font-weight: 700; letter-spacing: .02em; }
+.feld__hilfe { display: block; margin-top: .25em; font-style: normal; font-size: .76rem;
+  color: var(--text-still); line-height: 1.45; }
+
+.rechtsfrage { margin: 8px 0; border: 1px solid var(--rand); border-radius: var(--r-klein);
+  background: var(--flaeche2); }
+.rechtsfrage > summary { padding: .7em .9em; cursor: pointer; font-weight: 600; font-size: .9rem;
+  list-style: none; display: flex; align-items: flex-start; gap: .5em; }
+.rechtsfrage > summary::-webkit-details-marker { display: none; }
+.rechtsfrage > summary::before { content: '›'; flex: none; color: var(--text-still); font-size: 1.1em;
+  line-height: 1.2; transition: transform var(--tempo); }
+.rechtsfrage[open] > summary::before { transform: rotate(90deg); }
+.rechtsfrage p { margin: 0 .9em .9em 2em; font-size: .87rem; line-height: 1.65; color: var(--text-leise); }
+
+.fuss__links--recht { font-size: .82rem; }
+.fuss__links--recht a { color: var(--text-leise); }
+.fuss__links--recht a:hover { color: var(--akzent); }
+
+/* =====================================================================
+   Ringtausch als Bild
+   ===================================================================== */
+
+.ringerklaerung { display: grid; gap: 12px; }
+.ringerklaerung__punkte { display: flex; gap: 8px; justify-content: center; list-style: none;
+  margin: 0; padding: 0; }
+.ringerklaerung__punkte button { width: 34px; height: 8px; padding: 0; border: 0; border-radius: 999px;
+  background: var(--rand-stark); cursor: pointer; transition: background var(--tempo); }
+.ringerklaerung__punkte button:hover { background: var(--text-still); }
+.ringerklaerung__punkte .is-an button { background: var(--akzent); }
+.ringerklaerung__punkte .is-durch button { background: var(--akzent-hell); }
+.ringerklaerung__bild { margin: 0; }
+.ringerklaerung__bild figcaption { margin-top: 10px; padding: .85em 1em; border-radius: var(--r-klein);
+  background: var(--flaeche2); font-size: .89rem; line-height: 1.65; color: var(--text-leise); }
+.ringerklaerung__bild figcaption b { color: var(--text); }
+.ringerklaerung__fuss { display: flex; align-items: center; gap: 12px; width: 100%; }
+.ringerklaerung__fuss .fein { margin: 0 auto; }
+
+.ringbild { display: block; width: 100%; height: auto; max-height: 48vh; }
+.ringbild__titel { font-size: 15px; font-weight: 700; fill: var(--text); }
+.ringbild__gross { font-size: 14px; font-weight: 600; fill: var(--text); }
+.ringbild__klein { font-size: 11.5px; fill: var(--text-leise); }
+.ringbild__schild { font-size: 11.5px; font-weight: 600; fill: var(--auf-akzent2); }
+.ringbild__kante { font-size: 11px; font-weight: 600; fill: var(--akzent); }
+.ringbild__fuss { font-size: 12.5px; fill: var(--text-leise); }
+
+/* =====================================================================
+   Gründerplätze
+   ===================================================================== */
+
+.gruender { position: relative; margin: 0 0 18px; padding: 20px 22px;
+  border: 1px solid var(--akzent); border-radius: var(--r);
+  background: linear-gradient(140deg, var(--akzent-hell) 0%, var(--flaeche) 70%); }
+.gruender--schmal { margin-bottom: 16px; padding: 16px 18px; }
+.gruender.is-abgelaufen, .gruender.is-leer { border-color: var(--rand-stark);
+  background: var(--flaeche2); }
+.gruender__marke { display: inline-flex; align-items: center; gap: .35em; margin-bottom: .5em;
+  font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--akzent); }
+.gruender.is-abgelaufen .gruender__marke, .gruender.is-leer .gruender__marke { color: var(--text-still); }
+.gruender__marke .ico { width: 15px; height: 15px; }
+.gruender h2 { margin: 0 0 .35em; font-size: 1.2rem; line-height: 1.28; letter-spacing: -.015em; }
+.gruender > p { margin: 0 0 .6em; font-size: .91rem; line-height: 1.6; color: var(--text-leise); max-width: 62ch; }
+.gruender__balken { height: 8px; margin: .9em 0 .5em; border-radius: 999px;
+  background: var(--flaeche3); overflow: hidden; }
+.gruender__balken span { display: block; height: 100%; border-radius: 999px; background: var(--akzent); }
+.gruender__zahl { display: flex; align-items: baseline; gap: .4em; margin: 0 0 .8em; font-size: .88rem; }
+.gruender__zahl b { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.gruender__zahl i { font-style: normal; color: var(--text-still); font-size: .82rem; }
+.gruender__demo { display: flex; gap: .45em; align-items: flex-start; margin-top: .8em;
+  padding-top: .7em; border-top: 1px dashed var(--rand-stark); }
+.gruender__demo .ico { flex: none; width: 14px; height: 14px; margin-top: .15em; }
+.knopf--gross { padding: .72em 1.3em; font-size: .98rem; }
+
+/* =====================================================================
+   Band unter der Kopfzeile
+   ===================================================================== */
+
+#band:empty { display: none; }
+.band { display: flex; align-items: center; gap: .7em; flex-wrap: wrap;
+  max-width: var(--breite); margin: 0 auto; padding: .6em clamp(12px, 2vw, 24px);
+  border-bottom: 1px solid var(--rand); background: var(--flaeche2); }
+.band--hinweis { background: var(--warn-hell); border-bottom-color: var(--warn); }
+.band > .ico { flex: none; color: var(--warn); }
+.band p { flex: 1 1 20em; min-width: 0; margin: 0; font-size: .85rem; line-height: 1.5; color: var(--text-leise); }
+.band p b { color: var(--text); }
+.band .knopf { flex: none; }
+.band .ikon-btn { flex: none; width: 30px; height: 30px; }

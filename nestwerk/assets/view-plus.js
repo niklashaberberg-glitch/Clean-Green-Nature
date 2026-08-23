@@ -60,10 +60,17 @@
       </ul>
       <div class="tarif__tun">
         ${aktiv
-        ? h`<span class="tarif__laeuft">${ico('pruefen')}aktiv${S.get().tarifSeit && id === 'plus' ? ' seit ' + U.dateDE(S.get().tarifSeit) : ''}</span>`
+        ? h`<span class="tarif__laeuft">${ico('pruefen')}aktiv${id === 'plus' && P.plusQuelle() === 'gruender'
+          ? ' über deinen Gründerplatz, noch ' + P.gruenderTageRest() + ' ' + U.plural(P.gruenderTageRest(), 'Tag', 'Tage')
+          : S.get().tarifSeit && id === 'plus' ? ' seit ' + U.dateDE(S.get().tarifSeit) : ''}</span>`
         : id === 'plus'
           ? h`<button type="button" class="knopf knopf--voll" data-tu="plus-buchen">${ico('plus5')}Plus aktivieren</button>`
-          : h`<button type="button" class="knopf knopf--still knopf--voll" data-tu="plus-beenden">Zum freien Tarif zurück</button>`}
+          : P.plusQuelle() === 'gruender'
+            /* Ein Gründerplatz lässt sich nicht „beenden“ wie ein Abo –
+               es gibt nichts zu kündigen. Ihn zurückzugeben ist eine
+               eigene Entscheidung und gehört nicht hinter diesen Knopf. */
+            ? h`<a class="knopf knopf--still knopf--voll" href="#/recht/kuendigen">Gründerplatz zurückgeben</a>`
+            : h`<button type="button" class="knopf knopf--still knopf--voll" data-tu="plus-beenden">Zum freien Tarif zurück</button>`}
       </div>
     </article>`;
   }
@@ -103,6 +110,76 @@
     </div>`;
   }
 
+  /* ------------------------- Gründerplätze -------------------------
+
+     Der Block steht ganz oben, weil ein Jahr geschenktes Plus die einzige
+     Zahl auf dieser Seite ist, die jemanden zum Handeln bringt. Er sagt
+     zugleich, was er nicht ist: kein Abo, keine Karte, keine stille
+     Verlängerung. Wer das verschweigt, verkauft ein Abo im Gewand eines
+     Geschenks – und genau das will Nestwerk nicht sein. */
+
+  function gruenderBlock() {
+    const g = P.GRUENDER;
+    const meiner = P.gruender();
+    const frei = P.gruenderFrei();
+    const anteil = Math.min(100, Math.round(P.gruenderVergeben() / g.plaetze * 100));
+
+    if (meiner.nummer) {
+      const tage = P.gruenderTageRest();
+      const laeuft = P.gruenderAktiv();
+      return h`<section class="gruender ${laeuft ? 'is-aktiv' : 'is-abgelaufen'}">
+        <div class="gruender__marke">${ico('stern')}Gründerplatz ${U.num(meiner.nummer)} von ${U.num(g.plaetze)}</div>
+        <h2>${laeuft ? 'Plus läuft für dich – noch ' + tage + ' ' + U.plural(tage, 'Tag', 'Tage')
+        : 'Dein Gründerjahr ist abgelaufen'}</h2>
+        <p>${laeuft
+        ? 'Kostenlos bis zum ' + U.dateDE(meiner.bis) + '. Danach endet der Platz von selbst: keine Verlängerung, '
+        + 'keine Abbuchung, keine Kündigung nötig. Du entscheidest dann neu.'
+        : 'Am ' + U.dateDE(meiner.bis) + ' ist dein Jahr zu Ende gegangen. Merkliste, Profil, Notizen und '
+        + 'Suchaufträge sind vollständig erhalten – nur die Plus-Funktionen ruhen.'}</p>
+        ${laeuft ? h`<p class="gruender__balken" role="img"
+          aria-label="Noch ${tage} von ${g.monate} Monaten">
+          <span style="width:${Math.max(2, Math.round(tage / (g.monate * 30.4) * 100))}%"></span></p>` : ''}
+        <p class="werkzeug__weiter">
+          ${laeuft
+        ? h`<a class="knopf knopf--still" href="#/recht/kuendigen">${ico('info')}Platz zurückgeben</a>`
+        : h`<button type="button" class="knopf" data-tu="plus-buchen">${ico('plus5')}Plus weiterführen</button>`}
+        </p>
+      </section>`;
+    }
+
+    if (!frei) {
+      return h`<section class="gruender is-leer">
+        <div class="gruender__marke">${ico('stern')}Gründerplätze</div>
+        <h2>Alle ${U.num(g.plaetze)} Plätze sind vergeben</h2>
+        <p>Das Kontingent ist erschöpft. Der freie Tarif bleibt vollständig nutzbar – alles, was schützt und
+          gerechnet werden muss, war nie hinter der Bezahlschranke.</p>
+      </section>`;
+    }
+
+    return h`<section class="gruender">
+      <div class="gruender__marke">${ico('stern')}Gründerplätze</div>
+      <h2>Die ersten ${U.num(g.plaetze)} bekommen Plus ein Jahr geschenkt</h2>
+      <p>Ein volles Jahr mit allen Plus-Funktionen, ohne Bezahlung. <b>Kein Abo:</b> keine Zahlungsdaten, keine
+        stille Verlängerung, keine Kündigung nötig. Nach ${g.monate} Monaten endet der Platz von selbst, und du
+        entscheidest neu.</p>
+      <p class="gruender__balken" role="img"
+        aria-label="${U.num(P.gruenderVergeben())} von ${U.num(g.plaetze)} Plätzen vergeben">
+        <span style="width:${Math.max(2, anteil)}%"></span></p>
+      <p class="gruender__zahl"><b>${U.num(frei)}</b> ${U.plural(frei, 'Platz', 'Plätze')} noch frei
+        <i>· ${U.num(P.gruenderVergeben())} vergeben</i></p>
+      <p class="werkzeug__weiter">
+        <button type="button" class="knopf knopf--gross" data-tu="gruender-sichern">
+          ${ico('stern')}Platz sichern – ${g.monate} Monate Plus, 0 €</button>
+      </p>
+      <p class="fein">Mit dem Sichern gelten die <a href="#/recht/agb">Geschäftsbedingungen</a>, insbesondere § 6.
+        Ein Widerrufsrecht besteht nicht, weil keine Zahlungspflicht entsteht – beenden lässt sich der Platz
+        trotzdem jederzeit.</p>
+      <p class="fein gruender__demo">${ico('info')}In dieser Vorführung gibt es keinen Server, der die Plätze
+        zentral zählt. Der Zähler oben ist deshalb eine Hochrechnung aus der Zeit seit dem Start, keine
+        Messung. Im Betrieb vergibt der Server jede Nummer genau einmal.</p>
+    </section>`;
+  }
+
   function ansicht() {
     const s = S.get();
     const spar = ersparnis();
@@ -115,6 +192,8 @@
             <b>Plus bezahlt Zeitersparnis bei häufiger Nutzung – nie einen Vorteil gegenüber anderen Bewerbern.</b>
             Was dich schützt und was gerechnet werden muss, bleibt kostenlos.</p>
         </header>
+
+        ${gruenderBlock()}
 
         <div class="tarifschalter" role="group" aria-label="Zahlungsweise">
           <button type="button" class="${intervall === 'monat' ? 'is-an' : ''}" data-tu="tarif-intervall" data-wert="monat">monatlich</button>
@@ -175,6 +254,13 @@
                 Bei der Vergabe selbst hat Plus keinerlei Gewicht. Vermieter sehen nicht, welchen Tarif du hast.</p>
             </details>
             <details>
+              <summary>Was passiert nach dem Gründerjahr?</summary>
+              <p>Es endet. Ohne Rechnung, ohne Abbuchung, ohne dass du kündigen müsstest – ein Gründerplatz ist
+                kein Abo, das sich stillschweigend in ein bezahltes verwandelt. Vier Wochen vorher weist
+                Nestwerk darauf hin. Wer dann weitermachen will, entscheidet sich aktiv dafür; wer nichts tut,
+                nutzt den freien Tarif weiter.</p>
+            </details>
+            <details>
               <summary>Kann ich Plus erst ausprobieren?</summary>
               <p>In dieser Vorführung ist Plus mit einem Klick an- und abschaltbar, damit du beide Welten
                 vergleichen kannst. Im Betrieb wären die ersten vierzehn Tage kostenlos und ohne Zahlungsdaten.</p>
@@ -194,6 +280,27 @@
   const A_ = ui.aktionRegistrieren;
 
   A_('tarif-intervall', (el) => { intervall = el.dataset.wert; ui.neuZeichnen(); });
+
+  A_('gruender-sichern', () => {
+    const nummer = P.gruenderSichern();
+    if (!nummer) { ui.toast('Es ist kein Platz mehr frei.', 'schlecht'); ui.neuZeichnen(); return; }
+    ui.neuZeichnen();
+    ui.dialog({
+      titel: 'Gründerplatz ' + U.num(nummer),
+      inhalt: h`<p><b>Plus läuft ab sofort für ${P.GRUENDER.monate} Monate</b>, bis zum
+          ${U.dateDE(P.gruender().bis)}.</p>
+        <ul class="pruef">
+          <li>${ico('pruefen')}<span>Keine Zahlungsdaten hinterlegt und keine nötig.</span></li>
+          <li>${ico('pruefen')}<span>Keine automatische Verlängerung. Der Platz endet von selbst.</span></li>
+          <li>${ico('pruefen')}<span>Vier Wochen vor Ablauf erinnert dich Nestwerk – rechtzeitig genug, um in
+            Ruhe zu entscheiden.</span></li>
+          <li>${ico('pruefen')}<span>Jederzeit zurückgebbar, ohne Begründung.</span></li>
+        </ul>
+        <p class="fein">Es gilt § 6 der <a href="#/recht/agb">Geschäftsbedingungen</a>.</p>`,
+      fuss: h`<a class="knopf knopf--still" href="#/werkzeuge" data-tu="dialog-zu">Werkzeuge ansehen</a>
+        <button type="button" class="knopf" data-tu="dialog-zu">Los geht's</button>`
+    });
+  });
 
   A_('plus-buchen', () => {
     P.wechseln('plus', intervall);

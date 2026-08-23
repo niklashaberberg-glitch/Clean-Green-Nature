@@ -78,6 +78,9 @@
     tarif: 'frei',
     tarifIntervall: 'monat',
     tarifSeit: '',
+    /* Gründerplatz: nummer 0 heißt „nicht vergeben“. */
+    gruender: { nummer: 0, seit: '', bis: '' },
+    betreiber: {},          /* Angaben für Impressum, Datenschutz und AGB */
     theme: 'auto',
     ansicht: 'liste',
     hinweiseGelesen: {},
@@ -101,6 +104,7 @@
       state.profil.lifestyle = Object.assign({}, NW.data.profilVorlage.lifestyle, state.profil.lifestyle);
       state.profil.unterlagen = Object.assign({}, NW.data.profilVorlage.unterlagen, state.profil.unterlagen);
       state.filter = Object.assign(NW.analyse.leerFilter(), state.filter);
+      state.gruender = Object.assign({ nummer: 0, seit: '', bis: '' }, state.gruender);
     }
     return state;
   }

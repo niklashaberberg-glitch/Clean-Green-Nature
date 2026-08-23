@@ -200,22 +200,21 @@
     const a = NW.plan.anzeige(schluessel);
     if (!a) return '';
     return h`<aside class="anzeige anzeige--${variante || 'breit'}" aria-label="Anzeige">
-      <div class="anzeige__kopf">
+      <p class="anzeige__kopf">
         <span class="anzeige__marke">Anzeige</span>
-        <button type="button" class="anzeige__warum" data-tu="warum-werbung" aria-label="Warum sehe ich das?">?</button>
-      </div>
-      <div class="anzeige__koerper">
+        <span class="anzeige__art">${a.art}</span>
+        <button type="button" class="anzeige__warum" data-tu="warum-werbung"
+          title="Warum sehe ich das?" aria-label="Warum sehe ich das?">?</button>
+      </p>
+      <button type="button" class="anzeige__inhalt" data-tu="anzeige-klick">
         <span class="anzeige__zeichen">${ico(a.icon)}</span>
-        <div>
+        <span class="anzeige__wort">
           <b>${a.titel}</b>
-          <p>${a.text}</p>
-          <span class="anzeige__absender">${a.absender}</span>
-        </div>
-      </div>
-      <div class="anzeige__fuss">
-        <button type="button" class="knopf knopf--klein knopf--still" data-tu="anzeige-klick">${a.ruf}</button>
-        <a class="link" href="#/plus">ohne Anzeigen lesen</a>
-      </div>
+          <i>${a.text}</i>
+          <em>${a.absender} · ${a.ruf}${ico('chevron')}</em>
+        </span>
+      </button>
+      <a class="anzeige__ohne" href="#/plus">ohne Anzeigen lesen</a>
     </aside>`;
   }
 
@@ -398,6 +397,7 @@
     });
 
     if (ergebnis.danach) ergebnis.danach(haupt);
+    bandZeichnen();
     /* Nur bei einem echten Ansichtswechsel nach oben – nicht bei jedem
        Neuaufbau derselben Seite. */
     if (wechsel && !erzwingen) scrolleSofort(0);
@@ -510,6 +510,7 @@
         </div>
       </div>
     </header>
+    <div id="band"></div>
     <main id="haupt" tabindex="-1"></main>
     <nav class="unten" aria-label="Hauptbereiche">
       ${NAV.filter((n) => n.unten).map((n) => h`<a href="#/${n.route}" data-route="${n.route}">
@@ -522,9 +523,19 @@
       <p class="fuss__hinweis">Vorführfassung mit erzeugtem Beispielbestand. Alle Angaben, Anbieter und Adressen sind erfunden.
       Rechtliche Erläuterungen sind allgemeine Hinweise und ersetzen keine Beratung.
       Deine Eingaben bleiben im Browser dieses Geräts.</p>
+      <p class="fuss__links fuss__links--recht">
+        <a href="#/recht/impressum">Impressum</a>
+        <a href="#/recht/datenschutz">Datenschutz</a>
+        <a href="#/recht/agb">AGB</a>
+        <a href="#/recht/widerruf">Widerruf</a>
+        <a href="#/recht/kuendigen">Verträge kündigen</a>
+        <a href="#/recht/melden">Inhalt melden</a>
+        <a href="#/recht/barrierefreiheit">Barrierefreiheit</a>
+      </p>
       <p class="fuss__links">
         <a href="#/plus">Tarife</a>
         <a href="#/werkzeuge">Werkzeuge</a>
+        <a href="#/tresor">Dokumententresor</a>
         <button type="button" class="link" data-tu="hilfe">Tastaturbefehle</button>
         <button type="button" class="link" data-tu="daten">Meine Daten</button>
       </p>
@@ -532,6 +543,47 @@
     <div id="dialog" class="dialog" hidden></div>
     <div id="toasts" class="toasts" aria-live="polite"></div>
     <div id="palette" class="palette" hidden></div>`;
+  }
+
+  /* Ein schmales Band unter der Kopfzeile für Dinge, die ihre Zeit haben:
+     derzeit nur der Hinweis, dass ein Gründerjahr zu Ende geht. Wer vier
+     Wochen vorher Bescheid weiß, wird von nichts überrascht – und genau
+     das ist der Unterschied zu einem Abo, das sich still verlängert. */
+  function bandZeichnen() {
+    const el = U.$('#band');
+    if (!el) return;
+    const P = NW.plan;
+    const s = NW.store.get();
+    const g = P.gruender();
+    let inhalt = '';
+
+    if (g.nummer && P.gruenderAktiv() && P.gruenderTageRest() <= 28) {
+      const tage = P.gruenderTageRest();
+      const weg = s.hinweiseGelesen['gruenderEnde'];
+      /* „in 12 Tagen“, nicht „in 12 Tage“ – die Zeitangabe steht im Dativ. */
+      const wann = tage <= 1 ? 'morgen' : 'in ' + tage + ' Tagen';
+      if (!weg || U.daysSince(weg) >= 7) {
+        inhalt = h`<div class="band band--hinweis">
+          ${ico('verlauf')}
+          <p><b>Dein Gründerjahr endet ${wann}</b>, am ${U.dateDE(g.bis)}.
+            Danach läuft nichts weiter und es wird nichts abgebucht – der freie Tarif steht dir offen, Plus nur,
+            wenn du dich aktiv dafür entscheidest.</p>
+          <a class="knopf knopf--klein" href="#/plus">Tarife ansehen</a>
+          <button type="button" class="ikon-btn" data-tu="band-zu" data-was="gruenderEnde"
+            aria-label="Hinweis ausblenden">${ico('x')}</button>
+        </div>`;
+      }
+    } else if (g.nummer && !P.gruenderAktiv() && !s.hinweiseGelesen['gruenderVorbei']) {
+      inhalt = h`<div class="band">
+        ${ico('info')}
+        <p><b>Dein Gründerjahr ist abgelaufen.</b> Merkliste, Profil und Notizen sind vollständig erhalten;
+          nur die Plus-Funktionen ruhen.</p>
+        <a class="knopf knopf--klein" href="#/plus">Weitermachen</a>
+        <button type="button" class="ikon-btn" data-tu="band-zu" data-was="gruenderVorbei"
+          aria-label="Hinweis ausblenden">${ico('x')}</button>
+      </div>`;
+    }
+    el.innerHTML = String(inhalt);
   }
 
   function aktualisiereZaehler() {
@@ -623,7 +675,13 @@
         { route: 'uebergabe', label: 'Übergabeprotokoll', icon: 'schluessel' },
         { route: 'tresor', label: 'Dokumententresor', icon: 'schloss' },
         { route: 'markt', label: 'Marktdaten und Preisverlauf', icon: 'trend' },
-        { route: 'plus', label: 'Tarife', icon: 'plus5' }
+        { route: 'plus', label: 'Tarife', icon: 'plus5' },
+        { route: 'recht', label: 'Rechtliches', icon: 'blatt' },
+        { route: 'recht/impressum', label: 'Impressum', icon: 'info' },
+        { route: 'recht/datenschutz', label: 'Datenschutz', icon: 'schloss' },
+        { route: 'recht/agb', label: 'AGB', icon: 'blatt' },
+        { route: 'recht/widerruf', label: 'Widerruf', icon: 'zurueck' },
+        { route: 'recht/kuendigen', label: 'Verträge kündigen', icon: 'x' }
       ]).forEach((nav) => {
         if (!n || U.norm(nav.label).indexOf(n) >= 0) out.push({ art: 'bereich', label: nav.label, icon: nav.icon, ziel: nav.route });
       });
@@ -728,8 +786,19 @@
 
     'plus-beenden'() {
       NW.plan.wechseln('frei');
-      toast('Zurück im freien Tarif.');
+      if (NW.plan.plusQuelle() === 'gruender') {
+        /* Ein bezahltes Abo lässt sich beenden, ein Gründerplatz nicht
+           nebenbei – er ist keine Zahlung, sondern eine Zusage. */
+        toast('Der bezahlte Vertrag ist beendet. Plus läuft über deinen Gründerplatz weiter.', 'gut');
+      } else {
+        toast('Zurück im freien Tarif.');
+      }
       neuZeichnen();
+    },
+
+    'band-zu'(el) {
+      NW.store.update((s) => { s.hinweiseGelesen[el.dataset.was] = U.isoDate(NW.now()); }, 'hinweis');
+      bandZeichnen();
     },
 
     'warum-werbung'() {

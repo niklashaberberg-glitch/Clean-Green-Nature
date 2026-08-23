@@ -147,6 +147,16 @@
           </div>
         </header>
 
+        ${!P.gruender().nummer && P.gruenderFrei() ? h`<section class="gruender gruender--schmal">
+          <div class="gruender__marke">${ico('stern')}Gründerplätze</div>
+          <h2>Die ersten ${U.num(P.GRUENDER.plaetze)} bekommen Plus ein Jahr geschenkt</h2>
+          <p>Noch <b>${U.num(P.gruenderFrei())}</b> ${U.plural(P.gruenderFrei(), 'Platz', 'Plätze')} frei.
+            Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.</p>
+          <p class="werkzeug__weiter">
+            <a class="knopf" href="#/plus">${ico('stern')}Platz sichern</a>
+            <a class="link" href="#/plus">was Plus enthält</a></p>
+        </section>` : ''}
+
         ${tun.length ? h`<section class="block block--betont">
           <h2>${ico('check')}Als Nächstes</h2>
           <ul class="aufgaben">
@@ -178,6 +188,7 @@
               <b>Ringtausch statt Sackgasse</b>
               <p>Der direkte Wohnungstausch scheitert am doppelten Zufall. Nestwerk sucht Ketten über mehrere
                 Haushalte – gerade sind ${ringZahl} Dreierketten offen.</p>
+              <button type="button" class="link" data-tu="ring-erklaeren">in vier Bildern erklärt</button>
               <a class="link" href="#/tausch">Ketten ansehen</a></article>
             <article><span class="vorteile__zeichen">${ico('waage')}</span>
               <b>Preis mit Vergleichswert</b>

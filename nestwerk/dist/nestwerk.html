@@ -28,6 +28,9 @@
   --flaeche: #ffffff;
   --flaeche2: #f0f2f1;
   --flaeche3: #e6e9e8;
+  /* Eigene Grundfarbe für Werbung: warm statt grün, damit ein Auge sie
+     von Inhalt unterscheidet, ohne dass sie lauter wird. */
+  --werbung: #faf6ef;
   --rand: #dcdfde;
   --rand-stark: #c3c8c6;
 
@@ -56,6 +59,7 @@
   --warn: #96450a;
   --warn-hell: #fdefd9;
   --schlecht: #b91c1c;
+  --auf-schlecht: #ffffff;
   --schlecht-hell: #fbe2e2;
   --info: #1d4ed8;
   --info-hell: #dde6fd;
@@ -91,6 +95,7 @@
     --flaeche: #141d1c;
     --flaeche2: #1b2625;
     --flaeche3: #24312f;
+    --werbung: #221f18;
     --rand: #2b3836;
     --rand-stark: #3d4c49;
 
@@ -111,6 +116,7 @@
     --warn: #fbbf24;
     --warn-hell: #33270a;
     --schlecht: #f87171;
+    --auf-schlecht: #2b0f0f;
     --schlecht-hell: #341616;
     --info: #7aa5fb;
     --info-hell: #131f38;
@@ -131,6 +137,7 @@
   --flaeche: #141d1c;
   --flaeche2: #1b2625;
   --flaeche3: #24312f;
+  --werbung: #221f18;
   --rand: #2b3836;
   --rand-stark: #3d4c49;
   --text: #e8efed;
@@ -148,6 +155,7 @@
   --warn: #fbbf24;
   --warn-hell: #33270a;
   --schlecht: #f87171;
+  --auf-schlecht: #2b0f0f;
   --schlecht-hell: #341616;
   --info: #7aa5fb;
   --info-hell: #131f38;
@@ -304,8 +312,11 @@ svg { display: block; }
 .knopf--still { background: var(--flaeche); color: var(--text); border-color: var(--rand-stark); }
 .knopf--still:hover { background: var(--flaeche2); border-color: var(--text-still); color: var(--text); }
 .knopf--still.is-an { background: var(--akzent-hell); border-color: var(--akzent); color: var(--akzent); }
-.knopf--gefahr { background: var(--schlecht); border-color: var(--schlecht); color: #fff; }
-.knopf--gefahr:hover { background: color-mix(in srgb, var(--schlecht) 82%, #000); border-color: currentColor; }
+/* Wie bei --auf-akzent: Die Schrift auf gefüllter Warnfläche ist ein Token,
+   keine Sonderregel für dunkel. Weiß auf dem helleren Rot des Dunkelmodus
+   kam nur auf 2,8 zu 1. */
+.knopf--gefahr { background: var(--schlecht); border-color: var(--schlecht); color: var(--auf-schlecht); }
+.knopf--gefahr:hover { background: color-mix(in srgb, var(--schlecht) 84%, var(--auf-schlecht)); border-color: currentColor; }
 .knopf--klein { padding: .4em .72em; font-size: .84rem; }
 .knopf--voll { width: 100%; }
 .knopf[disabled] { opacity: .5; cursor: default; }
@@ -425,6 +436,9 @@ input[type="range"] {
 .block--betont { border-color: var(--akzent); background: linear-gradient(var(--akzent-hell), transparent 130px), var(--flaeche); }
 .block--warn { border-color: var(--warn); background: linear-gradient(var(--warn-hell), transparent 130px), var(--flaeche); }
 .block--schlecht { border-color: var(--schlecht); background: linear-gradient(var(--schlecht-hell), transparent 160px), var(--flaeche); }
+/* Ein grünes Warndreieck über einer Warnmeldung liest sich als Entwarnung. */
+.block--warn > h2 > .ico { color: var(--warn); }
+.block--schlecht > h2 > .ico { color: var(--schlecht); }
 .block--info { border-color: var(--info); }
 
 .hinweisbox {
@@ -1053,7 +1067,12 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .dialog__box.is-breit { width: min(880px, 100%); }
 .dialog__kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 1em 1.2em; border-bottom: 1px solid var(--rand); }
 .dialog__kopf h2 { margin: 0; font-size: 1.1rem; }
-.dialog__inhalt { padding: 1.2em; overflow-y: auto; }
+/* min-height: 0 ist hier Pflicht, nicht Feinschliff: In einer Flex-Spalte
+   steht min-height von Haus aus auf auto, also auf Inhaltshöhe. Ohne diese
+   Zeile schrumpft der Bereich nicht, overflow-y greift nie, und der Kasten
+   schneidet lange Dialoge unten einfach ab. */
+.dialog__inhalt { flex: 1 1 auto; min-height: 0; padding: 1.2em; overflow-y: auto;
+  overscroll-behavior: contain; }
 .dialog__fuss { display: flex; justify-content: flex-end; gap: 8px; padding: .9em 1.2em; border-top: 1px solid var(--rand); background: var(--flaeche2); flex-wrap: wrap; }
 
 .toasts { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 140; display: grid; gap: 8px; width: min(420px, calc(100vw - 32px)); }
@@ -1219,28 +1238,46 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .sperre__preis { padding: .6em .9em; background: var(--akzent-hell); border-radius: var(--r-klein); }
 .sperre__preis b { font-size: 1.2rem; color: var(--akzent); }
 
+/* Werbung: leise, aber unverwechselbar.
+
+   Zwei Anforderungen, die sich widersprechen – und beide gelten. Leise
+   heißt: kein Kasten, der lauter ist als ein Inserat, keine gefüllte
+   Fläche, kein Knopf in Akzentfarbe. Unverwechselbar heißt: Man darf
+   keine Sekunde im Zweifel sein, dass es Werbung ist. Gelöst über eine
+   eigene Grundfarbe, einen Streifen an der Kante und das Wort „Anzeige“
+   in Versalien darüber – nicht über Lautstärke. */
 .anzeige {
-  border: 1px solid var(--rand); border-radius: var(--r);
-  background: repeating-linear-gradient(135deg, var(--flaeche2) 0 12px, var(--flaeche) 12px 24px);
-  overflow: hidden;
+  margin: 4px 0; padding: .55em .9em .7em 1em;
+  border: 1px solid var(--rand); border-left: 3px solid var(--rand-stark);
+  border-radius: var(--r-klein); background: var(--werbung);
 }
-.anzeige--breit { margin: 4px 0; }
 .anzeige--schmal { margin-top: 14px; }
-.anzeige__kopf { display: flex; align-items: center; justify-content: space-between;
-  padding: .35em .7em; border-bottom: 1px solid var(--rand); background: var(--flaeche); }
-.anzeige__marke { font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text-still); }
-.anzeige__warum { width: 20px; height: 20px; padding: 0; border: 1px solid var(--rand-stark); border-radius: 50%;
-  background: none; color: var(--text-still); font-size: .72rem; cursor: pointer; line-height: 1; }
+.anzeige__kopf { display: flex; align-items: center; gap: .6em; margin: 0 0 .2em; }
+.anzeige__marke { font-size: .64rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase;
+  color: var(--text-still); }
+.anzeige__art { font-size: .7rem; color: var(--text-still); }
+.anzeige__art::before { content: '·'; margin-right: .5em; }
+/* 24 Pixel sind die Untergrenze für ein Bedienelement (WCAG 2.2, 2.5.8) –
+   auch für eines, das bewusst leise sein soll. */
+.anzeige__warum { width: 24px; height: 24px; padding: 0; margin-left: auto; flex: none;
+  border: 1px solid var(--rand-stark); border-radius: 50%; background: none;
+  color: var(--text-still); font-size: .72rem; cursor: pointer; line-height: 1; }
 .anzeige__warum:hover { border-color: var(--akzent); color: var(--akzent); }
-.anzeige__koerper { display: flex; gap: .8em; padding: .9em 1em; background: var(--flaeche); }
-.anzeige__zeichen { display: grid; place-items: center; width: 38px; height: 38px; flex: none;
-  border-radius: var(--r-klein); background: var(--flaeche3); color: var(--text-leise); }
-.anzeige__koerper b { display: block; font-size: .95rem; }
-.anzeige__koerper p { margin: .15em 0; font-size: .85rem; color: var(--text-leise); }
-.anzeige__absender { font-size: .76rem; color: var(--text-still); }
-.anzeige__fuss { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
-  padding: .55em 1em; background: var(--flaeche); border-top: 1px solid var(--rand); font-size: .8rem; }
-.anzeige__fuss .link { min-height: 24px; display: inline-flex; align-items: center; }
+.anzeige__inhalt { display: flex; gap: .7em; width: 100%; padding: 0; border: 0; background: none;
+  font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.anzeige__zeichen { display: grid; place-items: center; width: 30px; height: 30px; flex: none;
+  border-radius: var(--r-klein); background: var(--flaeche); color: var(--text-leise); }
+.anzeige__wort { min-width: 0; }
+.anzeige__wort b { display: block; font-size: .88rem; font-weight: 600; }
+.anzeige__wort i { display: block; margin-top: .1em; font-style: normal; font-size: .81rem; color: var(--text-leise); }
+.anzeige__wort em { display: inline-flex; align-items: center; gap: .15em; margin-top: .3em;
+  font-style: normal; font-size: .75rem; color: var(--text-still); }
+.anzeige__wort em .ico { width: 13px; height: 13px; }
+.anzeige__inhalt:hover .anzeige__wort b { text-decoration: underline; }
+.anzeige__inhalt:hover .anzeige__wort em { color: var(--akzent); }
+.anzeige__ohne { display: inline-flex; align-items: center; min-height: 24px; margin-top: .25em;
+  font-size: .74rem; color: var(--text-still); }
+.anzeige__ohne:hover { color: var(--akzent); }
 
 /* ---------------------------- Preisseite ---------------------------- */
 
@@ -1604,6 +1641,129 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .tresor__aufnahme { padding: 10px; }
   .freigabeliste__tun { gap: .5em .8em; }
 }
+
+/* =====================================================================
+   Rechtstexte
+   Lange Fließtexte brauchen andere Regeln als Oberflächen: engeres Maß,
+   mehr Zeilenabstand, klare Absatzabstände. Und Lücken, die man sieht.
+   ===================================================================== */
+
+.rechtspfad { margin: 0 0 .5em; font-size: .84rem; }
+.rechtspfad a { display: inline-flex; align-items: center; gap: .3em; color: var(--text-leise); }
+.rechtspfad a:hover { color: var(--akzent); }
+.rechtspfad .ico { width: 15px; height: 15px; }
+
+.rechtstext { max-width: 62ch; line-height: 1.72; }
+.rechtstext h2 { margin: 1.7em 0 .5em; font-size: 1.02rem; padding-bottom: .3em;
+  border-bottom: 1px solid var(--rand); }
+.rechtstext h2:first-child { margin-top: 0; }
+.rechtstext p { margin: 0 0 .85em; font-size: .92rem; }
+.rechtstext .pruef { margin: .5em 0 1em; }
+.rechtstext .pruef li { font-size: .9rem; line-height: 1.6; }
+.rechtstext .pruef .ico { color: var(--text-still); }
+.rechtstext__adresse { font-style: normal; padding: .8em 1em; border-left: 3px solid var(--akzent);
+  background: var(--flaeche2); border-radius: 0 var(--r-klein) var(--r-klein) 0; }
+.rechtstext__muster { margin: .6em 0 1em; padding: 1em; overflow-x: auto; white-space: pre;
+  border: 1px dashed var(--rand-stark); border-radius: var(--r-klein); background: var(--flaeche2);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .78rem; line-height: 1.55; }
+
+.rechtsliste { display: grid; grid-template-columns: minmax(min(140px, 40%), auto) minmax(0, 1fr);
+  gap: .35em .9em; margin: .3em 0 1em; font-size: .92rem; }
+.rechtsliste dt { font-weight: 600; color: var(--text-leise); }
+.rechtsliste dd { margin: 0; overflow-wrap: anywhere; }
+
+/* Eine fehlende Pflichtangabe darf nicht wie Text aussehen. */
+/* Kein nowrap: Auf 320 Pixeln passt „[E-Mail-Adresse eintragen]“ nicht in
+   eine Zeile und schob sich sonst über den rechten Rand hinaus. */
+.luecke { padding: .06em .45em; border-radius: var(--r-klein); background: var(--schlecht-hell);
+  color: var(--schlecht); font-weight: 600; font-size: .92em; overflow-wrap: anywhere; }
+.pflicht { margin-left: .4em; padding: .05em .4em; border-radius: 999px; background: var(--schlecht-hell);
+  color: var(--schlecht); font-size: .68rem; font-weight: 700; letter-spacing: .02em; }
+.feld__hilfe { display: block; margin-top: .25em; font-style: normal; font-size: .76rem;
+  color: var(--text-still); line-height: 1.45; }
+
+.rechtsfrage { margin: 8px 0; border: 1px solid var(--rand); border-radius: var(--r-klein);
+  background: var(--flaeche2); }
+.rechtsfrage > summary { padding: .7em .9em; cursor: pointer; font-weight: 600; font-size: .9rem;
+  list-style: none; display: flex; align-items: flex-start; gap: .5em; }
+.rechtsfrage > summary::-webkit-details-marker { display: none; }
+.rechtsfrage > summary::before { content: '›'; flex: none; color: var(--text-still); font-size: 1.1em;
+  line-height: 1.2; transition: transform var(--tempo); }
+.rechtsfrage[open] > summary::before { transform: rotate(90deg); }
+.rechtsfrage p { margin: 0 .9em .9em 2em; font-size: .87rem; line-height: 1.65; color: var(--text-leise); }
+
+.fuss__links--recht { font-size: .82rem; }
+.fuss__links--recht a { color: var(--text-leise); }
+.fuss__links--recht a:hover { color: var(--akzent); }
+
+/* =====================================================================
+   Ringtausch als Bild
+   ===================================================================== */
+
+.ringerklaerung { display: grid; gap: 12px; }
+.ringerklaerung__punkte { display: flex; gap: 8px; justify-content: center; list-style: none;
+  margin: 0; padding: 0; }
+.ringerklaerung__punkte button { width: 34px; height: 8px; padding: 0; border: 0; border-radius: 999px;
+  background: var(--rand-stark); cursor: pointer; transition: background var(--tempo); }
+.ringerklaerung__punkte button:hover { background: var(--text-still); }
+.ringerklaerung__punkte .is-an button { background: var(--akzent); }
+.ringerklaerung__punkte .is-durch button { background: var(--akzent-hell); }
+.ringerklaerung__bild { margin: 0; }
+.ringerklaerung__bild figcaption { margin-top: 10px; padding: .85em 1em; border-radius: var(--r-klein);
+  background: var(--flaeche2); font-size: .89rem; line-height: 1.65; color: var(--text-leise); }
+.ringerklaerung__bild figcaption b { color: var(--text); }
+.ringerklaerung__fuss { display: flex; align-items: center; gap: 12px; width: 100%; }
+.ringerklaerung__fuss .fein { margin: 0 auto; }
+
+.ringbild { display: block; width: 100%; height: auto; max-height: 48vh; }
+.ringbild__titel { font-size: 15px; font-weight: 700; fill: var(--text); }
+.ringbild__gross { font-size: 14px; font-weight: 600; fill: var(--text); }
+.ringbild__klein { font-size: 11.5px; fill: var(--text-leise); }
+.ringbild__schild { font-size: 11.5px; font-weight: 600; fill: var(--auf-akzent2); }
+.ringbild__kante { font-size: 11px; font-weight: 600; fill: var(--akzent); }
+.ringbild__fuss { font-size: 12.5px; fill: var(--text-leise); }
+
+/* =====================================================================
+   Gründerplätze
+   ===================================================================== */
+
+.gruender { position: relative; margin: 0 0 18px; padding: 20px 22px;
+  border: 1px solid var(--akzent); border-radius: var(--r);
+  background: linear-gradient(140deg, var(--akzent-hell) 0%, var(--flaeche) 70%); }
+.gruender--schmal { margin-bottom: 16px; padding: 16px 18px; }
+.gruender.is-abgelaufen, .gruender.is-leer { border-color: var(--rand-stark);
+  background: var(--flaeche2); }
+.gruender__marke { display: inline-flex; align-items: center; gap: .35em; margin-bottom: .5em;
+  font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--akzent); }
+.gruender.is-abgelaufen .gruender__marke, .gruender.is-leer .gruender__marke { color: var(--text-still); }
+.gruender__marke .ico { width: 15px; height: 15px; }
+.gruender h2 { margin: 0 0 .35em; font-size: 1.2rem; line-height: 1.28; letter-spacing: -.015em; }
+.gruender > p { margin: 0 0 .6em; font-size: .91rem; line-height: 1.6; color: var(--text-leise); max-width: 62ch; }
+.gruender__balken { height: 8px; margin: .9em 0 .5em; border-radius: 999px;
+  background: var(--flaeche3); overflow: hidden; }
+.gruender__balken span { display: block; height: 100%; border-radius: 999px; background: var(--akzent); }
+.gruender__zahl { display: flex; align-items: baseline; gap: .4em; margin: 0 0 .8em; font-size: .88rem; }
+.gruender__zahl b { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.gruender__zahl i { font-style: normal; color: var(--text-still); font-size: .82rem; }
+.gruender__demo { display: flex; gap: .45em; align-items: flex-start; margin-top: .8em;
+  padding-top: .7em; border-top: 1px dashed var(--rand-stark); }
+.gruender__demo .ico { flex: none; width: 14px; height: 14px; margin-top: .15em; }
+.knopf--gross { padding: .72em 1.3em; font-size: .98rem; }
+
+/* =====================================================================
+   Band unter der Kopfzeile
+   ===================================================================== */
+
+#band:empty { display: none; }
+.band { display: flex; align-items: center; gap: .7em; flex-wrap: wrap;
+  max-width: var(--breite); margin: 0 auto; padding: .6em clamp(12px, 2vw, 24px);
+  border-bottom: 1px solid var(--rand); background: var(--flaeche2); }
+.band--hinweis { background: var(--warn-hell); border-bottom-color: var(--warn); }
+.band > .ico { flex: none; color: var(--warn); }
+.band p { flex: 1 1 20em; min-width: 0; margin: 0; font-size: .85rem; line-height: 1.5; color: var(--text-leise); }
+.band p b { color: var(--text); }
+.band .knopf { flex: none; }
+.band .ikon-btn { flex: none; width: 30px; height: 30px; }
 
 </style>
 <noscript>
@@ -2409,6 +2569,230 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   }
 
   NW.img = { make, count, caption, avatar, paletteFor };
+})(window.NW = window.NW || {});
+
+/* ===== ring-bild.js ===== */
+/* =====================================================================
+   Nestwerk – Der Ringtausch als Bild
+
+   Erklärt wurde der Ringtausch bisher in Sätzen. Sätze reichen dafür
+   nicht: Wer zum ersten Mal davon hört, stellt sich einen Tausch zwischen
+   zwei Leuten vor und stolpert genau an der Stelle, an der es interessant
+   wird – dass niemand die Wohnung dessen bekommt, dem er die eigene gibt.
+
+   Deshalb hier vier Bilder statt eines Absatzes. Sie sind gezeichnet, nicht
+   geladen: reines SVG, das die Farben der Oberfläche übernimmt und in hell
+   wie dunkel funktioniert.
+   ===================================================================== */
+(function (NW) {
+  'use strict';
+
+  const U = NW.util;
+
+  /* Beispielhaushalte. Bewusst mit Zahlen, die den Grund sichtbar machen:
+     Anna braucht mehr Platz, Ben weniger, Carla will in eine andere Stadt.
+     Zwei von ihnen könnten nie direkt tauschen. */
+  const LEUTE = [
+    { name: 'Anna', hat: '2 Zi. · 58 m²', wo: 'Köln-Ehrenfeld', miete: '640 €', will: 'mehr Platz fürs Kind' },
+    { name: 'Ben', hat: '4 Zi. · 96 m²', wo: 'Köln-Sülz', miete: '1.180 €', will: 'kleiner nach dem Auszug der Kinder' },
+    { name: 'Carla', hat: '3 Zi. · 74 m²', wo: 'Bonn-Nordstadt', miete: '890 €', will: 'näher an die neue Arbeit' }
+  ];
+
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  /* ------------------------- Bausteine ------------------------- */
+
+  /* Die Wohnung als Karte mit Kopfstreifen. Der Streifen trägt den Namen –
+     früher schwebte er als Schild darüber, und die Pfeilspitzen der Kette
+     liefen genau dort hinein. Innen liegend kollidiert nichts mehr. */
+  const KARTE = { w: 176, h: 100, kopf: 28 };
+
+  function wohnung(x, y, p, opt) {
+    const o = opt || {};
+    const w = KARTE.w, hh = KARTE.h, kh = KARTE.kopf;
+    const rand = o.aktiv ? 'var(--akzent)' : 'var(--rand-stark)';
+    const flaeche = o.aktiv ? 'var(--akzent-hell)' : 'var(--flaeche2)';
+    const kopfFarbe = o.kopfFarbe || 'var(--akzent2)';
+    return '<g class="ringbild__wohnung">' +
+      '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + hh + '" rx="12" ' +
+      'fill="' + flaeche + '" stroke="' + rand + '" stroke-width="' + (o.aktiv ? 2.4 : 1.4) + '"/>' +
+      /* Kopfstreifen: oben rund, unten gerade – zwei Formen übereinander. */
+      '<path d="M' + x + ' ' + (y + kh) + 'V' + (y + 12) + 'a12 12 0 0 1 12 -12h' + (w - 24) +
+      'a12 12 0 0 1 12 12v' + (kh - 12) + 'z" fill="' + kopfFarbe + '"/>' +
+      '<text x="' + (x + w / 2) + '" y="' + (y + 19) + '" text-anchor="middle" class="ringbild__schild">' +
+      esc(o.kopf || p.name + ' wohnt hier') + '</text>' +
+      '<text x="' + (x + 14) + '" y="' + (y + kh + 22) + '" class="ringbild__gross">' + esc(p.hat) + '</text>' +
+      '<text x="' + (x + 14) + '" y="' + (y + kh + 41) + '" class="ringbild__klein">' + esc(p.wo) + '</text>' +
+      '<text x="' + (x + 14) + '" y="' + (y + kh + 59) + '" class="ringbild__klein">' + esc(p.miete) + ' warm</text>' +
+      '</g>';
+  }
+
+  /* Bogen von einem Punkt zum anderen, mit Beschriftung an der Mitte. */
+  function bogen(a, b, opt) {
+    const o = opt || {};
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const len = Math.hypot(dx, dy) || 1;
+    /* Der Kontrollpunkt sitzt seitlich der Verbindungsgeraden – dadurch
+       laufen Hin- und Rückweg nicht übereinander. */
+    const kruemmung = o.kruemmung === undefined ? 0.22 : o.kruemmung;
+    const mx = (a.x + b.x) / 2 - dy / len * len * kruemmung;
+    const my = (a.y + b.y) / 2 + dx / len * len * kruemmung;
+    const farbe = o.blass ? 'var(--rand-stark)' : 'var(--akzent)';
+    const breite = o.blass ? 1.6 : 2.6;
+    let s = '<path d="M' + a.x + ' ' + a.y + 'Q' + mx.toFixed(0) + ' ' + my.toFixed(0) + ' ' + b.x + ' ' + b.y + '" ' +
+      'fill="none" stroke="' + farbe + '" stroke-width="' + breite + '" ' +
+      (o.gestrichelt ? 'stroke-dasharray="7 6" ' : '') + 'marker-end="url(#rb-spitze)"/>';
+    if (o.text) {
+      const tx = (a.x + b.x) / 4 + mx / 2, ty = (a.y + b.y) / 4 + my / 2;
+      const br = o.text.length * 6.4 + 16;
+      s += '<rect x="' + (tx - br / 2) + '" y="' + (ty - 11) + '" width="' + br + '" height="21" rx="10" ' +
+        'fill="var(--flaeche)" stroke="' + farbe + '" stroke-width="1"/>' +
+        '<text x="' + tx + '" y="' + (ty + 4) + '" text-anchor="middle" class="ringbild__kante">' + esc(o.text) + '</text>';
+    }
+    return s;
+  }
+
+  function rahmen(inhalt, hoehe) {
+    return '<svg class="ringbild" viewBox="0 0 560 ' + hoehe + '" role="img" preserveAspectRatio="xMidYMid meet">' +
+      '<defs><marker id="rb-spitze" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" ' +
+      'orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs>' +
+      inhalt + '</svg>';
+  }
+
+  /* ------------------------- Die vier Bilder ------------------------- */
+
+  /* 1. Warum der direkte Tausch fast nie klappt. */
+  function bildDirekt() {
+    /* Zwischen den beiden Karten bleiben nur gut 150 Pixel. Eine
+       Beschriftung mitten auf dem Pfeil deckte dort die Spitze zu und
+       stieß an die zweite – deshalb hier gerade Linien mit der Schrift
+       darüber statt Bögen mit Schrift darin. */
+    const A = { x: 26, y: 56 }, B = { x: 358, y: 56 };
+    const linie = (x1, x2, y) =>
+      '<path d="M' + x1 + ' ' + y + 'H' + x2 + '" stroke="var(--akzent)" stroke-width="2.6" ' +
+      'marker-end="url(#rb-spitze)"/>';
+    const wort = (t, y) =>
+      '<text x="280" y="' + y + '" text-anchor="middle" class="ringbild__kante">' + esc(t) + '</text>';
+    let s = '';
+    s += wohnung(A.x, A.y, LEUTE[0]);
+    s += wohnung(B.x, B.y, LEUTE[1]);
+    s += wort('Anna zieht zu Ben', 92) + linie(212, 348, 106);
+    s += wort('Ben zieht zu Anna', 134) + linie(348, 212, 148);
+    s += '<text x="280" y="28" text-anchor="middle" class="ringbild__titel">Der direkte Tausch</text>';
+    s += '<text x="280" y="204" text-anchor="middle" class="ringbild__fuss">Dafür müssen zwei Menschen genau das Gegenteil</text>';
+    s += '<text x="280" y="224" text-anchor="middle" class="ringbild__fuss">voneinander wollen. Das passiert fast nie.</text>';
+    return rahmen(s, 244);
+  }
+
+  /* 2. Die Kette: jeder muss nur die Wohnung des Nächsten wollen. */
+  /* Dreieck: oben links, oben rechts, unten mittig. */
+  const DREI = [{ x: 20, y: 48 }, { x: 364, y: 48 }, { x: 192, y: 246 }];
+  const mitte = (i) => ({ x: DREI[i].x + KARTE.w / 2, y: DREI[i].y + KARTE.h / 2 });
+
+  /* Ansatzpunkt am Kartenrand: sonst steckt die Spitze in der Fläche.
+     Waagerecht ist mehr Luft nötig als senkrecht, weil die Karten breit
+     und flach sind. */
+  const randPunkt = (i, j, luft) => {
+    const a = mitte(i), b = mitte(j);
+    const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1;
+    const zu = luft || 0;
+    return { x: Math.round(a.x + dx / l * (KARTE.w / 2 + 22 + zu)),
+      y: Math.round(a.y + dy / l * (KARTE.h / 2 + 16 + zu)) };
+  };
+
+  function bildKette(hervor) {
+    let s = '';
+    [0, 1, 2].forEach((i) => {
+      s += wohnung(DREI[i].x, DREI[i].y, LEUTE[i], { aktiv: hervor === i });
+    });
+    [0, 1, 2].forEach((i) => {
+      const j = (i + 1) % 3;
+      s += bogen(randPunkt(i, j), randPunkt(j, i), {
+        text: hervor === i || hervor === undefined ? LEUTE[i].name + ' → ' + LEUTE[j].name : '',
+        blass: hervor !== undefined && hervor !== i,
+        kruemmung: 0.1
+      });
+    });
+    s += '<text x="280" y="28" text-anchor="middle" class="ringbild__titel">Die Kette</text>';
+    s += '<text x="280" y="384" text-anchor="middle" class="ringbild__fuss">Niemand tauscht mit der Person, der er die eigene Wohnung übergibt.</text>';
+    s += '<text x="280" y="404" text-anchor="middle" class="ringbild__fuss">Jede muss nur die Wohnung der nächsten Person wollen.</text>';
+    return rahmen(s, 422);
+  }
+
+  /* 3. Der Umzugstag: alle ziehen gleichzeitig. */
+  function bildUmzug() {
+    let s = '';
+    [0, 1, 2].forEach((i) => {
+      const rein = LEUTE[(i + 2) % 3];   /* wer hier einzieht */
+      s += wohnung(DREI[i].x, DREI[i].y, LEUTE[i], {
+        aktiv: true, kopfFarbe: 'var(--gut)', kopf: rein.name + ' zieht ein'
+      });
+      s += '<text x="' + (DREI[i].x + KARTE.w / 2) + '" y="' + (DREI[i].y + KARTE.h + 18) + '" ' +
+        'text-anchor="middle" class="ringbild__klein">' + esc(LEUTE[i].name) + ' zieht aus</text>';
+    });
+    [0, 1, 2].forEach((i) => {
+      const j = (i + 1) % 3;
+      s += bogen(randPunkt(i, j, 10), randPunkt(j, i, 10), { kruemmung: 0.1, gestrichelt: true });
+    });
+    s += '<text x="280" y="28" text-anchor="middle" class="ringbild__titel">Der Umzugstag</text>';
+    s += '<text x="280" y="398" text-anchor="middle" class="ringbild__fuss">Alle drei Umzüge fallen in dieselbe Woche – sonst zahlt jemand doppelt Miete.</text>';
+    return rahmen(s, 420);
+  }
+
+  /* 4. Was ein Ring braucht, damit er hält. */
+  function bildBedingungen() {
+    const punkte = [
+      ['Alle sagen zu', 'Ein Wackelkandidat reißt die ganze Kette.'],
+      ['Jede Vermieterseite stimmt zu', 'Einen Anspruch darauf gibt es nicht.'],
+      ['Termine liegen beieinander', 'Sonst läuft irgendwo eine Miete doppelt.'],
+      ['Für jede Wohnung ein neuer Vertrag', 'Rechtlich ist es kein Tausch. Alte Konditionen laufen nicht mit.']
+    ];
+    let s = '<text x="280" y="28" text-anchor="middle" class="ringbild__titel">Damit die Kette hält</text>';
+    punkte.forEach((p, i) => {
+      const y = 62 + i * 62;
+      s += '<circle cx="46" cy="' + (y + 12) + '" r="17" fill="var(--gut-hell)"/>' +
+        '<path d="M38 ' + (y + 12) + 'l6 6 12 -13" fill="none" stroke="var(--gut)" stroke-width="2.6" ' +
+        'stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<text x="78" y="' + (y + 8) + '" class="ringbild__gross">' + esc(p[0]) + '</text>' +
+        '<text x="78" y="' + (y + 28) + '" class="ringbild__klein">' + esc(p[1]) + '</text>';
+    });
+    return rahmen(s, 316);
+  }
+
+  /* ------------------------- Die Abfolge ------------------------- */
+
+  const SCHRITTE = [
+    {
+      titel: 'Warum der direkte Tausch fast nie klappt',
+      bild: bildDirekt,
+      text: 'Anna hat zwei Zimmer und braucht mehr Platz. Ben hat vier und braucht weniger. Die beiden könnten '
+        + 'tauschen – aber nur, weil sich hier zufällig genau zwei Menschen mit genau gegenläufigen Wünschen '
+        + 'begegnet sind. In einer Stadt mit tausenden Wohnungen passiert das so gut wie nie.'
+    },
+    {
+      titel: 'In der Kette reicht ein Wunsch je Person',
+      bild: () => bildKette(),
+      text: 'Kommt Carla dazu, muss niemand mehr das Gegenteil des anderen wollen. Anna zieht in Bens Wohnung, '
+        + 'Ben in Carlas, Carla in Annas. Jede bekommt, was sie sucht – und keine tauscht mit der Person, der '
+        + 'sie die eigene Wohnung übergibt. Genau das macht den Unterschied.'
+    },
+    {
+      titel: 'Alle ziehen am selben Tag',
+      bild: bildUmzug,
+      text: 'Eine Kette funktioniert nur geschlossen: Jede Wohnung wird frei, weil eine andere frei wird. '
+        + 'Deshalb liegen die Umzüge beieinander. Nestwerk sucht solche geschlossenen Ketten über zwei, drei '
+        + 'und vier Haushalte automatisch im gesamten Bestand – von Hand findet sie niemand.'
+    },
+    {
+      titel: 'Damit die Kette hält',
+      bild: bildBedingungen,
+      text: 'Ein Ring ist rechtlich kein Tausch, sondern für jede Wohnung ein neuer Mietvertrag. Und er steht '
+        + 'und fällt mit den Zustimmungen. Nestwerk zeigt bei jeder gefundenen Kette, wie viele davon schon '
+        + 'vorliegen und welches Glied das schwächste ist.'
+    }
+  ];
+
+  NW.ringBild = { SCHRITTE, bildDirekt, bildKette, bildUmzug, bildBedingungen, LEUTE };
 })(window.NW = window.NW || {});
 
 /* ===== data.js ===== */
@@ -4656,6 +5040,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     tarif: 'frei',
     tarifIntervall: 'monat',
     tarifSeit: '',
+    /* Gründerplatz: nummer 0 heißt „nicht vergeben“. */
+    gruender: { nummer: 0, seit: '', bis: '' },
+    betreiber: {},          /* Angaben für Impressum, Datenschutz und AGB */
     theme: 'auto',
     ansicht: 'liste',
     hinweiseGelesen: {},
@@ -4679,6 +5066,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       state.profil.lifestyle = Object.assign({}, NW.data.profilVorlage.lifestyle, state.profil.lifestyle);
       state.profil.unterlagen = Object.assign({}, NW.data.profilVorlage.unterlagen, state.profil.unterlagen);
       state.filter = Object.assign(NW.analyse.leerFilter(), state.filter);
+      state.gruender = Object.assign({ nummer: 0, seit: '', bis: '' }, state.gruender);
     }
     return state;
   }
@@ -5132,11 +5520,82 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     'Keine Werbung, die sich als Inserat ausgibt – Anzeigen sind immer als solche gekennzeichnet.'
   ];
 
+  /* ------------------------- Gründerplätze -------------------------
+
+     Die ersten zehntausend Anmeldungen bekommen Plus ein Jahr lang ohne
+     Bezahlung. Kein Abo, das sich verlängert, keine hinterlegte Karte:
+     Nach dem Jahr endet der Platz von selbst und die Anwendung fällt in
+     den freien Tarif zurück. Wer dann bezahlen will, entscheidet sich neu.
+
+     Was in dieser Vorführung fehlt, ist die zentrale Stelle, die zählt.
+     Ohne Server kann kein Browser wissen, wie viele Plätze anderswo schon
+     vergeben sind. Der Zähler unten ist deshalb ausdrücklich eine
+     Hochrechnung aus der Zeit seit dem Start – und die Anwendung sagt das
+     an jeder Stelle dazu, an der sie ihn zeigt. Im Betrieb vergibt der
+     Server die Nummer, und zwar genau einmal. */
+
+  const GRUENDER = {
+    plaetze: 10000,
+    monate: 12,
+    start: '2026-08-01',
+    /* Für die Hochrechnung: So viele Plätze gehen im Schnitt am Tag weg.
+       Eine Annahme, keine Messung. */
+    proTag: 140
+  };
+
+  const gruender = () => NW.store.get().gruender || { nummer: 0, seit: '', bis: '' };
+
+  function gruenderAktiv() {
+    const g = gruender();
+    return !!(g.nummer && g.bis && new Date(g.bis) > NW.now());
+  }
+
+  function gruenderTageRest() {
+    const g = gruender();
+    if (!g.bis) return 0;
+    return Math.max(0, Math.ceil((new Date(g.bis) - NW.now()) / 86400000));
+  }
+
+  /* Hochgerechnet, nicht gezählt – siehe oben. */
+  function gruenderVergeben() {
+    const tage = Math.max(0, Math.floor((NW.now() - new Date(GRUENDER.start)) / 86400000));
+    const geschaetzt = Math.min(GRUENDER.plaetze - 1, Math.round(tage * GRUENDER.proTag));
+    return gruender().nummer ? Math.max(geschaetzt, gruender().nummer) : geschaetzt;
+  }
+
+  const gruenderFrei = () => Math.max(0, GRUENDER.plaetze - gruenderVergeben());
+
+  /* Vergibt den eigenen Platz. Gibt die Nummer zurück oder 0, wenn nichts
+     mehr frei ist oder schon einer vergeben wurde. */
+  function gruenderSichern() {
+    if (gruender().nummer) return 0;
+    if (!gruenderFrei()) return 0;
+    const nummer = gruenderVergeben() + 1;
+    const bis = new Date(NW.now().getTime());
+    bis.setMonth(bis.getMonth() + GRUENDER.monate);
+    NW.store.set({ gruender: { nummer, seit: U.isoDate(NW.now()), bis: U.isoDate(bis) } }, 'tarif');
+    return nummer;
+  }
+
+  function gruenderAufgeben() {
+    NW.store.set({ gruender: { nummer: 0, seit: '', bis: '' } }, 'tarif');
+  }
+
   /* ------------------------- Zustand ------------------------- */
 
   function aktuell() {
     const s = NW.store.get();
-    return s.tarif === 'plus' ? 'plus' : 'frei';
+    if (s.tarif === 'plus') return 'plus';
+    return gruenderAktiv() ? 'plus' : 'frei';
+  }
+
+  /* Woher Plus kommt – die Oberfläche muss beides auseinanderhalten
+     können, sonst bietet sie einem Gründer ein Abo an, das er nicht
+     braucht, oder verschweigt ihm, dass sein Jahr ausläuft. */
+  function plusQuelle() {
+    const s = NW.store.get();
+    if (s.tarif === 'plus') return 'bezahlt';
+    return gruenderAktiv() ? 'gruender' : null;
   }
 
   const istPlus = () => aktuell() === 'plus';
@@ -5216,8 +5675,10 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   const ANZEIGE_ABSTAND = 6;
 
   NW.plan = {
-    TARIFE, GRENZEN, LEISTUNGEN, NICHT_KAEUFLICH, ANZEIGEN, ANZEIGE_ABSTAND,
-    aktuell, istPlus, grenze, darf, leistung, wechseln, anzeige
+    TARIFE, GRENZEN, LEISTUNGEN, NICHT_KAEUFLICH, ANZEIGEN, ANZEIGE_ABSTAND, GRUENDER,
+    aktuell, istPlus, plusQuelle, grenze, darf, leistung, wechseln, anzeige,
+    gruender, gruenderAktiv, gruenderTageRest, gruenderVergeben, gruenderFrei,
+    gruenderSichern, gruenderAufgeben
   };
 })(window.NW = window.NW || {});
 
@@ -5605,6 +6066,174 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     hinzufuegen, liste, loeschen, oeffnen,
     freigaben, freigabeStatus, freigabeErstellen, freigabeAbrufen,
     widerrufen, freigabeLoeschen, linkFuer, allesLoeschen
+  };
+})(window.NW = window.NW || {});
+
+/* ===== recht.js ===== */
+/* =====================================================================
+   Nestwerk – Betreiberangaben und Rechtsgrundlagen
+
+   Hier steht alles an einer Stelle, was in Impressum, Datenschutz-
+   erklärung und AGB immer wieder auftaucht: wer der Anbieter ist, wie er
+   erreichbar ist, welche Preise gelten. Die Texte greifen ausschließlich
+   auf diese Werte zu. Wer umzieht, den Namen ändert oder den Preis
+   anpasst, ändert das hier – und nicht an vierzehn Stellen im Fließtext.
+
+   Was leer bleibt, wird in den Texten sichtbar als fehlende Angabe
+   markiert, statt still zu verschwinden. Ein Impressum mit einer Lücke
+   ist ein Fehler, den man sehen muss: Fehlt die ladungsfähige Anschrift
+   oder eine schnelle elektronische Kontaktmöglichkeit, ist die
+   Impressumspflicht nach § 5 DDG nicht erfüllt, und das ist abmahnbar.
+   ===================================================================== */
+(function (NW) {
+  'use strict';
+
+  const U = NW.util;
+
+  /* Die Angaben, die der Betrieb selbst setzt. Was hier steht, ist
+     Voreinstellung; überschrieben wird sie in der Anwendung unter
+     „Angaben zum Anbieter“ und liegt dann im Speicher dieses Browsers. */
+  const VORGABE = {
+    name: 'Niklas Haberberg',
+    rechtsform: 'Einzelunternehmen (Kleingewerbe)',
+    zusatz: '',                 /* etwa „Nestwerk“ als Geschäftsbezeichnung */
+    strasse: '',
+    plz: '',
+    ort: '',
+    land: 'Deutschland',
+    email: '',
+    telefon: '',
+    ustId: '',                  /* § 27a UStG – bei Kleinunternehmern meist keine */
+    kleinunternehmer: true,     /* § 19 UStG: kein Ausweis von Umsatzsteuer */
+    handelsregister: '',        /* Kleingewerbe: keins */
+    gewerbeamt: '',             /* zuständige Stelle der Gewerbeanmeldung */
+    aufsichtsbehoerde: '',      /* Datenschutz: Aufsichtsbehörde am Sitz */
+    verantwortlichMStV: '',     /* § 18 Abs. 2 MStV – Name und Anschrift */
+    stand: '2026-08-23'
+  };
+
+  /* Welche Felder wofür gebraucht werden. Grundlage für die Prüfliste
+     und für die Markierungen im Text. */
+  const PFLICHT = [
+    { feld: 'name', label: 'Name des Anbieters', wofuer: 'Impressum, Datenschutz, AGB',
+      grund: '§ 5 Abs. 1 Nr. 1 DDG, Art. 13 Abs. 1 lit. a DSGVO' },
+    { feld: 'strasse', label: 'Straße und Hausnummer', wofuer: 'Impressum',
+      grund: '§ 5 Abs. 1 Nr. 1 DDG – ladungsfähige Anschrift, kein Postfach' },
+    { feld: 'plz', label: 'Postleitzahl', wofuer: 'Impressum', grund: '§ 5 Abs. 1 Nr. 1 DDG' },
+    { feld: 'ort', label: 'Ort', wofuer: 'Impressum', grund: '§ 5 Abs. 1 Nr. 1 DDG' },
+    { feld: 'email', label: 'E-Mail-Adresse', wofuer: 'Impressum, Datenschutz, Widerruf',
+      grund: '§ 5 Abs. 1 Nr. 2 DDG – Pflichtangabe' },
+    { feld: 'telefon', label: 'Telefonnummer', wofuer: 'Impressum',
+      grund: '§ 5 Abs. 1 Nr. 2 DDG – oder ein anderes ebenso schnelles Mittel; die Rechtsprechung verlangt in der Regel die Nummer' },
+    { feld: 'gewerbeamt', label: 'Stelle der Gewerbeanmeldung', wofuer: 'Prüfliste',
+      grund: 'keine Impressumspflicht, aber nützlich für die eigene Ablage', freiwillig: true },
+    { feld: 'aufsichtsbehoerde', label: 'Datenschutz-Aufsichtsbehörde', wofuer: 'Datenschutzerklärung',
+      grund: 'Art. 13 Abs. 2 lit. d DSGVO – Hinweis auf das Beschwerderecht' }
+  ];
+
+  function angaben() {
+    const eigene = (NW.store.get().betreiber) || {};
+    return Object.assign({}, VORGABE, eigene);
+  }
+
+  function fehlt(feld) {
+    const a = angaben();
+    return !String(a[feld] || '').trim();
+  }
+
+  function fehlendeAngaben() {
+    return PFLICHT.filter((p) => !p.freiwillig && fehlt(p.feld));
+  }
+
+  /* Im Text: entweder der Wert oder eine sichtbare Lücke. */
+  function wert(feld, beschreibung) {
+    const a = angaben();
+    const v = String(a[feld] || '').trim();
+    if (v) return U.html`${v}`;
+    return U.html`<mark class="luecke" title="Diese Angabe fehlt noch">[${beschreibung || feld} eintragen]</mark>`;
+  }
+
+  function anschrift() {
+    const a = angaben();
+    return U.html`${wert('name', 'Name')}${a.zusatz ? U.html`<br>${a.zusatz}` : ''}<br>
+      ${wert('strasse', 'Straße und Hausnummer')}<br>
+      ${wert('plz', 'PLZ')} ${wert('ort', 'Ort')}<br>
+      ${a.land}`;
+  }
+
+  const anschriftZeile = () => {
+    const a = angaben();
+    return [a.name, a.strasse, [a.plz, a.ort].filter(Boolean).join(' '), a.land].filter(Boolean).join(', ');
+  };
+
+  /* ------------------------- Preise ------------------------- */
+
+  /* Preisangaben brauchen einen Gesamtpreis (§ 3 PAngV) und, bei
+     Kleinunternehmern, den Hinweis auf § 19 UStG. Beides entsteht hier
+     einmal und wird überall gleich verwendet. */
+  function preisHinweis() {
+    return angaben().kleinunternehmer
+      ? 'Im Preis ist keine Umsatzsteuer enthalten; es wird keine ausgewiesen (Kleinunternehmerregelung nach § 19 UStG).'
+      : 'Alle Preise verstehen sich als Gesamtpreise einschließlich der gesetzlichen Umsatzsteuer.';
+  }
+
+  /* ------------------------- Fassung ------------------------- */
+
+  const stand = () => U.dateDE(angaben().stand);
+
+  /* ------------------------- Was noch zu klären ist -------------------------
+
+     Punkte, die keine Textbausteine sind, sondern Entscheidungen. Sie
+     stehen in der Anwendung offen sichtbar, weil sie sonst untergehen. */
+
+  const OFFEN = [
+    {
+      titel: 'Erlaubnis nach § 34c GewO – vermutlich nicht nötig, aber zu prüfen',
+      text: 'Wer gewerbsmäßig den Abschluss von Verträgen über Wohnräume vermittelt oder die Gelegenheit dazu '
+        + 'nachweist, braucht eine Erlaubnis der Gewerbebehörde. Nestwerk führt fremde Angebote zusammen und '
+        + 'verlangt dafür kein Erfolgshonorar von Vermietenden – das spricht dagegen, dass eine Erlaubnis nötig '
+        + 'ist. Sobald aber eine Provision im Erfolgsfall fließt, sieht es anders aus. Diese Frage gehört vor '
+        + 'dem Start einmal schriftlich geklärt, am besten beim zuständigen Ordnungs- oder Gewerbeamt.'
+    },
+    {
+      titel: 'Auftragsverarbeitung mit dem Hoster',
+      text: 'Sobald die Seite bei einem Anbieter liegt, verarbeitet dieser Anbieter personenbezogene Daten – '
+        + 'mindestens die IP-Adressen der Aufrufe. Dafür braucht es einen Vertrag nach Art. 28 DSGVO. Die '
+        + 'meisten Hoster stellen ihn zum Abschluss im Kundenkonto bereit.'
+    },
+    {
+      titel: 'Verzeichnis von Verarbeitungstätigkeiten',
+      text: 'Art. 30 DSGVO verlangt es auch von kleinen Betrieben, sobald die Verarbeitung nicht nur '
+        + 'gelegentlich erfolgt – bei einer laufenden Website ist das der Fall. Es ist kein Formular für die '
+        + 'Behörde, sondern eine eigene Übersicht, die auf Verlangen vorgelegt wird.'
+    },
+    {
+      titel: 'Zahlungsabwicklung',
+      text: 'Sobald Plus bezahlt wird, kommt ein Zahlungsdienstleister ins Spiel. Er wird in der '
+        + 'Datenschutzerklärung als Empfänger genannt, und die Bestellstrecke braucht die Schaltfläche mit '
+        + 'der Aufschrift „zahlungspflichtig bestellen“ (§ 312j Abs. 3 BGB) sowie die Bestätigung des '
+        + 'Vertrags auf einem dauerhaften Datenträger (§ 312f BGB).'
+    },
+    {
+      titel: 'Gewerbeanmeldung und Finanzamt',
+      text: 'Das Kleingewerbe wird beim Gewerbeamt der Wohnsitzgemeinde angemeldet; das Finanzamt schickt '
+        + 'danach den Fragebogen zur steuerlichen Erfassung, in dem die Kleinunternehmerregelung nach § 19 UStG '
+        + 'gewählt werden kann. Sie gilt, solange der Umsatz im laufenden Jahr 100.000 Euro nicht übersteigt. '
+        + 'Wird die Grenze im Jahr überschritten, endet die Regelung ab diesem Umsatz – dann ist Umsatzsteuer '
+        + 'auszuweisen, und die Preisangaben auf der Seite müssen mit.'
+    },
+    {
+      titel: 'Diese Texte durch eine anwaltliche Prüfung schicken',
+      text: 'Was hier steht, ist mit Sorgfalt und nach den geltenden Vorschriften geschrieben, aber es ist keine '
+        + 'Rechtsberatung und ersetzt sie nicht. Vor dem ersten echten Nutzer sollte jemand mit Zulassung '
+        + 'darüber gesehen haben – vor allem AGB, Haftung und die Frage nach § 34c GewO.'
+    }
+  ];
+
+  NW.recht = {
+    VORGABE, PFLICHT, OFFEN,
+    angaben, fehlt, fehlendeAngaben, wert, anschrift, anschriftZeile,
+    preisHinweis, stand
   };
 })(window.NW = window.NW || {});
 
@@ -6146,22 +6775,21 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const a = NW.plan.anzeige(schluessel);
     if (!a) return '';
     return h`<aside class="anzeige anzeige--${variante || 'breit'}" aria-label="Anzeige">
-      <div class="anzeige__kopf">
+      <p class="anzeige__kopf">
         <span class="anzeige__marke">Anzeige</span>
-        <button type="button" class="anzeige__warum" data-tu="warum-werbung" aria-label="Warum sehe ich das?">?</button>
-      </div>
-      <div class="anzeige__koerper">
+        <span class="anzeige__art">${a.art}</span>
+        <button type="button" class="anzeige__warum" data-tu="warum-werbung"
+          title="Warum sehe ich das?" aria-label="Warum sehe ich das?">?</button>
+      </p>
+      <button type="button" class="anzeige__inhalt" data-tu="anzeige-klick">
         <span class="anzeige__zeichen">${ico(a.icon)}</span>
-        <div>
+        <span class="anzeige__wort">
           <b>${a.titel}</b>
-          <p>${a.text}</p>
-          <span class="anzeige__absender">${a.absender}</span>
-        </div>
-      </div>
-      <div class="anzeige__fuss">
-        <button type="button" class="knopf knopf--klein knopf--still" data-tu="anzeige-klick">${a.ruf}</button>
-        <a class="link" href="#/plus">ohne Anzeigen lesen</a>
-      </div>
+          <i>${a.text}</i>
+          <em>${a.absender} · ${a.ruf}${ico('chevron')}</em>
+        </span>
+      </button>
+      <a class="anzeige__ohne" href="#/plus">ohne Anzeigen lesen</a>
     </aside>`;
   }
 
@@ -6344,6 +6972,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     });
 
     if (ergebnis.danach) ergebnis.danach(haupt);
+    bandZeichnen();
     /* Nur bei einem echten Ansichtswechsel nach oben – nicht bei jedem
        Neuaufbau derselben Seite. */
     if (wechsel && !erzwingen) scrolleSofort(0);
@@ -6456,6 +7085,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         </div>
       </div>
     </header>
+    <div id="band"></div>
     <main id="haupt" tabindex="-1"></main>
     <nav class="unten" aria-label="Hauptbereiche">
       ${NAV.filter((n) => n.unten).map((n) => h`<a href="#/${n.route}" data-route="${n.route}">
@@ -6468,9 +7098,19 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       <p class="fuss__hinweis">Vorführfassung mit erzeugtem Beispielbestand. Alle Angaben, Anbieter und Adressen sind erfunden.
       Rechtliche Erläuterungen sind allgemeine Hinweise und ersetzen keine Beratung.
       Deine Eingaben bleiben im Browser dieses Geräts.</p>
+      <p class="fuss__links fuss__links--recht">
+        <a href="#/recht/impressum">Impressum</a>
+        <a href="#/recht/datenschutz">Datenschutz</a>
+        <a href="#/recht/agb">AGB</a>
+        <a href="#/recht/widerruf">Widerruf</a>
+        <a href="#/recht/kuendigen">Verträge kündigen</a>
+        <a href="#/recht/melden">Inhalt melden</a>
+        <a href="#/recht/barrierefreiheit">Barrierefreiheit</a>
+      </p>
       <p class="fuss__links">
         <a href="#/plus">Tarife</a>
         <a href="#/werkzeuge">Werkzeuge</a>
+        <a href="#/tresor">Dokumententresor</a>
         <button type="button" class="link" data-tu="hilfe">Tastaturbefehle</button>
         <button type="button" class="link" data-tu="daten">Meine Daten</button>
       </p>
@@ -6478,6 +7118,47 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     <div id="dialog" class="dialog" hidden></div>
     <div id="toasts" class="toasts" aria-live="polite"></div>
     <div id="palette" class="palette" hidden></div>`;
+  }
+
+  /* Ein schmales Band unter der Kopfzeile für Dinge, die ihre Zeit haben:
+     derzeit nur der Hinweis, dass ein Gründerjahr zu Ende geht. Wer vier
+     Wochen vorher Bescheid weiß, wird von nichts überrascht – und genau
+     das ist der Unterschied zu einem Abo, das sich still verlängert. */
+  function bandZeichnen() {
+    const el = U.$('#band');
+    if (!el) return;
+    const P = NW.plan;
+    const s = NW.store.get();
+    const g = P.gruender();
+    let inhalt = '';
+
+    if (g.nummer && P.gruenderAktiv() && P.gruenderTageRest() <= 28) {
+      const tage = P.gruenderTageRest();
+      const weg = s.hinweiseGelesen['gruenderEnde'];
+      /* „in 12 Tagen“, nicht „in 12 Tage“ – die Zeitangabe steht im Dativ. */
+      const wann = tage <= 1 ? 'morgen' : 'in ' + tage + ' Tagen';
+      if (!weg || U.daysSince(weg) >= 7) {
+        inhalt = h`<div class="band band--hinweis">
+          ${ico('verlauf')}
+          <p><b>Dein Gründerjahr endet ${wann}</b>, am ${U.dateDE(g.bis)}.
+            Danach läuft nichts weiter und es wird nichts abgebucht – der freie Tarif steht dir offen, Plus nur,
+            wenn du dich aktiv dafür entscheidest.</p>
+          <a class="knopf knopf--klein" href="#/plus">Tarife ansehen</a>
+          <button type="button" class="ikon-btn" data-tu="band-zu" data-was="gruenderEnde"
+            aria-label="Hinweis ausblenden">${ico('x')}</button>
+        </div>`;
+      }
+    } else if (g.nummer && !P.gruenderAktiv() && !s.hinweiseGelesen['gruenderVorbei']) {
+      inhalt = h`<div class="band">
+        ${ico('info')}
+        <p><b>Dein Gründerjahr ist abgelaufen.</b> Merkliste, Profil und Notizen sind vollständig erhalten;
+          nur die Plus-Funktionen ruhen.</p>
+        <a class="knopf knopf--klein" href="#/plus">Weitermachen</a>
+        <button type="button" class="ikon-btn" data-tu="band-zu" data-was="gruenderVorbei"
+          aria-label="Hinweis ausblenden">${ico('x')}</button>
+      </div>`;
+    }
+    el.innerHTML = String(inhalt);
   }
 
   function aktualisiereZaehler() {
@@ -6569,7 +7250,13 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         { route: 'uebergabe', label: 'Übergabeprotokoll', icon: 'schluessel' },
         { route: 'tresor', label: 'Dokumententresor', icon: 'schloss' },
         { route: 'markt', label: 'Marktdaten und Preisverlauf', icon: 'trend' },
-        { route: 'plus', label: 'Tarife', icon: 'plus5' }
+        { route: 'plus', label: 'Tarife', icon: 'plus5' },
+        { route: 'recht', label: 'Rechtliches', icon: 'blatt' },
+        { route: 'recht/impressum', label: 'Impressum', icon: 'info' },
+        { route: 'recht/datenschutz', label: 'Datenschutz', icon: 'schloss' },
+        { route: 'recht/agb', label: 'AGB', icon: 'blatt' },
+        { route: 'recht/widerruf', label: 'Widerruf', icon: 'zurueck' },
+        { route: 'recht/kuendigen', label: 'Verträge kündigen', icon: 'x' }
       ]).forEach((nav) => {
         if (!n || U.norm(nav.label).indexOf(n) >= 0) out.push({ art: 'bereich', label: nav.label, icon: nav.icon, ziel: nav.route });
       });
@@ -6674,8 +7361,19 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
     'plus-beenden'() {
       NW.plan.wechseln('frei');
-      toast('Zurück im freien Tarif.');
+      if (NW.plan.plusQuelle() === 'gruender') {
+        /* Ein bezahltes Abo lässt sich beenden, ein Gründerplatz nicht
+           nebenbei – er ist keine Zahlung, sondern eine Zusage. */
+        toast('Der bezahlte Vertrag ist beendet. Plus läuft über deinen Gründerplatz weiter.', 'gut');
+      } else {
+        toast('Zurück im freien Tarif.');
+      }
       neuZeichnen();
+    },
+
+    'band-zu'(el) {
+      NW.store.update((s) => { s.hinweiseGelesen[el.dataset.was] = U.isoDate(NW.now()); }, 'hinweis');
+      bandZeichnen();
     },
 
     'warum-werbung'() {
@@ -6997,6 +7695,16 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           </div>
         </header>
 
+        ${!P.gruender().nummer && P.gruenderFrei() ? h`<section class="gruender gruender--schmal">
+          <div class="gruender__marke">${ico('stern')}Gründerplätze</div>
+          <h2>Die ersten ${U.num(P.GRUENDER.plaetze)} bekommen Plus ein Jahr geschenkt</h2>
+          <p>Noch <b>${U.num(P.gruenderFrei())}</b> ${U.plural(P.gruenderFrei(), 'Platz', 'Plätze')} frei.
+            Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.</p>
+          <p class="werkzeug__weiter">
+            <a class="knopf" href="#/plus">${ico('stern')}Platz sichern</a>
+            <a class="link" href="#/plus">was Plus enthält</a></p>
+        </section>` : ''}
+
         ${tun.length ? h`<section class="block block--betont">
           <h2>${ico('check')}Als Nächstes</h2>
           <ul class="aufgaben">
@@ -7028,6 +7736,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
               <b>Ringtausch statt Sackgasse</b>
               <p>Der direkte Wohnungstausch scheitert am doppelten Zufall. Nestwerk sucht Ketten über mehrere
                 Haushalte – gerade sind ${ringZahl} Dreierketten offen.</p>
+              <button type="button" class="link" data-tu="ring-erklaeren">in vier Bildern erklärt</button>
               <a class="link" href="#/tausch">Ketten ansehen</a></article>
             <article><span class="vorteile__zeichen">${ico('waage')}</span>
               <b>Preis mit Vergleichswert</b>
@@ -8902,6 +9611,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p class="seite__unter">Beim direkten Tausch müssen zwei Menschen exakt das Gegenteil voneinander wollen –
             das passiert fast nie. In einer Kette reicht es, wenn jeder die Wohnung des Nächsten möchte.
             Nestwerk durchsucht alle Angebote nach solchen geschlossenen Ketten.</p>
+          <p class="werkzeug__weiter">
+            <button type="button" class="knopf knopf--still" data-tu="ring-erklaeren">
+              ${ico('ring')}In vier Bildern erklärt</button></p>
         </header>
 
         ${meinAngebot()}
@@ -8956,6 +9668,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           </ol>
           <p class="fein">Ein Anspruch auf Zustimmung besteht nicht. Manche Vermieter verlangen dieselben
             Unterlagen wie bei jeder Neuvermietung – die Bewerbermappe im Profil hilft auch hier.</p>
+          <p class="werkzeug__weiter">
+            <button type="button" class="knopf knopf--klein knopf--still" data-tu="ring-erklaeren">
+              ${ico('ring')}Das Ganze als Bild</button></p>
         </section>
 
         <section class="block">
@@ -9000,6 +9715,63 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="kopieren" data-quelle="#ring-text">${ico('kopieren')}Kopieren</button>
         <button type="button" class="knopf" data-tu="dialog-zu">Schließen</button>`
     });
+  });
+
+  /* ------------------------- Ringtausch erklärt -------------------------
+     Ein Dialog, vier Bilder. Der Inhalt wird an Ort und Stelle getauscht
+     statt einen neuen Dialog zu öffnen – sonst springt der Fokus bei
+     jedem Schritt zurück an den Anfang. */
+
+  let schritt = 0;
+
+  function erklaerungInhalt() {
+    const s = NW.ringBild.SCHRITTE[schritt];
+    return h`<div class="ringerklaerung">
+      <ol class="ringerklaerung__punkte">
+        ${NW.ringBild.SCHRITTE.map((x, i) => h`<li class="${i === schritt ? 'is-an' : i < schritt ? 'is-durch' : ''}">
+          <button type="button" data-tu="ring-schritt" data-n="${i}"
+            aria-current="${i === schritt ? 'step' : 'false'}"><span class="nur-sr">Schritt ${i + 1}: ${x.titel}</span></button>
+        </li>`)}
+      </ol>
+      <figure class="ringerklaerung__bild">
+        ${raw(s.bild())}
+        <figcaption><b>${s.titel}</b> ${s.text}</figcaption>
+      </figure>
+    </div>`;
+  }
+
+  function erklaerungZeichnen() {
+    const ziel = U.$('#ring-erklaerung');
+    if (ziel) ziel.innerHTML = String(erklaerungInhalt());
+    const fuss = U.$('#ring-erklaerung-fuss');
+    if (fuss) fuss.innerHTML = String(erklaerungFuss());
+  }
+
+  function erklaerungFuss() {
+    const letzter = schritt >= NW.ringBild.SCHRITTE.length - 1;
+    return h`<button type="button" class="knopf knopf--still" data-tu="ring-schritt" data-n="${schritt - 1}"
+        ${schritt === 0 ? 'disabled' : ''}>${ico('zurueck')}Zurück</button>
+      <span class="fein">Schritt ${schritt + 1} von ${NW.ringBild.SCHRITTE.length}</span>
+      ${letzter
+        ? h`<button type="button" class="knopf" data-tu="dialog-zu">Verstanden</button>`
+        : h`<button type="button" class="knopf" data-tu="ring-schritt" data-n="${schritt + 1}">Weiter${ico('chevron')}</button>`}`;
+  }
+
+  A_('ring-erklaeren', () => {
+    schritt = 0;
+    ui.dialog({
+      titel: 'Wie ein Ringtausch funktioniert',
+      breit: true,
+      inhalt: h`<div id="ring-erklaerung">${erklaerungInhalt()}</div>`,
+      fuss: h`<div class="ringerklaerung__fuss" id="ring-erklaerung-fuss">${erklaerungFuss()}</div>`
+    });
+  });
+
+  A_('ring-schritt', (el) => {
+    const n = Number(el.dataset.n);
+    if (n < 0 || n >= NW.ringBild.SCHRITTE.length) return;
+    schritt = n;
+    erklaerungZeichnen();
   });
 
   A_('tausch-weg', () => {
@@ -11738,10 +12510,17 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       </ul>
       <div class="tarif__tun">
         ${aktiv
-        ? h`<span class="tarif__laeuft">${ico('pruefen')}aktiv${S.get().tarifSeit && id === 'plus' ? ' seit ' + U.dateDE(S.get().tarifSeit) : ''}</span>`
+        ? h`<span class="tarif__laeuft">${ico('pruefen')}aktiv${id === 'plus' && P.plusQuelle() === 'gruender'
+          ? ' über deinen Gründerplatz, noch ' + P.gruenderTageRest() + ' ' + U.plural(P.gruenderTageRest(), 'Tag', 'Tage')
+          : S.get().tarifSeit && id === 'plus' ? ' seit ' + U.dateDE(S.get().tarifSeit) : ''}</span>`
         : id === 'plus'
           ? h`<button type="button" class="knopf knopf--voll" data-tu="plus-buchen">${ico('plus5')}Plus aktivieren</button>`
-          : h`<button type="button" class="knopf knopf--still knopf--voll" data-tu="plus-beenden">Zum freien Tarif zurück</button>`}
+          : P.plusQuelle() === 'gruender'
+            /* Ein Gründerplatz lässt sich nicht „beenden“ wie ein Abo –
+               es gibt nichts zu kündigen. Ihn zurückzugeben ist eine
+               eigene Entscheidung und gehört nicht hinter diesen Knopf. */
+            ? h`<a class="knopf knopf--still knopf--voll" href="#/recht/kuendigen">Gründerplatz zurückgeben</a>`
+            : h`<button type="button" class="knopf knopf--still knopf--voll" data-tu="plus-beenden">Zum freien Tarif zurück</button>`}
       </div>
     </article>`;
   }
@@ -11781,6 +12560,76 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     </div>`;
   }
 
+  /* ------------------------- Gründerplätze -------------------------
+
+     Der Block steht ganz oben, weil ein Jahr geschenktes Plus die einzige
+     Zahl auf dieser Seite ist, die jemanden zum Handeln bringt. Er sagt
+     zugleich, was er nicht ist: kein Abo, keine Karte, keine stille
+     Verlängerung. Wer das verschweigt, verkauft ein Abo im Gewand eines
+     Geschenks – und genau das will Nestwerk nicht sein. */
+
+  function gruenderBlock() {
+    const g = P.GRUENDER;
+    const meiner = P.gruender();
+    const frei = P.gruenderFrei();
+    const anteil = Math.min(100, Math.round(P.gruenderVergeben() / g.plaetze * 100));
+
+    if (meiner.nummer) {
+      const tage = P.gruenderTageRest();
+      const laeuft = P.gruenderAktiv();
+      return h`<section class="gruender ${laeuft ? 'is-aktiv' : 'is-abgelaufen'}">
+        <div class="gruender__marke">${ico('stern')}Gründerplatz ${U.num(meiner.nummer)} von ${U.num(g.plaetze)}</div>
+        <h2>${laeuft ? 'Plus läuft für dich – noch ' + tage + ' ' + U.plural(tage, 'Tag', 'Tage')
+        : 'Dein Gründerjahr ist abgelaufen'}</h2>
+        <p>${laeuft
+        ? 'Kostenlos bis zum ' + U.dateDE(meiner.bis) + '. Danach endet der Platz von selbst: keine Verlängerung, '
+        + 'keine Abbuchung, keine Kündigung nötig. Du entscheidest dann neu.'
+        : 'Am ' + U.dateDE(meiner.bis) + ' ist dein Jahr zu Ende gegangen. Merkliste, Profil, Notizen und '
+        + 'Suchaufträge sind vollständig erhalten – nur die Plus-Funktionen ruhen.'}</p>
+        ${laeuft ? h`<p class="gruender__balken" role="img"
+          aria-label="Noch ${tage} von ${g.monate} Monaten">
+          <span style="width:${Math.max(2, Math.round(tage / (g.monate * 30.4) * 100))}%"></span></p>` : ''}
+        <p class="werkzeug__weiter">
+          ${laeuft
+        ? h`<a class="knopf knopf--still" href="#/recht/kuendigen">${ico('info')}Platz zurückgeben</a>`
+        : h`<button type="button" class="knopf" data-tu="plus-buchen">${ico('plus5')}Plus weiterführen</button>`}
+        </p>
+      </section>`;
+    }
+
+    if (!frei) {
+      return h`<section class="gruender is-leer">
+        <div class="gruender__marke">${ico('stern')}Gründerplätze</div>
+        <h2>Alle ${U.num(g.plaetze)} Plätze sind vergeben</h2>
+        <p>Das Kontingent ist erschöpft. Der freie Tarif bleibt vollständig nutzbar – alles, was schützt und
+          gerechnet werden muss, war nie hinter der Bezahlschranke.</p>
+      </section>`;
+    }
+
+    return h`<section class="gruender">
+      <div class="gruender__marke">${ico('stern')}Gründerplätze</div>
+      <h2>Die ersten ${U.num(g.plaetze)} bekommen Plus ein Jahr geschenkt</h2>
+      <p>Ein volles Jahr mit allen Plus-Funktionen, ohne Bezahlung. <b>Kein Abo:</b> keine Zahlungsdaten, keine
+        stille Verlängerung, keine Kündigung nötig. Nach ${g.monate} Monaten endet der Platz von selbst, und du
+        entscheidest neu.</p>
+      <p class="gruender__balken" role="img"
+        aria-label="${U.num(P.gruenderVergeben())} von ${U.num(g.plaetze)} Plätzen vergeben">
+        <span style="width:${Math.max(2, anteil)}%"></span></p>
+      <p class="gruender__zahl"><b>${U.num(frei)}</b> ${U.plural(frei, 'Platz', 'Plätze')} noch frei
+        <i>· ${U.num(P.gruenderVergeben())} vergeben</i></p>
+      <p class="werkzeug__weiter">
+        <button type="button" class="knopf knopf--gross" data-tu="gruender-sichern">
+          ${ico('stern')}Platz sichern – ${g.monate} Monate Plus, 0 €</button>
+      </p>
+      <p class="fein">Mit dem Sichern gelten die <a href="#/recht/agb">Geschäftsbedingungen</a>, insbesondere § 6.
+        Ein Widerrufsrecht besteht nicht, weil keine Zahlungspflicht entsteht – beenden lässt sich der Platz
+        trotzdem jederzeit.</p>
+      <p class="fein gruender__demo">${ico('info')}In dieser Vorführung gibt es keinen Server, der die Plätze
+        zentral zählt. Der Zähler oben ist deshalb eine Hochrechnung aus der Zeit seit dem Start, keine
+        Messung. Im Betrieb vergibt der Server jede Nummer genau einmal.</p>
+    </section>`;
+  }
+
   function ansicht() {
     const s = S.get();
     const spar = ersparnis();
@@ -11793,6 +12642,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             <b>Plus bezahlt Zeitersparnis bei häufiger Nutzung – nie einen Vorteil gegenüber anderen Bewerbern.</b>
             Was dich schützt und was gerechnet werden muss, bleibt kostenlos.</p>
         </header>
+
+        ${gruenderBlock()}
 
         <div class="tarifschalter" role="group" aria-label="Zahlungsweise">
           <button type="button" class="${intervall === 'monat' ? 'is-an' : ''}" data-tu="tarif-intervall" data-wert="monat">monatlich</button>
@@ -11853,6 +12704,13 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
                 Bei der Vergabe selbst hat Plus keinerlei Gewicht. Vermieter sehen nicht, welchen Tarif du hast.</p>
             </details>
             <details>
+              <summary>Was passiert nach dem Gründerjahr?</summary>
+              <p>Es endet. Ohne Rechnung, ohne Abbuchung, ohne dass du kündigen müsstest – ein Gründerplatz ist
+                kein Abo, das sich stillschweigend in ein bezahltes verwandelt. Vier Wochen vorher weist
+                Nestwerk darauf hin. Wer dann weitermachen will, entscheidet sich aktiv dafür; wer nichts tut,
+                nutzt den freien Tarif weiter.</p>
+            </details>
+            <details>
               <summary>Kann ich Plus erst ausprobieren?</summary>
               <p>In dieser Vorführung ist Plus mit einem Klick an- und abschaltbar, damit du beide Welten
                 vergleichen kannst. Im Betrieb wären die ersten vierzehn Tage kostenlos und ohne Zahlungsdaten.</p>
@@ -11872,6 +12730,27 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   const A_ = ui.aktionRegistrieren;
 
   A_('tarif-intervall', (el) => { intervall = el.dataset.wert; ui.neuZeichnen(); });
+
+  A_('gruender-sichern', () => {
+    const nummer = P.gruenderSichern();
+    if (!nummer) { ui.toast('Es ist kein Platz mehr frei.', 'schlecht'); ui.neuZeichnen(); return; }
+    ui.neuZeichnen();
+    ui.dialog({
+      titel: 'Gründerplatz ' + U.num(nummer),
+      inhalt: h`<p><b>Plus läuft ab sofort für ${P.GRUENDER.monate} Monate</b>, bis zum
+          ${U.dateDE(P.gruender().bis)}.</p>
+        <ul class="pruef">
+          <li>${ico('pruefen')}<span>Keine Zahlungsdaten hinterlegt und keine nötig.</span></li>
+          <li>${ico('pruefen')}<span>Keine automatische Verlängerung. Der Platz endet von selbst.</span></li>
+          <li>${ico('pruefen')}<span>Vier Wochen vor Ablauf erinnert dich Nestwerk – rechtzeitig genug, um in
+            Ruhe zu entscheiden.</span></li>
+          <li>${ico('pruefen')}<span>Jederzeit zurückgebbar, ohne Begründung.</span></li>
+        </ul>
+        <p class="fein">Es gilt § 6 der <a href="#/recht/agb">Geschäftsbedingungen</a>.</p>`,
+      fuss: h`<a class="knopf knopf--still" href="#/werkzeuge" data-tu="dialog-zu">Werkzeuge ansehen</a>
+        <button type="button" class="knopf" data-tu="dialog-zu">Los geht's</button>`
+    });
+  });
 
   A_('plus-buchen', () => {
     P.wechseln('plus', intervall);
@@ -12514,6 +13393,913 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   ui.ansichten.freigabe = freigabeAnsicht;
   NW.viewTresor = { laden, freigabeDialog, freigabeAbschnitt, verweisJeEmpfaenger,
     geoeffnet: [], letzterLink: '', artName };
+})(window.NW = window.NW || {});
+
+/* ===== view-recht.js ===== */
+/* =====================================================================
+   Nestwerk – Ansicht: Rechtliches
+
+   Ein Bereich, mehrere Dokumente: #/recht zeigt die Übersicht,
+   #/recht/impressum, /datenschutz, /agb, /widerruf, /melden,
+   /barrierefreiheit, /kuendigen und /angaben die einzelnen Seiten.
+
+   Die Texte stehen ausformuliert im Quelltext und nicht in einer
+   Datenstruktur. Rechtstexte werden gelesen, nicht ausgewertet – und wer
+   sie ändern muss, findet sie so an der Stelle, an der sie auch stehen.
+   ===================================================================== */
+(function (NW) {
+  'use strict';
+
+  const U = NW.util, ui = NW.ui, R = NW.recht, P = NW.plan, S = NW.store;
+  const h = U.html, raw = U.raw, ico = U.svg;
+
+  const SEITEN = [
+    { id: 'impressum', name: 'Impressum', icon: 'info',
+      unter: 'Wer die Seite betreibt und wie er erreichbar ist – Pflichtangaben nach § 5 DDG.' },
+    { id: 'datenschutz', name: 'Datenschutzerklärung', icon: 'schloss',
+      unter: 'Welche Daten verarbeitet werden, auf welcher Grundlage und welche Rechte du hast.' },
+    { id: 'agb', name: 'Allgemeine Geschäftsbedingungen', icon: 'blatt',
+      unter: 'Was Nestwerk leistet, was es kostet und was gilt, wenn etwas schiefgeht.' },
+    { id: 'widerruf', name: 'Widerrufsbelehrung', icon: 'zurueck',
+      unter: 'Vierzehn Tage Widerrufsrecht bei bezahlten Verträgen, mit Musterformular.' },
+    { id: 'melden', name: 'Rechtswidrige Inhalte melden', icon: 'warnung',
+      unter: 'Meldeweg nach Art. 16 der Verordnung über digitale Dienste.' },
+    { id: 'barrierefreiheit', name: 'Barrierefreiheit', icon: 'person',
+      unter: 'Was umgesetzt ist, was fehlt und wo Rückmeldung ankommt.' },
+    { id: 'kuendigen', name: 'Verträge hier kündigen', icon: 'x',
+      unter: 'Die Schaltfläche, die § 312k BGB verlangt – ohne Umweg über den Kundendienst.' }
+  ];
+
+  /* ================================================================
+     Bausteine
+     ================================================================ */
+
+  const rw = (feld, beschreibung) => R.wert(feld, beschreibung);
+
+  function kopf(titel, unter) {
+    return h`<header class="seite__kopf">
+      <p class="rechtspfad"><a href="#/recht">${ico('zurueck')}Rechtliches</a></p>
+      <h1>${titel}</h1>
+      ${unter ? h`<p class="seite__unter">${unter}</p>` : ''}
+      <p class="fein">Fassung vom ${R.stand()}</p>
+    </header>`;
+  }
+
+  function luecken() {
+    const f = R.fehlendeAngaben();
+    if (!f.length) return '';
+    return h`<div class="block block--warn">
+      <h2>${ico('warnung')}${f.length} ${U.plural(f.length, 'Pflichtangabe fehlt', 'Pflichtangaben fehlen')} noch</h2>
+      <p>Solange sie fehlen, ist dieses Dokument nicht vollständig. Im Text stehen die Lücken markiert.</p>
+      <ul class="pruef">
+        ${f.map((x) => h`<li>${ico('warnung')}<span><b>${x.label}</b> – ${x.grund}</span></li>`)}
+      </ul>
+      <p class="werkzeug__weiter"><a class="knopf knopf--klein" href="#/recht/angaben">${ico('stift')}Angaben ergänzen</a></p>
+    </div>`;
+  }
+
+  /* ================================================================
+     Übersicht
+     ================================================================ */
+
+  function uebersicht() {
+    const f = R.fehlendeAngaben();
+    return {
+      titel: 'Rechtliches',
+      html: h`<div class="seite seite--schmal">
+        <header class="seite__kopf">
+          <h1>${ico('blatt')}Rechtliches</h1>
+          <p class="seite__unter">Anbieter, Datenschutz, Geschäftsbedingungen und Widerruf – die Angaben, die
+            eine Seite in Deutschland führen muss, und die, die man führen sollte.</p>
+        </header>
+
+        <div class="hinweisbox">${ico('warnung')}
+          <div><b>Diese Texte sind ein Entwurf, keine Rechtsberatung</b>
+          <p>Sie sind nach den geltenden Vorschriften geschrieben – Digitale-Dienste-Gesetz, DSGVO, BGB,
+            Verordnung über digitale Dienste – und decken ab, was ein Kleingewerbe mit einer solchen Seite
+            braucht. Aber sie ersetzen nicht den Blick von jemandem mit Zulassung. Vor dem ersten echten
+            Nutzer gehören vor allem die Geschäftsbedingungen, die Haftung und die Frage nach einer Erlaubnis
+            gemäß § 34c GewO geprüft.</p></div>
+        </div>
+
+        ${f.length ? h`<div class="block block--warn">
+          <h2>${ico('warnung')}Noch ${f.length} ${U.plural(f.length, 'Angabe fehlt', 'Angaben fehlen')}</h2>
+          <p>Ein Impressum ohne ladungsfähige Anschrift oder ohne schnelle Kontaktmöglichkeit erfüllt die
+            Pflicht aus § 5 DDG nicht – und das ist abmahnbar. Die Lücken sind in allen Dokumenten sichtbar
+            markiert, damit sie nicht untergehen.</p>
+          <ul class="pruef">
+            ${f.map((x) => h`<li>${ico('warnung')}<span><b>${x.label}</b><br>${x.grund}</span></li>`)}
+          </ul>
+          <p class="werkzeug__weiter">
+            <a class="knopf" href="#/recht/angaben">${ico('stift')}Jetzt eintragen</a></p>
+        </div>` : h`<p class="gut-meldung">${ico('pruefen')}Alle Pflichtangaben sind eingetragen.
+          <a href="#/recht/angaben">Ändern</a></p>`}
+
+        <div class="werkzeuge">
+          ${SEITEN.map((s) => h`<a class="werkzeugkachel" href="#/recht/${s.id}">
+            <span class="werkzeugkachel__zeichen">${ico(s.icon)}</span>
+            <b>${s.name}</b>
+            <p>${s.unter}</p>
+          </a>`)}
+          <a class="werkzeugkachel" href="#/recht/angaben">
+            <span class="werkzeugkachel__zeichen">${ico('stift')}</span>
+            <b>Angaben zum Anbieter</b>
+            <p>Name, Anschrift, Kontakt und Steuerstatus – von hier speisen sich alle Dokumente.</p>
+          </a>
+        </div>
+
+        <section class="block">
+          <h2>${ico('liste')}Was vor dem Start noch zu klären ist</h2>
+          <p class="block__unter">Punkte, die kein Textbaustein löst, sondern eine Entscheidung.</p>
+          ${R.OFFEN.map((o) => h`<details class="rechtsfrage">
+            <summary>${o.titel}</summary>
+            <p>${o.text}</p>
+          </details>`)}
+        </section>
+      </div>`
+    };
+  }
+
+  /* ================================================================
+     Impressum
+     ================================================================ */
+
+  function impressum() {
+    const a = R.angaben();
+    return {
+      titel: 'Impressum',
+      html: h`<div class="seite seite--schmal">
+        ${kopf('Impressum', 'Angaben gemäß § 5 des Digitale-Dienste-Gesetzes (DDG).')}
+        ${luecken()}
+        <div class="block rechtstext">
+          <h2>Anbieter</h2>
+          <p class="rechtstext__adresse">${R.anschrift()}</p>
+          <p class="fein">Rechtsform: ${a.rechtsform}.
+            ${a.handelsregister ? 'Registereintrag: ' + a.handelsregister + '.'
+        : 'Ein Eintrag im Handelsregister besteht nicht; als Kleingewerbe besteht dazu keine Pflicht.'}</p>
+
+          <h2>Kontakt</h2>
+          <dl class="rechtsliste">
+            <dt>E-Mail</dt><dd>${rw('email', 'E-Mail-Adresse')}</dd>
+            <dt>Telefon</dt><dd>${rw('telefon', 'Telefonnummer')}</dd>
+          </dl>
+          <p class="fein">§ 5 Abs. 1 Nr. 2 DDG verlangt Angaben, die eine schnelle elektronische Kontaktaufnahme
+            und unmittelbare Kommunikation ermöglichen. Die E-Mail-Adresse ist dafür Pflicht; die Nummer ist
+            der übliche zweite Weg.</p>
+
+          <h2>Umsatzsteuer</h2>
+          ${a.ustId
+        ? h`<p>Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz: <b>${a.ustId}</b></p>`
+        : h`<p>Es besteht keine Umsatzsteuer-Identifikationsnummer. ${R.preisHinweis()}</p>`}
+          <p class="fein">Die Steuernummer ist keine Pflichtangabe im Impressum und wird hier bewusst nicht
+            veröffentlicht.</p>
+
+          <h2>Verantwortlich für redaktionelle Inhalte</h2>
+          <p>Gemäß § 18 Abs. 2 des Medienstaatsvertrags:
+            ${a.verantwortlichMStV ? h`${a.verantwortlichMStV}` : h`${rw('name', 'Name')}, Anschrift wie oben`}</p>
+
+          <h2>Verbraucherstreitbeilegung</h2>
+          <p>Der Anbieter ist weder bereit noch verpflichtet, an Streitbeilegungsverfahren vor einer
+            Verbraucherschlichtungsstelle teilzunehmen (§ 36 Verbraucherstreitbeilegungsgesetz).</p>
+          <p class="fein">Ein Hinweis auf die Online-Streitbeilegungsplattform der Europäischen Kommission
+            entfällt: Die Plattform wurde zum 20. Juli 2025 eingestellt. Verweise darauf sind seitdem
+            gegenstandslos und sollten von Websites entfernt werden.</p>
+
+          <h2>Erlaubnispflicht</h2>
+          <p>Nestwerk führt Angebote Dritter zusammen und stellt Werkzeuge zur Prüfung und Bewertung bereit.
+            Der Anbieter vermittelt keine Miet- oder Kaufverträge und erhält von Vermietenden oder
+            Verkaufenden im Erfolgsfall keine Provision. Eine Erlaubnis nach § 34c Gewerbeordnung ist danach
+            nicht erforderlich.</p>
+
+          <h2>Haftung für Inhalte und Verweise</h2>
+          <p>Für eigene Inhalte ist der Anbieter nach den allgemeinen Gesetzen verantwortlich. Für Angebote,
+            die Nutzende einstellen, gelten die Vorschriften der Verordnung (EU) 2022/2065 über digitale
+            Dienste: Der Anbieter ist nicht verpflichtet, sie allgemein zu überwachen, entfernt sie aber
+            unverzüglich, sobald er von einer Rechtsverletzung Kenntnis erlangt.
+            <a href="#/recht/melden">Hier lässt sich ein Inhalt melden.</a></p>
+          <p>Für Inhalte verlinkter Seiten ist deren Betreiber verantwortlich. Zum Zeitpunkt der Verlinkung
+            waren keine Rechtsverstöße erkennbar.</p>
+
+          <h2>Urheberrecht</h2>
+          <p>Aufbau, Texte, Grafiken und Quelltext dieser Anwendung sind urheberrechtlich geschützt.
+            Vervielfältigung, Bearbeitung und Verbreitung bedürfen der Zustimmung des Anbieters, soweit das
+            Urheberrechtsgesetz nichts anderes erlaubt.</p>
+        </div>
+      </div>`
+    };
+  }
+
+  /* ================================================================
+     Datenschutzerklärung
+     ================================================================ */
+
+  function datenschutz() {
+    const a = R.angaben();
+    return {
+      titel: 'Datenschutzerklärung',
+      html: h`<div class="seite seite--schmal">
+        ${kopf('Datenschutzerklärung', 'Informationen nach Artikel 13 und 14 der Datenschutz-Grundverordnung.')}
+        ${luecken()}
+
+        <div class="block block--betont">
+          <h2>${ico('schloss')}Das Wichtigste zuerst</h2>
+          <p>Nestwerk rechnet vollständig im Browser. Suche, Bewertung, Karte, Ringtausch, Merkliste und
+            Profil entstehen auf deinem Gerät und bleiben dort. Es gibt kein Nutzerkonto, keine Übertragung
+            deiner Eingaben an den Anbieter und keine Weitergabe an Dritte.</p>
+          <p>Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten
+            gebildet und keine Werbung nach deinen Interessen ausgespielt. Deshalb erscheint auch kein Fenster,
+            das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.</p>
+        </div>
+
+        <div class="block rechtstext">
+          <h2>1. Verantwortlicher</h2>
+          <p>Verantwortlich im Sinne von Art. 4 Nr. 7 DSGVO ist:</p>
+          <p class="rechtstext__adresse">${R.anschrift()}</p>
+          <p>E-Mail: ${rw('email', 'E-Mail-Adresse')} · Telefon: ${rw('telefon', 'Telefonnummer')}</p>
+
+          <h2>2. Datenschutzbeauftragter</h2>
+          <p>Ein Datenschutzbeauftragter ist nicht bestellt. Nach § 38 Abs. 1 BDSG besteht dazu keine Pflicht,
+            weil in der Regel weniger als zwanzig Personen ständig mit der automatisierten Verarbeitung
+            personenbezogener Daten beschäftigt sind und keine Verarbeitung stattfindet, die eine
+            Datenschutz-Folgenabschätzung erfordert.</p>
+
+          <h2>3. Aufruf der Seite (Server-Protokolle)</h2>
+          <p>Beim Aufruf überträgt dein Browser technisch notwendige Daten an den Server, auf dem die Seite
+            liegt: IP-Adresse, Datum und Uhrzeit, aufgerufene Datei, übertragene Datenmenge, Browsertyp und
+            Betriebssystem sowie die zuvor besuchte Seite.</p>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Auslieferung der Seite, Betriebssicherheit, Abwehr von Angriffen</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. f DSGVO – berechtigtes Interesse an einem
+              störungsfreien und sicheren Betrieb</dd>
+            <dt>Speicherdauer</dt><dd>in der Regel sieben Tage, danach automatische Löschung</dd>
+            <dt>Empfänger</dt><dd>der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO</dd>
+          </dl>
+
+          <h2>4. Speicher deines Browsers</h2>
+          <p>Nestwerk legt deine Eingaben im lokalen Speicher deines Browsers ab – Profil, Merkliste,
+            Suchaufträge, Nachrichten, eigene Inserate und die Einstellungen zur Darstellung. Diese Daten
+            verlassen dein Gerät nicht. Der Anbieter hat keinen Zugriff darauf.</p>
+          <p>Für den Zugriff auf diesen Speicher ist keine Einwilligung erforderlich: Er ist unbedingt
+            erforderlich, damit der von dir ausdrücklich gewünschte Dienst überhaupt funktioniert
+            (§ 25 Abs. 2 Nr. 2 des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes). Cookies zu
+            Werbe- oder Analysezwecken werden nicht gesetzt.</p>
+          <p>Du kannst diese Daten jederzeit im Fußbereich unter „Meine Daten“ als Datei sichern oder
+            vollständig löschen. Sie verschwinden ebenfalls, wenn du die Browserdaten löschst.</p>
+
+          <h2>5. Dokumententresor</h2>
+          <p>Legst du Unterlagen im Dokumententresor ab, werden sie <b>vor dem Speichern</b> in deinem Browser
+            verschlüsselt – mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem Kennwort und wird
+            nirgends gespeichert. Verschlüsselt werden auch die Dateinamen.</p>
+          <p>Gibst du Unterlagen frei, wird kein Anhang verschickt, sondern ein Verweis. Der Schlüssel dazu
+            steht im Fragmentteil dieses Verweises – dem Teil hinter dem Rautezeichen, den Browser
+            grundsätzlich nicht an Server übertragen. Der Anbieter kann die abgelegten Dateien deshalb auch
+            dann nicht lesen, wenn er Zugriff auf den Speicher hätte.</p>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Erfüllung des Vertrags über die Nutzung von Nestwerk</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO; für die Verschlüsselung zugleich
+              Art. 32 DSGVO – Sicherheit der Verarbeitung</dd>
+            <dt>Speicherdauer</dt><dd>bis du das Dokument löschst oder den Tresor leerst</dd>
+          </dl>
+          <p class="fein">In dieser Vorführfassung liegen auch die verschlüsselten Dateien ausschließlich in
+            deinem Browser. Im Betrieb läge dort das Chiffrat und sonst nichts.</p>
+
+          <h2>6. Werbung im freien Tarif</h2>
+          <p>Der freie Tarif wird über Anzeigen finanziert. Diese Anzeigen sind fest hinterlegt und werden
+            nach der Stelle ausgewählt, an der sie erscheinen – nicht nach deiner Person, deinem Verhalten
+            oder deinen Eingaben. Es findet kein Abgleich mit Werbenetzwerken statt, es werden keine Kennungen
+            gesetzt und es gehen keine Daten an Werbetreibende. Deshalb ist auch dafür keine Einwilligung
+            erforderlich.</p>
+          <p>Anzeigen sind stets als solche gekennzeichnet (§ 5a Abs. 4 des Gesetzes gegen den unlauteren
+            Wettbewerb) und werden nie im Erscheinungsbild eines Inserats dargestellt.</p>
+
+          <h2>7. Kontaktaufnahme</h2>
+          <p>Schreibst du per E-Mail, verarbeitet der Anbieter die Angaben aus deiner Nachricht, um sie zu
+            beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO bei vertragsbezogenen Anfragen, sonst
+            Art. 6 Abs. 1 lit. f DSGVO. Die Nachrichten werden gelöscht, sobald die Anfrage abschließend
+            bearbeitet ist und keine gesetzlichen Aufbewahrungsfristen entgegenstehen.</p>
+
+          <h2>8. Bezahlung von Nestwerk Plus</h2>
+          <p>Für bezahlte Verträge werden die zur Abwicklung nötigen Daten verarbeitet: Name, E-Mail-Adresse,
+            Zahlungsdaten sowie Beginn und Laufzeit. Die Zahlung selbst wickelt ein Zahlungsdienstleister ab,
+            an den die dafür erforderlichen Daten übermittelt werden.</p>
+          <dl class="rechtsliste">
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Vertrags; für
+              Rechnungsdaten zusätzlich Art. 6 Abs. 1 lit. c DSGVO</dd>
+            <dt>Speicherdauer</dt><dd>Rechnungsunterlagen zehn Jahre nach § 147 der Abgabenordnung und
+              § 257 des Handelsgesetzbuchs</dd>
+          </dl>
+          <p class="fein">Solange Plus nur über einen Gründerplatz vergeben wird, fallen weder Zahlungsdaten
+            noch Rechnungen an.</p>
+
+          <h2>9. Keine automatisierte Entscheidung über Personen</h2>
+          <p>Nestwerk bewertet Angebote, nicht Menschen. Die Passung, die Chancenschätzung und der Prüfhinweis
+            beziehen sich auf Wohnungen und Inseratstexte und dienen deiner eigenen Einordnung. Eine
+            automatisierte Entscheidung mit rechtlicher Wirkung gegenüber Personen im Sinne von Art. 22 DSGVO
+            findet nicht statt.</p>
+
+          <h2>10. Übermittlung in Drittländer</h2>
+          <p>Eine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des
+            Europäischen Wirtschaftsraums findet nicht statt.</p>
+
+          <h2>11. Deine Rechte</h2>
+          <ul class="pruef">
+            <li>${ico('pruefen')}<span><b>Auskunft</b> darüber, welche Daten verarbeitet werden (Art. 15 DSGVO)</span></li>
+            <li>${ico('pruefen')}<span><b>Berichtigung</b> unrichtiger Daten (Art. 16 DSGVO)</span></li>
+            <li>${ico('pruefen')}<span><b>Löschung</b> (Art. 17 DSGVO)</span></li>
+            <li>${ico('pruefen')}<span><b>Einschränkung der Verarbeitung</b> (Art. 18 DSGVO)</span></li>
+            <li>${ico('pruefen')}<span><b>Datenübertragbarkeit</b> in einem gängigen Format (Art. 20 DSGVO)</span></li>
+            <li>${ico('pruefen')}<span><b>Widerspruch</b> gegen Verarbeitungen auf Grundlage berechtigter
+              Interessen (Art. 21 DSGVO)</span></li>
+            <li>${ico('pruefen')}<span><b>Widerruf</b> einer erteilten Einwilligung mit Wirkung für die Zukunft
+              (Art. 7 Abs. 3 DSGVO)</span></li>
+          </ul>
+          <p>Für die Ausübung genügt eine formlose Nachricht an ${rw('email', 'E-Mail-Adresse')}.</p>
+          <p class="fein">Weil deine Eingaben ausschließlich in deinem Browser liegen, kannst du Auskunft,
+            Übertragbarkeit und Löschung dort unmittelbar selbst ausüben: im Fußbereich unter „Meine Daten“.</p>
+
+          <h2>12. Beschwerderecht</h2>
+          <p>Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in
+            dem Mitgliedstaat deines Aufenthaltsorts, deines Arbeitsplatzes oder des Orts des mutmaßlichen
+            Verstoßes. Für den Anbieter zuständig ist ${rw('aufsichtsbehoerde', 'zuständige Aufsichtsbehörde')}.</p>
+
+          <h2>13. Pflicht zur Bereitstellung</h2>
+          <p>Du bist nicht verpflichtet, personenbezogene Daten bereitzustellen. Ohne die Angaben im Profil
+            fallen allerdings die Funktionen weg, die darauf aufbauen – etwa die Passung oder die
+            Chancenschätzung.</p>
+
+          <h2>14. Änderungen</h2>
+          <p>Diese Erklärung gilt in der Fassung vom ${R.stand()}. Ändert sich die Anwendung, wird sie
+            angepasst.</p>
+        </div>
+      </div>`
+    };
+  }
+
+  /* ================================================================
+     AGB
+     ================================================================ */
+
+  function agb() {
+    const t = P.TARIFE.plus;
+    const g = P.GRUENDER;
+    return {
+      titel: 'Allgemeine Geschäftsbedingungen',
+      html: h`<div class="seite seite--schmal">
+        ${kopf('Allgemeine Geschäftsbedingungen', 'Für die Nutzung von Nestwerk durch Verbraucherinnen, Verbraucher und Unternehmen.')}
+        ${luecken()}
+        <div class="block rechtstext">
+
+          <h2>§ 1 Anbieter, Geltungsbereich</h2>
+          <p>(1) Anbieter von Nestwerk ist ${rw('name', 'Name')}, ${R.anschriftZeile() || ''}
+            (nachfolgend „Anbieter“). Die vollständigen Angaben stehen im <a href="#/recht/impressum">Impressum</a>.</p>
+          <p>(2) Diese Bedingungen gelten für alle Verträge über die Nutzung von Nestwerk in der jeweils bei
+            Vertragsschluss geltenden Fassung.</p>
+          <p>(3) Verbraucher ist, wer ein Rechtsgeschäft zu Zwecken abschließt, die überwiegend weder der
+            gewerblichen noch der selbständigen beruflichen Tätigkeit zugerechnet werden können (§ 13 BGB).
+            Unternehmer ist, wer dabei in Ausübung einer solchen Tätigkeit handelt (§ 14 BGB).</p>
+          <p>(4) Abweichende Bedingungen der Nutzenden werden nicht Vertragsbestandteil, es sei denn, der
+            Anbieter stimmt ihrer Geltung ausdrücklich schriftlich zu.</p>
+
+          <h2>§ 2 Gegenstand der Leistung</h2>
+          <p>(1) Nestwerk ist eine Oberfläche, die Wohnungsangebote verschiedener Art – Miete, Kauf,
+            WG-Zimmer und Wohnungstausch – zusammenführt und Werkzeuge zu ihrer Prüfung und Einordnung
+            bereitstellt.</p>
+          <p>(2) Der Anbieter <b>vermittelt keine Miet- oder Kaufverträge</b> und wird nicht Partei der
+            Verträge, die zwischen Nutzenden und Anbietenden von Wohnraum zustande kommen. Er erhält von
+            Vermietenden oder Verkaufenden keine erfolgsabhängige Vergütung.</p>
+          <p>(3) Bewertungen, Vergleichsmieten, Chancenschätzungen, Prüfhinweise und Vertragshinweise sind
+            <b>Rechenergebnisse und allgemeine Hinweise</b>. Sie beruhen auf den verfügbaren Angaben und
+            allgemein zugänglichen Rechenwerten. Sie sind weder eine Rechts- noch eine Steuer- oder
+            Anlageberatung und ersetzen eine solche nicht.</p>
+          <p>(4) Für Richtigkeit, Vollständigkeit und Aktualität von Angeboten, die Dritte einstellen, steht
+            der Anbieter nicht ein.</p>
+
+          <h2>§ 3 Zustandekommen des Vertrags</h2>
+          <p>(1) Die Nutzung des freien Tarifs kommt mit dem Aufruf der Anwendung zustande und erfordert keine
+            Anmeldung.</p>
+          <p>(2) Ein Vertrag über Nestwerk Plus kommt zustande, wenn der Anbieter die Bestellung annimmt oder
+            die Leistung freischaltet. Vor der Bestellung werden die wesentlichen Merkmale, der Gesamtpreis,
+            die Laufzeit und die Kündigungsbedingungen angezeigt. Die Schaltfläche, mit der die Bestellung
+            abgeschlossen wird, ist mit „zahlungspflichtig bestellen“ beschriftet (§ 312j Abs. 3 BGB).</p>
+          <p>(3) Der Vertragstext wird nach Abschluss auf einem dauerhaften Datenträger bestätigt
+            (§ 312f BGB). Vertragssprache ist Deutsch.</p>
+
+          <h2>§ 4 Freier Tarif und Werbung</h2>
+          <p>(1) Der freie Tarif ist dauerhaft ohne Entgelt nutzbar und über Anzeigen finanziert.</p>
+          <p>(2) Anzeigen sind stets als solche gekennzeichnet und vom übrigen Inhalt deutlich abgesetzt. Sie
+            werden nicht nach dem Verhalten oder den Eingaben der Nutzenden ausgewählt.</p>
+          <p>(3) Der Anbieter behält sich vor, Umfang und Platzierung von Anzeigen zu ändern. Die Funktionen
+            des freien Tarifs bleiben davon unberührt.</p>
+
+          <h2>§ 5 Nestwerk Plus</h2>
+          <p>(1) Nestwerk Plus umfasst die auf der <a href="#/plus">Tarifseite</a> beschriebenen Leistungen.
+            Plus verschafft <b>keinen Vorteil gegenüber anderen Bewerbenden</b>: keine bessere Platzierung in
+            Trefferlisten, keinen Vorrang bei Vermietenden, keinen früheren Zugang zu neuen Angeboten.</p>
+          <p>(2) Der Preis beträgt ${U.eur2(t.preisMonat)} im Monat oder ${U.eur2(t.preisJahr)} im Jahr.
+            ${R.preisHinweis()}</p>
+          <p>(3) Die Laufzeit beträgt je nach Wahl einen Monat oder ein Jahr und verlängert sich jeweils um
+            denselben Zeitraum, wenn nicht bis zum Ablauf gekündigt wird. Die Kündigung ist jederzeit zum
+            Ende der laufenden Laufzeit möglich, für Verbraucherinnen und Verbraucher nach Ablauf der
+            Erstlaufzeit jederzeit mit einer Frist von einem Monat (§ 309 Nr. 9 BGB).</p>
+          <p>(4) Die Kündigung ist ohne Anmeldung und ohne Umweg über den Kundendienst möglich, über die
+            Schaltfläche <a href="#/recht/kuendigen">„Verträge hier kündigen“</a> (§ 312k BGB). Eine formlose
+            Nachricht an ${rw('email', 'E-Mail-Adresse')} genügt ebenfalls.</p>
+          <p>(5) Erhöht der Anbieter den Preis, teilt er dies mindestens sechs Wochen vor Wirksamwerden in
+            Textform mit. Die Nutzenden können den Vertrag bis zum Wirksamwerden zum Zeitpunkt der Erhöhung
+            kündigen; darauf wird in der Mitteilung hingewiesen.</p>
+
+          <h2>§ 6 Gründerplätze</h2>
+          <p>(1) Der Anbieter vergibt die ersten <b>${U.num(g.plaetze)} Plätze</b> mit den Leistungen von
+            Nestwerk Plus für <b>${g.monate} Monate ohne Entgelt</b> (Gründerplatz).</p>
+          <p>(2) Der Gründerplatz ist <b>kein Abonnement</b>. Er verlängert sich nicht, geht nicht in einen
+            bezahlten Vertrag über und erfordert keine Zahlungsdaten. Nach Ablauf der ${g.monate} Monate
+            stehen die Leistungen des freien Tarifs zur Verfügung; wer Plus danach weiter nutzen möchte,
+            entscheidet sich neu.</p>
+          <p>(3) Es besteht kein Anspruch auf einen Gründerplatz. Die Vergabe erfolgt in der Reihenfolge des
+            Eingangs und endet, sobald das Kontingent erschöpft ist. Ein Gründerplatz wird je Person einmal
+            vergeben und ist nicht übertragbar.</p>
+          <p>(4) Der Anbieter kann einen Gründerplatz entziehen, wenn er durch falsche Angaben oder mehrfache
+            Anmeldung derselben Person erlangt wurde.</p>
+          <p>(5) Der Gründerplatz kann jederzeit ohne Angabe von Gründen beendet werden. Da er unentgeltlich
+            ist, entsteht dabei keine Zahlungspflicht und es besteht kein Anspruch auf Erstattung.</p>
+
+          <h2>§ 7 Pflichten der Nutzenden</h2>
+          <p>(1) Angaben, die Nutzende einstellen, müssen zutreffend sein. Insbesondere dürfen keine
+            Wohnungen angeboten werden, über die keine Verfügungsbefugnis besteht.</p>
+          <p>(2) Untersagt sind insbesondere:</p>
+          <ul class="pruef">
+            <li>${ico('x')}<span>Angebote, die es nicht gibt, sowie Zahlungsaufforderungen vor einer
+              Besichtigung</span></li>
+            <li>${ico('x')}<span>Formulierungen, die nach Herkunft, Religion, Geschlecht, Behinderung, Alter
+              oder sexueller Identität aussortieren (§§ 19, 21 Allgemeines Gleichbehandlungsgesetz)</span></li>
+            <li>${ico('x')}<span>Fragen nach Familienplanung, Religion, Parteizugehörigkeit oder Vorstrafen
+              gegenüber Bewerbenden</span></li>
+            <li>${ico('x')}<span>das automatisierte Auslesen der Anwendung sowie Versuche, ihre technischen
+              Schutzvorkehrungen zu umgehen</span></li>
+            <li>${ico('x')}<span>Inhalte, die Rechte Dritter verletzen</span></li>
+          </ul>
+          <p>(3) Nutzende halten den Anbieter von Ansprüchen Dritter frei, die auf einer schuldhaften
+            Verletzung dieser Pflichten beruhen, einschließlich angemessener Kosten der Rechtsverteidigung.</p>
+
+          <h2>§ 8 Inhalte der Nutzenden</h2>
+          <p>(1) Rechte an eingestellten Inhalten verbleiben bei den Nutzenden.</p>
+          <p>(2) Für die Dauer der Einstellung räumen Nutzende dem Anbieter das einfache, räumlich unbegrenzte
+            Recht ein, diese Inhalte im Rahmen der Anwendung anzuzeigen, technisch zu vervielfältigen und in
+            Formate umzuwandeln, die zur Darstellung nötig sind. Weitergehende Rechte werden nicht
+            eingeräumt.</p>
+          <p>(3) Mit der Löschung eines Inhalts endet das Nutzungsrecht, soweit keine gesetzlichen
+            Aufbewahrungspflichten entgegenstehen.</p>
+
+          <h2>§ 9 Entfernen von Inhalten, Sperrung, Beschwerde</h2>
+          <p>(1) Der Anbieter kann Inhalte entfernen oder den Zugang einschränken, wenn sie rechtswidrig sind
+            oder gegen § 7 verstoßen.</p>
+          <p>(2) Betroffene erhalten dazu eine <b>Begründung</b> mit Angabe des Grundes, der Tatsachengrundlage
+            und der Möglichkeiten, dagegen vorzugehen (Art. 17 der Verordnung (EU) 2022/2065).</p>
+          <p>(3) Gegen eine Entscheidung kann innerhalb von sechs Monaten formlos Beschwerde an
+            ${rw('email', 'E-Mail-Adresse')} erhoben werden. Der Anbieter entscheidet darüber unverzüglich,
+            begründet und nicht ausschließlich automatisiert.</p>
+          <p>(4) Rechtswidrige Inhalte lassen sich <a href="#/recht/melden">hier melden</a>. Meldungen werden
+            zeitnah, sorgfältig und nicht willkürlich bearbeitet (Art. 16 der Verordnung (EU) 2022/2065).</p>
+
+          <h2>§ 10 Verfügbarkeit</h2>
+          <p>(1) Der Anbieter bemüht sich um eine möglichst unterbrechungsfreie Verfügbarkeit, schuldet sie
+            aber nicht ununterbrochen. Wartungsarbeiten, Störungen der Netze Dritter und Ereignisse höherer
+            Gewalt können zu Unterbrechungen führen.</p>
+          <p>(2) Geplante Wartungsarbeiten werden nach Möglichkeit angekündigt und in nutzungsschwache Zeiten
+            gelegt.</p>
+          <p>(3) Fällt eine bezahlte Leistung länger als 48 zusammenhängende Stunden aus, verlängert sich die
+            Laufzeit auf Verlangen entsprechend.</p>
+
+          <h2>§ 11 Mängel und Haftung</h2>
+          <p>(1) Für die Bereitstellung digitaler Produkte gegen Entgelt gelten die §§ 327 ff. BGB. Der
+            Anbieter schuldet die vereinbarte und die objektiv erforderliche Beschaffenheit einschließlich
+            der Aktualisierungen, die zum Erhalt der Vertragsmäßigkeit nötig sind.</p>
+          <p>(2) Der Anbieter haftet unbeschränkt bei Vorsatz und grober Fahrlässigkeit, bei der Verletzung
+            von Leben, Körper oder Gesundheit, nach dem Produkthaftungsgesetz sowie im Umfang einer
+            übernommenen Garantie.</p>
+          <p>(3) Bei einfacher Fahrlässigkeit haftet der Anbieter nur für die Verletzung wesentlicher
+            Vertragspflichten – solcher Pflichten, deren Erfüllung die ordnungsgemäße Durchführung des
+            Vertrags überhaupt erst ermöglicht und auf deren Einhaltung regelmäßig vertraut werden darf – und
+            begrenzt auf den vertragstypischen, vorhersehbaren Schaden.</p>
+          <p>(4) Im Übrigen ist die Haftung ausgeschlossen. Eine Änderung der Beweislast zum Nachteil der
+            Nutzenden ist damit nicht verbunden.</p>
+          <p>(5) Der Anbieter haftet nicht für Entscheidungen, die auf Grundlage der Rechenergebnisse und
+            Hinweise nach § 2 Abs. 3 getroffen werden, und nicht für das Verhalten anderer Nutzender.</p>
+
+          <h2>§ 12 Kündigung durch den Anbieter</h2>
+          <p>(1) Unentgeltliche Nutzungsverhältnisse kann der Anbieter mit einer Frist von vier Wochen
+            kündigen.</p>
+          <p>(2) Das Recht zur Kündigung aus wichtigem Grund bleibt beiderseits unberührt. Ein wichtiger Grund
+            liegt für den Anbieter insbesondere bei erheblichen oder wiederholten Verstößen gegen § 7 vor.</p>
+
+          <h2>§ 13 Änderung dieser Bedingungen</h2>
+          <p>(1) Der Anbieter kann diese Bedingungen ändern, wenn dies zur Anpassung an geänderte
+            Rechtslage, Rechtsprechung oder an Änderungen der Anwendung erforderlich ist und die Nutzenden
+            dadurch nicht unangemessen benachteiligt werden.</p>
+          <p>(2) Änderungen werden mindestens sechs Wochen vor Wirksamwerden in Textform mitgeteilt.
+            Widersprechen Nutzende nicht bis zum Wirksamwerden, gelten die Änderungen als angenommen; auf
+            diese Folge und auf das Widerspruchsrecht wird in der Mitteilung gesondert hingewiesen. Im Fall
+            des Widerspruchs kann jede Seite den Vertrag zum Zeitpunkt des Wirksamwerdens kündigen.</p>
+
+          <h2>§ 14 Schlussbestimmungen</h2>
+          <p>(1) Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts. Verbraucherinnen und
+            Verbrauchern bleiben die zwingenden Schutzvorschriften des Staates erhalten, in dem sie ihren
+            gewöhnlichen Aufenthalt haben (Art. 6 Abs. 2 der Verordnung (EG) Nr. 593/2008).</p>
+          <p>(2) Ist die nutzende Person Kaufmann, juristische Person des öffentlichen Rechts oder
+            öffentlich-rechtliches Sondervermögen, ist Gerichtsstand der Sitz des Anbieters.</p>
+          <p>(3) Der Anbieter nimmt nicht an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle
+            teil (§ 36 VSBG).</p>
+          <p>(4) Sollte eine Bestimmung unwirksam sein, bleibt der Vertrag im Übrigen wirksam.</p>
+
+          <p class="fein">Fassung vom ${R.stand()}.</p>
+        </div>
+      </div>`
+    };
+  }
+
+  /* ================================================================
+     Widerrufsbelehrung
+     ================================================================ */
+
+  function widerruf() {
+    return {
+      titel: 'Widerrufsbelehrung',
+      html: h`<div class="seite seite--schmal">
+        ${kopf('Widerrufsbelehrung', 'Für Verbraucherinnen und Verbraucher bei entgeltlichen Verträgen.')}
+        ${luecken()}
+
+        <div class="block block--betont">
+          <h2>${ico('info')}Gilt der Widerruf für dich?</h2>
+          <p>Das Widerrufsrecht besteht bei Verträgen, die <b>gegen Entgelt</b> im Fernabsatz geschlossen
+            werden – also bei Nestwerk Plus. Für den freien Tarif und für einen
+            <b>Gründerplatz besteht kein Widerrufsrecht</b>, weil dabei keine Zahlungspflicht entsteht. Beides
+            lässt sich jederzeit und ohne Grund beenden.</p>
+        </div>
+
+        <div class="block rechtstext">
+          <h2>Widerrufsrecht</h2>
+          <p>Du hast das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.
+            Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses.</p>
+          <p>Um dein Widerrufsrecht auszuüben, musst du uns
+            (${rw('name', 'Name')}, ${R.anschriftZeile() || ''}, ${rw('email', 'E-Mail-Adresse')},
+            ${rw('telefon', 'Telefonnummer')}) mittels einer eindeutigen Erklärung – zum Beispiel per Post
+            versandter Brief oder E-Mail – über deinen Entschluss, diesen Vertrag zu widerrufen, informieren.
+            Du kannst dafür das beigefügte Muster verwenden, das aber nicht vorgeschrieben ist.</p>
+          <p>Zur Wahrung der Widerrufsfrist reicht es aus, dass du die Mitteilung über die Ausübung des
+            Widerrufsrechts vor Ablauf der Widerrufsfrist absendest.</p>
+
+          <h2>Folgen des Widerrufs</h2>
+          <p>Wenn du diesen Vertrag widerrufst, haben wir dir alle Zahlungen, die wir von dir erhalten haben,
+            unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung
+            über deinen Widerruf dieses Vertrags bei uns eingegangen ist. Für diese Rückzahlung verwenden wir
+            dasselbe Zahlungsmittel, das du bei der ursprünglichen Transaktion eingesetzt hast, es sei denn,
+            mit dir wurde ausdrücklich etwas anderes vereinbart; in keinem Fall werden dir wegen dieser
+            Rückzahlung Entgelte berechnet.</p>
+          <p>Hast du verlangt, dass die Dienstleistung während der Widerrufsfrist beginnen soll, so hast du
+            uns einen angemessenen Betrag zu zahlen, der dem Anteil der bis zum Zeitpunkt deiner Mitteilung
+            bereits erbrachten Dienstleistungen im Vergleich zum Gesamtumfang der im Vertrag vorgesehenen
+            Dienstleistungen entspricht (§ 357 Abs. 8 BGB).</p>
+
+          <h2>Vorzeitiges Erlöschen</h2>
+          <p>Das Widerrufsrecht erlischt bei einem Vertrag über die Bereitstellung digitaler Inhalte oder
+            Dienstleistungen vorzeitig, wenn wir mit der Ausführung begonnen haben, nachdem du</p>
+          <ul class="pruef">
+            <li>${ico('pruefen')}<span>ausdrücklich zugestimmt hast, dass wir vor Ablauf der Widerrufsfrist
+              beginnen,</span></li>
+            <li>${ico('pruefen')}<span>bestätigt hast, dass du dadurch dein Widerrufsrecht verlierst, und</span></li>
+            <li>${ico('pruefen')}<span>wir dir diese Bestätigung auf einem dauerhaften Datenträger zur
+              Verfügung gestellt haben (§ 356 Abs. 5 BGB, § 312f Abs. 3 BGB).</span></li>
+          </ul>
+          <p class="fein">Nestwerk holt diese Zustimmung in der Bestellstrecke ausdrücklich ein – als eigenes
+            Kästchen, nicht vorausgewählt. Wer nicht zustimmt, wird nach Ablauf der vierzehn Tage
+            freigeschaltet und behält sein Widerrufsrecht ungeschmälert.</p>
+
+          <h2>Muster-Widerrufsformular</h2>
+          <p class="fein">Wenn du den Vertrag widerrufen willst, füll dieses Formular aus und schick es
+            zurück. Vorgeschrieben ist es nicht.</p>
+          <pre class="rechtstext__muster" id="widerruf-muster">An ${R.angaben().name || '[Name]'}
+${R.anschriftZeile() || '[Anschrift]'}
+${R.angaben().email || '[E-Mail-Adresse]'}
+
+Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag
+über die Erbringung der folgenden Dienstleistung:
+
+  Nestwerk Plus
+
+Bestellt am (*) / erhalten am (*): ______________________
+
+Name des/der Verbraucher(s): ____________________________
+
+Anschrift des/der Verbraucher(s): _______________________
+
+________________________________________________________
+
+Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier)
+
+Datum: __________________
+
+(*) Unzutreffendes streichen.</pre>
+          <p class="werkzeug__weiter">
+            <button type="button" class="knopf knopf--still" data-tu="kopieren" data-quelle="#widerruf-muster">
+              ${ico('kopieren')}Formular kopieren</button>
+            <button type="button" class="knopf knopf--still" data-tu="widerruf-sichern">
+              ${ico('speichern')}Als Textdatei sichern</button>
+          </p>
+
+          <p class="fein">Fassung vom ${R.stand()}.</p>
+        </div>
+      </div>`
+    };
+  }
+
+  /* ================================================================
+     Inhalte melden (Art. 16 DSA)
+     ================================================================ */
+
+  function melden() {
+    return {
+      titel: 'Rechtswidrige Inhalte melden',
+      html: h`<div class="seite seite--schmal">
+        ${kopf('Rechtswidrige Inhalte melden',
+        'Meldeweg nach Artikel 16 der Verordnung (EU) 2022/2065 über digitale Dienste.')}
+        <div class="block rechtstext">
+          <h2>Wofür dieser Weg gedacht ist</h2>
+          <p>Für Inhalte in Nestwerk, die gegen Recht verstoßen: erfundene Inserate, Zahlungsaufforderungen
+            vor der Besichtigung, Angebote ohne Verfügungsbefugnis, benachteiligende Formulierungen im Sinne
+            des Allgemeinen Gleichbehandlungsgesetzes oder Verletzungen von Rechten Dritter.</p>
+
+          <h2>Was eine Meldung enthalten sollte</h2>
+          <ul class="pruef">
+            <li>${ico('pruefen')}<span>eine <b>hinreichend begründete Erläuterung</b>, warum der Inhalt
+              rechtswidrig ist</span></li>
+            <li>${ico('pruefen')}<span>die <b>genaue Angabe des Ortes</b> – am einfachsten der Verweis auf
+              das Inserat</span></li>
+            <li>${ico('pruefen')}<span><b>Name und E-Mail-Adresse</b> der meldenden Person; das entfällt bei
+              Meldungen zu bestimmten Straftaten gegen die sexuelle Selbstbestimmung</span></li>
+            <li>${ico('pruefen')}<span>eine <b>Bestätigung</b>, dass die Angaben nach bestem Wissen richtig
+              und vollständig sind</span></li>
+          </ul>
+
+          <h2>Wie es weitergeht</h2>
+          <p>Der Eingang wird unverzüglich bestätigt. Die Meldung wird zeitnah, sorgfältig, frei von Willkür
+            und objektiv bearbeitet. Über die Entscheidung und die Möglichkeiten, dagegen vorzugehen, ergeht
+            eine begründete Mitteilung. Wird eine Entscheidung nicht ausschließlich von Hand getroffen, wird
+            auf den Einsatz automatisierter Mittel hingewiesen.</p>
+
+          <h2>Kontaktstelle</h2>
+          <p>Meldungen und alle Anliegen nach den Artikeln 11 und 12 der Verordnung gehen an:
+            ${rw('email', 'E-Mail-Adresse')}. Die Kommunikation ist in <b>deutscher</b> Sprache möglich.</p>
+          <p class="fein">Der Anbieter ist ein Kleinstunternehmen im Sinne der Empfehlung 2003/361/EG und
+            damit von den zusätzlichen Pflichten für Online-Plattformen nach Abschnitt 3 des Kapitels III der
+            Verordnung befreit (Art. 19). Die Pflichten aus den Artikeln 11 bis 18 gelten gleichwohl und
+            werden erfüllt.</p>
+
+          <h2>Missbräuchliche Meldungen</h2>
+          <p>Wer wiederholt offensichtlich unbegründet meldet, kann nach vorheriger Verwarnung für eine
+            angemessene Zeit von der Bearbeitung ausgeschlossen werden (Art. 23 Abs. 2 der Verordnung).</p>
+        </div>
+      </div>`
+    };
+  }
+
+  /* ================================================================
+     Barrierefreiheit
+     ================================================================ */
+
+  function barrierefreiheit() {
+    return {
+      titel: 'Barrierefreiheit',
+      html: h`<div class="seite seite--schmal">
+        ${kopf('Erklärung zur Barrierefreiheit', 'Was umgesetzt ist, was fehlt, und wo Rückmeldung ankommt.')}
+        <div class="block rechtstext">
+          <h2>Stand</h2>
+          <p>Nestwerk ist so gebaut, dass es sich vollständig mit der Tastatur bedienen lässt und mit
+            Vorleseprogrammen zurechtkommt. Geprüft wurde gegen die Web Content Accessibility Guidelines in
+            der Fassung 2.2, Stufe AA.</p>
+          <ul class="pruef">
+            <li>${ico('pruefen')}<span>alle Bedienelemente mit Tastatur erreichbar, sichtbarer Fokus,
+              Sprungmarke zum Inhalt</span></li>
+            <li>${ico('pruefen')}<span>Kontraste durchgerechnet statt geschätzt: Fließtext mindestens 4,5 zu 1,
+              große Schrift und Bedienelemente mindestens 3 zu 1 – in hell und dunkel</span></li>
+            <li>${ico('pruefen')}<span>Farbe nie als einziges Unterscheidungsmerkmal; Diagrammfarben zusätzlich
+              auf Unterscheidbarkeit bei Farbfehlsichtigkeit geprüft</span></li>
+            <li>${ico('pruefen')}<span>Beschriftungen an jedem Eingabefeld, sinnvolle Überschriftenordnung,
+              genau eine Hauptüberschrift je Ansicht</span></li>
+            <li>${ico('pruefen')}<span>Bewegung nur, wenn das Betriebssystem sie nicht abbestellt hat
+              (<code>prefers-reduced-motion</code>)</span></li>
+            <li>${ico('pruefen')}<span>kein waagerechter Überlauf von 320 bis 1920 Pixel Breite</span></li>
+          </ul>
+
+          <h2>Was noch nicht barrierefrei ist</h2>
+          <ul class="pruef">
+            <li>${ico('warnung')}<span>Die <b>Karte</b> lässt sich mit der Tastatur verschieben und zoomen,
+              ersetzt aber räumliche Information nicht vollständig durch Text. Alle Angaben stehen zusätzlich
+              in der Trefferliste.</span></li>
+            <li>${ico('warnung')}<span>Die <b>Preisverläufe</b> im Marktbereich sind Diagramme. Die Zahlen
+              dahinter stehen als Tabelle darunter, die Beschreibung der Kurve ist knapp.</span></li>
+            <li>${ico('warnung')}<span>Bilder der Angebote sind schematische Zeichnungen. Ihre Beschreibung
+              nennt Gebäudeart und Lage, nicht den tatsächlichen Zustand.</span></li>
+          </ul>
+
+          <h2>Rückmeldung</h2>
+          <p>Fällt etwas auf, das sich nicht bedienen lässt: ${rw('email', 'E-Mail-Adresse')}. Rückmeldungen zur
+            Barrierefreiheit werden vorrangig behandelt.</p>
+
+          <h2>Rechtlicher Rahmen</h2>
+          <p>Das Barrierefreiheitsstärkungsgesetz gilt seit dem 28. Juni 2025 unter anderem für
+            Dienstleistungen im elektronischen Geschäftsverkehr gegenüber Verbraucherinnen und Verbrauchern.
+            Kleinstunternehmen, die Dienstleistungen erbringen – weniger als zehn Beschäftigte und höchstens
+            zwei Millionen Euro Jahresumsatz –, sind davon ausgenommen (§ 3 Abs. 3 BFSG). Der Anbieter fällt
+            derzeit unter diese Ausnahme und hält die Anforderungen dennoch freiwillig ein.</p>
+        </div>
+      </div>`
+    };
+  }
+
+  /* ================================================================
+     Kündigen (§ 312k BGB)
+     ================================================================ */
+
+  function kuendigen() {
+    const quelle = P.plusQuelle();
+    return {
+      titel: 'Verträge kündigen',
+      html: h`<div class="seite seite--schmal">
+        ${kopf('Verträge hier kündigen',
+        'Die Schaltfläche, die § 312k BGB verlangt: ohne Anmeldung, ohne Rückfrage, ohne Umweg.')}
+
+        ${quelle === 'bezahlt' ? h`<div class="block block--betont">
+          <h2>${ico('plus5')}Nestwerk Plus, bezahlt</h2>
+          <p>Läuft seit ${S.get().tarifSeit ? U.dateDE(S.get().tarifSeit) : 'kurzem'},
+            Abrechnung ${S.get().tarifIntervall === 'jahr' ? 'jährlich' : 'monatlich'}.</p>
+          <p>Die Kündigung wirkt zum Ende der laufenden Laufzeit. Bis dahin stehen alle Leistungen zur
+            Verfügung. Eine Bestätigung geht in Textform zu.</p>
+          <p class="werkzeug__weiter">
+            <button type="button" class="knopf knopf--gefahr" data-tu="kuendigen-plus">
+              ${ico('x')}Vertrag jetzt kündigen</button></p>
+        </div>`
+        : quelle === 'gruender' ? h`<div class="block block--betont">
+          <h2>${ico('stern')}Gründerplatz Nummer ${U.num(P.gruender().nummer)}</h2>
+          <p>Läuft noch ${P.gruenderTageRest()} ${U.plural(P.gruenderTageRest(), 'Tag', 'Tage')}, bis zum
+            ${U.dateDE(P.gruender().bis)}. Danach endet er von selbst.</p>
+          <p>Ein Gründerplatz ist kein Abonnement: Er kostet nichts, verlängert sich nicht und geht nicht in
+            einen bezahlten Vertrag über. Es gibt deshalb nichts zu kündigen. Wer ihn trotzdem vorher
+            zurückgeben will, kann das hier tun – der Platz geht dann an die nächste Person.</p>
+          <p class="werkzeug__weiter">
+            <button type="button" class="knopf knopf--still" data-tu="gruender-zurueck">
+              ${ico('zurueck')}Gründerplatz zurückgeben</button></p>
+        </div>`
+        : h`<p class="info-meldung">${ico('info')}Auf diesem Gerät läuft kein entgeltlicher Vertrag. Der freie
+          Tarif erfordert keine Kündigung – schließ die Seite einfach.</p>`}
+
+        <div class="block rechtstext">
+          <h2>Kündigung auf anderem Weg</h2>
+          <p>Eine formlose Erklärung genügt jederzeit, ohne Begründung:</p>
+          <dl class="rechtsliste">
+            <dt>E-Mail</dt><dd>${rw('email', 'E-Mail-Adresse')}</dd>
+            <dt>Post</dt><dd>${R.anschriftZeile() || rw('strasse', 'Anschrift')}</dd>
+          </dl>
+          <p>Gib an, welcher Vertrag gekündigt werden soll, und wann die Kündigung wirken soll – zum
+            nächstmöglichen Zeitpunkt oder zu einem bestimmten Datum. Der Eingang wird in Textform bestätigt,
+            und zwar mit Angabe des Zeitpunkts, zu dem die Kündigung wirkt (§ 312k Abs. 4 BGB).</p>
+
+          <h2>Widerruf statt Kündigung</h2>
+          <p>Innerhalb der ersten vierzehn Tage nach Vertragsschluss ist ein Widerruf möglich, der den Vertrag
+            von Anfang an rückabwickelt. Das ist für dich meist günstiger als eine Kündigung.
+            <a href="#/recht/widerruf">Zur Widerrufsbelehrung.</a></p>
+        </div>
+      </div>`
+    };
+  }
+
+  /* ================================================================
+     Angaben zum Anbieter
+     ================================================================ */
+
+  const FELDER = [
+    ['name', 'Name des Anbieters', 'Vor- und Nachname oder Firma', 'text'],
+    ['zusatz', 'Geschäftsbezeichnung (freiwillig)', 'etwa „Nestwerk“', 'text'],
+    ['strasse', 'Straße und Hausnummer', 'kein Postfach – die Anschrift muss ladungsfähig sein', 'text'],
+    ['plz', 'Postleitzahl', '', 'text'],
+    ['ort', 'Ort', '', 'text'],
+    ['land', 'Land', '', 'text'],
+    ['email', 'E-Mail-Adresse', 'Pflichtangabe nach § 5 DDG', 'email'],
+    ['telefon', 'Telefonnummer', 'der übliche zweite Kontaktweg', 'tel'],
+    ['ustId', 'Umsatzsteuer-Identifikationsnummer', 'nur falls vorhanden – Kleinunternehmer haben meist keine', 'text'],
+    ['gewerbeamt', 'Stelle der Gewerbeanmeldung', 'etwa „Gewerbeamt der Stadt …“', 'text'],
+    ['aufsichtsbehoerde', 'Datenschutz-Aufsichtsbehörde', 'die Behörde des Bundeslandes, in dem du sitzt', 'text'],
+    ['verantwortlichMStV', 'Verantwortlich nach § 18 Abs. 2 MStV', 'leer lassen, wenn es dieselbe Person und Anschrift ist', 'text']
+  ];
+
+  function angabenSeite() {
+    const a = R.angaben();
+    return {
+      titel: 'Angaben zum Anbieter',
+      html: h`<div class="seite seite--schmal">
+        ${kopf('Angaben zum Anbieter',
+        'Von hier speisen sich Impressum, Datenschutzerklärung, AGB und Widerrufsbelehrung – jede Angabe steht nur einmal.')}
+
+        <div class="hinweisbox">${ico('info')}
+          <div><b>Diese Angaben bleiben auf diesem Gerät</b>
+          <p>Sie liegen im Speicher dieses Browsers, wie alles andere auch. Für den echten Betrieb gehören sie
+            fest in den Quelltext – in <code>assets/recht.js</code> unter <code>VORGABE</code>. Dann stehen sie
+            für alle Aufrufe bereit und nicht nur für deinen.</p></div>
+        </div>
+
+        <form class="block" data-tu-submit="betreiber-speichern">
+          <h2>${ico('stift')}Angaben</h2>
+          <div class="formraster">
+            ${FELDER.map(([feld, label, hilfe, typ]) => h`<label class="feld">
+              <span>${label}${R.PFLICHT.some((p) => p.feld === feld && !p.freiwillig)
+        ? h` <b class="pflicht">Pflicht</b>` : ''}</span>
+              <input type="${typ}" data-betreiber="${feld}" value="${a[feld] || ''}">
+              ${hilfe ? h`<i class="feld__hilfe">${hilfe}</i>` : ''}
+            </label>`)}
+          </div>
+          <label class="schalter">
+            <input type="checkbox" data-betreiber-an="kleinunternehmer" ${a.kleinunternehmer ? 'checked' : ''}>
+            <span><b>Kleinunternehmerregelung nach § 19 UStG</b>
+              <i>Dann wird keine Umsatzsteuer ausgewiesen, und die Preisangaben sagen das dazu.</i></span></label>
+          <p class="werkzeug__weiter">
+            <button type="submit" class="knopf">${ico('speichern')}Angaben übernehmen</button>
+            <button type="button" class="knopf knopf--still" data-tu="betreiber-zuruecksetzen">Zurücksetzen</button>
+          </p>
+        </form>
+
+        <div class="block">
+          <h2>${ico('blatt')}So sehen sie im Impressum aus</h2>
+          <p class="rechtstext__adresse">${R.anschrift()}</p>
+          <dl class="rechtsliste">
+            <dt>E-Mail</dt><dd>${rw('email', 'E-Mail-Adresse')}</dd>
+            <dt>Telefon</dt><dd>${rw('telefon', 'Telefonnummer')}</dd>
+            <dt>Umsatzsteuer</dt><dd>${a.ustId || (a.kleinunternehmer
+        ? 'keine – Kleinunternehmerregelung nach § 19 UStG' : 'noch einzutragen')}</dd>
+          </dl>
+          <p class="werkzeug__weiter"><a class="knopf knopf--still" href="#/recht/impressum">Impressum ansehen</a></p>
+        </div>
+      </div>`
+    };
+  }
+
+  /* ================================================================
+     Router innerhalb des Bereichs
+     ================================================================ */
+
+  const UNTER = {
+    impressum, datenschutz, agb, widerruf, melden, barrierefreiheit,
+    kuendigen, angaben: angabenSeite
+  };
+
+  ui.ansichten.recht = function (route) {
+    const fn = UNTER[route.arg];
+    return fn ? fn() : uebersicht();
+  };
+
+  /* ================================================================
+     Aktionen
+     ================================================================ */
+
+  const A_ = ui.aktionRegistrieren;
+
+  A_('betreiber-speichern', () => {
+    const neu = {};
+    U.$$('[data-betreiber]').forEach((el) => { neu[el.dataset.betreiber] = el.value.trim(); });
+    U.$$('[data-betreiber-an]').forEach((el) => { neu[el.dataset.betreiberAn] = el.checked; });
+    S.set({ betreiber: Object.assign({}, S.get().betreiber, neu) }, 'betreiber');
+    const f = R.fehlendeAngaben();
+    ui.neuZeichnen();
+    ui.toast(f.length
+      ? 'Gespeichert. Es ' + U.plural(f.length, 'fehlt noch eine Pflichtangabe', 'fehlen noch ' + f.length + ' Pflichtangaben') + '.'
+      : 'Gespeichert. Alle Pflichtangaben sind vollständig.', f.length ? 'schlecht' : 'gut');
+  });
+
+  A_('betreiber-zuruecksetzen', () => {
+    if (!confirm('Alle eingetragenen Angaben verwerfen und zu den Voreinstellungen zurückkehren?')) return;
+    S.set({ betreiber: {} }, 'betreiber');
+    ui.neuZeichnen();
+    ui.toast('Zurückgesetzt.');
+  });
+
+  A_('widerruf-sichern', () => {
+    const el = U.$('#widerruf-muster');
+    ui.dateiSichern('widerruf-nestwerk.txt', el ? el.textContent : '', 'text/plain');
+  });
+
+  A_('kuendigen-plus', () => {
+    if (!confirm('Nestwerk Plus zum Ende der laufenden Laufzeit kündigen?')) return;
+    P.wechseln('frei');
+    ui.neuZeichnen();
+    ui.toast('Gekündigt. Die Bestätigung würde im Betrieb in Textform zugehen.', 'gut');
+  });
+
+  A_('gruender-zurueck', () => {
+    if (!confirm('Gründerplatz zurückgeben? Der Platz geht an die nächste Person, und Plus endet sofort.')) return;
+    P.gruenderAufgeben();
+    ui.neuZeichnen();
+    ui.toast('Gründerplatz zurückgegeben.');
+  });
+
+  NW.viewRecht = { SEITEN };
 })(window.NW = window.NW || {});
 
 /* ===== app.js ===== */

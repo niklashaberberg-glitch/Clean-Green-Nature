@@ -32,8 +32,20 @@ Daraus folgt die ganze Aufteilung:
 
 **Was Plus ausdrücklich nicht kauft:** keine bessere Platzierung in der
 Trefferliste, keinen Vorrang bei Vermietern, keinen Frühzugang zu Inseraten,
-keine Daten anderer Nutzer. Genau das verkaufen die meisten Portale – und genau
-deshalb ist ihre Trefferreihenfolge nicht nachvollziehbar.
+keine Daten anderer Nutzer, keinen besseren Datenschutz gegen Aufpreis. Genau
+das verkaufen die meisten Portale – und genau deshalb ist ihre
+Trefferreihenfolge nicht nachvollziehbar.
+
+**Gründerplätze.** Die ersten 10.000 Anmeldungen bekommen Plus zwölf Monate
+ohne Bezahlung. Das ist bewusst **kein Abo mit Gratismonat**: Es werden keine
+Zahlungsdaten hinterlegt, nichts verlängert sich, und niemand muss kündigen.
+Vier Wochen vor Ablauf erscheint ein Hinweisband, danach greift wieder der
+freie Tarif. Wer weitermachen will, entscheidet sich aktiv dafür.
+
+Weil es keinen Server gibt, kann in dieser Vorführung kein Browser wissen, wie
+viele Plätze anderswo vergeben sind. Der Zähler ist deshalb ausdrücklich eine
+Hochrechnung aus der Zeit seit dem Start, und die Anwendung sagt das an jeder
+Stelle dazu, an der sie ihn zeigt.
 
 | | Nestwerk frei | Nestwerk Plus |
 |---|---|---|
@@ -242,6 +254,20 @@ weiterreichen könnte, und der Abrufzähler liefe für alle zusammen.
 Der Tresor liegt vollständig im freien Tarif. Wer für Datenschutz zahlen muss,
 hat keinen.
 
+### Ringtausch in vier Bildern
+
+Der Ringtausch war bisher in Sätzen erklärt, und Sätze reichen dafür nicht:
+Wer zum ersten Mal davon hört, stellt sich einen Tausch zwischen zwei Leuten
+vor und stolpert genau an der Stelle, an der es interessant wird – dass
+niemand die Wohnung dessen bekommt, dem er die eigene gibt.
+
+Ein Knopf auf der Ringtausch-Seite und auf der Startseite öffnet deshalb vier
+Bilder, die sich durchblättern lassen: warum der direkte Tausch fast nie
+klappt, wie die Kette das löst, was am Umzugstag passiert, und was ein Ring
+braucht, damit er hält. Die Bilder sind gezeichnet, nicht geladen – reines
+SVG, das die Farben der Oberfläche übernimmt und in hell wie dunkel
+funktioniert.
+
 ### Bewerbungstafel
 
 Jedes gemerkte Objekt durchläuft sechs Stufen: gemerkt, angeschrieben,
@@ -350,6 +376,51 @@ Namen. Es gibt eine Tabellenansicht für alle, die lieber Zahlen lesen.
 
 ---
 
+## Werbung
+
+Zwei Anforderungen, die sich widersprechen, und beide gelten: **leise** und
+**unverwechselbar**.
+
+Leise heißt: kein Kasten, der lauter ist als ein Inserat, keine gefüllte
+Fläche, kein Knopf in Akzentfarbe, kein Bild, das mit den Wohnungsbildern
+konkurriert. Unverwechselbar heißt: Man darf keine Sekunde im Zweifel sein,
+dass es Werbung ist. Gelöst ist das über eine eigene Grundfarbe – warm statt
+grün –, einen Streifen an der linken Kante und das Wort „Anzeige“ in Versalien
+darüber. Nicht über Lautstärke.
+
+Dazu drei Regeln, die nicht verhandelbar sind:
+
+* Eine Anzeige sieht **nie aus wie ein Inserat** und steht nie in der
+  Trefferreihenfolge, sondern zwischen den Blöcken.
+* Die Auswahl entsteht aus der **Stelle auf der Seite**, nicht aus Profil,
+  Suche oder Verhalten. Es gibt keinen Abgleich mit Werbenetzwerken, keine
+  Kennungen und keine Daten an Werbetreibende – deshalb ist dafür auch keine
+  Einwilligung nötig, und es erscheint kein Zustimmungsfenster.
+* Neben jeder Anzeige steht ein **„?“**, das genau das erklärt, und ein Weg zum
+  anzeigenfreien Tarif.
+
+## Rechtliches
+
+Unter `#/recht` liegen Impressum (§ 5 DDG), Datenschutzerklärung (Art. 13/14
+DSGVO), AGB, Widerrufsbelehrung mit Musterformular, der Meldeweg für
+rechtswidrige Inhalte (Art. 16 der Verordnung (EU) 2022/2065), eine Erklärung
+zur Barrierefreiheit und der Kündigungsknopf, den § 312k BGB verlangt.
+
+Die Texte sind für ein **Kleingewerbe** geschrieben – Einzelunternehmen ohne
+Handelsregistereintrag, Kleinunternehmerregelung nach § 19 UStG, also keine
+ausgewiesene Umsatzsteuer.
+
+Alle Betreiberangaben stehen an **einer** Stelle: in `assets/recht.js` unter
+`VORGABE`, und zusätzlich unter `#/recht/angaben` im Browser änderbar. Was
+fehlt, verschwindet nicht still, sondern erscheint im Text als rot markierte
+Lücke und in einer Prüfliste mit der Vorschrift, aus der die Pflicht folgt.
+Ein Impressum ohne ladungsfähige Anschrift ist abmahnbar; das soll man sehen.
+
+Was die Texte nicht leisten: Rechtsberatung. `#/recht` führt die Punkte auf,
+die keine Textbausteine sind, sondern Entscheidungen – Erlaubnis nach
+§ 34c GewO, Auftragsverarbeitung mit dem Hoster, Verzeichnis von
+Verarbeitungstätigkeiten, Zahlungsabwicklung, Gewerbeanmeldung.
+
 ## Karte ohne Kartendienst
 
 Die Karte wird selbst gezeichnet: kein Kachelserver, kein fremdes Skript,
@@ -387,8 +458,10 @@ nestwerk/
     werkzeuge.js        Chancen, Doppel-Erkennung, Preisreihen, Leistbarkeit,
                         WBS, Wohngeld, Betriebskosten, Routenplanung
     store.js            Zustand und Speicherung
-    plan.js             Tarife, Grenzen, Anzeigen
+    ring-bild.js        die vier Erklärbilder zum Ringtausch
+    plan.js             Tarife, Grenzen, Gründerplätze, Anzeigen
     tresor.js           Verschlüsselung, Ablage, befristete Freigaben
+    recht.js            Betreiberangaben, Pflichtfelder, Preishinweise
     karte.js            die Karte
     ui.js               Schale, Router, geteilte Bausteine
     view-*.js           die einzelnen Ansichten

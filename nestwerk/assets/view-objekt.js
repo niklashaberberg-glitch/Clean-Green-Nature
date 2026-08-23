@@ -943,7 +943,14 @@
           ${fehlt.length ? h`<p class="warn-meldung">${ico('warnung')}Es fehlen: ${fehlt.map((f) => namen[f]).join(', ')}.
             <a href="#/profil">Im Profil ergänzen</a></p>` : h`<p class="gut-meldung">${ico('pruefen')}Deine Mappe ist vollständig.</p>`}
         </fieldset>
-        ${NW.viewTresor ? NW.viewTresor.freigabeAbschnitt(l.id, l.anbieter.name) : ''}`}`,
+        ${NW.viewTresor ? NW.viewTresor.freigabeAbschnitt(l.id, l.anbieter.name) : ''}`}
+        ${P.darf('anfrageVorne')
+        ? h`<p class="gut-meldung">${ico('plus5')}<span>Deine Anfrage erscheint im Postfach der anbietenden
+          Seite <b>oben</b> und ist dort als Plus gekennzeichnet. Über deine Chancen sagt das nichts – es ist
+          bezahlte Sichtbarkeit, kein Urteil.</span></p>`
+        : h`<p class="info-meldung">${ico('info')}<span>Deine Anfrage erscheint in der Reihenfolge des Eingangs.
+          <a href="#/plus">Mit Plus</a> stünde sie oben, sichtbar gekennzeichnet – am Inhalt ändert das nichts,
+          und gelöscht wird ohne Plus nichts.</span></p>`}`,
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="anschreiben-kopieren">${ico('kopieren')}Text kopieren</button>
         <button type="button" class="knopf" data-tu="anschreiben-senden" data-id="${l.id}">${ico('nachricht')}Absenden</button>`
     });

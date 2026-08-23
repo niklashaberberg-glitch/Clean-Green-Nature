@@ -371,12 +371,24 @@
         ${s.eigeneInserate.length ? h`<section class="block">
           <h2>Deine Inserate</h2>
           <ul class="eigene">
-            ${s.eigeneInserate.map((e) => h`<li>
-              <div><b><a href="#/objekt/${e.id}">${e.titel}</a></b>
-                <span>${ui.ART_LABEL[e.kind]} · ${e.viertel}, ${e.stadt} · seit ${U.since(e.erstellt)}</span></div>
+            ${s.eigeneInserate.map((e) => {
+        const b = e.boost, prod = b ? P.hervorhebung(b.art) : null;
+        const laeuft = P.boostAktiv(e);
+        return h`<li>
+              <div>
+                <b><a href="#/objekt/${e.id}">${U.truncate(e.titel, 46)}</a>
+                  ${laeuft && prod ? ui.badge(prod.name, 'info', prod.icon) : ''}</b>
+                <span>${ui.artLabel(e)} · ${e.viertel}, ${e.stadt} · seit ${U.since(e.erstellt)}${laeuft && b.bis
+          ? ' · hervorgehoben bis ' + U.dateDE(b.bis) : ''}</span>
+              </div>
+              <button type="button" class="knopf knopf--klein knopf--still" data-tu="hervorheben" data-id="${e.id}">
+                ${ico('blitz')}${laeuft ? 'Ändern' : 'Hervorheben'}</button>
               <button type="button" class="ikon-btn" data-tu="inserat-weg" data-id="${e.id}" aria-label="Löschen">${ico('muell')}</button>
-            </li>`)}
+            </li>`;
+      })}
           </ul>
+          <p class="fein">Hervorgehobene Inserate stehen in einem eigenen, als bezahlt gekennzeichneten Block
+            über den Treffern – nie zwischen ihnen. Die Reihenfolge der Suche bleibt unberührt.</p>
         </section>` : ''}
 
         <form class="block" data-tu-submit="inserat-speichern" id="inserat-form">
@@ -879,6 +891,73 @@
     const b = neueBilder.splice(i, 1)[0];
     neueBilder.splice(i - 1, 0, b);
     bilderNeuZeichnen();
+  });
+
+  /* ------------------------- Hervorheben -------------------------
+
+     Das Modell von Kleinanzeigen, aber mit sichtbarer Trennlinie: bezahlt
+     wird Sichtbarkeit, nicht ein besserer Platz in der Bewertung. */
+
+  A_('hervorheben', (el) => {
+    const id = el.dataset.id;
+    const e = S.get().eigeneInserate.find((x) => x.id === id);
+    if (!e) return;
+    const laeuft = P.boostAktiv(e);
+    const rabatt = P.istPlus();
+    ui.dialog({
+      titel: 'Inserat hervorheben',
+      breit: true,
+      inhalt: h`<p>Wer schneller vermieten oder verkaufen will, kann für Sichtbarkeit zahlen. Was du dabei
+          <b>nicht</b> kaufst: eine bessere Bewertung, einen anderen Platz in der Trefferreihenfolge oder das
+          Verschwinden anderer Inserate.</p>
+        ${rabatt ? h`<p class="gut-meldung">${ico('plus5')}Mit Plus sind alle Preise
+          ${Math.round(P.PLUS_RABATT * 100)} % günstiger.</p>` : ''}
+        <ul class="hervorliste">
+          ${P.HERVORHEBUNG.map((x) => h`<li class="${laeuft && e.boost.art === x.id ? 'is-an' : ''}">
+            <span class="hervorliste__zeichen">${ico(x.icon)}</span>
+            <div>
+              <b>${x.name}</b>
+              <i>${x.kurz}</i>
+              <span>${x.wirkung}</span>
+            </div>
+            <span class="hervorliste__preis">
+              <b>${U.eur2(P.hervorhebungPreis(x.id))}</b>
+              ${rabatt ? h`<s>${U.eur2(x.preis)}</s>` : ''}
+            </span>
+            <button type="button" class="knopf knopf--klein" data-tu="hervorheben-buchen"
+              data-id="${id}" data-art="${x.id}">
+              ${laeuft && e.boost.art === x.id ? 'Läuft' : 'Buchen'}</button>
+          </li>`)}
+        </ul>
+        <p class="fein">${NW.recht ? NW.recht.preisHinweis() : ''}</p>
+        <div class="hinweisbox">${ico('info')}
+          <div><b>Warum das gekennzeichnet wird</b>
+          <p>Bezahlte Platzierung in Suchergebnissen muss als solche erkennbar sein (§ 5b Abs. 1 Nr. 6 und
+            Abs. 2 UWG). Nestwerk löst das nicht mit einem kleinen Sternchen, sondern mit einem eigenen Block
+            über den Treffern. Das ist ehrlicher – und wirkt erfahrungsgemäß besser als ein getarnter Platz,
+            weil niemand sich getäuscht fühlt.</p></div>
+        </div>
+        <p class="fein">In dieser Vorführung wird nichts abgebucht. Im Betrieb liefe die Zahlung über den
+          Zahlungsdienstleister, mit Rechnung und Widerrufsbelehrung.</p>`,
+      fuss: h`${laeuft ? h`<button type="button" class="knopf knopf--still knopf--gefahr"
+          data-tu="hervorheben-beenden" data-id="${id}">Hervorhebung beenden</button>` : ''}
+        <button type="button" class="knopf knopf--still" data-tu="dialog-zu">Schließen</button>`
+    });
+  });
+
+  A_('hervorheben-buchen', (el) => {
+    const prod = P.hervorhebung(el.dataset.art);
+    S.inseratHervorheben(el.dataset.id, el.dataset.art);
+    ui.dialogZu();
+    ui.neuZeichnen();
+    ui.toast(prod.name + ' läuft' + (prod.tage ? ' für ' + prod.tage + ' Tage' : '') + '.', 'gut');
+  });
+
+  A_('hervorheben-beenden', (el) => {
+    S.inseratHervorheben(el.dataset.id, null);
+    ui.dialogZu();
+    ui.neuZeichnen();
+    ui.toast('Hervorhebung beendet.');
   });
 
   A_('inserat-speichern', (el) => {

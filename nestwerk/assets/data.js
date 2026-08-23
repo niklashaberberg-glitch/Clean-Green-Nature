@@ -670,9 +670,60 @@
     return [];
   }
 
+  /* ------------------------- Anfragen zu eigenen Inseraten -------------------------
+
+     Wer selbst inseriert, muss sehen können, wie die Anfragen bei ihm
+     ankommen – sonst bleibt „Plus-Anfragen stehen oben“ eine Behauptung
+     auf der Preisseite. In dieser Vorführung schreibt niemand wirklich,
+     also entstehen die Anfragen aus der Kennung des Inserats: immer
+     dieselben, sobald dasselbe Inserat da ist, und ausdrücklich als
+     Beispiel gekennzeichnet. Erfundene Dringlichkeit im eigenen Postfach
+     wäre unlauter; erfundene Anfragen im eigenen Schaufenster, damit man
+     die Sortierung sieht, sind etwas anderes – solange es dabeisteht. */
+
+  const ANFRAGE_TEXTE = [
+    'Guten Tag, die Wohnung passt genau zu dem, was wir suchen. Wären zwei Termine kommende Woche möglich?',
+    'Hallo, ich arbeite seit vier Jahren fest in der Nähe und würde allein einziehen. Unterlagen liegen bereit.',
+    'Guten Tag, wir sind zu zweit, beide berufstätig, ohne Haustiere. Ist die Küche im Preis enthalten?',
+    'Hallo, ich suche zum Quartalsende und bin beim Termin flexibel. Gibt es einen Stellplatz?',
+    'Guten Tag, wie hoch war die letzte Nebenkostenabrechnung, und wann wurde die Heizung erneuert?',
+    'Hallo, ich hätte Interesse an einer Besichtigung. Nachweise kann ich sofort digital bereitstellen.'
+  ];
+
+  function anfragenFuer(listing) {
+    if (!listing) return [];
+    const r = U.rng(U.hash('anfragen:' + listing.id));
+    const anzahl = U.intBetween(r, 3, 6);
+    const namen = [];
+    for (let i = 0; i < anzahl; i++) {
+      const v = U.pick(r, VORNAMEN_W.concat(VORNAMEN_M, VORNAMEN_D)), n = U.pick(r, NACHNAMEN);
+      namen.push(v + ' ' + n);
+    }
+    /* Wer Plus hat, wird nicht gewürfelt, sondern gesetzt: Sonst zeigt ein
+       Beispiel je nach Zufall gar keine Plus-Anfrage – und dann sieht man
+       die Sortierung nicht, um die es hier geht. */
+    const mitPlus = Math.max(1, Math.round(anzahl * 0.4));
+    const plusIndex = [];
+    while (plusIndex.length < mitPlus) {
+      const k = U.intBetween(r, 0, anzahl - 1);
+      if (plusIndex.indexOf(k) < 0) plusIndex.push(k);
+    }
+    return namen.map((name, i) => ({
+      id: listing.id + '-anf-' + i,
+      name,
+      plus: plusIndex.indexOf(i) >= 0,
+      /* Ältere Anfrage zuerst in der Zeit, damit die Reihenfolge nach
+         Eingang überhaupt eine Aussage hat. */
+      zeit: U.isoDate(U.addDays(NW.now(), -(anzahl - i) * 2 - U.intBetween(r, 0, 2))),
+      text: ANFRAGE_TEXTE[U.intBetween(r, 0, ANFRAGE_TEXTE.length - 1)],
+      unterlagen: r() < 0.55,
+      beispiel: true
+    }));
+  }
+
   NW.data = {
     listings, byId, profilVorlage,
-    startThreads,
+    startThreads, anfragenFuer,
     LIFESTYLE_KEYS, WG_ART, AUSSTATTUNG, SPRACHEN, QUIRKS, BERUFE,
     staedte: G.CITIES.map((c) => c.name)
   };

@@ -372,18 +372,47 @@
 
   const WENIG = 4;
 
+  /* Bezahlte Plätze stehen über den Treffern, in einem eigenen Block mit
+     eigener Überschrift – nicht zwischen ihnen. Untergemischt wären sie
+     nach § 5b Abs. 1 Nr. 6 UWG kennzeichnungspflichtig und würden die
+     Erklärung „sortiert nach deinem Profil“ zu einer Halbwahrheit machen.
+     Hier bleibt beides wahr: oben bezahlt und beschriftet, darunter die
+     Reihenfolge aus dem Profil. */
+  function topBlock(bewertet) {
+    const top = bewertet.filter((x) => NW.plan.istTop(x.l)).slice(0, NW.plan.TOP_MAX);
+    if (!top.length) return '';
+    return h`<section class="topanzeigen" aria-label="Bezahlte Platzierungen">
+      <p class="topanzeigen__kopf">
+        <span class="topanzeigen__marke">${ico('blitz')}Top-Anzeigen</span>
+        <button type="button" class="anzeige__warum" data-tu="warum-top"
+          title="Warum steht das hier?" aria-label="Warum steht das hier?">?</button>
+      </p>
+      <div class="ergebnisse__liste">
+        ${top.map((x) => ui.inseratsKarte(x.l, x.b))}
+      </div>
+      <p class="topanzeigen__fuss">Bezahlte Platzierung der anbietenden Seite. Sie ändert nichts an der
+        Reihenfolge darunter – die folgt weiter deinem Profil.</p>
+    </section>`;
+  }
+
   function ergebnisListe(bewertet) {
     const f = S.get().filter;
     if (!bewertet.length) return leerHinweis(f);
-    const teil = bewertet.slice(0, sichtbar);
-    const rest = bewertet.length - teil.length;
+    /* Ein Inserat steht entweder oben im bezahlten Block oder unten in
+       der Liste, nie zweimal. */
+    const top = bewertet.filter((x) => NW.plan.istTop(x.l)).slice(0, NW.plan.TOP_MAX);
+    const topIds = top.map((x) => x.l.id);
+    const organisch = bewertet.filter((x) => topIds.indexOf(x.l.id) < 0);
+    const teil = organisch.slice(0, sichtbar);
+    const rest = organisch.length - teil.length;
     /* Zwei Treffer sind fast so wenig wie keiner – die Hilfe darf nicht
        erst bei null erscheinen. */
     const knapp = bewertet.length < WENIG ? lockerungsKnoepfe(f) : '';
     /* Anzeigen sitzen zwischen den Treffern, nie in der Reihenfolge:
        sie haben eine eigene Gestalt und tragen immer ihre Kennzeichnung. */
     const abstand = NW.plan.ANZEIGE_ABSTAND;
-    return h`<div class="ergebnisse__liste">
+    return h`${topBlock(bewertet)}
+    <div class="ergebnisse__liste">
       ${teil.map((x, i) => h`${ui.inseratsKarte(x.l, x.b)}${(i + 1) % abstand === 0 && i + 1 < teil.length
         ? ui.anzeige('treffer-' + Math.floor(i / abstand), 'breit') : ''}`)}
     </div>
@@ -397,8 +426,8 @@
     ${rest > 0 ? h`<div class="mehr">
       <button type="button" class="knopf knopf--still" data-tu="mehr-zeigen">
         ${ico('pfeilUnten')}Weitere ${Math.min(SEITE, rest)} von ${U.num(rest)} zeigen</button>
-      <p class="fein">${U.num(teil.length)} von ${U.num(bewertet.length)} Treffern geladen</p>
-    </div>` : bewertet.length > SEITE ? h`<p class="mehr__fertig fein">Alle ${U.num(bewertet.length)} Treffer geladen.</p>` : ''}`;
+      <p class="fein">${U.num(teil.length)} von ${U.num(organisch.length)} Treffern geladen</p>
+    </div>` : organisch.length > SEITE ? h`<p class="mehr__fertig fein">Alle ${U.num(organisch.length)} Treffer geladen.</p>` : ''}`;
   }
 
   /* Erklärt, warum das erste Ergebnis vorne steht. */
@@ -411,6 +440,8 @@
       <summary>${ico('info')}Warum steht „${U.truncate(top.l.titel, 46)}“ ganz oben?</summary>
       <p>Nestwerk sortiert nach deinem Profil, nicht nach bezahlter Platzierung. Für dieses Inserat zählen vor allem
         ${raw(gruende.join(', '))}. Insgesamt ergibt das ${top.b.score} von 100 Punkten.</p>
+      <p>Bezahlte Plätze gibt es getrennt davon: Sie stehen über der Liste, tragen die Überschrift
+        „Top-Anzeigen“ und verschieben in der Liste darunter nichts.</p>
       <p class="erklaerung__mehr"><a href="#/profil">Gewichtung im Profil ändern</a> – dann ändert sich auch die Reihenfolge.</p>
     </details>`;
   }

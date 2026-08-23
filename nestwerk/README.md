@@ -11,8 +11,8 @@ Dritte. Alles, was du eingibst, bleibt im Speicher deines Geräts.
 
 ## Das Geschäftsmodell in einem Satz
 
-> **Plus bezahlt Zeitersparnis bei häufiger Nutzung – niemals einen Vorteil
-> gegenüber anderen Bewerbern.**
+> **Plus bezahlt Zeitersparnis und Sichtbarkeit – nie, was jemand über eine
+> Wohnung erfährt.**
 
 Daraus folgt die ganze Aufteilung:
 
@@ -30,11 +30,44 @@ Daraus folgt die ganze Aufteilung:
   Haushalte, mehrere Ankerpunkte, Marktdaten, Route für Besichtigungen,
   Erinnerung ans Nachfassen – und keine Anzeigen.
 
-**Was Plus ausdrücklich nicht kauft:** keine bessere Platzierung in der
-Trefferliste, keinen Vorrang bei Vermietern, keinen Frühzugang zu Inseraten,
-keine Daten anderer Nutzer, keinen besseren Datenschutz gegen Aufpreis. Genau
-das verkaufen die meisten Portale – und genau deshalb ist ihre
-Trefferreihenfolge nicht nachvollziehbar.
+**Was Plus ausdrücklich nicht kauft:** keine andere Trefferreihenfolge, keinen
+Frühzugang zu Inseraten, keine Daten anderer Nutzer, keinen besseren
+Datenschutz gegen Aufpreis, keine bessere Bewertung eines Angebots.
+
+## Bezahlte Sichtbarkeit
+
+Zwei Dinge kauft Geld sehr wohl, und beide sind Sichtbarkeit:
+
+1. **Anfragen von Plus-Nutzenden stehen im Postfach der anbietenden Seite
+   oben** und sind dort mit „Plus“ gekennzeichnet.
+2. **Inserate lassen sich hervorheben** – nach oben schieben für 2,90 €,
+   farbig hervorheben für 6,90 € (7 Tage), Top-Anzeige für 14,90 € (7 Tage).
+   Mit Plus 20 % günstiger.
+
+Beides ist an eine Bedingung geknüpft, von der nicht abgewichen wird: **Es
+wird angezeigt.**
+
+* Eine Anfrage, die oben steht, weil sie bezahlt ist, trägt das Wort „Plus“.
+  Daneben steht für die anbietende Seite lesbar, dass die Reihenfolge bezahlt
+  ist und *nichts über die Eignung der Person aussagt*. Keine Anfrage wird
+  gekürzt, versteckt oder gelöscht, weil jemand nicht zahlt.
+* Ein hervorgehobenes Inserat steht in einem **eigenen, beschrifteten Block
+  über** den Treffern, höchstens zwei auf einmal – nie zwischen ihnen. Die
+  Liste darunter folgt weiter dem Profil, und die Erklärung „warum steht das
+  ganz oben" sagt das ausdrücklich.
+
+Der Grund ist nicht nur Anstand: Bezahlte Platzierung in Suchergebnissen ist
+nach § 5b Abs. 1 Nr. 6 und Abs. 2 UWG kennzeichnungspflichtig. Untergemischte
+Werbeplätze wären also ohnehin unzulässig – vor allem aber wären sie der
+Anfang vom Ende jeder nachvollziehbaren Suche.
+
+Diese Aufteilung hat auch einen ökonomischen Grund: Sie lässt den zahlen, der
+etwas davon hat – die anbietende Seite –, und nicht den, der gerade eine
+Wohnung sucht und meist wenig Geld hat.
+
+Alles, was mit der **Wohnung selbst** zu tun hat – Prüfhinweis gegen Betrug,
+Vergleichsmiete, Chancenschätzung, echte Kosten, Vertragslupe –, bleibt im
+freien Tarif vollständig. Diese Grenze verschiebt sich nicht.
 
 **Gründerplätze.** Die ersten 10.000 Anmeldungen bekommen Plus zwölf Monate
 ohne Bezahlung. Das ist bewusst **kein Abo mit Gratismonat**: Es werden keine
@@ -427,11 +460,15 @@ Namen. Es gibt eine Tabellenansicht für alle, die lieber Zahlen lesen.
 
 ## Farben
 
-Der Farbton ist bewusst kein Grünblau. Fast jedes deutsche Wohnungsportal
-arbeitet mit Orangerot oder Petrol; wer daneben genauso aussieht, wird für
-eine Kopie gehalten. Nestwerk steht deshalb auf einem tiefen **Indigoviolett**
-mit **Beere** als Zweitfarbe, auf kühlen, leicht violett gebrochenen
-Grauwerten – und die gezeichneten Ansichten der Wohnungen ziehen mit.
+**Waldgrün, nicht Petrol.** Der Unterschied ist kein Geschmack, sondern
+Wiedererkennung: Petrol und Orangerot tragen fast alle deutschen
+Wohnungsportale. Nestwerk steht auf einem tiefen, gedeckten Grün mit **Beere**
+als Zweitfarbe; die warmen, leicht sandigen Grauwerte halten es davon ab, ins
+Krankenhausgrüne zu kippen, und die gezeichneten Ansichten der Wohnungen
+ziehen mit.
+
+„Gut" ist dabei bewusst limegrüner als der Markenton – sonst verschwimmen
+Zustand und Marke zu einer grünen Suppe.
 
 Statusfarben bleiben konventionell: Grün, Gelb und Rot bedeuten überall
 dasselbe. Sie umzufärben, damit sie zum Markenton passen, würde

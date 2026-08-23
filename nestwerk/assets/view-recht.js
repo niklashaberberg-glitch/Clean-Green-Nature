@@ -395,8 +395,9 @@
 
           <h2>§ 5 Nestwerk Plus</h2>
           <p>(1) Nestwerk Plus umfasst die auf der <a href="#/plus">Tarifseite</a> beschriebenen Leistungen.
-            Plus verschafft <b>keinen Vorteil gegenüber anderen Bewerbenden</b>: keine bessere Platzierung in
-            Trefferlisten, keinen Vorrang bei Vermietenden, keinen früheren Zugang zu neuen Angeboten.</p>
+            Plus verändert <b>nicht die Bewertung oder die Trefferreihenfolge</b> für andere Nutzende und
+            verschafft <b>keinen früheren Zugang</b> zu neuen Angeboten. Zur vorrangigen Anzeige von Anfragen
+            bei der anbietenden Seite siehe § 6.</p>
           <p>(2) Der Preis beträgt ${U.eur2(t.preisMonat)} im Monat oder ${U.eur2(t.preisJahr)} im Jahr.
             ${R.preisHinweis()}</p>
           <p>(3) Die Laufzeit beträgt je nach Wahl einen Monat oder ein Jahr und verlängert sich jeweils um
@@ -410,7 +411,30 @@
             Textform mit. Die Nutzenden können den Vertrag bis zum Wirksamwerden zum Zeitpunkt der Erhöhung
             kündigen; darauf wird in der Mitteilung hingewiesen.</p>
 
-          <h2>§ 6 Gründerplätze</h2>
+          <h2>§ 6 Bezahlte Sichtbarkeit</h2>
+          <p>(1) Der Anbieter stellt zwei Formen bezahlter Sichtbarkeit bereit:</p>
+          <ul class="pruef">
+            <li>${ico('pruefen')}<span><b>Vorrang von Anfragen.</b> Anfragen von Nutzenden mit Nestwerk Plus
+              werden im Posteingang der anbietenden Seite vorrangig angezeigt und dort als solche
+              gekennzeichnet.</span></li>
+            <li>${ico('pruefen')}<span><b>Hervorhebung von Inseraten.</b> Einzeln buchbar zu den auf der
+              <a href="#/plus">Tarifseite</a> genannten Preisen.</span></li>
+          </ul>
+          <p>(2) Bezahlte Platzierungen werden stets als solche gekennzeichnet und getrennt von den
+            organischen Ergebnissen dargestellt (§ 5b Abs. 1 Nr. 6 und Abs. 2 UWG). Die Reihenfolge der
+            übrigen Treffer bleibt davon unberührt; sie entsteht allein aus den Angaben des suchenden
+            Nutzers.</p>
+          <p>(3) Bezahlte Sichtbarkeit verändert nicht die inhaltliche Bewertung eines Angebots. Prüfhinweis,
+            Vergleichsmiete, Chancenschätzung und Kostenrechnung sind davon unabhängig und bleiben im freien
+            Tarif vollständig verfügbar.</p>
+          <p>(4) Es besteht kein Anspruch auf eine bestimmte Anzahl von Aufrufen, Anfragen oder auf einen
+            Vermietungs- oder Verkaufserfolg. Die Zahl gleichzeitig angezeigter bezahlter Plätze ist begrenzt;
+            sind alle belegt, wird die Buchung erst zum nächstmöglichen Zeitpunkt wirksam.</p>
+          <p>(5) Hervorhebungen sind digitale Dienstleistungen. Für Verbraucherinnen und Verbraucher gilt das
+            <a href="#/recht/widerruf">Widerrufsrecht</a>; beginnt die Leistung auf ausdrücklichen Wunsch
+            sofort, erlischt es nach § 356 Abs. 5 BGB.</p>
+
+          <h2>§ 7 Gründerplätze</h2>
           <p>(1) Der Anbieter vergibt die ersten <b>${U.num(g.plaetze)} Plätze</b> mit den Leistungen von
             Nestwerk Plus für <b>${g.monate} Monate ohne Entgelt</b> (Gründerplatz).</p>
           <p>(2) Der Gründerplatz ist <b>kein Abonnement</b>. Er verlängert sich nicht, geht nicht in einen
@@ -425,7 +449,7 @@
           <p>(5) Der Gründerplatz kann jederzeit ohne Angabe von Gründen beendet werden. Da er unentgeltlich
             ist, entsteht dabei keine Zahlungspflicht und es besteht kein Anspruch auf Erstattung.</p>
 
-          <h2>§ 7 Pflichten der Nutzenden</h2>
+          <h2>§ 8 Pflichten der Nutzenden</h2>
           <p>(1) Angaben, die Nutzende einstellen, müssen zutreffend sein. Insbesondere dürfen keine
             Wohnungen angeboten werden, über die keine Verfügungsbefugnis besteht.</p>
           <p>(2) Untersagt sind insbesondere:</p>
@@ -443,7 +467,7 @@
           <p>(3) Nutzende halten den Anbieter von Ansprüchen Dritter frei, die auf einer schuldhaften
             Verletzung dieser Pflichten beruhen, einschließlich angemessener Kosten der Rechtsverteidigung.</p>
 
-          <h2>§ 8 Inhalte der Nutzenden</h2>
+          <h2>§ 9 Inhalte der Nutzenden</h2>
           <p>(1) Rechte an eingestellten Inhalten verbleiben bei den Nutzenden.</p>
           <p>(2) Für die Dauer der Einstellung räumen Nutzende dem Anbieter das einfache, räumlich unbegrenzte
             Recht ein, diese Inhalte im Rahmen der Anwendung anzuzeigen, technisch zu vervielfältigen und in
@@ -452,9 +476,9 @@
           <p>(3) Mit der Löschung eines Inhalts endet das Nutzungsrecht, soweit keine gesetzlichen
             Aufbewahrungspflichten entgegenstehen.</p>
 
-          <h2>§ 9 Entfernen von Inhalten, Sperrung, Beschwerde</h2>
+          <h2>§ 10 Entfernen von Inhalten, Sperrung, Beschwerde</h2>
           <p>(1) Der Anbieter kann Inhalte entfernen oder den Zugang einschränken, wenn sie rechtswidrig sind
-            oder gegen § 7 verstoßen.</p>
+            oder gegen § 8 verstoßen.</p>
           <p>(2) Betroffene erhalten dazu eine <b>Begründung</b> mit Angabe des Grundes, der Tatsachengrundlage
             und der Möglichkeiten, dagegen vorzugehen (Art. 17 der Verordnung (EU) 2022/2065).</p>
           <p>(3) Gegen eine Entscheidung kann innerhalb von sechs Monaten formlos Beschwerde an
@@ -463,7 +487,7 @@
           <p>(4) Rechtswidrige Inhalte lassen sich <a href="#/recht/melden">hier melden</a>. Meldungen werden
             zeitnah, sorgfältig und nicht willkürlich bearbeitet (Art. 16 der Verordnung (EU) 2022/2065).</p>
 
-          <h2>§ 10 Verfügbarkeit</h2>
+          <h2>§ 11 Verfügbarkeit</h2>
           <p>(1) Der Anbieter bemüht sich um eine möglichst unterbrechungsfreie Verfügbarkeit, schuldet sie
             aber nicht ununterbrochen. Wartungsarbeiten, Störungen der Netze Dritter und Ereignisse höherer
             Gewalt können zu Unterbrechungen führen.</p>
@@ -472,7 +496,7 @@
           <p>(3) Fällt eine bezahlte Leistung länger als 48 zusammenhängende Stunden aus, verlängert sich die
             Laufzeit auf Verlangen entsprechend.</p>
 
-          <h2>§ 11 Mängel und Haftung</h2>
+          <h2>§ 12 Mängel und Haftung</h2>
           <p>(1) Für die Bereitstellung digitaler Produkte gegen Entgelt gelten die §§ 327 ff. BGB. Der
             Anbieter schuldet die vereinbarte und die objektiv erforderliche Beschaffenheit einschließlich
             der Aktualisierungen, die zum Erhalt der Vertragsmäßigkeit nötig sind.</p>
@@ -488,13 +512,13 @@
           <p>(5) Der Anbieter haftet nicht für Entscheidungen, die auf Grundlage der Rechenergebnisse und
             Hinweise nach § 2 Abs. 3 getroffen werden, und nicht für das Verhalten anderer Nutzender.</p>
 
-          <h2>§ 12 Kündigung durch den Anbieter</h2>
+          <h2>§ 13 Kündigung durch den Anbieter</h2>
           <p>(1) Unentgeltliche Nutzungsverhältnisse kann der Anbieter mit einer Frist von vier Wochen
             kündigen.</p>
           <p>(2) Das Recht zur Kündigung aus wichtigem Grund bleibt beiderseits unberührt. Ein wichtiger Grund
-            liegt für den Anbieter insbesondere bei erheblichen oder wiederholten Verstößen gegen § 7 vor.</p>
+            liegt für den Anbieter insbesondere bei erheblichen oder wiederholten Verstößen gegen § 8 vor.</p>
 
-          <h2>§ 13 Änderung dieser Bedingungen</h2>
+          <h2>§ 14 Änderung dieser Bedingungen</h2>
           <p>(1) Der Anbieter kann diese Bedingungen ändern, wenn dies zur Anpassung an geänderte
             Rechtslage, Rechtsprechung oder an Änderungen der Anwendung erforderlich ist und die Nutzenden
             dadurch nicht unangemessen benachteiligt werden.</p>
@@ -503,7 +527,7 @@
             diese Folge und auf das Widerspruchsrecht wird in der Mitteilung gesondert hingewiesen. Im Fall
             des Widerspruchs kann jede Seite den Vertrag zum Zeitpunkt des Wirksamwerdens kündigen.</p>
 
-          <h2>§ 14 Schlussbestimmungen</h2>
+          <h2>§ 15 Schlussbestimmungen</h2>
           <p>(1) Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts. Verbraucherinnen und
             Verbrauchern bleiben die zwingenden Schutzvorschriften des Staates erhalten, in dem sie ihren
             gewöhnlichen Aufenthalt haben (Art. 6 Abs. 2 der Verordnung (EG) Nr. 593/2008).</p>

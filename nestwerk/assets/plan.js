@@ -3,13 +3,33 @@
 
    Leitgedanke, an dem sich jede Entscheidung hier messen lassen muss:
 
-     Plus bezahlt Zeitersparnis bei häufiger Nutzung.
-     Plus bezahlt niemals einen Vorteil gegenüber anderen Bewerbern.
+     Plus bezahlt Zeitersparnis und Sichtbarkeit.
+     Plus verändert nie, was jemand über eine Wohnung erfährt.
 
    Deshalb bleibt alles frei, was schützt (Prüfhinweis, Vergleichsmiete,
    Chancen), was gerechnet werden muss (Leistbarkeit, Wohngeld, Kosten)
    und was man einmal im Leben braucht (Übergabe, Nebenkosten, Umzug).
    Hinter Plus liegt, was jemand zehnmal am Tag anfasst.
+
+   Zwei Dinge kauft Plus inzwischen doch, und beide sind bezahlte
+   Sichtbarkeit. Das ist eine Entscheidung des Betriebs, keine technische
+   Notwendigkeit – deshalb steht sie hier so deutlich:
+
+     1. Anfragen von Plus-Nutzenden erscheinen im Postfach der
+        anbietenden Seite weiter oben.
+     2. Inserate lassen sich gegen Gebühr hervorheben.
+
+   Beides ist an eine Bedingung geknüpft, von der nicht abgewichen wird:
+   Es wird angezeigt. Eine Anfrage, die oben steht, weil sie bezahlt ist,
+   trägt das Wort „Plus“; ein hervorgehobenes Inserat steht in einem
+   eigenen, beschrifteten Block und nicht in der Trefferreihenfolge.
+   Bezahlte Platzierung heimlich unter organische Ergebnisse zu mischen,
+   wäre nach § 5b Abs. 1 Nr. 6 und Abs. 2 UWG ohnehin unzulässig – vor
+   allem aber wäre es der Anfang vom Ende jeder nachvollziehbaren Suche.
+
+   Was Plus weiterhin nicht kauft: eine bessere Platzierung in der
+   Trefferliste anderer, früheren Zugang zu neuen Inseraten, Daten
+   anderer Nutzender oder besseren Datenschutz gegen Aufpreis.
    ===================================================================== */
 (function (NW) {
   'use strict';
@@ -44,7 +64,8 @@
       marktdaten: false,
       exposeExport: false,
       nachfassen: false,
-      tagesplan: false
+      tagesplan: false,
+      anfrageVorne: false
     },
     plus: {
       suchauftraege: Infinity,
@@ -58,7 +79,8 @@
       marktdaten: true,
       exposeExport: true,
       nachfassen: true,
-      tagesplan: true
+      tagesplan: true,
+      anfrageVorne: true
     }
   };
 
@@ -119,18 +141,100 @@
     { id: 'marktdaten', gruppe: 'Täglich', name: 'Preisverlauf und Marktdaten je Viertel',
       frei: 'nein', plus: 'ja' },
     { id: 'expose', gruppe: 'Täglich', name: 'Exposé und Merkliste als Datei',
-      frei: 'nein', plus: 'ja' }
+      frei: 'nein', plus: 'ja' },
+
+    { id: 'anfrageVorne', gruppe: 'Sichtbarkeit', name: 'Anfragen stehen im Postfach der Anbieter oben',
+      frei: 'in der Reihenfolge des Eingangs', plus: 'oben, sichtbar gekennzeichnet',
+      warum: 'Die anbietende Seite sieht, dass die Reihenfolge bezahlt ist. Verschwiegen wäre sie unzulässig.' },
+    { id: 'hervorheben', gruppe: 'Sichtbarkeit', name: 'Eigenes Inserat hervorheben',
+      frei: 'einzeln buchbar', plus: 'einzeln buchbar, 20 % günstiger',
+      warum: 'Hervorgehobene Inserate stehen in einem eigenen, beschrifteten Block – nie in der Trefferreihenfolge.' }
   ];
 
   /* Was Plus ausdrücklich nicht kauft. Steht so auch auf der Preisseite. */
   const NICHT_KAEUFLICH = [
-    'Keine bessere Platzierung in der Trefferliste – die Reihenfolge entsteht allein aus deinem Profil.',
-    'Kein Vorrang bei Vermietern und keine Markierung in deiner Bewerbung.',
+    'Keine andere Trefferreihenfolge. Die Sortierung entsteht allein aus deinem Profil – bezahlte Plätze stehen in einem eigenen, beschrifteten Block darüber.',
+    'Keine unsichtbare Bevorzugung. Wo Bezahlung die Reihenfolge ändert, steht es dabei – im Postfach der Anbieter genauso wie in der Suche.',
     'Kein Frühzugang zu neuen Inseraten. Alle sehen jedes Inserat in derselben Sekunde.',
     'Keine Daten anderer Nutzerinnen und Nutzer.',
     'Kein besserer Datenschutz gegen Aufpreis – der Dokumententresor und die widerrufbaren Verweise sind im freien Tarif vollständig enthalten.',
     'Keine Werbung, die sich als Inserat ausgibt – Anzeigen sind immer als solche gekennzeichnet.'
   ];
+
+  /* ------------------------- Inserate hervorheben -------------------------
+
+     Das Modell, das jeder von Kleinanzeigen kennt: Wer sein Angebot
+     schneller loswerden will, zahlt für Sichtbarkeit. Für eine Plattform
+     ist es die verlässlichste Einnahme überhaupt, weil sie den zahlt, der
+     einen Nutzen davon hat – die anbietende Seite –, und nicht den, der
+     gerade eine Wohnung sucht und meist wenig Geld hat.
+
+     Entscheidend ist, wie es eingebaut wird. Ein gekaufter Platz mitten
+     in der Trefferliste macht die Reihenfolge unerklärbar und ist nach
+     § 5b UWG kennzeichnungspflichtig. Deshalb hier: eigener Block über
+     den Ergebnissen, beschriftet, in der Zahl begrenzt. Die organische
+     Liste darunter bleibt unberührt und folgt weiter dem Profil. */
+
+  const HERVORHEBUNG = [
+    {
+      id: 'schub', name: 'Nach oben schieben', preis: 2.90, tage: 0,
+      kurz: 'Das Inserat gilt wieder als frisch und steht in „neueste zuerst“ ganz oben.',
+      wirkung: 'einmalig, sofort', icon: 'pfeilUnten'
+    },
+    {
+      id: 'farbe', name: 'Hervorheben', preis: 6.90, tage: 7,
+      kurz: 'Die Karte bekommt einen farbigen Rand und ein Kennzeichen – sie bleibt an ihrem Platz, fällt aber auf.',
+      wirkung: '7 Tage', icon: 'stern'
+    },
+    {
+      id: 'top', name: 'Top-Anzeige', preis: 14.90, tage: 7,
+      kurz: 'Das Inserat steht über den Treffern in einem eigenen, als bezahlt gekennzeichneten Block.',
+      wirkung: '7 Tage', icon: 'blitz'
+    }
+  ];
+
+  /* Höchstens so viele bezahlte Plätze über einer Trefferliste. Mehr, und
+     der eigentliche Inhalt beginnt unterhalb des Bildschirmrands. */
+  const TOP_MAX = 2;
+  const PLUS_RABATT = 0.20;
+
+  const hervorhebung = (id) => HERVORHEBUNG.find((x) => x.id === id) || null;
+
+  function hervorhebungPreis(id) {
+    const p = hervorhebung(id);
+    if (!p) return 0;
+    return istPlus() ? Math.round(p.preis * (1 - PLUS_RABATT) * 100) / 100 : p.preis;
+  }
+
+  /* Läuft die Hervorhebung eines Inserats gerade? */
+  function boostAktiv(l, art) {
+    const b = l && l.boost;
+    if (!b) return false;
+    if (art && b.art !== art) return false;
+    if (!b.bis) return b.art === 'schub';
+    return new Date(b.bis) > NW.now();
+  }
+
+  const istTop = (l) => boostAktiv(l, 'top');
+  const istHervorgehoben = (l) => boostAktiv(l, 'farbe') || boostAktiv(l, 'top');
+
+  /* ------------------------- Anfragen sortieren -------------------------
+
+     Die Reihenfolge im Postfach der anbietenden Seite. Plus zuerst, dann
+     nach Eingang. Der Rang wird zurückgegeben, damit die Oberfläche ihn
+     anzeigen kann – eine Sortierung, die niemand erklärt, ist genau die,
+     die man nicht bauen darf. */
+  function anfrageRang(a) {
+    return (a && a.plus) ? 0 : 1;
+  }
+
+  function anfragenSortieren(liste) {
+    return liste.slice().sort((a, b) => {
+      const r = anfrageRang(a) - anfrageRang(b);
+      if (r) return r;
+      return String(a.zeit || '').localeCompare(String(b.zeit || ''));
+    });
+  }
 
   /* ------------------------- Gründerplätze -------------------------
 
@@ -288,6 +392,9 @@
 
   NW.plan = {
     TARIFE, GRENZEN, LEISTUNGEN, NICHT_KAEUFLICH, ANZEIGEN, ANZEIGE_ABSTAND, GRUENDER,
+    HERVORHEBUNG, TOP_MAX, PLUS_RABATT,
+    hervorhebung, hervorhebungPreis, boostAktiv, istTop, istHervorgehoben,
+    anfrageRang, anfragenSortieren,
     aktuell, istPlus, plusQuelle, grenze, darf, leistung, wechseln, anzeige,
     gruender, gruenderAktiv, gruenderTageRest, gruenderVergeben, gruenderFrei,
     gruenderSichern, gruenderAufgeben

@@ -305,6 +305,28 @@
     return id;
   }
 
+  /* Hervorhebung eines eigenen Inserats setzen oder beenden. */
+  function inseratHervorheben(id, art) {
+    const p = NW.plan.hervorhebung(art);
+    update((s) => {
+      const e = s.eigeneInserate.find((x) => x.id === id);
+      if (!e) return;
+      if (!art) { delete e.boost; }
+      else {
+        e.boost = {
+          art,
+          seit: U.isoDate(NW.now()),
+          bis: p && p.tage ? U.isoDate(U.addDays(NW.now(), p.tage)) : '',
+          bezahlt: p ? NW.plan.hervorhebungPreis(art) : 0
+        };
+        /* „Nach oben schieben“ heißt: Das Inserat gilt wieder als frisch. */
+        if (art === 'schub') e.stats = Object.assign({}, e.stats, { online: U.isoDate(NW.now()) });
+      }
+      if (s.meinTausch && s.meinTausch.id === id) s.meinTausch = e;
+      NW.data.byId[id] = e;
+    }, 'inserate');
+  }
+
   function inseratLoeschen(id) {
     update((s) => {
       s.eigeneInserate = s.eigeneInserate.filter((x) => x.id !== id);
@@ -426,6 +448,7 @@
     gemerkt, merken, setStatus, setNotiz,
     imVergleich, vergleichen,
     agentAnlegen, agentLoeschen, agentTreffer, agentGelesen,
+    inseratHervorheben,
     threadFuer, anschreiben, threadGelesen,
     terminBuchen, terminAbsagen, checkSetzen,
     inseratAnlegen, inseratLoeschen, gesehenMerken,

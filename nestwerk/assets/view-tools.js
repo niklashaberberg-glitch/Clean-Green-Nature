@@ -351,6 +351,56 @@
      Nachrichten
      ================================================================ */
 
+  /* ---------------------- Anfragen zu eigenen Inseraten ----------------------
+
+     Hier wird sichtbar, was auf der Preisseite behauptet wird: Anfragen
+     mit Plus stehen oben. Damit das kein blindes Versprechen bleibt,
+     steht daneben, warum – und zwar für die anbietende Seite lesbar. */
+
+  function eigenesPostfach() {
+    const s = S.get();
+    if (!s.eigeneInserate.length) return '';
+    return h`<section class="block">
+      <div class="block__kopfzeile">
+        <h2>${ico('nachricht')}Anfragen zu deinen Inseraten</h2>
+        <span class="fein">${s.eigeneInserate.length} ${U.plural(s.eigeneInserate.length, 'Inserat', 'Inserate')}</span>
+      </div>
+      ${s.eigeneInserate.map((e) => {
+      const anfragen = P.anfragenSortieren(NW.data.anfragenFuer(e));
+      const mitPlus = anfragen.filter((a) => a.plus).length;
+      return h`<article class="anfragen">
+          <header class="anfragen__kopf">
+            <b><a href="#/objekt/${e.id}">${U.truncate(e.titel, 52)}</a></b>
+            <span>${anfragen.length} ${U.plural(anfragen.length, 'Anfrage', 'Anfragen')}${mitPlus
+        ? ' · ' + mitPlus + ' mit Plus' : ''}</span>
+          </header>
+          <ol class="anfragen__liste">
+            ${anfragen.map((a) => h`<li class="${a.plus ? 'is-plus' : ''}">
+              ${raw(NW.img.avatar(a.name, 34))}
+              <div>
+                <b>${a.name}${a.plus ? ui.badge('Plus', 'info', 'plus5') : ''}
+                  ${a.unterlagen ? ui.badge('Unterlagen dabei', 'gut') : ''}</b>
+                <i>${U.truncate(a.text, 96)}</i>
+                <span>${U.since(a.zeit)}</span>
+              </div>
+            </li>`)}
+          </ol>
+          <details class="anfragen__warum">
+            <summary>${ico('info')}Warum stehen manche Anfragen oben?</summary>
+            <p>Anfragen von Nutzenden mit <b>Nestwerk Plus</b> werden zuerst gezeigt und sind mit „Plus“
+              gekennzeichnet. Das ist bezahlte Sichtbarkeit, kein Urteil über die Person: Nestwerk sagt damit
+              nichts darüber, wer besser zu deiner Wohnung passt. Darunter folgen alle weiteren in der
+              Reihenfolge des Eingangs – gelöscht oder versteckt wird keine.</p>
+            <p class="fein">Du kannst die Reihenfolge ignorieren; die Liste zeigt alle Anfragen vollständig.</p>
+          </details>
+          <p class="fein anfragen__demo">${ico('info')}Beispielanfragen dieser Vorführung. Es gibt keinen
+            Server, also auch niemanden, der wirklich geschrieben hätte – die Namen und Texte entstehen aus der
+            Kennung des Inserats und bleiben deshalb gleich.</p>
+        </article>`;
+    })}
+    </section>`;
+  }
+
   function nachrichten(route) {
     const s = S.get();
     const aktivId = route.arg || (s.threads[0] ? s.threads[0].id : null);
@@ -362,7 +412,8 @@
         titel: 'Nachrichten',
         html: h`<div class="seite seite--schmal">
           <header class="seite__kopf"><h1>${ico('nachricht')}Nachrichten</h1></header>
-          <div class="leer">${ico('nachricht')}<h3>Noch kein Verlauf</h3>
+          ${eigenesPostfach()}
+          <div class="leer">${ico('nachricht')}<h3>Noch kein eigener Verlauf</h3>
             <p>Sobald du ein Inserat anschreibst, erscheint der Verlauf hier.</p>
             <p><a class="knopf" href="#/suche">${ico('suche')}Zur Suche</a></p></div></div>`
       };
@@ -372,6 +423,7 @@
       titel: 'Nachrichten',
       html: h`<div class="seite">
         <header class="seite__kopf"><h1>${ico('nachricht')}Nachrichten</h1></header>
+        ${eigenesPostfach()}
         <div class="post">
           <nav class="post__liste" aria-label="Verläufe">
             ${s.threads.map((t) => {

@@ -148,6 +148,9 @@
     if (b && b.mietCheck && b.mietCheck.diff > 25) marken.push(badge('+' + b.mietCheck.diff + ' % zum Spiegel', 'schlecht'));
     if (l.befristetBis) marken.push(badge('befristet', 'warn'));
     if (l.kind === 'wg' && b && b.wg && b.wg.ausschluss.length) marken.push(badge('Ausschlusskriterium', 'schlecht'));
+    /* Bezahlte Sichtbarkeit steht als Erstes und heißt beim Namen. */
+    if (NW.plan.istTop(l)) marken.unshift(badge('Top-Anzeige', 'info', 'blitz'));
+    else if (NW.plan.istHervorgehoben(l)) marken.unshift(badge('hervorgehoben', 'info', 'stern'));
     return marken;
   }
 
@@ -169,7 +172,8 @@
     }
     eck.push('ab ' + U.dateDE(l.freiAb));
 
-    return h`<article class="karte-inserat ${opt.kompakt ? 'is-kompakt' : ''}" data-id="${l.id}">
+    const hervor = NW.plan.istHervorgehoben(l);
+    return h`<article class="karte-inserat ${opt.kompakt ? 'is-kompakt' : ''} ${hervor ? 'is-hervor' : ''}" data-id="${l.id}">
       <a class="karte-inserat__bild" href="#/objekt/${l.id}" aria-label="${l.titel} ansehen">
         ${raw(NW.img.make(l, 0))}
         <span class="karte-inserat__art">${ico(artIcon(l))}${artLabel(l)}</span>
@@ -820,6 +824,25 @@
     'band-zu'(el) {
       NW.store.update((s) => { s.hinweiseGelesen[el.dataset.was] = U.isoDate(NW.now()); }, 'hinweis');
       bandZeichnen();
+    },
+
+    'warum-top'() {
+      dialog({
+        titel: 'Warum steht das oben?',
+        inhalt: h`<p>Diese Inserate stehen dort, weil die anbietende Seite für den Platz bezahlt hat. Nestwerk
+            zeigt bezahlte Plätze <b>getrennt und beschriftet</b> – nie zwischen den Treffern.</p>
+          <p><b>Was das nicht bedeutet:</b></p>
+          <ul class="liste-schlicht">
+            <li>Die Reihenfolge deiner Treffer darunter ändert sich dadurch nicht. Sie folgt weiter deinem Profil.</li>
+            <li>Ein bezahlter Platz sagt nichts über die Wohnung. Prüfhinweis, Vergleichsmiete und Chancen
+              rechnet Nestwerk hier genauso wie überall.</li>
+            <li>Kein Inserat verschwindet, weil ein anderes bezahlt hat. Die Liste bleibt vollständig.</li>
+          </ul>
+          <p class="fein">Höchstens ${NW.plan.TOP_MAX} bezahlte Plätze über einer Trefferliste. Mehr, und der
+            eigentliche Inhalt begänne unterhalb des Bildschirmrands.</p>`,
+        fuss: h`<a class="knopf knopf--still" href="#/inserieren" data-tu="dialog-zu">Eigenes Inserat hervorheben</a>
+          <button type="button" class="knopf" data-tu="dialog-zu">Verstanden</button>`
+      });
     },
 
     'warum-werbung'() {

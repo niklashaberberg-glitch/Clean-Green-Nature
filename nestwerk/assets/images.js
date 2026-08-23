@@ -13,20 +13,25 @@
      Verwandtschaft wie die Oberfläche. Vorher stand hier ein Grün-Orange-
      Satz aus einer früheren Fassung; neben dem Indigo der Anwendung sah das
      aus, als gehörten Bild und Seite nicht zusammen. */
+  /* Sechs Farbfamilien für Abwechslung im Bestand – aber alle aus derselben
+     Verwandtschaft wie die Oberfläche. Ein Satz aus Grün und Orange neben
+     einem waldgrünen Kopf sähe aus, als gehörten Bild und Seite nicht
+     zusammen; also gedeckte Töne rund um Wald, Salbei, Lehm und Beere. */
   const PALETTES = [
-    /* Indigo */
-    { sky: ['#e4e0fb', '#f3f1fe'], wall: '#d5d1e6', wall2: '#a8a2c4', warm: '#faf9ff', accent: '#4a32c4', dark: '#332d4d', green: '#3f8f5f' },
-    /* Petrol */
-    { sky: ['#d6eef4', '#eef8fb'], wall: '#cdd9de', wall2: '#93a9b3', warm: '#f7fcfd', accent: '#0b6f7e', dark: '#2c4249', green: '#2f7d5a' },
-    /* Beere */
-    { sky: ['#fbe1ee', '#fef4f8'], wall: '#e3d3dc', wall2: '#bfa2b2', warm: '#fffafc', accent: '#ab2168', dark: '#4a3040', green: '#4d7c4f' },
-    /* Sand */
-    { sky: ['#f7ecd9', '#fdf8ef'], wall: '#e4dac6', wall2: '#bcae92', warm: '#fffdf7', accent: '#7d5a06', dark: '#453c2c', green: '#5d7f3a' },
-    /* Nachtblau */
-    { sky: ['#dbe4fb', '#eff3fe'], wall: '#ccd3e4', wall2: '#98a4c2', warm: '#f9faff', accent: '#2f4dae', dark: '#2f3856', green: '#3d7f6a' },
+    /* Wald */
+    { sky: ['#dcefe2', '#f0f8f3'], wall: '#d3ddd4', wall2: '#a0b2a3', warm: '#f9fcfa', accent: '#1a5c37', dark: '#2c3a2f', green: '#38660c' },
+    /* Lehm */
+    { sky: ['#f4ead9', '#fcf7ee'], wall: '#e2d8c6', wall2: '#b9ad94', warm: '#fffdf7', accent: '#8a5a1e', dark: '#443b2c', green: '#5d7f3a' },
     /* Salbei */
-    { sky: ['#e0efe6', '#f2f9f4'], wall: '#d2ded6', wall2: '#9fb2a7', warm: '#fafdfb', accent: '#276b52', dark: '#33453c', green: '#3f7a4e' }
+    { sky: ['#e4eee3', '#f3f8f2'], wall: '#d6ded2', wall2: '#a5b39c', warm: '#fbfdfa', accent: '#3f6b3a', dark: '#374437', green: '#4a7a1e' },
+    /* Beere */
+    { sky: ['#fae0ec', '#fdf3f7'], wall: '#e2d2da', wall2: '#bfa1b0', warm: '#fffafc', accent: '#79155e', dark: '#432c3c', green: '#4d7c4f' },
+    /* Seegrün */
+    { sky: ['#d8eeee', '#eff9f9'], wall: '#cdd9d7', wall2: '#95aca9', warm: '#f8fdfc', accent: '#0e6560', dark: '#2b403e', green: '#357a4a' },
+    /* Nebelblau */
+    { sky: ['#dee6ef', '#f1f5f9'], wall: '#d0d7de', wall2: '#9aa6b2', warm: '#fafcfd', accent: '#2276b8', dark: '#2f3a45', green: '#3d7f5a' }
   ];
+
 
 
   function paletteFor(seed) { return PALETTES[seed % PALETTES.length]; }

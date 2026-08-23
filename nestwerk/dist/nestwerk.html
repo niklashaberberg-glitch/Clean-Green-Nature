@@ -6,10 +6,10 @@
 <title>Nestwerk</title>
 <meta name="description" content="Nestwerk führt Mietmarkt, Kaufangebote, WG-Zimmer und Wohnungstausch zusammen: mit Vergleichsmiete, Vertragslupe, Betrugserkennung, echten Monatskosten und Ringtausch über mehrere Haushalte.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#4a32c4" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#100e1a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#1a5c37" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f120f" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234a32c4'/%3E%3Cpath d='M5 16L16 6l11 10' stroke='%23fff' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8 14.5V26h16V14.5' stroke='%23fff' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='20' r='3.2' stroke='%23fff' stroke-width='2.6' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231a5c37'/%3E%3Cpath d='M5 16L16 6l11 10' stroke='%23fff' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8 14.5V26h16V14.5' stroke='%23fff' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='20' r='3.2' stroke='%23fff' stroke-width='2.6' fill='none'/%3E%3C/svg%3E">
 </head>
 <body>
 <style>
@@ -24,39 +24,40 @@
 :root {
   color-scheme: light;
 
-  /* Der Farbton ist bewusst kein Grünblau. Fast jedes deutsche
-     Wohnungsportal arbeitet mit Orangerot oder Petrol; wer daneben genauso
-     aussieht, wird für eine Kopie gehalten. Nestwerk steht deshalb auf
-     einem tiefen Indigoviolett mit Beere als Zweitfarbe – und auf kühlen,
-     leicht violett gebrochenen Grauwerten statt der üblichen grünstichigen.
-     Alle Werte hier sind nachgerechnet, nicht geschätzt: Fließtext
-     mindestens 4,5 zu 1 gegen jede Fläche, Ränder von Bedienelementen
-     mindestens 3 zu 1, Diagrammfarben auch bei Farbfehlsichtigkeit
-     unterscheidbar. */
+  /* Waldgrün, nicht Petrol. Der Unterschied ist kein Geschmack, sondern
+     Wiedererkennung: Petrol und Orangerot tragen fast alle deutschen
+     Wohnungsportale, und wer daneben genauso aussieht, wird für eine Kopie
+     gehalten. Ein tiefes, gedecktes Grün mit Beere als Zweitfarbe steht
+     allein – und die warmen, leicht sandigen Grauwerte halten es davon ab,
+     ins Krankenhausgrüne zu kippen.
 
-  --papier: #f5f4fa;
+     Alle Werte sind nachgerechnet, nicht geschätzt:
+     node scripts/farben-pruefen.js assets/app.css */
+
+  --papier: #f6f5f2;
   --flaeche: #ffffff;
-  --flaeche2: #efeef7;
-  --flaeche3: #e4e2f0;
-  /* Eigene Grundfarbe für Werbung: warm gegen kühle Umgebung, damit ein
-     Auge sie von Inhalt unterscheidet, ohne dass sie lauter wird. */
-  --werbung: #fdf7f0;
-  --rand: #dfdcec;
-  --rand-stark: #bfbbd4;
+  --flaeche2: #f0efea;
+  --flaeche3: #e5e3dc;
+  /* Werbung bekommt eine kühle Grundfarbe gegen die warme Umgebung. Ein
+     Auge erkennt den Temperaturwechsel sofort, ohne dass die Fläche
+     lauter würde. */
+  --werbung: #f1f3f6;
+  --rand: #e0ded6;
+  --rand-stark: #c3c0b5;
   /* Der Rand eines Bedienelements muss es erkennbar machen – 3 zu 1 nach
      WCAG 1.4.11. Ein Strukturstrich darf leiser sein, ein Eingabefeld
      nicht: Wer den Rahmen nicht sieht, sieht das Feld nicht. */
-  --rand-feld: #756f92;
+  --rand-feld: #787468;
 
-  --text: #191630;
-  --text-leise: #4e4870;
-  --text-still: #575173;
+  --text: #191c17;
+  --text-leise: #4c5044;
+  --text-still: #545848;
 
-  --akzent: #4a32c4;
-  --akzent-hell: #e7e3fb;
-  --akzent-tief: #37248f;
-  --akzent2: #a32a72;
-  --akzent2-hell: #fbe3f0;
+  --akzent: #1a5c37;
+  --akzent-hell: #dcefe2;
+  --akzent-tief: #124528;
+  --akzent2: #a3245f;
+  --akzent2-hell: #fbe3ee;
   /* Schrift auf gefüllter Akzentfläche. Als Token, nicht als Dunkel-
      Sonderregel: Solche Regeln brauchen hohe Spezifität und überfahren
      dann Abwandlungen wie .knopf--still, deren Fläche gar nicht gefüllt
@@ -65,31 +66,31 @@
   --auf-akzent2: #ffffff;
 
   /* Statusfarben bleiben konventionell: Grün, Gelb und Rot bedeuten
-     überall dasselbe, und sie umzufärben, um zum Markenton zu passen,
-     würde Verständlichkeit gegen Geschmack tauschen. */
-  --gut: #0f6b33;
-  --gut-hell: #dcf5e3;
+     überall dasselbe. „Gut“ ist bewusst limegrüner als der Markenton –
+     sonst verschwimmen Zustand und Marke zu einer grünen Suppe. */
+  --gut: #38660c;
+  --gut-hell: #e6f3d8;
   --warn: #96450a;
   --warn-hell: #fdefd9;
   --schlecht: #b91c1c;
   --auf-schlecht: #ffffff;
   --schlecht-hell: #fbe2e2;
-  --info: #0d6a86;
-  --info-hell: #d9eef5;
+  --info: #1d54c4;
+  --info-hell: #dfe6fb;
 
   /* Diagrammfarben: vier Familien mit deutlichem Abstand, geprüft auch
      unter Prot-, Deuter- und Tritanopie. */
-  --miete: #4a32c4;
-  --kauf: #0b6f7e;
-  --wg: #ab2168;
-  --tausch: #7d5a06;
+  --miete: #1a5c37;
+  --kauf: #2276b8;
+  --wg: #79155e;
+  --tausch: #a3730c;
 
   --r-klein: 8px;
   --r: 14px;
   --r-gross: 22px;
 
-  --schatten: 0 1px 2px rgba(25, 22, 48, .07), 0 4px 14px rgba(25, 22, 48, .07);
-  --schatten-hoch: 0 12px 40px rgba(25, 22, 48, .18);
+  --schatten: 0 1px 2px rgba(20, 28, 20, .07), 0 4px 14px rgba(20, 28, 20, .07);
+  --schatten-hoch: 0 12px 40px rgba(20, 28, 20, .18);
 
   --kopf-hoehe: 60px;
   --breite: 1420px;
@@ -106,40 +107,40 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --papier: #100e1a;
-    --flaeche: #191627;
-    --flaeche2: #221e33;
-    --flaeche3: #2c2741;
-    --werbung: #241f1a;
-    --rand: #332e4a;
-    --rand-stark: #494263;
-    --rand-feld: #8a83a8;
-    --text: #ece9f7;
-    --text-leise: #aca6c6;
-    --text-still: #9c96b8;
+    --papier: #0f120f;
+    --flaeche: #171c17;
+    --flaeche2: #1f251f;
+    --flaeche3: #2a312a;
+    --werbung: #191d22;
+    --rand: #2e372e;
+    --rand-stark: #414c40;
+    --rand-feld: #868f83;
+    --text: #e9efe8;
+    --text-leise: #a9b4a6;
+    --text-still: #9aa697;
 
-    --akzent: #a99bff;
-    --akzent-hell: #241d4d;
-    --akzent-tief: #c4b9ff;
-    --akzent2: #f191c4;
-    --akzent2-hell: #3a1730;
-    --auf-akzent: #17123a;
-    --auf-akzent2: #2e0c22;
+    --akzent: #57c98a;
+    --akzent-hell: #0f2d1c;
+    --akzent-tief: #7ede9f;
+    --akzent2: #f284b4;
+    --akzent2-hell: #3a1526;
+    --auf-akzent: #06210f;
+    --auf-akzent2: #2c0a19;
 
-    --gut: #4ade80;
-    --gut-hell: #12301d;
+    --gut: #8bd44a;
+    --gut-hell: #1b2f10;
     --warn: #fbbf24;
     --warn-hell: #33270a;
     --schlecht: #f87171;
     --auf-schlecht: #2b0f0f;
     --schlecht-hell: #341616;
-    --info: #5fc6e3;
-    --info-hell: #0d2c38;
+    --info: #7fb0ff;
+    --info-hell: #141f38;
 
-    --miete: #a99bff;
-    --kauf: #4fd6cf;
-    --wg: #f57aa8;
-    --tausch: #f9c46a;
+    --miete: #57c98a;
+    --kauf: #7fb0ff;
+    --wg: #ff8fc6;
+    --tausch: #e0bc55;
 
     --schatten: 0 1px 2px rgba(0, 0, 0, .45), 0 4px 16px rgba(0, 0, 0, .4);
     --schatten-hoch: 0 16px 48px rgba(0, 0, 0, .65);
@@ -148,40 +149,40 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
---papier: #100e1a;
-  --flaeche: #191627;
-  --flaeche2: #221e33;
-  --flaeche3: #2c2741;
-  --werbung: #241f1a;
-  --rand: #332e4a;
-  --rand-stark: #494263;
-  --rand-feld: #8a83a8;
-  --text: #ece9f7;
-  --text-leise: #aca6c6;
-  --text-still: #9c96b8;
+--papier: #0f120f;
+  --flaeche: #171c17;
+  --flaeche2: #1f251f;
+  --flaeche3: #2a312a;
+  --werbung: #191d22;
+  --rand: #2e372e;
+  --rand-stark: #414c40;
+  --rand-feld: #868f83;
+  --text: #e9efe8;
+  --text-leise: #a9b4a6;
+  --text-still: #9aa697;
 
-  --akzent: #a99bff;
-  --akzent-hell: #241d4d;
-  --akzent-tief: #c4b9ff;
-  --akzent2: #f191c4;
-  --akzent2-hell: #3a1730;
-  --auf-akzent: #17123a;
-  --auf-akzent2: #2e0c22;
+  --akzent: #57c98a;
+  --akzent-hell: #0f2d1c;
+  --akzent-tief: #7ede9f;
+  --akzent2: #f284b4;
+  --akzent2-hell: #3a1526;
+  --auf-akzent: #06210f;
+  --auf-akzent2: #2c0a19;
 
-  --gut: #4ade80;
-  --gut-hell: #12301d;
+  --gut: #8bd44a;
+  --gut-hell: #1b2f10;
   --warn: #fbbf24;
   --warn-hell: #33270a;
   --schlecht: #f87171;
   --auf-schlecht: #2b0f0f;
   --schlecht-hell: #341616;
-  --info: #5fc6e3;
-  --info-hell: #0d2c38;
+  --info: #7fb0ff;
+  --info-hell: #141f38;
 
-  --miete: #a99bff;
-  --kauf: #4fd6cf;
-  --wg: #f57aa8;
-  --tausch: #f9c46a;
+  --miete: #57c98a;
+  --kauf: #7fb0ff;
+  --wg: #ff8fc6;
+  --tausch: #e0bc55;
 
   --schatten: 0 1px 2px rgba(0, 0, 0, .45), 0 4px 16px rgba(0, 0, 0, .4);
   --schatten-hoch: 0 16px 48px rgba(0, 0, 0, .65);
@@ -1813,6 +1814,67 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .eigenbild { display: block; width: 100%; height: 100%; object-fit: cover; }
 .galerie__gross .eigenbild { max-height: 460px; }
 
+/* =====================================================================
+   Bezahlte Sichtbarkeit
+   Zwei Regeln bestimmen die Gestalt: Sie muss auffallen, und sie muss als
+   bezahlt erkennbar sein. Deshalb ein eigener Block mit Überschrift statt
+   eines untergemischten Treffers mit Sternchen.
+   ===================================================================== */
+
+.topanzeigen { margin: 0 0 18px; padding: 10px 12px 8px; border: 1px solid var(--info);
+  border-radius: var(--r); background: linear-gradient(var(--info-hell), transparent 90px), var(--flaeche); }
+.topanzeigen__kopf { display: flex; align-items: center; gap: .6em; margin: 0 0 8px; }
+.topanzeigen__marke { display: inline-flex; align-items: center; gap: .35em; font-size: .7rem;
+  font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--info); }
+.topanzeigen__marke .ico { width: 15px; height: 15px; }
+.topanzeigen__kopf .anzeige__warum { margin-left: auto; }
+.topanzeigen__fuss { margin: 8px 0 0; font-size: .76rem; color: var(--text-still); line-height: 1.5; }
+
+.karte-inserat.is-hervor { border-color: var(--info); box-shadow: 0 0 0 1px var(--info); }
+
+.hervorliste { list-style: none; margin: 12px 0; padding: 0; display: grid; gap: 10px; }
+.hervorliste li { display: flex; flex-wrap: wrap; gap: .8em; align-items: center; padding: .8em .9em;
+  border: 1px solid var(--rand); border-radius: var(--r-klein); background: var(--flaeche); }
+.hervorliste li.is-an { border-color: var(--akzent); background: var(--akzent-hell); }
+.hervorliste__zeichen { flex: none; display: grid; place-items: center; width: 36px; height: 36px;
+  border-radius: var(--r-klein); background: var(--flaeche2); color: var(--akzent); }
+.hervorliste li > div { flex: 1 1 14em; min-width: 0; }
+.hervorliste b { display: block; font-size: .93rem; }
+.hervorliste i { display: block; margin-top: .12em; font-style: normal; font-size: .82rem;
+  color: var(--text-leise); line-height: 1.5; }
+.hervorliste li > div > span { display: block; margin-top: .2em; font-size: .76rem; color: var(--text-still); }
+.hervorliste__preis { flex: none; text-align: right; }
+.hervorliste__preis b { font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.hervorliste__preis s { font-size: .78rem; color: var(--text-still); }
+.hervorliste--preise li { background: var(--flaeche2); }
+
+/* Anfragen zu eigenen Inseraten */
+.anfragen { margin: 12px 0; padding: .9em 1em; border: 1px solid var(--rand); border-radius: var(--r);
+  background: var(--flaeche); }
+.anfragen__kopf { display: flex; flex-wrap: wrap; gap: .3em .8em; align-items: baseline; }
+.anfragen__kopf b { font-size: .95rem; }
+.anfragen__kopf span { font-size: .8rem; color: var(--text-still); }
+.anfragen__liste { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; counter-reset: anfrage; }
+.anfragen__liste li { display: flex; gap: .7em; align-items: flex-start; padding: .6em .7em;
+  border: 1px solid var(--rand); border-radius: var(--r-klein); background: var(--flaeche2); }
+.anfragen__liste li.is-plus { border-color: var(--info); background: var(--info-hell); }
+.anfragen__liste svg { flex: none; border-radius: 50%; }
+.anfragen__liste li > div { min-width: 0; flex: 1 1 auto; }
+.anfragen__liste b { display: flex; flex-wrap: wrap; gap: .4em; align-items: center; font-size: .88rem; }
+.anfragen__liste i { display: block; margin-top: .15em; font-style: normal; font-size: .82rem;
+  color: var(--text-leise); line-height: 1.5; }
+.anfragen__liste li > div > span { display: block; margin-top: .15em; font-size: .75rem; color: var(--text-still); }
+.anfragen__warum { margin-top: 10px; }
+.anfragen__warum > summary { display: flex; align-items: center; gap: .4em; padding: .4em 0;
+  cursor: pointer; font-size: .84rem; font-weight: 600; color: var(--text-leise); list-style: none; }
+.anfragen__warum > summary::-webkit-details-marker { display: none; }
+.anfragen__warum p { margin: .2em 0 .6em; font-size: .84rem; line-height: 1.6; color: var(--text-leise); }
+.anfragen__demo { display: flex; gap: .45em; align-items: flex-start; margin-top: .6em;
+  padding-top: .6em; border-top: 1px dashed var(--rand-stark); }
+.anfragen__demo .ico { flex: none; width: 14px; height: 14px; margin-top: .15em; }
+
+.eigene li > .knopf { flex: none; }
+
 </style>
 <noscript>
   <div style="max-width:640px;margin:12vh auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.6">
@@ -2325,20 +2387,25 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
      Verwandtschaft wie die Oberfläche. Vorher stand hier ein Grün-Orange-
      Satz aus einer früheren Fassung; neben dem Indigo der Anwendung sah das
      aus, als gehörten Bild und Seite nicht zusammen. */
+  /* Sechs Farbfamilien für Abwechslung im Bestand – aber alle aus derselben
+     Verwandtschaft wie die Oberfläche. Ein Satz aus Grün und Orange neben
+     einem waldgrünen Kopf sähe aus, als gehörten Bild und Seite nicht
+     zusammen; also gedeckte Töne rund um Wald, Salbei, Lehm und Beere. */
   const PALETTES = [
-    /* Indigo */
-    { sky: ['#e4e0fb', '#f3f1fe'], wall: '#d5d1e6', wall2: '#a8a2c4', warm: '#faf9ff', accent: '#4a32c4', dark: '#332d4d', green: '#3f8f5f' },
-    /* Petrol */
-    { sky: ['#d6eef4', '#eef8fb'], wall: '#cdd9de', wall2: '#93a9b3', warm: '#f7fcfd', accent: '#0b6f7e', dark: '#2c4249', green: '#2f7d5a' },
-    /* Beere */
-    { sky: ['#fbe1ee', '#fef4f8'], wall: '#e3d3dc', wall2: '#bfa2b2', warm: '#fffafc', accent: '#ab2168', dark: '#4a3040', green: '#4d7c4f' },
-    /* Sand */
-    { sky: ['#f7ecd9', '#fdf8ef'], wall: '#e4dac6', wall2: '#bcae92', warm: '#fffdf7', accent: '#7d5a06', dark: '#453c2c', green: '#5d7f3a' },
-    /* Nachtblau */
-    { sky: ['#dbe4fb', '#eff3fe'], wall: '#ccd3e4', wall2: '#98a4c2', warm: '#f9faff', accent: '#2f4dae', dark: '#2f3856', green: '#3d7f6a' },
+    /* Wald */
+    { sky: ['#dcefe2', '#f0f8f3'], wall: '#d3ddd4', wall2: '#a0b2a3', warm: '#f9fcfa', accent: '#1a5c37', dark: '#2c3a2f', green: '#38660c' },
+    /* Lehm */
+    { sky: ['#f4ead9', '#fcf7ee'], wall: '#e2d8c6', wall2: '#b9ad94', warm: '#fffdf7', accent: '#8a5a1e', dark: '#443b2c', green: '#5d7f3a' },
     /* Salbei */
-    { sky: ['#e0efe6', '#f2f9f4'], wall: '#d2ded6', wall2: '#9fb2a7', warm: '#fafdfb', accent: '#276b52', dark: '#33453c', green: '#3f7a4e' }
+    { sky: ['#e4eee3', '#f3f8f2'], wall: '#d6ded2', wall2: '#a5b39c', warm: '#fbfdfa', accent: '#3f6b3a', dark: '#374437', green: '#4a7a1e' },
+    /* Beere */
+    { sky: ['#fae0ec', '#fdf3f7'], wall: '#e2d2da', wall2: '#bfa1b0', warm: '#fffafc', accent: '#79155e', dark: '#432c3c', green: '#4d7c4f' },
+    /* Seegrün */
+    { sky: ['#d8eeee', '#eff9f9'], wall: '#cdd9d7', wall2: '#95aca9', warm: '#f8fdfc', accent: '#0e6560', dark: '#2b403e', green: '#357a4a' },
+    /* Nebelblau */
+    { sky: ['#dee6ef', '#f1f5f9'], wall: '#d0d7de', wall2: '#9aa6b2', warm: '#fafcfd', accent: '#2276b8', dark: '#2f3a45', green: '#3d7f5a' }
   ];
+
 
 
   function paletteFor(seed) { return PALETTES[seed % PALETTES.length]; }
@@ -3550,9 +3617,60 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     return [];
   }
 
+  /* ------------------------- Anfragen zu eigenen Inseraten -------------------------
+
+     Wer selbst inseriert, muss sehen können, wie die Anfragen bei ihm
+     ankommen – sonst bleibt „Plus-Anfragen stehen oben“ eine Behauptung
+     auf der Preisseite. In dieser Vorführung schreibt niemand wirklich,
+     also entstehen die Anfragen aus der Kennung des Inserats: immer
+     dieselben, sobald dasselbe Inserat da ist, und ausdrücklich als
+     Beispiel gekennzeichnet. Erfundene Dringlichkeit im eigenen Postfach
+     wäre unlauter; erfundene Anfragen im eigenen Schaufenster, damit man
+     die Sortierung sieht, sind etwas anderes – solange es dabeisteht. */
+
+  const ANFRAGE_TEXTE = [
+    'Guten Tag, die Wohnung passt genau zu dem, was wir suchen. Wären zwei Termine kommende Woche möglich?',
+    'Hallo, ich arbeite seit vier Jahren fest in der Nähe und würde allein einziehen. Unterlagen liegen bereit.',
+    'Guten Tag, wir sind zu zweit, beide berufstätig, ohne Haustiere. Ist die Küche im Preis enthalten?',
+    'Hallo, ich suche zum Quartalsende und bin beim Termin flexibel. Gibt es einen Stellplatz?',
+    'Guten Tag, wie hoch war die letzte Nebenkostenabrechnung, und wann wurde die Heizung erneuert?',
+    'Hallo, ich hätte Interesse an einer Besichtigung. Nachweise kann ich sofort digital bereitstellen.'
+  ];
+
+  function anfragenFuer(listing) {
+    if (!listing) return [];
+    const r = U.rng(U.hash('anfragen:' + listing.id));
+    const anzahl = U.intBetween(r, 3, 6);
+    const namen = [];
+    for (let i = 0; i < anzahl; i++) {
+      const v = U.pick(r, VORNAMEN_W.concat(VORNAMEN_M, VORNAMEN_D)), n = U.pick(r, NACHNAMEN);
+      namen.push(v + ' ' + n);
+    }
+    /* Wer Plus hat, wird nicht gewürfelt, sondern gesetzt: Sonst zeigt ein
+       Beispiel je nach Zufall gar keine Plus-Anfrage – und dann sieht man
+       die Sortierung nicht, um die es hier geht. */
+    const mitPlus = Math.max(1, Math.round(anzahl * 0.4));
+    const plusIndex = [];
+    while (plusIndex.length < mitPlus) {
+      const k = U.intBetween(r, 0, anzahl - 1);
+      if (plusIndex.indexOf(k) < 0) plusIndex.push(k);
+    }
+    return namen.map((name, i) => ({
+      id: listing.id + '-anf-' + i,
+      name,
+      plus: plusIndex.indexOf(i) >= 0,
+      /* Ältere Anfrage zuerst in der Zeit, damit die Reihenfolge nach
+         Eingang überhaupt eine Aussage hat. */
+      zeit: U.isoDate(U.addDays(NW.now(), -(anzahl - i) * 2 - U.intBetween(r, 0, 2))),
+      text: ANFRAGE_TEXTE[U.intBetween(r, 0, ANFRAGE_TEXTE.length - 1)],
+      unterlagen: r() < 0.55,
+      beispiel: true
+    }));
+  }
+
   NW.data = {
     listings, byId, profilVorlage,
-    startThreads,
+    startThreads, anfragenFuer,
     LIFESTYLE_KEYS, WG_ART, AUSSTATTUNG, SPRACHEN, QUIRKS, BERUFE,
     staedte: G.CITIES.map((c) => c.name)
   };
@@ -5405,6 +5523,28 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     return id;
   }
 
+  /* Hervorhebung eines eigenen Inserats setzen oder beenden. */
+  function inseratHervorheben(id, art) {
+    const p = NW.plan.hervorhebung(art);
+    update((s) => {
+      const e = s.eigeneInserate.find((x) => x.id === id);
+      if (!e) return;
+      if (!art) { delete e.boost; }
+      else {
+        e.boost = {
+          art,
+          seit: U.isoDate(NW.now()),
+          bis: p && p.tage ? U.isoDate(U.addDays(NW.now(), p.tage)) : '',
+          bezahlt: p ? NW.plan.hervorhebungPreis(art) : 0
+        };
+        /* „Nach oben schieben“ heißt: Das Inserat gilt wieder als frisch. */
+        if (art === 'schub') e.stats = Object.assign({}, e.stats, { online: U.isoDate(NW.now()) });
+      }
+      if (s.meinTausch && s.meinTausch.id === id) s.meinTausch = e;
+      NW.data.byId[id] = e;
+    }, 'inserate');
+  }
+
   function inseratLoeschen(id) {
     update((s) => {
       s.eigeneInserate = s.eigeneInserate.filter((x) => x.id !== id);
@@ -5526,6 +5666,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     gemerkt, merken, setStatus, setNotiz,
     imVergleich, vergleichen,
     agentAnlegen, agentLoeschen, agentTreffer, agentGelesen,
+    inseratHervorheben,
     threadFuer, anschreiben, threadGelesen,
     terminBuchen, terminAbsagen, checkSetzen,
     inseratAnlegen, inseratLoeschen, gesehenMerken,
@@ -5540,13 +5681,33 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
    Leitgedanke, an dem sich jede Entscheidung hier messen lassen muss:
 
-     Plus bezahlt Zeitersparnis bei häufiger Nutzung.
-     Plus bezahlt niemals einen Vorteil gegenüber anderen Bewerbern.
+     Plus bezahlt Zeitersparnis und Sichtbarkeit.
+     Plus verändert nie, was jemand über eine Wohnung erfährt.
 
    Deshalb bleibt alles frei, was schützt (Prüfhinweis, Vergleichsmiete,
    Chancen), was gerechnet werden muss (Leistbarkeit, Wohngeld, Kosten)
    und was man einmal im Leben braucht (Übergabe, Nebenkosten, Umzug).
    Hinter Plus liegt, was jemand zehnmal am Tag anfasst.
+
+   Zwei Dinge kauft Plus inzwischen doch, und beide sind bezahlte
+   Sichtbarkeit. Das ist eine Entscheidung des Betriebs, keine technische
+   Notwendigkeit – deshalb steht sie hier so deutlich:
+
+     1. Anfragen von Plus-Nutzenden erscheinen im Postfach der
+        anbietenden Seite weiter oben.
+     2. Inserate lassen sich gegen Gebühr hervorheben.
+
+   Beides ist an eine Bedingung geknüpft, von der nicht abgewichen wird:
+   Es wird angezeigt. Eine Anfrage, die oben steht, weil sie bezahlt ist,
+   trägt das Wort „Plus“; ein hervorgehobenes Inserat steht in einem
+   eigenen, beschrifteten Block und nicht in der Trefferreihenfolge.
+   Bezahlte Platzierung heimlich unter organische Ergebnisse zu mischen,
+   wäre nach § 5b Abs. 1 Nr. 6 und Abs. 2 UWG ohnehin unzulässig – vor
+   allem aber wäre es der Anfang vom Ende jeder nachvollziehbaren Suche.
+
+   Was Plus weiterhin nicht kauft: eine bessere Platzierung in der
+   Trefferliste anderer, früheren Zugang zu neuen Inseraten, Daten
+   anderer Nutzender oder besseren Datenschutz gegen Aufpreis.
    ===================================================================== */
 (function (NW) {
   'use strict';
@@ -5581,7 +5742,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       marktdaten: false,
       exposeExport: false,
       nachfassen: false,
-      tagesplan: false
+      tagesplan: false,
+      anfrageVorne: false
     },
     plus: {
       suchauftraege: Infinity,
@@ -5595,7 +5757,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       marktdaten: true,
       exposeExport: true,
       nachfassen: true,
-      tagesplan: true
+      tagesplan: true,
+      anfrageVorne: true
     }
   };
 
@@ -5656,18 +5819,100 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     { id: 'marktdaten', gruppe: 'Täglich', name: 'Preisverlauf und Marktdaten je Viertel',
       frei: 'nein', plus: 'ja' },
     { id: 'expose', gruppe: 'Täglich', name: 'Exposé und Merkliste als Datei',
-      frei: 'nein', plus: 'ja' }
+      frei: 'nein', plus: 'ja' },
+
+    { id: 'anfrageVorne', gruppe: 'Sichtbarkeit', name: 'Anfragen stehen im Postfach der Anbieter oben',
+      frei: 'in der Reihenfolge des Eingangs', plus: 'oben, sichtbar gekennzeichnet',
+      warum: 'Die anbietende Seite sieht, dass die Reihenfolge bezahlt ist. Verschwiegen wäre sie unzulässig.' },
+    { id: 'hervorheben', gruppe: 'Sichtbarkeit', name: 'Eigenes Inserat hervorheben',
+      frei: 'einzeln buchbar', plus: 'einzeln buchbar, 20 % günstiger',
+      warum: 'Hervorgehobene Inserate stehen in einem eigenen, beschrifteten Block – nie in der Trefferreihenfolge.' }
   ];
 
   /* Was Plus ausdrücklich nicht kauft. Steht so auch auf der Preisseite. */
   const NICHT_KAEUFLICH = [
-    'Keine bessere Platzierung in der Trefferliste – die Reihenfolge entsteht allein aus deinem Profil.',
-    'Kein Vorrang bei Vermietern und keine Markierung in deiner Bewerbung.',
+    'Keine andere Trefferreihenfolge. Die Sortierung entsteht allein aus deinem Profil – bezahlte Plätze stehen in einem eigenen, beschrifteten Block darüber.',
+    'Keine unsichtbare Bevorzugung. Wo Bezahlung die Reihenfolge ändert, steht es dabei – im Postfach der Anbieter genauso wie in der Suche.',
     'Kein Frühzugang zu neuen Inseraten. Alle sehen jedes Inserat in derselben Sekunde.',
     'Keine Daten anderer Nutzerinnen und Nutzer.',
     'Kein besserer Datenschutz gegen Aufpreis – der Dokumententresor und die widerrufbaren Verweise sind im freien Tarif vollständig enthalten.',
     'Keine Werbung, die sich als Inserat ausgibt – Anzeigen sind immer als solche gekennzeichnet.'
   ];
+
+  /* ------------------------- Inserate hervorheben -------------------------
+
+     Das Modell, das jeder von Kleinanzeigen kennt: Wer sein Angebot
+     schneller loswerden will, zahlt für Sichtbarkeit. Für eine Plattform
+     ist es die verlässlichste Einnahme überhaupt, weil sie den zahlt, der
+     einen Nutzen davon hat – die anbietende Seite –, und nicht den, der
+     gerade eine Wohnung sucht und meist wenig Geld hat.
+
+     Entscheidend ist, wie es eingebaut wird. Ein gekaufter Platz mitten
+     in der Trefferliste macht die Reihenfolge unerklärbar und ist nach
+     § 5b UWG kennzeichnungspflichtig. Deshalb hier: eigener Block über
+     den Ergebnissen, beschriftet, in der Zahl begrenzt. Die organische
+     Liste darunter bleibt unberührt und folgt weiter dem Profil. */
+
+  const HERVORHEBUNG = [
+    {
+      id: 'schub', name: 'Nach oben schieben', preis: 2.90, tage: 0,
+      kurz: 'Das Inserat gilt wieder als frisch und steht in „neueste zuerst“ ganz oben.',
+      wirkung: 'einmalig, sofort', icon: 'pfeilUnten'
+    },
+    {
+      id: 'farbe', name: 'Hervorheben', preis: 6.90, tage: 7,
+      kurz: 'Die Karte bekommt einen farbigen Rand und ein Kennzeichen – sie bleibt an ihrem Platz, fällt aber auf.',
+      wirkung: '7 Tage', icon: 'stern'
+    },
+    {
+      id: 'top', name: 'Top-Anzeige', preis: 14.90, tage: 7,
+      kurz: 'Das Inserat steht über den Treffern in einem eigenen, als bezahlt gekennzeichneten Block.',
+      wirkung: '7 Tage', icon: 'blitz'
+    }
+  ];
+
+  /* Höchstens so viele bezahlte Plätze über einer Trefferliste. Mehr, und
+     der eigentliche Inhalt beginnt unterhalb des Bildschirmrands. */
+  const TOP_MAX = 2;
+  const PLUS_RABATT = 0.20;
+
+  const hervorhebung = (id) => HERVORHEBUNG.find((x) => x.id === id) || null;
+
+  function hervorhebungPreis(id) {
+    const p = hervorhebung(id);
+    if (!p) return 0;
+    return istPlus() ? Math.round(p.preis * (1 - PLUS_RABATT) * 100) / 100 : p.preis;
+  }
+
+  /* Läuft die Hervorhebung eines Inserats gerade? */
+  function boostAktiv(l, art) {
+    const b = l && l.boost;
+    if (!b) return false;
+    if (art && b.art !== art) return false;
+    if (!b.bis) return b.art === 'schub';
+    return new Date(b.bis) > NW.now();
+  }
+
+  const istTop = (l) => boostAktiv(l, 'top');
+  const istHervorgehoben = (l) => boostAktiv(l, 'farbe') || boostAktiv(l, 'top');
+
+  /* ------------------------- Anfragen sortieren -------------------------
+
+     Die Reihenfolge im Postfach der anbietenden Seite. Plus zuerst, dann
+     nach Eingang. Der Rang wird zurückgegeben, damit die Oberfläche ihn
+     anzeigen kann – eine Sortierung, die niemand erklärt, ist genau die,
+     die man nicht bauen darf. */
+  function anfrageRang(a) {
+    return (a && a.plus) ? 0 : 1;
+  }
+
+  function anfragenSortieren(liste) {
+    return liste.slice().sort((a, b) => {
+      const r = anfrageRang(a) - anfrageRang(b);
+      if (r) return r;
+      return String(a.zeit || '').localeCompare(String(b.zeit || ''));
+    });
+  }
 
   /* ------------------------- Gründerplätze -------------------------
 
@@ -5825,6 +6070,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   NW.plan = {
     TARIFE, GRENZEN, LEISTUNGEN, NICHT_KAEUFLICH, ANZEIGEN, ANZEIGE_ABSTAND, GRUENDER,
+    HERVORHEBUNG, TOP_MAX, PLUS_RABATT,
+    hervorhebung, hervorhebungPreis, boostAktiv, istTop, istHervorgehoben,
+    anfrageRang, anfragenSortieren,
     aktuell, istPlus, plusQuelle, grenze, darf, leistung, wechseln, anzeige,
     gruender, gruenderAktiv, gruenderTageRest, gruenderVergeben, gruenderFrei,
     gruenderSichern, gruenderAufgeben
@@ -6875,6 +7123,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     if (b && b.mietCheck && b.mietCheck.diff > 25) marken.push(badge('+' + b.mietCheck.diff + ' % zum Spiegel', 'schlecht'));
     if (l.befristetBis) marken.push(badge('befristet', 'warn'));
     if (l.kind === 'wg' && b && b.wg && b.wg.ausschluss.length) marken.push(badge('Ausschlusskriterium', 'schlecht'));
+    /* Bezahlte Sichtbarkeit steht als Erstes und heißt beim Namen. */
+    if (NW.plan.istTop(l)) marken.unshift(badge('Top-Anzeige', 'info', 'blitz'));
+    else if (NW.plan.istHervorgehoben(l)) marken.unshift(badge('hervorgehoben', 'info', 'stern'));
     return marken;
   }
 
@@ -6896,7 +7147,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     }
     eck.push('ab ' + U.dateDE(l.freiAb));
 
-    return h`<article class="karte-inserat ${opt.kompakt ? 'is-kompakt' : ''}" data-id="${l.id}">
+    const hervor = NW.plan.istHervorgehoben(l);
+    return h`<article class="karte-inserat ${opt.kompakt ? 'is-kompakt' : ''} ${hervor ? 'is-hervor' : ''}" data-id="${l.id}">
       <a class="karte-inserat__bild" href="#/objekt/${l.id}" aria-label="${l.titel} ansehen">
         ${raw(NW.img.make(l, 0))}
         <span class="karte-inserat__art">${ico(artIcon(l))}${artLabel(l)}</span>
@@ -7547,6 +7799,25 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     'band-zu'(el) {
       NW.store.update((s) => { s.hinweiseGelesen[el.dataset.was] = U.isoDate(NW.now()); }, 'hinweis');
       bandZeichnen();
+    },
+
+    'warum-top'() {
+      dialog({
+        titel: 'Warum steht das oben?',
+        inhalt: h`<p>Diese Inserate stehen dort, weil die anbietende Seite für den Platz bezahlt hat. Nestwerk
+            zeigt bezahlte Plätze <b>getrennt und beschriftet</b> – nie zwischen den Treffern.</p>
+          <p><b>Was das nicht bedeutet:</b></p>
+          <ul class="liste-schlicht">
+            <li>Die Reihenfolge deiner Treffer darunter ändert sich dadurch nicht. Sie folgt weiter deinem Profil.</li>
+            <li>Ein bezahlter Platz sagt nichts über die Wohnung. Prüfhinweis, Vergleichsmiete und Chancen
+              rechnet Nestwerk hier genauso wie überall.</li>
+            <li>Kein Inserat verschwindet, weil ein anderes bezahlt hat. Die Liste bleibt vollständig.</li>
+          </ul>
+          <p class="fein">Höchstens ${NW.plan.TOP_MAX} bezahlte Plätze über einer Trefferliste. Mehr, und der
+            eigentliche Inhalt begänne unterhalb des Bildschirmrands.</p>`,
+        fuss: h`<a class="knopf knopf--still" href="#/inserieren" data-tu="dialog-zu">Eigenes Inserat hervorheben</a>
+          <button type="button" class="knopf" data-tu="dialog-zu">Verstanden</button>`
+      });
     },
 
     'warum-werbung'() {
@@ -8348,18 +8619,47 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   const WENIG = 4;
 
+  /* Bezahlte Plätze stehen über den Treffern, in einem eigenen Block mit
+     eigener Überschrift – nicht zwischen ihnen. Untergemischt wären sie
+     nach § 5b Abs. 1 Nr. 6 UWG kennzeichnungspflichtig und würden die
+     Erklärung „sortiert nach deinem Profil“ zu einer Halbwahrheit machen.
+     Hier bleibt beides wahr: oben bezahlt und beschriftet, darunter die
+     Reihenfolge aus dem Profil. */
+  function topBlock(bewertet) {
+    const top = bewertet.filter((x) => NW.plan.istTop(x.l)).slice(0, NW.plan.TOP_MAX);
+    if (!top.length) return '';
+    return h`<section class="topanzeigen" aria-label="Bezahlte Platzierungen">
+      <p class="topanzeigen__kopf">
+        <span class="topanzeigen__marke">${ico('blitz')}Top-Anzeigen</span>
+        <button type="button" class="anzeige__warum" data-tu="warum-top"
+          title="Warum steht das hier?" aria-label="Warum steht das hier?">?</button>
+      </p>
+      <div class="ergebnisse__liste">
+        ${top.map((x) => ui.inseratsKarte(x.l, x.b))}
+      </div>
+      <p class="topanzeigen__fuss">Bezahlte Platzierung der anbietenden Seite. Sie ändert nichts an der
+        Reihenfolge darunter – die folgt weiter deinem Profil.</p>
+    </section>`;
+  }
+
   function ergebnisListe(bewertet) {
     const f = S.get().filter;
     if (!bewertet.length) return leerHinweis(f);
-    const teil = bewertet.slice(0, sichtbar);
-    const rest = bewertet.length - teil.length;
+    /* Ein Inserat steht entweder oben im bezahlten Block oder unten in
+       der Liste, nie zweimal. */
+    const top = bewertet.filter((x) => NW.plan.istTop(x.l)).slice(0, NW.plan.TOP_MAX);
+    const topIds = top.map((x) => x.l.id);
+    const organisch = bewertet.filter((x) => topIds.indexOf(x.l.id) < 0);
+    const teil = organisch.slice(0, sichtbar);
+    const rest = organisch.length - teil.length;
     /* Zwei Treffer sind fast so wenig wie keiner – die Hilfe darf nicht
        erst bei null erscheinen. */
     const knapp = bewertet.length < WENIG ? lockerungsKnoepfe(f) : '';
     /* Anzeigen sitzen zwischen den Treffern, nie in der Reihenfolge:
        sie haben eine eigene Gestalt und tragen immer ihre Kennzeichnung. */
     const abstand = NW.plan.ANZEIGE_ABSTAND;
-    return h`<div class="ergebnisse__liste">
+    return h`${topBlock(bewertet)}
+    <div class="ergebnisse__liste">
       ${teil.map((x, i) => h`${ui.inseratsKarte(x.l, x.b)}${(i + 1) % abstand === 0 && i + 1 < teil.length
         ? ui.anzeige('treffer-' + Math.floor(i / abstand), 'breit') : ''}`)}
     </div>
@@ -8373,8 +8673,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     ${rest > 0 ? h`<div class="mehr">
       <button type="button" class="knopf knopf--still" data-tu="mehr-zeigen">
         ${ico('pfeilUnten')}Weitere ${Math.min(SEITE, rest)} von ${U.num(rest)} zeigen</button>
-      <p class="fein">${U.num(teil.length)} von ${U.num(bewertet.length)} Treffern geladen</p>
-    </div>` : bewertet.length > SEITE ? h`<p class="mehr__fertig fein">Alle ${U.num(bewertet.length)} Treffer geladen.</p>` : ''}`;
+      <p class="fein">${U.num(teil.length)} von ${U.num(organisch.length)} Treffern geladen</p>
+    </div>` : organisch.length > SEITE ? h`<p class="mehr__fertig fein">Alle ${U.num(organisch.length)} Treffer geladen.</p>` : ''}`;
   }
 
   /* Erklärt, warum das erste Ergebnis vorne steht. */
@@ -8387,6 +8687,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       <summary>${ico('info')}Warum steht „${U.truncate(top.l.titel, 46)}“ ganz oben?</summary>
       <p>Nestwerk sortiert nach deinem Profil, nicht nach bezahlter Platzierung. Für dieses Inserat zählen vor allem
         ${raw(gruende.join(', '))}. Insgesamt ergibt das ${top.b.score} von 100 Punkten.</p>
+      <p>Bezahlte Plätze gibt es getrennt davon: Sie stehen über der Liste, tragen die Überschrift
+        „Top-Anzeigen“ und verschieben in der Liste darunter nichts.</p>
       <p class="erklaerung__mehr"><a href="#/profil">Gewichtung im Profil ändern</a> – dann ändert sich auch die Reihenfolge.</p>
     </details>`;
   }
@@ -9629,7 +9931,14 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           ${fehlt.length ? h`<p class="warn-meldung">${ico('warnung')}Es fehlen: ${fehlt.map((f) => namen[f]).join(', ')}.
             <a href="#/profil">Im Profil ergänzen</a></p>` : h`<p class="gut-meldung">${ico('pruefen')}Deine Mappe ist vollständig.</p>`}
         </fieldset>
-        ${NW.viewTresor ? NW.viewTresor.freigabeAbschnitt(l.id, l.anbieter.name) : ''}`}`,
+        ${NW.viewTresor ? NW.viewTresor.freigabeAbschnitt(l.id, l.anbieter.name) : ''}`}
+        ${P.darf('anfrageVorne')
+        ? h`<p class="gut-meldung">${ico('plus5')}<span>Deine Anfrage erscheint im Postfach der anbietenden
+          Seite <b>oben</b> und ist dort als Plus gekennzeichnet. Über deine Chancen sagt das nichts – es ist
+          bezahlte Sichtbarkeit, kein Urteil.</span></p>`
+        : h`<p class="info-meldung">${ico('info')}<span>Deine Anfrage erscheint in der Reihenfolge des Eingangs.
+          <a href="#/plus">Mit Plus</a> stünde sie oben, sichtbar gekennzeichnet – am Inhalt ändert das nichts,
+          und gelöscht wird ohne Plus nichts.</span></p>`}`,
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="anschreiben-kopieren">${ico('kopieren')}Text kopieren</button>
         <button type="button" class="knopf" data-tu="anschreiben-senden" data-id="${l.id}">${ico('nachricht')}Absenden</button>`
     });
@@ -10407,6 +10716,56 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
      Nachrichten
      ================================================================ */
 
+  /* ---------------------- Anfragen zu eigenen Inseraten ----------------------
+
+     Hier wird sichtbar, was auf der Preisseite behauptet wird: Anfragen
+     mit Plus stehen oben. Damit das kein blindes Versprechen bleibt,
+     steht daneben, warum – und zwar für die anbietende Seite lesbar. */
+
+  function eigenesPostfach() {
+    const s = S.get();
+    if (!s.eigeneInserate.length) return '';
+    return h`<section class="block">
+      <div class="block__kopfzeile">
+        <h2>${ico('nachricht')}Anfragen zu deinen Inseraten</h2>
+        <span class="fein">${s.eigeneInserate.length} ${U.plural(s.eigeneInserate.length, 'Inserat', 'Inserate')}</span>
+      </div>
+      ${s.eigeneInserate.map((e) => {
+      const anfragen = P.anfragenSortieren(NW.data.anfragenFuer(e));
+      const mitPlus = anfragen.filter((a) => a.plus).length;
+      return h`<article class="anfragen">
+          <header class="anfragen__kopf">
+            <b><a href="#/objekt/${e.id}">${U.truncate(e.titel, 52)}</a></b>
+            <span>${anfragen.length} ${U.plural(anfragen.length, 'Anfrage', 'Anfragen')}${mitPlus
+        ? ' · ' + mitPlus + ' mit Plus' : ''}</span>
+          </header>
+          <ol class="anfragen__liste">
+            ${anfragen.map((a) => h`<li class="${a.plus ? 'is-plus' : ''}">
+              ${raw(NW.img.avatar(a.name, 34))}
+              <div>
+                <b>${a.name}${a.plus ? ui.badge('Plus', 'info', 'plus5') : ''}
+                  ${a.unterlagen ? ui.badge('Unterlagen dabei', 'gut') : ''}</b>
+                <i>${U.truncate(a.text, 96)}</i>
+                <span>${U.since(a.zeit)}</span>
+              </div>
+            </li>`)}
+          </ol>
+          <details class="anfragen__warum">
+            <summary>${ico('info')}Warum stehen manche Anfragen oben?</summary>
+            <p>Anfragen von Nutzenden mit <b>Nestwerk Plus</b> werden zuerst gezeigt und sind mit „Plus“
+              gekennzeichnet. Das ist bezahlte Sichtbarkeit, kein Urteil über die Person: Nestwerk sagt damit
+              nichts darüber, wer besser zu deiner Wohnung passt. Darunter folgen alle weiteren in der
+              Reihenfolge des Eingangs – gelöscht oder versteckt wird keine.</p>
+            <p class="fein">Du kannst die Reihenfolge ignorieren; die Liste zeigt alle Anfragen vollständig.</p>
+          </details>
+          <p class="fein anfragen__demo">${ico('info')}Beispielanfragen dieser Vorführung. Es gibt keinen
+            Server, also auch niemanden, der wirklich geschrieben hätte – die Namen und Texte entstehen aus der
+            Kennung des Inserats und bleiben deshalb gleich.</p>
+        </article>`;
+    })}
+    </section>`;
+  }
+
   function nachrichten(route) {
     const s = S.get();
     const aktivId = route.arg || (s.threads[0] ? s.threads[0].id : null);
@@ -10418,7 +10777,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         titel: 'Nachrichten',
         html: h`<div class="seite seite--schmal">
           <header class="seite__kopf"><h1>${ico('nachricht')}Nachrichten</h1></header>
-          <div class="leer">${ico('nachricht')}<h3>Noch kein Verlauf</h3>
+          ${eigenesPostfach()}
+          <div class="leer">${ico('nachricht')}<h3>Noch kein eigener Verlauf</h3>
             <p>Sobald du ein Inserat anschreibst, erscheint der Verlauf hier.</p>
             <p><a class="knopf" href="#/suche">${ico('suche')}Zur Suche</a></p></div></div>`
       };
@@ -10428,6 +10788,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       titel: 'Nachrichten',
       html: h`<div class="seite">
         <header class="seite__kopf"><h1>${ico('nachricht')}Nachrichten</h1></header>
+        ${eigenesPostfach()}
         <div class="post">
           <nav class="post__liste" aria-label="Verläufe">
             ${s.threads.map((t) => {
@@ -11093,12 +11454,24 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         ${s.eigeneInserate.length ? h`<section class="block">
           <h2>Deine Inserate</h2>
           <ul class="eigene">
-            ${s.eigeneInserate.map((e) => h`<li>
-              <div><b><a href="#/objekt/${e.id}">${e.titel}</a></b>
-                <span>${ui.ART_LABEL[e.kind]} · ${e.viertel}, ${e.stadt} · seit ${U.since(e.erstellt)}</span></div>
+            ${s.eigeneInserate.map((e) => {
+        const b = e.boost, prod = b ? P.hervorhebung(b.art) : null;
+        const laeuft = P.boostAktiv(e);
+        return h`<li>
+              <div>
+                <b><a href="#/objekt/${e.id}">${U.truncate(e.titel, 46)}</a>
+                  ${laeuft && prod ? ui.badge(prod.name, 'info', prod.icon) : ''}</b>
+                <span>${ui.artLabel(e)} · ${e.viertel}, ${e.stadt} · seit ${U.since(e.erstellt)}${laeuft && b.bis
+          ? ' · hervorgehoben bis ' + U.dateDE(b.bis) : ''}</span>
+              </div>
+              <button type="button" class="knopf knopf--klein knopf--still" data-tu="hervorheben" data-id="${e.id}">
+                ${ico('blitz')}${laeuft ? 'Ändern' : 'Hervorheben'}</button>
               <button type="button" class="ikon-btn" data-tu="inserat-weg" data-id="${e.id}" aria-label="Löschen">${ico('muell')}</button>
-            </li>`)}
+            </li>`;
+      })}
           </ul>
+          <p class="fein">Hervorgehobene Inserate stehen in einem eigenen, als bezahlt gekennzeichneten Block
+            über den Treffern – nie zwischen ihnen. Die Reihenfolge der Suche bleibt unberührt.</p>
         </section>` : ''}
 
         <form class="block" data-tu-submit="inserat-speichern" id="inserat-form">
@@ -11601,6 +11974,73 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const b = neueBilder.splice(i, 1)[0];
     neueBilder.splice(i - 1, 0, b);
     bilderNeuZeichnen();
+  });
+
+  /* ------------------------- Hervorheben -------------------------
+
+     Das Modell von Kleinanzeigen, aber mit sichtbarer Trennlinie: bezahlt
+     wird Sichtbarkeit, nicht ein besserer Platz in der Bewertung. */
+
+  A_('hervorheben', (el) => {
+    const id = el.dataset.id;
+    const e = S.get().eigeneInserate.find((x) => x.id === id);
+    if (!e) return;
+    const laeuft = P.boostAktiv(e);
+    const rabatt = P.istPlus();
+    ui.dialog({
+      titel: 'Inserat hervorheben',
+      breit: true,
+      inhalt: h`<p>Wer schneller vermieten oder verkaufen will, kann für Sichtbarkeit zahlen. Was du dabei
+          <b>nicht</b> kaufst: eine bessere Bewertung, einen anderen Platz in der Trefferreihenfolge oder das
+          Verschwinden anderer Inserate.</p>
+        ${rabatt ? h`<p class="gut-meldung">${ico('plus5')}Mit Plus sind alle Preise
+          ${Math.round(P.PLUS_RABATT * 100)} % günstiger.</p>` : ''}
+        <ul class="hervorliste">
+          ${P.HERVORHEBUNG.map((x) => h`<li class="${laeuft && e.boost.art === x.id ? 'is-an' : ''}">
+            <span class="hervorliste__zeichen">${ico(x.icon)}</span>
+            <div>
+              <b>${x.name}</b>
+              <i>${x.kurz}</i>
+              <span>${x.wirkung}</span>
+            </div>
+            <span class="hervorliste__preis">
+              <b>${U.eur2(P.hervorhebungPreis(x.id))}</b>
+              ${rabatt ? h`<s>${U.eur2(x.preis)}</s>` : ''}
+            </span>
+            <button type="button" class="knopf knopf--klein" data-tu="hervorheben-buchen"
+              data-id="${id}" data-art="${x.id}">
+              ${laeuft && e.boost.art === x.id ? 'Läuft' : 'Buchen'}</button>
+          </li>`)}
+        </ul>
+        <p class="fein">${NW.recht ? NW.recht.preisHinweis() : ''}</p>
+        <div class="hinweisbox">${ico('info')}
+          <div><b>Warum das gekennzeichnet wird</b>
+          <p>Bezahlte Platzierung in Suchergebnissen muss als solche erkennbar sein (§ 5b Abs. 1 Nr. 6 und
+            Abs. 2 UWG). Nestwerk löst das nicht mit einem kleinen Sternchen, sondern mit einem eigenen Block
+            über den Treffern. Das ist ehrlicher – und wirkt erfahrungsgemäß besser als ein getarnter Platz,
+            weil niemand sich getäuscht fühlt.</p></div>
+        </div>
+        <p class="fein">In dieser Vorführung wird nichts abgebucht. Im Betrieb liefe die Zahlung über den
+          Zahlungsdienstleister, mit Rechnung und Widerrufsbelehrung.</p>`,
+      fuss: h`${laeuft ? h`<button type="button" class="knopf knopf--still knopf--gefahr"
+          data-tu="hervorheben-beenden" data-id="${id}">Hervorhebung beenden</button>` : ''}
+        <button type="button" class="knopf knopf--still" data-tu="dialog-zu">Schließen</button>`
+    });
+  });
+
+  A_('hervorheben-buchen', (el) => {
+    const prod = P.hervorhebung(el.dataset.art);
+    S.inseratHervorheben(el.dataset.id, el.dataset.art);
+    ui.dialogZu();
+    ui.neuZeichnen();
+    ui.toast(prod.name + ' läuft' + (prod.tage ? ' für ' + prod.tage + ' Tage' : '') + '.', 'gut');
+  });
+
+  A_('hervorheben-beenden', (el) => {
+    S.inseratHervorheben(el.dataset.id, null);
+    ui.dialogZu();
+    ui.neuZeichnen();
+    ui.toast('Hervorhebung beendet.');
   });
 
   A_('inserat-speichern', (el) => {
@@ -13087,12 +13527,14 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   function vergleichsTabelle() {
     const gruppen = {};
     P.LEISTUNGEN.forEach((l) => { (gruppen[l.gruppe] = gruppen[l.gruppe] || []).push(l); });
-    const reihenfolge = ['Suchen', 'Schutz', 'Rechnen', 'Täglich'];
+    const reihenfolge = ['Suchen', 'Schutz', 'Rechnen', 'Täglich', 'Sichtbarkeit'];
     const erklaerung = {
       Suchen: 'Der Kern der Anwendung. Vollständig im freien Tarif.',
       Schutz: 'Alles, was dich vor Schaden bewahrt. Bleibt frei – dafür Geld zu nehmen wäre falsch.',
       Rechnen: 'Werkzeuge, die man ein paarmal im Leben braucht. Bleiben frei.',
-      'Täglich': 'Was jemand anfasst, der wirklich sucht. Hier liegt der Unterschied.'
+      'Täglich': 'Was jemand anfasst, der wirklich sucht. Hier liegt der Unterschied.',
+      Sichtbarkeit: 'Bezahlte Sichtbarkeit – die einzige Stelle, an der Geld eine Reihenfolge ändert. '
+        + 'Sie wird deshalb überall gekennzeichnet, wo sie wirkt.'
     };
     return h`<div class="tarifvergleich__rolle">
       <table class="tarifvergleich">
@@ -13108,7 +13550,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             <tr class="tarifvergleich__gruppe">
               <th scope="row" colspan="3"><b>${g}</b><i>${erklaerung[g]}</i></th>
             </tr>
-            ${gruppen[g].map((l) => h`<tr class="${l.gleich ? 'is-gleich' : ''}">
+            ${(gruppen[g] || []).map((l) => h`<tr class="${l.gleich ? 'is-gleich' : ''}">
               <th scope="row">${l.name}${l.warum ? h`<i>${l.warum}</i>` : ''}</th>
               <td>${l.frei === 'nein' ? raw('<span class="fehlt">–</span>') : l.frei}</td>
               <td class="is-plus">${l.plus === 'ja' ? ui.ico('check') : l.plus}</td>
@@ -13198,8 +13640,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         <header class="seite__kopf">
           <h1>${ico('plus5')}Tarife</h1>
           <p class="seite__unter">Ein Satz erklärt das ganze Modell:
-            <b>Plus bezahlt Zeitersparnis bei häufiger Nutzung – nie einen Vorteil gegenüber anderen Bewerbern.</b>
-            Was dich schützt und was gerechnet werden muss, bleibt kostenlos.</p>
+            <b>Plus bezahlt Zeitersparnis und Sichtbarkeit – nie, was du über eine Wohnung erfährst.</b>
+            Prüfhinweis, Vergleichsmiete, Chancen und alle Rechner bleiben kostenlos. Und wo Bezahlung eine
+            Reihenfolge ändert, steht es dabei.</p>
         </header>
 
         ${gruenderBlock()}
@@ -13227,6 +13670,29 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         <section class="block">
           <h2>${ico('waage')}Alles im Vergleich</h2>
           ${vergleichsTabelle()}
+        </section>
+
+        <section class="block">
+          <h2>${ico('blitz')}Eigenes Inserat hervorheben</h2>
+          <p class="block__unter">Für die anbietende Seite, unabhängig vom Tarif einzeln buchbar. Mit Plus
+            ${Math.round(P.PLUS_RABATT * 100)} % günstiger.</p>
+          <ul class="hervorliste hervorliste--preise">
+            ${P.HERVORHEBUNG.map((x) => h`<li>
+              <span class="hervorliste__zeichen">${ico(x.icon)}</span>
+              <div><b>${x.name}</b><i>${x.kurz}</i><span>${x.wirkung}</span></div>
+              <span class="hervorliste__preis"><b>${U.eur2(x.preis)}</b></span>
+            </li>`)}
+          </ul>
+          <div class="hinweisbox">${ico('info')}
+            <div><b>Bezahlte Plätze stehen getrennt</b>
+            <p>Hervorgehobene Inserate erscheinen in einem eigenen Block über den Treffern, beschriftet als
+              Top-Anzeigen, höchstens ${P.TOP_MAX} auf einmal. Sie werden nicht zwischen die Ergebnisse
+              gemischt und verschieben in der Liste darunter nichts. Wer sucht, sieht damit weiterhin eine
+              Reihenfolge, die sich aus seinem Profil erklärt – und erkennt auf den ersten Blick, was bezahlt
+              ist. Untergemischte Werbeplätze wären nach § 5b UWG ohnehin kennzeichnungspflichtig.</p></div>
+          </div>
+          <p class="fein">${NW.recht ? NW.recht.preisHinweis() : ''} Buchen lässt sich das unter
+            <a href="#/inserieren">Inserieren</a> bei deinen eigenen Inseraten.</p>
         </section>
 
         <section class="block">
@@ -13258,9 +13724,30 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             </details>
             <details>
               <summary>Bringt Plus mir eine Wohnung schneller?</summary>
-              <p>Nur insofern, als du weniger Zeit mit Handarbeit verlierst: mehrere Suchaufträge statt einem,
-                Serienbewerbung statt jede Anfrage einzeln, Besichtigungen als Route statt als Zettelwirtschaft.
-                Bei der Vergabe selbst hat Plus keinerlei Gewicht. Vermieter sehen nicht, welchen Tarif du hast.</p>
+              <p>Es spart vor allem Handarbeit: mehrere Suchaufträge statt einem, Serienbewerbung statt jede
+                Anfrage einzeln, Besichtigungen als Route statt als Zettelwirtschaft.</p>
+              <p>Dazu kommt eines, das offen ausgesprochen gehört: <b>Deine Anfrage steht im Postfach der
+                anbietenden Seite oben</b> und ist dort mit „Plus“ gekennzeichnet. Ob das hilft, entscheidet
+                die anbietende Seite – Nestwerk sagt ihr ausdrücklich dazu, dass die Reihenfolge bezahlt ist
+                und nichts über die Eignung aussagt. Keine Anfrage wird verborgen, gekürzt oder gelöscht,
+                weil jemand nicht zahlt.</p>
+            </details>
+            <details>
+              <summary>Ist es fair, dass zahlende Anfragen oben stehen?</summary>
+              <p>Eine ehrliche Antwort: Es ist ein Vorteil, und er kostet Geld. Nestwerk hält ihn deshalb so
+                klein und so sichtbar wie möglich – die anbietende Seite sieht die Kennzeichnung, sieht alle
+                Anfragen vollständig und kann die Reihenfolge ignorieren. Was Plus nicht kann: den Inhalt
+                einer Anfrage verändern, eine Bewertung verbessern oder andere Anfragen verdrängen.</p>
+              <p>Alles, was mit der <b>Wohnung selbst</b> zu tun hat – Prüfhinweis gegen Betrug,
+                Vergleichsmiete, Chancen, echte Kosten –, bleibt im freien Tarif vollständig. Diese Grenze
+                verschiebt sich nicht.</p>
+            </details>
+            <details>
+              <summary>Kann ich mein eigenes Inserat nach oben kaufen?</summary>
+              <p>Ja, und zwar unabhängig vom Tarif: Es gibt drei Hervorhebungen ab ${U.eur2(P.HERVORHEBUNG[0].preis)}.
+                Sie erscheinen in einem eigenen, als bezahlt beschrifteten Block über den Treffern – nie
+                zwischen ihnen. Was du dabei nicht kaufst: eine bessere Bewertung deines Inserats oder einen
+                anderen Platz in der Reihenfolge darunter.</p>
             </details>
             <details>
               <summary>Was passiert nach dem Gründerjahr?</summary>
@@ -14352,8 +14839,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
           <h2>§ 5 Nestwerk Plus</h2>
           <p>(1) Nestwerk Plus umfasst die auf der <a href="#/plus">Tarifseite</a> beschriebenen Leistungen.
-            Plus verschafft <b>keinen Vorteil gegenüber anderen Bewerbenden</b>: keine bessere Platzierung in
-            Trefferlisten, keinen Vorrang bei Vermietenden, keinen früheren Zugang zu neuen Angeboten.</p>
+            Plus verändert <b>nicht die Bewertung oder die Trefferreihenfolge</b> für andere Nutzende und
+            verschafft <b>keinen früheren Zugang</b> zu neuen Angeboten. Zur vorrangigen Anzeige von Anfragen
+            bei der anbietenden Seite siehe § 6.</p>
           <p>(2) Der Preis beträgt ${U.eur2(t.preisMonat)} im Monat oder ${U.eur2(t.preisJahr)} im Jahr.
             ${R.preisHinweis()}</p>
           <p>(3) Die Laufzeit beträgt je nach Wahl einen Monat oder ein Jahr und verlängert sich jeweils um
@@ -14367,7 +14855,30 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             Textform mit. Die Nutzenden können den Vertrag bis zum Wirksamwerden zum Zeitpunkt der Erhöhung
             kündigen; darauf wird in der Mitteilung hingewiesen.</p>
 
-          <h2>§ 6 Gründerplätze</h2>
+          <h2>§ 6 Bezahlte Sichtbarkeit</h2>
+          <p>(1) Der Anbieter stellt zwei Formen bezahlter Sichtbarkeit bereit:</p>
+          <ul class="pruef">
+            <li>${ico('pruefen')}<span><b>Vorrang von Anfragen.</b> Anfragen von Nutzenden mit Nestwerk Plus
+              werden im Posteingang der anbietenden Seite vorrangig angezeigt und dort als solche
+              gekennzeichnet.</span></li>
+            <li>${ico('pruefen')}<span><b>Hervorhebung von Inseraten.</b> Einzeln buchbar zu den auf der
+              <a href="#/plus">Tarifseite</a> genannten Preisen.</span></li>
+          </ul>
+          <p>(2) Bezahlte Platzierungen werden stets als solche gekennzeichnet und getrennt von den
+            organischen Ergebnissen dargestellt (§ 5b Abs. 1 Nr. 6 und Abs. 2 UWG). Die Reihenfolge der
+            übrigen Treffer bleibt davon unberührt; sie entsteht allein aus den Angaben des suchenden
+            Nutzers.</p>
+          <p>(3) Bezahlte Sichtbarkeit verändert nicht die inhaltliche Bewertung eines Angebots. Prüfhinweis,
+            Vergleichsmiete, Chancenschätzung und Kostenrechnung sind davon unabhängig und bleiben im freien
+            Tarif vollständig verfügbar.</p>
+          <p>(4) Es besteht kein Anspruch auf eine bestimmte Anzahl von Aufrufen, Anfragen oder auf einen
+            Vermietungs- oder Verkaufserfolg. Die Zahl gleichzeitig angezeigter bezahlter Plätze ist begrenzt;
+            sind alle belegt, wird die Buchung erst zum nächstmöglichen Zeitpunkt wirksam.</p>
+          <p>(5) Hervorhebungen sind digitale Dienstleistungen. Für Verbraucherinnen und Verbraucher gilt das
+            <a href="#/recht/widerruf">Widerrufsrecht</a>; beginnt die Leistung auf ausdrücklichen Wunsch
+            sofort, erlischt es nach § 356 Abs. 5 BGB.</p>
+
+          <h2>§ 7 Gründerplätze</h2>
           <p>(1) Der Anbieter vergibt die ersten <b>${U.num(g.plaetze)} Plätze</b> mit den Leistungen von
             Nestwerk Plus für <b>${g.monate} Monate ohne Entgelt</b> (Gründerplatz).</p>
           <p>(2) Der Gründerplatz ist <b>kein Abonnement</b>. Er verlängert sich nicht, geht nicht in einen
@@ -14382,7 +14893,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p>(5) Der Gründerplatz kann jederzeit ohne Angabe von Gründen beendet werden. Da er unentgeltlich
             ist, entsteht dabei keine Zahlungspflicht und es besteht kein Anspruch auf Erstattung.</p>
 
-          <h2>§ 7 Pflichten der Nutzenden</h2>
+          <h2>§ 8 Pflichten der Nutzenden</h2>
           <p>(1) Angaben, die Nutzende einstellen, müssen zutreffend sein. Insbesondere dürfen keine
             Wohnungen angeboten werden, über die keine Verfügungsbefugnis besteht.</p>
           <p>(2) Untersagt sind insbesondere:</p>
@@ -14400,7 +14911,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p>(3) Nutzende halten den Anbieter von Ansprüchen Dritter frei, die auf einer schuldhaften
             Verletzung dieser Pflichten beruhen, einschließlich angemessener Kosten der Rechtsverteidigung.</p>
 
-          <h2>§ 8 Inhalte der Nutzenden</h2>
+          <h2>§ 9 Inhalte der Nutzenden</h2>
           <p>(1) Rechte an eingestellten Inhalten verbleiben bei den Nutzenden.</p>
           <p>(2) Für die Dauer der Einstellung räumen Nutzende dem Anbieter das einfache, räumlich unbegrenzte
             Recht ein, diese Inhalte im Rahmen der Anwendung anzuzeigen, technisch zu vervielfältigen und in
@@ -14409,9 +14920,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p>(3) Mit der Löschung eines Inhalts endet das Nutzungsrecht, soweit keine gesetzlichen
             Aufbewahrungspflichten entgegenstehen.</p>
 
-          <h2>§ 9 Entfernen von Inhalten, Sperrung, Beschwerde</h2>
+          <h2>§ 10 Entfernen von Inhalten, Sperrung, Beschwerde</h2>
           <p>(1) Der Anbieter kann Inhalte entfernen oder den Zugang einschränken, wenn sie rechtswidrig sind
-            oder gegen § 7 verstoßen.</p>
+            oder gegen § 8 verstoßen.</p>
           <p>(2) Betroffene erhalten dazu eine <b>Begründung</b> mit Angabe des Grundes, der Tatsachengrundlage
             und der Möglichkeiten, dagegen vorzugehen (Art. 17 der Verordnung (EU) 2022/2065).</p>
           <p>(3) Gegen eine Entscheidung kann innerhalb von sechs Monaten formlos Beschwerde an
@@ -14420,7 +14931,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p>(4) Rechtswidrige Inhalte lassen sich <a href="#/recht/melden">hier melden</a>. Meldungen werden
             zeitnah, sorgfältig und nicht willkürlich bearbeitet (Art. 16 der Verordnung (EU) 2022/2065).</p>
 
-          <h2>§ 10 Verfügbarkeit</h2>
+          <h2>§ 11 Verfügbarkeit</h2>
           <p>(1) Der Anbieter bemüht sich um eine möglichst unterbrechungsfreie Verfügbarkeit, schuldet sie
             aber nicht ununterbrochen. Wartungsarbeiten, Störungen der Netze Dritter und Ereignisse höherer
             Gewalt können zu Unterbrechungen führen.</p>
@@ -14429,7 +14940,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p>(3) Fällt eine bezahlte Leistung länger als 48 zusammenhängende Stunden aus, verlängert sich die
             Laufzeit auf Verlangen entsprechend.</p>
 
-          <h2>§ 11 Mängel und Haftung</h2>
+          <h2>§ 12 Mängel und Haftung</h2>
           <p>(1) Für die Bereitstellung digitaler Produkte gegen Entgelt gelten die §§ 327 ff. BGB. Der
             Anbieter schuldet die vereinbarte und die objektiv erforderliche Beschaffenheit einschließlich
             der Aktualisierungen, die zum Erhalt der Vertragsmäßigkeit nötig sind.</p>
@@ -14445,13 +14956,13 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p>(5) Der Anbieter haftet nicht für Entscheidungen, die auf Grundlage der Rechenergebnisse und
             Hinweise nach § 2 Abs. 3 getroffen werden, und nicht für das Verhalten anderer Nutzender.</p>
 
-          <h2>§ 12 Kündigung durch den Anbieter</h2>
+          <h2>§ 13 Kündigung durch den Anbieter</h2>
           <p>(1) Unentgeltliche Nutzungsverhältnisse kann der Anbieter mit einer Frist von vier Wochen
             kündigen.</p>
           <p>(2) Das Recht zur Kündigung aus wichtigem Grund bleibt beiderseits unberührt. Ein wichtiger Grund
-            liegt für den Anbieter insbesondere bei erheblichen oder wiederholten Verstößen gegen § 7 vor.</p>
+            liegt für den Anbieter insbesondere bei erheblichen oder wiederholten Verstößen gegen § 8 vor.</p>
 
-          <h2>§ 13 Änderung dieser Bedingungen</h2>
+          <h2>§ 14 Änderung dieser Bedingungen</h2>
           <p>(1) Der Anbieter kann diese Bedingungen ändern, wenn dies zur Anpassung an geänderte
             Rechtslage, Rechtsprechung oder an Änderungen der Anwendung erforderlich ist und die Nutzenden
             dadurch nicht unangemessen benachteiligt werden.</p>
@@ -14460,7 +14971,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             diese Folge und auf das Widerspruchsrecht wird in der Mitteilung gesondert hingewiesen. Im Fall
             des Widerspruchs kann jede Seite den Vertrag zum Zeitpunkt des Wirksamwerdens kündigen.</p>
 
-          <h2>§ 14 Schlussbestimmungen</h2>
+          <h2>§ 15 Schlussbestimmungen</h2>
           <p>(1) Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts. Verbraucherinnen und
             Verbrauchern bleiben die zwingenden Schutzvorschriften des Staates erhalten, in dem sie ihren
             gewöhnlichen Aufenthalt haben (Art. 6 Abs. 2 der Verordnung (EG) Nr. 593/2008).</p>

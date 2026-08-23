@@ -9,39 +9,40 @@
 :root {
   color-scheme: light;
 
-  /* Der Farbton ist bewusst kein Grünblau. Fast jedes deutsche
-     Wohnungsportal arbeitet mit Orangerot oder Petrol; wer daneben genauso
-     aussieht, wird für eine Kopie gehalten. Nestwerk steht deshalb auf
-     einem tiefen Indigoviolett mit Beere als Zweitfarbe – und auf kühlen,
-     leicht violett gebrochenen Grauwerten statt der üblichen grünstichigen.
-     Alle Werte hier sind nachgerechnet, nicht geschätzt: Fließtext
-     mindestens 4,5 zu 1 gegen jede Fläche, Ränder von Bedienelementen
-     mindestens 3 zu 1, Diagrammfarben auch bei Farbfehlsichtigkeit
-     unterscheidbar. */
+  /* Waldgrün, nicht Petrol. Der Unterschied ist kein Geschmack, sondern
+     Wiedererkennung: Petrol und Orangerot tragen fast alle deutschen
+     Wohnungsportale, und wer daneben genauso aussieht, wird für eine Kopie
+     gehalten. Ein tiefes, gedecktes Grün mit Beere als Zweitfarbe steht
+     allein – und die warmen, leicht sandigen Grauwerte halten es davon ab,
+     ins Krankenhausgrüne zu kippen.
 
-  --papier: #f5f4fa;
+     Alle Werte sind nachgerechnet, nicht geschätzt:
+     node scripts/farben-pruefen.js assets/app.css */
+
+  --papier: #f6f5f2;
   --flaeche: #ffffff;
-  --flaeche2: #efeef7;
-  --flaeche3: #e4e2f0;
-  /* Eigene Grundfarbe für Werbung: warm gegen kühle Umgebung, damit ein
-     Auge sie von Inhalt unterscheidet, ohne dass sie lauter wird. */
-  --werbung: #fdf7f0;
-  --rand: #dfdcec;
-  --rand-stark: #bfbbd4;
+  --flaeche2: #f0efea;
+  --flaeche3: #e5e3dc;
+  /* Werbung bekommt eine kühle Grundfarbe gegen die warme Umgebung. Ein
+     Auge erkennt den Temperaturwechsel sofort, ohne dass die Fläche
+     lauter würde. */
+  --werbung: #f1f3f6;
+  --rand: #e0ded6;
+  --rand-stark: #c3c0b5;
   /* Der Rand eines Bedienelements muss es erkennbar machen – 3 zu 1 nach
      WCAG 1.4.11. Ein Strukturstrich darf leiser sein, ein Eingabefeld
      nicht: Wer den Rahmen nicht sieht, sieht das Feld nicht. */
-  --rand-feld: #756f92;
+  --rand-feld: #787468;
 
-  --text: #191630;
-  --text-leise: #4e4870;
-  --text-still: #575173;
+  --text: #191c17;
+  --text-leise: #4c5044;
+  --text-still: #545848;
 
-  --akzent: #4a32c4;
-  --akzent-hell: #e7e3fb;
-  --akzent-tief: #37248f;
-  --akzent2: #a32a72;
-  --akzent2-hell: #fbe3f0;
+  --akzent: #1a5c37;
+  --akzent-hell: #dcefe2;
+  --akzent-tief: #124528;
+  --akzent2: #a3245f;
+  --akzent2-hell: #fbe3ee;
   /* Schrift auf gefüllter Akzentfläche. Als Token, nicht als Dunkel-
      Sonderregel: Solche Regeln brauchen hohe Spezifität und überfahren
      dann Abwandlungen wie .knopf--still, deren Fläche gar nicht gefüllt
@@ -50,31 +51,31 @@
   --auf-akzent2: #ffffff;
 
   /* Statusfarben bleiben konventionell: Grün, Gelb und Rot bedeuten
-     überall dasselbe, und sie umzufärben, um zum Markenton zu passen,
-     würde Verständlichkeit gegen Geschmack tauschen. */
-  --gut: #0f6b33;
-  --gut-hell: #dcf5e3;
+     überall dasselbe. „Gut“ ist bewusst limegrüner als der Markenton –
+     sonst verschwimmen Zustand und Marke zu einer grünen Suppe. */
+  --gut: #38660c;
+  --gut-hell: #e6f3d8;
   --warn: #96450a;
   --warn-hell: #fdefd9;
   --schlecht: #b91c1c;
   --auf-schlecht: #ffffff;
   --schlecht-hell: #fbe2e2;
-  --info: #0d6a86;
-  --info-hell: #d9eef5;
+  --info: #1d54c4;
+  --info-hell: #dfe6fb;
 
   /* Diagrammfarben: vier Familien mit deutlichem Abstand, geprüft auch
      unter Prot-, Deuter- und Tritanopie. */
-  --miete: #4a32c4;
-  --kauf: #0b6f7e;
-  --wg: #ab2168;
-  --tausch: #7d5a06;
+  --miete: #1a5c37;
+  --kauf: #2276b8;
+  --wg: #79155e;
+  --tausch: #a3730c;
 
   --r-klein: 8px;
   --r: 14px;
   --r-gross: 22px;
 
-  --schatten: 0 1px 2px rgba(25, 22, 48, .07), 0 4px 14px rgba(25, 22, 48, .07);
-  --schatten-hoch: 0 12px 40px rgba(25, 22, 48, .18);
+  --schatten: 0 1px 2px rgba(20, 28, 20, .07), 0 4px 14px rgba(20, 28, 20, .07);
+  --schatten-hoch: 0 12px 40px rgba(20, 28, 20, .18);
 
   --kopf-hoehe: 60px;
   --breite: 1420px;
@@ -91,40 +92,40 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --papier: #100e1a;
-    --flaeche: #191627;
-    --flaeche2: #221e33;
-    --flaeche3: #2c2741;
-    --werbung: #241f1a;
-    --rand: #332e4a;
-    --rand-stark: #494263;
-    --rand-feld: #8a83a8;
-    --text: #ece9f7;
-    --text-leise: #aca6c6;
-    --text-still: #9c96b8;
+    --papier: #0f120f;
+    --flaeche: #171c17;
+    --flaeche2: #1f251f;
+    --flaeche3: #2a312a;
+    --werbung: #191d22;
+    --rand: #2e372e;
+    --rand-stark: #414c40;
+    --rand-feld: #868f83;
+    --text: #e9efe8;
+    --text-leise: #a9b4a6;
+    --text-still: #9aa697;
 
-    --akzent: #a99bff;
-    --akzent-hell: #241d4d;
-    --akzent-tief: #c4b9ff;
-    --akzent2: #f191c4;
-    --akzent2-hell: #3a1730;
-    --auf-akzent: #17123a;
-    --auf-akzent2: #2e0c22;
+    --akzent: #57c98a;
+    --akzent-hell: #0f2d1c;
+    --akzent-tief: #7ede9f;
+    --akzent2: #f284b4;
+    --akzent2-hell: #3a1526;
+    --auf-akzent: #06210f;
+    --auf-akzent2: #2c0a19;
 
-    --gut: #4ade80;
-    --gut-hell: #12301d;
+    --gut: #8bd44a;
+    --gut-hell: #1b2f10;
     --warn: #fbbf24;
     --warn-hell: #33270a;
     --schlecht: #f87171;
     --auf-schlecht: #2b0f0f;
     --schlecht-hell: #341616;
-    --info: #5fc6e3;
-    --info-hell: #0d2c38;
+    --info: #7fb0ff;
+    --info-hell: #141f38;
 
-    --miete: #a99bff;
-    --kauf: #4fd6cf;
-    --wg: #f57aa8;
-    --tausch: #f9c46a;
+    --miete: #57c98a;
+    --kauf: #7fb0ff;
+    --wg: #ff8fc6;
+    --tausch: #e0bc55;
 
     --schatten: 0 1px 2px rgba(0, 0, 0, .45), 0 4px 16px rgba(0, 0, 0, .4);
     --schatten-hoch: 0 16px 48px rgba(0, 0, 0, .65);
@@ -133,40 +134,40 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
---papier: #100e1a;
-  --flaeche: #191627;
-  --flaeche2: #221e33;
-  --flaeche3: #2c2741;
-  --werbung: #241f1a;
-  --rand: #332e4a;
-  --rand-stark: #494263;
-  --rand-feld: #8a83a8;
-  --text: #ece9f7;
-  --text-leise: #aca6c6;
-  --text-still: #9c96b8;
+--papier: #0f120f;
+  --flaeche: #171c17;
+  --flaeche2: #1f251f;
+  --flaeche3: #2a312a;
+  --werbung: #191d22;
+  --rand: #2e372e;
+  --rand-stark: #414c40;
+  --rand-feld: #868f83;
+  --text: #e9efe8;
+  --text-leise: #a9b4a6;
+  --text-still: #9aa697;
 
-  --akzent: #a99bff;
-  --akzent-hell: #241d4d;
-  --akzent-tief: #c4b9ff;
-  --akzent2: #f191c4;
-  --akzent2-hell: #3a1730;
-  --auf-akzent: #17123a;
-  --auf-akzent2: #2e0c22;
+  --akzent: #57c98a;
+  --akzent-hell: #0f2d1c;
+  --akzent-tief: #7ede9f;
+  --akzent2: #f284b4;
+  --akzent2-hell: #3a1526;
+  --auf-akzent: #06210f;
+  --auf-akzent2: #2c0a19;
 
-  --gut: #4ade80;
-  --gut-hell: #12301d;
+  --gut: #8bd44a;
+  --gut-hell: #1b2f10;
   --warn: #fbbf24;
   --warn-hell: #33270a;
   --schlecht: #f87171;
   --auf-schlecht: #2b0f0f;
   --schlecht-hell: #341616;
-  --info: #5fc6e3;
-  --info-hell: #0d2c38;
+  --info: #7fb0ff;
+  --info-hell: #141f38;
 
-  --miete: #a99bff;
-  --kauf: #4fd6cf;
-  --wg: #f57aa8;
-  --tausch: #f9c46a;
+  --miete: #57c98a;
+  --kauf: #7fb0ff;
+  --wg: #ff8fc6;
+  --tausch: #e0bc55;
 
   --schatten: 0 1px 2px rgba(0, 0, 0, .45), 0 4px 16px rgba(0, 0, 0, .4);
   --schatten-hoch: 0 16px 48px rgba(0, 0, 0, .65);
@@ -1797,3 +1798,64 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
    deshalb genauso füllen. */
 .eigenbild { display: block; width: 100%; height: 100%; object-fit: cover; }
 .galerie__gross .eigenbild { max-height: 460px; }
+
+/* =====================================================================
+   Bezahlte Sichtbarkeit
+   Zwei Regeln bestimmen die Gestalt: Sie muss auffallen, und sie muss als
+   bezahlt erkennbar sein. Deshalb ein eigener Block mit Überschrift statt
+   eines untergemischten Treffers mit Sternchen.
+   ===================================================================== */
+
+.topanzeigen { margin: 0 0 18px; padding: 10px 12px 8px; border: 1px solid var(--info);
+  border-radius: var(--r); background: linear-gradient(var(--info-hell), transparent 90px), var(--flaeche); }
+.topanzeigen__kopf { display: flex; align-items: center; gap: .6em; margin: 0 0 8px; }
+.topanzeigen__marke { display: inline-flex; align-items: center; gap: .35em; font-size: .7rem;
+  font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--info); }
+.topanzeigen__marke .ico { width: 15px; height: 15px; }
+.topanzeigen__kopf .anzeige__warum { margin-left: auto; }
+.topanzeigen__fuss { margin: 8px 0 0; font-size: .76rem; color: var(--text-still); line-height: 1.5; }
+
+.karte-inserat.is-hervor { border-color: var(--info); box-shadow: 0 0 0 1px var(--info); }
+
+.hervorliste { list-style: none; margin: 12px 0; padding: 0; display: grid; gap: 10px; }
+.hervorliste li { display: flex; flex-wrap: wrap; gap: .8em; align-items: center; padding: .8em .9em;
+  border: 1px solid var(--rand); border-radius: var(--r-klein); background: var(--flaeche); }
+.hervorliste li.is-an { border-color: var(--akzent); background: var(--akzent-hell); }
+.hervorliste__zeichen { flex: none; display: grid; place-items: center; width: 36px; height: 36px;
+  border-radius: var(--r-klein); background: var(--flaeche2); color: var(--akzent); }
+.hervorliste li > div { flex: 1 1 14em; min-width: 0; }
+.hervorliste b { display: block; font-size: .93rem; }
+.hervorliste i { display: block; margin-top: .12em; font-style: normal; font-size: .82rem;
+  color: var(--text-leise); line-height: 1.5; }
+.hervorliste li > div > span { display: block; margin-top: .2em; font-size: .76rem; color: var(--text-still); }
+.hervorliste__preis { flex: none; text-align: right; }
+.hervorliste__preis b { font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.hervorliste__preis s { font-size: .78rem; color: var(--text-still); }
+.hervorliste--preise li { background: var(--flaeche2); }
+
+/* Anfragen zu eigenen Inseraten */
+.anfragen { margin: 12px 0; padding: .9em 1em; border: 1px solid var(--rand); border-radius: var(--r);
+  background: var(--flaeche); }
+.anfragen__kopf { display: flex; flex-wrap: wrap; gap: .3em .8em; align-items: baseline; }
+.anfragen__kopf b { font-size: .95rem; }
+.anfragen__kopf span { font-size: .8rem; color: var(--text-still); }
+.anfragen__liste { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; counter-reset: anfrage; }
+.anfragen__liste li { display: flex; gap: .7em; align-items: flex-start; padding: .6em .7em;
+  border: 1px solid var(--rand); border-radius: var(--r-klein); background: var(--flaeche2); }
+.anfragen__liste li.is-plus { border-color: var(--info); background: var(--info-hell); }
+.anfragen__liste svg { flex: none; border-radius: 50%; }
+.anfragen__liste li > div { min-width: 0; flex: 1 1 auto; }
+.anfragen__liste b { display: flex; flex-wrap: wrap; gap: .4em; align-items: center; font-size: .88rem; }
+.anfragen__liste i { display: block; margin-top: .15em; font-style: normal; font-size: .82rem;
+  color: var(--text-leise); line-height: 1.5; }
+.anfragen__liste li > div > span { display: block; margin-top: .15em; font-size: .75rem; color: var(--text-still); }
+.anfragen__warum { margin-top: 10px; }
+.anfragen__warum > summary { display: flex; align-items: center; gap: .4em; padding: .4em 0;
+  cursor: pointer; font-size: .84rem; font-weight: 600; color: var(--text-leise); list-style: none; }
+.anfragen__warum > summary::-webkit-details-marker { display: none; }
+.anfragen__warum p { margin: .2em 0 .6em; font-size: .84rem; line-height: 1.6; color: var(--text-leise); }
+.anfragen__demo { display: flex; gap: .45em; align-items: flex-start; margin-top: .6em;
+  padding-top: .6em; border-top: 1px dashed var(--rand-stark); }
+.anfragen__demo .ico { flex: none; width: 14px; height: 14px; margin-top: .15em; }
+
+.eigene li > .knopf { flex: none; }

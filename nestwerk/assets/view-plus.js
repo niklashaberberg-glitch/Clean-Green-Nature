@@ -78,12 +78,14 @@
   function vergleichsTabelle() {
     const gruppen = {};
     P.LEISTUNGEN.forEach((l) => { (gruppen[l.gruppe] = gruppen[l.gruppe] || []).push(l); });
-    const reihenfolge = ['Suchen', 'Schutz', 'Rechnen', 'Täglich'];
+    const reihenfolge = ['Suchen', 'Schutz', 'Rechnen', 'Täglich', 'Sichtbarkeit'];
     const erklaerung = {
       Suchen: 'Der Kern der Anwendung. Vollständig im freien Tarif.',
       Schutz: 'Alles, was dich vor Schaden bewahrt. Bleibt frei – dafür Geld zu nehmen wäre falsch.',
       Rechnen: 'Werkzeuge, die man ein paarmal im Leben braucht. Bleiben frei.',
-      'Täglich': 'Was jemand anfasst, der wirklich sucht. Hier liegt der Unterschied.'
+      'Täglich': 'Was jemand anfasst, der wirklich sucht. Hier liegt der Unterschied.',
+      Sichtbarkeit: 'Bezahlte Sichtbarkeit – die einzige Stelle, an der Geld eine Reihenfolge ändert. '
+        + 'Sie wird deshalb überall gekennzeichnet, wo sie wirkt.'
     };
     return h`<div class="tarifvergleich__rolle">
       <table class="tarifvergleich">
@@ -99,7 +101,7 @@
             <tr class="tarifvergleich__gruppe">
               <th scope="row" colspan="3"><b>${g}</b><i>${erklaerung[g]}</i></th>
             </tr>
-            ${gruppen[g].map((l) => h`<tr class="${l.gleich ? 'is-gleich' : ''}">
+            ${(gruppen[g] || []).map((l) => h`<tr class="${l.gleich ? 'is-gleich' : ''}">
               <th scope="row">${l.name}${l.warum ? h`<i>${l.warum}</i>` : ''}</th>
               <td>${l.frei === 'nein' ? raw('<span class="fehlt">–</span>') : l.frei}</td>
               <td class="is-plus">${l.plus === 'ja' ? ui.ico('check') : l.plus}</td>
@@ -189,8 +191,9 @@
         <header class="seite__kopf">
           <h1>${ico('plus5')}Tarife</h1>
           <p class="seite__unter">Ein Satz erklärt das ganze Modell:
-            <b>Plus bezahlt Zeitersparnis bei häufiger Nutzung – nie einen Vorteil gegenüber anderen Bewerbern.</b>
-            Was dich schützt und was gerechnet werden muss, bleibt kostenlos.</p>
+            <b>Plus bezahlt Zeitersparnis und Sichtbarkeit – nie, was du über eine Wohnung erfährst.</b>
+            Prüfhinweis, Vergleichsmiete, Chancen und alle Rechner bleiben kostenlos. Und wo Bezahlung eine
+            Reihenfolge ändert, steht es dabei.</p>
         </header>
 
         ${gruenderBlock()}
@@ -218,6 +221,29 @@
         <section class="block">
           <h2>${ico('waage')}Alles im Vergleich</h2>
           ${vergleichsTabelle()}
+        </section>
+
+        <section class="block">
+          <h2>${ico('blitz')}Eigenes Inserat hervorheben</h2>
+          <p class="block__unter">Für die anbietende Seite, unabhängig vom Tarif einzeln buchbar. Mit Plus
+            ${Math.round(P.PLUS_RABATT * 100)} % günstiger.</p>
+          <ul class="hervorliste hervorliste--preise">
+            ${P.HERVORHEBUNG.map((x) => h`<li>
+              <span class="hervorliste__zeichen">${ico(x.icon)}</span>
+              <div><b>${x.name}</b><i>${x.kurz}</i><span>${x.wirkung}</span></div>
+              <span class="hervorliste__preis"><b>${U.eur2(x.preis)}</b></span>
+            </li>`)}
+          </ul>
+          <div class="hinweisbox">${ico('info')}
+            <div><b>Bezahlte Plätze stehen getrennt</b>
+            <p>Hervorgehobene Inserate erscheinen in einem eigenen Block über den Treffern, beschriftet als
+              Top-Anzeigen, höchstens ${P.TOP_MAX} auf einmal. Sie werden nicht zwischen die Ergebnisse
+              gemischt und verschieben in der Liste darunter nichts. Wer sucht, sieht damit weiterhin eine
+              Reihenfolge, die sich aus seinem Profil erklärt – und erkennt auf den ersten Blick, was bezahlt
+              ist. Untergemischte Werbeplätze wären nach § 5b UWG ohnehin kennzeichnungspflichtig.</p></div>
+          </div>
+          <p class="fein">${NW.recht ? NW.recht.preisHinweis() : ''} Buchen lässt sich das unter
+            <a href="#/inserieren">Inserieren</a> bei deinen eigenen Inseraten.</p>
         </section>
 
         <section class="block">
@@ -249,9 +275,30 @@
             </details>
             <details>
               <summary>Bringt Plus mir eine Wohnung schneller?</summary>
-              <p>Nur insofern, als du weniger Zeit mit Handarbeit verlierst: mehrere Suchaufträge statt einem,
-                Serienbewerbung statt jede Anfrage einzeln, Besichtigungen als Route statt als Zettelwirtschaft.
-                Bei der Vergabe selbst hat Plus keinerlei Gewicht. Vermieter sehen nicht, welchen Tarif du hast.</p>
+              <p>Es spart vor allem Handarbeit: mehrere Suchaufträge statt einem, Serienbewerbung statt jede
+                Anfrage einzeln, Besichtigungen als Route statt als Zettelwirtschaft.</p>
+              <p>Dazu kommt eines, das offen ausgesprochen gehört: <b>Deine Anfrage steht im Postfach der
+                anbietenden Seite oben</b> und ist dort mit „Plus“ gekennzeichnet. Ob das hilft, entscheidet
+                die anbietende Seite – Nestwerk sagt ihr ausdrücklich dazu, dass die Reihenfolge bezahlt ist
+                und nichts über die Eignung aussagt. Keine Anfrage wird verborgen, gekürzt oder gelöscht,
+                weil jemand nicht zahlt.</p>
+            </details>
+            <details>
+              <summary>Ist es fair, dass zahlende Anfragen oben stehen?</summary>
+              <p>Eine ehrliche Antwort: Es ist ein Vorteil, und er kostet Geld. Nestwerk hält ihn deshalb so
+                klein und so sichtbar wie möglich – die anbietende Seite sieht die Kennzeichnung, sieht alle
+                Anfragen vollständig und kann die Reihenfolge ignorieren. Was Plus nicht kann: den Inhalt
+                einer Anfrage verändern, eine Bewertung verbessern oder andere Anfragen verdrängen.</p>
+              <p>Alles, was mit der <b>Wohnung selbst</b> zu tun hat – Prüfhinweis gegen Betrug,
+                Vergleichsmiete, Chancen, echte Kosten –, bleibt im freien Tarif vollständig. Diese Grenze
+                verschiebt sich nicht.</p>
+            </details>
+            <details>
+              <summary>Kann ich mein eigenes Inserat nach oben kaufen?</summary>
+              <p>Ja, und zwar unabhängig vom Tarif: Es gibt drei Hervorhebungen ab ${U.eur2(P.HERVORHEBUNG[0].preis)}.
+                Sie erscheinen in einem eigenen, als bezahlt beschrifteten Block über den Treffern – nie
+                zwischen ihnen. Was du dabei nicht kaufst: eine bessere Bewertung deines Inserats oder einen
+                anderen Platz in der Reihenfolge darunter.</p>
             </details>
             <details>
               <summary>Was passiert nach dem Gründerjahr?</summary>

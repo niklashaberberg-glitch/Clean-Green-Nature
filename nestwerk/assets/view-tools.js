@@ -541,7 +541,10 @@
       })}
         </ul>
         <label class="feld"><span>Zusatz für alle Anschreiben (freiwillig)</span>
-          <textarea rows="3" id="serie-zusatz" placeholder="Etwas, das für alle gilt – etwa der frühestmögliche Einzugstermin."></textarea></label>`,
+          <textarea rows="3" id="serie-zusatz" placeholder="Etwas, das für alle gilt – etwa der frühestmögliche Einzugstermin."></textarea></label>
+        ${NW.viewTresor ? NW.viewTresor.freigabeAbschnitt(null, '', { ohneKnopf: true,
+        einleitung: 'Jede Bewerbung bekommt einen eigenen Verweis – ein gemeinsamer wäre ein Generalschlüssel, '
+          + 'den jede Seite weiterreichen könnte. Widerrufen lässt sich später jeder einzeln.' }) : ''}`,
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Abbrechen</button>
         <button type="button" class="knopf" data-tu="serie-senden">${ico('nachricht')}Alle ausgewählten absenden</button>`
     });
@@ -551,6 +554,14 @@
     const zusatz = ((U.$('#serie-zusatz') || {}).value || '').trim();
     const gewaehlt = U.$$('[data-serie]').filter((el) => el.checked).map((el) => el.dataset.serie);
     if (!gewaehlt.length) { ui.toast('Nichts ausgewählt.', 'schlecht'); return; }
+    const auftraege = gewaehlt.map((id) => ({
+      objektId: id, empfaenger: (NW.data.byId[id].anbieter || {}).name || ''
+    }));
+    const verweise = NW.viewTresor ? NW.viewTresor.verweisJeEmpfaenger(auftraege) : Promise.resolve({});
+    verweise.then((links) => senden(gewaehlt, zusatz, links));
+  });
+
+  function senden(gewaehlt, zusatz, links) {
     const p = S.get().profil;
     gewaehlt.forEach((id) => {
       const l = NW.data.byId[id];
@@ -566,13 +577,13 @@
         (zusatz ? zusatz + '\n\n' : '') +
         W.unterlagenSatz(p) + ' ' +
         'Nennen Sie mir gern zwei Termine, die Ihnen passen.\n\n' +
-        'Viele Grüße\n' + (p.name || '');
+        'Viele Grüße\n' + (p.name || '') + ((links || {})[id] || '');
       S.anschreiben(id, text);
     });
     ui.dialogZu();
     ui.toast(gewaehlt.length + ' ' + U.plural(gewaehlt.length, 'Anschreiben', 'Anschreiben') + ' abgeschickt.', 'gut');
     ui.neuZeichnen();
-  });
+  }
 
   A_('vergleich-kopieren', () => {
     const s = S.get();

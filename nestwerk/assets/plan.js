@@ -91,6 +91,12 @@
       frei: 'vollständig', plus: 'vollständig', gleich: true,
       warum: 'Braucht man einmal beim Umzug – dafür ein Abo zu verlangen wäre unverschämt.' },
 
+    { id: 'tresor', gruppe: 'Schutz', name: 'Dokumententresor mit Ende-zu-Ende-Verschlüsselung',
+      frei: 'unbegrenzt', plus: 'unbegrenzt', gleich: true,
+      warum: 'Wer für Datenschutz zahlen muss, hat keinen. Verschlüsselung ist kein Zusatzverkauf.' },
+    { id: 'freigaben', gruppe: 'Schutz', name: 'Befristete Verweise statt Anhänge, jederzeit widerrufbar',
+      frei: 'unbegrenzt', plus: 'unbegrenzt', gleich: true },
+
     { id: 'werbung', gruppe: 'Täglich', name: 'Anzeigenfrei', frei: 'mit Anzeigen', plus: 'ohne Anzeigen' },
     { id: 'suchauftraege', gruppe: 'Täglich', name: 'Suchaufträge mit sofortiger Meldung',
       frei: '1 Auftrag', plus: 'unbegrenzt' },
@@ -122,6 +128,7 @@
     'Kein Vorrang bei Vermietern und keine Markierung in deiner Bewerbung.',
     'Kein Frühzugang zu neuen Inseraten. Alle sehen jedes Inserat in derselben Sekunde.',
     'Keine Daten anderer Nutzerinnen und Nutzer.',
+    'Kein besserer Datenschutz gegen Aufpreis – der Dokumententresor und die widerrufbaren Verweise sind im freien Tarif vollständig enthalten.',
     'Keine Werbung, die sich als Inserat ausgibt – Anzeigen sind immer als solche gekennzeichnet.'
   ];
 

@@ -203,6 +203,12 @@
               der Vertrag angreifbar wird. Erst wenn die Wohnung ernsthaft in Betracht kommt, sind Einkommensnachweise
               und Schufa üblich.</p></div>
           </div>
+          <p class="werkzeug__weiter">
+            <a class="knopf knopf--still" href="#/tresor">${ico('schloss')}Unterlagen verschlüsselt ablegen</a>
+          </p>
+          <p class="fein">Im Dokumententresor liegen die Dateien verschlüsselt. Beim Bewerben verschickst du
+            dann keinen Anhang, sondern einen Verweis, der nach gesetzter Frist erlischt und sich widerrufen
+            lässt. Was dort liegt, wird hier automatisch abgehakt.</p>
         </section>
 
         <section class="block">

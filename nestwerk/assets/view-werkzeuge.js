@@ -54,7 +54,10 @@
       wann: 'am Tag der Übergabe' },
     { route: 'nebenkosten', icon: 'lupe', name: 'Nebenkosten prüfen',
       text: 'Welche Posten überhaupt umgelegt werden dürfen, ob die Abrechnung rechtzeitig kam und ob die Heizkosten richtig verteilt wurden.',
-      wann: 'wenn die Abrechnung im Briefkasten liegt' }
+      wann: 'wenn die Abrechnung im Briefkasten liegt' },
+    { route: 'tresor', icon: 'schloss', name: 'Dokumententresor',
+      text: 'Unterlagen einmal verschlüsselt ablegen und beim Bewerben nur einen Verweis verschicken, der nach gesetzter Frist erlischt und sich jederzeit widerrufen lässt.',
+      wann: 'vor der ersten Bewerbung' }
   ];
 
   function uebersicht() {

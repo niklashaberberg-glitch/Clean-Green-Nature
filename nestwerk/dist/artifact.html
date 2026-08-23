@@ -20,17 +20,27 @@
 
   --text: #16211f;
   --text-leise: #58635f;
-  --text-still: #7c8783;
+  /* Nachgerechnet gegen alle vier Flächen: der frühere Wert #7c8783 kam
+     nur auf 3,0 bis 3,7 zu 1 und war damit für Fließtext zu blass. */
+  --text-still: #626d69;
 
   --akzent: #0f766e;
   --akzent-hell: #d7efec;
   --akzent-tief: #0b544e;
   --akzent2: #b45309;
   --akzent2-hell: #fdefd9;
+  /* Schrift auf gefüllter Akzentfläche. Als Token, nicht als Dunkel-
+     Sonderregel: Solche Regeln brauchen hohe Spezifität und überfahren
+     dann Abwandlungen wie .knopf--still, deren Fläche gar nicht gefüllt
+     ist – im Dunkelmodus stand dort schwarz auf schwarz. */
+  --auf-akzent: #ffffff;
+  --auf-akzent2: #ffffff;
 
-  --gut: #15803d;
+  /* Statusfarben stehen meist auf ihrer eigenen hellen Fläche –
+     dort galt es nachzuschärfen, nicht auf Weiß. */
+  --gut: #0f6b33;
   --gut-hell: #dcf5e3;
-  --warn: #b45309;
+  --warn: #96450a;
   --warn-hell: #fdefd9;
   --schlecht: #b91c1c;
   --schlecht-hell: #fbe2e2;
@@ -73,13 +83,15 @@
 
     --text: #e8efed;
     --text-leise: #a3b0ad;
-    --text-still: #7d8a87;
+    --text-still: #93a09c;
 
     --akzent: #2dd4bf;
     --akzent-hell: #10312e;
     --akzent-tief: #5eead4;
     --akzent2: #fbbf24;
     --akzent2-hell: #33270a;
+    --auf-akzent: #06201d;
+    --auf-akzent2: #201603;
 
     --gut: #4ade80;
     --gut-hell: #12301d;
@@ -110,12 +122,14 @@
   --rand-stark: #3d4c49;
   --text: #e8efed;
   --text-leise: #a3b0ad;
-  --text-still: #7d8a87;
+  --text-still: #93a09c;
   --akzent: #2dd4bf;
   --akzent-hell: #10312e;
   --akzent-tief: #5eead4;
   --akzent2: #fbbf24;
   --akzent2-hell: #33270a;
+  --auf-akzent: #06201d;
+  --auf-akzent2: #201603;
   --gut: #4ade80;
   --gut-hell: #12301d;
   --warn: #fbbf24;
@@ -237,11 +251,9 @@ svg { display: block; }
 .zaehler {
   min-width: 17px; height: 17px; padding: 0 4px;
   display: grid; place-items: center;
-  background: var(--akzent2); color: #fff;
+  background: var(--akzent2); color: var(--auf-akzent2);
   border-radius: 9px; font-size: .66rem; font-weight: 700; line-height: 1;
 }
-:root[data-theme="dark"] .zaehler { color: #201603; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .zaehler { color: #201603; } }
 
 .ikon-btn .zaehler { position: absolute; top: 1px; right: 1px; }
 
@@ -270,12 +282,10 @@ svg { display: block; }
 .knopf {
   display: inline-flex; align-items: center; justify-content: center; gap: .45em;
   padding: .62em 1.05em; border: 1px solid var(--akzent);
-  border-radius: var(--r-klein); background: var(--akzent); color: #fff;
+  border-radius: var(--r-klein); background: var(--akzent); color: var(--auf-akzent);
   font: inherit; font-size: .92rem; font-weight: 600; cursor: pointer; text-decoration: none;
   transition: background var(--tempo), border-color var(--tempo), transform var(--tempo);
 }
-:root[data-theme="dark"] .knopf { color: #06201d; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .knopf { color: #06201d; } }
 .knopf:hover { background: var(--akzent-tief); border-color: var(--akzent-tief); }
 .knopf:active { transform: translateY(1px); }
 .knopf--still { background: var(--flaeche); color: var(--text); border-color: var(--rand-stark); }
@@ -360,11 +370,11 @@ input[type="range"] {
 .schalter i { display: block; font-style: normal; font-size: .78rem; color: var(--text-still); }
 .schalter--klein { font-size: .82rem; }
 
-.formraster { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
-.formraster--drei { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); align-items: end; }
+.formraster { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap: 12px; }
+.formraster--drei { grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); align-items: end; }
 
 .regler { display: grid; gap: 14px; }
-.reglerzeile { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; }
+.reglerzeile { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; align-items: center; }
 .reglerzeile label { grid-column: 1; font-size: .88rem; font-weight: 550; }
 .reglerzeile label i { display: block; font-style: normal; font-weight: 400; font-size: .78rem; color: var(--text-still); }
 .reglerzeile output { grid-column: 2; font-variant-numeric: tabular-nums; font-weight: 650; color: var(--akzent); min-width: 2ch; text-align: right; }
@@ -397,6 +407,8 @@ input[type="range"] {
 .block h3 { margin-top: 1.1em; }
 .block__unter { color: var(--text-leise); font-size: .9rem; max-width: 72ch; }
 .block__kopfzeile { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+/* Verweise in Abschnittsköpfen bekommen eine greifbare Höhe. */
+.block__kopfzeile .link, .block__kopfzeile a { min-height: 24px; display: inline-flex; align-items: center; }
 .block--betont { border-color: var(--akzent); background: linear-gradient(var(--akzent-hell), transparent 130px), var(--flaeche); }
 .block--warn { border-color: var(--warn); background: linear-gradient(var(--warn-hell), transparent 130px), var(--flaeche); }
 .block--schlecht { border-color: var(--schlecht); background: linear-gradient(var(--schlecht-hell), transparent 160px), var(--flaeche); }
@@ -427,19 +439,19 @@ input[type="range"] {
 
 .fliesstext { max-width: 72ch; line-height: 1.68; }
 
-.kennzahlen { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 14px 0; }
+.kennzahlen { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr)); gap: 12px; margin: 14px 0; }
 .kennzahlen > div { background: var(--flaeche2); border-radius: var(--r-klein); padding: .8em .9em; }
 .kennzahlen b { display: block; font-size: 1.24rem; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
 .kennzahlen span { display: block; font-size: .79rem; color: var(--text-leise); line-height: 1.35; }
-.kennzahlen--vier { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+.kennzahlen--vier { grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr)); }
 
-.fakten { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2px 18px; margin: 12px 0 0; }
+.fakten { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 2px 18px; margin: 12px 0 0; }
 .fakten > div { display: flex; justify-content: space-between; gap: 10px; padding: .5em 0; border-bottom: 1px solid var(--rand); }
 .fakten dt { color: var(--text-leise); font-size: .87rem; }
 .fakten dd { margin: 0; font-weight: 550; text-align: right; font-size: .9rem; display: flex; align-items: center; gap: .4em; justify-content: flex-end; flex-wrap: wrap; }
 .fakten--dicht > div { padding: .38em 0; }
 
-.merkmale { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 4px 14px; }
+.merkmale { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 4px 14px; }
 .merkmale li { display: flex; align-items: center; gap: .45em; font-size: .89rem; }
 .merkmale .ico { color: var(--gut); width: 15px; height: 15px; }
 
@@ -453,7 +465,7 @@ input[type="range"] {
 .fortschritt__spur i { display: block; height: 100%; background: var(--akzent); border-radius: 999px; transition: width var(--tempo); }
 .fortschritt b { font-size: .84rem; color: var(--text-leise); white-space: nowrap; }
 
-.balkenzeile { display: grid; grid-template-columns: 5.2em 1fr 2.4em; gap: 10px; align-items: center; font-size: .86rem; margin-bottom: 6px; }
+.balkenzeile { display: grid; grid-template-columns: 5.2em minmax(0, 1fr) 2.4em; gap: 10px; align-items: center; font-size: .86rem; margin-bottom: 6px; }
 .balken { height: 8px; background: var(--flaeche3); border-radius: 999px; overflow: hidden; }
 .balken i { display: block; height: 100%; background: var(--akzent); border-radius: 999px; }
 
@@ -478,8 +490,8 @@ input[type="range"] {
 /* ---------------------------- Inseratskarte ---------------------------- */
 
 .ergebnisse__liste { display: grid; gap: 14px; }
-.ergebnisse__liste--drei { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-.ergebnisse__liste--vier { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.ergebnisse__liste--drei { grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); }
+.ergebnisse__liste--vier { grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr)); }
 
 .karte-inserat {
   display: grid; grid-template-columns: clamp(150px, 34%, 260px) minmax(0, 1fr);
@@ -487,7 +499,10 @@ input[type="range"] {
   overflow: hidden; transition: border-color var(--tempo), box-shadow var(--tempo), transform var(--tempo);
 }
 .karte-inserat:hover { border-color: var(--rand-stark); box-shadow: var(--schatten); }
-.karte-inserat.is-kompakt { grid-template-columns: 1fr; }
+/* 1fr entspricht minmax(auto, 1fr) – die Spalte darf also nicht unter
+   die Mindestbreite ihres Inhalts fallen und sprengt sonst die Karte.
+   minmax(0, 1fr) erlaubt das Schrumpfen; der Text bricht dann um. */
+.karte-inserat.is-kompakt { grid-template-columns: minmax(0, 1fr); }
 
 .karte-inserat__bild { position: relative; display: block; background: var(--flaeche2); aspect-ratio: 4 / 3; }
 .karte-inserat.is-kompakt .karte-inserat__bild { aspect-ratio: 16 / 10; }
@@ -504,10 +519,11 @@ input[type="range"] {
 
 .karte-inserat__text { padding: 12px 14px 10px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
 .karte-inserat__marken { display: flex; flex-wrap: wrap; gap: 4px; min-height: 0; }
-.karte-inserat h3 { margin: 0; font-size: 1rem; }
+.karte-inserat h3 { margin: 0; font-size: 1rem; overflow-wrap: anywhere; }
 .karte-inserat h3 a { color: var(--text); text-decoration: none; }
 .karte-inserat h3 a:hover { color: var(--akzent); }
-.karte-inserat__ort { margin: 0; display: flex; align-items: center; gap: .35em; font-size: .84rem; color: var(--text-leise); }
+.karte-inserat__ort { margin: 0; display: flex; align-items: center; gap: .35em; font-size: .84rem; color: var(--text-leise);
+  min-width: 0; overflow-wrap: anywhere; }
 .karte-inserat__ort .ico { width: 14px; height: 14px; }
 .karte-inserat__preis { margin: 0; display: flex; align-items: baseline; gap: .5em; flex-wrap: wrap; }
 .karte-inserat__preis b { font-size: 1.2rem; letter-spacing: -.02em; }
@@ -524,7 +540,7 @@ input[type="range"] {
 .karte-inserat__tun .ikon-btn.is-an .ico { fill: currentColor; }
 
 @media (max-width: 620px) {
-  .karte-inserat { grid-template-columns: 1fr; }
+  .karte-inserat { grid-template-columns: minmax(0, 1fr); }
   .karte-inserat__bild { aspect-ratio: 16 / 10; }
 }
 
@@ -541,9 +557,7 @@ input[type="range"] {
   transition: all var(--tempo);
 }
 .art:hover { border-color: var(--akzent); }
-.art.is-an { background: var(--akzent); border-color: var(--akzent); color: #fff; }
-:root[data-theme="dark"] .art.is-an { color: #06201d; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .art.is-an { color: #06201d; } }
+.art.is-an { background: var(--akzent); border-color: var(--akzent); color: var(--auf-akzent); }
 .art .ico { width: 16px; height: 16px; }
 
 .suche__feld { position: relative; display: flex; align-items: center; gap: .5em; }
@@ -613,15 +627,11 @@ input[type="range"] {
 .karte__pin:hover, .karte__pin.is-aktiv { stroke-width: 3; }
 .karte__preis { cursor: pointer; }
 .karte__preis rect { stroke: var(--flaeche); stroke-width: 1.5; }
-.karte__preis text { fill: #fff; font-size: 12px; font-weight: 650; text-anchor: middle; font-family: var(--schrift); }
-:root[data-theme="dark"] .karte__preis text { fill: #06201d; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .karte__preis text { fill: #06201d; } }
+.karte__preis text { fill: var(--auf-akzent); font-size: 12px; font-weight: 650; text-anchor: middle; font-family: var(--schrift); }
 .karte__preis.is-aktiv rect { stroke: var(--text); stroke-width: 2.5; }
 .karte__cluster { cursor: pointer; }
 .karte__cluster circle { fill: var(--akzent); stroke: var(--flaeche); stroke-width: 2.5; }
-.karte__cluster text { fill: #fff; font-size: 12px; font-weight: 700; text-anchor: middle; font-family: var(--schrift); }
-:root[data-theme="dark"] .karte__cluster text { fill: #06201d; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .karte__cluster text { fill: #06201d; } }
+.karte__cluster text { fill: var(--auf-akzent); font-size: 12px; font-weight: 700; text-anchor: middle; font-family: var(--schrift); }
 
 .karte__viertel, .karte__stadt {
   fill: var(--text); font-family: var(--schrift); text-anchor: middle; pointer-events: none;
@@ -694,7 +704,7 @@ input[type="range"] {
 .passung { display: flex; gap: 16px; align-items: flex-start; margin-top: 10px; }
 .passung__ring { flex: none; }
 .passung__balken { flex: 1; display: grid; gap: 7px; min-width: 0; }
-.passung__zeile { display: grid; grid-template-columns: 1fr; gap: 2px; font-size: .8rem; }
+.passung__zeile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; font-size: .8rem; }
 .passung__label { font-weight: 600; }
 .passung__spur { height: 6px; background: var(--flaeche3); border-radius: 999px; overflow: hidden; }
 .passung__spur i { display: block; height: 100%; background: var(--akzent); border-radius: 999px; }
@@ -726,7 +736,7 @@ input[type="range"] {
 .pruef li { display: flex; gap: .5em; align-items: flex-start; font-size: .9rem; }
 .pruef .ico { flex: none; margin-top: .18em; color: var(--warn); }
 
-.kosten { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 14px 0; }
+.kosten { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 18px; margin: 14px 0; }
 .kosten__spalte h3 { margin: 0 0 .5em; font-size: .95rem; }
 .kosten__liste { list-style: none; margin: 0; padding: 0; }
 .kosten__liste li { display: flex; justify-content: space-between; gap: 12px; padding: .4em 0; border-bottom: 1px dotted var(--rand); font-size: .88rem; }
@@ -765,7 +775,7 @@ input[type="range"] {
 .termine__frei { font-size: .8rem; color: var(--text-leise); }
 
 .wg__kopf { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; margin: 12px 0; }
-.wg__leute { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; min-width: 220px; }
+.wg__leute { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(190px, 100%), 1fr)); gap: 10px; min-width: 220px; }
 .wg__person { display: flex; align-items: center; gap: .6em; }
 .wg__person b { display: block; font-size: .9rem; }
 .wg__person span { font-size: .78rem; color: var(--text-leise); }
@@ -824,9 +834,7 @@ input[type="range"] {
 .ringkarte__koerper { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 16px; padding: 1.1em; align-items: center; }
 .ringkarte__schritte { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
 .ringkarte__schritte li { display: flex; gap: .7em; align-items: flex-start; }
-.ringkarte__schritte .ringkarte__marke { display: grid; place-items: center; width: 26px; height: 26px; flex: none; border-radius: 50%; background: var(--akzent); color: #fff; font-size: .78rem; font-weight: 700; }
-:root[data-theme="dark"] .ringkarte__schritte .ringkarte__marke { color: #06201d; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ringkarte__schritte .ringkarte__marke { color: #06201d; } }
+.ringkarte__schritte .ringkarte__marke { display: grid; place-items: center; width: 26px; height: 26px; flex: none; border-radius: 50%; background: var(--akzent); color: var(--auf-akzent); font-size: .78rem; font-weight: 700; }
 .ringkarte__schritte b { display: block; font-size: .9rem; }
 .ringkarte__schritte b a { color: var(--text); text-decoration: none; }
 .ringkarte__schritte b a:hover { color: var(--akzent); }
@@ -876,7 +884,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .pipeline__stufe--warn { background: var(--warn-hell); }
 .pipeline__stufe--info { background: var(--info-hell); }
 
-.vorteile { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 12px; }
+.vorteile { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 14px; margin-top: 12px; }
 .vorteile article { padding: 1em; background: var(--flaeche2); border-radius: var(--r-klein); }
 .vorteile__zeichen { display: grid; place-items: center; width: 34px; height: 34px; border-radius: var(--r-klein); background: var(--akzent-hell); color: var(--akzent); margin-bottom: .5em; }
 .vorteile b { display: block; margin-bottom: .25em; }
@@ -884,7 +892,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
 /* ---------------------------- Merkliste ---------------------------- */
 
-.tafel { display: grid; grid-template-columns: repeat(6, minmax(220px, 1fr)); gap: 10px; overflow-x: auto; padding-bottom: 10px; }
+.tafel { display: grid; grid-template-columns: repeat(6, minmax(min(220px, 100%), 1fr)); gap: 10px; overflow-x: auto; padding-bottom: 10px; }
 .tafel__spalte { background: var(--flaeche2); border-radius: var(--r); padding: 8px; min-width: 220px; }
 .tafel__kopf { display: flex; justify-content: space-between; align-items: center; padding: .4em .6em; border-radius: var(--r-klein); background: var(--flaeche3); margin-bottom: 8px; font-size: .84rem; }
 .tafel__kopf--gut { background: var(--gut-hell); color: var(--gut); }
@@ -951,7 +959,10 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .post__eintrag.is-an { background: var(--akzent-hell); }
 .post__eintrag b { display: flex; align-items: center; gap: .4em; font-size: .89rem; }
 .post__eintrag span { display: block; font-size: .78rem; color: var(--text-leise); }
+/* Auf der eingefärbten Fläche des aktiven Verlaufs reicht die dritte
+   Textfarbe nicht mehr – dort eine Stufe kräftiger. */
 .post__eintrag i { display: block; font-style: normal; font-size: .76rem; color: var(--text-still); }
+.post__eintrag.is-an i, .post__eintrag.is-an span { color: var(--text-leise); }
 .punkt { width: 8px; height: 8px; border-radius: 50%; background: var(--akzent2); display: inline-block; }
 
 .post__verlauf { background: var(--flaeche); border: 1px solid var(--rand); border-radius: var(--r); display: flex; flex-direction: column; min-height: 420px; }
@@ -989,7 +1000,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .anker b { display: block; font-size: .9rem; }
 .anker span { font-size: .8rem; color: var(--text-leise); }
 
-.mappe { list-style: none; margin: 10px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 5px; }
+.mappe { list-style: none; margin: 10px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap: 5px; }
 .mappe li { display: flex; align-items: center; gap: .45em; font-size: .86rem; color: var(--text-still); }
 .mappe li .ico { width: 15px; height: 15px; color: var(--text-still); }
 .mappe li.is-da { color: var(--text); }
@@ -1003,7 +1014,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .eigene b { display: block; font-size: .9rem; }
 .eigene span { font-size: .79rem; color: var(--text-leise); }
 
-.ergebnis-gross { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin: 12px 0; }
+.ergebnis-gross { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr)); gap: 16px; margin: 12px 0; }
 .ergebnis-gross b { display: block; font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2rem); letter-spacing: -.03em; font-variant-numeric: tabular-nums; color: var(--text-leise); }
 .ergebnis-gross b.is-vorne { color: var(--akzent); }
 .ergebnis-gross span { display: block; font-size: .88rem; }
@@ -1060,7 +1071,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .palette__eintrag i { display: block; font-style: normal; font-size: .78rem; color: var(--text-leise); }
 .palette__leer { padding: 1.4em; text-align: center; color: var(--text-still); font-size: .88rem; }
 
-.tastatur { display: grid; grid-template-columns: auto 1fr; gap: .5em 1.2em; margin: 0; font-size: .89rem; }
+.tastatur { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .5em 1.2em; margin: 0; font-size: .89rem; }
 .tastatur dt { font-weight: 600; white-space: nowrap; }
 .tastatur dd { margin: 0; color: var(--text-leise); }
 
@@ -1076,6 +1087,28 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 /* ---------------------------- Anpassungen für schmale Fenster ---------------------------- */
 
 .nur-schmal { display: none; }
+
+/* Zwischen Tablet und großem Bildschirm ist die Kopfzeile am engsten: Die
+   Hauptbereiche stehen noch nebeneinander, aber der Platz reicht nicht für
+   Symbol und Wort. Ohne diese Stufe lief die Zeile von 900 bis 1330 px
+   waagerecht über den Rand hinaus – also auf den meisten Notebooks. */
+@media (min-width: 901px) and (max-width: 1340px) {
+  .kopf__innen { gap: 10px; }
+  .kopf__nav a { padding: .5em .48em; font-size: .855rem; gap: 0; }
+  .kopf__nav a > .ico { display: none; }
+  .tarifknopf { padding-left: .6em; padding-right: .6em; }
+}
+@media (min-width: 901px) and (max-width: 1023px) {
+  .marke__text { display: none; }
+}
+
+/* Ganz schmale Geräte: Der Schriftzug weicht dem Zeichen, die Schaltflächen
+   rücken zusammen. Sonst schob sich die rechte Gruppe über den Rand. */
+@media (max-width: 400px) {
+  .marke__text { display: none; }
+  .kopf__tun { gap: 2px; }
+  .kopf__tun .ikon-btn { width: 36px; height: 36px; }
+}
 
 @media (max-width: 1180px) {
   .suche__raster { grid-template-columns: 260px minmax(0, 1fr); }
@@ -1194,25 +1227,22 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .anzeige__absender { font-size: .76rem; color: var(--text-still); }
 .anzeige__fuss { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
   padding: .55em 1em; background: var(--flaeche); border-top: 1px solid var(--rand); font-size: .8rem; }
+.anzeige__fuss .link { min-height: 24px; display: inline-flex; align-items: center; }
 
 /* ---------------------------- Preisseite ---------------------------- */
 
 .tarifschalter { display: inline-flex; border: 1px solid var(--rand-stark); border-radius: 999px; overflow: hidden; margin-bottom: 16px; }
 .tarifschalter button { padding: .5em 1.1em; border: 0; background: var(--flaeche); color: var(--text-leise);
   font: inherit; font-size: .88rem; cursor: pointer; display: inline-flex; align-items: center; gap: .4em; }
-.tarifschalter button.is-an { background: var(--akzent); color: #fff; font-weight: 600; }
-:root[data-theme="dark"] .tarifschalter button.is-an { color: #06201d; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tarifschalter button.is-an { color: #06201d; } }
+.tarifschalter button.is-an { background: var(--akzent); color: var(--auf-akzent); font-weight: 600; }
 .tarifschalter em { font-style: normal; font-size: .76rem; opacity: .85; }
 
-.tarife { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 16px; }
+.tarife { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 16px; margin-bottom: 16px; }
 .tarif { position: relative; background: var(--flaeche); border: 1px solid var(--rand); border-radius: var(--r); padding: 20px; }
 .tarif--plus { border-color: var(--akzent); }
 .tarif.is-aktiv { box-shadow: 0 0 0 2px var(--akzent); }
 .tarif__marke { position: absolute; top: -10px; left: 20px; padding: .15em .7em; border-radius: 999px;
-  background: var(--akzent); color: #fff; font-size: .72rem; font-weight: 700; }
-:root[data-theme="dark"] .tarif__marke { color: #06201d; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tarif__marke { color: #06201d; } }
+  background: var(--akzent); color: var(--auf-akzent); font-size: .72rem; font-weight: 700; }
 .tarif h2 { margin-bottom: .1em; }
 .tarif__preis b { font-size: 2rem; letter-spacing: -.03em; }
 .tarif__preis span { font-size: .84rem; color: var(--text-leise); margin-left: .4em; }
@@ -1253,8 +1283,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
    Werkzeuge
    ===================================================================== */
 
-.werkzeuge { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
-.werkzeuge--klein { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.werkzeuge { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 12px; }
+.werkzeuge--klein { grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); }
 .werkzeugkachel {
   display: block; padding: 1em; background: var(--flaeche); border: 1px solid var(--rand);
   border-radius: var(--r); text-decoration: none; color: var(--text);
@@ -1270,12 +1300,12 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .werkzeug__weiter { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .staedteliste { display: grid; gap: 3px; margin: 10px 0; }
-.staedteliste__zeile { display: grid; grid-template-columns: 7em 1fr 4.5em auto; gap: 10px; align-items: center; font-size: .88rem; }
+.staedteliste__zeile { display: grid; grid-template-columns: 7em minmax(0, 1fr) 4.5em auto; gap: 10px; align-items: center; font-size: .88rem; }
 .staedteliste__zeile b { font-variant-numeric: tabular-nums; text-align: right; }
 .staedteliste__zeile.is-eng { opacity: .5; }
 
-.nkraster { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2px 18px; margin-top: 10px; }
-.nkzeile { display: grid; grid-template-columns: 1fr 7.5em; gap: 10px; align-items: center;
+.nkraster { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 2px 18px; margin-top: 10px; }
+.nkzeile { display: grid; grid-template-columns: minmax(0, 1fr) 7.5em; gap: 10px; align-items: center;
   padding: .4em 0; border-bottom: 1px dotted var(--rand); cursor: text; }
 .nkzeile__label { font-size: .87rem; }
 .nkzeile__label i { display: block; font-style: normal; font-size: .76rem; color: var(--text-still); }
@@ -1285,10 +1315,10 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   font-style: normal; font-size: .8rem; color: var(--text-still); pointer-events: none; }
 .nkzeile.is-nicht .nkzeile__label { color: var(--text-leise); }
 
-.zaehler__zeile { display: grid; grid-template-columns: 12em 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 6px; }
+.zaehler__zeile { display: grid; grid-template-columns: 12em minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: center; margin-bottom: 6px; }
 .zaehler__zeile > span { font-size: .88rem; font-weight: 550; }
 
-.raeume { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 10px; }
+.raeume { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 12px; margin-top: 10px; }
 .raum { padding: .8em; background: var(--flaeche2); border-radius: var(--r-klein); display: grid; gap: 8px; }
 .raum__kopf { display: flex; gap: 6px; align-items: center; }
 .raum__kopf .feld { flex: 1; }
@@ -1362,7 +1392,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
 .vizbalken { display: grid; gap: 2px; margin-top: 10px; }
 .vizbalken__zeile {
-  display: grid; grid-template-columns: 9em 1fr 4.2em 4.2em; gap: 10px; align-items: center;
+  display: grid; grid-template-columns: 9em minmax(0, 1fr) 4.2em 4.2em; gap: 10px; align-items: center;
   padding: .3em .4em; border: 0; border-radius: var(--r-klein);
   background: none; color: var(--text); font: inherit; font-size: .86rem; text-align: left; cursor: pointer;
 }
@@ -1464,7 +1494,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .vizbalken__trend { grid-column: 2 / -1; text-align: left; }
   .nkzeile { grid-template-columns: 1fr 6em; }
 }
-.chancenkopf { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 12px 0; }
+.chancenkopf { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px; margin: 12px 0; }
 .chancenkopf .ampel { margin: 0; }
 .chancenkopf .ampel__zahl .ico { width: 30px; height: 30px; }
 .chancen__satz { font-size: .95rem; }
@@ -1491,6 +1521,76 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   font-size: .8rem; color: var(--text-still); transition: color var(--tempo); }
 .gespeichert .ico { width: 14px; height: 14px; }
 .gespeichert.is-frisch { color: var(--gut); }
+
+/* =====================================================================
+   Dokumententresor
+   Die Listen tragen viel Text bei wenig Breite. Deshalb überall
+   minmax(0, …) für die Textspalte – sonst drängt ein langer Dateiname
+   die Knöpfe aus der Karte.
+   ===================================================================== */
+
+.tresor__erklaerung { margin-top: 16px; border: 1px solid var(--rand); border-radius: var(--r-klein);
+  background: var(--flaeche2); }
+.tresor__erklaerung > summary { display: flex; align-items: center; gap: .5em; padding: .7em .9em;
+  cursor: pointer; font-weight: 650; font-size: .88rem; list-style: none; }
+.tresor__erklaerung > summary::-webkit-details-marker { display: none; }
+.tresor__erklaerung > summary::after { content: '▾'; margin-left: auto; color: var(--text-still);
+  transition: transform var(--tempo); }
+.tresor__erklaerung[open] > summary::after { transform: rotate(180deg); }
+.tresor__erklaerung > summary .ico { flex: none; color: var(--akzent); }
+.tresor__erklaerung p { margin: 0 .9em .8em; font-size: .84rem; line-height: 1.6; color: var(--text-leise); }
+.tresor__erklaerung p:first-of-type { margin-top: .1em; }
+
+.tresor__aufnahme { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 12px; align-items: end; margin: 14px 0 6px; padding: 12px; border: 1px dashed var(--rand-stark);
+  border-radius: var(--r); background: var(--flaeche2); }
+.tresor__aufnahme .feld { margin: 0; }
+/* Das native Dateifeld beschriftet sich selbst – auf Englisch, in der
+   Sprache des Browsers, nicht in der der Seite. Deshalb hier ein eigenes
+   Feld: Das echte Element bleibt bedienbar, nur unsichtbar. */
+.dateiwahl { display: flex; flex-wrap: wrap; gap: .5em .7em; align-items: center; }
+.dateiwahl > label { flex: none; cursor: pointer; }
+.dateiwahl > i { flex: 1 1 8em; min-width: 0; font-style: normal; font-size: .82rem;
+  color: var(--text-leise); overflow-wrap: anywhere; }
+.dateiwahl > input:focus-visible + label { outline: 2px solid var(--akzent); outline-offset: 2px; }
+
+.tresorliste { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; }
+/* Flex statt Raster: Die Zeilen tragen mal zwei, mal vier Kinder – ein
+   festes Spaltenraster würde das vierte in die nächste Zeile werfen. */
+.tresorliste li { display: flex; flex-wrap: wrap; gap: .55em .7em; align-items: center;
+  padding: .7em .85em; border: 1px solid var(--rand); border-radius: var(--r-klein);
+  background: var(--flaeche); }
+.tresorliste li > .ico { flex: none; color: var(--akzent); }
+.tresorliste li > div { flex: 1 1 9em; min-width: 0; }
+/* Nur die direkten Kinder: Ein `.tresorliste span` hätte auch die
+   Kennzeichen darin auf Blockbreite gezogen. */
+.tresorliste li > div > b { display: block; font-size: .92rem; overflow-wrap: anywhere; }
+.tresorliste li > div > span { display: block; margin-top: .12em; font-size: .78rem; color: var(--text-leise); }
+.tresorliste li > div > span .badge { margin-left: .4em; vertical-align: baseline; }
+.tresorliste li > .ikon-btn, .tresorliste li > .knopf { flex: none; }
+.tresorliste--gesperrt li { background: var(--flaeche2); border-style: dashed; }
+.tresorliste--gesperrt li > .ico { color: var(--text-still); }
+
+.tresor__vorschau { display: block; max-width: 100%; max-height: 62vh; margin: 0 auto;
+  border-radius: var(--r-klein); background: var(--flaeche2); }
+
+.freigabeliste { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.freigabeliste li { padding: .8em .9em; border: 1px solid var(--rand); border-left: 3px solid var(--gut);
+  border-radius: var(--r-klein); background: var(--flaeche); }
+.freigabeliste li.is-tot { border-left-color: var(--rand-stark); background: var(--flaeche2); }
+.freigabeliste li.is-tot .freigabeliste__kopf b { color: var(--text-leise); }
+.freigabeliste__kopf { display: flex; flex-wrap: wrap; gap: .5em; align-items: center; }
+.freigabeliste__kopf > b { font-size: .93rem; overflow-wrap: anywhere; }
+.freigabeliste > li > span { display: block; margin-top: .25em; font-size: .8rem; color: var(--text-leise); }
+.freigabeliste__protokoll { display: flex; gap: .4em; align-items: flex-start; margin-top: .35em;
+  font-size: .78rem; font-style: normal; color: var(--text-still); }
+.freigabeliste__protokoll .ico { flex: none; width: 14px; height: 14px; margin-top: .15em; color: var(--gut); }
+.freigabeliste__tun { display: flex; flex-wrap: wrap; gap: .6em; align-items: center; margin-top: .6em; }
+
+@media (max-width: 560px) {
+  .tresor__aufnahme { padding: 10px; }
+  .freigabeliste__tun { gap: .5em .8em; }
+}
 
 </style>
 <noscript>
@@ -4978,6 +5078,12 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       frei: 'vollständig', plus: 'vollständig', gleich: true,
       warum: 'Braucht man einmal beim Umzug – dafür ein Abo zu verlangen wäre unverschämt.' },
 
+    { id: 'tresor', gruppe: 'Schutz', name: 'Dokumententresor mit Ende-zu-Ende-Verschlüsselung',
+      frei: 'unbegrenzt', plus: 'unbegrenzt', gleich: true,
+      warum: 'Wer für Datenschutz zahlen muss, hat keinen. Verschlüsselung ist kein Zusatzverkauf.' },
+    { id: 'freigaben', gruppe: 'Schutz', name: 'Befristete Verweise statt Anhänge, jederzeit widerrufbar',
+      frei: 'unbegrenzt', plus: 'unbegrenzt', gleich: true },
+
     { id: 'werbung', gruppe: 'Täglich', name: 'Anzeigenfrei', frei: 'mit Anzeigen', plus: 'ohne Anzeigen' },
     { id: 'suchauftraege', gruppe: 'Täglich', name: 'Suchaufträge mit sofortiger Meldung',
       frei: '1 Auftrag', plus: 'unbegrenzt' },
@@ -5009,6 +5115,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     'Kein Vorrang bei Vermietern und keine Markierung in deiner Bewerbung.',
     'Kein Frühzugang zu neuen Inseraten. Alle sehen jedes Inserat in derselben Sekunde.',
     'Keine Daten anderer Nutzerinnen und Nutzer.',
+    'Kein besserer Datenschutz gegen Aufpreis – der Dokumententresor und die widerrufbaren Verweise sind im freien Tarif vollständig enthalten.',
     'Keine Werbung, die sich als Inserat ausgibt – Anzeigen sind immer als solche gekennzeichnet.'
   ];
 
@@ -5098,6 +5205,393 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   NW.plan = {
     TARIFE, GRENZEN, LEISTUNGEN, NICHT_KAEUFLICH, ANZEIGEN, ANZEIGE_ABSTAND,
     aktuell, istPlus, grenze, darf, leistung, wechseln, anzeige
+  };
+})(window.NW = window.NW || {});
+
+/* ===== tresor.js ===== */
+/* =====================================================================
+   Nestwerk – Dokumententresor
+
+   Das Problem: Wer sich auf zwanzig Wohnungen bewirbt, verschickt zwanzig
+   Mal Gehaltsnachweise, Ausweiskopie und Schufa – an Fremde, per E-Mail,
+   ohne Ablaufdatum. Die Unterlagen liegen danach in zwanzig Postfächern
+   und bleiben dort für immer.
+
+   Die Antwort hier: Die Dokumente werden einmal im Browser verschlüsselt
+   abgelegt. Verschickt wird nie die Datei, sondern ein Verweis, der nach
+   einer gesetzten Frist und einer gesetzten Zahl von Abrufen erlischt und
+   sich jederzeit widerrufen lässt.
+
+   Was daran echt ist: die Verschlüsselung. AES-GCM mit 256 Bit, Schlüssel
+   aus dem Kennwort über PBKDF2 mit 310.000 Runden. Jedes Dokument hat
+   einen eigenen Schlüssel, der mit dem Tresorschlüssel umschlossen wird –
+   nur so lässt sich ein einzelnes Dokument freigeben, ohne den Tresor zu
+   öffnen. Der Freigabeschlüssel steht im Fragment des Verweises, dem Teil
+   hinter dem Rautezeichen, den Browser niemals an einen Server senden.
+
+   Was hier fehlt: der Server. In dieser Vorführung liegt das Chiffrat im
+   Browser, der Verweis funktioniert deshalb nur auf diesem Gerät. Im
+   Betrieb läge dort das Chiffrat und sonst nichts – kein Schlüssel, keine
+   Datei im Klartext, nichts, was ein Einbruch verwertbar machen würde.
+   ===================================================================== */
+(function (NW) {
+  'use strict';
+
+  const U = NW.util;
+
+  const DB_NAME = 'nestwerk-tresor';
+  const DB_VERSION = 1;
+  const SPEICHER = 'dokumente';
+  const META = 'nestwerk.tresor.v1';
+
+  const RUNDEN = 310000;
+  const MAX_BYTES = 8 * 1024 * 1024;   /* je Datei */
+  const OK_TYPEN = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'image/heic'];
+
+  const ARTEN = [
+    { id: 'selbstauskunft', name: 'Selbstauskunft', hinweis: 'Standardformular mit Angaben zu Person und Einkommen.' },
+    { id: 'gehaltsnachweise', name: 'Gehaltsnachweise', hinweis: 'Die letzten drei Abrechnungen.' },
+    { id: 'schufa', name: 'Schufa-Bonitätsauskunft', hinweis: 'Erst nach der Besichtigung herausgeben – nie mit der ersten Anfrage.' },
+    { id: 'mietschuldenfrei', name: 'Mietschuldenfreiheit', hinweis: 'Bescheinigung der bisherigen Vermieterseite.' },
+    { id: 'ausweis', name: 'Ausweiskopie', hinweis: 'Nummer schwärzen. Erst bei ernsthaftem Interesse.' },
+    { id: 'buergschaft', name: 'Bürgschaft', hinweis: 'Falls Einkommen oder Bonität allein nicht reichen.' },
+    { id: 'wbs', name: 'Wohnberechtigungsschein', hinweis: 'Nur für geförderte Wohnungen nötig.' },
+    { id: 'sonstiges', name: 'Sonstiges', hinweis: 'Arbeitsvertrag, Bürgschaftserklärung, was sonst verlangt wird.' }
+  ];
+
+  /* Unterlagen, die man niemals mit der ersten Anfrage verschickt. */
+  const HEIKEL = ['schufa', 'ausweis'];
+
+  const verfuegbar = () => !!(window.crypto && window.crypto.subtle && window.indexedDB && window.TextEncoder);
+
+  /* ------------------------- Kleinkram ------------------------- */
+
+  const enc = new TextEncoder();
+  const dec = new TextDecoder();
+
+  function zuBase64(puffer) {
+    const bytes = new Uint8Array(puffer);
+    let s = '';
+    for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+    return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  function ausBase64(text) {
+    const s = atob(String(text).replace(/-/g, '+').replace(/_/g, '/'));
+    const bytes = new Uint8Array(s.length);
+    for (let i = 0; i < s.length; i++) bytes[i] = s.charCodeAt(i);
+    return bytes;
+  }
+
+  const zufall = (n) => crypto.getRandomValues(new Uint8Array(n));
+
+  /* ------------------------- Speicher ------------------------- */
+
+  let dbVersprechen = null;
+
+  function db() {
+    if (dbVersprechen) return dbVersprechen;
+    dbVersprechen = new Promise((gut, schlecht) => {
+      const anfrage = indexedDB.open(DB_NAME, DB_VERSION);
+      anfrage.onupgradeneeded = () => {
+        const d = anfrage.result;
+        if (!d.objectStoreNames.contains(SPEICHER)) d.createObjectStore(SPEICHER, { keyPath: 'id' });
+      };
+      anfrage.onsuccess = () => gut(anfrage.result);
+      anfrage.onerror = () => schlecht(anfrage.error);
+    });
+    return dbVersprechen;
+  }
+
+  function tun(modus, fn) {
+    return db().then((d) => new Promise((gut, schlecht) => {
+      const t = d.transaction(SPEICHER, modus);
+      const s = t.objectStore(SPEICHER);
+      let ergebnis;
+      try { ergebnis = fn(s); } catch (e) { schlecht(e); return; }
+      t.oncomplete = () => gut(ergebnis && ergebnis.result !== undefined ? ergebnis.result : ergebnis);
+      t.onerror = () => schlecht(t.error);
+    }));
+  }
+
+  function meta() {
+    try { return JSON.parse(localStorage.getItem(META) || 'null'); } catch (e) { return null; }
+  }
+
+  function metaSetzen(m) {
+    try { localStorage.setItem(META, JSON.stringify(m)); } catch (e) { /* Speicher voll */ }
+  }
+
+  /* ------------------------- Schlüssel ------------------------- */
+
+  let tresorSchluessel = null;    /* nur im Arbeitsspeicher, nie gespeichert */
+
+  function schluesselAusKennwort(kennwort, salz) {
+    return crypto.subtle.importKey('raw', enc.encode(kennwort), 'PBKDF2', false, ['deriveKey'])
+      .then((roh) => crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: salz, iterations: RUNDEN, hash: 'SHA-256' },
+        roh, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt', 'wrapKey', 'unwrapKey']
+      ));
+  }
+
+  function verschluesseln(schluessel, daten) {
+    const iv = zufall(12);
+    return crypto.subtle.encrypt({ name: 'AES-GCM', iv }, schluessel, daten)
+      .then((chiffrat) => ({ iv: zuBase64(iv), chiffrat }));
+  }
+
+  function entschluesseln(schluessel, ivText, chiffrat) {
+    return crypto.subtle.decrypt({ name: 'AES-GCM', iv: ausBase64(ivText) }, schluessel, chiffrat);
+  }
+
+  /* ------------------------- Einrichten und Öffnen ------------------------- */
+
+  const eingerichtet = () => !!(meta() && meta().salz);
+  const istOffen = () => !!tresorSchluessel;
+
+  function einrichten(kennwort) {
+    if (!verfuegbar()) return Promise.reject(new Error('Dieser Browser kann keine Verschlüsselung.'));
+    if (!kennwort || kennwort.length < 8) return Promise.reject(new Error('Das Kennwort braucht mindestens acht Zeichen.'));
+    const salz = zufall(16);
+    return schluesselAusKennwort(kennwort, salz).then((k) => {
+      return verschluesseln(k, enc.encode('nestwerk-tresor')).then((probe) => {
+        metaSetzen({
+          salz: zuBase64(salz), runden: RUNDEN,
+          probeIv: probe.iv, probe: zuBase64(probe.chiffrat),
+          angelegt: U.isoDate(NW.now()), freigaben: []
+        });
+        tresorSchluessel = k;
+        return true;
+      });
+    });
+  }
+
+  function entsperren(kennwort) {
+    const m = meta();
+    if (!m) return Promise.reject(new Error('Es ist noch kein Tresor eingerichtet.'));
+    return schluesselAusKennwort(kennwort, ausBase64(m.salz))
+      .then((k) => entschluesseln(k, m.probeIv, ausBase64(m.probe).buffer)
+        .then((klar) => {
+          if (dec.decode(klar) !== 'nestwerk-tresor') throw new Error('falsch');
+          tresorSchluessel = k;
+          return true;
+        }))
+      .catch(() => { throw new Error('Das Kennwort stimmt nicht.'); });
+  }
+
+  function sperren() { tresorSchluessel = null; }
+
+  /* ------------------------- Dokumente ------------------------- */
+
+  function hinzufuegen(datei, art) {
+    if (!istOffen()) return Promise.reject(new Error('Der Tresor ist gesperrt.'));
+    if (datei.size > MAX_BYTES) return Promise.reject(new Error('Die Datei ist größer als 8 MB.'));
+    if (datei.type && OK_TYPEN.indexOf(datei.type) < 0) {
+      return Promise.reject(new Error('Erlaubt sind PDF, JPG, PNG, WEBP und HEIC.'));
+    }
+    const id = 'dok-' + zuBase64(zufall(9));
+
+    /* Jedes Dokument bekommt einen eigenen Schlüssel. Nur so lässt sich
+       ein einzelnes freigeben, ohne den Tresor preiszugeben. */
+    return crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt'])
+      .then((dokSchluessel) => datei.arrayBuffer()
+        .then((bytes) => verschluesseln(dokSchluessel, bytes))
+        .then((inhalt) => {
+          /* Auch der Dateiname wird verschlüsselt – er verrät sonst mehr,
+             als vielen bewusst ist. */
+          return verschluesseln(dokSchluessel, enc.encode(JSON.stringify({ name: datei.name, typ: datei.type })))
+            .then((kopf) => crypto.subtle.exportKey('raw', dokSchluessel)
+              .then((rohSchluessel) => verschluesseln(tresorSchluessel, rohSchluessel)
+                .then((umschlossen) => tun('readwrite', (s) => s.put({
+                  id, art: art || 'sonstiges',
+                  groesse: datei.size,
+                  hinzu: new Date().toISOString(),
+                  inhaltIv: inhalt.iv, inhalt: inhalt.chiffrat,
+                  kopfIv: kopf.iv, kopf: kopf.chiffrat,
+                  huelleIv: umschlossen.iv, huelle: umschlossen.chiffrat
+                })).then(() => id))));
+        }));
+  }
+
+  /* Holt den Dokumentschlüssel aus der Hülle. */
+  function dokSchluessel(satz) {
+    return entschluesseln(tresorSchluessel, satz.huelleIv, satz.huelle)
+      .then((roh) => crypto.subtle.importKey('raw', roh, 'AES-GCM', true, ['encrypt', 'decrypt']));
+  }
+
+  function liste() {
+    return tun('readonly', (s) => s.getAll()).then((saetze) => {
+      saetze.sort((a, b) => a.hinzu.localeCompare(b.hinzu));
+      if (!istOffen()) {
+        /* Gesperrt: Nur was ohnehin unverschlüsselt liegt – Art, Größe,
+           Datum. Der Dateiname bleibt verborgen. */
+        return saetze.map((s) => ({ id: s.id, art: s.art, groesse: s.groesse, hinzu: s.hinzu, gesperrt: true }));
+      }
+      return Promise.all(saetze.map((satz) => dokSchluessel(satz)
+        .then((k) => entschluesseln(k, satz.kopfIv, satz.kopf))
+        .then((klar) => {
+          const kopf = JSON.parse(dec.decode(klar));
+          return { id: satz.id, art: satz.art, groesse: satz.groesse, hinzu: satz.hinzu, name: kopf.name, typ: kopf.typ };
+        })
+        .catch(() => ({ id: satz.id, art: satz.art, groesse: satz.groesse, hinzu: satz.hinzu, gesperrt: true }))));
+    });
+  }
+
+  function loeschen(id) {
+    return tun('readwrite', (s) => s.delete(id)).then(() => {
+      /* Aus allen Freigaben entfernen; eine leere Freigabe wird widerrufen. */
+      const m = meta();
+      if (!m) return;
+      m.freigaben = (m.freigaben || []).map((f) => {
+        f.dokumente = f.dokumente.filter((d) => d !== id);
+        if (!f.dokumente.length) f.widerrufen = new Date().toISOString();
+        return f;
+      });
+      metaSetzen(m);
+    });
+  }
+
+  /* Entschlüsselt ein Dokument für die eigene Ansicht. */
+  function oeffnen(id) {
+    if (!istOffen()) return Promise.reject(new Error('Der Tresor ist gesperrt.'));
+    return tun('readonly', (s) => s.get(id)).then((satz) => {
+      if (!satz) throw new Error('Dokument nicht gefunden.');
+      return dokSchluessel(satz).then((k) => Promise.all([
+        entschluesseln(k, satz.inhaltIv, satz.inhalt),
+        entschluesseln(k, satz.kopfIv, satz.kopf)
+      ]).then(([inhalt, kopf]) => {
+        const meta2 = JSON.parse(dec.decode(kopf));
+        return { name: meta2.name, typ: meta2.typ, bytes: inhalt };
+      }));
+    });
+  }
+
+  /* ------------------------- Freigaben ------------------------- */
+
+  function freigaben() {
+    const m = meta();
+    return (m && m.freigaben) ? m.freigaben.slice().reverse() : [];
+  }
+
+  function freigabeStatus(f) {
+    if (f.widerrufen) return { gueltig: false, grund: 'widerrufen', text: 'widerrufen am ' + U.dateDE(f.widerrufen.slice(0, 10)) };
+    const abgelaufen = new Date(f.ablauf) < NW.now();
+    if (abgelaufen) return { gueltig: false, grund: 'abgelaufen', text: 'abgelaufen am ' + U.dateDE(f.ablauf.slice(0, 10)) };
+    if (f.abrufe.length >= f.maxAbrufe) return { gueltig: false, grund: 'aufgebraucht', text: 'alle ' + f.maxAbrufe + ' Abrufe verbraucht' };
+    const tage = Math.ceil((new Date(f.ablauf) - NW.now()) / 86400000);
+    return { gueltig: true, grund: 'offen', text: 'gültig noch ' + tage + ' ' + U.plural(tage, 'Tag', 'Tage')
+      + ', ' + (f.maxAbrufe - f.abrufe.length) + ' von ' + f.maxAbrufe + ' Abrufen offen' };
+  }
+
+  /* Erzeugt eine Freigabe: Die Dokumentschlüssel wandern in den Verweis,
+     nicht in den Speicher. Wer den Verweis nicht hat, kann nichts lesen –
+     auch nicht, wer Zugriff auf die abgelegten Daten bekommt. */
+  function freigabeErstellen(optionen) {
+    if (!istOffen()) return Promise.reject(new Error('Der Tresor ist gesperrt.'));
+    const ids = optionen.dokumente || [];
+    if (!ids.length) return Promise.reject(new Error('Wähle mindestens ein Dokument.'));
+    const tage = U.clamp(Number(optionen.tage) || 7, 1, 90);
+    const maxAbrufe = U.clamp(Number(optionen.maxAbrufe) || 3, 1, 20);
+
+    return tun('readonly', (s) => s.getAll()).then((alle) => {
+      const gewaehlt = alle.filter((s) => ids.indexOf(s.id) >= 0);
+      return Promise.all(gewaehlt.map((satz) => dokSchluessel(satz)
+        .then((k) => crypto.subtle.exportKey('raw', k))
+        .then((roh) => ({ id: satz.id, k: zuBase64(roh) }))));
+    }).then((schluessel) => {
+      const id = 'fg-' + zuBase64(zufall(9));
+      const m = meta();
+      m.freigaben = m.freigaben || [];
+      m.freigaben.push({
+        id, dokumente: ids,
+        empfaenger: (optionen.empfaenger || '').slice(0, 120),
+        objektId: optionen.objektId || null,
+        erstellt: new Date().toISOString(),
+        ablauf: new Date(NW.now().getTime() + tage * 86400000).toISOString(),
+        maxAbrufe, abrufe: [], widerrufen: null
+      });
+      metaSetzen(m);
+      const geheim = zuBase64(enc.encode(JSON.stringify(schluessel)));
+      return { id, geheim, link: linkFuer(id, geheim), tage, maxAbrufe };
+    });
+  }
+
+  function linkFuer(id, geheim) {
+    const basis = location.href.split('#')[0];
+    return basis + '#/freigabe/' + id + '~' + geheim;
+  }
+
+  function widerrufen(id) {
+    const m = meta();
+    if (!m) return;
+    (m.freigaben || []).forEach((f) => { if (f.id === id) f.widerrufen = new Date().toISOString(); });
+    metaSetzen(m);
+  }
+
+  function freigabeLoeschen(id) {
+    const m = meta();
+    if (!m) return;
+    m.freigaben = (m.freigaben || []).filter((f) => f.id !== id);
+    metaSetzen(m);
+  }
+
+  /* Abruf durch die empfangende Seite. Braucht keinen Tresorschlüssel –
+     die Dokumentschlüssel stehen im Verweis. */
+  function freigabeAbrufen(id, geheim, protokollieren) {
+    const m = meta();
+    const f = (m && m.freigaben || []).find((x) => x.id === id);
+    if (!f) return Promise.reject(new Error('Diesen Verweis gibt es nicht mehr.'));
+    const status = freigabeStatus(f);
+    if (!status.gueltig) return Promise.reject(new Error('Der Verweis ist ' + status.text + '.'));
+
+    let schluessel;
+    try { schluessel = JSON.parse(dec.decode(ausBase64(geheim))); }
+    catch (e) { return Promise.reject(new Error('Der Verweis ist unvollständig.')); }
+
+    return tun('readonly', (s) => s.getAll()).then((alle) => {
+      return Promise.all(schluessel.map((eintrag) => {
+        const satz = alle.find((s) => s.id === eintrag.id);
+        if (!satz) return null;
+        return crypto.subtle.importKey('raw', ausBase64(eintrag.k), 'AES-GCM', false, ['decrypt'])
+          .then((k) => Promise.all([
+            entschluesseln(k, satz.inhaltIv, satz.inhalt),
+            entschluesseln(k, satz.kopfIv, satz.kopf)
+          ]))
+          .then(([inhalt, kopf]) => {
+            const meta2 = JSON.parse(dec.decode(kopf));
+            return { id: satz.id, art: satz.art, name: meta2.name, typ: meta2.typ, bytes: inhalt, groesse: satz.groesse };
+          })
+          .catch(() => null);
+      }));
+    }).then((dokumente) => {
+      const gueltige = dokumente.filter(Boolean);
+      if (!gueltige.length) throw new Error('Die Unterlagen lassen sich mit diesem Verweis nicht entschlüsseln.');
+      let stand = f;
+      if (protokollieren !== false) {
+        const m2 = meta();
+        const f2 = (m2.freigaben || []).find((x) => x.id === id);
+        if (f2) { f2.abrufe.push({ zeit: new Date().toISOString() }); metaSetzen(m2); stand = f2; }
+      }
+      /* Der eigene Abruf zählt mit: Wer die Unterlagen gerade geöffnet hat,
+         soll „1 von 3“ sehen und nicht „0 von 3“. */
+      return { freigabe: stand, dokumente: gueltige };
+    });
+  }
+
+  /* ------------------------- Aufräumen ------------------------- */
+
+  function allesLoeschen() {
+    tresorSchluessel = null;
+    try { localStorage.removeItem(META); } catch (e) { /* egal */ }
+    return tun('readwrite', (s) => s.clear()).catch(() => { });
+  }
+
+  NW.tresor = {
+    ARTEN, HEIKEL, MAX_BYTES, OK_TYPEN, RUNDEN,
+    verfuegbar, eingerichtet, istOffen, einrichten, entsperren, sperren,
+    hinzufuegen, liste, loeschen, oeffnen,
+    freigaben, freigabeStatus, freigabeErstellen, freigabeAbrufen,
+    widerrufen, freigabeLoeschen, linkFuer, allesLoeschen
   };
 })(window.NW = window.NW || {});
 
@@ -5817,6 +6311,10 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const wechsel = letzteRoute.split('/')[0] !== r.name;
     letzteRoute = schluessel;
 
+    /* Ein Verweis im Dialog hat die Seite darunter gewechselt, während der
+       Dialog stehen blieb. Bei einem echten Routenwechsel schließt er. */
+    if (!erzwingen) dialogZu();
+
     const ansicht = ui.ansichten[r.name] || ui.ansichten.start;
     ui.aktuell = r.name;
     ui.params = r;
@@ -6056,6 +6554,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         { route: 'wohngeld', label: 'Wohngeld prüfen', icon: 'euro' },
         { route: 'nebenkosten', label: 'Nebenkosten prüfen', icon: 'lupe' },
         { route: 'uebergabe', label: 'Übergabeprotokoll', icon: 'schluessel' },
+        { route: 'tresor', label: 'Dokumententresor', icon: 'schloss' },
         { route: 'markt', label: 'Marktdaten und Preisverlauf', icon: 'trend' },
         { route: 'plus', label: 'Tarife', icon: 'plus5' }
       ]).forEach((nav) => {
@@ -6217,7 +6716,13 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <li>${s.eigeneInserate.length} eigene Inserate</li>
           <li>Belegter Speicher: rund ${U.num(Math.ceil(groesse / 1024))} kB</li>
         </ul>
-        <p>Beim Leeren der Browserdaten verschwindet auch dieser Stand.</p>`,
+        <p>Beim Leeren der Browserdaten verschwindet auch dieser Stand.</p>
+        ${NW.tresor && NW.tresor.eingerichtet() ? h`<div class="hinweisbox">${ico('schloss')}
+          <div><b>Der Dokumententresor liegt getrennt davon</b>
+          <p>Er wird hier weder gesichert noch gelöscht: Verschlüsselte Unterlagen in eine Klartextdatei zu
+            exportieren wäre das Gegenteil dessen, wofür er da ist. Leeren lässt er sich im
+            <a href="#/tresor">Tresor</a> selbst.</p></div>
+        </div>` : ''}`,
         fuss: h`<button type="button" class="knopf knopf--still" data-tu="daten-export">${ico('speichern')}Als Datei sichern</button>
           <button type="button" class="knopf knopf--gefahr" data-tu="daten-loeschen">${ico('muell')}Alles zurücksetzen</button>`
       });
@@ -6227,7 +6732,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     },
 
     'daten-loeschen'() {
-      if (!confirm('Merkliste, Profil, Suchaufträge und Nachrichten werden gelöscht. Fortfahren?')) return;
+      if (!confirm('Merkliste, Profil, Suchaufträge und Nachrichten werden gelöscht. '
+        + 'Der Dokumententresor bleibt bestehen – ihn leerst du dort. Fortfahren?')) return;
       NW.store.zuruecksetzen();
       dialogZu();
       toast('Alles zurückgesetzt.', 'info');
@@ -8166,7 +8672,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           </ul>
           ${fehlt.length ? h`<p class="warn-meldung">${ico('warnung')}Es fehlen: ${fehlt.map((f) => namen[f]).join(', ')}.
             <a href="#/profil">Im Profil ergänzen</a></p>` : h`<p class="gut-meldung">${ico('pruefen')}Deine Mappe ist vollständig.</p>`}
-        </fieldset>`,
+        </fieldset>
+        ${NW.viewTresor ? NW.viewTresor.freigabeAbschnitt(l.id, l.anbieter.name) : ''}`,
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="anschreiben-kopieren">${ico('kopieren')}Text kopieren</button>
         <button type="button" class="knopf" data-tu="anschreiben-senden" data-id="${l.id}">${ico('nachricht')}Absenden</button>`
     });
@@ -9039,7 +9546,10 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       })}
         </ul>
         <label class="feld"><span>Zusatz für alle Anschreiben (freiwillig)</span>
-          <textarea rows="3" id="serie-zusatz" placeholder="Etwas, das für alle gilt – etwa der frühestmögliche Einzugstermin."></textarea></label>`,
+          <textarea rows="3" id="serie-zusatz" placeholder="Etwas, das für alle gilt – etwa der frühestmögliche Einzugstermin."></textarea></label>
+        ${NW.viewTresor ? NW.viewTresor.freigabeAbschnitt(null, '', { ohneKnopf: true,
+        einleitung: 'Jede Bewerbung bekommt einen eigenen Verweis – ein gemeinsamer wäre ein Generalschlüssel, '
+          + 'den jede Seite weiterreichen könnte. Widerrufen lässt sich später jeder einzeln.' }) : ''}`,
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Abbrechen</button>
         <button type="button" class="knopf" data-tu="serie-senden">${ico('nachricht')}Alle ausgewählten absenden</button>`
     });
@@ -9049,6 +9559,14 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const zusatz = ((U.$('#serie-zusatz') || {}).value || '').trim();
     const gewaehlt = U.$$('[data-serie]').filter((el) => el.checked).map((el) => el.dataset.serie);
     if (!gewaehlt.length) { ui.toast('Nichts ausgewählt.', 'schlecht'); return; }
+    const auftraege = gewaehlt.map((id) => ({
+      objektId: id, empfaenger: (NW.data.byId[id].anbieter || {}).name || ''
+    }));
+    const verweise = NW.viewTresor ? NW.viewTresor.verweisJeEmpfaenger(auftraege) : Promise.resolve({});
+    verweise.then((links) => senden(gewaehlt, zusatz, links));
+  });
+
+  function senden(gewaehlt, zusatz, links) {
     const p = S.get().profil;
     gewaehlt.forEach((id) => {
       const l = NW.data.byId[id];
@@ -9064,13 +9582,13 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         (zusatz ? zusatz + '\n\n' : '') +
         W.unterlagenSatz(p) + ' ' +
         'Nennen Sie mir gern zwei Termine, die Ihnen passen.\n\n' +
-        'Viele Grüße\n' + (p.name || '');
+        'Viele Grüße\n' + (p.name || '') + ((links || {})[id] || '');
       S.anschreiben(id, text);
     });
     ui.dialogZu();
     ui.toast(gewaehlt.length + ' ' + U.plural(gewaehlt.length, 'Anschreiben', 'Anschreiben') + ' abgeschickt.', 'gut');
     ui.neuZeichnen();
-  });
+  }
 
   A_('vergleich-kopieren', () => {
     const s = S.get();
@@ -9355,6 +9873,12 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
               der Vertrag angreifbar wird. Erst wenn die Wohnung ernsthaft in Betracht kommt, sind Einkommensnachweise
               und Schufa üblich.</p></div>
           </div>
+          <p class="werkzeug__weiter">
+            <a class="knopf knopf--still" href="#/tresor">${ico('schloss')}Unterlagen verschlüsselt ablegen</a>
+          </p>
+          <p class="fein">Im Dokumententresor liegen die Dateien verschlüsselt. Beim Bewerben verschickst du
+            dann keinen Anhang, sondern einen Verweis, der nach gesetzter Frist erlischt und sich widerrufen
+            lässt. Was dort liegt, wird hier automatisch abgehakt.</p>
         </section>
 
         <section class="block">
@@ -9955,7 +10479,10 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       wann: 'am Tag der Übergabe' },
     { route: 'nebenkosten', icon: 'lupe', name: 'Nebenkosten prüfen',
       text: 'Welche Posten überhaupt umgelegt werden dürfen, ob die Abrechnung rechtzeitig kam und ob die Heizkosten richtig verteilt wurden.',
-      wann: 'wenn die Abrechnung im Briefkasten liegt' }
+      wann: 'wenn die Abrechnung im Briefkasten liegt' },
+    { route: 'tresor', icon: 'schloss', name: 'Dokumententresor',
+      text: 'Unterlagen einmal verschlüsselt ablegen und beim Bewerben nur einen Verweis verschicken, der nach gesetzter Frist erlischt und sich jederzeit widerrufen lässt.',
+      wann: 'vor der ersten Bewerbung' }
   ];
 
   function uebersicht() {
@@ -11342,6 +11869,640 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   ui.ansichten.plus = ansicht;
 })(window.NW = window.NW || {});
 
+/* ===== view-tresor.js ===== */
+/* =====================================================================
+   Nestwerk – Ansicht: Dokumententresor und Freigaben
+   ===================================================================== */
+(function (NW) {
+  'use strict';
+
+  const U = NW.util, ui = NW.ui, S = NW.store, T = NW.tresor;
+  const h = U.html, raw = U.raw, ico = U.svg;
+
+  let dokumente = [];
+  let ladefehler = '';
+
+  const artName = (id) => (T.ARTEN.find((a) => a.id === id) || { name: 'Sonstiges' }).name;
+  /* „0 kB“ hat schon manchen glauben lassen, die Datei sei leer. */
+  const kb = (n) => n < 1024 ? 'unter 1 kB'
+    : n < 1024 * 1024 ? Math.round(n / 1024) + ' kB'
+      : (Math.round(n / 1024 / 102.4) / 10) + ' MB';
+
+  /* ================================================================
+     Erklärkasten – was hier echt ist und was nicht
+     ================================================================ */
+
+  function erklaerung() {
+    return h`<details class="tresor__erklaerung">
+      <summary>${ico('info')}Was hier tatsächlich passiert</summary>
+      <p>Deine Dateien werden im Browser mit <b>AES-GCM und 256 Bit</b> verschlüsselt, bevor sie gespeichert
+        werden. Der Schlüssel entsteht aus deinem Kennwort über <b>PBKDF2 mit ${U.num(T.RUNDEN)} Runden</b> und
+        wird nirgends abgelegt – er lebt nur im Arbeitsspeicher, solange der Tresor offen ist. Nach dem Neuladen
+        der Seite ist er weg.</p>
+      <p>Jedes Dokument bekommt einen <b>eigenen Schlüssel</b>, der mit dem Tresorschlüssel umschlossen wird.
+        Nur deshalb lässt sich eine einzelne Gehaltsabrechnung freigeben, ohne den ganzen Tresor zu öffnen.
+        Auch der Dateiname wird verschlüsselt – er verrät sonst mehr, als vielen bewusst ist.</p>
+      <p>Beim Freigeben wandern die Dokumentschlüssel in den <b>Fragmentteil</b> des Verweises, also hinter das
+        Rautezeichen. Browser senden diesen Teil nie an einen Server. Ein Betreiber sähe also die Anfrage,
+        aber nie den Schlüssel.</p>
+      <p><b>Was hier fehlt, ist der Server.</b> In dieser Vorführung liegt das Chiffrat in diesem Browser, der
+        Verweis funktioniert deshalb nur auf diesem Gerät. Im Betrieb läge dort das Chiffrat und sonst nichts:
+        kein Schlüssel, keine Datei im Klartext, nichts, was ein Einbruch verwertbar machen würde. Ablauf und
+        Abrufzähler würde der Server durchsetzen – hier tut es die Anwendung selbst.</p>
+    </details>`;
+  }
+
+  /* ================================================================
+     Zustände: nicht möglich, nicht eingerichtet, gesperrt, offen
+     ================================================================ */
+
+  function nichtMoeglich() {
+    return h`<div class="block block--warn">
+      <h2>${ico('warnung')}Dieser Browser kann das nicht</h2>
+      <p>Für den Tresor braucht es die Verschlüsselungsfunktionen des Browsers und einen lokalen Datenspeicher.
+        Beides fehlt hier – meist, weil die Seite ohne gesicherte Verbindung geöffnet wurde oder der private
+        Modus den Speicher sperrt.</p>
+      <p>Die Bewerbermappe im <a href="#/profil">Profil</a> funktioniert weiterhin; du verschickst deine
+        Unterlagen dann wie gewohnt selbst.</p>
+    </div>`;
+  }
+
+  function einrichtenBlock() {
+    return h`<div class="block block--betont">
+      <h2>${ico('schloss')}Tresor einrichten</h2>
+      <p class="block__unter">Ein Kennwort, das nur du kennst. Daraus entsteht der Schlüssel – gespeichert wird
+        er nirgends.</p>
+      <form data-tu-submit="tresor-einrichten">
+        <div class="formraster">
+          <label class="feld"><span>Kennwort</span>
+            <input type="password" id="tresor-kw1" autocomplete="new-password" minlength="8" required
+              placeholder="mindestens acht Zeichen"></label>
+          <label class="feld"><span>Kennwort wiederholen</span>
+            <input type="password" id="tresor-kw2" autocomplete="new-password" minlength="8" required></label>
+        </div>
+        <div class="hinweisbox">${ico('warnung')}
+          <div><b>Dieses Kennwort lässt sich nicht zurücksetzen</b>
+          <p>Es gibt keinen Server, der es kennt, und keine Wiederherstellung per E-Mail. Genau das ist der
+            Punkt: Wer den Speicher dieses Geräts in die Hände bekommt, kommt ohne das Kennwort nicht an deine
+            Unterlagen. Vergisst du es, sind sie auch für dich verloren – dann bleibt nur, den Tresor zu leeren
+            und neu zu füllen.</p></div>
+        </div>
+        <button type="submit" class="knopf">${ico('schloss')}Tresor anlegen</button>
+      </form>
+      ${erklaerung()}
+    </div>`;
+  }
+
+  function gesperrtBlock() {
+    const anzahl = dokumente.length;
+    return h`<div class="block block--betont">
+      <h2>${ico('schloss')}Tresor gesperrt</h2>
+      <p class="block__unter">${anzahl
+      ? anzahl + ' ' + U.plural(anzahl, 'Dokument liegt', 'Dokumente liegen') + ' verschlüsselt bereit. '
+        + 'Ohne Kennwort sind nicht einmal die Dateinamen lesbar.'
+      : 'Der Tresor ist noch leer.'}</p>
+      <form data-tu-submit="tresor-oeffnen">
+        <label class="feld"><span>Kennwort</span>
+          <input type="password" id="tresor-kw" autocomplete="current-password" required></label>
+        <p class="werkzeug__weiter">
+          <button type="submit" class="knopf">${ico('schluessel')}Öffnen</button>
+          <button type="button" class="knopf knopf--gefahr" data-tu="tresor-verwerfen">Kennwort vergessen – Tresor leeren</button>
+        </p>
+      </form>
+      ${anzahl ? h`<ul class="tresorliste tresorliste--gesperrt">
+        ${dokumente.map((d) => h`<li>
+          ${ico('schloss')}
+          <div><b>${artName(d.art)}</b><span>${kb(d.groesse)} · abgelegt ${U.since(d.hinzu)}</span></div>
+        </li>`)}
+      </ul>
+      <p class="fein">Art, Größe und Datum liegen unverschlüsselt – sie werden gebraucht, um dir diese Liste zu
+        zeigen, solange der Tresor zu ist. Alles andere, auch der Dateiname, ist nur mit Kennwort lesbar.</p>` : ''}
+      ${erklaerung()}
+    </div>`;
+  }
+
+  function offenBlock() {
+    const nachArt = {};
+    dokumente.forEach((d) => { (nachArt[d.art] = nachArt[d.art] || []).push(d); });
+    const fg = T.freigaben();
+    const offen = fg.filter((f) => T.freigabeStatus(f).gueltig);
+
+    return h`<div class="block">
+        <div class="block__kopfzeile">
+          <h2>${ico('schluessel')}Deine Unterlagen</h2>
+          <button type="button" class="link" data-tu="tresor-sperren">${ico('schloss')}Tresor schließen</button>
+        </div>
+        <p class="block__unter">${dokumente.length
+      ? dokumente.length + ' ' + U.plural(dokumente.length, 'Dokument', 'Dokumente') + ' verschlüsselt abgelegt.'
+      : 'Noch nichts abgelegt. Lade hier ein, was Vermieter regelmäßig verlangen.'}</p>
+
+        <form class="tresor__aufnahme" data-tu-submit="tresor-hochladen">
+          <label class="feld"><span>Art der Unterlage</span>
+            <select id="tresor-art">
+              ${T.ARTEN.map((a) => h`<option value="${a.id}">${a.name}</option>`)}
+            </select></label>
+          <div class="feld"><span>Datei</span>
+            <div class="dateiwahl">
+              <input type="file" id="tresor-datei" class="nur-sr" data-tu-change="tresor-dateiname"
+                accept=".pdf,.jpg,.jpeg,.png,.webp,.heic" required>
+              <label for="tresor-datei" class="knopf knopf--still knopf--klein">${ico('blatt')}Datei wählen</label>
+              <i id="tresor-dateiname">noch keine gewählt</i>
+            </div>
+          </div>
+          <div class="feld feld--knopf">
+            <button type="submit" class="knopf">${ico('plus')}Verschlüsselt ablegen</button>
+          </div>
+        </form>
+        <p class="fein">PDF, JPG, PNG, WEBP oder HEIC, je bis 8 MB. Die Datei wird verschlüsselt, bevor sie den
+          Arbeitsspeicher verlässt – unverschlüsselt liegt sie zu keinem Zeitpunkt im Speicher des Geräts.</p>
+
+        ${dokumente.length ? h`<ul class="tresorliste">
+          ${dokumente.map((d) => h`<li>
+            ${ico(d.typ === 'application/pdf' ? 'blatt' : 'blatt')}
+            <div>
+              <b>${d.name || '(Name nicht lesbar)'}</b>
+              <span>${artName(d.art)} · ${kb(d.groesse)} · ${U.since(d.hinzu)}
+                ${T.HEIKEL.indexOf(d.art) >= 0 ? ui.badge('heikel', 'warn') : ''}</span>
+            </div>
+            <button type="button" class="ikon-btn" data-tu="tresor-ansehen" data-id="${d.id}" title="Ansehen">${ico('lupe')}</button>
+            <button type="button" class="ikon-btn" data-tu="tresor-weg" data-id="${d.id}" title="Löschen">${ico('muell')}</button>
+          </li>`)}
+        </ul>` : ''}
+
+        ${dokumente.length ? h`<p class="werkzeug__weiter">
+          <button type="button" class="knopf" data-tu="freigabe-neu">${ico('teilen')}Unterlagen freigeben</button>
+        </p>` : ''}
+      </div>
+
+      <div class="block">
+        <div class="block__kopfzeile">
+          <h2>${ico('verlauf')}Freigaben</h2>
+          <span class="fein">${offen.length} von ${fg.length} noch gültig</span>
+        </div>
+        ${fg.length ? h`<ul class="freigabeliste">
+          ${fg.map((f) => {
+      const st = T.freigabeStatus(f);
+      return h`<li class="${st.gueltig ? '' : 'is-tot'}">
+              <div class="freigabeliste__kopf">
+                <b>${f.empfaenger || 'ohne Empfänger'}</b>
+                ${ui.badge(st.gueltig ? 'gültig' : st.grund, st.gueltig ? 'gut' : 'neutral')}
+              </div>
+              <span>${f.dokumente.length} ${U.plural(f.dokumente.length, 'Dokument', 'Dokumente')} ·
+                erstellt ${U.since(f.erstellt)} · ${st.text}</span>
+              ${f.abrufe.length ? h`<i class="freigabeliste__protokoll">${ico('pruefen')}Abgerufen:
+                ${f.abrufe.map((a) => U.dateDE(a.zeit.slice(0, 10)) + ' um ' + a.zeit.slice(11, 16)).join(', ')} Uhr</i>`
+        : h`<i class="freigabeliste__protokoll">noch nicht abgerufen</i>`}
+              <div class="freigabeliste__tun">
+                ${st.gueltig ? h`<button type="button" class="knopf knopf--klein knopf--still" data-tu="freigabe-widerrufen" data-id="${f.id}">
+                  Sofort widerrufen</button>` : ''}
+                <button type="button" class="link" data-tu="freigabe-loeschen" data-id="${f.id}">aus der Liste entfernen</button>
+              </div>
+            </li>`;
+    })}
+        </ul>` : h`<p class="info-meldung">${ico('info')}Noch nichts freigegeben. Beim Anschreiben einer Wohnung
+          kannst du direkt einen befristeten Verweis mitschicken, statt Dateien anzuhängen.</p>`}
+        <p class="fein">Ein Widerruf wirkt sofort: Der Verweis führt danach ins Leere, auch wenn ihn jemand
+          gespeichert hat. Bei Dateien im E-Mail-Postfach gibt es das nicht.</p>
+      </div>
+
+      ${erklaerung()}`;
+  }
+
+  /* ================================================================
+     Seite
+     ================================================================ */
+
+  function seite() {
+    return {
+      titel: 'Dokumententresor',
+      html: h`<div class="seite seite--schmal">
+        <header class="seite__kopf">
+          <h1>${ico('schloss')}Dokumententresor</h1>
+          <p class="seite__unter">Wer sich auf zwanzig Wohnungen bewirbt, verschickt zwanzig Mal
+            Gehaltsnachweise, Ausweiskopie und Schufa – an Fremde, ohne Ablaufdatum. Danach liegen die
+            Unterlagen in zwanzig Postfächern und bleiben dort. Hier legst du sie einmal verschlüsselt ab und
+            verschickst nur noch einen Verweis, der abläuft und sich widerrufen lässt.</p>
+        </header>
+        ${ladefehler ? h`<p class="warn-meldung">${ico('warnung')}${ladefehler}</p>` : ''}
+        ${!T.verfuegbar() ? nichtMoeglich()
+        : !T.eingerichtet() ? einrichtenBlock()
+          : !T.istOffen() ? gesperrtBlock() : offenBlock()}
+
+        <div class="block">
+          <h2>${ico('info')}Was du ohnehin nie mitschicken solltest</h2>
+          <p class="block__unter">Auch der beste Tresor hilft nicht gegen die falsche Reihenfolge.</p>
+          <ul class="pruef">
+            <li>${ico('warnung')}<span><b>Schufa und Ausweiskopie gehören nicht in die erste Anfrage.</b>
+              Erst wenn die Wohnung ernsthaft in Betracht kommt – also nach der Besichtigung.</span></li>
+            <li>${ico('warnung')}<span><b>Die Ausweisnummer schwärzen.</b> Für die Identitätsprüfung reichen
+              Name, Geburtsdatum und Foto; die Nummer braucht niemand.</span></li>
+            <li>${ico('warnung')}<span><b>Kontoauszüge sind keine Einkommensnachweise.</b> Sie zeigen jede
+              Ausgabe deines Lebens. Gehaltsabrechnungen genügen.</span></li>
+            <li>${ico('info')}<span><b>Fragen nach Familienplanung, Religion, Herkunft, Parteizugehörigkeit
+              oder Vorstrafen</b> sind unzulässig. Sie dürfen falsch beantwortet werden, ohne dass der Vertrag
+              deshalb angreifbar wird.</span></li>
+          </ul>
+        </div>
+      </div>`,
+      danach() { if (!dokumente.length && T.verfuegbar()) laden(); }
+    };
+  }
+
+  function laden() {
+    if (!T.verfuegbar()) return;
+    T.liste().then((liste) => {
+      const gleich = liste.length === dokumente.length &&
+        liste.every((d, i) => dokumente[i] && d.id === dokumente[i].id && d.name === dokumente[i].name);
+      dokumente = liste;
+      /* Nur die Tresorseite zeigt diese Liste. Anderswo – etwa beim
+         Vorladen nach dem Start oder aus einem Dialog heraus – würde ein
+         Neuaufbau nur stören. */
+      if (!gleich && ui.aktuell === 'tresor') ui.neuZeichnen();
+    }).catch((e) => { ladefehler = e.message; });
+  }
+
+  /* ================================================================
+     Empfängeransicht
+     ================================================================ */
+
+  function freigabeAnsicht(route) {
+    const roh = route.arg || '';
+    const teil = roh.split('~');
+    const id = teil[0], geheim = teil.slice(1).join('~');
+
+    return {
+      titel: 'Freigegebene Unterlagen',
+      html: h`<div class="seite seite--schmal">
+        <header class="seite__kopf">
+          <h1>${ico('blatt')}Freigegebene Unterlagen</h1>
+        </header>
+        <div id="freigabe-inhalt"><p class="info-meldung">${ico('verlauf')}Wird entschlüsselt…</p></div>
+        <div class="hinweisbox">${ico('info')}
+          <div><b>So funktioniert dieser Verweis</b>
+          <p>Die Unterlagen wurden verschlüsselt abgelegt. Der Schlüssel steckt im Teil dieses Verweises hinter
+            dem Rautezeichen – Browser senden ihn nie an einen Server. Wer den Verweis nicht hat, kann die
+            Dateien nicht lesen, auch nicht der Betreiber.</p></div>
+        </div>
+      </div>`,
+      danach(wurzel) {
+        if (!T.verfuegbar() || !id || !geheim) {
+          malen(h`<p class="warn-meldung">${ico('warnung')}Dieser Verweis ist unvollständig.</p>`);
+          return;
+        }
+        T.freigabeAbrufen(id, geheim).then((ergebnis) => {
+          const f = ergebnis.freigabe;
+          const st = T.freigabeStatus(f);
+          malen(h`<div class="block">
+            <div class="kennzahlen kennzahlen--vier">
+              <div><b>${ergebnis.dokumente.length}</b><span>${U.plural(ergebnis.dokumente.length, 'Dokument', 'Dokumente')}</span></div>
+              <div><b>${U.dateDE(f.ablauf.slice(0, 10))}</b><span>gültig bis</span></div>
+              <div><b>${f.abrufe.length} / ${f.maxAbrufe}</b><span>Abrufe</span></div>
+              <div><b>${U.since(f.erstellt)}</b><span>freigegeben</span></div>
+            </div>
+            <p class="${st.gueltig ? 'gut-meldung' : 'warn-meldung'}">
+              ${ico(st.gueltig ? 'pruefen' : 'warnung')}${st.text}. Nach Ablauf oder Widerruf führt dieser
+              Verweis ins Leere – die Dateien lassen sich dann nicht mehr öffnen.</p>
+            <ul class="tresorliste">
+              ${ergebnis.dokumente.map((d, i) => h`<li>
+                ${ico('blatt')}
+                <div><b>${d.name}</b><span>${artName(d.art)} · ${kb(d.groesse)}</span></div>
+                <button type="button" class="knopf knopf--klein knopf--still" data-tu="freigabe-ansehen" data-i="${i}">Ansehen</button>
+                <button type="button" class="knopf knopf--klein" data-tu="freigabe-sichern" data-i="${i}">Sichern</button>
+              </li>`)}
+            </ul>
+            <div id="freigabe-vorschau"></div>
+          </div>`);
+          NW.viewTresor.geoeffnet = ergebnis.dokumente;
+        }).catch((e) => {
+          malen(h`<div class="block block--warn">
+            <h2>${ico('warnung')}Kein Zugriff</h2>
+            <p>${e.message}</p>
+            <p class="fein">Das ist der Sinn der Sache: Ein Verweis, der abgelaufen oder widerrufen wurde,
+              lässt sich nicht wiederbeleben – auch nicht von der Person, die ihn erstellt hat.</p>
+          </div>`);
+        });
+
+        function malen(markup) {
+          const el = U.$('#freigabe-inhalt', wurzel);
+          if (el) el.innerHTML = String(markup);
+        }
+      }
+    };
+  }
+
+  /* ================================================================
+     Aktionen
+     ================================================================ */
+
+  const A_ = ui.aktionRegistrieren;
+
+  A_('tresor-einrichten', () => {
+    const a = U.$('#tresor-kw1').value, b = U.$('#tresor-kw2').value;
+    if (a !== b) { ui.toast('Die beiden Kennwörter stimmen nicht überein.', 'schlecht'); return; }
+    T.einrichten(a).then(() => {
+      ladefehler = '';
+      ui.toast('Tresor angelegt und geöffnet.', 'gut');
+      laden(); ui.neuZeichnen();
+    }, (e) => ui.toast(e.message, 'schlecht'));
+  });
+
+  A_('tresor-oeffnen', () => {
+    const kw = U.$('#tresor-kw').value;
+    T.entsperren(kw).then(() => {
+      ladefehler = '';
+      ui.toast('Tresor geöffnet.', 'gut');
+      laden(); ui.neuZeichnen();
+    }, (e) => ui.toast(e.message, 'schlecht'));
+  });
+
+  A_('tresor-sperren', () => {
+    T.sperren();
+    dokumente = [];
+    laden(); ui.neuZeichnen();
+    ui.toast('Tresor geschlossen. Der Schlüssel ist aus dem Speicher entfernt.');
+  });
+
+  A_('tresor-verwerfen', () => {
+    if (!confirm('Alle abgelegten Dokumente und Freigaben werden gelöscht. Ohne Kennwort lassen sie sich nicht wiederherstellen. Fortfahren?')) return;
+    T.allesLoeschen().then(() => {
+      dokumente = [];
+      ui.neuZeichnen();
+      ui.toast('Tresor geleert.');
+    });
+  });
+
+  A_('tresor-hochladen', () => {
+    const feld = U.$('#tresor-datei');
+    const art = U.$('#tresor-art').value;
+    const datei = feld.files && feld.files[0];
+    if (!datei) { ui.toast('Wähle eine Datei.', 'schlecht'); return; }
+    T.hinzufuegen(datei, art).then(() => {
+      feld.value = '';
+      const anzeige = U.$('#tresor-dateiname');
+      if (anzeige) anzeige.textContent = 'noch keine gewählt';
+      /* Was im Tresor liegt, gilt in der Bewerbermappe als vorhanden. */
+      S.update((s) => { if (s.profil.unterlagen[art] !== undefined) s.profil.unterlagen[art] = true; }, 'profil');
+      ui.toast('Verschlüsselt abgelegt.', 'gut');
+      laden();
+    }, (e) => ui.toast(e.message, 'schlecht'));
+  });
+
+  A_('tresor-dateiname', (el) => {
+    const anzeige = U.$('#tresor-dateiname');
+    const datei = el.files && el.files[0];
+    if (anzeige) anzeige.textContent = datei ? datei.name + ' · ' + kb(datei.size) : 'noch keine gewählt';
+  });
+
+  A_('tresor-weg', (el) => {
+    if (!confirm('Dieses Dokument endgültig löschen?')) return;
+    T.loeschen(el.dataset.id).then(() => { ui.toast('Gelöscht.'); laden(); });
+  });
+
+  A_('tresor-ansehen', (el) => {
+    T.oeffnen(el.dataset.id).then((d) => {
+      const url = URL.createObjectURL(new Blob([d.bytes], { type: d.typ || 'application/octet-stream' }));
+      ui.dialog({
+        titel: d.name,
+        breit: true,
+        inhalt: /^image\//.test(d.typ)
+          ? h`<img class="tresor__vorschau" src="${url}" alt="${d.name}">`
+          : h`<p>Vorschau für diesen Dateityp gibt es hier nicht. Du kannst die Datei entschlüsselt sichern.</p>`,
+        fuss: h`<button type="button" class="knopf knopf--still" data-tu="tresor-sichern" data-id="${el.dataset.id}">${ico('speichern')}Entschlüsselt sichern</button>
+          <button type="button" class="knopf" data-tu="dialog-zu">Schließen</button>`,
+        beimSchliessen: () => URL.revokeObjectURL(url)
+      });
+    }, (e) => ui.toast(e.message, 'schlecht'));
+  });
+
+  A_('tresor-sichern', (el) => {
+    T.oeffnen(el.dataset.id).then((d) => {
+      ui.dateiSichern(d.name, d.bytes, d.typ || 'application/octet-stream');
+    }, (e) => ui.toast(e.message, 'schlecht'));
+  });
+
+  /* --------------------- Freigabe erstellen --------------------- */
+
+  function freigabeDialog(objektId, empfaengerVorschlag) {
+    if (!T.istOffen()) { ui.toast('Öffne zuerst den Tresor.', 'schlecht'); ui.gehe('tresor'); return; }
+    if (!dokumente.length) { ui.toast('Im Tresor liegt noch nichts.', 'schlecht'); ui.gehe('tresor'); return; }
+    ui.dialog({
+      titel: 'Unterlagen freigeben',
+      breit: true,
+      inhalt: h`<p>Verschickt wird kein Anhang, sondern ein Verweis, der von selbst erlischt. Wähl nur aus,
+          was in diesem Schritt wirklich gebraucht wird.</p>
+        <fieldset class="filter__gruppe"><legend>Dokumente</legend>
+          ${dokumente.map((d) => h`<label class="schalter">
+            <input type="checkbox" data-freigabe="${d.id}" ${T.HEIKEL.indexOf(d.art) >= 0 ? '' : 'checked'}>
+            <span><b>${d.name || artName(d.art)}</b>
+              <i>${artName(d.art)} · ${kb(d.groesse)}${T.HEIKEL.indexOf(d.art) >= 0
+        ? ' · vor der Besichtigung besser nicht' : ''}</i></span></label>`)}
+        </fieldset>
+        <div class="formraster">
+          <label class="feld"><span>Empfänger (nur für deine Übersicht)</span>
+            <input type="text" id="freigabe-empfaenger" value="${empfaengerVorschlag || ''}"></label>
+          <label class="feld"><span>Gültig für</span>
+            <select id="freigabe-tage">
+              <option value="3">3 Tage</option>
+              <option value="7" selected>7 Tage</option>
+              <option value="14">14 Tage</option>
+              <option value="30">30 Tage</option>
+            </select></label>
+          <label class="feld"><span>Höchstens abrufbar</span>
+            <select id="freigabe-abrufe">
+              <option value="1">einmal</option>
+              <option value="3" selected>dreimal</option>
+              <option value="5">fünfmal</option>
+              <option value="10">zehnmal</option>
+            </select></label>
+        </div>
+        <p class="fein">Kürzer und seltener ist besser. Für eine Besichtigung reicht meist ein Abruf über drei Tage.</p>`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Abbrechen</button>
+        <button type="button" class="knopf" data-tu="freigabe-erstellen" data-objekt="${objektId || ''}">${ico('teilen')}Verweis erzeugen</button>`
+    });
+  }
+
+  A_('freigabe-neu', () => freigabeDialog(null, ''));
+
+  /* --------------------- Freigabe im Anschreiben ---------------------
+     Ein zweiter Dialog würde den ersten ersetzen und den getippten Text
+     mitnehmen. Deshalb steckt die Freigabe hier direkt im Anschreiben. */
+
+  function freigabeAbschnitt(objektId, empfaenger, optionen) {
+    const opt = optionen || {};
+    const rahmen = (inhalt) => h`<fieldset class="filter__gruppe"><legend>Unterlagen sicher mitschicken</legend>
+      ${inhalt}</fieldset>`;
+    const hinweis = (text, knopf) => rahmen(h`<p class="fein">${text}</p>
+      <p class="werkzeug__weiter"><a class="knopf knopf--klein knopf--still" href="#/tresor">${ico('schloss')}${knopf}</a></p>`);
+
+    if (!T.verfuegbar()) return '';
+    if (!T.eingerichtet()) {
+      return hinweis('Statt Dateien anzuhängen, die für immer im fremden Postfach liegen, kannst du deine '
+        + 'Unterlagen einmal verschlüsselt ablegen und hier nur einen Verweis mitschicken, der nach gesetzter '
+        + 'Frist erlischt.', 'Tresor einrichten');
+    }
+    if (!T.istOffen()) {
+      return hinweis('Dein Tresor ist gesperrt. Öffne ihn, um statt Anhängen einen befristeten Verweis '
+        + 'mitzuschicken.', 'Tresor öffnen');
+    }
+    if (!dokumente.length) {
+      return hinweis('Im Tresor liegt noch nichts. Lade dort ab, was regelmäßig verlangt wird – danach '
+        + 'genügt hier ein Verweis.', 'Unterlagen ablegen');
+    }
+    return rahmen(h`<p class="fein">${opt.einleitung || 'Verschickt wird kein Anhang, sondern ein Verweis, '
+      + 'der von selbst erlischt und sich widerrufen lässt. Heikles bleibt bewusst abgewählt.'}</p>
+      ${dokumente.map((d) => h`<label class="schalter">
+        <input type="checkbox" data-freigabe="${d.id}" ${T.HEIKEL.indexOf(d.art) >= 0 ? '' : 'checked'}>
+        <span><b>${d.name || artName(d.art)}</b>
+          <i>${artName(d.art)} · ${kb(d.groesse)}${T.HEIKEL.indexOf(d.art) >= 0
+      ? ' · vor der Besichtigung besser nicht' : ''}</i></span></label>`)}
+      <div class="formraster">
+        <label class="feld"><span>Gültig für</span>
+          <select id="freigabe-tage">
+            <option value="3">3 Tage</option>
+            <option value="7" selected>7 Tage</option>
+            <option value="14">14 Tage</option>
+          </select></label>
+        <label class="feld"><span>Höchstens abrufbar</span>
+          <select id="freigabe-abrufe">
+            <option value="1">einmal</option>
+            <option value="3" selected>dreimal</option>
+            <option value="5">fünfmal</option>
+          </select></label>
+      </div>
+      <input type="hidden" id="freigabe-empfaenger" value="${empfaenger || ''}">
+      ${opt.ohneKnopf ? '' : h`<p class="werkzeug__weiter">
+        <button type="button" class="knopf knopf--klein" data-tu="anschreiben-verweis"
+          data-objekt="${objektId || ''}" data-ziel="#anschreiben-text">${ico('teilen')}Verweis erzeugen und einfügen</button>
+      </p>`}`);
+  }
+
+  A_('anschreiben-verweis', (el) => {
+    const ids = U.$$('[data-freigabe]').filter((x) => x.checked).map((x) => x.dataset.freigabe);
+    if (!ids.length) { ui.toast('Wähle mindestens ein Dokument.', 'schlecht'); return; }
+    T.freigabeErstellen({
+      dokumente: ids,
+      empfaenger: (U.$('#freigabe-empfaenger') || {}).value || '',
+      tage: Number((U.$('#freigabe-tage') || {}).value) || 7,
+      maxAbrufe: Number((U.$('#freigabe-abrufe') || {}).value) || 3,
+      objektId: el.dataset.objekt || null
+    }).then((f) => {
+      const feld = U.$(el.dataset.ziel || '#anschreiben-text');
+      if (feld) {
+        /* Bewusst eng: Nur ein zuvor von hier eingefügter Block wird
+           ersetzt. Ein ähnlich beginnender Satz aus dem Anschreiben
+           bleibt stehen. */
+        feld.value = feld.value.replace(/\n*Meine Unterlagen liegen verschlüsselt bereit[\s\S]*$/, '')
+          .replace(/\s+$/, '')
+          + '\n\nMeine Unterlagen liegen verschlüsselt bereit. Dieser Verweis öffnet sie, gilt '
+          + f.tage + ' ' + U.plural(f.tage, 'Tag', 'Tage') + ' und lässt sich ' + f.maxAbrufe + ' Mal öffnen:\n'
+          + f.link;
+      }
+      /* Der Abschnitt hat seinen Zweck erfüllt – an seiner Stelle steht
+         jetzt, was verschickt wird. */
+      const feldsatz = el.closest('fieldset');
+      if (feldsatz) {
+        feldsatz.innerHTML = String(h`<legend>Unterlagen sicher mitschicken</legend>
+          <p class="gut-meldung">${ico('pruefen')}Verweis erzeugt und unten in den Text eingefügt:
+            ${ids.length} ${U.plural(ids.length, 'Dokument', 'Dokumente')}, gültig ${f.tage} ${U.plural(f.tage, 'Tag', 'Tage')},
+            ${f.maxAbrufe} ${U.plural(f.maxAbrufe, 'Abruf', 'Abrufe')}.</p>
+          <p class="fein">Widerrufen kannst du ihn jederzeit im <a href="#/tresor">Dokumententresor</a>.</p>`);
+      }
+      laden();
+    }, (e) => ui.toast(e.message, 'schlecht'));
+  });
+
+  A_('freigabe-erstellen', (el) => {
+    const ids = U.$$('[data-freigabe]').filter((x) => x.checked).map((x) => x.dataset.freigabe);
+    if (!ids.length) { ui.toast('Wähle mindestens ein Dokument.', 'schlecht'); return; }
+    T.freigabeErstellen({
+      dokumente: ids,
+      empfaenger: (U.$('#freigabe-empfaenger') || {}).value || '',
+      tage: Number((U.$('#freigabe-tage') || {}).value) || 7,
+      maxAbrufe: Number((U.$('#freigabe-abrufe') || {}).value) || 3,
+      objektId: el.dataset.objekt || null
+    }).then((f) => {
+      ui.dialogZu();
+      ui.dialog({
+        titel: 'Verweis erzeugt',
+        breit: true,
+        inhalt: h`<p>Dieser Verweis gilt <b>${f.tage} Tage</b> und lässt sich <b>${f.maxAbrufe} Mal</b> öffnen.
+            Danach ist er wertlos. Im Tresor kannst du ihn jederzeit vorher widerrufen.</p>
+          <label class="feld"><span>Verweis</span>
+            <textarea rows="3" id="freigabe-link" readonly>${f.link}</textarea></label>
+          <div class="hinweisbox">${ico('warnung')}
+            <div><b>Der Schlüssel steckt im Verweis</b>
+            <p>Alles hinter dem Rautezeichen ist der Schlüssel. Wer den Verweis weitergibt, gibt die Unterlagen
+              weiter. Verschick ihn deshalb einzeln und nicht in Verteilern.</p></div>
+          </div>
+          <p class="fein">In dieser Vorführung liegen die verschlüsselten Dateien in diesem Browser – der
+            Verweis funktioniert deshalb nur auf diesem Gerät.</p>`,
+        fuss: h`<button type="button" class="knopf knopf--still" data-tu="kopieren" data-quelle="#freigabe-link">${ico('kopieren')}Verweis kopieren</button>
+          <button type="button" class="knopf" data-tu="dialog-zu">Fertig</button>`
+      });
+      NW.viewTresor.letzterLink = f.link;
+      laden();
+      /* Die Dokumentenliste ist unverändert – die Freigabenliste nicht.
+         Ohne diesen Anstoß bliebe die neue Freigabe unsichtbar. */
+      if (ui.aktuell === 'tresor') ui.neuZeichnen();
+    }, (e) => ui.toast(e.message, 'schlecht'));
+  });
+
+  A_('freigabe-widerrufen', (el) => {
+    T.widerrufen(el.dataset.id);
+    ui.neuZeichnen();
+    ui.toast('Widerrufen. Der Verweis führt ab sofort ins Leere.', 'gut');
+  });
+
+  A_('freigabe-loeschen', (el) => {
+    T.freigabeLoeschen(el.dataset.id);
+    ui.neuZeichnen();
+  });
+
+  A_('freigabe-ansehen', (el) => {
+    const d = (NW.viewTresor.geoeffnet || [])[Number(el.dataset.i)];
+    if (!d) return;
+    const url = URL.createObjectURL(new Blob([d.bytes], { type: d.typ || 'application/octet-stream' }));
+    ui.dialog({
+      titel: d.name, breit: true,
+      inhalt: /^image\//.test(d.typ)
+        ? h`<img class="tresor__vorschau" src="${url}" alt="${d.name}">`
+        : h`<p>Für diesen Dateityp gibt es hier keine Vorschau. Sichere die Datei, um sie zu öffnen.</p>`,
+      fuss: h`<button type="button" class="knopf" data-tu="dialog-zu">Schließen</button>`,
+      beimSchliessen: () => URL.revokeObjectURL(url)
+    });
+  });
+
+  A_('freigabe-sichern', (el) => {
+    const d = (NW.viewTresor.geoeffnet || [])[Number(el.dataset.i)];
+    if (!d) return;
+    ui.dateiSichern(d.name, d.bytes, d.typ || 'application/octet-stream');
+  });
+
+  /* Für die Serienbewerbung: je Empfänger ein eigener Verweis. Ein
+     geteilter wäre ein Generalschlüssel – jede Seite könnte ihn
+     weiterreichen, und der Abrufzähler liefe für alle zusammen. */
+  function verweisJeEmpfaenger(auftraege) {
+    const ids = U.$$('[data-freigabe]').filter((x) => x.checked).map((x) => x.dataset.freigabe);
+    if (!ids.length || !T.istOffen()) return Promise.resolve({});
+    const tage = Number((U.$('#freigabe-tage') || {}).value) || 7;
+    const maxAbrufe = Number((U.$('#freigabe-abrufe') || {}).value) || 3;
+    /* Nacheinander: Jede Freigabe schreibt dieselbe Liste zurück, parallel
+       würden sich die Schreibvorgänge gegenseitig überholen. */
+    const ergebnis = {};
+    return auftraege.reduce((kette, a) => kette.then(() => T.freigabeErstellen({
+      dokumente: ids, empfaenger: a.empfaenger, objektId: a.objektId, tage, maxAbrufe
+    }).then((f) => {
+      ergebnis[a.objektId] = '\n\nMeine Unterlagen liegen verschlüsselt bereit. Dieser Verweis öffnet sie, gilt '
+        + f.tage + ' ' + U.plural(f.tage, 'Tag', 'Tage') + ' und lässt sich ' + f.maxAbrufe + ' Mal öffnen:\n' + f.link;
+    }).catch(() => { })), Promise.resolve()).then(() => { laden(); return ergebnis; });
+  }
+
+  ui.ansichten.tresor = seite;
+  ui.ansichten.freigabe = freigabeAnsicht;
+  NW.viewTresor = { laden, freigabeDialog, freigabeAbschnitt, verweisJeEmpfaenger,
+    geoeffnet: [], letzterLink: '', artName };
+})(window.NW = window.NW || {});
+
 /* ===== app.js ===== */
 /* =====================================================================
    Nestwerk – Start
@@ -11364,6 +12525,11 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     else if (medium.addListener) medium.addListener(beobachten);
 
     NW.ui.start();
+
+    /* Der Tresor liegt in einer eigenen Datenbank und antwortet erst kurz
+       nach dem Start. Vorladen, damit die Freigabe im Anschreiben sofort
+       zur Verfügung steht und nicht erst nach einem Besuch der Seite. */
+    if (NW.viewTresor) NW.viewTresor.laden();
 
     /* Tastenkürzel auf einer Objektseite. */
     document.addEventListener('keydown', (e) => {

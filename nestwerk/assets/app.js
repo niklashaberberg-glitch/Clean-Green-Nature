@@ -20,6 +20,11 @@
 
     NW.ui.start();
 
+    /* Der Tresor liegt in einer eigenen Datenbank und antwortet erst kurz
+       nach dem Start. Vorladen, damit die Freigabe im Anschreiben sofort
+       zur Verfügung steht und nicht erst nach einem Besuch der Seite. */
+    if (NW.viewTresor) NW.viewTresor.laden();
+
     /* Tastenkürzel auf einer Objektseite. */
     document.addEventListener('keydown', (e) => {
       if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) return;

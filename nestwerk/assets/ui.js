@@ -378,6 +378,10 @@
     const wechsel = letzteRoute.split('/')[0] !== r.name;
     letzteRoute = schluessel;
 
+    /* Ein Verweis im Dialog hat die Seite darunter gewechselt, während der
+       Dialog stehen blieb. Bei einem echten Routenwechsel schließt er. */
+    if (!erzwingen) dialogZu();
+
     const ansicht = ui.ansichten[r.name] || ui.ansichten.start;
     ui.aktuell = r.name;
     ui.params = r;
@@ -617,6 +621,7 @@
         { route: 'wohngeld', label: 'Wohngeld prüfen', icon: 'euro' },
         { route: 'nebenkosten', label: 'Nebenkosten prüfen', icon: 'lupe' },
         { route: 'uebergabe', label: 'Übergabeprotokoll', icon: 'schluessel' },
+        { route: 'tresor', label: 'Dokumententresor', icon: 'schloss' },
         { route: 'markt', label: 'Marktdaten und Preisverlauf', icon: 'trend' },
         { route: 'plus', label: 'Tarife', icon: 'plus5' }
       ]).forEach((nav) => {
@@ -778,7 +783,13 @@
           <li>${s.eigeneInserate.length} eigene Inserate</li>
           <li>Belegter Speicher: rund ${U.num(Math.ceil(groesse / 1024))} kB</li>
         </ul>
-        <p>Beim Leeren der Browserdaten verschwindet auch dieser Stand.</p>`,
+        <p>Beim Leeren der Browserdaten verschwindet auch dieser Stand.</p>
+        ${NW.tresor && NW.tresor.eingerichtet() ? h`<div class="hinweisbox">${ico('schloss')}
+          <div><b>Der Dokumententresor liegt getrennt davon</b>
+          <p>Er wird hier weder gesichert noch gelöscht: Verschlüsselte Unterlagen in eine Klartextdatei zu
+            exportieren wäre das Gegenteil dessen, wofür er da ist. Leeren lässt er sich im
+            <a href="#/tresor">Tresor</a> selbst.</p></div>
+        </div>` : ''}`,
         fuss: h`<button type="button" class="knopf knopf--still" data-tu="daten-export">${ico('speichern')}Als Datei sichern</button>
           <button type="button" class="knopf knopf--gefahr" data-tu="daten-loeschen">${ico('muell')}Alles zurücksetzen</button>`
       });
@@ -788,7 +799,8 @@
     },
 
     'daten-loeschen'() {
-      if (!confirm('Merkliste, Profil, Suchaufträge und Nachrichten werden gelöscht. Fortfahren?')) return;
+      if (!confirm('Merkliste, Profil, Suchaufträge und Nachrichten werden gelöscht. '
+        + 'Der Dokumententresor bleibt bestehen – ihn leerst du dort. Fortfahren?')) return;
       NW.store.zuruecksetzen();
       dialogZu();
       toast('Alles zurückgesetzt.', 'info');

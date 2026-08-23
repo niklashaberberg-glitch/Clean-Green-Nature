@@ -202,6 +202,46 @@ Der Brief sagt dabei nur zu, was tatsächlich vorliegt. Ein Anschreiben, das
 Unterlagen verspricht, die es nicht gibt, fliegt spätestens bei der
 Besichtigung auf.
 
+### Dokumententresor
+
+Wer sich auf zwanzig Wohnungen bewirbt, verschickt zwanzig Mal
+Gehaltsnachweise, Ausweiskopie und Schufa – an Fremde, per E-Mail, ohne
+Ablaufdatum. Die Unterlagen liegen danach in zwanzig Postfächern und bleiben
+dort für immer.
+
+Nestwerk kehrt das um. Die Dateien werden einmal im Browser verschlüsselt
+abgelegt; verschickt wird nie die Datei, sondern ein Verweis, der nach
+gesetzter Frist und gesetzter Zahl von Abrufen erlischt und sich jederzeit
+widerrufen lässt. Jeder Abruf wird protokolliert.
+
+Die Verschlüsselung ist echt, nicht angedeutet:
+
+* **AES-GCM mit 256 Bit** für Inhalt und Dateiname. Auch der Name wird
+  verschlüsselt – er verrät sonst mehr, als vielen bewusst ist.
+* **PBKDF2 mit 310.000 Runden** leitet den Tresorschlüssel aus dem Kennwort
+  ab. Der Schlüssel wird nirgends gespeichert; er lebt im Arbeitsspeicher,
+  solange der Tresor offen ist, und ist nach dem Neuladen weg.
+* **Ein eigener Schlüssel je Dokument**, umschlossen vom Tresorschlüssel. Nur
+  deshalb lässt sich eine einzelne Gehaltsabrechnung freigeben, ohne den
+  ganzen Tresor zu öffnen.
+* **Der Freigabeschlüssel steht im Fragment** des Verweises, also hinter dem
+  Rautezeichen. Diesen Teil senden Browser nie an einen Server. Ein Betreiber
+  sähe die Anfrage, aber nie den Schlüssel.
+
+Bei gesperrtem Tresor bleiben nur Art, Größe und Datum lesbar – gerade genug
+für die Liste, sonst nichts. Was hier fehlt, ist der Server: In dieser
+Vorführung liegt das Chiffrat in derselben Browser-Datenbank, weshalb ein
+Verweis nur auf demselben Gerät funktioniert. Im Betrieb läge dort das
+Chiffrat und sonst nichts.
+
+Im Anschreiben und in der Serienbewerbung steckt die Freigabe direkt im
+Formular. Die Serienbewerbung erzeugt bewusst **je Empfänger einen eigenen
+Verweis** – ein gemeinsamer wäre ein Generalschlüssel, den jede Seite
+weiterreichen könnte, und der Abrufzähler liefe für alle zusammen.
+
+Der Tresor liegt vollständig im freien Tarif. Wer für Datenschutz zahlen muss,
+hat keinen.
+
 ### Bewerbungstafel
 
 Jedes gemerkte Objekt durchläuft sechs Stufen: gemerkt, angeschrieben,
@@ -348,6 +388,7 @@ nestwerk/
                         WBS, Wohngeld, Betriebskosten, Routenplanung
     store.js            Zustand und Speicherung
     plan.js             Tarife, Grenzen, Anzeigen
+    tresor.js           Verschlüsselung, Ablage, befristete Freigaben
     karte.js            die Karte
     ui.js               Schale, Router, geteilte Bausteine
     view-*.js           die einzelnen Ansichten
@@ -402,6 +443,13 @@ eigene Inserate liegen im `localStorage` dieses Browsers unter dem Schlüssel
 `nestwerk.v1`. Unter „Meine Daten“ im Fußbereich lässt sich der Stand als
 Datei sichern oder vollständig löschen. Beim Leeren der Browserdaten
 verschwindet er ebenfalls.
+
+Die Dokumente des Tresors liegen davon getrennt: das Chiffrat in der
+IndexedDB `nestwerk-tresor`, die Kopfdaten der Freigaben unter
+`nestwerk.tresor.v1`. Beides ist ohne Kennwort wertlos – der Schlüssel wird
+nirgends abgelegt. „Meine Daten“ sichert den Tresor deshalb ausdrücklich
+nicht mit; verschlüsselte Dateien in einer Klartextdatei zu exportieren wäre
+das Gegenteil dessen, wofür er da ist.
 
 ## Hinweis zum Bestand
 

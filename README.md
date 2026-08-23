@@ -1,6 +1,8 @@
 # Clean Green Nature – Website
 
-Einseitige Website für Laser-Graffitientfernung und Fassadenreinigung in Köln.
+Einseitige Website für chemiefreie Laserreinigung in Köln – für Industrie,
+Infrastruktur und Denkmäler. Inhalt und Aufbau folgen der Kurzvorstellung
+für Facility Management, Einkauf und die öffentliche Hand.
 
 Die komplette Seite steckt in **einer einzigen Datei** (`index.html`): HTML, CSS,
 JavaScript, alle Icons und Illustrationen. Es gibt keinen Build-Schritt, kein
@@ -21,9 +23,12 @@ sitemap.xml     Seitenverzeichnis für Google & Co.
 `index.html`, den Ordner `images/`, `robots.txt` und `sitemap.xml` in das
 Web-Wurzelverzeichnis des Hosters kopieren. Fertig.
 
-Sobald die endgültige Domain feststeht: In `index.html`, `robots.txt` und
-`sitemap.xml` nach `clean-green-nature.de` suchen und ersetzen. Die Adresse
-steht dort in `canonical`, den Open-Graph-Angaben und den Strukturdaten.
+**Domain:** Die Seite ist durchgängig auf `https://www.cleangreennature.de/`
+eingestellt – so steht sie in der Kurzvorstellung und so lautet auch die
+E-Mail-Adresse. Vorher stand hier `clean-green-nature.de` mit Bindestrichen.
+Falls die Bindestrich-Variante doch die richtige ist: in `index.html`,
+`robots.txt` und `sitemap.xml` nach `cleangreennature.de` suchen und ersetzen.
+Die Adresse steht in `canonical`, den Open-Graph-Angaben und den Strukturdaten.
 
 ## Was von außen geladen wird
 
@@ -84,9 +89,46 @@ jeder Domain, auch auf einer Testadresse – ohne dass etwas angepasst werden mu
 Limits ändern: `MAX_FILES`, `MAX_BYTES` und `OK_TYPES` stehen im Skript
 direkt beieinander.
 
+## GraffitiCare Portfolio
+
+Der Abschnitt liegt unter dem Anker **`#graffiticare`** – genau die Adresse, auf
+die die Kurzvorstellung verweist (`www.cleangreennature.de/#graffiticare`).
+
+Drei Pakete, Preise je Objekt und Monat, netto:
+
+| Paket | Preis | Sichtkontrollen | Entfernung/Jahr | Rückmeldung |
+|---|---|---|---|---|
+| BASIS | 35 € | 2 | bis 8 m² | 5 Werktage |
+| AKTIV | 69 € | 4 | bis 16 m² | 48 Stunden |
+| KOMPLETT | 129 € | 6 | bis 32 m² | 24 Stunden |
+
+Der Portfolio-Rechner darunter multipliziert Objektzahl × Paketpreis und zieht
+die Mengenstaffel ab. Er zeigt Monatsrate, effektiven Preis je Objekt und die
+Summe auf 12 Monate. Ein Klick auf „Dieses Portfolio anfragen“ übernimmt die
+Konfiguration ins Anfrageformular.
+
+> **Bitte prüfen – die Staffel-Stufen sind von mir gesetzt.** Die
+> Kurzvorstellung nennt nur „ab 5 Objekten eine Mengenstaffel von 5 bis 20 %“,
+> aber nicht die Zwischenschritte. Hinterlegt ist:
+>
+> | Objekte | Rabatt |
+> |---|---|
+> | 1–4 | 0 % |
+> | 5–9 | 5 % |
+> | 10–19 | 10 % |
+> | 20–49 | 15 % |
+> | ab 50 | 20 % |
+>
+> Anpassen in `index.html` unter `VOLUME_SCALE` – die Übersicht im Aufklapper
+> „Wie die Mengenstaffel gestaffelt ist“ erzeugt sich daraus automatisch.
+
+Paketpreise ändern: an zwei Stellen, in den Karten (`.tier__price`) und in den
+Optionen von `#pf-tier` (`data-price`).
+
 ## Der Richtpreis-Rechner
 
-Die Rechnung läuft ausschließlich im Browser des Besuchers:
+Für **Einzelaufträge**. Die Rechnung läuft ausschließlich im Browser des
+Besuchers:
 
 ```
 Grundwert  = Fläche (m²) × Untergrund-Ansatz (€/m²) × Verschmutzungsfaktor
@@ -128,6 +170,7 @@ und `id="modal-agb"` markiert.
 | Heller/dunkler Modus | Schalter in der Kopfzeile, folgt sonst dem System |
 | Fenster schließen | `Esc`, Klick daneben oder das ×-Symbol |
 | Angaben übernehmen | „Zusammenfassung kopieren“ unter dem Richtpreis |
+| Portfolio berechnen | Regler und Paketwahl unter `#graffiticare` |
 
 ## Barrierefreiheit
 
@@ -139,6 +182,20 @@ sauberer Überschriftenhierarchie sowie vollständige Berücksichtigung von
 
 Ohne JavaScript bleiben alle Inhalte lesbar und das Formular absendbar; nur die
 interaktiven Zugaben entfallen.
+
+## Woher der Inhalt stammt
+
+Texte, Leistungsbereiche, Einsatzbereiche, Ablaufschritte, Paketpreise und die
+Positionierung folgen der Kurzvorstellung („Chemiefreie Laserreinigung für
+Industrie, Infrastruktur & Denkmäler“, 2 Seiten). Zwei Abweichungen sind
+bewusst:
+
+* **Clean Advertising** steht nicht in der Kurzvorstellung, war aber auf der
+  Seite ausgearbeitet. Es ist nicht gelöscht, sondern als ergänzende Leistung
+  unter die sechs Kernbereiche gerückt.
+* **Laserbeauftragter**: Die Kurzvorstellung nennt nur „Gründer“. Da die Rolle
+  ausdrücklich hervorgehoben werden sollte, steht sie weiterhin in der Vision
+  und in den Strukturdaten.
 
 ## Getestet
 

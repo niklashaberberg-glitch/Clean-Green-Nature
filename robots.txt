@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://clean-green-nature.de/sitemap.xml
+Sitemap: https://www.cleangreennature.de/sitemap.xml

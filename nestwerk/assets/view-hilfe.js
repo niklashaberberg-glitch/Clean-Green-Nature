@@ -122,7 +122,7 @@
 
   function fensterMarkup() {
     return h`<button type="button" class="hilfe__knopf ${offen ? 'is-offen' : ''}" data-tu="hilfe-umschalten"
-        aria-expanded="${offen ? 'true' : 'false'}" aria-controls="hilfe-fenster">
+        aria-expanded="${offen ? 'true' : 'false'}"${offen ? ' aria-controls="hilfe-fenster"' : ''}>
         ${ico(offen ? 'x' : 'nachricht')}<span class="hilfe__knopfwort">Hilfe</span>
       </button>
       ${offen ? h`<section class="hilfe__fenster" id="hilfe-fenster" role="dialog"

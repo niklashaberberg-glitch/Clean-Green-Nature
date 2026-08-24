@@ -333,6 +333,13 @@
     erklaerungZeichnen();
   });
 
+  /* Fehlte bisher ganz: Beide Knöpfe trugen data-tu="tausch-anlegen",
+     ohne dass es die Aktion gab – sie taten also nichts. */
+  A_('tausch-anlegen', () => {
+    const m = S.get().meinTausch;
+    ui.gehe(m ? 'inserieren?bearbeiten=' + encodeURIComponent(m.id) : 'inserieren?art=tausch');
+  });
+
   A_('tausch-weg', () => {
     const m = S.get().meinTausch;
     if (!m) return;

@@ -1,7 +1,10 @@
 /* Prüft die Farbtoken: Kontraste nach WCAG 2.2 und Unterscheidbarkeit der
    Diagrammfarben, auch bei den drei häufigen Farbfehlsichtigkeiten. */
 const fs = require('fs');
-const css = fs.readFileSync(process.argv[2] || 'nestwerk/assets/app.css', 'utf8');
+const path = require('path');
+/* Der Pfad hängt am Skript, nicht am Verzeichnis, aus dem es gestartet wird. */
+const css = fs.readFileSync(process.argv[2]
+  || path.join(__dirname, '..', 'assets', 'app.css'), 'utf8');
 
 function tokenBlock(start) {
   const i = css.indexOf(start);

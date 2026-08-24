@@ -121,6 +121,23 @@
   NW.now = () => _now;
   NW.setNow = (d) => { _now = d; };
 
+  /* ------------------------- Nachschlagen ------------------------- */
+
+  /* Schlüssel aus der Adresszeile treffen sonst den Prototyp: In einem
+     gewöhnlichen Objekt liefert obj['constructor'] eine Funktion statt
+     undefined, und die Seite bricht ab. Deshalb Karten ohne Prototyp
+     anlegen und fremde Schlüssel nur als eigene Eigenschaft nachschlagen. */
+  function karte(quelle) {
+    const k = Object.create(null);
+    if (quelle) Object.keys(quelle).forEach((x) => { k[x] = quelle[x]; });
+    return k;
+  }
+
+  function hole(obj, schluessel) {
+    if (!obj || schluessel === null || schluessel === undefined) return undefined;
+    return Object.prototype.hasOwnProperty.call(obj, schluessel) ? obj[schluessel] : undefined;
+  }
+
   /* ------------------------- Text ------------------------- */
 
   function esc(s) {
@@ -259,6 +276,7 @@
     clamp, sum, uniq, debounce, rng, hash, pick, pickN, between, intBetween,
     eur, eur2, num, dec, qm, pct, rooms, dateDE, monthDE, since, daysSince, addDays, isoDate,
     esc, raw, markup, html, norm, slug, plural, truncate,
+    karte, hole,
     $, $$, on, setHTML, svg,
     distKm, travelMin, minutesLabel, TRAVEL,
     loadStore, saveStore, clearStore

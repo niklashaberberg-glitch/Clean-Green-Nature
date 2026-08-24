@@ -327,6 +327,65 @@
 
   const bildGroesse = (b) => Math.round(b.datei.length * 0.75 / 1024) + ' kB';
 
+  /* Füllt die Maske aus einem bestehenden Inserat. Bewusst über die
+     Namen der Felder statt über eine zweite Tabelle: Wer ein Feld
+     hinzufügt, soll es nicht an zwei Stellen eintragen müssen. */
+  function vorbelegen(e) {
+    const setz = (name, wert) => {
+      const el = U.$('[name="' + name + '"]', U.$('#inserat-form'));
+      if (el && wert !== undefined && wert !== null && wert !== '') el.value = wert;
+    };
+    setz('viertelKey', e.viertelKey);
+    setz('strasse', e.strasse);
+    setz('zimmer', e.zimmer);
+    setz('flaeche', e.flaeche);
+    setz('etage', e.etage);
+    setz('etagen', e.etagen);
+    setz('baujahr', e.baujahr);
+    setz('heizung', e.energie && e.energie.heizung);
+    setz('kalt', e.kalt);
+    setz('nebenkosten', e.nebenkosten);
+    setz('heizkosten', e.heizkosten);
+    setz('kaution', e.kaution);
+    setz('freiAb', e.freiAb);
+    setz('freiAbKauf', e.freiAb);
+    setz('kaufpreis', e.kaufpreis);
+    setz('hausgeld', e.hausgeld);
+    setz('provision', e.provision);
+    setz('grundstueck', e.grundstueck);
+    setz('bauweise', e.bauweise);
+    setz('beschreibung', e.beschreibung);
+    if (e.grund) {
+      setz('gflaeche', e.grundstueck || e.flaeche);
+      setz('baulandArt', e.grund.baulandArt);
+      setz('bplan', e.grund.bplan);
+      setz('grz', e.grund.grz);
+      setz('gfz', e.grund.gfz);
+      setz('erschliessung', e.grund.erschliessung);
+    }
+    (e.ausstattung || []).forEach((a) => {
+      const el = U.$$('[name="ausstattung"]', U.$('#inserat-form')).find((x) => x.value === a);
+      if (el) el.checked = true;
+    });
+    if (e.tausch) {
+      setz('grund', e.tausch.grund);
+      setz('tZimmer', e.tausch.suche.zimmerMin);
+      setz('tFlaeche', e.tausch.suche.flaecheMin);
+      setz('tWarm', e.tausch.suche.warmMax);
+      (e.tausch.suche.staedte || []).forEach((c) => {
+        const el = U.$$('[name="wunschStadt"]', U.$('#inserat-form')).find((x) => x.value === c);
+        if (el) el.checked = true;
+      });
+      const ring = U.$('[name="ringOk"]', U.$('#inserat-form'));
+      if (ring) ring.checked = !!e.tausch.dreiecktauschOk;
+    }
+    /* Vorhandene Bilder übernehmen, damit sie beim Ändern nicht wegfallen. */
+    if (Array.isArray(e.bilder) && e.bilder.length && !neueBilder.length) {
+      neueBilder = e.bilder.slice();
+      bilderNeuZeichnen();
+    }
+  }
+
   function bilderBlock() {
     return h`<fieldset class="filter__gruppe bilder"><legend>Fotos</legend>
       <p class="fein">Inserate mit Fotos werden deutlich häufiger geöffnet. Bis zu ${BILD_MAX} Bilder,
@@ -371,8 +430,18 @@
     </li>`)}`;
   }
 
-  function inserieren() {
+  function inserieren(route) {
     const s = S.get();
+    const params = (route && route.params) || {};
+    /* Bearbeiten heißt hier: dieselbe Maske, vorbelegt, und beim Speichern
+       ersetzt der neue Eintrag den alten. Ein Knopf „Ändern“, der ein
+       leeres Formular öffnet, ist schlimmer als gar keiner. */
+    const bearbeitet = params.bearbeiten
+      ? s.eigeneInserate.find((x) => x.id === params.bearbeiten) : null;
+    const vorgabeArt = bearbeitet
+      ? (ARTEN.find((a) => a.kind === bearbeitet.kind && a.type === bearbeitet.type)
+        || ARTEN.find((a) => a.kind === bearbeitet.kind) || ARTEN[0]).id
+      : (ARTEN.some((a) => a.id === params.art) ? params.art : ARTEN[0].id);
     return {
       titel: 'Inserieren',
       html: h`<div class="seite seite--schmal">
@@ -407,12 +476,17 @@
         </section>` : ''}
 
         <form class="block" data-tu-submit="inserat-speichern" id="inserat-form">
-          <h2>Neues Inserat</h2>
+          <h2>${bearbeitet ? 'Inserat ändern' : 'Neues Inserat'}</h2>
+          ${bearbeitet ? h`<p class="block__unter">Die Felder sind mit deinem bisherigen Angebot vorbelegt.
+            Beim Speichern ersetzt der neue Stand den alten – die Kennung bleibt, Merkungen und Anfragen
+            gehen nicht verloren.</p>
+            <input type="hidden" name="bearbeitet" value="${bearbeitet.id}">` : ''}
 
           <fieldset class="filter__gruppe"><legend>Art des Angebots</legend>
             <div class="chips">
-              ${ARTEN.map((o, i) =>
-        h`<label class="chip chip--radio"><input type="radio" name="art" value="${o.id}" ${i === 0 ? 'checked' : ''}
+              ${ARTEN.map((o) =>
+        h`<label class="chip chip--radio"><input type="radio" name="art" value="${o.id}"
+                  ${o.id === vorgabeArt ? 'checked' : ''}
                   data-tu-change="inserat-art"> ${ico(o.icon)}${o.label}</label>`)}
             </div>
           </fieldset>
@@ -550,7 +624,10 @@
       /* Die Feldgruppen richten sich nach der Art. Beim ersten Aufbau
          muss das einmal von Hand geschehen – danach erledigt es der
          Wechsel der Auswahl. */
-      danach() { gruppenZeigen((U.$('input[name="art"]:checked') || {}).value || 'miete'); }
+      danach() {
+        gruppenZeigen((U.$('input[name="art"]:checked') || {}).value || vorgabeArt);
+        if (bearbeitet) vorbelegen(bearbeitet);
+      }
     };
   }
 
@@ -1090,15 +1167,21 @@
       };
     }
 
+    const alt = f.get('bearbeitet');
     let id;
     try {
-      id = S.inseratAnlegen(daten);
+      id = alt ? S.inseratErsetzen(alt, daten) : S.inseratAnlegen(daten);
     } catch (e) {
       /* Der Browserspeicher ist begrenzt; Bilder füllen ihn am schnellsten. */
       ui.toast('Der Speicher dieses Browsers ist voll. Entferne einige Bilder oder ältere Inserate.', 'schlecht');
       return;
     }
     neueBilder = [];
+    if (alt) {
+      ui.toast('Inserat geändert.', 'gut');
+      ui.gehe(kind === 'tausch' ? 'tausch' : 'objekt/' + id);
+      return;
+    }
     ui.toast(daten.bilder.length
       ? 'Inserat mit ' + daten.bilder.length + ' ' + U.plural(daten.bilder.length, 'Bild', 'Bildern') + ' angelegt.'
       : 'Inserat angelegt.', 'gut');

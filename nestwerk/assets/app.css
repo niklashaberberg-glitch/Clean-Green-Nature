@@ -379,8 +379,14 @@ input[type="text"], input[type="search"], input[type="number"], input[type="date
 input:focus, select:focus, textarea:focus {
   border-color: var(--akzent);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--akzent) 20%, transparent);
-  outline: none;
 }
+/* Der weiche Schein ist Rückmeldung für die Maus. Für die Tastatur reicht er
+   nicht: zwischen ruhendem und fokussiertem Rand liegen nur 1,7:1, WCAG 2.4.13
+   will 3:1. Deshalb bleibt dort der kräftige Ring aus :focus-visible stehen –
+   der überlebt als outline auch den Kontrastmodus von Windows, box-shadow nicht. */
+input:focus:not(:focus-visible), select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) { outline: none; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { box-shadow: none; }
 textarea { resize: vertical; min-height: 3em; line-height: 1.5; }
 select { cursor: pointer; }
 
@@ -490,7 +496,7 @@ input[type="range"] {
 .merkmale .ico { color: var(--gut); width: 15px; height: 15px; }
 
 .tabelle { width: 100%; border-collapse: collapse; font-size: .88rem; margin-top: 8px; }
-.tabelle th, .tabelle td { text-align: left; padding: .5em .6em; border-bottom: 1px solid var(--rand); }
+.tabelle th, .tabelle td { text-align: left; padding: .5em .6em; border-bottom: 1px solid var(--rand); overflow-wrap: anywhere; }
 .tabelle thead th { font-size: .78rem; color: var(--text-leise); text-transform: uppercase; letter-spacing: .04em; }
 .tabelle tbody th { font-weight: 600; }
 
@@ -588,7 +594,7 @@ input[type="range"] {
   display: inline-flex; align-items: center; gap: .4em;
   padding: .5em .9em; border: 1px solid var(--rand-feld); border-radius: 999px;
   background: var(--flaeche); color: var(--text-leise); font: inherit; font-size: .88rem; font-weight: 550; cursor: pointer;
-  transition: all var(--tempo);
+  transition: background-color var(--tempo), border-color var(--tempo), color var(--tempo);
 }
 .art:hover { border-color: var(--akzent); }
 .art.is-an { background: var(--akzent); border-color: var(--akzent); color: var(--auf-akzent); }
@@ -646,6 +652,8 @@ input[type="range"] {
 
 .leer { text-align: center; padding: 46px 20px; background: var(--flaeche); border: 1px dashed var(--rand-stark); border-radius: var(--r); }
 .leer > .ico { width: 44px; height: 44px; margin: 0 auto .6em; color: var(--text-still); }
+/* Die Ebene der Überschrift richtet sich nach der Seite, die Größe nicht. */
+.leer h2, .leer h3 { font-size: 1.02rem; }
 .leer p { color: var(--text-leise); max-width: 52ch; margin-left: auto; margin-right: auto; }
 .leer__tun { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
 
@@ -705,6 +713,9 @@ input[type="range"] {
 .brotkrumen .ico { width: 13px; height: 13px; }
 
 .objekt__kopf { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; }
+/* Titel und Adresse stammen vom Inserenten. Ohne min-width bleibt das
+   Flex-Kind so breit wie sein längstes Wort und schiebt die Seite auf. */
+.objekt__titel { flex: 1 1 300px; min-width: 0; overflow-wrap: anywhere; }
 .objekt__titel h1 { margin: .2em 0 .15em; }
 .objekt__ort { display: flex; align-items: center; gap: .4em; color: var(--text-leise); margin: 0; }
 .objekt__preis { text-align: right; }
@@ -975,6 +986,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .agent { background: var(--flaeche); border: 1px solid var(--rand); border-radius: var(--r); padding: 14px; margin-bottom: 12px; }
 .agent.is-aus { opacity: .6; }
 .agent__kopf { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+.agent__kopf > div:first-child { flex: 1 1 180px; min-width: 0; overflow-wrap: anywhere; }
 .agent__kopf h2 { margin: 0; font-size: 1.05rem; }
 .agent__kopf p { margin: .15em 0 0; font-size: .82rem; color: var(--text-leise); }
 .agent__zahlen { display: flex; gap: 14px; align-items: baseline; }
@@ -1001,11 +1013,12 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
 .post__verlauf { background: var(--flaeche); border: 1px solid var(--rand); border-radius: var(--r); display: flex; flex-direction: column; min-height: 420px; }
 .post__kopf { display: flex; align-items: center; gap: .7em; padding: .8em 1em; border-bottom: 1px solid var(--rand); flex-wrap: wrap; }
+.post__kopf > div { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
 .post__kopf b { display: block; }
 .post__kopf a { font-size: .82rem; }
 .post__quote { margin-left: auto; font-size: .78rem; color: var(--text-leise); }
 .post__blasen { flex: 1; padding: 1em; display: grid; gap: 10px; align-content: start; }
-.blase { max-width: 78%; padding: .65em .85em; border-radius: var(--r); font-size: .89rem; }
+.blase { max-width: 78%; min-width: 0; padding: .65em .85em; border-radius: var(--r); font-size: .89rem; overflow-wrap: anywhere; }
 .blase p { margin: 0; }
 .blase time { display: block; font-size: .72rem; opacity: .7; margin-top: .3em; }
 .blase--partner { background: var(--flaeche2); justify-self: start; border-bottom-left-radius: 4px; }
@@ -1030,7 +1043,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .anker { list-style: none; margin: 10px 0; padding: 0; display: grid; gap: 6px; }
 .anker li { display: flex; align-items: center; gap: .6em; padding: .5em .8em; background: var(--flaeche2); border-radius: var(--r-klein); }
 .anker li > .ico { color: var(--akzent); flex: none; }
-.anker li > div { flex: 1; }
+.anker li > div { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .anker b { display: block; font-size: .9rem; }
 .anker span { font-size: .8rem; color: var(--text-leise); }
 
@@ -1044,7 +1057,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
 .eigene { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
 .eigene li { display: flex; align-items: center; gap: 10px; padding: .55em .8em; background: var(--flaeche2); border-radius: var(--r-klein); }
-.eigene li > div { flex: 1; }
+.eigene li > div { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .eigene b { display: block; font-size: .9rem; }
 .eigene span { font-size: .79rem; color: var(--text-leise); }
 
@@ -1840,7 +1853,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .anfragen { margin: 12px 0; padding: .9em 1em; border: 1px solid var(--rand); border-radius: var(--r);
   background: var(--flaeche); }
 .anfragen__kopf { display: flex; flex-wrap: wrap; gap: .3em .8em; align-items: baseline; }
-.anfragen__kopf b { font-size: .95rem; }
+.anfragen__kopf b { font-size: .95rem; min-width: 0; overflow-wrap: anywhere; }
 .anfragen__kopf span { font-size: .8rem; color: var(--text-still); }
 .anfragen__liste { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; counter-reset: anfrage; }
 .anfragen__liste li { display: flex; gap: .7em; align-items: flex-start; padding: .6em .7em;

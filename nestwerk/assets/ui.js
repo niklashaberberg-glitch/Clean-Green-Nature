@@ -10,7 +10,7 @@
   const U = NW.util;
   const h = U.html, raw = U.raw, ico = U.svg;
 
-  const ui = { ansichten: {}, aktuell: null, params: {} };
+  const ui = { ansichten: Object.create(null), aktuell: null, params: {} };
   NW.ui = ui;
 
   /* ================================================================
@@ -387,7 +387,7 @@
     const roh = location.hash.replace(/^#\/?/, '') || 'start';
     const [pfad, query] = roh.split('?');
     const teile = pfad.split('/').filter(Boolean);
-    const params = {};
+    const params = Object.create(null);
     if (query) query.split('&').forEach((p) => {
       const [k, v] = p.split('=');
       params[decodeURIComponent(k)] = decodeURIComponent(v || '');

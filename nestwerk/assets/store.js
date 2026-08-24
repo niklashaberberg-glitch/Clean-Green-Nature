@@ -64,7 +64,7 @@
     profilAngelegt: false,
     filter: NW.analyse.leerFilter(),
     filterBeruehrt: false,   /* solange false, folgt die Suche dem Profil */
-    merkliste: {},          /* id -> { status, notiz, hinzu, termin, checkliste } */
+    merkliste: U.karte(),   /* id -> { status, notiz, hinzu, termin, checkliste } */
     vergleich: [],
     agenten: [],
     threads: NW.data.startThreads(),
@@ -72,9 +72,9 @@
     eigeneInserate: [],
     gesehen: [],
     einzugsdatum: '',
-    umzug: {},
-    protokoll: {},          /* Übergabeprotokoll: Räume, Zähler, Mängel */
-    werkzeuge: {},          /* zuletzt eingegebene Werte der Rechner */
+    umzug: U.karte(),
+    protokoll: U.karte(),   /* Übergabeprotokoll: Räume, Zähler, Mängel */
+    werkzeuge: U.karte(),   /* zuletzt eingegebene Werte der Rechner */
     tarif: 'frei',
     tarifIntervall: 'monat',
     tarifSeit: '',
@@ -83,29 +83,54 @@
     betreiber: {},          /* Angaben für Impressum, Datenschutz und AGB */
     theme: 'auto',
     ansicht: 'liste',
-    hinweiseGelesen: {},
+    hinweiseGelesen: U.karte(),
     zuletzt: U.isoDate(NW.now())
   });
 
   let state = null;
   const hoerer = [];
 
+  /* Welche Art ein Wert hat – Arrays sind in JavaScript auch Objekte, und
+     genau diese Verwechslung war der Fehler. */
+  const artVon = (v) => (v === null ? 'null' : Array.isArray(v) ? 'liste' : typeof v);
+
   function laden() {
     const gespeichert = U.loadStore();
     state = leer();
     if (gespeichert && gespeichert.version === 1) {
-      /* Nur bekannte Felder übernehmen, damit alte Stände nichts kaputt machen. */
+      /* Nur bekannte Felder übernehmen – und nur, wenn die Art stimmt.
+         Der Feldname allein reicht nicht: Stand irgendwo ein Objekt, wo
+         eine Liste erwartet wird, warf der erste Zugriff darauf, und die
+         Anwendung blieb weiß. Ein verworfenes Feld ist unangenehm, ein
+         weißer Bildschirm ist das Ende. */
       Object.keys(state).forEach((k) => {
-        if (gespeichert[k] !== undefined && k !== 'version') state[k] = gespeichert[k];
+        if (k === 'version' || gespeichert[k] === undefined) return;
+        if (artVon(gespeichert[k]) !== artVon(state[k])) return;
+        state[k] = gespeichert[k];
       });
       /* Profil und Filter gegen die aktuelle Vorlage auffüllen. */
-      state.profil = Object.assign({}, NW.data.profilVorlage, state.profil);
-      state.profil.gewichtung = Object.assign({}, NW.data.profilVorlage.gewichtung, state.profil.gewichtung);
-      state.profil.lifestyle = Object.assign({}, NW.data.profilVorlage.lifestyle, state.profil.lifestyle);
-      state.profil.unterlagen = Object.assign({}, NW.data.profilVorlage.unterlagen, state.profil.unterlagen);
-      state.filter = Object.assign(NW.analyse.leerFilter(), state.filter);
-      state.gruender = Object.assign({ nummer: 0, seit: '', bis: '' }, state.gruender);
+      const objekt = (v, vorlage) => (v && artVon(v) === 'object' ? v : vorlage);
+      state.profil = Object.assign({}, NW.data.profilVorlage, objekt(state.profil, {}));
+      state.profil.gewichtung = Object.assign({}, NW.data.profilVorlage.gewichtung, objekt(state.profil.gewichtung, {}));
+      state.profil.lifestyle = Object.assign({}, NW.data.profilVorlage.lifestyle, objekt(state.profil.lifestyle, {}));
+      state.profil.unterlagen = Object.assign({}, NW.data.profilVorlage.unterlagen, objekt(state.profil.unterlagen, {}));
+      state.filter = Object.assign(NW.analyse.leerFilter(), objekt(state.filter, {}));
+      state.gruender = Object.assign({ nummer: 0, seit: '', bis: '' }, objekt(state.gruender, {}));
+      state.betreiber = objekt(state.betreiber, {});
+      /* Listen dürfen nur enthalten, was auch ein Objekt ist. */
+      ['agenten', 'threads', 'eigeneInserate', 'vergleich', 'gesehen'].forEach((k) => {
+        if (!Array.isArray(state[k])) state[k] = [];
+      });
+      /* Aus JSON.parse kommen gewöhnliche Objekte zurück – die Karten
+         müssen ihren Prototyp wieder verlieren, sonst liefert ein Zugriff
+         mit „constructor“ als Kennung eine Funktion statt undefined. */
+      ['merkliste', 'umzug', 'protokoll', 'werkzeuge', 'hinweiseGelesen'].forEach((k) => {
+        state[k] = U.karte(artVon(state[k]) === 'object' ? state[k] : null);
+      });
     }
+    /* Eigene Inserate müssen im Nachschlagewerk stehen, sonst zeigt die
+       Merkliste auf Einträge, die es scheinbar nicht gibt. */
+    state.eigeneInserate.forEach((e) => { if (e && e.id) NW.data.byId[e.id] = e; });
     return state;
   }
 
@@ -327,6 +352,33 @@
     }, 'inserate');
   }
 
+  /* Ersetzt ein eigenes Inserat, behält aber Kennung, Erstelldatum,
+     Hervorhebung und Statistik – sonst verlöre ein „Ändern“ die Merkungen
+     anderer und stellte die Uhr auf null. */
+  function inseratErsetzen(id, daten) {
+    const alt = state.eigeneInserate.find((x) => x.id === id);
+    if (!alt) return inseratAnlegen(daten);
+    const neu = Object.assign({}, daten, {
+      id, eigen: true, erstellt: alt.erstellt,
+      boost: alt.boost, stats: alt.stats,
+      geaendert: U.isoDate(NW.now())
+    });
+    const vorher = JSON.parse(JSON.stringify(state.eigeneInserate));
+    update((s) => {
+      s.eigeneInserate = s.eigeneInserate.map((x) => (x.id === id ? neu : x));
+      if (neu.kind === 'tausch') s.meinTausch = neu;
+      else if (s.meinTausch && s.meinTausch.id === id) s.meinTausch = null;
+    }, 'inserate');
+    if (!U.saveStore(state)) {
+      state.eigeneInserate = vorher;
+      U.saveStore(state);
+      melden('inserate');
+      throw new Error('Der Speicher reicht nicht.');
+    }
+    NW.data.byId[id] = neu;
+    return id;
+  }
+
   function inseratLoeschen(id) {
     update((s) => {
       s.eigeneInserate = s.eigeneInserate.filter((x) => x.id !== id);
@@ -451,7 +503,7 @@
     inseratHervorheben,
     threadFuer, anschreiben, threadGelesen,
     terminBuchen, terminAbsagen, checkSetzen,
-    inseratAnlegen, inseratLoeschen, gesehenMerken,
+    inseratAnlegen, inseratErsetzen, inseratLoeschen, gesehenMerken,
     umzugsPlan, umzugSetzen, einzugsdatum, zuruecksetzen,
     nachfassFaellig, nachgefasst, protokollSetzen, werkzeugSetzen, werkzeugWerte
   };

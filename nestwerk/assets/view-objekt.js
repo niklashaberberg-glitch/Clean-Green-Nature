@@ -588,8 +588,15 @@
   function ansicht(route) {
     const l = NW.data.byId[route.arg];
     if (!l) {
-      return { titel: 'Nicht gefunden', html: h`<div class="leer">${ico('warnung')}<h2>Dieses Inserat gibt es nicht (mehr)</h2>
-        <p><a class="knopf" href="#/suche">Zur Suche</a></p></div>` };
+      /* Auch die Fehlseite braucht eine Hauptüberschrift: Wer mit einem
+         Screenreader auf einem toten Verweis landet, hört sonst nichts,
+         woran er sich orientieren kann. */
+      return { titel: 'Nicht gefunden', html: h`<div class="seite seite--schmal">
+        <header class="seite__kopf"><h1>${ico('warnung')}Nicht gefunden</h1></header>
+        <div class="leer">${ico('warnung')}<h2>Dieses Inserat gibt es nicht (mehr)</h2>
+          <p>Vielleicht ist der Verweis alt, oder das Inserat wurde zurückgezogen.</p>
+          <p><a class="knopf" href="#/suche">${ico('suche')}Zur Suche</a></p></div>
+      </div>` };
     }
     S.gesehenMerken(l.id);
     const s = S.get();

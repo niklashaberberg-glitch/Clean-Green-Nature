@@ -44,7 +44,7 @@
         html: h`<div class="seite seite--schmal">
           <header class="seite__kopf"><h1>${ico('herz')}Merkliste</h1></header>
           <div class="leer">${ico('herz')}
-            <h3>Noch nichts gemerkt</h3>
+            <h2>Noch nichts gemerkt</h2>
             <p>Klick bei einem Inserat auf das Herz. Hier entsteht daraus eine Tafel, die deine Bewerbungen
               von „gemerkt“ bis „Zusage“ begleitet.</p>
             <p><a class="knopf" href="#/suche">${ico('suche')}Zur Suche</a></p></div>
@@ -180,7 +180,7 @@
         html: h`<div class="seite seite--schmal">
           <header class="seite__kopf"><h1>${ico('waage')}Vergleich</h1></header>
           <div class="leer">${ico('waage')}
-            <h3>Noch nichts im Vergleich</h3>
+            <h2>Noch nichts im Vergleich</h2>
             <p>Bis zu ${S.maxVergleich()} Objekte lassen sich nebeneinanderstellen – mit echten Monatskosten,
               Vergleichsmiete und Passung in einer Tabelle.</p>
             <p><a class="knopf" href="#/suche">${ico('suche')}Objekte suchen</a></p></div>
@@ -281,7 +281,7 @@
         html: h`<div class="seite seite--schmal">
           <header class="seite__kopf"><h1>${ico('glocke')}Suchaufträge</h1></header>
           <div class="leer">${ico('glocke')}
-            <h3>Kein Suchauftrag angelegt</h3>
+            <h2>Kein Suchauftrag angelegt</h2>
             <p>Stell in der Suche deine Filter ein und speichere sie. Nestwerk zeigt dir dann bei jedem Besuch,
               was seither neu dazugekommen ist – über alle vier Angebotsarten hinweg.</p>
             <p><a class="knopf" href="#/suche">${ico('suche')}Filter einstellen</a></p></div>
@@ -413,7 +413,7 @@
         html: h`<div class="seite seite--schmal">
           <header class="seite__kopf"><h1>${ico('nachricht')}Nachrichten</h1></header>
           ${eigenesPostfach()}
-          <div class="leer">${ico('nachricht')}<h3>Noch kein eigener Verlauf</h3>
+          <div class="leer">${ico('nachricht')}<h2>Noch kein eigener Verlauf</h2>
             <p>Sobald du ein Inserat anschreibst, erscheint der Verlauf hier.</p>
             <p><a class="knopf" href="#/suche">${ico('suche')}Zur Suche</a></p></div></div>`
       };
@@ -683,7 +683,8 @@
   A_('post-senden', (el) => {
     const feld = U.$('#post-text');
     const text = (feld.value || '').trim();
-    if (!text) return;
+    /* Stillschweigend nichts zu tun ist die schlechteste Rückmeldung. */
+    if (!text) { feld.focus(); ui.toast('Schreib erst etwas.', 'schlecht'); return; }
     const t = S.get().threads.find((x) => x.id === el.dataset.id);
     if (!t) return;
     S.update((s) => {

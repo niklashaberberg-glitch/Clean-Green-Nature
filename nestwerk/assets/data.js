@@ -321,7 +321,11 @@
       kaution = U.pick(r, [2, 3, 3, 3, 1, 0]);
       provision = kind === 'miete' && r() < 0.06 ? 2.38 : 0;
     }
-    const warm = kalt + nebenkosten + heizkosten;
+    /* Die Warmmiete wird weiter unten neu gerechnet, wenn ein Inserat als
+       Köder gestreut wird – sonst stünde dort eine gesenkte Kaltmiete
+       neben der unveränderten Warmmiete, und die Karte zeigte den
+       Widerspruch offen an. */
+    let warm = kalt + nebenkosten + heizkosten;
 
     /* Auffälligkeiten */
     const quirks = [];
@@ -351,6 +355,8 @@
     if (kind !== 'kauf' && r() < 0.045) {
       fake = true;
       kalt = Math.round(kalt * U.between(r, 0.38, 0.55));
+      /* Der Köder muss durchgängig zu billig sein, nicht nur kalt. */
+      warm = kalt + nebenkosten + heizkosten;
       anbieter.verifiziert = false;
       anbieter.stufe = 0;
       anbieter.art = 'privat';
@@ -626,7 +632,8 @@
   }
 
   const listings = build();
-  const byId = {};
+  /* Ohne Prototyp: #/objekt/constructor darf kein Objekt zurückgeben. */
+  const byId = Object.create(null);
   listings.forEach((l) => { byId[l.id] = l; });
 
   /* ------------------------- Eigenes Profil ------------------------- */

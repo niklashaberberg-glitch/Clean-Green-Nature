@@ -931,10 +931,10 @@ Datum: __________________
      Router innerhalb des Bereichs
      ================================================================ */
 
-  const UNTER = {
+  const UNTER = U.karte({
     impressum, datenschutz, agb, widerruf, melden, barrierefreiheit,
     kuendigen, angaben: angabenSeite
-  };
+  });
 
   ui.ansichten.recht = function (route) {
     const fn = UNTER[route.arg];

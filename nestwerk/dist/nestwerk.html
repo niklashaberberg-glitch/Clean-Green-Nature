@@ -394,8 +394,14 @@ input[type="text"], input[type="search"], input[type="number"], input[type="date
 input:focus, select:focus, textarea:focus {
   border-color: var(--akzent);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--akzent) 20%, transparent);
-  outline: none;
 }
+/* Der weiche Schein ist Rückmeldung für die Maus. Für die Tastatur reicht er
+   nicht: zwischen ruhendem und fokussiertem Rand liegen nur 1,7:1, WCAG 2.4.13
+   will 3:1. Deshalb bleibt dort der kräftige Ring aus :focus-visible stehen –
+   der überlebt als outline auch den Kontrastmodus von Windows, box-shadow nicht. */
+input:focus:not(:focus-visible), select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) { outline: none; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { box-shadow: none; }
 textarea { resize: vertical; min-height: 3em; line-height: 1.5; }
 select { cursor: pointer; }
 
@@ -505,7 +511,7 @@ input[type="range"] {
 .merkmale .ico { color: var(--gut); width: 15px; height: 15px; }
 
 .tabelle { width: 100%; border-collapse: collapse; font-size: .88rem; margin-top: 8px; }
-.tabelle th, .tabelle td { text-align: left; padding: .5em .6em; border-bottom: 1px solid var(--rand); }
+.tabelle th, .tabelle td { text-align: left; padding: .5em .6em; border-bottom: 1px solid var(--rand); overflow-wrap: anywhere; }
 .tabelle thead th { font-size: .78rem; color: var(--text-leise); text-transform: uppercase; letter-spacing: .04em; }
 .tabelle tbody th { font-weight: 600; }
 
@@ -603,7 +609,7 @@ input[type="range"] {
   display: inline-flex; align-items: center; gap: .4em;
   padding: .5em .9em; border: 1px solid var(--rand-feld); border-radius: 999px;
   background: var(--flaeche); color: var(--text-leise); font: inherit; font-size: .88rem; font-weight: 550; cursor: pointer;
-  transition: all var(--tempo);
+  transition: background-color var(--tempo), border-color var(--tempo), color var(--tempo);
 }
 .art:hover { border-color: var(--akzent); }
 .art.is-an { background: var(--akzent); border-color: var(--akzent); color: var(--auf-akzent); }
@@ -661,6 +667,8 @@ input[type="range"] {
 
 .leer { text-align: center; padding: 46px 20px; background: var(--flaeche); border: 1px dashed var(--rand-stark); border-radius: var(--r); }
 .leer > .ico { width: 44px; height: 44px; margin: 0 auto .6em; color: var(--text-still); }
+/* Die Ebene der Überschrift richtet sich nach der Seite, die Größe nicht. */
+.leer h2, .leer h3 { font-size: 1.02rem; }
 .leer p { color: var(--text-leise); max-width: 52ch; margin-left: auto; margin-right: auto; }
 .leer__tun { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
 
@@ -720,6 +728,9 @@ input[type="range"] {
 .brotkrumen .ico { width: 13px; height: 13px; }
 
 .objekt__kopf { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; }
+/* Titel und Adresse stammen vom Inserenten. Ohne min-width bleibt das
+   Flex-Kind so breit wie sein längstes Wort und schiebt die Seite auf. */
+.objekt__titel { flex: 1 1 300px; min-width: 0; overflow-wrap: anywhere; }
 .objekt__titel h1 { margin: .2em 0 .15em; }
 .objekt__ort { display: flex; align-items: center; gap: .4em; color: var(--text-leise); margin: 0; }
 .objekt__preis { text-align: right; }
@@ -990,6 +1001,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .agent { background: var(--flaeche); border: 1px solid var(--rand); border-radius: var(--r); padding: 14px; margin-bottom: 12px; }
 .agent.is-aus { opacity: .6; }
 .agent__kopf { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+.agent__kopf > div:first-child { flex: 1 1 180px; min-width: 0; overflow-wrap: anywhere; }
 .agent__kopf h2 { margin: 0; font-size: 1.05rem; }
 .agent__kopf p { margin: .15em 0 0; font-size: .82rem; color: var(--text-leise); }
 .agent__zahlen { display: flex; gap: 14px; align-items: baseline; }
@@ -1016,11 +1028,12 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
 .post__verlauf { background: var(--flaeche); border: 1px solid var(--rand); border-radius: var(--r); display: flex; flex-direction: column; min-height: 420px; }
 .post__kopf { display: flex; align-items: center; gap: .7em; padding: .8em 1em; border-bottom: 1px solid var(--rand); flex-wrap: wrap; }
+.post__kopf > div { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
 .post__kopf b { display: block; }
 .post__kopf a { font-size: .82rem; }
 .post__quote { margin-left: auto; font-size: .78rem; color: var(--text-leise); }
 .post__blasen { flex: 1; padding: 1em; display: grid; gap: 10px; align-content: start; }
-.blase { max-width: 78%; padding: .65em .85em; border-radius: var(--r); font-size: .89rem; }
+.blase { max-width: 78%; min-width: 0; padding: .65em .85em; border-radius: var(--r); font-size: .89rem; overflow-wrap: anywhere; }
 .blase p { margin: 0; }
 .blase time { display: block; font-size: .72rem; opacity: .7; margin-top: .3em; }
 .blase--partner { background: var(--flaeche2); justify-self: start; border-bottom-left-radius: 4px; }
@@ -1045,7 +1058,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .anker { list-style: none; margin: 10px 0; padding: 0; display: grid; gap: 6px; }
 .anker li { display: flex; align-items: center; gap: .6em; padding: .5em .8em; background: var(--flaeche2); border-radius: var(--r-klein); }
 .anker li > .ico { color: var(--akzent); flex: none; }
-.anker li > div { flex: 1; }
+.anker li > div { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .anker b { display: block; font-size: .9rem; }
 .anker span { font-size: .8rem; color: var(--text-leise); }
 
@@ -1059,7 +1072,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
 .eigene { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
 .eigene li { display: flex; align-items: center; gap: 10px; padding: .55em .8em; background: var(--flaeche2); border-radius: var(--r-klein); }
-.eigene li > div { flex: 1; }
+.eigene li > div { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .eigene b { display: block; font-size: .9rem; }
 .eigene span { font-size: .79rem; color: var(--text-leise); }
 
@@ -1855,7 +1868,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .anfragen { margin: 12px 0; padding: .9em 1em; border: 1px solid var(--rand); border-radius: var(--r);
   background: var(--flaeche); }
 .anfragen__kopf { display: flex; flex-wrap: wrap; gap: .3em .8em; align-items: baseline; }
-.anfragen__kopf b { font-size: .95rem; }
+.anfragen__kopf b { font-size: .95rem; min-width: 0; overflow-wrap: anywhere; }
 .anfragen__kopf span { font-size: .8rem; color: var(--text-still); }
 .anfragen__liste { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; counter-reset: anfrage; }
 .anfragen__liste li { display: flex; gap: .7em; align-items: flex-start; padding: .6em .7em;
@@ -2192,6 +2205,23 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
   NW.now = () => _now;
   NW.setNow = (d) => { _now = d; };
 
+  /* ------------------------- Nachschlagen ------------------------- */
+
+  /* Schlüssel aus der Adresszeile treffen sonst den Prototyp: In einem
+     gewöhnlichen Objekt liefert obj['constructor'] eine Funktion statt
+     undefined, und die Seite bricht ab. Deshalb Karten ohne Prototyp
+     anlegen und fremde Schlüssel nur als eigene Eigenschaft nachschlagen. */
+  function karte(quelle) {
+    const k = Object.create(null);
+    if (quelle) Object.keys(quelle).forEach((x) => { k[x] = quelle[x]; });
+    return k;
+  }
+
+  function hole(obj, schluessel) {
+    if (!obj || schluessel === null || schluessel === undefined) return undefined;
+    return Object.prototype.hasOwnProperty.call(obj, schluessel) ? obj[schluessel] : undefined;
+  }
+
   /* ------------------------- Text ------------------------- */
 
   function esc(s) {
@@ -2330,6 +2360,7 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
     clamp, sum, uniq, debounce, rng, hash, pick, pickN, between, intBetween,
     eur, eur2, num, dec, qm, pct, rooms, dateDE, monthDE, since, daysSince, addDays, isoDate,
     esc, raw, markup, html, norm, slug, plural, truncate,
+    karte, hole,
     $, $$, on, setHTML, svg,
     distKm, travelMin, minutesLabel, TRAVEL,
     loadStore, saveStore, clearStore
@@ -3451,7 +3482,11 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
       kaution = U.pick(r, [2, 3, 3, 3, 1, 0]);
       provision = kind === 'miete' && r() < 0.06 ? 2.38 : 0;
     }
-    const warm = kalt + nebenkosten + heizkosten;
+    /* Die Warmmiete wird weiter unten neu gerechnet, wenn ein Inserat als
+       Köder gestreut wird – sonst stünde dort eine gesenkte Kaltmiete
+       neben der unveränderten Warmmiete, und die Karte zeigte den
+       Widerspruch offen an. */
+    let warm = kalt + nebenkosten + heizkosten;
 
     /* Auffälligkeiten */
     const quirks = [];
@@ -3481,6 +3516,8 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
     if (kind !== 'kauf' && r() < 0.045) {
       fake = true;
       kalt = Math.round(kalt * U.between(r, 0.38, 0.55));
+      /* Der Köder muss durchgängig zu billig sein, nicht nur kalt. */
+      warm = kalt + nebenkosten + heizkosten;
       anbieter.verifiziert = false;
       anbieter.stufe = 0;
       anbieter.art = 'privat';
@@ -3756,7 +3793,8 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
   }
 
   const listings = build();
-  const byId = {};
+  /* Ohne Prototyp: #/objekt/constructor darf kein Objekt zurückgeben. */
+  const byId = Object.create(null);
   listings.forEach((l) => { byId[l.id] = l; });
 
   /* ------------------------- Eigenes Profil ------------------------- */
@@ -5473,7 +5511,7 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
     profilAngelegt: false,
     filter: NW.analyse.leerFilter(),
     filterBeruehrt: false,   /* solange false, folgt die Suche dem Profil */
-    merkliste: {},          /* id -> { status, notiz, hinzu, termin, checkliste } */
+    merkliste: U.karte(),   /* id -> { status, notiz, hinzu, termin, checkliste } */
     vergleich: [],
     agenten: [],
     threads: NW.data.startThreads(),
@@ -5481,9 +5519,9 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
     eigeneInserate: [],
     gesehen: [],
     einzugsdatum: '',
-    umzug: {},
-    protokoll: {},          /* Übergabeprotokoll: Räume, Zähler, Mängel */
-    werkzeuge: {},          /* zuletzt eingegebene Werte der Rechner */
+    umzug: U.karte(),
+    protokoll: U.karte(),   /* Übergabeprotokoll: Räume, Zähler, Mängel */
+    werkzeuge: U.karte(),   /* zuletzt eingegebene Werte der Rechner */
     tarif: 'frei',
     tarifIntervall: 'monat',
     tarifSeit: '',
@@ -5492,29 +5530,54 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
     betreiber: {},          /* Angaben für Impressum, Datenschutz und AGB */
     theme: 'auto',
     ansicht: 'liste',
-    hinweiseGelesen: {},
+    hinweiseGelesen: U.karte(),
     zuletzt: U.isoDate(NW.now())
   });
 
   let state = null;
   const hoerer = [];
 
+  /* Welche Art ein Wert hat – Arrays sind in JavaScript auch Objekte, und
+     genau diese Verwechslung war der Fehler. */
+  const artVon = (v) => (v === null ? 'null' : Array.isArray(v) ? 'liste' : typeof v);
+
   function laden() {
     const gespeichert = U.loadStore();
     state = leer();
     if (gespeichert && gespeichert.version === 1) {
-      /* Nur bekannte Felder übernehmen, damit alte Stände nichts kaputt machen. */
+      /* Nur bekannte Felder übernehmen – und nur, wenn die Art stimmt.
+         Der Feldname allein reicht nicht: Stand irgendwo ein Objekt, wo
+         eine Liste erwartet wird, warf der erste Zugriff darauf, und die
+         Anwendung blieb weiß. Ein verworfenes Feld ist unangenehm, ein
+         weißer Bildschirm ist das Ende. */
       Object.keys(state).forEach((k) => {
-        if (gespeichert[k] !== undefined && k !== 'version') state[k] = gespeichert[k];
+        if (k === 'version' || gespeichert[k] === undefined) return;
+        if (artVon(gespeichert[k]) !== artVon(state[k])) return;
+        state[k] = gespeichert[k];
       });
       /* Profil und Filter gegen die aktuelle Vorlage auffüllen. */
-      state.profil = Object.assign({}, NW.data.profilVorlage, state.profil);
-      state.profil.gewichtung = Object.assign({}, NW.data.profilVorlage.gewichtung, state.profil.gewichtung);
-      state.profil.lifestyle = Object.assign({}, NW.data.profilVorlage.lifestyle, state.profil.lifestyle);
-      state.profil.unterlagen = Object.assign({}, NW.data.profilVorlage.unterlagen, state.profil.unterlagen);
-      state.filter = Object.assign(NW.analyse.leerFilter(), state.filter);
-      state.gruender = Object.assign({ nummer: 0, seit: '', bis: '' }, state.gruender);
+      const objekt = (v, vorlage) => (v && artVon(v) === 'object' ? v : vorlage);
+      state.profil = Object.assign({}, NW.data.profilVorlage, objekt(state.profil, {}));
+      state.profil.gewichtung = Object.assign({}, NW.data.profilVorlage.gewichtung, objekt(state.profil.gewichtung, {}));
+      state.profil.lifestyle = Object.assign({}, NW.data.profilVorlage.lifestyle, objekt(state.profil.lifestyle, {}));
+      state.profil.unterlagen = Object.assign({}, NW.data.profilVorlage.unterlagen, objekt(state.profil.unterlagen, {}));
+      state.filter = Object.assign(NW.analyse.leerFilter(), objekt(state.filter, {}));
+      state.gruender = Object.assign({ nummer: 0, seit: '', bis: '' }, objekt(state.gruender, {}));
+      state.betreiber = objekt(state.betreiber, {});
+      /* Listen dürfen nur enthalten, was auch ein Objekt ist. */
+      ['agenten', 'threads', 'eigeneInserate', 'vergleich', 'gesehen'].forEach((k) => {
+        if (!Array.isArray(state[k])) state[k] = [];
+      });
+      /* Aus JSON.parse kommen gewöhnliche Objekte zurück – die Karten
+         müssen ihren Prototyp wieder verlieren, sonst liefert ein Zugriff
+         mit „constructor“ als Kennung eine Funktion statt undefined. */
+      ['merkliste', 'umzug', 'protokoll', 'werkzeuge', 'hinweiseGelesen'].forEach((k) => {
+        state[k] = U.karte(artVon(state[k]) === 'object' ? state[k] : null);
+      });
     }
+    /* Eigene Inserate müssen im Nachschlagewerk stehen, sonst zeigt die
+       Merkliste auf Einträge, die es scheinbar nicht gibt. */
+    state.eigeneInserate.forEach((e) => { if (e && e.id) NW.data.byId[e.id] = e; });
     return state;
   }
 
@@ -5736,6 +5799,33 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
     }, 'inserate');
   }
 
+  /* Ersetzt ein eigenes Inserat, behält aber Kennung, Erstelldatum,
+     Hervorhebung und Statistik – sonst verlöre ein „Ändern“ die Merkungen
+     anderer und stellte die Uhr auf null. */
+  function inseratErsetzen(id, daten) {
+    const alt = state.eigeneInserate.find((x) => x.id === id);
+    if (!alt) return inseratAnlegen(daten);
+    const neu = Object.assign({}, daten, {
+      id, eigen: true, erstellt: alt.erstellt,
+      boost: alt.boost, stats: alt.stats,
+      geaendert: U.isoDate(NW.now())
+    });
+    const vorher = JSON.parse(JSON.stringify(state.eigeneInserate));
+    update((s) => {
+      s.eigeneInserate = s.eigeneInserate.map((x) => (x.id === id ? neu : x));
+      if (neu.kind === 'tausch') s.meinTausch = neu;
+      else if (s.meinTausch && s.meinTausch.id === id) s.meinTausch = null;
+    }, 'inserate');
+    if (!U.saveStore(state)) {
+      state.eigeneInserate = vorher;
+      U.saveStore(state);
+      melden('inserate');
+      throw new Error('Der Speicher reicht nicht.');
+    }
+    NW.data.byId[id] = neu;
+    return id;
+  }
+
   function inseratLoeschen(id) {
     update((s) => {
       s.eigeneInserate = s.eigeneInserate.filter((x) => x.id !== id);
@@ -5860,7 +5950,7 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
     inseratHervorheben,
     threadFuer, anschreiben, threadGelesen,
     terminBuchen, terminAbsagen, checkSetzen,
-    inseratAnlegen, inseratLoeschen, gesehenMerken,
+    inseratAnlegen, inseratErsetzen, inseratLoeschen, gesehenMerken,
     umzugsPlan, umzugSetzen, einzugsdatum, zuruecksetzen,
     nachfassFaellig, nachgefasst, protokollSetzen, werkzeugSetzen, werkzeugWerte
   };
@@ -8143,7 +8233,7 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
   const U = NW.util;
   const h = U.html, raw = U.raw, ico = U.svg;
 
-  const ui = { ansichten: {}, aktuell: null, params: {} };
+  const ui = { ansichten: Object.create(null), aktuell: null, params: {} };
   NW.ui = ui;
 
   /* ================================================================
@@ -8520,7 +8610,7 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
     const roh = location.hash.replace(/^#\/?/, '') || 'start';
     const [pfad, query] = roh.split('?');
     const teile = pfad.split('/').filter(Boolean);
-    const params = {};
+    const params = Object.create(null);
     if (query) query.split('&').forEach((p) => {
       const [k, v] = p.split('=');
       params[decodeURIComponent(k)] = decodeURIComponent(v || '');
@@ -10772,8 +10862,15 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
   function ansicht(route) {
     const l = NW.data.byId[route.arg];
     if (!l) {
-      return { titel: 'Nicht gefunden', html: h`<div class="leer">${ico('warnung')}<h2>Dieses Inserat gibt es nicht (mehr)</h2>
-        <p><a class="knopf" href="#/suche">Zur Suche</a></p></div>` };
+      /* Auch die Fehlseite braucht eine Hauptüberschrift: Wer mit einem
+         Screenreader auf einem toten Verweis landet, hört sonst nichts,
+         woran er sich orientieren kann. */
+      return { titel: 'Nicht gefunden', html: h`<div class="seite seite--schmal">
+        <header class="seite__kopf"><h1>${ico('warnung')}Nicht gefunden</h1></header>
+        <div class="leer">${ico('warnung')}<h2>Dieses Inserat gibt es nicht (mehr)</h2>
+          <p>Vielleicht ist der Verweis alt, oder das Inserat wurde zurückgezogen.</p>
+          <p><a class="knopf" href="#/suche">${ico('suche')}Zur Suche</a></p></div>
+      </div>` };
     }
     S.gesehenMerken(l.id);
     const s = S.get();
@@ -11560,6 +11657,13 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
     erklaerungZeichnen();
   });
 
+  /* Fehlte bisher ganz: Beide Knöpfe trugen data-tu="tausch-anlegen",
+     ohne dass es die Aktion gab – sie taten also nichts. */
+  A_('tausch-anlegen', () => {
+    const m = S.get().meinTausch;
+    ui.gehe(m ? 'inserieren?bearbeiten=' + encodeURIComponent(m.id) : 'inserieren?art=tausch');
+  });
+
   A_('tausch-weg', () => {
     const m = S.get().meinTausch;
     if (!m) return;
@@ -11620,7 +11724,7 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
         html: h`<div class="seite seite--schmal">
           <header class="seite__kopf"><h1>${ico('herz')}Merkliste</h1></header>
           <div class="leer">${ico('herz')}
-            <h3>Noch nichts gemerkt</h3>
+            <h2>Noch nichts gemerkt</h2>
             <p>Klick bei einem Inserat auf das Herz. Hier entsteht daraus eine Tafel, die deine Bewerbungen
               von „gemerkt“ bis „Zusage“ begleitet.</p>
             <p><a class="knopf" href="#/suche">${ico('suche')}Zur Suche</a></p></div>
@@ -11756,7 +11860,7 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
         html: h`<div class="seite seite--schmal">
           <header class="seite__kopf"><h1>${ico('waage')}Vergleich</h1></header>
           <div class="leer">${ico('waage')}
-            <h3>Noch nichts im Vergleich</h3>
+            <h2>Noch nichts im Vergleich</h2>
             <p>Bis zu ${S.maxVergleich()} Objekte lassen sich nebeneinanderstellen – mit echten Monatskosten,
               Vergleichsmiete und Passung in einer Tabelle.</p>
             <p><a class="knopf" href="#/suche">${ico('suche')}Objekte suchen</a></p></div>
@@ -11857,7 +11961,7 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
         html: h`<div class="seite seite--schmal">
           <header class="seite__kopf"><h1>${ico('glocke')}Suchaufträge</h1></header>
           <div class="leer">${ico('glocke')}
-            <h3>Kein Suchauftrag angelegt</h3>
+            <h2>Kein Suchauftrag angelegt</h2>
             <p>Stell in der Suche deine Filter ein und speichere sie. Nestwerk zeigt dir dann bei jedem Besuch,
               was seither neu dazugekommen ist – über alle vier Angebotsarten hinweg.</p>
             <p><a class="knopf" href="#/suche">${ico('suche')}Filter einstellen</a></p></div>
@@ -11989,7 +12093,7 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
         html: h`<div class="seite seite--schmal">
           <header class="seite__kopf"><h1>${ico('nachricht')}Nachrichten</h1></header>
           ${eigenesPostfach()}
-          <div class="leer">${ico('nachricht')}<h3>Noch kein eigener Verlauf</h3>
+          <div class="leer">${ico('nachricht')}<h2>Noch kein eigener Verlauf</h2>
             <p>Sobald du ein Inserat anschreibst, erscheint der Verlauf hier.</p>
             <p><a class="knopf" href="#/suche">${ico('suche')}Zur Suche</a></p></div></div>`
       };
@@ -12259,7 +12363,8 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
   A_('post-senden', (el) => {
     const feld = U.$('#post-text');
     const text = (feld.value || '').trim();
-    if (!text) return;
+    /* Stillschweigend nichts zu tun ist die schlechteste Rückmeldung. */
+    if (!text) { feld.focus(); ui.toast('Schreib erst etwas.', 'schlecht'); return; }
     const t = S.get().threads.find((x) => x.id === el.dataset.id);
     if (!t) return;
     S.update((s) => {
@@ -12621,6 +12726,65 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
 
   const bildGroesse = (b) => Math.round(b.datei.length * 0.75 / 1024) + ' kB';
 
+  /* Füllt die Maske aus einem bestehenden Inserat. Bewusst über die
+     Namen der Felder statt über eine zweite Tabelle: Wer ein Feld
+     hinzufügt, soll es nicht an zwei Stellen eintragen müssen. */
+  function vorbelegen(e) {
+    const setz = (name, wert) => {
+      const el = U.$('[name="' + name + '"]', U.$('#inserat-form'));
+      if (el && wert !== undefined && wert !== null && wert !== '') el.value = wert;
+    };
+    setz('viertelKey', e.viertelKey);
+    setz('strasse', e.strasse);
+    setz('zimmer', e.zimmer);
+    setz('flaeche', e.flaeche);
+    setz('etage', e.etage);
+    setz('etagen', e.etagen);
+    setz('baujahr', e.baujahr);
+    setz('heizung', e.energie && e.energie.heizung);
+    setz('kalt', e.kalt);
+    setz('nebenkosten', e.nebenkosten);
+    setz('heizkosten', e.heizkosten);
+    setz('kaution', e.kaution);
+    setz('freiAb', e.freiAb);
+    setz('freiAbKauf', e.freiAb);
+    setz('kaufpreis', e.kaufpreis);
+    setz('hausgeld', e.hausgeld);
+    setz('provision', e.provision);
+    setz('grundstueck', e.grundstueck);
+    setz('bauweise', e.bauweise);
+    setz('beschreibung', e.beschreibung);
+    if (e.grund) {
+      setz('gflaeche', e.grundstueck || e.flaeche);
+      setz('baulandArt', e.grund.baulandArt);
+      setz('bplan', e.grund.bplan);
+      setz('grz', e.grund.grz);
+      setz('gfz', e.grund.gfz);
+      setz('erschliessung', e.grund.erschliessung);
+    }
+    (e.ausstattung || []).forEach((a) => {
+      const el = U.$$('[name="ausstattung"]', U.$('#inserat-form')).find((x) => x.value === a);
+      if (el) el.checked = true;
+    });
+    if (e.tausch) {
+      setz('grund', e.tausch.grund);
+      setz('tZimmer', e.tausch.suche.zimmerMin);
+      setz('tFlaeche', e.tausch.suche.flaecheMin);
+      setz('tWarm', e.tausch.suche.warmMax);
+      (e.tausch.suche.staedte || []).forEach((c) => {
+        const el = U.$$('[name="wunschStadt"]', U.$('#inserat-form')).find((x) => x.value === c);
+        if (el) el.checked = true;
+      });
+      const ring = U.$('[name="ringOk"]', U.$('#inserat-form'));
+      if (ring) ring.checked = !!e.tausch.dreiecktauschOk;
+    }
+    /* Vorhandene Bilder übernehmen, damit sie beim Ändern nicht wegfallen. */
+    if (Array.isArray(e.bilder) && e.bilder.length && !neueBilder.length) {
+      neueBilder = e.bilder.slice();
+      bilderNeuZeichnen();
+    }
+  }
+
   function bilderBlock() {
     return h`<fieldset class="filter__gruppe bilder"><legend>Fotos</legend>
       <p class="fein">Inserate mit Fotos werden deutlich häufiger geöffnet. Bis zu ${BILD_MAX} Bilder,
@@ -12665,8 +12829,18 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
     </li>`)}`;
   }
 
-  function inserieren() {
+  function inserieren(route) {
     const s = S.get();
+    const params = (route && route.params) || {};
+    /* Bearbeiten heißt hier: dieselbe Maske, vorbelegt, und beim Speichern
+       ersetzt der neue Eintrag den alten. Ein Knopf „Ändern“, der ein
+       leeres Formular öffnet, ist schlimmer als gar keiner. */
+    const bearbeitet = params.bearbeiten
+      ? s.eigeneInserate.find((x) => x.id === params.bearbeiten) : null;
+    const vorgabeArt = bearbeitet
+      ? (ARTEN.find((a) => a.kind === bearbeitet.kind && a.type === bearbeitet.type)
+        || ARTEN.find((a) => a.kind === bearbeitet.kind) || ARTEN[0]).id
+      : (ARTEN.some((a) => a.id === params.art) ? params.art : ARTEN[0].id);
     return {
       titel: 'Inserieren',
       html: h`<div class="seite seite--schmal">
@@ -12701,12 +12875,17 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
         </section>` : ''}
 
         <form class="block" data-tu-submit="inserat-speichern" id="inserat-form">
-          <h2>Neues Inserat</h2>
+          <h2>${bearbeitet ? 'Inserat ändern' : 'Neues Inserat'}</h2>
+          ${bearbeitet ? h`<p class="block__unter">Die Felder sind mit deinem bisherigen Angebot vorbelegt.
+            Beim Speichern ersetzt der neue Stand den alten – die Kennung bleibt, Merkungen und Anfragen
+            gehen nicht verloren.</p>
+            <input type="hidden" name="bearbeitet" value="${bearbeitet.id}">` : ''}
 
           <fieldset class="filter__gruppe"><legend>Art des Angebots</legend>
             <div class="chips">
-              ${ARTEN.map((o, i) =>
-        h`<label class="chip chip--radio"><input type="radio" name="art" value="${o.id}" ${i === 0 ? 'checked' : ''}
+              ${ARTEN.map((o) =>
+        h`<label class="chip chip--radio"><input type="radio" name="art" value="${o.id}"
+                  ${o.id === vorgabeArt ? 'checked' : ''}
                   data-tu-change="inserat-art"> ${ico(o.icon)}${o.label}</label>`)}
             </div>
           </fieldset>
@@ -12844,7 +13023,10 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
       /* Die Feldgruppen richten sich nach der Art. Beim ersten Aufbau
          muss das einmal von Hand geschehen – danach erledigt es der
          Wechsel der Auswahl. */
-      danach() { gruppenZeigen((U.$('input[name="art"]:checked') || {}).value || 'miete'); }
+      danach() {
+        gruppenZeigen((U.$('input[name="art"]:checked') || {}).value || vorgabeArt);
+        if (bearbeitet) vorbelegen(bearbeitet);
+      }
     };
   }
 
@@ -13384,15 +13566,21 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
       };
     }
 
+    const alt = f.get('bearbeitet');
     let id;
     try {
-      id = S.inseratAnlegen(daten);
+      id = alt ? S.inseratErsetzen(alt, daten) : S.inseratAnlegen(daten);
     } catch (e) {
       /* Der Browserspeicher ist begrenzt; Bilder füllen ihn am schnellsten. */
       ui.toast('Der Speicher dieses Browsers ist voll. Entferne einige Bilder oder ältere Inserate.', 'schlecht');
       return;
     }
     neueBilder = [];
+    if (alt) {
+      ui.toast('Inserat geändert.', 'gut');
+      ui.gehe(kind === 'tausch' ? 'tausch' : 'objekt/' + id);
+      return;
+    }
     ui.toast(daten.bilder.length
       ? 'Inserat mit ' + daten.bilder.length + ' ' + U.plural(daten.bilder.length, 'Bild', 'Bildern') + ' angelegt.'
       : 'Inserat angelegt.', 'gut');
@@ -16601,10 +16789,10 @@ Datum: __________________
      Router innerhalb des Bereichs
      ================================================================ */
 
-  const UNTER = {
+  const UNTER = U.karte({
     impressum, datenschutz, agb, widerruf, melden, barrierefreiheit,
     kuendigen, angaben: angabenSeite
-  };
+  });
 
   ui.ansichten.recht = function (route) {
     const fn = UNTER[route.arg];
@@ -16783,7 +16971,7 @@ Datum: __________________
 
   function fensterMarkup() {
     return h`<button type="button" class="hilfe__knopf ${offen ? 'is-offen' : ''}" data-tu="hilfe-umschalten"
-        aria-expanded="${offen ? 'true' : 'false'}" aria-controls="hilfe-fenster">
+        aria-expanded="${offen ? 'true' : 'false'}"${offen ? ' aria-controls="hilfe-fenster"' : ''}>
         ${ico(offen ? 'x' : 'nachricht')}<span class="hilfe__knopfwort">Hilfe</span>
       </button>
       ${offen ? h`<section class="hilfe__fenster" id="hilfe-fenster" role="dialog"

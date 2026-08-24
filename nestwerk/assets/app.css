@@ -369,7 +369,15 @@ svg { display: block; }
 .feld > span { color: var(--text-leise); font-weight: 550; }
 .feld > span b { color: var(--text); }
 
-input[type="text"], input[type="search"], input[type="number"], input[type="date"], select, textarea {
+/* Umgekehrt aufgezählt: Bei einer Liste der erlaubten Arten fehlte
+   type="email", "password", "tel" und "time" – neun Felder in der
+   Anwendung standen als nackte Browservorgabe da, darunter die
+   Anmeldung und der Tresor. Ausgenommen wird jetzt nur, was eine
+   eigene Gestalt hat. */
+input:not([type="button"], [type="submit"], [type="reset"], [type="checkbox"],
+  [type="radio"], [type="range"], [type="file"], [type="hidden"],
+  [type="image"], [type="color"]),
+select, textarea {
   width: 100%; padding: .55em .7em;
   border: 1px solid var(--rand-feld); border-radius: var(--r-klein);
   background: var(--flaeche); color: var(--text);
@@ -464,15 +472,24 @@ input[type="range"] {
    mitten im Satz. Sonst zerreißt es Sätze wie „bis 900 € warm“. */
 .hinweisbox > div > b:first-child { display: block; }
 
+/* Kein Flexbereich: Der Satz in diesen Kästen enthält Verweise, und im
+   Flexbereich wird jedes Kind zu einem eigenen Kasten – „Trag im“,
+   „Profil“ und der Rest standen deshalb in drei getrennten Blöcken
+   untereinander. Als Absatz mit hängendem Einzug bleibt der Satz ein
+   Satz, und Folgezeilen stehen trotzdem unter dem Text statt unter dem
+   Zeichen. */
 .gut-meldung, .warn-meldung, .info-meldung {
-  display: flex; align-items: flex-start; gap: .5em; padding: .7em .9em; margin: 10px 0;
-  border-radius: var(--r-klein); font-size: .9rem;
+  display: block; padding: .7em .9em .7em 2.5em; text-indent: -1.6em;
+  margin: 10px 0; border-radius: var(--r-klein); font-size: .9rem;
+}
+.gut-meldung > .ico, .warn-meldung > .ico, .info-meldung > .ico {
+  display: inline-block; vertical-align: -.22em; margin-right: .45em;
 }
 .gut-meldung { background: var(--gut-hell); color: var(--gut); }
 .warn-meldung { background: var(--warn-hell); color: var(--warn); }
 .info-meldung { background: var(--info-hell); color: var(--info); }
 .gut-meldung a, .warn-meldung a, .info-meldung a { color: inherit; }
-.gut-meldung .ico, .warn-meldung .ico, .info-meldung .ico { margin-top: .16em; }
+
 
 .liste-schlicht { margin: .4em 0; padding-left: 1.2em; }
 .liste-schlicht li { margin-bottom: .25em; }
@@ -637,8 +654,10 @@ input[type="range"] {
 .filter__gruppe legend i { font-style: normal; font-weight: 400; color: var(--text-still); }
 .filter__gruppe > * + * { margin-top: 8px; }
 .filter__hinweis { font-size: .8rem; color: var(--text-still); margin: 8px 0 0; }
-.filter__hinweis--tipp { display: flex; gap: .5em; padding: .7em; background: var(--flaeche2); border-radius: var(--r-klein); }
-.filter__hinweis--tipp .ico { flex: none; color: var(--akzent); margin-top: .12em; }
+.filter__hinweis--tipp { display: block; padding: .7em .7em .7em 2.3em; text-indent: -1.6em;
+  background: var(--flaeche2); border-radius: var(--r-klein); }
+.filter__hinweis--tipp > .ico { display: inline-block; vertical-align: -.22em; margin-right: .45em;
+  color: var(--akzent); }
 .filter__fuss { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--rand); }
 
 .markt { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 10px 14px; margin-bottom: 12px;
@@ -1204,6 +1223,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .unten a .ico { width: 21px; height: 21px; }
   .unten a.is-aktiv { color: var(--akzent); background: var(--akzent-hell); }
   body { padding-bottom: 58px; }
+  body:not(.ist-angemeldet) { padding-bottom: 0; }
   .toasts { bottom: 76px; }
 }
 
@@ -1964,6 +1984,18 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .nur-angemeldet { display: none; }
 body.ist-angemeldet .nur-angemeldet { display: grid; }
 
+/* Ohne Anmeldung führt jeder Punkt der Navigation auf diese Seite zurück –
+   ein Menü, das nur zu sich selbst führt, ist eine Sackgasse. Sichtbar
+   bleibt, was ohne Konto trägt: Marke, Darstellung, Hilfefenster und die
+   Rechtstexte im Fußbereich. */
+body:not(.ist-angemeldet) .kopf__nav,
+body:not(.ist-angemeldet) .unten,
+body:not(.ist-angemeldet) .kopf__tun > :not([data-tu="theme"]) { display: none; }
+body:not(.ist-angemeldet) .kopf__innen { justify-content: space-between; }
+/* Dasselbe im Fußbereich: Die Rechtstexte und die Hilfe bleiben stehen,
+   die Verweise in die Anwendung verschwinden. */
+body:not(.ist-angemeldet) .nur-innen { display: none; }
+
 .anmeldung { min-height: calc(100vh - var(--kopf-hoehe)); display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 20px; padding: 5vh clamp(12px, 4vw, 24px) 24px; }
 .anmeldung__kasten { width: min(520px, 100%); padding: clamp(20px, 4vw, 32px);
@@ -2024,7 +2056,7 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
 .anmeldung__ehrlich { display: flex; gap: .6em; align-items: flex-start; margin-top: 18px;
   padding-top: 14px; border-top: 1px dashed var(--rand-stark); }
 .anmeldung__ehrlich > .ico { flex: none; color: var(--text-still); margin-top: .15em; }
-.anmeldung__ehrlich b { display: block; font-size: .87rem; }
+.anmeldung__ehrlich > div > b { display: block; font-size: .87rem; }
 .anmeldung__ehrlich p { margin: .2em 0 0; font-size: .82rem; line-height: 1.6; color: var(--text-leise); }
 
 .anmeldung__fuss { display: flex; flex-wrap: wrap; gap: .6em 1.2em; justify-content: center;

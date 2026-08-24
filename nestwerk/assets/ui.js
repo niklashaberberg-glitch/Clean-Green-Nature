@@ -577,10 +577,10 @@
       </p>
       <p class="fuss__links">
         <button type="button" class="link" data-tu="hilfe-oeffnen">Hilfe</button>
-        <a href="#/konto">Konto</a>
-        <a href="#/plus">Tarife</a>
-        <a href="#/werkzeuge">Werkzeuge</a>
-        <a href="#/tresor">Dokumententresor</a>
+        <a class="nur-innen" href="#/konto">Konto</a>
+        <a class="nur-innen" href="#/plus">Tarife</a>
+        <a class="nur-innen" href="#/werkzeuge">Werkzeuge</a>
+        <a class="nur-innen" href="#/tresor">Dokumententresor</a>
         <button type="button" class="link" data-tu="hilfe">Tastaturbefehle</button>
         <button type="button" class="link" data-tu="daten">Meine Daten</button>
       </p>

@@ -473,6 +473,21 @@
           <div><b>${a.antwortStd < 24 ? a.antwortStd + ' Std.' : Math.round(a.antwortStd / 24) + ' Tage'}</b><span>im Schnitt</span></div>
         </div>
       </div>
+      ${(() => {
+      const n = a.stufe === undefined ? (a.verifiziert ? 3 : 1) : a.stufe;
+      const st = NW.konto.stufe(n);
+      return h`<p class="anbieter__stufe ${n <= 1 ? 'is-schwach' : ''}">
+        ${ico(n <= 1 ? 'warnung' : 'schloss')}
+        <span><b>Vertrauensstufe ${n} – ${st.name}.</b> ${st.text}</span>
+      </p>
+      ${n <= 1 ? h`<div class="hinweisbox">${ico('warnung')}
+        <div><b>Über diese Seite ist wenig bekannt</b>
+        <p>Ein Konto ohne Gerätebindung und ohne bestätigte Nummer ist in Minuten angelegt – und nach einer
+          Sperre genauso schnell wieder. Das heißt nicht, dass hier etwas nicht stimmt; es heißt, dass die
+          üblichen Regeln besonders gelten: vor der Besichtigung nichts zahlen, keine Schufa und keine
+          Ausweiskopie in der ersten Anfrage, und auf einer Besichtigung in der Wohnung bestehen.</p></div>
+      </div>` : ''}`;
+    })()}
       <p class="fein">Antwortquote und Reaktionszeit stammen aus dem bisherigen Verhalten auf der Plattform.
         Unter 50 % lohnt sich eine zweite Option.</p>
     </section>`;

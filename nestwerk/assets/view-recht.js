@@ -237,7 +237,46 @@
             <dt>Empfänger</dt><dd>der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO</dd>
           </dl>
 
-          <h2>4. Speicher deines Browsers</h2>
+          <h2>4. Anmeldung und Konto</h2>
+          <p>Die Nutzung setzt eine Anmeldung voraus. Verarbeitet werden dabei Name (freiwillig),
+            E-Mail-Adresse, das gewählte Anmeldeverfahren, der Zeitpunkt der letzten Anmeldung und die
+            Vertrauensstufe.</p>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Bereitstellung des Zugangs, Zuordnung von Inseraten und Anfragen, Schutz vor
+              missbräuchlicher Mehrfachanlage</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags; für die
+              Missbrauchsabwehr zusätzlich Art. 6 Abs. 1 lit. f DSGVO</dd>
+            <dt>Speicherdauer</dt><dd>bis zur Löschung des Kontos; sie ist jederzeit ohne Angabe von Gründen
+              möglich</dd>
+          </dl>
+
+          <h3>Anmeldung über Google, Microsoft oder Apple</h3>
+          <p>Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei Nestwerk anmeldest.
+            An Nestwerk übermittelt werden Name, E-Mail-Adresse und die Angabe, ob sie bestätigt ist – nicht
+            dein dortiges Passwort und keine weiteren Inhalte deines Kontos. Es besteht kein Zugriff auf
+            Kontakte, Kalender, Dateien oder Postfach.</p>
+          <p>Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst:
+            Google Ireland Limited, Microsoft Ireland Operations Limited und Apple Distribution International
+            Limited, jeweils mit Sitz in Irland. Soweit dabei Daten in die Vereinigten Staaten übermittelt
+            werden, stützt sich das auf den Angemessenheitsbeschluss der Europäischen Kommission zum
+            EU-US Data Privacy Framework; die genannten Anbieter sind darunter zertifiziert.</p>
+          <p>Bei Apple lässt sich die eigene Adresse verbergen. Nestwerk erhält dann eine
+            Weiterleitungsadresse bei <code>privaterelay.appleid.com</code> und kennt die echte Adresse nicht.
+            Die Anwendung behandelt beide gleich.</p>
+
+          <h3>Passkey</h3>
+          <p>Beim Passkey entsteht das Schlüsselpaar im Sicherheitsbaustein deines Geräts. Der private
+            Schlüssel verlässt das Gerät nicht und ist für Nestwerk nicht lesbar; gespeichert wird nur die
+            Kennung des Schlüssels. Biometrische Merkmale – Gesicht, Fingerabdruck – werden weder übertragen
+            noch verarbeitet: Sie entsperren ausschließlich lokal das Gerät (Art. 9 DSGVO ist damit nicht
+            berührt).</p>
+
+          <h3>Bestätigung von Adresse und Telefonnummer</h3>
+          <p>Der Einmalcode dient allein der Bestätigung, dass du die angegebene Adresse abrufen kannst. Er
+            gilt ${NW.konto ? NW.konto.CODE_GUELTIG_MIN : 10} Minuten und wird danach verworfen. Eine
+            Telefonnummer wird nur verarbeitet, wenn du sie selbst zur Bestätigung angibst.</p>
+
+          <h2>5. Speicher deines Browsers</h2>
           <p>Nestwerk legt deine Eingaben im lokalen Speicher deines Browsers ab – Profil, Merkliste,
             Suchaufträge, Nachrichten, eigene Inserate und die Einstellungen zur Darstellung. Diese Daten
             verlassen dein Gerät nicht. Der Anbieter hat keinen Zugriff darauf.</p>
@@ -248,7 +287,7 @@
           <p>Du kannst diese Daten jederzeit im Fußbereich unter „Meine Daten“ als Datei sichern oder
             vollständig löschen. Sie verschwinden ebenfalls, wenn du die Browserdaten löschst.</p>
 
-          <h2>5. Dokumententresor</h2>
+          <h2>6. Dokumententresor</h2>
           <p>Legst du Unterlagen im Dokumententresor ab, werden sie <b>vor dem Speichern</b> in deinem Browser
             verschlüsselt – mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem Kennwort und wird
             nirgends gespeichert. Verschlüsselt werden auch die Dateinamen.</p>
@@ -265,7 +304,7 @@
           <p class="fein">In dieser Vorführfassung liegen auch die verschlüsselten Dateien ausschließlich in
             deinem Browser. Im Betrieb läge dort das Chiffrat und sonst nichts.</p>
 
-          <h2>6. Werbung im freien Tarif</h2>
+          <h2>7. Werbung im freien Tarif</h2>
           <p>Der freie Tarif wird über Anzeigen finanziert. Diese Anzeigen sind fest hinterlegt und werden
             nach der Stelle ausgewählt, an der sie erscheinen – nicht nach deiner Person, deinem Verhalten
             oder deinen Eingaben. Es findet kein Abgleich mit Werbenetzwerken statt, es werden keine Kennungen
@@ -274,7 +313,7 @@
           <p>Anzeigen sind stets als solche gekennzeichnet (§ 5a Abs. 4 des Gesetzes gegen den unlauteren
             Wettbewerb) und werden nie im Erscheinungsbild eines Inserats dargestellt.</p>
 
-          <h2>7. Kontaktaufnahme und Hilfe</h2>
+          <h2>8. Kontaktaufnahme und Hilfe</h2>
           <p>Schreibst du per E-Mail, verarbeitet der Anbieter die Angaben aus deiner Nachricht, um sie zu
             beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO bei vertragsbezogenen Anfragen, sonst
             Art. 6 Abs. 1 lit. f DSGVO. Die Nachrichten werden gelöscht, sobald die Anfrage abschließend
@@ -287,7 +326,7 @@
             die du selbst einträgst. Profil, Merkliste und die Inhalte des Dokumententresors sind nicht
             enthalten und werden auch nicht angehängt.</p>
 
-          <h2>8. Bezahlung von Nestwerk Plus</h2>
+          <h2>9. Bezahlung von Nestwerk Plus</h2>
           <p>Für bezahlte Verträge werden die zur Abwicklung nötigen Daten verarbeitet: Name, E-Mail-Adresse,
             Zahlungsdaten sowie Beginn und Laufzeit. Die Zahlung selbst wickelt ein Zahlungsdienstleister ab,
             an den die dafür erforderlichen Daten übermittelt werden.</p>
@@ -300,17 +339,19 @@
           <p class="fein">Solange Plus nur über einen Gründerplatz vergeben wird, fallen weder Zahlungsdaten
             noch Rechnungen an.</p>
 
-          <h2>9. Keine automatisierte Entscheidung über Personen</h2>
+          <h2>10. Keine automatisierte Entscheidung über Personen</h2>
           <p>Nestwerk bewertet Angebote, nicht Menschen. Die Passung, die Chancenschätzung und der Prüfhinweis
             beziehen sich auf Wohnungen und Inseratstexte und dienen deiner eigenen Einordnung. Eine
             automatisierte Entscheidung mit rechtlicher Wirkung gegenüber Personen im Sinne von Art. 22 DSGVO
             findet nicht statt.</p>
 
-          <h2>10. Übermittlung in Drittländer</h2>
-          <p>Eine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des
-            Europäischen Wirtschaftsraums findet nicht statt.</p>
+          <h2>11. Übermittlung in Drittländer</h2>
+          <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft oder Apple hinaus findet
+            keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des
+            Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit
+            E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus.</p>
 
-          <h2>11. Deine Rechte</h2>
+          <h2>12. Deine Rechte</h2>
           <ul class="pruef">
             <li>${ico('pruefen')}<span><b>Auskunft</b> darüber, welche Daten verarbeitet werden (Art. 15 DSGVO)</span></li>
             <li>${ico('pruefen')}<span><b>Berichtigung</b> unrichtiger Daten (Art. 16 DSGVO)</span></li>
@@ -326,17 +367,17 @@
           <p class="fein">Weil deine Eingaben ausschließlich in deinem Browser liegen, kannst du Auskunft,
             Übertragbarkeit und Löschung dort unmittelbar selbst ausüben: im Fußbereich unter „Meine Daten“.</p>
 
-          <h2>12. Beschwerderecht</h2>
+          <h2>13. Beschwerderecht</h2>
           <p>Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in
             dem Mitgliedstaat deines Aufenthaltsorts, deines Arbeitsplatzes oder des Orts des mutmaßlichen
             Verstoßes. Für den Anbieter zuständig ist ${rw('aufsichtsbehoerde', 'zuständige Aufsichtsbehörde')}.</p>
 
-          <h2>13. Pflicht zur Bereitstellung</h2>
+          <h2>14. Pflicht zur Bereitstellung</h2>
           <p>Du bist nicht verpflichtet, personenbezogene Daten bereitzustellen. Ohne die Angaben im Profil
             fallen allerdings die Funktionen weg, die darauf aufbauen – etwa die Passung oder die
             Chancenschätzung.</p>
 
-          <h2>14. Änderungen</h2>
+          <h2>15. Änderungen</h2>
           <p>Diese Erklärung gilt in der Fassung vom ${R.stand()}. Ändert sich die Anwendung, wird sie
             angepasst.</p>
         </div>
@@ -383,14 +424,25 @@
           <p>(4) Für Richtigkeit, Vollständigkeit und Aktualität von Angeboten, die Dritte einstellen, steht
             der Anbieter nicht ein.</p>
 
-          <h2>§ 3 Zustandekommen des Vertrags</h2>
-          <p>(1) Die Nutzung des freien Tarifs kommt mit dem Aufruf der Anwendung zustande und erfordert keine
-            Anmeldung.</p>
-          <p>(2) Ein Vertrag über Nestwerk Plus kommt zustande, wenn der Anbieter die Bestellung annimmt oder
+          <h2>§ 3 Anmeldung und Zustandekommen des Vertrags</h2>
+          <p>(1) Die Nutzung setzt eine Anmeldung voraus. Sie ist möglich mit einem Passkey, über ein Konto bei
+            Google, Microsoft oder Apple oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung
+            kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande.</p>
+          <p>(2) Die Anmeldung setzt die Zustimmung zu diesen Bedingungen und die Kenntnisnahme der
+            Datenschutzerklärung voraus. Beide sind vor der Anmeldung ohne Anmeldung abrufbar.</p>
+          <p>(3) Es besteht kein Anspruch auf Anmeldung. Der Anbieter kann sie ablehnen, insbesondere bei
+            begründetem Verdacht auf missbräuchliche Mehrfachanlage.</p>
+          <p>(4) Je Person ist ein Konto zulässig. Zugangsmittel dürfen nicht weitergegeben werden. Wer den
+            Verdacht hat, dass ein anderer Zugang zu seinem Konto hat, teilt das unverzüglich mit.</p>
+          <p>(5) Bestimmte Handlungen setzen eine Vertrauensstufe voraus – insbesondere das Einstellen von
+            Angeboten. Die Stufen und ihre Voraussetzungen sind in der Anwendung beschrieben.</p>
+          <p>(6) Das Konto kann jederzeit, ohne Angabe von Gründen und ohne Frist gelöscht werden. Damit endet
+            der unentgeltliche Nutzungsvertrag.</p>
+          <p>(7) Ein Vertrag über Nestwerk Plus kommt zustande, wenn der Anbieter die Bestellung annimmt oder
             die Leistung freischaltet. Vor der Bestellung werden die wesentlichen Merkmale, der Gesamtpreis,
             die Laufzeit und die Kündigungsbedingungen angezeigt. Die Schaltfläche, mit der die Bestellung
             abgeschlossen wird, ist mit „zahlungspflichtig bestellen“ beschriftet (§ 312j Abs. 3 BGB).</p>
-          <p>(3) Der Vertragstext wird nach Abschluss auf einem dauerhaften Datenträger bestätigt
+          <p>(8) Der Vertragstext wird nach Abschluss auf einem dauerhaften Datenträger bestätigt
             (§ 312f BGB). Vertragssprache ist Deutsch.</p>
 
           <h2>§ 4 Freier Tarif und Werbung</h2>

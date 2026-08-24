@@ -194,9 +194,16 @@
       seitTage = U.intBetween(r, 5, 2000);
       inserate = U.intBetween(r, 1, 3);
     }
+    /* Die Vertrauensstufe ist der eigentliche Betrugsfilter: Ein Konto
+       ohne Gerätebindung und ohne bestätigte Nummer ist in Minuten neu
+       angelegt, ein ausweisgeprüftes nicht. Gewerbliche Anbieter stehen
+       im Schnitt höher, weil sie sich ohnehin ausweisen müssen. */
+    const stufe = verifiziert
+      ? (art === 'privat' ? U.intBetween(r, 2, 3) : U.intBetween(r, 3, 4))
+      : U.intBetween(r, 0, 2);
     return {
       name, art, stadt: city,
-      quote, antwortStd: std, verifiziert,
+      quote, antwortStd: std, verifiziert, stufe,
       seit: dateOffset(-seitTage), inserate,
       bewertung: Math.round((3.1 + r() * 1.9) * 10) / 10,
       bewertungen: U.intBetween(r, 0, 140)
@@ -345,6 +352,7 @@
       fake = true;
       kalt = Math.round(kalt * U.between(r, 0.38, 0.55));
       anbieter.verifiziert = false;
+      anbieter.stufe = 0;
       anbieter.art = 'privat';
       anbieter.seit = dateOffset(-U.intBetween(r, 1, 12));
       anbieter.inserate = U.intBetween(r, 1, 2);

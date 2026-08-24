@@ -141,7 +141,13 @@
     const tage = U.daysSince(l.stats.online);
     if (tage <= 2) marken.push(badge('neu', 'gut'));
     if (l.kind === 'miete' && l.provision === 0) marken.push(badge('provisionsfrei', 'info'));
-    if (l.anbieter.verifiziert) marken.push(badge('geprüft', 'neutral', 'pruefen'));
+    /* Die Vertrauensstufe der anbietenden Seite gehört auf die Karte, nicht
+       nur auf die Objektseite: Wer sie erst nach dem Klick sieht, hat schon
+       Zeit verloren. Unter Stufe 2 wird gewarnt statt geschwiegen. */
+    const st = NW.konto ? (l.anbieter.stufe === undefined ? (l.anbieter.verifiziert ? 3 : 1) : l.anbieter.stufe) : null;
+    if (st !== null && st <= 1) marken.push(badge('Anbieter ungeprüft', 'warn', 'warnung'));
+    else if (st !== null && st >= 4) marken.push(badge('Ausweis geprüft', 'gut', 'pruefen'));
+    else if (l.anbieter.verifiziert) marken.push(badge('geprüft', 'neutral', 'pruefen'));
     if (b && b.risiko.stufe === 'warnung') marken.push(badge('Prüfhinweis', 'schlecht', 'warnung'));
     else if (b && b.risiko.stufe === 'achtung') marken.push(badge('genau lesen', 'warn', 'warnung'));
     if (b && b.mietCheck && b.mietCheck.diff <= -12) marken.push(badge(b.mietCheck.diff + ' % zum Spiegel', 'gut'));
@@ -406,19 +412,29 @@
        Dialog stehen blieb. Bei einem echten Routenwechsel schließt er. */
     if (!erzwingen) dialogZu();
 
-    const ansicht = ui.ansichten[r.name] || ui.ansichten.start;
-    ui.aktuell = r.name;
+    /* Die Anmeldesperre. Was ohne Anmeldung erreichbar bleiben muss:
+       Impressum, Datenschutzerklärung und AGB, weil § 5 DDG „ständig
+       verfügbar“ verlangt und hinter einer Anmeldung nichts ständig
+       verfügbar ist – dazu Widerruf, Meldeweg und die Hilfe. Wer nicht
+       hereinkommt, braucht die Hilfe am dringendsten. */
+    const OHNE_ANMELDUNG = ['anmelden', 'recht', 'hilfe', 'freigabe'];
+    const gesperrt = NW.konto && !NW.konto.angemeldet() && OHNE_ANMELDUNG.indexOf(r.name) < 0;
+    const name = gesperrt ? 'anmelden' : r.name;
+
+    const ansicht = ui.ansichten[name] || ui.ansichten.start;
+    ui.aktuell = name;
     ui.params = r;
+    document.body.classList.toggle('ist-angemeldet', !(NW.konto && !NW.konto.angemeldet()));
 
     const haupt = U.$('#haupt');
     const ergebnis = ansicht(r) || {};
     document.title = (ergebnis.titel ? ergebnis.titel + ' – ' : '') + 'Nestwerk';
     haupt.innerHTML = ergebnis.html || '';
-    haupt.dataset.ansicht = r.name;
+    haupt.dataset.ansicht = name;
 
     U.$$('[data-route]').forEach((a) => {
-      a.classList.toggle('is-aktiv', a.dataset.route === r.name);
-      if (a.dataset.route === r.name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+      a.classList.toggle('is-aktiv', a.dataset.route === name);
+      if (a.dataset.route === name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
 
     if (ergebnis.danach) ergebnis.danach(haupt);
@@ -533,6 +549,7 @@
             title="${NW.plan.istPlus() ? 'Nestwerk Plus aktiv' : 'Tarife ansehen'}">
             ${NW.plan.istPlus() ? raw(ico('plus5').__raw + '<span>Plus</span>') : raw('<span>Plus entdecken</span>')}</a>
           <a class="knopf knopf--klein nur-breit" href="#/inserieren">${ico('plus')}<span>Inserieren</span></a>
+          <a class="ikon-btn nur-angemeldet" href="#/konto" title="Konto" aria-label="Konto">${ico('person')}</a>
         </div>
       </div>
     </header>
@@ -560,6 +577,7 @@
       </p>
       <p class="fuss__links">
         <button type="button" class="link" data-tu="hilfe-oeffnen">Hilfe</button>
+        <a href="#/konto">Konto</a>
         <a href="#/plus">Tarife</a>
         <a href="#/werkzeuge">Werkzeuge</a>
         <a href="#/tresor">Dokumententresor</a>
@@ -710,7 +728,8 @@
         { route: 'recht/agb', label: 'AGB', icon: 'blatt' },
         { route: 'recht/widerruf', label: 'Widerruf', icon: 'zurueck' },
         { route: 'recht/kuendigen', label: 'Verträge kündigen', icon: 'x' },
-        { route: 'hilfe', label: 'Hilfe und häufige Fragen', icon: 'nachricht' }
+        { route: 'hilfe', label: 'Hilfe und häufige Fragen', icon: 'nachricht' },
+        { route: 'konto', label: 'Konto und Vertrauensstufe', icon: 'person' }
       ]).forEach((nav) => {
         if (!n || U.norm(nav.label).indexOf(n) >= 0) out.push({ art: 'bereich', label: nav.label, icon: nav.icon, ziel: nav.route });
       });
@@ -946,6 +965,7 @@
 
   function start() {
     NW.store.laden();
+    if (NW.konto) NW.konto.laden();
 
     /* Die App bekommt einen eigenen Wurzelknoten und rührt den Rest des
        Dokuments nicht an. In der Einzeldatei stehen Stil und Skript im
@@ -1005,6 +1025,20 @@
     });
 
     window.addEventListener('hashchange', () => zeichnen());
+
+    /* Endet die Sitzung – hier, oder in einem zweiten Fenster desselben
+       Browsers –, muss die Oberfläche sofort zusperren. Eine Anwendung,
+       die nach dem Abmelden noch offensteht, hat nicht abgemeldet. */
+    if (NW.konto) {
+      NW.konto.on((k, grund) => {
+        if (grund === 'abmeldung' || grund === 'anmeldung') neuZeichnen();
+      });
+      window.addEventListener('storage', (e) => {
+        if (e.key !== 'nestwerk.konto.v1') return;
+        NW.konto.laden();
+        neuZeichnen();
+      });
+    }
     if (!location.hash) location.hash = '#/start';
     zeichnen(true);
   }

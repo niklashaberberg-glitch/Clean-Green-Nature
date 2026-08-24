@@ -406,16 +406,37 @@
     /* ---------------- Anwendung ---------------- */
     {
       id: 'konto',
-      titel: 'Wie lege ich ein Konto an?',
+      titel: 'Wie melde ich mich an?',
       gruppe: 'Anwendung',
-      fragen: ['registrieren', 'konto anlegen', 'anmelden', 'passwort vergessen', 'login'],
+      fragen: ['registrieren', 'konto anlegen', 'anmelden', 'passwort vergessen', 'login',
+        'was ist ein passkey', 'anmeldung mit google'],
       schlag: ['konto', 'passwort', 'kennwort', 'account', 'registrier', 'anmeld', 'einlogg', 'login', 'zugang'],
       muster: [/(passwort|kennwort|zugang).{0,20}(vergess|verlor|zuruecksetz|aendern)/],
-      antwort: 'Gar nicht – es gibt kein Konto. Nestwerk läuft vollständig in deinem Browser, und alles, was '
-        + 'du eingibst, bleibt dort. Kein Passwort, keine Bestätigungsmail, keine Anmeldung.\n\n'
-        + 'Die Kehrseite: Auf einem anderen Gerät ist nichts davon da. Unter „Meine Daten“ im Fußbereich '
-        + 'kannst du deinen Stand als Datei sichern.',
-      ziele: [['Profil ausfüllen', 'profil']]
+      antwort: 'Über einen der vier Wege auf der Startseite: <b>Passkey</b> (Face ID, Windows Hello oder '
+        + 'Fingerabdruck), Google, Microsoft, Apple – oder mit deiner E-Mail-Adresse und einem Einmalcode.\n\n'
+        + 'Ein Passwort gibt es in keinem der Wege. Beim Passkey entsteht der Schlüssel im Sicherheitschip '
+        + 'deines Geräts und verlässt ihn nie; beim E-Mail-Weg bekommst du einen Code, der zehn Minuten gilt. '
+        + 'Es gibt also nichts zu vergessen und nichts, was jemand abfischen könnte.\n\n'
+        + 'Vergisst du, mit welchem Weg du dich angemeldet hast: Der E-Mail-Weg funktioniert immer, solange '
+        + 'du die Adresse abrufen kannst.',
+      ziele: [['Konto ansehen', 'konto'], ['Profil ausfüllen', 'profil']]
+    },
+    {
+      id: 'stufen',
+      titel: 'Was bedeutet die Vertrauensstufe?',
+      gruppe: 'Schutz',
+      fragen: ['vertrauensstufe', 'was heisst anbieter ungeprueft', 'ausweis geprueft',
+        'wie erhoehe ich meine stufe'],
+      schlag: ['vertrauensstuf', 'stufe', 'ungeprueft', 'geprueft', 'verifizier', 'identitaet'],
+      antwort: 'Fünf Stufen, von 0 bis 4: nichts bestätigt, E-Mail bestätigt, Gerät oder Anbieterkonto '
+        + 'bestätigt, Telefonnummer bestätigt, Ausweis geprüft.\n\n'
+        + 'Sie steht an jedem Inserat, weil dort der Nutzen liegt: Ein Konto auf Stufe 0 oder 1 ist in Minuten '
+        + 'angelegt – und nach einer Sperre genauso schnell wieder. Das heißt nicht, dass etwas nicht stimmt; '
+        + 'es heißt, dass die üblichen Regeln besonders gelten.\n\n'
+        + 'Die eigene Stufe hebst du unter „Konto“: Passkey hinterlegen bringt Stufe 2, eine bestätigte '
+        + 'Telefonnummer Stufe 3, eine Ausweisprüfung Stufe 4. <b>Für das Suchen brauchst du keine hohe '
+        + 'Stufe</b> – sie zählt vor allem, wenn du selbst inserierst.',
+      ziele: [['Zum Konto', 'konto'], ['Inhalt melden', 'recht/melden']]
     },
     {
       id: 'daten-weg',
@@ -423,9 +444,10 @@
       gruppe: 'Anwendung',
       fragen: ['daten weg', 'merkliste leer', 'alles verschwunden', 'anderes geraet'],
       schlag: ['weg', 'verschwund', 'verlor', 'leer', 'geraet', 'wiederherstell', 'sicherung'],
-      antwort: 'Alles liegt im Speicher dieses Browsers. Es verschwindet, wenn die Browserdaten gelöscht '
-        + 'werden, im privaten Modus beim Schließen des Fensters – und es ist auf einem anderen Gerät oder in '
-        + 'einem anderen Browser von vornherein nicht da.\n\n'
+      antwort: 'Alles liegt im Speicher dieses Browsers – auch die Anmeldung. Es verschwindet, wenn die '
+        + 'Browserdaten gelöscht werden, im privaten Modus beim Schließen des Fensters – und es ist auf einem '
+        + 'anderen Gerät oder in einem anderen Browser von vornherein nicht da. Dort meldest du dich neu an; '
+        + 'Merkliste und Profil wandern deshalb nicht mit.\n\n'
         + 'Vorbeugen lässt sich das unter „Meine Daten“ im Fußbereich: Dort sicherst du den Stand als Datei.\n\n'
         + 'Der Dokumententresor liegt getrennt davon und wird dabei bewusst nicht mitgesichert – '
         + 'verschlüsselte Dateien in eine Klartextdatei zu exportieren wäre das Gegenteil dessen, wofür er da ist.',

@@ -1162,6 +1162,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .marke__text { display: none; }
   .kopf__tun { gap: 2px; }
   .kopf__tun .ikon-btn { width: 36px; height: 36px; }
+  /* Auf 320 Pixeln passt die rechte Gruppe sonst nicht. Das Konto bleibt
+     über Profil, Fußbereich und Schnellsuche erreichbar. */
+  body.ist-angemeldet .kopf__tun .nur-angemeldet { display: none; }
 }
 
 @media (max-width: 1180px) {
@@ -1955,6 +1958,105 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .hilfe__knopfwort { display: none; }
   .hilfe__knopf { padding: .7em; }
 }
+
+/* =====================================================================
+   Anmeldung und Konto
+   ===================================================================== */
+
+.nur-angemeldet { display: none; }
+body.ist-angemeldet .nur-angemeldet { display: grid; }
+
+.anmeldung { min-height: calc(100vh - var(--kopf-hoehe)); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px; padding: 5vh clamp(12px, 4vw, 24px) 24px; }
+.anmeldung__kasten { width: min(520px, 100%); padding: clamp(20px, 4vw, 32px);
+  border: 1px solid var(--rand); border-radius: var(--r-gross); background: var(--flaeche);
+  box-shadow: var(--schatten); }
+.anmeldung__kopf { text-align: center; margin-bottom: 20px; }
+.anmeldung__logo { display: inline-grid; place-items: center; width: 52px; height: 52px; margin-bottom: 10px;
+  border-radius: var(--r); background: var(--akzent-hell); color: var(--akzent); }
+.anmeldung__logo .ico { width: 28px; height: 28px; }
+.anmeldung__kopf h1 { margin: 0 0 .3em; font-size: 1.45rem; letter-spacing: -.02em; }
+.anmeldung__kopf p { margin: 0; font-size: .9rem; line-height: 1.6; color: var(--text-leise); }
+
+.anmeldung__wege { display: grid; gap: 8px; }
+.anmeldung__wege--eng { margin-top: 14px; }
+.anmeldung__weg { display: flex; align-items: center; gap: .8em; width: 100%; padding: .8em .9em;
+  border: 1px solid var(--rand-feld); border-radius: var(--r); background: var(--flaeche);
+  font: inherit; color: var(--text); text-align: left; cursor: pointer;
+  transition: border-color var(--tempo), background var(--tempo); }
+.anmeldung__weg:hover:not([disabled]) { border-color: var(--akzent); background: var(--flaeche2); }
+.anmeldung__weg[disabled] { opacity: .55; cursor: not-allowed; }
+.anmeldung__weg.is-empfohlen { border-color: var(--akzent); border-width: 2px; }
+.anmeldung__zeichen { flex: none; display: grid; place-items: center; width: 34px; height: 34px;
+  border-radius: var(--r-klein); background: var(--flaeche2); }
+.anmeldung__zeichen .ico { width: 19px; height: 19px; }
+.anmeldung__wort { flex: 1 1 auto; min-width: 0; }
+.anmeldung__wort b { display: block; font-size: .95rem; }
+.anmeldung__wort i { display: block; margin-top: .1em; font-style: normal; font-size: .8rem;
+  color: var(--text-leise); line-height: 1.45; }
+.anmeldung__marke { flex: none; padding: .2em .6em; border-radius: 999px;
+  background: var(--akzent-hell); color: var(--akzent); font-size: .7rem; font-weight: 700; }
+.anmeldung__nachbau { flex: none; padding: .2em .55em; border-radius: 999px;
+  background: var(--warn-hell); color: var(--warn); font-size: .68rem; font-weight: 600; white-space: nowrap; }
+
+.anmeldung__form { display: grid; gap: 12px; }
+.anmeldung__form .werkzeug__weiter { margin: 0; }
+.anmeldung__agb { align-items: flex-start; font-size: .84rem; line-height: 1.55; }
+.anmeldung__zustimmung { padding: 14px; border: 1px solid var(--rand); border-radius: var(--r);
+  background: var(--flaeche2); display: grid; gap: 10px; }
+.anmeldung__zustimmungKopf { display: flex; align-items: center; gap: .6em; margin: 0; font-size: .95rem; }
+
+.anmeldung__demo { display: flex; gap: .6em; align-items: flex-start; padding: .8em .9em;
+  border: 1px dashed var(--warn); border-radius: var(--r-klein); background: var(--warn-hell); }
+.anmeldung__demo > .ico { flex: none; color: var(--warn); margin-top: .15em; }
+.anmeldung__demo b { display: block; font-size: .87rem; }
+.anmeldung__demo p { margin: .2em 0 0; font-size: .82rem; line-height: 1.55; color: var(--text-leise); }
+.anmeldung__code { display: inline-block; margin-top: .5em; padding: .25em .7em; border-radius: var(--r-klein);
+  background: var(--flaeche); font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 1.35rem; font-weight: 700; letter-spacing: .22em; }
+
+.anmeldung__warum { margin-top: 14px; border: 1px solid var(--rand); border-radius: var(--r-klein);
+  background: var(--flaeche2); }
+.anmeldung__warum > summary { display: flex; align-items: center; gap: .5em; padding: .7em .9em;
+  cursor: pointer; font-size: .86rem; font-weight: 600; list-style: none; }
+.anmeldung__warum > summary::-webkit-details-marker { display: none; }
+.anmeldung__warum > summary .ico { color: var(--akzent); }
+.anmeldung__warum p { margin: 0 .9em .8em; font-size: .84rem; line-height: 1.6; color: var(--text-leise); }
+
+.anmeldung__ehrlich { display: flex; gap: .6em; align-items: flex-start; margin-top: 18px;
+  padding-top: 14px; border-top: 1px dashed var(--rand-stark); }
+.anmeldung__ehrlich > .ico { flex: none; color: var(--text-still); margin-top: .15em; }
+.anmeldung__ehrlich b { display: block; font-size: .87rem; }
+.anmeldung__ehrlich p { margin: .2em 0 0; font-size: .82rem; line-height: 1.6; color: var(--text-leise); }
+
+.anmeldung__fuss { display: flex; flex-wrap: wrap; gap: .6em 1.2em; justify-content: center;
+  font-size: .82rem; }
+.anmeldung__fuss a { color: var(--text-leise); }
+.anmeldung__fuss a:hover { color: var(--akzent); }
+
+/* Vertrauensstufen */
+.stufen { list-style: none; margin: 14px 0; padding: 0; display: grid; gap: 6px; }
+.stufen li { display: flex; gap: .8em; align-items: flex-start; padding: .7em .85em;
+  border: 1px solid var(--rand); border-radius: var(--r-klein); background: var(--flaeche2); opacity: .62; }
+.stufen li.is-erreicht { opacity: 1; background: var(--flaeche); }
+.stufen li.is-jetzt { border-color: var(--akzent); border-width: 2px; background: var(--akzent-hell); }
+.stufen__n { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--flaeche3); color: var(--text-leise); font-size: .82rem; font-weight: 700; }
+.stufen li.is-erreicht .stufen__n { background: var(--akzent); color: var(--auf-akzent); }
+.stufen li > div { flex: 1 1 auto; min-width: 0; }
+.stufen b { display: block; font-size: .89rem; }
+.stufen i { display: block; margin-top: .12em; font-style: normal; font-size: .8rem;
+  color: var(--text-leise); line-height: 1.5; }
+.stufen__marke { flex: none; padding: .18em .55em; border-radius: 999px; background: var(--akzent);
+  color: var(--auf-akzent); font-size: .68rem; font-weight: 700; white-space: nowrap; }
+
+.anbieter__stufe { display: flex; gap: .55em; align-items: flex-start; margin: 12px 0 0;
+  padding: .7em .85em; border-radius: var(--r-klein); background: var(--flaeche2);
+  font-size: .85rem; line-height: 1.6; color: var(--text-leise); }
+.anbieter__stufe > .ico { flex: none; margin-top: .15em; color: var(--akzent); }
+.anbieter__stufe b { color: var(--text); }
+.anbieter__stufe.is-schwach { background: var(--warn-hell); }
+.anbieter__stufe.is-schwach > .ico { color: var(--warn); }
 
 </style>
 <noscript>
@@ -3222,9 +3324,16 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       seitTage = U.intBetween(r, 5, 2000);
       inserate = U.intBetween(r, 1, 3);
     }
+    /* Die Vertrauensstufe ist der eigentliche Betrugsfilter: Ein Konto
+       ohne Gerätebindung und ohne bestätigte Nummer ist in Minuten neu
+       angelegt, ein ausweisgeprüftes nicht. Gewerbliche Anbieter stehen
+       im Schnitt höher, weil sie sich ohnehin ausweisen müssen. */
+    const stufe = verifiziert
+      ? (art === 'privat' ? U.intBetween(r, 2, 3) : U.intBetween(r, 3, 4))
+      : U.intBetween(r, 0, 2);
     return {
       name, art, stadt: city,
-      quote, antwortStd: std, verifiziert,
+      quote, antwortStd: std, verifiziert, stufe,
       seit: dateOffset(-seitTage), inserate,
       bewertung: Math.round((3.1 + r() * 1.9) * 10) / 10,
       bewertungen: U.intBetween(r, 0, 140)
@@ -3373,6 +3482,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       fake = true;
       kalt = Math.round(kalt * U.between(r, 0.38, 0.55));
       anbieter.verifiziert = false;
+      anbieter.stufe = 0;
       anbieter.art = 'privat';
       anbieter.seit = dateOffset(-U.intBetween(r, 1, 12));
       anbieter.inserate = U.intBetween(r, 1, 2);
@@ -7136,16 +7246,37 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     /* ---------------- Anwendung ---------------- */
     {
       id: 'konto',
-      titel: 'Wie lege ich ein Konto an?',
+      titel: 'Wie melde ich mich an?',
       gruppe: 'Anwendung',
-      fragen: ['registrieren', 'konto anlegen', 'anmelden', 'passwort vergessen', 'login'],
+      fragen: ['registrieren', 'konto anlegen', 'anmelden', 'passwort vergessen', 'login',
+        'was ist ein passkey', 'anmeldung mit google'],
       schlag: ['konto', 'passwort', 'kennwort', 'account', 'registrier', 'anmeld', 'einlogg', 'login', 'zugang'],
       muster: [/(passwort|kennwort|zugang).{0,20}(vergess|verlor|zuruecksetz|aendern)/],
-      antwort: 'Gar nicht – es gibt kein Konto. Nestwerk läuft vollständig in deinem Browser, und alles, was '
-        + 'du eingibst, bleibt dort. Kein Passwort, keine Bestätigungsmail, keine Anmeldung.\n\n'
-        + 'Die Kehrseite: Auf einem anderen Gerät ist nichts davon da. Unter „Meine Daten“ im Fußbereich '
-        + 'kannst du deinen Stand als Datei sichern.',
-      ziele: [['Profil ausfüllen', 'profil']]
+      antwort: 'Über einen der vier Wege auf der Startseite: <b>Passkey</b> (Face ID, Windows Hello oder '
+        + 'Fingerabdruck), Google, Microsoft, Apple – oder mit deiner E-Mail-Adresse und einem Einmalcode.\n\n'
+        + 'Ein Passwort gibt es in keinem der Wege. Beim Passkey entsteht der Schlüssel im Sicherheitschip '
+        + 'deines Geräts und verlässt ihn nie; beim E-Mail-Weg bekommst du einen Code, der zehn Minuten gilt. '
+        + 'Es gibt also nichts zu vergessen und nichts, was jemand abfischen könnte.\n\n'
+        + 'Vergisst du, mit welchem Weg du dich angemeldet hast: Der E-Mail-Weg funktioniert immer, solange '
+        + 'du die Adresse abrufen kannst.',
+      ziele: [['Konto ansehen', 'konto'], ['Profil ausfüllen', 'profil']]
+    },
+    {
+      id: 'stufen',
+      titel: 'Was bedeutet die Vertrauensstufe?',
+      gruppe: 'Schutz',
+      fragen: ['vertrauensstufe', 'was heisst anbieter ungeprueft', 'ausweis geprueft',
+        'wie erhoehe ich meine stufe'],
+      schlag: ['vertrauensstuf', 'stufe', 'ungeprueft', 'geprueft', 'verifizier', 'identitaet'],
+      antwort: 'Fünf Stufen, von 0 bis 4: nichts bestätigt, E-Mail bestätigt, Gerät oder Anbieterkonto '
+        + 'bestätigt, Telefonnummer bestätigt, Ausweis geprüft.\n\n'
+        + 'Sie steht an jedem Inserat, weil dort der Nutzen liegt: Ein Konto auf Stufe 0 oder 1 ist in Minuten '
+        + 'angelegt – und nach einer Sperre genauso schnell wieder. Das heißt nicht, dass etwas nicht stimmt; '
+        + 'es heißt, dass die üblichen Regeln besonders gelten.\n\n'
+        + 'Die eigene Stufe hebst du unter „Konto“: Passkey hinterlegen bringt Stufe 2, eine bestätigte '
+        + 'Telefonnummer Stufe 3, eine Ausweisprüfung Stufe 4. <b>Für das Suchen brauchst du keine hohe '
+        + 'Stufe</b> – sie zählt vor allem, wenn du selbst inserierst.',
+      ziele: [['Zum Konto', 'konto'], ['Inhalt melden', 'recht/melden']]
     },
     {
       id: 'daten-weg',
@@ -7153,9 +7284,10 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       gruppe: 'Anwendung',
       fragen: ['daten weg', 'merkliste leer', 'alles verschwunden', 'anderes geraet'],
       schlag: ['weg', 'verschwund', 'verlor', 'leer', 'geraet', 'wiederherstell', 'sicherung'],
-      antwort: 'Alles liegt im Speicher dieses Browsers. Es verschwindet, wenn die Browserdaten gelöscht '
-        + 'werden, im privaten Modus beim Schließen des Fensters – und es ist auf einem anderen Gerät oder in '
-        + 'einem anderen Browser von vornherein nicht da.\n\n'
+      antwort: 'Alles liegt im Speicher dieses Browsers – auch die Anmeldung. Es verschwindet, wenn die '
+        + 'Browserdaten gelöscht werden, im privaten Modus beim Schließen des Fensters – und es ist auf einem '
+        + 'anderen Gerät oder in einem anderen Browser von vornherein nicht da. Dort meldest du dich neu an; '
+        + 'Merkliste und Profil wandern deshalb nicht mit.\n\n'
         + 'Vorbeugen lässt sich das unter „Meine Daten“ im Fußbereich: Dort sicherst du den Stand als Datei.\n\n'
         + 'Der Dokumententresor liegt getrennt davon und wird dabei bewusst nicht mitgesichert – '
         + 'verschlüsselte Dateien in eine Klartextdatei zu exportieren wäre das Gegenteil dessen, wofür er da ist.',
@@ -7269,6 +7401,394 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   NW.hilfe = {
     THEMEN, MINDEST,
     normalisieren, woerter, wortFormen, bewerten, antworten, thema, text, einstieg, GRUPPEN
+  };
+})(window.NW = window.NW || {});
+
+/* ===== konto.js ===== */
+/* =====================================================================
+   Nestwerk – Anmeldung und Konto
+
+   Was hier echt ist und was nicht, gehört an den Anfang:
+
+   ECHT ist der Passkey. `navigator.credentials` spricht mit dem
+   Betriebssystem, und Face ID, Windows Hello oder der Fingerabdruck
+   laufen wirklich – der Schlüssel entsteht im Sicherheitschip des Geräts
+   und verlässt ihn nie. Das ist zugleich das einzige Verfahren hier, das
+   gegen die häufigste Betrugsform überhaupt schützt: Wer sich eine
+   Nestwerk-Seite nachbaut und Zugangsdaten abfischt, bekommt mit einem
+   Passkey nichts, weil der Schlüssel an die Domain gebunden ist.
+
+   ECHT ist auch die Prüfung der Eingaben, der Einmalcode als Verfahren,
+   die Ablauffrist, die Sperre nach zu vielen Fehlversuchen und die
+   Vertrauensstufen.
+
+   NICHT ECHT sein kann ohne Server: das Versenden der Bestätigungsmail
+   (es gibt niemanden, der sie verschickt – der Code steht deshalb in
+   dieser Vorführung auf dem Bildschirm) und der Rückkanal zu Google,
+   Microsoft und Apple. Deren Verfahren braucht zwingend eine Serverseite,
+   die das Geheimnis hält und das zurückgegebene Token prüft; ein reiner
+   Browser kann das nicht, und wer behauptet, er könne es, hat es falsch
+   gebaut. Was diese Anwendung deshalb tut: den Ablauf vollständig
+   nachbilden, an jeder Stelle sagen, dass er nachgebildet ist, und in
+   ANBIETER genau aufschreiben, was im Betrieb einzutragen ist.
+
+   Und eine Einordnung, die zur Sache gehört: Eine Anmeldepflicht hält
+   keinen Betrüger auf. Ein Google-Konto ist in zwei Minuten angelegt.
+   Was wirklich wirkt, ist die Stufe darüber – Gerätebindung, bestätigte
+   Telefonnummer, geprüfter Ausweis – und dass man sieht, welche Stufe
+   das Gegenüber hat. Deshalb gibt es hier STUFEN, und deshalb hängen die
+   Kennzeichen an Inseraten daran.
+   ===================================================================== */
+(function (NW) {
+  'use strict';
+
+  const U = NW.util;
+
+  const SPEICHER = 'nestwerk.konto.v1';
+  const CODE_GUELTIG_MIN = 10;
+  const CODE_VERSUCHE = 5;
+  const SPERRE_MIN = 15;
+
+  /* ------------------------- Anbieter -------------------------
+
+     Was im Betrieb je Anbieter zu hinterlegen ist, steht hier – nicht in
+     einer Anleitung, die niemand findet. `einrichtung` erscheint in der
+     Anwendung an der Stelle, an der jemand den Knopf drückt. */
+
+  const ANBIETER = [
+    {
+      id: 'passkey',
+      name: 'Mit Passkey',
+      unter: 'Face ID, Windows Hello oder Fingerabdruck',
+      icon: 'schluessel',
+      echt: true,
+      empfohlen: true,
+      farbe: '#1a5c37',
+      stufe: 2,
+      erklaerung: 'Der Schlüssel entsteht im Sicherheitschip deines Geräts und verlässt ihn nie. Er ist an '
+        + 'nestwerk.de gebunden: Eine nachgebaute Seite bekommt nichts, selbst wenn du darauf hereinfällst. '
+        + 'Kein Passwort, nichts zum Abfischen, nichts zum Vergessen.',
+      einrichtung: 'Läuft ohne fremden Dienst. Im Betrieb prüft der Server die Signatur gegen den bei der '
+        + 'Registrierung hinterlegten öffentlichen Schlüssel (WebAuthn, Relying Party = die eigene Domain).'
+    },
+    {
+      id: 'google',
+      nachbau: 'nachgebildet',
+      name: 'Weiter mit Google',
+      unter: 'Google-Konto',
+      icon: 'person',
+      farbe: '#1a73e8',
+      stufe: 2,
+      erklaerung: 'Nestwerk erfährt von Google deinen Namen, deine E-Mail-Adresse und dass sie bestätigt ist. '
+        + 'Kein Zugriff auf Kontakte, Kalender oder Dateien, und dein Google-Passwort bekommt Nestwerk nie zu '
+        + 'sehen.',
+      einrichtung: 'Google Cloud Console: OAuth-2.0-Client-ID (Typ „Web“), autorisierte Weiterleitungs-URI, '
+        + 'Bereiche openid/email/profile. Der Server tauscht den Code gegen ein ID-Token und prüft Signatur, '
+        + 'Aussteller, Zielgruppe und Nonce.'
+    },
+    {
+      id: 'microsoft',
+      nachbau: 'nachgebildet',
+      name: 'Weiter mit Microsoft',
+      unter: 'Privat oder geschäftlich',
+      icon: 'person',
+      farbe: '#0067b8',
+      stufe: 2,
+      erklaerung: 'Nestwerk erfährt Name und E-Mail-Adresse aus deinem Microsoft-Konto. Sonst nichts – kein '
+        + 'Postfach, kein OneDrive.',
+      einrichtung: 'Microsoft Entra ID: App-Registrierung, Weiterleitungs-URI, Bereiche openid/email/profile. '
+        + 'Für private und geschäftliche Konten den Mandanten „common“ verwenden.'
+    },
+    {
+      id: 'apple',
+      nachbau: 'nachgebildet',
+      name: 'Weiter mit Apple',
+      unter: 'Mit „E-Mail verbergen“',
+      icon: 'person',
+      farbe: '#111111',
+      stufe: 2,
+      erklaerung: 'Apple erlaubt es, die eigene Adresse zu verbergen: Nestwerk bekommt dann eine '
+        + 'Weiterleitungsadresse statt deiner echten. Das funktioniert hier genauso – die Anwendung merkt den '
+        + 'Unterschied nicht, und das ist der Sinn.',
+      einrichtung: 'Apple Developer: Services-ID, Domain und Return-URL verifizieren, Schlüssel für das '
+        + 'Client-Geheimnis erzeugen (JWT, alle sechs Monate zu erneuern). Achtung: Apple sendet Name und '
+        + 'E-Mail nur beim allerersten Mal.'
+    },
+    {
+      id: 'mail',
+      /* Code, Frist und Fehlversuchszähler laufen wirklich – nur den
+         Versand kann ein Browser nicht leisten. */
+      echt: true,
+      nachbau: 'Versand nachgebildet',
+      name: 'Mit E-Mail-Adresse',
+      unter: 'Einmalcode statt Passwort',
+      icon: 'nachricht',
+      stufe: 1,
+      erklaerung: 'Kein Passwort, das man vergessen oder wiederverwenden kann: Du bekommst einen sechsstelligen '
+        + 'Code, der zehn Minuten gilt. Wer die Adresse nicht abrufen kann, kommt nicht hinein.',
+      einrichtung: 'Nur ein Versanddienst nötig. Der Code gehört serverseitig erzeugt, gehasht gespeichert und '
+        + 'nach Ablauf oder fünf Fehlversuchen verworfen.'
+    }
+  ];
+
+  const anbieter = (id) => ANBIETER.find((a) => a.id === id) || null;
+
+  /* ------------------------- Vertrauensstufen -------------------------
+
+     Der eigentliche Schutz sitzt nicht in der Anmeldung, sondern hier:
+     Wie viel ist über das Gegenüber bekannt, und sieht man es? */
+
+  const STUFEN = [
+    { n: 0, name: 'nicht bestätigt', kurz: 'offen', ton: 'schlecht',
+      text: 'Es ist nichts geprüft. So ein Konto sollte nichts inserieren dürfen.' },
+    { n: 1, name: 'E-Mail bestätigt', kurz: 'E-Mail', ton: 'warn',
+      text: 'Die Adresse ist erreichbar. Das schließt Wegwerfadressen nicht aus.' },
+    { n: 2, name: 'Gerät oder Anbieter bestätigt', kurz: 'Konto', ton: 'info',
+      text: 'Passkey auf diesem Gerät oder ein bestätigtes Konto bei Google, Microsoft oder Apple. '
+        + 'Massenhaftes Anlegen wird damit deutlich mühsamer.' },
+    { n: 3, name: 'Telefonnummer bestätigt', kurz: 'Telefon', ton: 'gut',
+      text: 'Eine Nummer je Konto. Der Punkt, an dem Betrug im großen Stil unwirtschaftlich wird.' },
+    { n: 4, name: 'Ausweis geprüft', kurz: 'Ausweis', ton: 'gut',
+      text: 'Für Inserierende der Maßstab. Prüfung über einen Dienst wie POSTIDENT oder eID – der Ausweis '
+        + 'selbst wird dabei nicht gespeichert.' }
+  ];
+
+  const stufe = (n) => STUFEN[U.clamp(Math.round(n || 0), 0, STUFEN.length - 1)];
+
+  /* ------------------------- Speicher ------------------------- */
+
+  /* Das Konto liegt getrennt vom übrigen Stand: Wer sich abmeldet, soll
+     seine Merkliste behalten, und wer die Daten löscht, nicht ungewollt
+     ausgesperrt werden. */
+  function lesen() {
+    try { return JSON.parse(localStorage.getItem(SPEICHER) || 'null'); } catch (e) { return null; }
+  }
+
+  function schreiben(k) {
+    try {
+      if (k) localStorage.setItem(SPEICHER, JSON.stringify(k));
+      else localStorage.removeItem(SPEICHER);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  let konto = null;
+
+  function laden() {
+    konto = lesen();
+    return konto;
+  }
+
+  const aktuell = () => konto || (konto = lesen());
+  const angemeldet = () => !!(aktuell() && aktuell().id);
+
+  /* ------------------------- Prüfungen ------------------------- */
+
+  /* Bewusst keine der berüchtigten Riesenregeln: Sie schließen gültige
+     Adressen aus und lassen ungültige durch. Geprüft wird die Form, den
+     Rest erledigt der Code, der ankommen muss – oder eben nicht. */
+  const mailForm = (m) => /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(String(m || '').trim());
+
+  /* Wegwerfadressen sind kein Betrugsbeweis, aber ein Grund, die Stufe
+     nicht anzuheben. Eine winzige Liste – vollständig wäre sie nie. */
+  const WEGWERF = ['mailinator.com', 'trashmail.com', 'wegwerfmail.de', 'guerrillamail.com',
+    '10minutemail.com', 'yopmail.com', 'temp-mail.org'];
+
+  const istWegwerf = (m) => WEGWERF.indexOf(String(m).toLowerCase().split('@')[1] || '') >= 0;
+
+  /* ------------------------- Einmalcode ------------------------- */
+
+  let laufenderCode = null;
+
+  function codeErzeugen(mail) {
+    const bytes = new Uint8Array(4);
+    (window.crypto || {}).getRandomValues
+      ? crypto.getRandomValues(bytes)
+      : bytes.forEach((_, i) => { bytes[i] = Math.floor(Math.random() * 256); });
+    const zahl = ((bytes[0] << 16) | (bytes[1] << 8) | bytes[2]) % 1000000;
+    laufenderCode = {
+      mail: String(mail).trim().toLowerCase(),
+      code: String(zahl).padStart(6, '0'),
+      bis: Date.now() + CODE_GUELTIG_MIN * 60000,
+      versuche: 0
+    };
+    return laufenderCode;
+  }
+
+  function codePruefen(eingabe) {
+    const c = laufenderCode;
+    if (!c) return { ok: false, grund: 'Es wurde kein Code angefordert.' };
+    if (Date.now() > c.bis) { laufenderCode = null; return { ok: false, grund: 'Der Code ist abgelaufen. Fordere einen neuen an.' }; }
+    c.versuche++;
+    if (c.versuche > CODE_VERSUCHE) {
+      laufenderCode = null;
+      return { ok: false, grund: 'Zu viele Fehlversuche. Fordere einen neuen Code an.' };
+    }
+    if (String(eingabe).replace(/\s/g, '') !== c.code) {
+      return { ok: false, grund: 'Der Code stimmt nicht. Noch ' + (CODE_VERSUCHE - c.versuche + 1)
+        + ' ' + U.plural(CODE_VERSUCHE - c.versuche + 1, 'Versuch', 'Versuche') + '.' };
+    }
+    return { ok: true, mail: c.mail };
+  }
+
+  const codeStand = () => laufenderCode;
+
+  /* ------------------------- Passkey (WebAuthn) -------------------------
+
+     Der einzige Teil, der ohne Server wirklich läuft. Ohne Serverseite
+     lässt sich die Signatur nicht prüfen – für die Vorführung genügt,
+     dass das Gerät sie überhaupt erzeugt hat: Genau das ist der Beweis,
+     dass Betriebssystem und Sicherheitschip mitgespielt haben. */
+
+  const passkeyMoeglich = () => !!(window.PublicKeyCredential && navigator.credentials
+    && navigator.credentials.create);
+
+  function passkeyPlattform() {
+    if (!passkeyMoeglich() || !PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
+      return Promise.resolve(false);
+    }
+    return PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(() => false);
+  }
+
+  const zufall = (n) => {
+    const b = new Uint8Array(n);
+    if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(b);
+    else for (let i = 0; i < n; i++) b[i] = Math.floor(Math.random() * 256);
+    return b;
+  };
+
+  function b64(puffer) {
+    const bytes = new Uint8Array(puffer);
+    let s = '';
+    for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+    return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  function passkeyAnlegen(name) {
+    if (!passkeyMoeglich()) return Promise.reject(new Error('Dieser Browser kann keine Passkeys.'));
+    const nutzerId = zufall(16);
+    return navigator.credentials.create({
+      publicKey: {
+        /* Im Betrieb kommt die Aufforderung vom Server und wird dort
+           gegen die Antwort geprüft. Eine im Browser erzeugte ist für den
+           Ablauf richtig, für die Prüfung wertlos – das ist der Grund,
+           warum WebAuthn ohne Server nicht vollständig ist. */
+        challenge: zufall(32),
+        rp: { name: 'Nestwerk' },
+        user: { id: nutzerId, name: name || 'nestwerk', displayName: name || 'Nestwerk-Konto' },
+        pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
+        authenticatorSelection: {
+          authenticatorAttachment: 'platform',
+          residentKey: 'preferred',
+          userVerification: 'required'
+        },
+        timeout: 60000,
+        attestation: 'none'
+      }
+    }).then((cred) => {
+      if (!cred) throw new Error('Es wurde kein Passkey erstellt.');
+      return { id: cred.id, roh: b64(cred.rawId), angelegt: new Date().toISOString() };
+    });
+  }
+
+  function passkeyPruefen(passkey) {
+    if (!passkeyMoeglich()) return Promise.reject(new Error('Dieser Browser kann keine Passkeys.'));
+    const opt = {
+      challenge: zufall(32),
+      timeout: 60000,
+      userVerification: 'required'
+    };
+    /* Ohne hinterlegten Schlüssel darf der Browser selbst wählen –
+       genau das macht die Anmeldung ohne Eingabe möglich. */
+    if (passkey && passkey.roh) {
+      const roh = Uint8Array.from(atob(passkey.roh.replace(/-/g, '+').replace(/_/g, '/')), (c) => c.charCodeAt(0));
+      opt.allowCredentials = [{ type: 'public-key', id: roh }];
+    }
+    return navigator.credentials.get({ publicKey: opt }).then((cred) => {
+      if (!cred) throw new Error('Die Anmeldung wurde abgebrochen.');
+      return { id: cred.id };
+    });
+  }
+
+  /* ------------------------- Anmelden ------------------------- */
+
+  function stufeBerechnen(k) {
+    let n = 0;
+    if (k.mailBestaetigt) n = 1;
+    if (k.passkey || (k.anbieter && k.anbieter !== 'mail')) n = 2;
+    if (k.telefonBestaetigt) n = 3;
+    if (k.ausweisGeprueft) n = 4;
+    /* Eine Wegwerfadresse hebt die Stufe nicht über eins – auch dann
+       nicht, wenn ein Passkey daran hängt. */
+    if (k.mail && istWegwerf(k.mail) && !k.telefonBestaetigt) n = Math.min(n, 1);
+    return n;
+  }
+
+  function anmelden(daten) {
+    const vorher = aktuell();
+    const k = Object.assign({
+      id: (vorher && vorher.id) || 'k-' + b64(zufall(9)),
+      angelegt: (vorher && vorher.angelegt) || U.isoDate(NW.now()),
+      name: '', mail: '', anbieter: 'mail',
+      mailBestaetigt: false, telefon: '', telefonBestaetigt: false,
+      ausweisGeprueft: false, passkey: null,
+      agbStand: '', letzteAnmeldung: ''
+    }, vorher || {}, daten);
+    k.letzteAnmeldung = new Date().toISOString();
+    k.stufe = stufeBerechnen(k);
+    konto = k;
+    schreiben(k);
+    melden('anmeldung');
+    return k;
+  }
+
+  function aendern(daten) {
+    if (!angemeldet()) return null;
+    const k = Object.assign({}, konto, daten);
+    k.stufe = stufeBerechnen(k);
+    konto = k;
+    schreiben(k);
+    melden('konto');
+    return k;
+  }
+
+  function abmelden() {
+    konto = null;
+    schreiben(null);
+    laufenderCode = null;
+    melden('abmeldung');
+  }
+
+  /* Konto vollständig löschen – Art. 17 DSGVO. Der übrige Stand bleibt
+     davon unberührt; wer sein Konto löscht, will nicht zwingend seine
+     Merkliste verlieren. Beides zusammen geht über „Meine Daten“. */
+  function loeschen() {
+    abmelden();
+  }
+
+  /* ------------------------- Beobachter ------------------------- */
+
+  const hoerer = [];
+  const on = (fn) => hoerer.push(fn);
+  const melden = (grund) => hoerer.forEach((fn) => fn(konto, grund));
+
+  /* ------------------------- Anzeige ------------------------- */
+
+  function anzeigeName() {
+    const k = aktuell();
+    if (!k) return '';
+    if (k.name) return k.name;
+    if (k.mail) return k.mail.split('@')[0];
+    return 'Konto';
+  }
+
+  NW.konto = {
+    ANBIETER, STUFEN, CODE_GUELTIG_MIN, CODE_VERSUCHE, SPERRE_MIN,
+    anbieter, stufe, stufeBerechnen,
+    laden, aktuell, angemeldet, anmelden, aendern, abmelden, loeschen, on,
+    mailForm, istWegwerf, anzeigeName,
+    codeErzeugen, codePruefen, codeStand,
+    passkeyMoeglich, passkeyPlattform, passkeyAnlegen, passkeyPruefen
   };
 })(window.NW = window.NW || {});
 
@@ -7754,7 +8274,13 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     const tage = U.daysSince(l.stats.online);
     if (tage <= 2) marken.push(badge('neu', 'gut'));
     if (l.kind === 'miete' && l.provision === 0) marken.push(badge('provisionsfrei', 'info'));
-    if (l.anbieter.verifiziert) marken.push(badge('geprüft', 'neutral', 'pruefen'));
+    /* Die Vertrauensstufe der anbietenden Seite gehört auf die Karte, nicht
+       nur auf die Objektseite: Wer sie erst nach dem Klick sieht, hat schon
+       Zeit verloren. Unter Stufe 2 wird gewarnt statt geschwiegen. */
+    const st = NW.konto ? (l.anbieter.stufe === undefined ? (l.anbieter.verifiziert ? 3 : 1) : l.anbieter.stufe) : null;
+    if (st !== null && st <= 1) marken.push(badge('Anbieter ungeprüft', 'warn', 'warnung'));
+    else if (st !== null && st >= 4) marken.push(badge('Ausweis geprüft', 'gut', 'pruefen'));
+    else if (l.anbieter.verifiziert) marken.push(badge('geprüft', 'neutral', 'pruefen'));
     if (b && b.risiko.stufe === 'warnung') marken.push(badge('Prüfhinweis', 'schlecht', 'warnung'));
     else if (b && b.risiko.stufe === 'achtung') marken.push(badge('genau lesen', 'warn', 'warnung'));
     if (b && b.mietCheck && b.mietCheck.diff <= -12) marken.push(badge(b.mietCheck.diff + ' % zum Spiegel', 'gut'));
@@ -8019,19 +8545,29 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
        Dialog stehen blieb. Bei einem echten Routenwechsel schließt er. */
     if (!erzwingen) dialogZu();
 
-    const ansicht = ui.ansichten[r.name] || ui.ansichten.start;
-    ui.aktuell = r.name;
+    /* Die Anmeldesperre. Was ohne Anmeldung erreichbar bleiben muss:
+       Impressum, Datenschutzerklärung und AGB, weil § 5 DDG „ständig
+       verfügbar“ verlangt und hinter einer Anmeldung nichts ständig
+       verfügbar ist – dazu Widerruf, Meldeweg und die Hilfe. Wer nicht
+       hereinkommt, braucht die Hilfe am dringendsten. */
+    const OHNE_ANMELDUNG = ['anmelden', 'recht', 'hilfe', 'freigabe'];
+    const gesperrt = NW.konto && !NW.konto.angemeldet() && OHNE_ANMELDUNG.indexOf(r.name) < 0;
+    const name = gesperrt ? 'anmelden' : r.name;
+
+    const ansicht = ui.ansichten[name] || ui.ansichten.start;
+    ui.aktuell = name;
     ui.params = r;
+    document.body.classList.toggle('ist-angemeldet', !(NW.konto && !NW.konto.angemeldet()));
 
     const haupt = U.$('#haupt');
     const ergebnis = ansicht(r) || {};
     document.title = (ergebnis.titel ? ergebnis.titel + ' – ' : '') + 'Nestwerk';
     haupt.innerHTML = ergebnis.html || '';
-    haupt.dataset.ansicht = r.name;
+    haupt.dataset.ansicht = name;
 
     U.$$('[data-route]').forEach((a) => {
-      a.classList.toggle('is-aktiv', a.dataset.route === r.name);
-      if (a.dataset.route === r.name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+      a.classList.toggle('is-aktiv', a.dataset.route === name);
+      if (a.dataset.route === name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
 
     if (ergebnis.danach) ergebnis.danach(haupt);
@@ -8146,6 +8682,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             title="${NW.plan.istPlus() ? 'Nestwerk Plus aktiv' : 'Tarife ansehen'}">
             ${NW.plan.istPlus() ? raw(ico('plus5').__raw + '<span>Plus</span>') : raw('<span>Plus entdecken</span>')}</a>
           <a class="knopf knopf--klein nur-breit" href="#/inserieren">${ico('plus')}<span>Inserieren</span></a>
+          <a class="ikon-btn nur-angemeldet" href="#/konto" title="Konto" aria-label="Konto">${ico('person')}</a>
         </div>
       </div>
     </header>
@@ -8173,6 +8710,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
       </p>
       <p class="fuss__links">
         <button type="button" class="link" data-tu="hilfe-oeffnen">Hilfe</button>
+        <a href="#/konto">Konto</a>
         <a href="#/plus">Tarife</a>
         <a href="#/werkzeuge">Werkzeuge</a>
         <a href="#/tresor">Dokumententresor</a>
@@ -8323,7 +8861,8 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
         { route: 'recht/agb', label: 'AGB', icon: 'blatt' },
         { route: 'recht/widerruf', label: 'Widerruf', icon: 'zurueck' },
         { route: 'recht/kuendigen', label: 'Verträge kündigen', icon: 'x' },
-        { route: 'hilfe', label: 'Hilfe und häufige Fragen', icon: 'nachricht' }
+        { route: 'hilfe', label: 'Hilfe und häufige Fragen', icon: 'nachricht' },
+        { route: 'konto', label: 'Konto und Vertrauensstufe', icon: 'person' }
       ]).forEach((nav) => {
         if (!n || U.norm(nav.label).indexOf(n) >= 0) out.push({ art: 'bereich', label: nav.label, icon: nav.icon, ziel: nav.route });
       });
@@ -8559,6 +9098,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
   function start() {
     NW.store.laden();
+    if (NW.konto) NW.konto.laden();
 
     /* Die App bekommt einen eigenen Wurzelknoten und rührt den Rest des
        Dokuments nicht an. In der Einzeldatei stehen Stil und Skript im
@@ -8618,6 +9158,20 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     });
 
     window.addEventListener('hashchange', () => zeichnen());
+
+    /* Endet die Sitzung – hier, oder in einem zweiten Fenster desselben
+       Browsers –, muss die Oberfläche sofort zusperren. Eine Anwendung,
+       die nach dem Abmelden noch offensteht, hat nicht abgemeldet. */
+    if (NW.konto) {
+      NW.konto.on((k, grund) => {
+        if (grund === 'abmeldung' || grund === 'anmeldung') neuZeichnen();
+      });
+      window.addEventListener('storage', (e) => {
+        if (e.key !== 'nestwerk.konto.v1') return;
+        NW.konto.laden();
+        neuZeichnen();
+      });
+    }
     if (!location.hash) location.hash = '#/start';
     zeichnen(true);
   }
@@ -10103,6 +10657,21 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <div><b>${a.antwortStd < 24 ? a.antwortStd + ' Std.' : Math.round(a.antwortStd / 24) + ' Tage'}</b><span>im Schnitt</span></div>
         </div>
       </div>
+      ${(() => {
+      const n = a.stufe === undefined ? (a.verifiziert ? 3 : 1) : a.stufe;
+      const st = NW.konto.stufe(n);
+      return h`<p class="anbieter__stufe ${n <= 1 ? 'is-schwach' : ''}">
+        ${ico(n <= 1 ? 'warnung' : 'schloss')}
+        <span><b>Vertrauensstufe ${n} – ${st.name}.</b> ${st.text}</span>
+      </p>
+      ${n <= 1 ? h`<div class="hinweisbox">${ico('warnung')}
+        <div><b>Über diese Seite ist wenig bekannt</b>
+        <p>Ein Konto ohne Gerätebindung und ohne bestätigte Nummer ist in Minuten angelegt – und nach einer
+          Sperre genauso schnell wieder. Das heißt nicht, dass hier etwas nicht stimmt; es heißt, dass die
+          üblichen Regeln besonders gelten: vor der Besichtigung nichts zahlen, keine Schufa und keine
+          Ausweiskopie in der ersten Anfrage, und auf einer Besichtigung in der Wohnung bestehen.</p></div>
+      </div>` : ''}`;
+    })()}
       <p class="fein">Antwortquote und Reaktionszeit stammen aus dem bisherigen Verhalten auf der Plattform.
         Unter 50 % lohnt sich eine zweite Option.</p>
     </section>`;
@@ -11908,6 +12477,21 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             ${M.DIMENSIONEN.map((d) => reglerZeile(d.key, 'lifestyle', d.label, d.links2 || d.links, d.rechts, p.lifestyle[d.key], 10))}
           </div>
         </section>
+
+        ${NW.konto && NW.konto.angemeldet() ? (() => {
+        const k = NW.konto.aktuell();
+        const st = NW.konto.stufe(k.stufe);
+        return h`<section class="block">
+          <div class="block__kopfzeile">
+            <h2>${ico('person')}Konto</h2>
+            ${ui.badge(st.name, st.ton)}
+          </div>
+          <p class="block__unter">Angemeldet als <b>${NW.konto.anzeigeName()}</b>${k.mail ? ' · ' + k.mail : ''}.
+            Die Vertrauensstufe zählt vor allem, wenn du selbst inserierst – andere sehen sie an deinem Angebot.</p>
+          <p class="werkzeug__weiter">
+            <a class="knopf knopf--still" href="#/konto">${ico('schloss')}Konto und Vertrauensstufe</a></p>
+        </section>`;
+      })() : ''}
 
         <section class="block">
           <h2>${ico('blatt')}Bewerbermappe</h2>
@@ -15323,7 +15907,46 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             <dt>Empfänger</dt><dd>der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO</dd>
           </dl>
 
-          <h2>4. Speicher deines Browsers</h2>
+          <h2>4. Anmeldung und Konto</h2>
+          <p>Die Nutzung setzt eine Anmeldung voraus. Verarbeitet werden dabei Name (freiwillig),
+            E-Mail-Adresse, das gewählte Anmeldeverfahren, der Zeitpunkt der letzten Anmeldung und die
+            Vertrauensstufe.</p>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Bereitstellung des Zugangs, Zuordnung von Inseraten und Anfragen, Schutz vor
+              missbräuchlicher Mehrfachanlage</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags; für die
+              Missbrauchsabwehr zusätzlich Art. 6 Abs. 1 lit. f DSGVO</dd>
+            <dt>Speicherdauer</dt><dd>bis zur Löschung des Kontos; sie ist jederzeit ohne Angabe von Gründen
+              möglich</dd>
+          </dl>
+
+          <h3>Anmeldung über Google, Microsoft oder Apple</h3>
+          <p>Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei Nestwerk anmeldest.
+            An Nestwerk übermittelt werden Name, E-Mail-Adresse und die Angabe, ob sie bestätigt ist – nicht
+            dein dortiges Passwort und keine weiteren Inhalte deines Kontos. Es besteht kein Zugriff auf
+            Kontakte, Kalender, Dateien oder Postfach.</p>
+          <p>Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst:
+            Google Ireland Limited, Microsoft Ireland Operations Limited und Apple Distribution International
+            Limited, jeweils mit Sitz in Irland. Soweit dabei Daten in die Vereinigten Staaten übermittelt
+            werden, stützt sich das auf den Angemessenheitsbeschluss der Europäischen Kommission zum
+            EU-US Data Privacy Framework; die genannten Anbieter sind darunter zertifiziert.</p>
+          <p>Bei Apple lässt sich die eigene Adresse verbergen. Nestwerk erhält dann eine
+            Weiterleitungsadresse bei <code>privaterelay.appleid.com</code> und kennt die echte Adresse nicht.
+            Die Anwendung behandelt beide gleich.</p>
+
+          <h3>Passkey</h3>
+          <p>Beim Passkey entsteht das Schlüsselpaar im Sicherheitsbaustein deines Geräts. Der private
+            Schlüssel verlässt das Gerät nicht und ist für Nestwerk nicht lesbar; gespeichert wird nur die
+            Kennung des Schlüssels. Biometrische Merkmale – Gesicht, Fingerabdruck – werden weder übertragen
+            noch verarbeitet: Sie entsperren ausschließlich lokal das Gerät (Art. 9 DSGVO ist damit nicht
+            berührt).</p>
+
+          <h3>Bestätigung von Adresse und Telefonnummer</h3>
+          <p>Der Einmalcode dient allein der Bestätigung, dass du die angegebene Adresse abrufen kannst. Er
+            gilt ${NW.konto ? NW.konto.CODE_GUELTIG_MIN : 10} Minuten und wird danach verworfen. Eine
+            Telefonnummer wird nur verarbeitet, wenn du sie selbst zur Bestätigung angibst.</p>
+
+          <h2>5. Speicher deines Browsers</h2>
           <p>Nestwerk legt deine Eingaben im lokalen Speicher deines Browsers ab – Profil, Merkliste,
             Suchaufträge, Nachrichten, eigene Inserate und die Einstellungen zur Darstellung. Diese Daten
             verlassen dein Gerät nicht. Der Anbieter hat keinen Zugriff darauf.</p>
@@ -15334,7 +15957,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p>Du kannst diese Daten jederzeit im Fußbereich unter „Meine Daten“ als Datei sichern oder
             vollständig löschen. Sie verschwinden ebenfalls, wenn du die Browserdaten löschst.</p>
 
-          <h2>5. Dokumententresor</h2>
+          <h2>6. Dokumententresor</h2>
           <p>Legst du Unterlagen im Dokumententresor ab, werden sie <b>vor dem Speichern</b> in deinem Browser
             verschlüsselt – mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem Kennwort und wird
             nirgends gespeichert. Verschlüsselt werden auch die Dateinamen.</p>
@@ -15351,7 +15974,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p class="fein">In dieser Vorführfassung liegen auch die verschlüsselten Dateien ausschließlich in
             deinem Browser. Im Betrieb läge dort das Chiffrat und sonst nichts.</p>
 
-          <h2>6. Werbung im freien Tarif</h2>
+          <h2>7. Werbung im freien Tarif</h2>
           <p>Der freie Tarif wird über Anzeigen finanziert. Diese Anzeigen sind fest hinterlegt und werden
             nach der Stelle ausgewählt, an der sie erscheinen – nicht nach deiner Person, deinem Verhalten
             oder deinen Eingaben. Es findet kein Abgleich mit Werbenetzwerken statt, es werden keine Kennungen
@@ -15360,7 +15983,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p>Anzeigen sind stets als solche gekennzeichnet (§ 5a Abs. 4 des Gesetzes gegen den unlauteren
             Wettbewerb) und werden nie im Erscheinungsbild eines Inserats dargestellt.</p>
 
-          <h2>7. Kontaktaufnahme und Hilfe</h2>
+          <h2>8. Kontaktaufnahme und Hilfe</h2>
           <p>Schreibst du per E-Mail, verarbeitet der Anbieter die Angaben aus deiner Nachricht, um sie zu
             beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO bei vertragsbezogenen Anfragen, sonst
             Art. 6 Abs. 1 lit. f DSGVO. Die Nachrichten werden gelöscht, sobald die Anfrage abschließend
@@ -15373,7 +15996,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
             die du selbst einträgst. Profil, Merkliste und die Inhalte des Dokumententresors sind nicht
             enthalten und werden auch nicht angehängt.</p>
 
-          <h2>8. Bezahlung von Nestwerk Plus</h2>
+          <h2>9. Bezahlung von Nestwerk Plus</h2>
           <p>Für bezahlte Verträge werden die zur Abwicklung nötigen Daten verarbeitet: Name, E-Mail-Adresse,
             Zahlungsdaten sowie Beginn und Laufzeit. Die Zahlung selbst wickelt ein Zahlungsdienstleister ab,
             an den die dafür erforderlichen Daten übermittelt werden.</p>
@@ -15386,17 +16009,19 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p class="fein">Solange Plus nur über einen Gründerplatz vergeben wird, fallen weder Zahlungsdaten
             noch Rechnungen an.</p>
 
-          <h2>9. Keine automatisierte Entscheidung über Personen</h2>
+          <h2>10. Keine automatisierte Entscheidung über Personen</h2>
           <p>Nestwerk bewertet Angebote, nicht Menschen. Die Passung, die Chancenschätzung und der Prüfhinweis
             beziehen sich auf Wohnungen und Inseratstexte und dienen deiner eigenen Einordnung. Eine
             automatisierte Entscheidung mit rechtlicher Wirkung gegenüber Personen im Sinne von Art. 22 DSGVO
             findet nicht statt.</p>
 
-          <h2>10. Übermittlung in Drittländer</h2>
-          <p>Eine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des
-            Europäischen Wirtschaftsraums findet nicht statt.</p>
+          <h2>11. Übermittlung in Drittländer</h2>
+          <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft oder Apple hinaus findet
+            keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des
+            Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit
+            E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus.</p>
 
-          <h2>11. Deine Rechte</h2>
+          <h2>12. Deine Rechte</h2>
           <ul class="pruef">
             <li>${ico('pruefen')}<span><b>Auskunft</b> darüber, welche Daten verarbeitet werden (Art. 15 DSGVO)</span></li>
             <li>${ico('pruefen')}<span><b>Berichtigung</b> unrichtiger Daten (Art. 16 DSGVO)</span></li>
@@ -15412,17 +16037,17 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p class="fein">Weil deine Eingaben ausschließlich in deinem Browser liegen, kannst du Auskunft,
             Übertragbarkeit und Löschung dort unmittelbar selbst ausüben: im Fußbereich unter „Meine Daten“.</p>
 
-          <h2>12. Beschwerderecht</h2>
+          <h2>13. Beschwerderecht</h2>
           <p>Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in
             dem Mitgliedstaat deines Aufenthaltsorts, deines Arbeitsplatzes oder des Orts des mutmaßlichen
             Verstoßes. Für den Anbieter zuständig ist ${rw('aufsichtsbehoerde', 'zuständige Aufsichtsbehörde')}.</p>
 
-          <h2>13. Pflicht zur Bereitstellung</h2>
+          <h2>14. Pflicht zur Bereitstellung</h2>
           <p>Du bist nicht verpflichtet, personenbezogene Daten bereitzustellen. Ohne die Angaben im Profil
             fallen allerdings die Funktionen weg, die darauf aufbauen – etwa die Passung oder die
             Chancenschätzung.</p>
 
-          <h2>14. Änderungen</h2>
+          <h2>15. Änderungen</h2>
           <p>Diese Erklärung gilt in der Fassung vom ${R.stand()}. Ändert sich die Anwendung, wird sie
             angepasst.</p>
         </div>
@@ -15469,14 +16094,25 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
           <p>(4) Für Richtigkeit, Vollständigkeit und Aktualität von Angeboten, die Dritte einstellen, steht
             der Anbieter nicht ein.</p>
 
-          <h2>§ 3 Zustandekommen des Vertrags</h2>
-          <p>(1) Die Nutzung des freien Tarifs kommt mit dem Aufruf der Anwendung zustande und erfordert keine
-            Anmeldung.</p>
-          <p>(2) Ein Vertrag über Nestwerk Plus kommt zustande, wenn der Anbieter die Bestellung annimmt oder
+          <h2>§ 3 Anmeldung und Zustandekommen des Vertrags</h2>
+          <p>(1) Die Nutzung setzt eine Anmeldung voraus. Sie ist möglich mit einem Passkey, über ein Konto bei
+            Google, Microsoft oder Apple oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung
+            kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande.</p>
+          <p>(2) Die Anmeldung setzt die Zustimmung zu diesen Bedingungen und die Kenntnisnahme der
+            Datenschutzerklärung voraus. Beide sind vor der Anmeldung ohne Anmeldung abrufbar.</p>
+          <p>(3) Es besteht kein Anspruch auf Anmeldung. Der Anbieter kann sie ablehnen, insbesondere bei
+            begründetem Verdacht auf missbräuchliche Mehrfachanlage.</p>
+          <p>(4) Je Person ist ein Konto zulässig. Zugangsmittel dürfen nicht weitergegeben werden. Wer den
+            Verdacht hat, dass ein anderer Zugang zu seinem Konto hat, teilt das unverzüglich mit.</p>
+          <p>(5) Bestimmte Handlungen setzen eine Vertrauensstufe voraus – insbesondere das Einstellen von
+            Angeboten. Die Stufen und ihre Voraussetzungen sind in der Anwendung beschrieben.</p>
+          <p>(6) Das Konto kann jederzeit, ohne Angabe von Gründen und ohne Frist gelöscht werden. Damit endet
+            der unentgeltliche Nutzungsvertrag.</p>
+          <p>(7) Ein Vertrag über Nestwerk Plus kommt zustande, wenn der Anbieter die Bestellung annimmt oder
             die Leistung freischaltet. Vor der Bestellung werden die wesentlichen Merkmale, der Gesamtpreis,
             die Laufzeit und die Kündigungsbedingungen angezeigt. Die Schaltfläche, mit der die Bestellung
             abgeschlossen wird, ist mit „zahlungspflichtig bestellen“ beschriftet (§ 312j Abs. 3 BGB).</p>
-          <p>(3) Der Vertragstext wird nach Abschluss auf einem dauerhaften Datenträger bestätigt
+          <p>(8) Der Vertragstext wird nach Abschluss auf einem dauerhaften Datenträger bestätigt
             (§ 312f BGB). Vertragssprache ist Deutsch.</p>
 
           <h2>§ 4 Freier Tarif und Werbung</h2>
@@ -16480,6 +17116,504 @@ Datum: __________________
 
   ui.ansichten.hilfe = seite;
   NW.viewHilfe = { zeichnen, frageStellen, nachrichtText, kern, oeffnen: () => { offen = true; zeichnen(); } };
+})(window.NW = window.NW || {});
+
+/* ===== view-anmeldung.js ===== */
+/* =====================================================================
+   Nestwerk – Anmeldung und Konto: Oberfläche
+
+   Zwei Dinge, die diese Seite anders macht als die meisten Anmeldungen:
+
+   1. Impressum, Datenschutzerklärung und AGB sind auch ohne Anmeldung
+      erreichbar. § 5 DDG verlangt, dass sie „leicht erkennbar, unmittelbar
+      erreichbar und ständig verfügbar“ sind – hinter einer Anmeldung sind
+      sie das nicht. Dasselbe gilt für die Hilfe: Wer nicht hereinkommt,
+      braucht sie am dringendsten.
+
+   2. Die Reihenfolge der Verfahren folgt der Sicherheit, nicht der
+      Bekanntheit. Der Passkey steht oben, weil er als Einziges gegen
+      nachgebaute Anmeldeseiten schützt.
+   ===================================================================== */
+(function (NW) {
+  'use strict';
+
+  const U = NW.util, ui = NW.ui, K = NW.konto, R = NW.recht;
+  const h = U.html, raw = U.raw, ico = U.svg;
+
+  /* Schritt: 'wahl' | 'mail' | 'code' | 'anbieter' */
+  let schritt = 'wahl';
+  let entwurf = { mail: '', name: '', anbieter: '', agb: false };
+  let meldung = '';
+  let passkeyDa = false;
+
+  K.passkeyPlattform().then((ja) => {
+    passkeyDa = ja;
+    if (ui.aktuell === 'anmelden') ui.neuZeichnen();
+  });
+
+  /* ================================================================
+     Anmeldeseite
+     ================================================================ */
+
+  function anbieterKnopf(a) {
+    const gesperrt = a.id === 'passkey' && !K.passkeyMoeglich();
+    return h`<button type="button" class="anmeldung__weg ${a.empfohlen ? 'is-empfohlen' : ''}"
+      data-tu="anmelden-weg" data-id="${a.id}" ${gesperrt ? 'disabled' : ''}>
+      <span class="anmeldung__zeichen" style="color:${a.farbe || 'currentColor'}">${ico(a.icon)}</span>
+      <span class="anmeldung__wort">
+        <b>${a.name}</b>
+        <i>${gesperrt ? 'Dieser Browser kann keine Passkeys' : a.unter}</i>
+      </span>
+      ${a.empfohlen && !gesperrt ? h`<span class="anmeldung__marke">${passkeyDa ? 'am sichersten' : 'empfohlen'}</span>` : ''}
+      ${a.nachbau ? h`<span class="anmeldung__nachbau"
+        title="In dieser Vorführung nachgebildet">${a.nachbau}</span>` : ''}
+    </button>`;
+  }
+
+  function wahlSchritt() {
+    return h`<div class="anmeldung__wege">
+        ${K.ANBIETER.map(anbieterKnopf)}
+      </div>
+      <details class="anmeldung__warum">
+        <summary>${ico('schloss')}Warum steht der Passkey oben?</summary>
+        <p>Weil er als Einziges gegen die häufigste Masche schützt: eine nachgebaute Anmeldeseite. Ein Passkey
+          ist an die Adresse gebunden, unter der er angelegt wurde. Wer auf eine gefälschte Seite hereinfällt,
+          gibt dort nichts preis – es gibt nichts einzugeben. Der Schlüssel entsteht im Sicherheitschip deines
+          Geräts und verlässt ihn nie.</p>
+        <p>Bei Google, Microsoft und Apple bekommt Nestwerk Name und E-Mail-Adresse, dein Passwort dort aber
+          nie zu sehen. Beim Weg über die E-Mail-Adresse gibt es gar kein Passwort, sondern einen Code, der
+          zehn Minuten gilt.</p>
+      </details>`;
+  }
+
+  function mailSchritt() {
+    return h`<form class="anmeldung__form" data-tu-submit="anmelden-code-anfordern" novalidate>
+      <label class="feld"><span>E-Mail-Adresse</span>
+        <input type="email" id="anmelden-mail" autocomplete="email" required inputmode="email"
+          value="${entwurf.mail}" placeholder="name@beispiel.de"></label>
+      <label class="feld"><span>Name (freiwillig)</span>
+        <input type="text" id="anmelden-name" autocomplete="name" value="${entwurf.name}"
+          placeholder="wie du in Anfragen erscheinst"></label>
+      ${agbKasten()}
+      <button type="submit" class="knopf knopf--voll">${ico('nachricht')}Code anfordern</button>
+      <button type="button" class="link" data-tu="anmelden-zurueck">anderes Verfahren wählen</button>
+    </form>`;
+  }
+
+  function codeSchritt() {
+    const c = K.codeStand();
+    return h`<form class="anmeldung__form" data-tu-submit="anmelden-code-pruefen" novalidate>
+      <p>Wir haben einen sechsstelligen Code an <b>${entwurf.mail}</b> geschickt. Er gilt
+        ${K.CODE_GUELTIG_MIN} Minuten.</p>
+      ${c ? h`<div class="anmeldung__demo">
+        ${ico('warnung')}
+        <div><b>Vorführung: Der Code steht hier</b>
+        <p>Es gibt keinen Server, der eine Mail verschicken könnte. Im Betrieb stünde hier nichts – der Code
+          käme in dein Postfach.</p>
+        <span class="anmeldung__code">${c.code}</span></div>
+      </div>` : ''}
+      <label class="feld"><span>Code</span>
+        <input type="text" id="anmelden-code" inputmode="numeric" autocomplete="one-time-code"
+          pattern="[0-9 ]{6,8}" maxlength="8" required placeholder="000000"></label>
+      <button type="submit" class="knopf knopf--voll">${ico('pruefen')}Anmelden</button>
+      <p class="werkzeug__weiter">
+        <button type="button" class="link" data-tu="anmelden-code-neu">neuen Code anfordern</button>
+        <button type="button" class="link" data-tu="anmelden-zurueck">Adresse ändern</button>
+      </p>
+    </form>`;
+  }
+
+  /* Der nachgebildete Zustimmungsdialog der drei Anbieter. Er zeigt genau
+     das, was der echte zeigt – und sagt darüber, dass er nachgebildet ist. */
+  function anbieterSchritt() {
+    const a = K.anbieter(entwurf.anbieter);
+    if (!a) { schritt = 'wahl'; return wahlSchritt(); }
+    return h`<div class="anmeldung__form">
+      <div class="anmeldung__demo">
+        ${ico('warnung')}
+        <div><b>Nachgebildeter Ablauf</b>
+        <p>Das echte Verfahren braucht zwingend eine Serverseite, die das Geheimnis hält und das
+          zurückgegebene Token prüft. Ein reiner Browser kann das nicht. Was du gleich siehst, entspricht dem
+          Ablauf – die Bestätigung kommt aber nicht von ${a.name.replace('Weiter mit ', '')}.</p></div>
+      </div>
+      <div class="anmeldung__zustimmung">
+        <p class="anmeldung__zustimmungKopf">
+          <span class="anmeldung__zeichen" style="color:${a.farbe}">${ico(a.icon)}</span>
+          <b>Nestwerk möchte auf dein Konto zugreifen</b>
+        </p>
+        <ul class="pruef">
+          <li>${ico('pruefen')}<span>Name und Profilbild</span></li>
+          <li>${ico('pruefen')}<span>E-Mail-Adresse und ob sie bestätigt ist</span></li>
+          <li>${ico('x')}<span>Kein Zugriff auf Kontakte, Kalender, Dateien oder Postfach</span></li>
+          <li>${ico('x')}<span>Dein Passwort bekommt Nestwerk nie zu sehen</span></li>
+        </ul>
+        ${a.id === 'apple' ? h`<label class="schalter">
+          <input type="checkbox" id="anmelden-verbergen" checked>
+          <span><b>E-Mail-Adresse verbergen</b>
+            <i>Nestwerk bekommt eine Weiterleitungsadresse statt deiner echten.</i></span></label>` : ''}
+        <label class="feld"><span>Welches Konto?</span>
+          <input type="email" id="anmelden-mail" autocomplete="email" required
+            value="${entwurf.mail}" placeholder="name@beispiel.de"></label>
+        <label class="feld"><span>Name</span>
+          <input type="text" id="anmelden-name" autocomplete="name" value="${entwurf.name}"></label>
+      </div>
+      ${agbKasten()}
+      <button type="button" class="knopf knopf--voll" data-tu="anmelden-anbieter-fertig"
+        data-id="${a.id}">${ico('pruefen')}Zulassen und anmelden</button>
+      <button type="button" class="link" data-tu="anmelden-zurueck">Abbrechen</button>
+      <details class="anmeldung__warum">
+        <summary>${ico('werkzeug')}Was im Betrieb einzurichten ist</summary>
+        <p>${a.einrichtung}</p>
+      </details>
+    </div>`;
+  }
+
+  /* § 305 Abs. 2 BGB: AGB werden nur Vertragsbestandteil, wenn vor
+     Vertragsschluss ausdrücklich darauf hingewiesen wird und man sie zur
+     Kenntnis nehmen kann. Ein vorausgewähltes Kästchen genügt dafür
+     nicht – deshalb ist es leer und die Verweise sind echte Verweise. */
+  function agbKasten() {
+    return h`<label class="schalter anmeldung__agb">
+      <input type="checkbox" id="anmelden-agb" ${entwurf.agb ? 'checked' : ''}>
+      <span>Ich habe die <a href="#/recht/agb">Allgemeinen Geschäftsbedingungen</a> und die
+        <a href="#/recht/datenschutz">Datenschutzerklärung</a> gelesen und bin damit einverstanden.</span>
+    </label>`;
+  }
+
+  function anmeldeseite() {
+    return {
+      titel: 'Anmelden',
+      html: h`<div class="anmeldung">
+        <div class="anmeldung__kasten">
+          <header class="anmeldung__kopf">
+            <span class="anmeldung__logo">${ico('dach')}</span>
+            <h1>Willkommen bei Nestwerk</h1>
+            <p>Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil,
+              eine Bewerbermappe. Zum Start brauchst du eine Anmeldung.</p>
+          </header>
+
+          ${meldung ? h`<p class="warn-meldung">${ico('warnung')}${meldung}</p>` : ''}
+
+          ${schritt === 'mail' ? mailSchritt()
+        : schritt === 'code' ? codeSchritt()
+          : schritt === 'anbieter' ? anbieterSchritt() : wahlSchritt()}
+
+          <div class="anmeldung__ehrlich">
+            ${ico('info')}
+            <div>
+              <b>Eine Anmeldung allein hält keinen Betrüger auf</b>
+              <p>Ein Konto ist überall in zwei Minuten angelegt. Was wirklich hilft, ist die Stufe darüber –
+                ein an das Gerät gebundener Schlüssel, eine bestätigte Telefonnummer, ein geprüfter Ausweis –
+                und dass man <b>sieht</b>, welche Stufe das Gegenüber hat. Nestwerk zeigt das an jedem Inserat.</p>
+            </div>
+          </div>
+        </div>
+
+        <footer class="anmeldung__fuss">
+          <a href="#/recht/impressum">Impressum</a>
+          <a href="#/recht/datenschutz">Datenschutz</a>
+          <a href="#/recht/agb">AGB</a>
+          <a href="#/recht/widerruf">Widerruf</a>
+          <a href="#/hilfe">Hilfe</a>
+        </footer>
+      </div>`
+    };
+  }
+
+  /* ================================================================
+     Kontoseite
+     ================================================================ */
+
+  function stufenLeiter(k) {
+    return h`<ol class="stufen">
+      ${K.STUFEN.map((s) => h`<li class="${s.n <= k.stufe ? 'is-erreicht' : ''} ${s.n === k.stufe ? 'is-jetzt' : ''}">
+        <span class="stufen__n">${s.n}</span>
+        <div><b>${s.name}</b><i>${s.text}</i></div>
+        ${s.n === k.stufe ? h`<span class="stufen__marke">deine Stufe</span>` : ''}
+      </li>`)}
+    </ol>`;
+  }
+
+  function kontoseite() {
+    const k = K.aktuell();
+    if (!k) return anmeldeseite();
+    const a = K.anbieter(k.anbieter);
+    const st = K.stufe(k.stufe);
+    return {
+      titel: 'Konto',
+      html: h`<div class="seite seite--schmal">
+        <header class="seite__kopf">
+          <h1>${ico('person')}Konto</h1>
+          <p class="seite__unter">Wie du angemeldet bist, was davon bestätigt ist und wie du beides änderst.</p>
+        </header>
+
+        <section class="block block--betont">
+          <div class="block__kopfzeile">
+            <h2>${ico('person')}${K.anzeigeName()}</h2>
+            ${ui.badge(st.name, st.ton)}
+          </div>
+          <dl class="rechtsliste">
+            <dt>E-Mail</dt><dd>${k.mail || '–'}${k.mailBestaetigt ? ' · bestätigt' : ''}</dd>
+            <dt>Angemeldet über</dt><dd>${a ? a.name.replace('Weiter mit ', '') : 'E-Mail'}</dd>
+            <dt>Konto seit</dt><dd>${U.dateDE(k.angelegt)}</dd>
+            <dt>Zuletzt angemeldet</dt><dd>${k.letzteAnmeldung ? U.since(k.letzteAnmeldung.slice(0, 10)) : '–'}</dd>
+            <dt>Passkey</dt><dd>${k.passkey ? 'hinterlegt seit ' + U.dateDE(k.passkey.angelegt.slice(0, 10)) : 'keiner'}</dd>
+          </dl>
+          <p class="werkzeug__weiter">
+            <button type="button" class="knopf knopf--still" data-tu="konto-abmelden">${ico('zurueck')}Abmelden</button>
+            <button type="button" class="knopf knopf--still knopf--gefahr" data-tu="konto-loeschen">${ico('muell')}Konto löschen</button>
+          </p>
+        </section>
+
+        <section class="block">
+          <h2>${ico('schloss')}Vertrauensstufe</h2>
+          <p class="block__unter">Was über ein Konto bekannt ist, entscheidet, wie viel es darf – und was
+            andere über es sehen. Genau hier, nicht bei der Anmeldung selbst, sitzt der Schutz vor Betrug.</p>
+          ${stufenLeiter(k)}
+          <div class="anmeldung__wege anmeldung__wege--eng">
+            ${!k.passkey && K.passkeyMoeglich() ? h`<button type="button" class="anmeldung__weg is-empfohlen"
+              data-tu="konto-passkey">
+              <span class="anmeldung__zeichen">${ico('schluessel')}</span>
+              <span class="anmeldung__wort"><b>Passkey hinterlegen</b>
+                <i>Anmelden mit Face ID, Windows Hello oder Fingerabdruck – auf Stufe 2</i></span>
+            </button>` : ''}
+            ${!k.telefonBestaetigt ? h`<button type="button" class="anmeldung__weg" data-tu="konto-telefon">
+              <span class="anmeldung__zeichen">${ico('glocke')}</span>
+              <span class="anmeldung__wort"><b>Telefonnummer bestätigen</b>
+                <i>Eine Nummer je Konto – auf Stufe 3</i></span>
+              <span class="anmeldung__nachbau">nachgebildet</span>
+            </button>` : ''}
+            ${!k.ausweisGeprueft ? h`<button type="button" class="anmeldung__weg" data-tu="konto-ausweis">
+              <span class="anmeldung__zeichen">${ico('blatt')}</span>
+              <span class="anmeldung__wort"><b>Ausweis prüfen lassen</b>
+                <i>Für Inserierende der Maßstab – auf Stufe 4</i></span>
+              <span class="anmeldung__nachbau">nachgebildet</span>
+            </button>` : ''}
+          </div>
+          ${k.stufe >= 4 ? h`<p class="gut-meldung">${ico('pruefen')}Höchste Stufe erreicht.</p>` : ''}
+        </section>
+
+        <section class="block">
+          <h2>${ico('stift')}Angaben ändern</h2>
+          <form class="formraster" data-tu-submit="konto-speichern">
+            <label class="feld"><span>Name</span>
+              <input type="text" id="konto-name" value="${k.name || ''}" autocomplete="name"></label>
+            <label class="feld"><span>E-Mail-Adresse</span>
+              <input type="email" id="konto-mail" value="${k.mail || ''}" autocomplete="email"></label>
+            <div class="feld feld--knopf">
+              <button type="submit" class="knopf">${ico('speichern')}Übernehmen</button>
+            </div>
+          </form>
+          <p class="fein">Wird die Adresse geändert, gilt sie erst nach einer neuen Bestätigung – sonst könnte
+            man ein Konto auf eine fremde Adresse umschreiben.</p>
+        </section>
+
+        <div class="hinweisbox">${ico('schloss')}
+          <div><b>Was von deinem Konto gespeichert wird</b>
+          <p>Name, E-Mail-Adresse, das gewählte Verfahren und die Vertrauensstufe – im Speicher dieses
+            Browsers, wie alles andere. Beim Passkey liegt nur die Kennung hier; der Schlüssel selbst bleibt
+            im Sicherheitschip des Geräts und ist von hier aus nicht lesbar.</p>
+          <p>„Konto löschen“ entfernt diese Angaben vollständig. Merkliste, Profil und Notizen bleiben
+            erhalten – beides zusammen löschst du über <b>Meine Daten</b> im Fußbereich.</p></div>
+        </div>
+      </div>`
+    };
+  }
+
+  /* ================================================================
+     Aktionen
+     ================================================================ */
+
+  const A_ = ui.aktionRegistrieren;
+
+  const agbGesetzt = () => {
+    const el = U.$('#anmelden-agb');
+    entwurf.agb = !!(el && el.checked);
+    return entwurf.agb;
+  };
+
+  function felderLesen() {
+    entwurf.mail = ((U.$('#anmelden-mail') || {}).value || '').trim();
+    entwurf.name = ((U.$('#anmelden-name') || {}).value || '').trim();
+  }
+
+  A_('anmelden-weg', (el) => {
+    const id = el.dataset.id;
+    meldung = '';
+    if (id === 'passkey') { passkeyAnmelden(); return; }
+    entwurf.anbieter = id;
+    schritt = id === 'mail' ? 'mail' : 'anbieter';
+    ui.neuZeichnen();
+  });
+
+  A_('anmelden-zurueck', () => {
+    schritt = 'wahl';
+    meldung = '';
+    ui.neuZeichnen();
+  });
+
+  A_('anmelden-code-anfordern', () => {
+    felderLesen();
+    if (!K.mailForm(entwurf.mail)) { meldung = 'Diese Adresse sieht nicht wie eine E-Mail-Adresse aus.'; ui.neuZeichnen(); return; }
+    if (!agbGesetzt()) { meldung = 'Ohne Zustimmung zu AGB und Datenschutzerklärung geht es nicht weiter.'; ui.neuZeichnen(); return; }
+    K.codeErzeugen(entwurf.mail);
+    schritt = 'code';
+    meldung = '';
+    ui.neuZeichnen();
+  });
+
+  A_('anmelden-code-neu', () => {
+    K.codeErzeugen(entwurf.mail);
+    meldung = '';
+    ui.neuZeichnen();
+    ui.toast('Neuer Code erzeugt.', 'gut');
+  });
+
+  A_('anmelden-code-pruefen', () => {
+    const eingabe = ((U.$('#anmelden-code') || {}).value || '');
+    const p = K.codePruefen(eingabe);
+    if (!p.ok) { meldung = p.grund; ui.neuZeichnen(); return; }
+    fertig({
+      mail: p.mail, name: entwurf.name, anbieter: 'mail', mailBestaetigt: true
+    });
+  });
+
+  A_('anmelden-anbieter-fertig', (el) => {
+    felderLesen();
+    const id = el.dataset.id;
+    if (!K.mailForm(entwurf.mail)) { meldung = 'Bitte die Adresse des Kontos angeben.'; ui.neuZeichnen(); return; }
+    if (!agbGesetzt()) { meldung = 'Ohne Zustimmung zu AGB und Datenschutzerklärung geht es nicht weiter.'; ui.neuZeichnen(); return; }
+    const verbergen = (U.$('#anmelden-verbergen') || {}).checked;
+    const mail = (id === 'apple' && verbergen)
+      ? entwurf.mail.split('@')[0].slice(0, 8) + '@privaterelay.appleid.com'
+      : entwurf.mail;
+    fertig({ mail, name: entwurf.name, anbieter: id, mailBestaetigt: true, relay: !!(id === 'apple' && verbergen) });
+  });
+
+  function passkeyAnmelden() {
+    const vorhanden = K.aktuell() && K.aktuell().passkey;
+    const arbeit = vorhanden ? K.passkeyPruefen(vorhanden) : K.passkeyAnlegen('Nestwerk');
+    arbeit.then((erg) => {
+      if (vorhanden) {
+        fertig({ anbieter: K.aktuell().anbieter || 'passkey' });
+      } else {
+        /* Ohne Adresse geht es nicht weiter als Stufe 2 – aber anmelden
+           kann man sich damit sofort. Die Adresse holt die Kontoseite. */
+        fertig({ anbieter: 'passkey', passkey: erg, name: entwurf.name || '' });
+      }
+    }, (e) => {
+      meldung = e && e.name === 'NotAllowedError'
+        ? 'Die Anmeldung wurde abgebrochen oder ist abgelaufen.'
+        : (e.message || 'Der Passkey ließ sich nicht anlegen.');
+      ui.neuZeichnen();
+    });
+  }
+
+  function fertig(daten) {
+    const k = K.anmelden(Object.assign({ agbStand: R ? R.angaben().stand : '' }, daten));
+    schritt = 'wahl';
+    meldung = '';
+    entwurf = { mail: '', name: '', anbieter: '', agb: false };
+    ui.gehe(k.stufe < 2 ? 'konto' : 'start');
+    ui.neuZeichnen();
+    ui.toast('Angemeldet als ' + K.anzeigeName() + '.', 'gut');
+  }
+
+  A_('konto-abmelden', () => {
+    if (!confirm('Abmelden? Merkliste, Profil und Notizen bleiben auf diesem Gerät erhalten.')) return;
+    K.abmelden();
+    ui.gehe('anmelden');
+    ui.neuZeichnen();
+  });
+
+  A_('konto-loeschen', () => {
+    if (!confirm('Das Konto wird vollständig gelöscht. Merkliste, Profil und Notizen bleiben erhalten – '
+      + 'die löschst du über „Meine Daten“. Fortfahren?')) return;
+    K.loeschen();
+    ui.gehe('anmelden');
+    ui.neuZeichnen();
+    ui.toast('Konto gelöscht.');
+  });
+
+  A_('konto-speichern', () => {
+    const name = ((U.$('#konto-name') || {}).value || '').trim();
+    const mail = ((U.$('#konto-mail') || {}).value || '').trim();
+    const k = K.aktuell();
+    if (mail && !K.mailForm(mail)) { ui.toast('Diese Adresse sieht nicht wie eine E-Mail-Adresse aus.', 'schlecht'); return; }
+    const geaendert = mail !== (k.mail || '');
+    K.aendern({ name, mail, mailBestaetigt: geaendert ? false : k.mailBestaetigt });
+    ui.neuZeichnen();
+    ui.toast(geaendert ? 'Gespeichert. Die neue Adresse ist noch nicht bestätigt.' : 'Gespeichert.', 'gut');
+  });
+
+  A_('konto-passkey', () => {
+    K.passkeyAnlegen(K.anzeigeName()).then((p) => {
+      K.aendern({ passkey: p });
+      ui.neuZeichnen();
+      ui.toast('Passkey hinterlegt. Nächste Anmeldung ohne Eingabe.', 'gut');
+    }, (e) => ui.toast(e && e.name === 'NotAllowedError'
+      ? 'Abgebrochen.' : (e.message || 'Hat nicht geklappt.'), 'schlecht'));
+  });
+
+  A_('konto-telefon', () => {
+    ui.dialog({
+      titel: 'Telefonnummer bestätigen',
+      inhalt: h`<p>Eine bestätigte Nummer ist der Punkt, an dem Betrug im großen Stil unwirtschaftlich wird:
+          Nummern kosten Geld und lassen sich nicht beliebig oft neu beschaffen.</p>
+        <label class="feld"><span>Mobilnummer</span>
+          <input type="tel" id="konto-nummer" autocomplete="tel" placeholder="+49 …"></label>
+        <div class="anmeldung__demo">${ico('warnung')}
+          <div><b>Nachgebildet</b>
+          <p>Es gibt keinen Server, der eine SMS verschicken könnte. Im Betrieb käme jetzt ein Code auf das
+            Telefon – über einen Versanddienst, der pro Nachricht abrechnet.</p></div>
+        </div>`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Abbrechen</button>
+        <button type="button" class="knopf" data-tu="konto-telefon-fertig">${ico('pruefen')}Als bestätigt eintragen</button>`
+    });
+  });
+
+  A_('konto-telefon-fertig', () => {
+    const nr = ((U.$('#konto-nummer') || {}).value || '').trim();
+    if (nr.replace(/\D/g, '').length < 7) { ui.toast('Diese Nummer ist zu kurz.', 'schlecht'); return; }
+    K.aendern({ telefon: nr, telefonBestaetigt: true });
+    ui.dialogZu();
+    ui.neuZeichnen();
+    ui.toast('Stufe 3 erreicht.', 'gut');
+  });
+
+  A_('konto-ausweis', () => {
+    ui.dialog({
+      titel: 'Ausweis prüfen lassen',
+      breit: true,
+      inhalt: h`<p>Für Inserierende ist das der Maßstab. Geprüft wird über einen Dienst – POSTIDENT in der
+          Filiale oder per Video, oder die eID-Funktion des Personalausweises.</p>
+        <ul class="pruef">
+          <li>${ico('pruefen')}<span><b>Der Ausweis selbst wird nicht gespeichert.</b> Zurück kommt nur die
+            Bestätigung, dass die Person geprüft wurde, mit Name und Geburtsdatum.</span></li>
+          <li>${ico('pruefen')}<span>Ein Ausweis je Konto. Wer aussortiert wird, kann nicht in fünf Minuten
+            wiederkommen.</span></li>
+          <li>${ico('warnung')}<span>Kostet Geld – je nach Verfahren wenige Euro je Prüfung. Deshalb sinnvoll
+            für Inserierende, nicht für alle.</span></li>
+        </ul>
+        <div class="anmeldung__demo">${ico('warnung')}
+          <div><b>Nachgebildet</b>
+          <p>Hier gibt es keinen Prüfdienst. Der Knopf setzt die Stufe, damit du siehst, was sie bewirkt.</p></div>
+        </div>`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Abbrechen</button>
+        <button type="button" class="knopf" data-tu="konto-ausweis-fertig">Als geprüft eintragen</button>`
+    });
+  });
+
+  A_('konto-ausweis-fertig', () => {
+    K.aendern({ ausweisGeprueft: true });
+    ui.dialogZu();
+    ui.neuZeichnen();
+    ui.toast('Stufe 4 erreicht.', 'gut');
+  });
+
+  ui.ansichten.anmelden = anmeldeseite;
+  ui.ansichten.konto = kontoseite;
+  NW.viewAnmeldung = { anmeldeseite, kontoseite };
 })(window.NW = window.NW || {});
 
 /* ===== app.js ===== */

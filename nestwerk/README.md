@@ -511,6 +511,64 @@ Dazu drei Regeln, die nicht verhandelbar sind:
 * Neben jeder Anzeige steht ein **„?“**, das genau das erklärt, und ein Weg zum
   anzeigenfreien Tarif.
 
+## Anmeldung
+
+Die Nutzung setzt eine Anmeldung voraus. Vier Wege, sortiert nach
+Sicherheit statt nach Bekanntheit:
+
+| Weg | Stufe | Was daran echt ist |
+|---|---|---|
+| **Passkey** | 2 | vollständig – WebAuthn spricht mit dem Betriebssystem |
+| Google / Microsoft / Apple | 2 | Ablauf nachgebildet, Konfiguration dokumentiert |
+| E-Mail mit Einmalcode | 1 | Code, Frist, Fehlversuchszähler echt – nur der Versand nicht |
+
+**Der Passkey steht oben, weil er als Einziges gegen die häufigste Masche
+schützt:** eine nachgebaute Anmeldeseite. Ein Passkey ist an die Domain
+gebunden, unter der er angelegt wurde. Wer auf eine gefälschte Seite
+hereinfällt, gibt dort nichts preis — es gibt nichts einzugeben. Das ist der
+eine Teil, der hier wirklich läuft: `navigator.credentials` spricht mit dem
+Betriebssystem, Face ID und Windows Hello gehen auf, und der Schlüssel
+entsteht im Sicherheitschip des Geräts.
+
+Ein Passwort gibt es in keinem der vier Wege.
+
+Was ohne Server nicht echt sein *kann*: das Versenden der Bestätigungsmail
+und der Rückkanal zu Google, Microsoft und Apple. Deren Verfahren braucht
+zwingend eine Serverseite, die das Client-Geheimnis hält und das
+zurückgegebene ID-Token prüft — ein reiner Browser kann das nicht, und wer
+behauptet, er könne es, hat es falsch gebaut. Die Anwendung bildet den Ablauf
+deshalb vollständig nach, sagt an jeder Stelle dazu, dass er nachgebildet
+ist, und schreibt in `assets/konto.js` unter `ANBIETER` auf, was im Betrieb
+je Anbieter einzutragen ist.
+
+### Ohne Anmeldung erreichbar
+
+Impressum, Datenschutzerklärung, AGB, Widerrufsbelehrung, der Meldeweg und
+die Hilfe. § 5 DDG verlangt „ständig verfügbar" — hinter einer Anmeldung ist
+nichts ständig verfügbar. Und wer nicht hereinkommt, braucht die Hilfe am
+dringendsten.
+
+### Vertrauensstufen — hier sitzt der Schutz, nicht in der Anmeldung
+
+Eine Anmeldepflicht hält keinen Betrüger auf. Ein Google-Konto ist in zwei
+Minuten angelegt. Was wirklich wirkt, ist die Stufe darüber — und dass man
+**sieht**, welche Stufe das Gegenüber hat:
+
+| Stufe | Bedingung | Wirkung |
+|---|---|---|
+| 0 | nichts bestätigt | sollte nichts inserieren dürfen |
+| 1 | E-Mail bestätigt | Wegwerfadressen bleiben möglich |
+| 2 | Passkey oder Anbieterkonto | massenhaftes Anlegen wird mühsam |
+| 3 | Telefonnummer bestätigt | Betrug im großen Stil wird unwirtschaftlich |
+| 4 | Ausweis geprüft | für Inserierende der Maßstab |
+
+Die Stufe steht **an jedem Inserat**, nicht nur im eigenen Konto: auf der
+Karte als Kennzeichen, auf der Objektseite mit einem Satz dazu, was sie
+bedeutet. Unter Stufe 2 warnt Nestwerk ausdrücklich — nicht, dass etwas nicht
+stimmt, sondern dass die üblichen Regeln besonders gelten.
+
+Eine Wegwerfadresse hebt die Stufe nicht über 1, auch mit Passkey.
+
 ## Hilfe
 
 Unten rechts hängt auf jeder Seite ein Hilfefenster; unter `#/hilfe` stehen
@@ -631,6 +689,7 @@ nestwerk/
     tresor.js           Verschlüsselung, Ablage, befristete Freigaben
     recht.js            Betreiberangaben, Pflichtfelder, Preishinweise
     hilfe.js            Wissensbasis der Hilfe und der Abgleich
+    konto.js            Anmeldung, Passkeys, Einmalcode, Vertrauensstufen
     karte.js            die Karte
     ui.js               Schale, Router, geteilte Bausteine
     view-*.js           die einzelnen Ansichten
@@ -682,7 +741,9 @@ keine doppelten IDs, kein waagerechter Überlauf von 320 px bis 1920 px,
 
 Es gibt keinen Server. Merkliste, Profil, Suchaufträge, Nachrichten und
 eigene Inserate liegen im `localStorage` dieses Browsers unter dem Schlüssel
-`nestwerk.v1`. Unter „Meine Daten“ im Fußbereich lässt sich der Stand als
+`nestwerk.v1`, das Konto getrennt davon unter `nestwerk.konto.v1` — wer sich
+abmeldet, soll seine Merkliste behalten, und wer seine Daten löscht, nicht
+ungewollt ausgesperrt werden. Unter „Meine Daten“ im Fußbereich lässt sich der Stand als
 Datei sichern oder vollständig löschen. Beim Leeren der Browserdaten
 verschwindet er ebenfalls.
 

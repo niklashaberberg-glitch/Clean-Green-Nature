@@ -1147,6 +1147,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .marke__text { display: none; }
   .kopf__tun { gap: 2px; }
   .kopf__tun .ikon-btn { width: 36px; height: 36px; }
+  /* Auf 320 Pixeln passt die rechte Gruppe sonst nicht. Das Konto bleibt
+     über Profil, Fußbereich und Schnellsuche erreichbar. */
+  body.ist-angemeldet .kopf__tun .nur-angemeldet { display: none; }
 }
 
 @media (max-width: 1180px) {
@@ -1940,3 +1943,102 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .hilfe__knopfwort { display: none; }
   .hilfe__knopf { padding: .7em; }
 }
+
+/* =====================================================================
+   Anmeldung und Konto
+   ===================================================================== */
+
+.nur-angemeldet { display: none; }
+body.ist-angemeldet .nur-angemeldet { display: grid; }
+
+.anmeldung { min-height: calc(100vh - var(--kopf-hoehe)); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px; padding: 5vh clamp(12px, 4vw, 24px) 24px; }
+.anmeldung__kasten { width: min(520px, 100%); padding: clamp(20px, 4vw, 32px);
+  border: 1px solid var(--rand); border-radius: var(--r-gross); background: var(--flaeche);
+  box-shadow: var(--schatten); }
+.anmeldung__kopf { text-align: center; margin-bottom: 20px; }
+.anmeldung__logo { display: inline-grid; place-items: center; width: 52px; height: 52px; margin-bottom: 10px;
+  border-radius: var(--r); background: var(--akzent-hell); color: var(--akzent); }
+.anmeldung__logo .ico { width: 28px; height: 28px; }
+.anmeldung__kopf h1 { margin: 0 0 .3em; font-size: 1.45rem; letter-spacing: -.02em; }
+.anmeldung__kopf p { margin: 0; font-size: .9rem; line-height: 1.6; color: var(--text-leise); }
+
+.anmeldung__wege { display: grid; gap: 8px; }
+.anmeldung__wege--eng { margin-top: 14px; }
+.anmeldung__weg { display: flex; align-items: center; gap: .8em; width: 100%; padding: .8em .9em;
+  border: 1px solid var(--rand-feld); border-radius: var(--r); background: var(--flaeche);
+  font: inherit; color: var(--text); text-align: left; cursor: pointer;
+  transition: border-color var(--tempo), background var(--tempo); }
+.anmeldung__weg:hover:not([disabled]) { border-color: var(--akzent); background: var(--flaeche2); }
+.anmeldung__weg[disabled] { opacity: .55; cursor: not-allowed; }
+.anmeldung__weg.is-empfohlen { border-color: var(--akzent); border-width: 2px; }
+.anmeldung__zeichen { flex: none; display: grid; place-items: center; width: 34px; height: 34px;
+  border-radius: var(--r-klein); background: var(--flaeche2); }
+.anmeldung__zeichen .ico { width: 19px; height: 19px; }
+.anmeldung__wort { flex: 1 1 auto; min-width: 0; }
+.anmeldung__wort b { display: block; font-size: .95rem; }
+.anmeldung__wort i { display: block; margin-top: .1em; font-style: normal; font-size: .8rem;
+  color: var(--text-leise); line-height: 1.45; }
+.anmeldung__marke { flex: none; padding: .2em .6em; border-radius: 999px;
+  background: var(--akzent-hell); color: var(--akzent); font-size: .7rem; font-weight: 700; }
+.anmeldung__nachbau { flex: none; padding: .2em .55em; border-radius: 999px;
+  background: var(--warn-hell); color: var(--warn); font-size: .68rem; font-weight: 600; white-space: nowrap; }
+
+.anmeldung__form { display: grid; gap: 12px; }
+.anmeldung__form .werkzeug__weiter { margin: 0; }
+.anmeldung__agb { align-items: flex-start; font-size: .84rem; line-height: 1.55; }
+.anmeldung__zustimmung { padding: 14px; border: 1px solid var(--rand); border-radius: var(--r);
+  background: var(--flaeche2); display: grid; gap: 10px; }
+.anmeldung__zustimmungKopf { display: flex; align-items: center; gap: .6em; margin: 0; font-size: .95rem; }
+
+.anmeldung__demo { display: flex; gap: .6em; align-items: flex-start; padding: .8em .9em;
+  border: 1px dashed var(--warn); border-radius: var(--r-klein); background: var(--warn-hell); }
+.anmeldung__demo > .ico { flex: none; color: var(--warn); margin-top: .15em; }
+.anmeldung__demo b { display: block; font-size: .87rem; }
+.anmeldung__demo p { margin: .2em 0 0; font-size: .82rem; line-height: 1.55; color: var(--text-leise); }
+.anmeldung__code { display: inline-block; margin-top: .5em; padding: .25em .7em; border-radius: var(--r-klein);
+  background: var(--flaeche); font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 1.35rem; font-weight: 700; letter-spacing: .22em; }
+
+.anmeldung__warum { margin-top: 14px; border: 1px solid var(--rand); border-radius: var(--r-klein);
+  background: var(--flaeche2); }
+.anmeldung__warum > summary { display: flex; align-items: center; gap: .5em; padding: .7em .9em;
+  cursor: pointer; font-size: .86rem; font-weight: 600; list-style: none; }
+.anmeldung__warum > summary::-webkit-details-marker { display: none; }
+.anmeldung__warum > summary .ico { color: var(--akzent); }
+.anmeldung__warum p { margin: 0 .9em .8em; font-size: .84rem; line-height: 1.6; color: var(--text-leise); }
+
+.anmeldung__ehrlich { display: flex; gap: .6em; align-items: flex-start; margin-top: 18px;
+  padding-top: 14px; border-top: 1px dashed var(--rand-stark); }
+.anmeldung__ehrlich > .ico { flex: none; color: var(--text-still); margin-top: .15em; }
+.anmeldung__ehrlich b { display: block; font-size: .87rem; }
+.anmeldung__ehrlich p { margin: .2em 0 0; font-size: .82rem; line-height: 1.6; color: var(--text-leise); }
+
+.anmeldung__fuss { display: flex; flex-wrap: wrap; gap: .6em 1.2em; justify-content: center;
+  font-size: .82rem; }
+.anmeldung__fuss a { color: var(--text-leise); }
+.anmeldung__fuss a:hover { color: var(--akzent); }
+
+/* Vertrauensstufen */
+.stufen { list-style: none; margin: 14px 0; padding: 0; display: grid; gap: 6px; }
+.stufen li { display: flex; gap: .8em; align-items: flex-start; padding: .7em .85em;
+  border: 1px solid var(--rand); border-radius: var(--r-klein); background: var(--flaeche2); opacity: .62; }
+.stufen li.is-erreicht { opacity: 1; background: var(--flaeche); }
+.stufen li.is-jetzt { border-color: var(--akzent); border-width: 2px; background: var(--akzent-hell); }
+.stufen__n { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--flaeche3); color: var(--text-leise); font-size: .82rem; font-weight: 700; }
+.stufen li.is-erreicht .stufen__n { background: var(--akzent); color: var(--auf-akzent); }
+.stufen li > div { flex: 1 1 auto; min-width: 0; }
+.stufen b { display: block; font-size: .89rem; }
+.stufen i { display: block; margin-top: .12em; font-style: normal; font-size: .8rem;
+  color: var(--text-leise); line-height: 1.5; }
+.stufen__marke { flex: none; padding: .18em .55em; border-radius: 999px; background: var(--akzent);
+  color: var(--auf-akzent); font-size: .68rem; font-weight: 700; white-space: nowrap; }
+
+.anbieter__stufe { display: flex; gap: .55em; align-items: flex-start; margin: 12px 0 0;
+  padding: .7em .85em; border-radius: var(--r-klein); background: var(--flaeche2);
+  font-size: .85rem; line-height: 1.6; color: var(--text-leise); }
+.anbieter__stufe > .ico { flex: none; margin-top: .15em; color: var(--akzent); }
+.anbieter__stufe b { color: var(--text); }
+.anbieter__stufe.is-schwach { background: var(--warn-hell); }
+.anbieter__stufe.is-schwach > .ico { color: var(--warn); }

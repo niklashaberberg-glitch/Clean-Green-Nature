@@ -184,6 +184,21 @@
           </div>
         </section>
 
+        ${NW.konto && NW.konto.angemeldet() ? (() => {
+        const k = NW.konto.aktuell();
+        const st = NW.konto.stufe(k.stufe);
+        return h`<section class="block">
+          <div class="block__kopfzeile">
+            <h2>${ico('person')}Konto</h2>
+            ${ui.badge(st.name, st.ton)}
+          </div>
+          <p class="block__unter">Angemeldet als <b>${NW.konto.anzeigeName()}</b>${k.mail ? ' · ' + k.mail : ''}.
+            Die Vertrauensstufe zählt vor allem, wenn du selbst inserierst – andere sehen sie an deinem Angebot.</p>
+          <p class="werkzeug__weiter">
+            <a class="knopf knopf--still" href="#/konto">${ico('schloss')}Konto und Vertrauensstufe</a></p>
+        </section>`;
+      })() : ''}
+
         <section class="block">
           <h2>${ico('blatt')}Bewerbermappe</h2>
           <p class="block__unter">Wer die Unterlagen parat hat, bewirbt sich in Minuten statt in Tagen.

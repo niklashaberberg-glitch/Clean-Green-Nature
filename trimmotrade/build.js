@@ -6,6 +6,8 @@
    Ergebnis:
      dist/trimmotrade.html   vollständige Seite, per Doppelklick zu öffnen
      dist/artifact.html   nur der Seiteninhalt, ohne html/head/body
+     dist/artifact-web.html  dieselbe Datei noch einmal – sie ist es, die
+                             als Artefakt veröffentlicht wird
    ===================================================================== */
 'use strict';
 
@@ -73,6 +75,10 @@ const nurInhalt = '<title>TrimmoTrade</title>\n' + inhalt + '\n';
 fs.mkdirSync(dist, { recursive: true });
 fs.writeFileSync(path.join(dist, 'trimmotrade.html'), vollseite);
 fs.writeFileSync(path.join(dist, 'artifact.html'), nurInhalt);
+/* Zweite, gleichlautende Ausgabe. Sie ist die Datei, die als Artefakt
+   veröffentlicht wird – unter eigenem Namen, damit sich die Adresse des
+   Artefakts nicht ändert, wenn sich an der Ausgabe etwas verschiebt. */
+fs.writeFileSync(path.join(dist, 'artifact-web.html'), nurInhalt);
 
 const kb = (s) => Math.round(Buffer.byteLength(s, 'utf8') / 1024) + ' kB';
 console.log('dist/trimmotrade.html  ' + kb(vollseite));

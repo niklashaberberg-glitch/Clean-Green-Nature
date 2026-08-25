@@ -44,7 +44,7 @@
         '<circle r="21" class="' + (p.k.eigen ? 'is-ich' : '') + '"/>' +
         '<text y="5">' + (p.k.eigen ? 'Du' : String.fromCharCode(65 + i)) + '</text></g>';
     });
-    return raw('<svg class="ringgrafik" viewBox="0 0 ' + g + ' ' + g + '" role="img" aria-label="Tauschkette mit ' + n + ' Beteiligten">' +
+    return raw('<svg class="ringgrafik" viewBox="0 0 ' + g + ' ' + g + '" role="img" aria-label="' + U.t('Tauschkette mit {0} Beteiligten').replace('{0}', n) + '">' +
       '<defs><marker id="' + spitze + '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">' +
       '<path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs>' +
       pfeile + knoten + '</svg>');

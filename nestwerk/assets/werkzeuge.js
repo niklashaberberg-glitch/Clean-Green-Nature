@@ -70,9 +70,9 @@
     /* Wer früh dran ist, wird gelesen. */
     const tage = U.daysSince(l.stats.online);
     if (tage <= 1) wiegen(1.5, 'Zeitpunkt', 'Das Inserat ist frisch – deine Nachricht steht weit oben im Postfach.', true);
-    else if (tage <= 4) wiegen(1.15, 'Zeitpunkt', 'Seit ' + tage + ' Tagen online, noch früh genug.', true);
-    else if (tage <= 14) wiegen(0.85, 'Zeitpunkt', 'Seit ' + tage + ' Tagen online – die ersten Besichtigungen laufen wahrscheinlich schon.', false);
-    else wiegen(0.55, 'Zeitpunkt', 'Seit ' + tage + ' Tagen online. Entweder ist es schwer vermietbar, oder die Vergabe stockt.', false);
+    else if (tage <= 4) wiegen(1.15, 'Zeitpunkt', U.t('Seit {0} Tagen online, noch früh genug.').replace('{0}', tage), true);
+    else if (tage <= 14) wiegen(0.85, 'Zeitpunkt', U.t('Seit {0} Tagen online – die ersten Besichtigungen laufen wahrscheinlich schon.').replace('{0}', tage), false);
+    else wiegen(0.55, 'Zeitpunkt', U.t('Seit {0} Tagen online. Entweder ist es schwer vermietbar, oder die Vergabe stockt.').replace('{0}', tage), false);
 
     /* Belegung: zu viele Menschen auf zu wenig Zimmern ist ein häufiger Ablehnungsgrund. */
     if (l.kind !== 'kauf' && p.haushalt) {
@@ -93,7 +93,7 @@
 
     /* Ein Anbieter, der nicht antwortet, macht jede Bewerbung wertlos. */
     if (l.anbieter.quote < 45) {
-      wiegen(0.7, 'Anbieter', 'Der Anbieter antwortet nur in ' + l.anbieter.quote + ' % der Fälle.', false);
+      wiegen(0.7, 'Anbieter', U.t('Der Anbieter antwortet nur in {0} % der Fälle.').replace('{0}', l.anbieter.quote), false);
       tipps.push('Halte parallel zwei Alternativen warm – bei dieser Antwortquote ist Schweigen wahrscheinlich.');
     } else if (l.anbieter.quote > 85) {
       wiegen(1.12, 'Anbieter', l.anbieter.quote + ' % Antwortquote – hier bekommst du zumindest eine Rückmeldung.', true);
@@ -122,11 +122,11 @@
         staerke: 'unbekannt', andrang: mitbewerber === 0 ? 'keiner' : mitbewerber < 8 ? 'gering'
           : mitbewerber < 30 ? 'spürbar' : mitbewerber < 80 ? 'hoch' : 'sehr hoch',
         stufe: 'unbekannt',
-        satz: 'Über deine Bewerbung weiß Nestwerk noch nichts – ohne Einkommen und Unterlagen im Profil lässt sich '
-          + 'nichts einschätzen. Was feststeht: '
-          + (mitbewerber === 0 ? 'Bisher hat sich niemand sonst gemeldet.'
-            : mitbewerber === 1 ? 'Bisher hat sich eine weitere Person gemeldet.'
-              : 'Es haben sich bereits ' + mitbewerber + ' andere gemeldet.')
+        satz: U.t('Über deine Bewerbung weiß Nestwerk noch nichts – ohne Einkommen und Unterlagen im Profil '
+          + 'lässt sich nichts einschätzen. Was feststeht:') + ' '
+          + (mitbewerber === 0 ? U.t('Bisher hat sich niemand sonst gemeldet.')
+            : mitbewerber === 1 ? U.t('Bisher hat sich eine weitere Person gemeldet.')
+              : U.t('Es haben sich bereits {0} andere gemeldet.').replace('{0}', mitbewerber))
       };
     }
 

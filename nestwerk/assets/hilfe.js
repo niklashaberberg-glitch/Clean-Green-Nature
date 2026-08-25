@@ -471,13 +471,34 @@
 
   /* Vorberechnete Wortlisten – bei jedem Tastendruck neu zu stemmen wäre
      Verschwendung. */
-  const INDEX = THEMEN.map((t) => ({
-    thema: t,
-    schlag: t.schlag.map(formen),
-    muster: t.muster || [],
-    fragen: t.fragen.map((f) => woerter(f)),
-    titelWorte: woerter(t.titel)
-  }));
+  /* Die Wissensbasis ist je Sprache eine eigene, keine übersetzte: Der
+     Abgleich läuft über Wortstämme und Muster, und deutsche Stämme
+     finden in „how do I cancel“ nichts. Englische Themen stehen in
+     hilfe-en.js und tragen sich hier ein. */
+  const TABELLEN = Object.create(null);
+  TABELLEN.de = THEMEN;
+
+  let aktive = THEMEN;
+  let INDEX = [];
+
+  function indizieren() {
+    const sprache = NW.i18n ? NW.i18n.sprache() : 'de';
+    aktive = TABELLEN[sprache] || TABELLEN.de;
+    INDEX = aktive.map((t) => ({
+      thema: t,
+      schlag: t.schlag.map(formen),
+      muster: t.muster || [],
+      fragen: t.fragen.map((f) => woerter(f)),
+      titelWorte: woerter(t.titel)
+    }));
+  }
+
+  function themenEintragen(sprache, liste) {
+    TABELLEN[sprache] = liste;
+    indizieren();
+  }
+
+  indizieren();
 
   const MINDEST = 2.2;
 
@@ -536,7 +557,7 @@
     return { sicher: true, thema: rang[0].thema, punkte: rang[0].punkte };
   }
 
-  const thema = (id) => THEMEN.find((t) => t.id === id) || null;
+  const thema = (id) => aktive.find((t) => t.id === id) || null;
 
   function text(t) {
     return typeof t.antwort === 'function' ? t.antwort() : t.antwort;
@@ -545,7 +566,7 @@
   /* Themen für die Startauswahl: je Gruppe das erste. */
   function einstieg() {
     const gesehen = {};
-    return THEMEN.filter((t) => {
+    return aktive.filter((t) => {
       if (gesehen[t.gruppe]) return false;
       gesehen[t.gruppe] = true;
       return true;
@@ -554,12 +575,13 @@
 
   const GRUPPEN = () => {
     const g = {};
-    THEMEN.forEach((t) => { (g[t.gruppe] = g[t.gruppe] || []).push(t); });
+    aktive.forEach((t) => { (g[t.gruppe] = g[t.gruppe] || []).push(t); });
     return g;
   };
 
   NW.hilfe = {
-    THEMEN, MINDEST,
+    MINDEST, themenEintragen, indizieren,
+    get THEMEN() { return aktive; },
     normalisieren, woerter, wortFormen, bewerten, antworten, thema, text, einstieg, GRUPPEN
   };
 })(window.NW = window.NW || {});

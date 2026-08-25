@@ -34,7 +34,7 @@
 
     container.classList.add('karte');
     container.innerHTML =
-      '<svg class="karte__svg" viewBox="0 0 ' + W + ' ' + H + '" role="application" aria-label="Karte der Suchergebnisse" tabindex="0">' +
+      '<svg class="karte__svg" viewBox="0 0 ' + W + ' ' + H + '" role="application" aria-label="' + NW.util.t('Karte der Suchergebnisse') + '" tabindex="0">' +
       '<defs>' +
       '<pattern id="k-raster" width="40" height="40" patternUnits="userSpaceOnUse">' +
       '<path d="M40 0H0V40" fill="none" stroke="currentColor" stroke-width="1" opacity=".12"/></pattern>' +
@@ -56,10 +56,10 @@
       '<label class="karte__schalter"><input type="checkbox" data-k="heat" checked> Preisniveau</label>' +
       '</div>' +
       '<div class="karte__legende" aria-hidden="true">' +
-      '<span><i style="background:' + FARBEN.miete + '"></i>Miete</span>' +
-      '<span><i style="background:' + FARBEN.kauf + '"></i>Kauf</span>' +
-      '<span><i style="background:' + FARBEN.wg + '"></i>WG</span>' +
-      '<span><i style="background:' + FARBEN.tausch + '"></i>Tausch</span>' +
+      '<span><i style="background:' + FARBEN.miete + '"></i>' + NW.util.t('Miete') + '</span>' +
+      '<span><i style="background:' + FARBEN.kauf + '"></i>' + NW.util.t('Kauf') + '</span>' +
+      '<span><i style="background:' + FARBEN.wg + '"></i>' + NW.util.t('WG') + '</span>' +
+      '<span><i style="background:' + FARBEN.tausch + '"></i>' + NW.util.t('Tausch') + '</span>' +
       '</div>' +
       '<div class="karte__tip" hidden></div>';
 

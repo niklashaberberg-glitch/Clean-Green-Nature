@@ -417,7 +417,7 @@
       type: isZimmer ? 'zimmer' : isHaus ? 'haus' : 'wohnung',
       titel: titelTeil + ' – ' + district.name,
       stadt: city.name, viertel: district.name, viertelKey: district.key,
-      strasse: 'Nähe ' + U.pick(r, STRASSEN),
+      strasse: f('Nähe {0}', U.pick(r, STRASSEN)),
       lat, lng,
       zimmer: rooms, flaeche: area, wohnflaeche,
       etage: floor, etagen: floors, baujahr: year, saniert,
@@ -639,7 +639,7 @@
       zwilling.flaeche = original.flaeche + U.pick(r, [0, 0, 1, -1]);
       zwilling.wohnflaeche = zwilling.flaeche;
       zwilling.anbieter = makeAnbieter(r, original.anbieter.art === 'makler' ? 'privat' : 'makler', zwilling.stadt);
-      zwilling.strasse = 'Nähe ' + U.pick(r, STRASSEN);
+      zwilling.strasse = f('Nähe {0}', U.pick(r, STRASSEN));
       zwilling.stats = {
         aufrufe: Math.round(original.stats.aufrufe * U.between(r, 0.3, 1.4)),
         bewerber: Math.round(original.stats.bewerber * U.between(r, 0.3, 1.3)),

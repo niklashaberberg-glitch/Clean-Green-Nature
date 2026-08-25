@@ -207,7 +207,20 @@
 
   function uebersetzeLauf(text) {
     if (text.indexOf(MARKE) < 0) return uebersetze(text);
-    return zurueck(uebersetze(zuLesbar(text)));
+    const lesbar = zuLesbar(text);
+    const direkt = uebersetze(lesbar);
+    if (direkt !== lesbar) return zurueck(direkt);
+    /* Zweiter Versuch ohne die Platzhalter am Rand. Ein Zeichen vor dem
+       Text – ${ico('herz')}Merken – gehört nicht zum Satz, verschiebt
+       aber den Schlüssel auf „{0}Merken“. Ohne diesen Schritt müsste
+       jeder Eintrag wissen, wie viele Werte zufällig davorstehen, und
+       ein zusätzliches Zeichen im Markup bräche die Übersetzung. */
+    const teile = /^(\s*(?:\{\d+\}\s*)*)([\s\S]*?)((?:\s*\{\d+\})*\s*)$/.exec(lesbar);
+    if (teile && teile[2].trim()) {
+      const innen = uebersetze(teile[2]);
+      if (innen !== teile[2]) return zurueck(teile[1] + innen + teile[3]);
+    }
+    return text;
   }
 
   const ATTRIBUTE = /\b(aria-label|aria-description|title|placeholder|alt)\s*=\s*"([^"]*)"/gi;

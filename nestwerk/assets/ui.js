@@ -174,7 +174,8 @@
       eck.push(l.flaeche + ' m²');
       if (l.kind === 'wg') eck.push(U.t('WG mit {0}').replace('{0}', l.wg.groesse));
       else if (l.type === 'haus') eck.push(l.grundstueck ? U.num(l.grundstueck) + ' m² Grund' : 'Haus');
-      else eck.push(l.etage === 0 ? 'EG' : l.etage >= l.etagen ? 'DG' : l.etage + '. OG');
+      else eck.push(l.etage === 0 ? U.t('EG') : l.etage >= l.etagen ? U.t('DG')
+        : U.t('{0}. OG').replace('{0}', l.etage));
     }
     eck.push('ab ' + U.dateDE(l.freiAb));
 
@@ -193,7 +194,8 @@
         <ul class="karte-inserat__eck">${eck.map((e) => h`<li>${e}</li>`)}</ul>
         ${b && b.pendel ? h`<p class="karte-inserat__pendel">${ico('zug')}${U.minutesLabel(b.pendel.min)} nach ${b.pendel.anker.name}</p>` : ''}
         ${l.kind === 'wg' && b && b.wg && !b.wg.ausschluss.length
-        ? h`<p class="karte-inserat__wg">${ico('wg')}WG-Passung ${b.wg.score} % – ${b.wg.kurz}</p>` : ''}
+        ? h`<p class="karte-inserat__wg">${ico('wg')}${U.t('WG-Passung {0} % – {1}')
+          .replace('{0}', b.wg.score).replace('{1}', U.t(b.wg.kurz))}</p>` : ''}
         ${l.kind === 'tausch' ? h`<p class="karte-inserat__wg">${ico('tausch')}sucht ${l.tausch.suche.staedte.join(', ')}</p>` : ''}
         <div class="karte-inserat__fuss">
           <span class="karte-inserat__meta">${U.since(l.stats.online)} · ${l.stats.bewerber} ${U.plural(l.stats.bewerber, 'Interessent', 'Interessenten')}</span>
@@ -706,6 +708,7 @@
     /* Der erzeugte Bestand trägt seine Texte fertig zusammengesetzt bei
        sich – der muss neu gebaut werden, bevor irgendetwas zeichnet. */
     NW.data.neuAufbauen();
+    if (NW.hilfe) NW.hilfe.indizieren();
     /* Die Schale trägt Navigation, Fußbereich und Knöpfe – die stehen
        alle in Vorlagen und müssen mit. Danach die Ansicht erzwingen,
        weil sich die Route nicht geändert hat. */

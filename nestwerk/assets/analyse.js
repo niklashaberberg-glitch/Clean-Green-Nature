@@ -415,8 +415,9 @@
       const vs = schoen.length ? schoenOk / schoen.length : 1;
       const v = vm * 0.7 + vs * 0.3;
       add('ausstattung', 'Ausstattung', v, gw.ausstattung,
-        (muss.length ? mussOk + ' von ' + muss.length + ' Pflicht' : '') +
-        (schoen.length ? (muss.length ? ', ' : '') + schoenOk + ' von ' + schoen.length + ' Wunsch' : ''));
+        (muss.length ? U.t('{0} von {1} Pflicht').replace('{0}', mussOk).replace('{1}', muss.length) : '') +
+        (schoen.length ? (muss.length ? ', ' : '')
+          + U.t('{0} von {1} Wunsch').replace('{0}', schoenOk).replace('{1}', schoen.length) : ''));
     }
 
     /* Energie – ein Grundstück hat keinen Ausweis, und einen zu erfinden
@@ -444,10 +445,11 @@
     } else if (mc) {
       const v = mc.diff <= -12 ? 1 : mc.diff <= 5 ? 0.85 : mc.diff <= 15 ? 0.5 : mc.diff <= 25 ? 0.25 : 0.05;
       add('fairness', 'Preis-Leistung', v, gw.fairness,
-        (mc.diff >= 0 ? '+' : '') + mc.diff + ' % zur Vergleichsmiete');
+        U.t('{0} % zur Vergleichsmiete').replace('{0}', (mc.diff >= 0 ? '+' : '') + mc.diff));
     } else if (kc) {
       const v = kc.diff <= -10 ? 1 : kc.diff <= 6 ? 0.85 : kc.diff <= 18 ? 0.5 : 0.2;
-      add('fairness', 'Preis-Leistung', v, gw.fairness, 'Faktor ' + U.dec(kc.faktor) + ' Jahresmieten');
+      add('fairness', 'Preis-Leistung', v, gw.fairness,
+        U.t('Faktor {0} Jahresmieten').replace('{0}', U.dec(kc.faktor)));
     }
 
     /* WG-Zusammenpassen fließt bei WGs zusätzlich ein */

@@ -150,8 +150,8 @@
         ${!P.gruender().nummer && P.gruenderFrei() ? h`<section class="gruender gruender--schmal">
           <div class="gruender__marke">${ico('stern')}Gründerplätze</div>
           <h2>Die ersten ${U.num(P.GRUENDER.plaetze)} bekommen Plus ein Jahr geschenkt</h2>
-          <p>Noch <b>${U.num(P.gruenderFrei())}</b> ${U.plural(P.gruenderFrei(), 'Platz', 'Plätze')} frei.
-            Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.</p>
+          <p>${U.t('Noch')} <b>${U.num(P.gruenderFrei())}</b> ${U.t(U.plural(P.gruenderFrei(), 'Platz frei.', 'Plätze frei.'))}
+            ${U.t('Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.')}</p>
           <p class="werkzeug__weiter">
             <a class="knopf" href="#/plus">${ico('stern')}Platz sichern</a>
             <a class="link" href="#/plus">was Plus enthält</a></p>
@@ -232,7 +232,7 @@
             ${NW.viewWerkzeuge.KATALOG.slice(0, 4).map((k) => h`<a class="werkzeugkachel" href="#/${k.route}">
               <span class="werkzeugkachel__zeichen">${ico(k.icon)}</span>
               <b>${k.name}${k.plus ? ui.badge('Plus', 'info') : ''}</b>
-              <p>${U.truncate(k.text, 90)}</p>
+              <p>${U.truncate(U.t(k.text), 90)}</p>
             </a>`)}
           </div>
         </section>

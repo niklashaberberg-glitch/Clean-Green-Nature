@@ -117,7 +117,7 @@
       maengel.push(U.t('{0} über der Preisgrenze').replace('{0}', U.eur(b.warm - s.warmMax)));
     }
     (s.wunschAusstattung || []).forEach((f) => {
-      if (b.ausstattung.indexOf(f) < 0) { wert -= 0.08; maengel.push('ohne ' + f); }
+      if (b.ausstattung.indexOf(f) < 0) { wert -= 0.08; maengel.push(U.t('ohne {0}').replace('{0}', U.t(f))); }
     });
 
     /* Zeitliche Nähe des Wunschtermins */

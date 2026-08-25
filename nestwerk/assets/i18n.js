@@ -47,15 +47,13 @@
   function spracheBestimmen() {
     let gespeichert = null;
     try { gespeichert = localStorage.getItem(SCHLUESSEL); } catch (e) { gespeichert = null; }
-    if (gespeichert && SPRACHEN.some((s) => s.id === gespeichert)) {
-      aktuell = gespeichert;
-      return aktuell;
-    }
-    /* Beim ersten Besuch entscheidet der Browser. Wer sein Gerät auf
-       Englisch stellt, soll nicht erst suchen müssen. */
-    let von = '';
-    try { von = (navigator.languages && navigator.languages[0]) || navigator.language || ''; } catch (e) { von = ''; }
-    aktuell = /^en\b/i.test(von) ? 'en' : 'de';
+    /* Deutsch ist die Sprache dieser Anwendung; Englisch ist eine Wahl,
+       keine Vermutung. Automatisch nach der Browsersprache umzuschalten
+       wäre bequem, aber es überrascht: Der Bestand, die Städte und die
+       Rechtstexte sind deutsch, und wer ein englisches Betriebssystem
+       benutzt, sucht deswegen nicht in einem anderen Land. Wer umstellt,
+       bleibt umgestellt – das merkt sich der Browser. */
+    aktuell = gespeichert && SPRACHEN.some((s) => s.id === gespeichert) ? gespeichert : 'de';
     return aktuell;
   }
 

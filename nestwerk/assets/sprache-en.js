@@ -1834,4 +1834,763 @@
       'Enter your net income in your profile and Nestwerk will show the rent-to-income ratio.'
   });
 
+  /* ------------------------- Rechtstexte -------------------------
+
+     Übersetzt zum Verstehen, nicht zum Gelten: Über jedem dieser
+     Dokumente steht in der englischen Fassung der Hinweis, dass die
+     deutsche maßgeblich ist. Paragraphen und Gesetzesnamen bleiben im
+     Original – „§ 551 BGB“ ist die Fundstelle, unter der man nachliest,
+     und eine Übersetzung des Namens hilft dabei niemandem. */
+
+  e({
+    '{0}Rechtliches': '{0}Legal',
+    'Fassung vom {3}': 'Version of {3}',
+    'Anbieter, Datenschutz, Geschäftsbedingungen und Widerruf – die Angaben, die eine Seite in Deutschland führen muss, und die, die man führen sollte.':
+      'Provider, privacy, terms and withdrawal – the information a website in Germany must carry, and the information it ought to carry.',
+    '{0}{1} {2} noch': '{0}{1} {2} still',
+    'Pflichtangabe fehlt': 'mandatory detail missing',
+    'Pflichtangaben fehlen': 'mandatory details missing',
+    'Solange sie fehlen, ist dieses Dokument nicht vollständig. Im Text stehen die Lücken markiert.':
+      'While they are missing this document is incomplete. The gaps are marked in the text.',
+    '{4}Angaben ergänzen': '{4}Complete the details',
+    'Diese Texte sind ein Entwurf, keine Rechtsberatung':
+      'These texts are a draft, not legal advice',
+    'Sie sind nach den geltenden Vorschriften geschrieben – Digitale-Dienste-Gesetz, DSGVO, BGB, Verordnung über digitale Dienste – und decken ab, was ein Kleingewerbe mit einer solchen Seite braucht. Aber sie ersetzen nicht den Blick von jemandem mit Zulassung. Vor dem ersten echten Nutzer gehören vor allem die Geschäftsbedingungen, die Haftung und die Frage nach einer Erlaubnis gemäß § 34c GewO geprüft.':
+      'They are written to the applicable rules – the German Digital Services Act (DDG), the GDPR, the Civil Code (BGB) and the EU Digital Services Act – and cover what a small business running a site like this needs. But they do not replace a look from someone qualified. Before the first real user, the terms, the liability provisions and the question of a licence under § 34c GewO in particular should be reviewed.',
+    'Angaben zum Anbieter': 'Provider details',
+    'Name, Anschrift, Kontakt und Steuerstatus – von hier speisen sich alle Dokumente.':
+      'Name, address, contact and tax status – every document draws on this.',
+    '{5}Was vor dem Start noch zu klären ist': '{5}What still needs settling before launch',
+    'Punkte, die kein Textbaustein löst, sondern eine Entscheidung.':
+      'Points no template solves – only a decision does.',
+
+    /* Impressum */
+    'Anbieter': 'Provider',
+    'Rechtsform: {3}. {4}': 'Legal form: {3}. {4}',
+    'Kontakt': 'Contact',
+    'Telefon': 'Phone',
+    '§ 5 Abs. 1 Nr. 2 DDG verlangt Angaben, die eine schnelle elektronische Kontaktaufnahme und unmittelbare Kommunikation ermöglichen. Die E-Mail-Adresse ist dafür Pflicht; die Nummer ist der übliche zweite Weg.':
+      '§ 5(1) no. 2 DDG requires details enabling rapid electronic contact and direct communication. An email address is mandatory for this; a phone number is the customary second route.',
+    'Umsatzsteuer': 'VAT',
+    'Die Steuernummer ist keine Pflichtangabe im Impressum und wird hier bewusst nicht veröffentlicht.':
+      'The tax number is not a mandatory item in the legal notice and is deliberately not published here.',
+    'Verantwortlich für redaktionelle Inhalte': 'Responsible for editorial content',
+    'Gemäß § 18 Abs. 2 des Medienstaatsvertrags: {8}':
+      'Pursuant to § 18(2) of the German Interstate Media Treaty: {8}',
+    'Verbraucherstreitbeilegung': 'Consumer dispute resolution',
+    'Der Anbieter ist weder bereit noch verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen (§ 36 Verbraucherstreitbeilegungsgesetz).':
+      'The provider is neither willing nor obliged to take part in dispute resolution proceedings before a consumer arbitration board (§ 36 VSBG).',
+    'Ein Hinweis auf die Online-Streitbeilegungsplattform der Europäischen Kommission entfällt: Die Plattform wurde zum 20. Juli 2025 eingestellt. Verweise darauf sind seitdem gegenstandslos und sollten von Websites entfernt werden.':
+      'No reference to the European Commission’s online dispute resolution platform is given: the platform was discontinued on 20 July 2025. References to it have been meaningless since then and should be removed from websites.',
+    'Erlaubnispflicht': 'Licensing',
+    'Nestwerk führt Angebote Dritter zusammen und stellt Werkzeuge zur Prüfung und Bewertung bereit. Der Anbieter vermittelt keine Miet- oder Kaufverträge und erhält von Vermietenden oder Verkaufenden im Erfolgsfall keine Provision. Eine Erlaubnis nach § 34c Gewerbeordnung ist danach nicht erforderlich.':
+      'Nestwerk brings together third-party offers and provides tools for checking and assessing them. The provider does not broker rental or purchase agreements and receives no success commission from landlords or sellers. A licence under § 34c of the German Trade Regulation Act (GewO) is therefore not required.',
+    'Haftung für Inhalte und Verweise': 'Liability for content and links',
+    'Für eigene Inhalte ist der Anbieter nach den allgemeinen Gesetzen verantwortlich. Für Angebote, die Nutzende einstellen, gelten die Vorschriften der Verordnung (EU) 2022/2065 über digitale Dienste: Der Anbieter ist nicht verpflichtet, sie allgemein zu überwachen, entfernt sie aber unverzüglich, sobald er von einer Rechtsverletzung Kenntnis erlangt.':
+      'The provider is responsible for its own content under the general laws. For offers posted by users, Regulation (EU) 2022/2065 on digital services applies: the provider is not obliged to monitor them generally, but removes them without delay upon obtaining knowledge of an infringement.',
+    'Hier lässt sich ein Inhalt melden.': 'Content can be reported here.',
+    'Für Inhalte verlinkter Seiten ist deren Betreiber verantwortlich. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar.':
+      'The operators of linked sites are responsible for their content. No legal infringements were apparent at the time the links were set.',
+    'Urheberrecht': 'Copyright',
+    'Aufbau, Texte, Grafiken und Quelltext dieser Anwendung sind urheberrechtlich geschützt. Vervielfältigung, Bearbeitung und Verbreitung bedürfen der Zustimmung des Anbieters, soweit das Urheberrechtsgesetz nichts anderes erlaubt.':
+      'The structure, texts, graphics and source code of this application are protected by copyright. Reproduction, modification and distribution require the provider’s consent unless the German Copyright Act permits otherwise.',
+
+    /* Datenschutz */
+    '{2}Das Wichtigste zuerst': '{2}The most important part first',
+    'Nestwerk rechnet vollständig im Browser. Suche, Bewertung, Karte, Ringtausch, Merkliste und Profil entstehen auf deinem Gerät und bleiben dort. Es gibt kein Nutzerkonto, keine Übertragung deiner Eingaben an den Anbieter und keine Weitergabe an Dritte.':
+      'Nestwerk computes entirely in the browser. The search, scoring, map, swap chains, saved list and profile all happen on your device and stay there. There is no user account, no transfer of what you enter to the provider, and no disclosure to third parties.',
+    'Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten gebildet und keine Werbung nach deinen Interessen ausgespielt. Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.':
+      'No analytics tools are used, no profiles are built about your behaviour, and no interest-based advertising is served. That is also why no consent dialog appears: there is nothing that would require consent.',
+    '1. Verantwortlicher': '1. Controller',
+    'Verantwortlich im Sinne von Art. 4 Nr. 7 DSGVO ist:':
+      'The controller within the meaning of Art. 4(7) GDPR is:',
+    'E-Mail: {4} · Telefon: {5}': 'Email: {4} · Phone: {5}',
+    '2. Datenschutzbeauftragter': '2. Data protection officer',
+    'Ein Datenschutzbeauftragter ist nicht bestellt. Nach § 38 Abs. 1 BDSG besteht dazu keine Pflicht, weil in der Regel weniger als zwanzig Personen ständig mit der automatisierten Verarbeitung personenbezogener Daten beschäftigt sind und keine Verarbeitung stattfindet, die eine Datenschutz-Folgenabschätzung erfordert.':
+      'No data protection officer has been appointed. Under § 38(1) BDSG there is no obligation to do so, because as a rule fewer than twenty people are permanently engaged in the automated processing of personal data and no processing takes place that would require a data protection impact assessment.',
+    '3. Aufruf der Seite (Server-Protokolle)': '3. Accessing the site (server logs)',
+    'Beim Aufruf überträgt dein Browser technisch notwendige Daten an den Server, auf dem die Seite liegt: IP-Adresse, Datum und Uhrzeit, aufgerufene Datei, übertragene Datenmenge, Browsertyp und Betriebssystem sowie die zuvor besuchte Seite.':
+      'When you access the site your browser transmits technically necessary data to the server hosting it: IP address, date and time, the file requested, the volume of data transferred, browser type and operating system, and the previously visited page.',
+    'Zweck': 'Purpose',
+    'Auslieferung der Seite, Betriebssicherheit, Abwehr von Angriffen':
+      'delivering the page, operational security, defending against attacks',
+    'Rechtsgrundlage': 'Legal basis',
+    'Art. 6 Abs. 1 lit. f DSGVO – berechtigtes Interesse an einem störungsfreien und sicheren Betrieb':
+      'Art. 6(1)(f) GDPR – legitimate interest in trouble-free and secure operation',
+    'Speicherdauer': 'Retention',
+    'in der Regel sieben Tage, danach automatische Löschung':
+      'as a rule seven days, then automatic deletion',
+    'Empfänger': 'Recipients',
+    'der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO':
+      'the hosting provider as a processor under Art. 28 GDPR',
+    '4. Anmeldung und Konto': '4. Signing in and your account',
+    'Die Nutzung setzt eine Anmeldung voraus. Verarbeitet werden dabei Name (freiwillig), E-Mail-Adresse, das gewählte Anmeldeverfahren, der Zeitpunkt der letzten Anmeldung und die Vertrauensstufe.':
+      'Use requires signing in. The data processed are your name (optional), email address, the sign-in method chosen, the time of your last sign-in and your trust level.',
+    'Bereitstellung des Zugangs, Zuordnung von Inseraten und Anfragen, Schutz vor missbräuchlicher Mehrfachanlage':
+      'providing access, attributing listings and enquiries, protection against abusive multiple accounts',
+    'Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags; für die Missbrauchsabwehr zusätzlich Art. 6 Abs. 1 lit. f DSGVO':
+      'Art. 6(1)(b) GDPR – performance of the user agreement; additionally Art. 6(1)(f) GDPR for abuse prevention',
+    'bis zur Löschung des Kontos; sie ist jederzeit ohne Angabe von Gründen möglich':
+      'until the account is deleted; this is possible at any time without giving reasons',
+    'Anmeldung über Google, Microsoft oder Apple': 'Signing in via Google, Microsoft or Apple',
+    'Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei Nestwerk anmeldest. An Nestwerk übermittelt werden Name, E-Mail-Adresse und die Angabe, ob sie bestätigt ist – nicht dein dortiges Passwort und keine weiteren Inhalte deines Kontos. Es besteht kein Zugriff auf Kontakte, Kalender, Dateien oder Postfach.':
+      'If you choose one of these routes, that provider learns that you are signing in to Nestwerk. What is transmitted to Nestwerk is your name, email address and whether it is verified – not your password there and no other content from your account. There is no access to contacts, calendar, files or mailbox.',
+    'Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst: Google Ireland Limited, Microsoft Ireland Operations Limited und Apple Distribution International Limited, jeweils mit Sitz in Irland. Soweit dabei Daten in die Vereinigten Staaten übermittelt werden, stützt sich das auf den Angemessenheitsbeschluss der Europäischen Kommission zum EU-US Data Privacy Framework; die genannten Anbieter sind darunter zertifiziert.':
+      'The providers themselves are the controllers for the processing on their side: Google Ireland Limited, Microsoft Ireland Operations Limited and Apple Distribution International Limited, each established in Ireland. Where data is transferred to the United States in the process, this relies on the European Commission’s adequacy decision on the EU-US Data Privacy Framework; the providers named are certified under it.',
+    'Bei Apple lässt sich die eigene Adresse verbergen. Nestwerk erhält dann eine Weiterleitungsadresse bei':
+      'With Apple you can hide your own address. Nestwerk then receives a relay address at',
+    'und kennt die echte Adresse nicht. Die Anwendung behandelt beide gleich.':
+      'and does not know the real one. The application treats both the same.',
+    'Beim Passkey entsteht das Schlüsselpaar im Sicherheitsbaustein deines Geräts. Der private Schlüssel verlässt das Gerät nicht und ist für Nestwerk nicht lesbar; gespeichert wird nur die Kennung des Schlüssels. Biometrische Merkmale – Gesicht, Fingerabdruck – werden weder übertragen noch verarbeitet: Sie entsperren ausschließlich lokal das Gerät (Art. 9 DSGVO ist damit nicht berührt).':
+      'With a passkey the key pair is created in your device’s secure element. The private key does not leave the device and is not readable by Nestwerk; only the key’s identifier is stored. Biometric features – face, fingerprint – are neither transmitted nor processed: they unlock the device locally and nothing more (Art. 9 GDPR is therefore not engaged).',
+    'Bestätigung von Adresse und Telefonnummer': 'Verifying your address and phone number',
+    'Der Einmalcode dient allein der Bestätigung, dass du die angegebene Adresse abrufen kannst. Er gilt {6} Minuten und wird danach verworfen. Eine Telefonnummer wird nur verarbeitet, wenn du sie selbst zur Bestätigung angibst.':
+      'The one-time code serves solely to confirm that you can access the address given. It is valid for {6} minutes and is discarded afterwards. A phone number is only processed if you provide it yourself for verification.',
+    '5. Speicher deines Browsers': '5. Your browser’s storage',
+    'Nestwerk legt deine Eingaben im lokalen Speicher deines Browsers ab – Profil, Merkliste, Suchaufträge, Nachrichten, eigene Inserate und die Einstellungen zur Darstellung. Diese Daten verlassen dein Gerät nicht. Der Anbieter hat keinen Zugriff darauf.':
+      'Nestwerk stores what you enter in your browser’s local storage – profile, saved list, saved searches, messages, your own listings and your display settings. This data does not leave your device. The provider has no access to it.',
+    'Für den Zugriff auf diesen Speicher ist keine Einwilligung erforderlich: Er ist unbedingt erforderlich, damit der von dir ausdrücklich gewünschte Dienst überhaupt funktioniert (§ 25 Abs. 2 Nr. 2 des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes). Cookies zu Werbe- oder Analysezwecken werden nicht gesetzt.':
+      'No consent is required for access to this storage: it is strictly necessary for the service you expressly requested to work at all (§ 25(2) no. 2 TDDDG). No cookies are set for advertising or analytics purposes.',
+    'Du kannst diese Daten jederzeit im Fußbereich unter „Meine Daten“ als Datei sichern oder vollständig löschen. Sie verschwinden ebenfalls, wenn du die Browserdaten löschst.':
+      'You can save this data as a file or delete it entirely at any time under “My data” in the footer. It also disappears if you clear your browser data.',
+    '6. Dokumententresor': '6. Document vault',
+    'Legst du Unterlagen im Dokumententresor ab, werden sie': 'If you place documents in the vault they are encrypted',
+    'vor dem Speichern': 'before being stored',
+    'in deinem Browser verschlüsselt – mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem Kennwort und wird nirgends gespeichert. Verschlüsselt werden auch die Dateinamen.':
+      'in your browser – with AES-GCM and 256 bits. The key is derived from your password and is stored nowhere. File names are encrypted too.',
+    'Gibst du Unterlagen frei, wird kein Anhang verschickt, sondern ein Verweis. Der Schlüssel dazu steht im Fragmentteil dieses Verweises – dem Teil hinter dem Rautezeichen, den Browser grundsätzlich nicht an Server übertragen. Der Anbieter kann die abgelegten Dateien deshalb auch dann nicht lesen, wenn er Zugriff auf den Speicher hätte.':
+      'If you share documents, no attachment is sent but a link. The key to it sits in the fragment part of that link – the part after the hash sign, which browsers as a rule do not transmit to servers. The provider therefore cannot read the stored files even if it had access to the storage.',
+    'Erfüllung des Vertrags über die Nutzung von Nestwerk':
+      'performance of the contract for the use of Nestwerk',
+    'Art. 6 Abs. 1 lit. b DSGVO; für die Verschlüsselung zugleich Art. 32 DSGVO – Sicherheit der Verarbeitung':
+      'Art. 6(1)(b) GDPR; for the encryption also Art. 32 GDPR – security of processing',
+    'bis du das Dokument löschst oder den Tresor leerst':
+      'until you delete the document or empty the vault',
+    'In dieser Vorführfassung liegen auch die verschlüsselten Dateien ausschließlich in deinem Browser. Im Betrieb läge dort das Chiffrat und sonst nichts.':
+      'In this demo version the encrypted files also live solely in your browser. In production the server would hold the ciphertext and nothing else.',
+    '7. Werbung im freien Tarif': '7. Advertising on the free plan',
+    'Der freie Tarif wird über Anzeigen finanziert. Diese Anzeigen sind fest hinterlegt und werden nach der Stelle ausgewählt, an der sie erscheinen – nicht nach deiner Person, deinem Verhalten oder deinen Eingaben. Es findet kein Abgleich mit Werbenetzwerken statt, es werden keine Kennungen gesetzt und es gehen keine Daten an Werbetreibende. Deshalb ist auch dafür keine Einwilligung erforderlich.':
+      'The free plan is funded by ads. These ads are fixed in the application and are selected by the position in which they appear – not by who you are, how you behave or what you enter. There is no matching against ad networks, no identifiers are set, and no data goes to advertisers. No consent is required for this either.',
+    'Anzeigen sind stets als solche gekennzeichnet (§ 5a Abs. 4 des Gesetzes gegen den unlauteren Wettbewerb) und werden nie im Erscheinungsbild eines Inserats dargestellt.':
+      'Ads are always labelled as such (§ 5a(4) of the German Unfair Competition Act, UWG) and are never presented in the appearance of a listing.',
+    '8. Kontaktaufnahme und Hilfe': '8. Getting in touch and help',
+    'Schreibst du per E-Mail, verarbeitet der Anbieter die Angaben aus deiner Nachricht, um sie zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO bei vertragsbezogenen Anfragen, sonst Art. 6 Abs. 1 lit. f DSGVO. Die Nachrichten werden gelöscht, sobald die Anfrage abschließend bearbeitet ist und keine gesetzlichen Aufbewahrungsfristen entgegenstehen.':
+      'If you write by email, the provider processes the details in your message in order to answer it. The legal basis is Art. 6(1)(b) GDPR for contract-related enquiries, otherwise Art. 6(1)(f) GDPR. Messages are deleted once the enquiry has been dealt with conclusively and no statutory retention periods stand in the way.',
+    'Die Hilfe in der Anwendung beantwortet Fragen': 'The help inside the application answers questions',
+    'im Browser': 'in the browser',
+    '; dabei wird nichts übertragen. Führt sie nicht weiter, kannst du die Zusammenfassung an {7} weitergeben. Das geschieht nur auf deinen ausdrücklichen Klick, über dein eigenes E-Mail-Programm – und':
+      '; nothing is transmitted in the process. If it leads nowhere you can pass the summary on to {7}. That happens only on your explicit click, through your own email program – and',
+    'der vollständige Text wird dir vorher angezeigt': 'the full text is shown to you beforehand',
+    '. Übertragen wird ausschließlich, was dort steht: deine Fragen, die Themen der gegebenen Antworten, dein Freitext und die Kontaktangaben, die du selbst einträgst. Profil, Merkliste und die Inhalte des Dokumententresors sind nicht enthalten und werden auch nicht angehängt.':
+      '. The only thing transmitted is what it says there: your questions, the topics of the answers given, your free text and the contact details you enter yourself. Your profile, saved list and the contents of the document vault are not included and are not attached.',
+    '9. Bezahlung von Nestwerk Plus': '9. Paying for Nestwerk Plus',
+    'Für bezahlte Verträge werden die zur Abwicklung nötigen Daten verarbeitet: Name, E-Mail-Adresse, Zahlungsdaten sowie Beginn und Laufzeit. Die Zahlung selbst wickelt ein Zahlungsdienstleister ab, an den die dafür erforderlichen Daten übermittelt werden.':
+      'For paid contracts the data needed to handle them is processed: name, email address, payment details, and the start and term. The payment itself is handled by a payment service provider, to whom the data required for that is transmitted.',
+    'Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Vertrags; für Rechnungsdaten zusätzlich Art. 6 Abs. 1 lit. c DSGVO':
+      'Art. 6(1)(b) GDPR – performance of the contract; additionally Art. 6(1)(c) GDPR for invoice data',
+    'Rechnungsunterlagen zehn Jahre nach § 147 der Abgabenordnung und § 257 des Handelsgesetzbuchs':
+      'invoice records for ten years under § 147 AO and § 257 HGB',
+    'Solange Plus nur über einen Gründerplatz vergeben wird, fallen weder Zahlungsdaten noch Rechnungen an.':
+      'As long as Plus is only granted through a founder place, neither payment data nor invoices arise.',
+    '10. Keine automatisierte Entscheidung über Personen': '10. No automated decisions about people',
+    'Nestwerk bewertet Angebote, nicht Menschen. Die Passung, die Chancenschätzung und der Prüfhinweis beziehen sich auf Wohnungen und Inseratstexte und dienen deiner eigenen Einordnung. Eine automatisierte Entscheidung mit rechtlicher Wirkung gegenüber Personen im Sinne von Art. 22 DSGVO findet nicht statt.':
+      'Nestwerk assesses offers, not people. The match score, the estimate of your chances and the check notice relate to apartments and listing texts and serve your own judgement. No automated decision producing legal effects concerning individuals within the meaning of Art. 22 GDPR takes place.',
+    '11. Übermittlung in Drittländer': '11. Transfers to third countries',
+    'Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft oder Apple hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus.':
+      'Beyond the sign-in via Google, Microsoft or Apple described in section 4, no personal data is transferred to countries outside the European Union and the European Economic Area. If you want to avoid it, sign in with a passkey or with your email address – both routes work without any third-party provider.',
+    '12. Deine Rechte': '12. Your rights',
+    'Auskunft': 'Access',
+    'darüber, welche Daten verarbeitet werden (Art. 15 DSGVO)':
+      'to information on what data is processed (Art. 15 GDPR)',
+    'Berichtigung': 'Rectification',
+    'unrichtiger Daten (Art. 16 DSGVO)': 'of inaccurate data (Art. 16 GDPR)',
+    'Löschung': 'Erasure',
+    '(Art. 17 DSGVO)': '(Art. 17 GDPR)',
+    'Einschränkung der Verarbeitung': 'Restriction of processing',
+    '(Art. 18 DSGVO)': '(Art. 18 GDPR)',
+    'Datenübertragbarkeit': 'Data portability',
+    'in einem gängigen Format (Art. 20 DSGVO)': 'in a common format (Art. 20 GDPR)',
+    'Widerspruch': 'Objection',
+    'gegen Verarbeitungen auf Grundlage berechtigter Interessen (Art. 21 DSGVO)':
+      'to processing based on legitimate interests (Art. 21 GDPR)',
+    'einer erteilten Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO)':
+      'of consent given, with effect for the future (Art. 7(3) GDPR)'
+  });
+
+  /* ------------------------- Geschäftsbedingungen ------------------------- */
+
+  e({
+    'Für die Ausübung genügt eine formlose Nachricht an {15}.':
+      'An informal message to {15} is enough to exercise them.',
+    'Weil deine Eingaben ausschließlich in deinem Browser liegen, kannst du Auskunft, Übertragbarkeit und Löschung dort unmittelbar selbst ausüben: im Fußbereich unter „Meine Daten“.':
+      'Because what you enter lives solely in your browser, you can exercise access, portability and erasure there yourself directly: under “My data” in the footer.',
+    '13. Beschwerderecht': '13. Right to complain',
+    'Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in dem Mitgliedstaat deines Aufenthaltsorts, deines Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes. Für den Anbieter zuständig ist {16}.':
+      'You can complain to a data protection supervisory authority (Art. 77 GDPR), in particular in the member state of your residence, your place of work or the place of the alleged infringement. The authority responsible for the provider is {16}.',
+    '14. Pflicht zur Bereitstellung': '14. Obligation to provide data',
+    'Du bist nicht verpflichtet, personenbezogene Daten bereitzustellen. Ohne die Angaben im Profil fallen allerdings die Funktionen weg, die darauf aufbauen – etwa die Passung oder die Chancenschätzung.':
+      'You are not obliged to provide personal data. Without the details in your profile, however, the features that build on them fall away – the match score or the estimate of your chances, for instance.',
+    '15. Änderungen': '15. Changes',
+    'Diese Erklärung gilt in der Fassung vom {17}. Ändert sich die Anwendung, wird sie angepasst.':
+      'This policy applies in the version of {17}. If the application changes, it will be adapted.',
+
+    '§ 1 Anbieter, Geltungsbereich': '§ 1 Provider, scope',
+    '(1) Anbieter von Nestwerk ist {2}, {3} (nachfolgend „Anbieter“). Die vollständigen Angaben stehen im':
+      '(1) The provider of Nestwerk is {2}, {3} (the “provider”). The full details are in the',
+    '(2) Diese Bedingungen gelten für alle Verträge über die Nutzung von Nestwerk in der jeweils bei Vertragsschluss geltenden Fassung.':
+      '(2) These terms apply to all contracts for the use of Nestwerk in the version in force when the contract is concluded.',
+    '(3) Verbraucher ist, wer ein Rechtsgeschäft zu Zwecken abschließt, die überwiegend weder der gewerblichen noch der selbständigen beruflichen Tätigkeit zugerechnet werden können (§ 13 BGB). Unternehmer ist, wer dabei in Ausübung einer solchen Tätigkeit handelt (§ 14 BGB).':
+      '(3) A consumer is anyone entering into a legal transaction for purposes predominantly outside their trade, business or profession (§ 13 BGB). A trader is anyone acting in the exercise of such an activity (§ 14 BGB).',
+    '(4) Abweichende Bedingungen der Nutzenden werden nicht Vertragsbestandteil, es sei denn, der Anbieter stimmt ihrer Geltung ausdrücklich schriftlich zu.':
+      '(4) Users’ differing terms do not become part of the contract unless the provider expressly agrees to their application in writing.',
+
+    '§ 2 Gegenstand der Leistung': '§ 2 Subject matter of the service',
+    '(1) Nestwerk ist eine Oberfläche, die Wohnungsangebote verschiedener Art – Miete, Kauf, WG-Zimmer und Wohnungstausch – zusammenführt und Werkzeuge zu ihrer Prüfung und Einordnung bereitstellt.':
+      '(1) Nestwerk is an interface that brings together housing offers of various kinds – rental, purchase, flatshare rooms and apartment swaps – and provides tools for checking and assessing them.',
+    '(2) Der Anbieter': '(2) The provider',
+    'vermittelt keine Miet- oder Kaufverträge': 'does not broker rental or purchase agreements',
+    'und wird nicht Partei der Verträge, die zwischen Nutzenden und Anbietenden von Wohnraum zustande kommen. Er erhält von Vermietenden oder Verkaufenden keine erfolgsabhängige Vergütung.':
+      'and does not become a party to the contracts concluded between users and those offering housing. It receives no success-based remuneration from landlords or sellers.',
+    '(3) Bewertungen, Vergleichsmieten, Chancenschätzungen, Prüfhinweise und Vertragshinweise sind':
+      '(3) Scores, benchmark rents, estimates of your chances, check notices and contract notes are',
+    'Rechenergebnisse und allgemeine Hinweise': 'computed results and general notes',
+    '. Sie beruhen auf den verfügbaren Angaben und allgemein zugänglichen Rechenwerten. Sie sind weder eine Rechts- noch eine Steuer- oder Anlageberatung und ersetzen eine solche nicht.':
+      '. They are based on the available details and publicly accessible reference figures. They are neither legal, tax nor investment advice and do not replace any such advice.',
+    '(4) Für Richtigkeit, Vollständigkeit und Aktualität von Angeboten, die Dritte einstellen, steht der Anbieter nicht ein.':
+      '(4) The provider does not warrant the accuracy, completeness or currency of offers posted by third parties.',
+
+    '§ 3 Anmeldung und Zustandekommen des Vertrags': '§ 3 Signing in and formation of the contract',
+    '(1) Die Nutzung setzt eine Anmeldung voraus. Sie ist möglich mit einem Passkey, über ein Konto bei Google, Microsoft oder Apple oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande.':
+      '(1) Use requires signing in. This is possible with a passkey, via an account with Google, Microsoft or Apple, or with an email address and a one-time code. Signing in forms a free-of-charge user agreement covering the free plan.',
+    '(2) Die Anmeldung setzt die Zustimmung zu diesen Bedingungen und die Kenntnisnahme der Datenschutzerklärung voraus. Beide sind vor der Anmeldung ohne Anmeldung abrufbar.':
+      '(2) Signing in requires agreement to these terms and acknowledgement of the privacy policy. Both are available before signing in, without signing in.',
+    '(3) Es besteht kein Anspruch auf Anmeldung. Der Anbieter kann sie ablehnen, insbesondere bei begründetem Verdacht auf missbräuchliche Mehrfachanlage.':
+      '(3) There is no right to be admitted. The provider may refuse, in particular where there is reasonable suspicion of abusive multiple accounts.',
+    '(4) Je Person ist ein Konto zulässig. Zugangsmittel dürfen nicht weitergegeben werden. Wer den Verdacht hat, dass ein anderer Zugang zu seinem Konto hat, teilt das unverzüglich mit.':
+      '(4) One account per person is permitted. Access credentials may not be passed on. Anyone suspecting that someone else has access to their account must report it without delay.',
+    '(5) Bestimmte Handlungen setzen eine Vertrauensstufe voraus – insbesondere das Einstellen von Angeboten. Die Stufen und ihre Voraussetzungen sind in der Anwendung beschrieben.':
+      '(5) Certain actions require a trust level – posting offers in particular. The levels and their requirements are described in the application.',
+    '(6) Das Konto kann jederzeit, ohne Angabe von Gründen und ohne Frist gelöscht werden. Damit endet der unentgeltliche Nutzungsvertrag.':
+      '(6) The account can be deleted at any time, without giving reasons and without notice. This ends the free user agreement.',
+    '(7) Ein Vertrag über Nestwerk Plus kommt zustande, wenn der Anbieter die Bestellung annimmt oder die Leistung freischaltet. Vor der Bestellung werden die wesentlichen Merkmale, der Gesamtpreis, die Laufzeit und die Kündigungsbedingungen angezeigt. Die Schaltfläche, mit der die Bestellung abgeschlossen wird, ist mit „zahlungspflichtig bestellen“ beschriftet (§ 312j Abs. 3 BGB).':
+      '(7) A contract for Nestwerk Plus is formed when the provider accepts the order or activates the service. Before ordering, the essential characteristics, the total price, the term and the cancellation conditions are displayed. The button completing the order is labelled “order with obligation to pay” (§ 312j(3) BGB).',
+    '(8) Der Vertragstext wird nach Abschluss auf einem dauerhaften Datenträger bestätigt (§ 312f BGB). Vertragssprache ist Deutsch.':
+      '(8) The contract text is confirmed on a durable medium after conclusion (§ 312f BGB). The language of the contract is German.',
+
+    '§ 4 Freier Tarif und Werbung': '§ 4 Free plan and advertising',
+    '(1) Der freie Tarif ist dauerhaft ohne Entgelt nutzbar und über Anzeigen finanziert.':
+      '(1) The free plan is usable permanently at no charge and is funded by ads.',
+    '(2) Anzeigen sind stets als solche gekennzeichnet und vom übrigen Inhalt deutlich abgesetzt. Sie werden nicht nach dem Verhalten oder den Eingaben der Nutzenden ausgewählt.':
+      '(2) Ads are always labelled as such and clearly set apart from the rest of the content. They are not selected on the basis of users’ behaviour or entries.',
+    '(3) Der Anbieter behält sich vor, Umfang und Platzierung von Anzeigen zu ändern. Die Funktionen des freien Tarifs bleiben davon unberührt.':
+      '(3) The provider reserves the right to change the extent and placement of ads. The features of the free plan remain unaffected.',
+
+    '§ 5 Nestwerk Plus': '§ 5 Nestwerk Plus',
+    '(1) Nestwerk Plus umfasst die auf der': '(1) Nestwerk Plus comprises the services described on the',
+    'Tarifseite': 'plans page',
+    'beschriebenen Leistungen. Plus verändert': '. Plus does',
+    'nicht die Bewertung oder die Trefferreihenfolge': 'not change the scoring or the result order',
+    'für andere Nutzende und verschafft': 'for other users and provides',
+    'keinen früheren Zugang': 'no earlier access',
+    'zu neuen Angeboten. Zur vorrangigen Anzeige von Anfragen bei der anbietenden Seite siehe § 6.':
+      'to new offers. On the priority display of enquiries in the advertiser’s inbox, see § 6.',
+    '(2) Der Preis beträgt {4} im Monat oder {5} im Jahr. {6}':
+      '(2) The price is {4} per month or {5} per year. {6}',
+    '(3) Die Laufzeit beträgt je nach Wahl einen Monat oder ein Jahr und verlängert sich jeweils um denselben Zeitraum, wenn nicht bis zum Ablauf gekündigt wird. Die Kündigung ist jederzeit zum Ende der laufenden Laufzeit möglich, für Verbraucherinnen und Verbraucher nach Ablauf der Erstlaufzeit jederzeit mit einer Frist von einem Monat (§ 309 Nr. 9 BGB).':
+      '(3) The term is one month or one year, as chosen, and renews for the same period unless cancelled before it ends. Cancellation is possible at any time with effect from the end of the current term; for consumers, after the initial term has expired, at any time with one month’s notice (§ 309 no. 9 BGB).',
+    '(4) Die Kündigung ist ohne Anmeldung und ohne Umweg über den Kundendienst möglich, über die Schaltfläche':
+      '(4) Cancellation is possible without signing in and without any detour via customer service, using the button',
+    '„Verträge hier kündigen“': '“Cancel contracts here”',
+    '(§ 312k BGB). Eine formlose Nachricht an {7} genügt ebenfalls.':
+      '(§ 312k BGB). An informal message to {7} is equally sufficient.',
+    '(5) Erhöht der Anbieter den Preis, teilt er dies mindestens sechs Wochen vor Wirksamwerden in Textform mit. Die Nutzenden können den Vertrag bis zum Wirksamwerden zum Zeitpunkt der Erhöhung kündigen; darauf wird in der Mitteilung hingewiesen.':
+      '(5) If the provider raises the price it will give notice in text form at least six weeks before it takes effect. Users may cancel the contract with effect from the date of the increase up until it takes effect; the notice will point this out.',
+
+    '§ 6 Bezahlte Sichtbarkeit': '§ 6 Paid visibility',
+    '(1) Der Anbieter stellt zwei Formen bezahlter Sichtbarkeit bereit:':
+      '(1) The provider offers two forms of paid visibility:',
+    'Vorrang von Anfragen.': 'Priority for enquiries.',
+    'Anfragen von Nutzenden mit Nestwerk Plus werden im Posteingang der anbietenden Seite vorrangig angezeigt und dort als solche gekennzeichnet.':
+      'Enquiries from users with Nestwerk Plus are displayed first in the advertiser’s inbox and labelled as such there.',
+    'Hervorhebung von Inseraten.': 'Promotion of listings.',
+    'Einzeln buchbar zu den auf der': 'Bookable individually at the prices stated on the',
+    'genannten Preisen.': '.',
+    '(2) Bezahlte Platzierungen werden stets als solche gekennzeichnet und getrennt von den organischen Ergebnissen dargestellt (§ 5b Abs. 1 Nr. 6 und Abs. 2 UWG). Die Reihenfolge der übrigen Treffer bleibt davon unberührt; sie entsteht allein aus den Angaben des suchenden Nutzers.':
+      '(2) Paid placements are always labelled as such and shown separately from the organic results (§ 5b(1) no. 6 and (2) UWG). The order of the remaining results is unaffected; it derives solely from the searching user’s own details.',
+    '(3) Bezahlte Sichtbarkeit verändert nicht die inhaltliche Bewertung eines Angebots. Prüfhinweis, Vergleichsmiete, Chancenschätzung und Kostenrechnung sind davon unabhängig und bleiben im freien Tarif vollständig verfügbar.':
+      '(3) Paid visibility does not change the substantive assessment of an offer. The check notice, benchmark rent, estimate of your chances and cost calculation are independent of it and remain fully available on the free plan.',
+    '(4) Es besteht kein Anspruch auf eine bestimmte Anzahl von Aufrufen, Anfragen oder auf einen Vermietungs- oder Verkaufserfolg. Die Zahl gleichzeitig angezeigter bezahlter Plätze ist begrenzt; sind alle belegt, wird die Buchung erst zum nächstmöglichen Zeitpunkt wirksam.':
+      '(4) There is no entitlement to any particular number of views or enquiries, or to a successful letting or sale. The number of paid placements shown at the same time is limited; if all are taken, the booking takes effect at the next possible time.',
+    '(5) Hervorhebungen sind digitale Dienstleistungen. Für Verbraucherinnen und Verbraucher gilt das':
+      '(5) Promotions are digital services. For consumers the',
+    'Widerrufsrecht': 'right of withdrawal',
+    '; beginnt die Leistung auf ausdrücklichen Wunsch sofort, erlischt es nach § 356 Abs. 5 BGB.':
+      'applies; if performance begins immediately at your express request, it lapses under § 356(5) BGB.',
+
+    '§ 7 Gründerplätze': '§ 7 Founder places',
+    '(1) Der Anbieter vergibt die ersten': '(1) The provider grants the first',
+    '{10} Plätze': '{10} places',
+    'mit den Leistungen von Nestwerk Plus für': 'with the services of Nestwerk Plus for',
+    '{11} Monate ohne Entgelt': '{11} months free of charge',
+    '(Gründerplatz).': '(founder place).',
+    '(2) Der Gründerplatz ist': '(2) A founder place is',
+    'kein Abonnement': 'not a subscription',
+    '. Er verlängert sich nicht, geht nicht in einen bezahlten Vertrag über und erfordert keine Zahlungsdaten. Nach Ablauf der {12} Monate stehen die Leistungen des freien Tarifs zur Verfügung; wer Plus danach weiter nutzen möchte, entscheidet sich neu.':
+      '. It does not renew, does not turn into a paid contract and requires no payment details. After the {12} months have elapsed the services of the free plan are available; anyone wishing to carry on using Plus decides afresh.',
+    '(3) Es besteht kein Anspruch auf einen Gründerplatz. Die Vergabe erfolgt in der Reihenfolge des Eingangs und endet, sobald das Kontingent erschöpft ist. Ein Gründerplatz wird je Person einmal vergeben und ist nicht übertragbar.':
+      '(3) There is no entitlement to a founder place. They are granted in order of arrival and end once the allocation is used up. One founder place is granted per person and it is not transferable.',
+    '(4) Der Anbieter kann einen Gründerplatz entziehen, wenn er durch falsche Angaben oder mehrfache Anmeldung derselben Person erlangt wurde.':
+      '(4) The provider may withdraw a founder place if it was obtained through false statements or through the same person signing up more than once.',
+    '(5) Der Gründerplatz kann jederzeit ohne Angabe von Gründen beendet werden. Da er unentgeltlich ist, entsteht dabei keine Zahlungspflicht und es besteht kein Anspruch auf Erstattung.':
+      '(5) A founder place can be ended at any time without giving reasons. As it is free of charge, no payment obligation arises and there is no claim to a refund.',
+
+    '§ 8 Pflichten der Nutzenden': '§ 8 Users’ obligations',
+    '(1) Angaben, die Nutzende einstellen, müssen zutreffend sein. Insbesondere dürfen keine Wohnungen angeboten werden, über die keine Verfügungsbefugnis besteht.':
+      '(1) Details posted by users must be accurate. In particular, no apartments may be offered over which the user has no right of disposal.',
+    '(2) Untersagt sind insbesondere:': '(2) The following are prohibited in particular:',
+    'Angebote, die es nicht gibt, sowie Zahlungsaufforderungen vor einer Besichtigung':
+      'offers that do not exist, and demands for payment before a viewing',
+    'Formulierungen, die nach Herkunft, Religion, Geschlecht, Behinderung, Alter oder sexueller Identität aussortieren (§§ 19, 21 Allgemeines Gleichbehandlungsgesetz)':
+      'wording that filters by origin, religion, gender, disability, age or sexual identity (§§ 19, 21 AGG)',
+    'Fragen nach Familienplanung, Religion, Parteizugehörigkeit oder Vorstrafen gegenüber Bewerbenden':
+      'questions to applicants about family planning, religion, party membership or criminal convictions',
+    'das automatisierte Auslesen der Anwendung sowie Versuche, ihre technischen Schutzvorkehrungen zu umgehen':
+      'automated scraping of the application and attempts to circumvent its technical protection measures',
+    'Inhalte, die Rechte Dritter verletzen': 'content that infringes third-party rights',
+    '(3) Nutzende halten den Anbieter von Ansprüchen Dritter frei, die auf einer schuldhaften Verletzung dieser Pflichten beruhen, einschließlich angemessener Kosten der Rechtsverteidigung.':
+      '(3) Users indemnify the provider against third-party claims arising from a culpable breach of these obligations, including reasonable costs of legal defence.',
+
+    '§ 9 Inhalte der Nutzenden': '§ 9 User content',
+    '(1) Rechte an eingestellten Inhalten verbleiben bei den Nutzenden.':
+      '(1) Rights in posted content remain with the users.',
+    '(2) Für die Dauer der Einstellung räumen Nutzende dem Anbieter das einfache, räumlich unbegrenzte Recht ein, diese Inhalte im Rahmen der Anwendung anzuzeigen, technisch zu vervielfältigen und in Formate umzuwandeln, die zur Darstellung nötig sind. Weitergehende Rechte werden nicht eingeräumt.':
+      '(2) For as long as the content is posted, users grant the provider the non-exclusive, geographically unlimited right to display it within the application, to reproduce it technically and to convert it into formats needed for display. No further rights are granted.',
+    '(3) Mit der Löschung eines Inhalts endet das Nutzungsrecht, soweit keine gesetzlichen Aufbewahrungspflichten entgegenstehen.':
+      '(3) Deleting content ends the right of use, unless statutory retention obligations stand in the way.',
+
+    '§ 10 Entfernen von Inhalten, Sperrung, Beschwerde':
+      '§ 10 Removal of content, suspension, complaints',
+    '(1) Der Anbieter kann Inhalte entfernen oder den Zugang einschränken, wenn sie rechtswidrig sind oder gegen § 8 verstoßen.':
+      '(1) The provider may remove content or restrict access if it is unlawful or breaches § 8.',
+    '(2) Betroffene erhalten dazu eine': '(2) Those affected receive a',
+    'Begründung': 'statement of reasons',
+    'mit Angabe des Grundes, der Tatsachengrundlage und der Möglichkeiten, dagegen vorzugehen (Art. 17 der Verordnung (EU) 2022/2065).':
+      'setting out the ground, the factual basis and the options for challenging it (Art. 17 of Regulation (EU) 2022/2065).',
+    '(3) Gegen eine Entscheidung kann innerhalb von sechs Monaten formlos Beschwerde an {18} erhoben werden. Der Anbieter entscheidet darüber unverzüglich, begründet und nicht ausschließlich automatisiert.':
+      '(3) A decision can be challenged informally within six months by writing to {18}. The provider decides without delay, with reasons, and not solely by automated means.',
+    '(4) Rechtswidrige Inhalte lassen sich': '(4) Unlawful content can be',
+    'hier melden': 'reported here',
+    '. Meldungen werden zeitnah, sorgfältig und nicht willkürlich bearbeitet (Art. 16 der Verordnung (EU) 2022/2065).':
+      '. Reports are handled promptly, diligently and non-arbitrarily (Art. 16 of Regulation (EU) 2022/2065).',
+
+    '§ 11 Verfügbarkeit': '§ 11 Availability',
+    '(1) Der Anbieter bemüht sich um eine möglichst unterbrechungsfreie Verfügbarkeit, schuldet sie aber nicht ununterbrochen. Wartungsarbeiten, Störungen der Netze Dritter und Ereignisse höherer Gewalt können zu Unterbrechungen führen.':
+      '(1) The provider endeavours to keep the service available without interruption but does not owe uninterrupted availability. Maintenance, faults in third-party networks and force majeure events can cause interruptions.',
+    '(2) Geplante Wartungsarbeiten werden nach Möglichkeit angekündigt und in nutzungsschwache Zeiten gelegt.':
+      '(2) Planned maintenance is announced where possible and scheduled for low-usage periods.',
+    '(3) Fällt eine bezahlte Leistung länger als 48 zusammenhängende Stunden aus, verlängert sich die Laufzeit auf Verlangen entsprechend.':
+      '(3) If a paid service is unavailable for more than 48 consecutive hours, the term is extended accordingly on request.'
+  });
+
+  /* ------------------------- Widerruf, Meldeweg, Barrierefreiheit ------------------------- */
+
+  e({
+    '§ 12 Mängel und Haftung': '§ 12 Defects and liability',
+    '(1) Für die Bereitstellung digitaler Produkte gegen Entgelt gelten die §§ 327 ff. BGB. Der Anbieter schuldet die vereinbarte und die objektiv erforderliche Beschaffenheit einschließlich der Aktualisierungen, die zum Erhalt der Vertragsmäßigkeit nötig sind.':
+      '(1) §§ 327 et seq. BGB apply to the supply of digital products for payment. The provider owes the agreed and the objectively required quality, including the updates needed to maintain conformity with the contract.',
+    '(2) Der Anbieter haftet unbeschränkt bei Vorsatz und grober Fahrlässigkeit, bei der Verletzung von Leben, Körper oder Gesundheit, nach dem Produkthaftungsgesetz sowie im Umfang einer übernommenen Garantie.':
+      '(2) The provider is liable without limitation for intent and gross negligence, for injury to life, body or health, under the German Product Liability Act, and to the extent of any guarantee given.',
+    '(3) Bei einfacher Fahrlässigkeit haftet der Anbieter nur für die Verletzung wesentlicher Vertragspflichten – solcher Pflichten, deren Erfüllung die ordnungsgemäße Durchführung des Vertrags überhaupt erst ermöglicht und auf deren Einhaltung regelmäßig vertraut werden darf – und begrenzt auf den vertragstypischen, vorhersehbaren Schaden.':
+      '(3) In cases of ordinary negligence the provider is liable only for breach of material contractual obligations – obligations whose fulfilment makes proper performance of the contract possible in the first place and on whose observance a party may regularly rely – and limited to the foreseeable damage typical of the contract.',
+    '(4) Im Übrigen ist die Haftung ausgeschlossen. Eine Änderung der Beweislast zum Nachteil der Nutzenden ist damit nicht verbunden.':
+      '(4) Liability is otherwise excluded. This does not involve any change in the burden of proof to users’ detriment.',
+    '(5) Der Anbieter haftet nicht für Entscheidungen, die auf Grundlage der Rechenergebnisse und Hinweise nach § 2 Abs. 3 getroffen werden, und nicht für das Verhalten anderer Nutzender.':
+      '(5) The provider is not liable for decisions taken on the basis of the computed results and notes under § 2(3), nor for the conduct of other users.',
+    '§ 13 Kündigung durch den Anbieter': '§ 13 Termination by the provider',
+    '(1) Unentgeltliche Nutzungsverhältnisse kann der Anbieter mit einer Frist von vier Wochen kündigen.':
+      '(1) The provider may terminate free user relationships on four weeks’ notice.',
+    '(2) Das Recht zur Kündigung aus wichtigem Grund bleibt beiderseits unberührt. Ein wichtiger Grund liegt für den Anbieter insbesondere bei erheblichen oder wiederholten Verstößen gegen § 8 vor.':
+      '(2) The right to terminate for good cause remains unaffected on both sides. For the provider, good cause exists in particular in the case of serious or repeated breaches of § 8.',
+    '§ 14 Änderung dieser Bedingungen': '§ 14 Changes to these terms',
+    '(1) Der Anbieter kann diese Bedingungen ändern, wenn dies zur Anpassung an geänderte Rechtslage, Rechtsprechung oder an Änderungen der Anwendung erforderlich ist und die Nutzenden dadurch nicht unangemessen benachteiligt werden.':
+      '(1) The provider may amend these terms where necessary to adapt to a changed legal position, case law or changes to the application, and where users are not thereby unreasonably disadvantaged.',
+    '(2) Änderungen werden mindestens sechs Wochen vor Wirksamwerden in Textform mitgeteilt. Widersprechen Nutzende nicht bis zum Wirksamwerden, gelten die Änderungen als angenommen; auf diese Folge und auf das Widerspruchsrecht wird in der Mitteilung gesondert hingewiesen. Im Fall des Widerspruchs kann jede Seite den Vertrag zum Zeitpunkt des Wirksamwerdens kündigen.':
+      '(2) Changes are notified in text form at least six weeks before they take effect. If users do not object before they take effect, the changes are deemed accepted; the notice separately points out this consequence and the right to object. In the event of an objection, either side may terminate the contract with effect from the date the changes take effect.',
+    '§ 15 Schlussbestimmungen': '§ 15 Final provisions',
+    '(1) Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts. Verbraucherinnen und Verbrauchern bleiben die zwingenden Schutzvorschriften des Staates erhalten, in dem sie ihren gewöhnlichen Aufenthalt haben (Art. 6 Abs. 2 der Verordnung (EG) Nr. 593/2008).':
+      '(1) German law applies, excluding the UN Convention on Contracts for the International Sale of Goods. Consumers retain the mandatory protective provisions of the state in which they have their habitual residence (Art. 6(2) of Regulation (EC) No 593/2008).',
+    '(2) Ist die nutzende Person Kaufmann, juristische Person des öffentlichen Rechts oder öffentlich-rechtliches Sondervermögen, ist Gerichtsstand der Sitz des Anbieters.':
+      '(2) If the user is a merchant, a legal person under public law or a special fund under public law, the place of jurisdiction is the provider’s registered office.',
+    '(3) Der Anbieter nimmt nicht an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teil (§ 36 VSBG).':
+      '(3) The provider does not take part in dispute resolution proceedings before a consumer arbitration board (§ 36 VSBG).',
+    '(4) Sollte eine Bestimmung unwirksam sein, bleibt der Vertrag im Übrigen wirksam.':
+      '(4) Should any provision be invalid, the remainder of the contract stays in force.',
+    'Fassung vom {19}.': 'Version of {19}.',
+    'Fassung vom {15}.': 'Version of {15}.',
+
+    /* Widerruf */
+    '{2}Gilt der Widerruf für dich?': '{2}Does the right of withdrawal apply to you?',
+    'Das Widerrufsrecht besteht bei Verträgen, die': 'The right of withdrawal exists for contracts concluded',
+    'gegen Entgelt': 'for payment',
+    'im Fernabsatz geschlossen werden – also bei Nestwerk Plus. Für den freien Tarif und für einen':
+      'at a distance – that is, for Nestwerk Plus. For the free plan and for a',
+    'Gründerplatz besteht kein Widerrufsrecht': 'founder place there is no right of withdrawal',
+    ', weil dabei keine Zahlungspflicht entsteht. Beides lässt sich jederzeit und ohne Grund beenden.':
+      ', because no payment obligation arises. Both can be ended at any time and without giving a reason.',
+    'Du hast das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses.':
+      'You have the right to withdraw from this contract within fourteen days without giving any reason. The withdrawal period is fourteen days from the day the contract is concluded.',
+    'Um dein Widerrufsrecht auszuüben, musst du uns ({3}, {4}, {5}, {6}) mittels einer eindeutigen Erklärung – zum Beispiel per Post versandter Brief oder E-Mail – über deinen Entschluss, diesen Vertrag zu widerrufen, informieren. Du kannst dafür das beigefügte Muster verwenden, das aber nicht vorgeschrieben ist.':
+      'To exercise your right of withdrawal you must inform us ({3}, {4}, {5}, {6}) of your decision to withdraw from this contract by an unequivocal statement – for example a letter sent by post or an email. You may use the attached model form for this, though it is not mandatory.',
+    'Zur Wahrung der Widerrufsfrist reicht es aus, dass du die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absendest.':
+      'To meet the withdrawal deadline it is sufficient for you to send your communication concerning your exercise of the right of withdrawal before the withdrawal period has expired.',
+    'Folgen des Widerrufs': 'Effects of withdrawal',
+    'Wenn du diesen Vertrag widerrufst, haben wir dir alle Zahlungen, die wir von dir erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über deinen Widerruf dieses Vertrags bei uns eingegangen ist. Für diese Rückzahlung verwenden wir dasselbe Zahlungsmittel, das du bei der ursprünglichen Transaktion eingesetzt hast, es sei denn, mit dir wurde ausdrücklich etwas anderes vereinbart; in keinem Fall werden dir wegen dieser Rückzahlung Entgelte berechnet.':
+      'If you withdraw from this contract, we shall reimburse to you all payments received from you without undue delay and in any event not later than fourteen days from the day on which we are informed about your decision to withdraw from this contract. We will carry out such reimbursement using the same means of payment as you used for the initial transaction, unless you have expressly agreed otherwise; in any event, you will not incur any fees as a result of such reimbursement.',
+    'Hast du verlangt, dass die Dienstleistung während der Widerrufsfrist beginnen soll, so hast du uns einen angemessenen Betrag zu zahlen, der dem Anteil der bis zum Zeitpunkt deiner Mitteilung bereits erbrachten Dienstleistungen im Vergleich zum Gesamtumfang der im Vertrag vorgesehenen Dienstleistungen entspricht (§ 357 Abs. 8 BGB).':
+      'If you requested that the service should begin during the withdrawal period, you shall pay us an amount which is in proportion to what has been provided until you communicated your withdrawal, in comparison with the full coverage of the contract (§ 357(8) BGB).',
+    'Vorzeitiges Erlöschen': 'Early lapse',
+    'Das Widerrufsrecht erlischt bei einem Vertrag über die Bereitstellung digitaler Inhalte oder Dienstleistungen vorzeitig, wenn wir mit der Ausführung begonnen haben, nachdem du':
+      'For a contract on the supply of digital content or services, the right of withdrawal lapses early if we have begun performance after you have',
+    'ausdrücklich zugestimmt hast, dass wir vor Ablauf der Widerrufsfrist beginnen,':
+      'expressly consented to us beginning before the withdrawal period expires,',
+    'bestätigt hast, dass du dadurch dein Widerrufsrecht verlierst, und':
+      'acknowledged that you thereby lose your right of withdrawal, and',
+    'wir dir diese Bestätigung auf einem dauerhaften Datenträger zur Verfügung gestellt haben (§ 356 Abs. 5 BGB, § 312f Abs. 3 BGB).':
+      'we have provided you with that confirmation on a durable medium (§ 356(5) BGB, § 312f(3) BGB).',
+    'Nestwerk holt diese Zustimmung in der Bestellstrecke ausdrücklich ein – als eigenes Kästchen, nicht vorausgewählt. Wer nicht zustimmt, wird nach Ablauf der vierzehn Tage freigeschaltet und behält sein Widerrufsrecht ungeschmälert.':
+      'Nestwerk obtains this consent expressly during the order process – as its own checkbox, not pre-ticked. Anyone who does not consent is activated after the fourteen days have elapsed and keeps their right of withdrawal undiminished.',
+    'Muster-Widerrufsformular': 'Model withdrawal form',
+    'Wenn du den Vertrag widerrufen willst, füll dieses Formular aus und schick es zurück. Vorgeschrieben ist es nicht.':
+      'If you wish to withdraw from the contract, fill in this form and send it back. It is not mandatory.',
+    'An {10} {11} {12} Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über die Erbringung der folgenden Dienstleistung: Nestwerk Plus Bestellt am (*) / erhalten am (*): ______________________ Name des/der Verbraucher(s): ____________________________ Anschrift des/der Verbraucher(s): _______________________ ________________________________________________________ Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier) Datum: __________________ (*) Unzutreffendes streichen.':
+      'To {10} {11} {12} I/We (*) hereby give notice that I/We (*) withdraw from my/our (*) contract for the supply of the following service: Nestwerk Plus Ordered on (*) / received on (*): ______________________ Name of consumer(s): ____________________________________ Address of consumer(s): _________________________________ ________________________________________________________ Signature of consumer(s) (only if this form is notified on paper) Date: __________________ (*) Delete as appropriate.',
+    '{13}Formular kopieren': '{13}Copy form',
+    '{14}Als Textdatei sichern': '{14}Save as a text file',
+
+    /* Meldeweg */
+    'Wofür dieser Weg gedacht ist': 'What this route is for',
+    'Für Inhalte in Nestwerk, die gegen Recht verstoßen: erfundene Inserate, Zahlungsaufforderungen vor der Besichtigung, Angebote ohne Verfügungsbefugnis, benachteiligende Formulierungen im Sinne des Allgemeinen Gleichbehandlungsgesetzes oder Verletzungen von Rechten Dritter.':
+      'For content in Nestwerk that breaks the law: invented listings, demands for payment before a viewing, offers made without the right of disposal, discriminatory wording within the meaning of the German Equal Treatment Act, or infringements of third-party rights.',
+    'Was eine Meldung enthalten sollte': 'What a report should contain',
+    'eine': 'a',
+    'hinreichend begründete Erläuterung': 'sufficiently substantiated explanation',
+    ', warum der Inhalt rechtswidrig ist': 'of why the content is unlawful',
+    'die': 'the',
+    'genaue Angabe des Ortes': 'exact location',
+    '– am einfachsten der Verweis auf das Inserat': '– most simply the link to the listing',
+    'Name und E-Mail-Adresse': 'Name and email address',
+    'der meldenden Person; das entfällt bei Meldungen zu bestimmten Straftaten gegen die sexuelle Selbstbestimmung':
+      'of the person reporting; this is not required for reports concerning certain offences against sexual self-determination',
+    'Bestätigung': 'Confirmation',
+    ', dass die Angaben nach bestem Wissen richtig und vollständig sind':
+      'that the information is accurate and complete to the best of your knowledge',
+    'Wie es weitergeht': 'What happens next',
+    'Der Eingang wird unverzüglich bestätigt. Die Meldung wird zeitnah, sorgfältig, frei von Willkür und objektiv bearbeitet. Über die Entscheidung und die Möglichkeiten, dagegen vorzugehen, ergeht eine begründete Mitteilung. Wird eine Entscheidung nicht ausschließlich von Hand getroffen, wird auf den Einsatz automatisierter Mittel hingewiesen.':
+      'Receipt is confirmed without delay. The report is handled promptly, diligently, non-arbitrarily and objectively. A reasoned notice is issued about the decision and the options for challenging it. If a decision is not taken entirely by hand, the use of automated means is disclosed.',
+    'Kontaktstelle': 'Point of contact',
+    'Meldungen und alle Anliegen nach den Artikeln 11 und 12 der Verordnung gehen an: {5}. Die Kommunikation ist in':
+      'Reports and all matters under Articles 11 and 12 of the Regulation go to: {5}. Communication is possible in',
+    'deutscher': 'German',
+    'Sprache möglich.': '.',
+    'Der Anbieter ist ein Kleinstunternehmen im Sinne der Empfehlung 2003/361/EG und damit von den zusätzlichen Pflichten für Online-Plattformen nach Abschnitt 3 des Kapitels III der Verordnung befreit (Art. 19). Die Pflichten aus den Artikeln 11 bis 18 gelten gleichwohl und werden erfüllt.':
+      'The provider is a micro-enterprise within the meaning of Recommendation 2003/361/EC and is therefore exempt from the additional obligations for online platforms under Section 3 of Chapter III of the Regulation (Art. 19). The obligations under Articles 11 to 18 nevertheless apply and are met.',
+    'Missbräuchliche Meldungen': 'Abusive reports',
+    'Wer wiederholt offensichtlich unbegründet meldet, kann nach vorheriger Verwarnung für eine angemessene Zeit von der Bearbeitung ausgeschlossen werden (Art. 23 Abs. 2 der Verordnung).':
+      'Anyone repeatedly submitting manifestly unfounded reports may, after a prior warning, be excluded from having reports processed for a reasonable period (Art. 23(2) of the Regulation).',
+
+    /* Barrierefreiheit */
+    'Stand': 'As at',
+    'Nestwerk ist so gebaut, dass es sich vollständig mit der Tastatur bedienen lässt und mit Vorleseprogrammen zurechtkommt. Geprüft wurde gegen die Web Content Accessibility Guidelines in der Fassung 2.2, Stufe AA.':
+      'Nestwerk is built so that it can be operated entirely with the keyboard and works with screen readers. It has been tested against the Web Content Accessibility Guidelines version 2.2, level AA.',
+    'alle Bedienelemente mit Tastatur erreichbar, sichtbarer Fokus, Sprungmarke zum Inhalt':
+      'every control reachable by keyboard, a visible focus indicator, a skip link to the content',
+    'Kontraste durchgerechnet statt geschätzt: Fließtext mindestens 4,5 zu 1, große Schrift und Bedienelemente mindestens 3 zu 1 – in hell und dunkel':
+      'contrast calculated rather than estimated: body text at least 4.5:1, large text and controls at least 3:1 – in light and dark',
+    'Farbe nie als einziges Unterscheidungsmerkmal; Diagrammfarben zusätzlich auf Unterscheidbarkeit bei Farbfehlsichtigkeit geprüft':
+      'colour never the only distinguishing feature; chart colours additionally checked for distinguishability under colour vision deficiency',
+    'Beschriftungen an jedem Eingabefeld, sinnvolle Überschriftenordnung, genau eine Hauptüberschrift je Ansicht':
+      'a label on every input field, a sensible heading order, exactly one main heading per view',
+    'Bewegung nur, wenn das Betriebssystem sie nicht abbestellt hat (':
+      'motion only where the operating system has not opted out of it (',
+    'kein waagerechter Überlauf von 320 bis 1920 Pixel Breite':
+      'no horizontal overflow from 320 to 1920 pixels wide',
+    'Was noch nicht barrierefrei ist': 'What is not yet accessible',
+    'Die': 'The',
+    'lässt sich mit der Tastatur verschieben und zoomen, ersetzt aber räumliche Information nicht vollständig durch Text. Alle Angaben stehen zusätzlich in der Trefferliste.':
+      'can be panned and zoomed with the keyboard but does not fully replace spatial information with text. All the details are also in the result list.',
+    'Preisverläufe': 'Price histories',
+    'im Marktbereich sind Diagramme. Die Zahlen dahinter stehen als Tabelle darunter, die Beschreibung der Kurve ist knapp.':
+      'in the market section are charts. The figures behind them are given as a table underneath; the description of the curve is brief.',
+    'Bilder der Angebote sind schematische Zeichnungen. Ihre Beschreibung nennt Gebäudeart und Lage, nicht den tatsächlichen Zustand.':
+      'Images of offers are schematic drawings. Their description names the building type and location, not the actual condition.',
+    'Rückmeldung': 'Feedback',
+    'Fällt etwas auf, das sich nicht bedienen lässt: {10}. Rückmeldungen zur Barrierefreiheit werden vorrangig behandelt.':
+      'If you notice something that cannot be operated: {10}. Accessibility feedback is treated as a priority.',
+    'Rechtlicher Rahmen': 'Legal framework',
+    'Das Barrierefreiheitsstärkungsgesetz gilt seit dem 28. Juni 2025 unter anderem für Dienstleistungen im elektronischen Geschäftsverkehr gegenüber Verbraucherinnen und Verbrauchern. Kleinstunternehmen, die Dienstleistungen erbringen – weniger als zehn Beschäftigte und höchstens zwei Millionen Euro Jahresumsatz –, sind davon ausgenommen (§ 3 Abs. 3 BFSG). Der Anbieter fällt derzeit unter diese Ausnahme und hält die Anforderungen dennoch freiwillig ein.':
+      'The German Accessibility Strengthening Act (BFSG) has applied since 28 June 2025 to, among other things, e-commerce services provided to consumers. Micro-enterprises providing services – fewer than ten employees and no more than two million euros in annual turnover – are exempt (§ 3(3) BFSG). The provider currently falls under this exemption and meets the requirements voluntarily nonetheless.',
+
+    /* Kündigung */
+    'Kündigung auf anderem Weg': 'Cancelling by other means',
+    'Eine formlose Erklärung genügt jederzeit, ohne Begründung:':
+      'An informal statement is always sufficient, with no reason required:',
+    'Post': 'Post',
+    'Gib an, welcher Vertrag gekündigt werden soll, und wann die Kündigung wirken soll – zum nächstmöglichen Zeitpunkt oder zu einem bestimmten Datum. Der Eingang wird in Textform bestätigt, und zwar mit Angabe des Zeitpunkts, zu dem die Kündigung wirkt (§ 312k Abs. 4 BGB).':
+      'State which contract is to be cancelled and when the cancellation should take effect – at the earliest possible date or on a specific date. Receipt is confirmed in text form, stating the point at which the cancellation takes effect (§ 312k(4) BGB).',
+    'Widerruf statt Kündigung': 'Withdrawal instead of cancellation',
+    'Innerhalb der ersten vierzehn Tage nach Vertragsschluss ist ein Widerruf möglich, der den Vertrag von Anfang an rückabwickelt. Das ist für dich meist günstiger als eine Kündigung.':
+      'Within the first fourteen days after the contract is concluded you can withdraw, which unwinds the contract from the outset. That is usually better for you than cancelling.',
+    'Zur Widerrufsbelehrung.': 'To the withdrawal notice.',
+
+    /* Betreiberangaben */
+    'Diese Angaben bleiben auf diesem Gerät': 'These details stay on this device',
+    'Sie liegen im Speicher dieses Browsers, wie alles andere auch. Für den echten Betrieb gehören sie fest in den Quelltext – in':
+      'They live in this browser’s storage, like everything else. For real operation they belong permanently in the source code – in',
+    'assets/recht.js': 'assets/recht.js',
+    'unter': 'under',
+    'VORGABE': 'VORGABE',
+    '. Dann stehen sie für alle Aufrufe bereit und nicht nur für deinen.':
+      '. Then they are available for every visitor, not just for you.',
+    '{2}Angaben': '{2}Details',
+    'Kleinunternehmerregelung nach § 19 UStG': 'Small-business rule under § 19 UStG',
+    'Dann wird keine Umsatzsteuer ausgewiesen, und die Preisangaben sagen das dazu.':
+      'No VAT is then shown, and the price statements say so.',
+    '{5}Angaben übernehmen': '{5}Apply details',
+    '{6}So sehen sie im Impressum aus': '{6}This is how they look in the legal notice',
+    'Impressum ansehen': 'View legal notice'
+  });
+
+  /* ------------------------- Letzte Muster und Betreiberangaben ------------------------- */
+
+  e({
+    'Nähe {0}': 'near {0}',
+    'ohne {0}': 'no {0}',
+    ' – rechnerisch {0} von 100': ' – {0} out of 100 on the numbers',
+    '{0} Jahre': 'aged {0}',
+    'Tauschkette mit {0} Beteiligten': 'Swap chain with {0} participants',
+    'Seit {0} Tagen online, noch früh genug.': 'Online for {0} days, still early enough.',
+    'Seit {0} Tagen online – die ersten Besichtigungen laufen wahrscheinlich schon.':
+      'Online for {0} days – the first viewings are probably already under way.',
+    'Seit {0} Tagen online. Entweder ist es schwer vermietbar, oder die Vergabe stockt.':
+      'Online for {0} days. Either it is hard to let, or the allocation has stalled.',
+    'Der Anbieter antwortet nur in {0} % der Fälle.': 'The provider only replies {0} % of the time.',
+    '{0} % zur Vergleichsmiete': '{0} % vs. the benchmark rent',
+    'Faktor {0} Jahresmieten': 'multiple of {0} annual rents',
+    '{0} von {1} Pflicht': '{0} of {1} must-haves',
+    '{0} von {1} Wunsch': '{0} of {1} nice-to-haves',
+    'WG: {0} von 10': 'Flatshare: {0} out of 10',
+    'Du: {0} von 10': 'You: {0} out of 10',
+    'Zeitpunkt': 'Timing',
+    'Ausstattung': 'Features',
+    'Deine Bewerbung': 'Your application',
+    'Andrang': 'Demand',
+    'Miete + WG-Zimmer': 'Rent + flatshare room',
+    'Mit Plus kannst du beliebig viele anlegen.': 'With Plus you can create as many as you like.',
+    '2 Objekte stehen auf „gemerkt“. Nestwerk schreibt für jedes ein eigenes Anschreiben aus deinem Profil – angepasst an Titel, Lage und Preis, nicht als Rundmail.':
+      '2 listings are marked “saved”. Nestwerk writes a separate covering letter for each from your profile – tailored to the title, location and price, not a mass mailing.',
+    '{0} Objekte stehen auf „gemerkt“. Nestwerk schreibt für jedes ein eigenes Anschreiben aus deinem Profil – angepasst an Titel, Lage und Preis, nicht als Rundmail.':
+      '{0} listings are marked “saved”. Nestwerk writes a separate covering letter for each from your profile – tailored to the title, location and price, not a mass mailing.',
+    'Hervorgehobene Inserate stehen in einem eigenen, als bezahlt gekennzeichneten Block über den Treffern – nie zwischen ihnen. Die Reihenfolge der Suche bleibt unberührt.':
+      'Promoted listings sit in their own block above the results, labelled as paid – never among them. The search order is unaffected.',
+    'nur mit geschwärzter Nummer und erst bei ernsthaftem Interesse':
+      'only with the number blacked out, and only once there is serious interest',
+    'falls Einkommen oder Bonität nicht reichen': 'if income or creditworthiness is not enough',
+    'nur für geförderte Wohnungen nötig': 'only needed for subsidised apartments',
+    'Welche Posten überhaupt umgelegt werden dürfen, ob die Abrechnung rechtzeitig kam und ob die Heizkosten richtig verteilt wurden.':
+      'Which items may be passed on at all, whether the statement arrived in time, and whether the heating costs were split correctly.',
+    'wenn die Abrechnung im Briefkasten liegt': 'when the statement is in your letterbox',
+    'Unterlagen einmal verschlüsselt ablegen und beim Bewerben nur einen Verweis verschicken, der nach gesetzter Frist erlischt und sich jederzeit widerrufen lässt.':
+      'Store your documents once, encrypted, and when applying send only a link that expires after a set period and can be revoked at any time.',
+    'vor der ersten Bewerbung': 'before your first application',
+    'Zwei Grenzen, die ständig verwechselt werden: was dein Haushalt trägt und was Vermieter sehen wollen. Dazu, wie groß die Wohnung in jeder Stadt sein dürfte.':
+      'Two limits that are constantly confused: what your household can carry and what landlords want to see. Plus how big the apartment could be in each city.',
+    'Rechnet dein maßgebliches Jahreseinkommen mit allen Pauschalen aus und stellt es der Einkommensgrenze gegenüber – die du selbst setzen kannst, weil jedes Land eine andere hat.':
+      'Works out your relevant annual income with all the flat-rate deductions and sets it against the income limit – which you can set yourself, because every state has a different one.',
+    'Vermögensvergleich über frei wählbare Jahre. Der Mietende legt sein Eigenkapital an und investiert die monatliche Differenz – anders ist der Vergleich unehrlich.':
+      'A wealth comparison over as many years as you like. The renter invests their equity and the monthly difference – any other comparison is dishonest.',
+    'Über deine Bewerbung weiß Nestwerk noch nichts – ohne Einkommen und Unterlagen im Profil lässt sich nichts einschätzen. Was feststeht: Es haben sich bereits {0} andere gemeldet.':
+      'Nestwerk knows nothing about your application yet – without income and documents in your profile there is nothing to assess. What is certain: {0} others have already been in touch.',
+
+    /* Rechtsübersicht und Betreiberangaben */
+    'Angaben gemäß § 5 des Digitale-Dienste-Gesetzes (DDG).':
+      'Information pursuant to § 5 of the German Digital Services Act (DDG).',
+    'Informationen nach Artikel 13 und 14 der Datenschutz-Grundverordnung.':
+      'Information under Articles 13 and 14 of the General Data Protection Regulation.',
+    'Für die Nutzung von Nestwerk durch Verbraucherinnen, Verbraucher und Unternehmen.':
+      'For the use of Nestwerk by consumers and businesses.',
+    'Für Verbraucherinnen und Verbraucher bei entgeltlichen Verträgen.':
+      'For consumers, in the case of paid contracts.',
+    'Meldeweg nach Art. 16 der Verordnung über digitale Dienste.':
+      'Reporting route under Art. 16 of the Digital Services Act.',
+    'Meldeweg nach Artikel 16 der Verordnung (EU) 2022/2065 über digitale Dienste.':
+      'Reporting route under Article 16 of Regulation (EU) 2022/2065 on digital services.',
+    'Erklärung zur Barrierefreiheit': 'Accessibility statement',
+    'Was umgesetzt ist, was fehlt und wo Rückmeldung ankommt.':
+      'What is implemented, what is missing and where feedback goes.',
+    'Was umgesetzt ist, was fehlt, und wo Rückmeldung ankommt.':
+      'What is implemented, what is missing, and where feedback goes.',
+    'Wer die Seite betreibt und wie er erreichbar ist – Pflichtangaben nach § 5 DDG.':
+      'Who runs the site and how to reach them – mandatory details under § 5 DDG.',
+    'Welche Daten verarbeitet werden, auf welcher Grundlage und welche Rechte du hast.':
+      'What data is processed, on what basis, and what rights you have.',
+    'Was Nestwerk leistet, was es kostet und was gilt, wenn etwas schiefgeht.':
+      'What Nestwerk does, what it costs, and what applies if something goes wrong.',
+    'Vierzehn Tage Widerrufsrecht bei bezahlten Verträgen, mit Musterformular.':
+      'Fourteen days’ right of withdrawal on paid contracts, with a model form.',
+    'Verträge hier kündigen': 'Cancel contracts here',
+    'Die Schaltfläche, die § 312k BGB verlangt – ohne Umweg über den Kundendienst.':
+      'The button § 312k BGB requires – with no detour via customer service.',
+    'Die Schaltfläche, die § 312k BGB verlangt: ohne Anmeldung, ohne Rückfrage, ohne Umweg.':
+      'The button § 312k BGB requires: no sign-in, no questions, no detour.',
+    'Läuft seit kurzem, Abrechnung {0}.': 'Running since recently, billed {0}.',
+    'Die Kündigung wirkt zum Ende der laufenden Laufzeit. Bis dahin stehen alle Leistungen zur Verfügung. Eine Bestätigung geht in Textform zu.':
+      'The cancellation takes effect at the end of the current term. Until then all services remain available. A confirmation is sent in text form.',
+    'Vertrag jetzt kündigen': 'Cancel contract now',
+    'Von hier speisen sich Impressum, Datenschutzerklärung, AGB und Widerrufsbelehrung – jede Angabe steht nur einmal.':
+      'The legal notice, privacy policy, terms and withdrawal notice all draw on this – each detail appears only once.',
+    'Name des Anbieters': 'Provider’s name',
+    'Vor- und Nachname oder Firma': 'First and last name, or company',
+    'Straße und Hausnummer': 'Street and house number',
+    'kein Postfach – die Anschrift muss ladungsfähig sein':
+      'no PO box – the address must be one where documents can be served',
+    'Pflichtangabe nach § 5 DDG': 'mandatory under § 5 DDG',
+    'der übliche zweite Kontaktweg': 'the customary second contact route',
+    'Postfach des Service-Teams': 'Service team mailbox',
+    'wohin die Hilfe Anfragen weiterleitet': 'where the help forwards enquiries',
+    'nur falls vorhanden – Kleinunternehmer haben meist keine':
+      'only if you have one – small businesses usually do not',
+    'Stelle der Gewerbeanmeldung': 'Trade registration office',
+    'etwa „Gewerbeamt der Stadt …“': 'e.g. “Trade office of the city of …”',
+    'die Behörde des Bundeslandes, in dem du sitzt': 'the authority of the federal state you are based in',
+    'Verantwortlich nach § 18 Abs. 2 MStV': 'Responsible under § 18(2) MStV',
+    'leer lassen, wenn es dieselbe Person und Anschrift ist':
+      'leave empty if it is the same person and address',
+    'keine – Kleinunternehmerregelung nach § 19 UStG':
+      'none – small-business rule under § 19 UStG',
+    'Diese Angabe fehlt noch': 'This detail is still missing',
+    '[{0} eintragen]': '[enter {0}]',
+    'Noch {0} Angaben fehlen': '{0} details are still missing',
+    'Ein Impressum ohne ladungsfähige Anschrift oder ohne schnelle Kontaktmöglichkeit erfüllt die Pflicht aus § 5 DDG nicht – und das ist abmahnbar. Die Lücken sind in allen Dokumenten markiert.':
+      'A legal notice without a serviceable address or a rapid means of contact does not meet the obligation under § 5 DDG – and that can attract a formal warning. The gaps are marked in every document.',
+    '§ 5 Abs. 1 Nr. 1 DDG – ladungsfähige Anschrift, kein Postfach':
+      '§ 5(1) no. 1 DDG – a serviceable address, not a PO box',
+    '– § 5 Abs. 1 Nr. 1 DDG – ladungsfähige Anschrift, kein Postfach':
+      '– § 5(1) no. 1 DDG – a serviceable address, not a PO box',
+    '§ 5 Abs. 1 Nr. 2 DDG – oder ein anderes ebenso schnelles Mittel; die Rechtsprechung verlangt in der Regel die Nummer':
+      '§ 5(1) no. 2 DDG – or another equally rapid means; the case law generally requires the number',
+    '– § 5 Abs. 1 Nr. 2 DDG – oder ein anderes ebenso schnelles Mittel; die Rechtsprechung verlangt in der Regel die Nummer':
+      '– § 5(1) no. 2 DDG – or another equally rapid means; the case law generally requires the number',
+    'Art. 13 Abs. 2 lit. d DSGVO – Hinweis auf das Beschwerderecht':
+      'Art. 13(2)(d) GDPR – notice of the right to complain',
+    '– Art. 13 Abs. 2 lit. d DSGVO – Hinweis auf das Beschwerderecht':
+      '– Art. 13(2)(d) GDPR – notice of the right to complain',
+    'Jetzt eintragen': 'Enter now',
+    'Legal form: Einzelunternehmen (Kleingewerbe). Ein Eintrag im Handelsregister besteht nicht; als Kleingewerbe besteht dazu keine Pflicht.':
+      'Legal form: sole trader (small business). There is no commercial register entry; as a small business there is no obligation to have one.',
+    'Einzelunternehmen (Kleingewerbe)': 'sole trader (small business)',
+    'Ein Eintrag im Handelsregister besteht nicht; als Kleingewerbe besteht dazu keine Pflicht.':
+      'There is no commercial register entry; as a small business there is no obligation to have one.',
+    'Es besteht keine Umsatzsteuer-Identifikationsnummer.': 'There is no VAT identification number.',
+    'Niklas Haberberg, Anschrift wie oben': 'Niklas Haberberg, address as above',
+
+    /* Was vor dem Start zu klären ist */
+    'Erlaubnis nach § 34c GewO – vermutlich nicht nötig, aber zu prüfen':
+      'Licence under § 34c GewO – probably not needed, but worth checking',
+    'Wer gewerbsmäßig den Abschluss von Verträgen über Wohnräume vermittelt oder die Gelegenheit dazu nachweist, braucht eine Erlaubnis der Gewerbebehörde. Nestwerk führt fremde Angebote zusammen und nimmt keine Provision – danach greift die Pflicht nicht. Die Abgrenzung ist im Einzelfall aber unscharf; ein kurzer Anruf beim Gewerbeamt kostet nichts.':
+      'Anyone who commercially brokers contracts for residential premises, or points out the opportunity to conclude them, needs a licence from the trade authority. Nestwerk brings together third-party offers and takes no commission – on that basis the obligation does not apply. The dividing line is blurred in individual cases, though; a short call to the trade office costs nothing.',
+    'Domain und Postfach müssen dir gehören': 'The domain and mailbox have to be yours',
+    'Auftragsverarbeitung mit dem Hoster': 'A processing agreement with the host',
+    'Verzeichnis von Verarbeitungstätigkeiten': 'Record of processing activities',
+    'Gewerbeanmeldung und Finanzamt': 'Trade registration and the tax office',
+    'Diese Texte durch eine anwaltliche Prüfung schicken':
+      'Have these texts reviewed by a lawyer'
+  });
+
+  /* ------------------------- Letzte Lücken ------------------------- */
+
+  e({
+    'EG': 'GF', 'DG': 'top',
+    '{0} von {1} Treffern geladen': '{0} of {1} results loaded',
+    'wird bei Auszug zurückgezahlt': 'refunded when you move out',
+    'Karte der Suchergebnisse': 'Map of the search results',
+    'Konto und Vertrauensstufe': 'Account and trust level',
+    'In der Suche öffnen': 'Open in the search',
+    'Aus meinem Profil füllen': 'Fill from my profile',
+    'Mieten oder kaufen': 'Rent or buy',
+    'WG-Passung {0} % – passt sehr gut': 'Flatshare match {0} % – a very good fit',
+    'WG-Passung {0} % – passt gut': 'Flatshare match {0} % – a good fit',
+    'WG-Passung {0} % – passt eher nicht': 'Flatshare match {0} % – probably not a fit',
+    'Anfragen zu deinen Inseraten': 'Enquiries about your listings',
+    'Noch {0} Plätze frei. Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.':
+      '{0} places still free. No subscription, no payment details, no renewal – after twelve months the place ends by itself.',
+    'Plätze frei. Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.':
+      'places still free. No subscription, no payment details, no renewal – after twelve months the place ends by itself.',
+    'im Architekturbüro': 'at an architecture practice',
+
+    /* Was vor dem Start noch zu klären ist */
+    'Wer gewerbsmäßig den Abschluss von Verträgen über Wohnräume vermittelt oder die Gelegenheit dazu nachweist, braucht eine Erlaubnis der Gewerbebehörde. Nestwerk führt fremde Angebote zusammen und verlangt dafür kein Erfolgshonorar von Vermietenden – das spricht dagegen, dass eine Erlaubnis nötig ist. Sobald aber eine Provision im Erfolgsfall fließt, sieht es anders aus. Diese Frage gehört vor dem Start einmal schriftlich geklärt, am besten beim zuständigen Ordnungs- oder Gewerbeamt.':
+      'Anyone who commercially brokers contracts for residential premises, or points out the opportunity to conclude them, needs a licence from the trade authority. Nestwerk brings together third-party offers and charges landlords no success fee for doing so – which argues against a licence being needed. As soon as a commission flows on success, though, it looks different. This question should be settled in writing once before launch, ideally with the responsible public order or trade office.',
+    'Die Hilfe leitet Anfragen an info@nestwerk.de weiter. Bevor das erste Mal jemand darauf antwortet, muss die Domain registriert und das Postfach eingerichtet sein – und jemand muss es lesen. Ein Kontaktweg, der ins Leere geht, ist schlimmer als keiner: Nach § 5 DDG muss die Kontaktaufnahme tatsächlich möglich sein, und wer binnen weniger Tage nicht antwortet, verliert mehr als eine Anfrage.':
+      'The help forwards enquiries to info@nestwerk.de. Before anyone answers one for the first time, the domain has to be registered and the mailbox set up – and someone has to read it. A contact route that leads nowhere is worse than none: under § 5 DDG contact must actually be possible, and anyone who does not reply within a few days loses more than one enquiry.',
+    'Sobald die Seite bei einem Anbieter liegt, verarbeitet dieser Anbieter personenbezogene Daten – mindestens die IP-Adressen der Aufrufe. Dafür braucht es einen Vertrag nach Art. 28 DSGVO. Die meisten Hoster stellen ihn zum Abschluss im Kundenkonto bereit.':
+      'Once the site is hosted with a provider, that provider processes personal data – the IP addresses of visits at the very least. That requires a contract under Art. 28 GDPR. Most hosts make one available to conclude in your customer account.',
+    'Art. 30 DSGVO verlangt es auch von kleinen Betrieben, sobald die Verarbeitung nicht nur gelegentlich erfolgt – bei einer laufenden Website ist das der Fall. Es ist kein Formular für die Behörde, sondern eine eigene Übersicht, die auf Verlangen vorgelegt wird.':
+      'Art. 30 GDPR requires one of small businesses too, as soon as processing is more than occasional – which it is for a live website. It is not a form for the authority but your own overview, produced on request.',
+    'Zahlungsabwicklung': 'Payment processing',
+    'Sobald Plus bezahlt wird, kommt ein Zahlungsdienstleister ins Spiel. Er wird in der Datenschutzerklärung als Empfänger genannt, und die Bestellstrecke braucht die Schaltfläche mit der Aufschrift „zahlungspflichtig bestellen“ (§ 312j Abs. 3 BGB) sowie die Bestätigung des Vertrags auf einem dauerhaften Datenträger (§ 312f BGB).':
+      'As soon as Plus is paid for, a payment service provider comes into play. It is named as a recipient in the privacy policy, and the order process needs the button labelled “order with obligation to pay” (§ 312j(3) BGB) as well as confirmation of the contract on a durable medium (§ 312f BGB).',
+    'Das Kleingewerbe wird beim Gewerbeamt der Wohnsitzgemeinde angemeldet; das Finanzamt schickt danach den Fragebogen zur steuerlichen Erfassung, in dem die Kleinunternehmerregelung nach § 19 UStG gewählt werden kann. Sie gilt, solange der Umsatz im laufenden Jahr 100.000 Euro nicht übersteigt. Wird die Grenze im Jahr überschritten, endet die Regelung ab diesem Umsatz – dann ist Umsatzsteuer auszuweisen, und die Preisangaben auf der Seite müssen mit.':
+      'A small business is registered with the trade office of the municipality where you live; the tax office then sends the questionnaire for tax registration, in which the small-business rule under § 19 UStG can be chosen. It applies as long as turnover in the current year does not exceed 100,000 euros. If the threshold is exceeded during the year, the rule ends from that turnover onwards – VAT then has to be shown, and the prices on the site have to follow.',
+    'Was hier steht, ist mit Sorgfalt und nach den geltenden Vorschriften geschrieben, aber es ist keine Rechtsberatung und ersetzt sie nicht. Vor dem ersten echten Nutzer sollte jemand mit Zulassung darüber gesehen haben – vor allem AGB, Haftung und die Frage nach § 34c GewO.':
+      'What is written here is drafted with care and in line with the applicable rules, but it is not legal advice and does not replace it. Before the first real user, someone qualified should have looked over it – the terms, the liability provisions and the § 34c GewO question above all.',
+    'Ein Impressum ohne ladungsfähige Anschrift oder ohne schnelle Kontaktmöglichkeit erfüllt die Pflicht aus § 5 DDG nicht – und das ist abmahnbar. Die Lücken sind in allen Dokumenten sichtbar markiert.':
+      'A legal notice without a serviceable address or a rapid means of contact does not meet the obligation under § 5 DDG – and that can attract a formal warning. The gaps are visibly marked in every document.'
+  });
+
+  e({
+    'WG': 'Share',
+    'Vertrag jetzt kündigen': 'Cancel contract now',
+    'Noch {0} Angaben fehlen': '{0} details are still missing',
+    'Noch {0} Angabe fehlt': '{0} detail is still missing',
+    'Anschrift wie oben': 'address as above',
+    'Läuft seit kurzem, Abrechnung {0}.': 'Running since recently, billed {0}.',
+    '{0} Objekte stehen auf „gemerkt“.': '{0} listings are marked “saved”.',
+    '{0} mit Plus': '{0} with Plus',
+    'seit {0}': 'since {0}',
+    'Die Vertrauensstufe zählt vor allem, wenn du selbst inserierst – andere sehen sie an deinem Angebot.':
+      'The trust level counts above all when you advertise yourself – others see it on your offer.'
+  });
+
+  e({
+    'Angemeldet als': 'Signed in as',
+    'Profil ausfüllen': 'Fill in your profile',
+    'Eigene Angaben ändern': 'Change your own details',
+    'WG-Passung {0} % – {1}': 'Flatshare match {0} % – {1}',
+    'passt sehr gut': 'a very good fit', 'passt gut': 'a good fit',
+    'passt eher nicht': 'probably not a fit', 'passt kaum': 'barely a fit',
+    'Abrechnung {0}.': 'Billed {0}.',
+    'jährlich': 'yearly', 'monatlich': 'monthly',
+    'Über deine Bewerbung weiß Nestwerk noch nichts – ohne Einkommen und Unterlagen im Profil lässt sich nichts einschätzen. Was feststeht:':
+      'Nestwerk knows nothing about your application yet – without income and documents in your profile there is nothing to assess. What is certain:',
+    'Bisher hat sich niemand sonst gemeldet.': 'Nobody else has been in touch so far.',
+    'Bisher hat sich eine weitere Person gemeldet.': 'One other person has been in touch so far.',
+    'Es haben sich bereits {0} andere gemeldet.': '{0} others have already been in touch.',
+    '{0} Objekte stehen auf „gemerkt“. Nestwerk schreibt für jedes ein eigenes Anschreiben aus deinem Profil – angepasst an Titel, Lage und Preis, nicht als Rundmail.':
+      '{0} listings are marked “saved”. Nestwerk writes a separate covering letter for each from your profile – tailored to the title, location and price, not a mass mailing.',
+    'Serienbewerbung': 'Batch application',
+    'Anschreiben vorbereiten': 'Prepare covering letters'
+  });
+
+  e({
+    'Noch': 'Still',
+    'Platz frei.': 'place free.', 'Plätze frei.': 'places free.',
+    'Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.':
+      'No subscription, no payment details, no renewal – after twelve months the place ends by itself.',
+    'Läuft seit {0},': 'Running since {0},',
+    'kurzem': 'recently',
+    'Vertrag': 'Contract', 'Umzug': 'Move', 'Ämter': 'Authorities', 'Danach': 'Afterwards',
+    'Ein Impressum ohne ladungsfähige Anschrift oder ohne schnelle Kontaktmöglichkeit erfüllt die Pflicht aus § 5 DDG nicht – und das ist abmahnbar. Die Lücken sind in allen Dokumenten sichtbar markiert, damit sie nicht untergehen.':
+      'A legal notice without a serviceable address or a rapid means of contact does not meet the obligation under § 5 DDG – and that can attract a formal warning. The gaps are visibly marked in every document so they do not get lost.'
+  });
+
 })(window.NW = window.NW || {});

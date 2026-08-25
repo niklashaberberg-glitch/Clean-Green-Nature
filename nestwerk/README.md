@@ -786,6 +786,59 @@ Die Diagrammfarben sind mit einem Palettenprüfer gegen Farbfehlsichtigkeit
 gerechnet – alle Paare, hell und dunkel, ΔE ≥ 9 unter Deuteranopie,
 Protanopie und Tritanopie (`scripts/farben-pruefen.js`).
 
+## Sprachen
+
+Deutsch ist die Ausgangssprache und steht im Quelltext. Englisch kommt aus
+einem Wörterbuch, dessen Schlüssel der deutsche Satz selbst ist
+(`assets/sprache-en.js`). Das hat zwei Gründe: Es gibt keine erfundenen
+Bezeichner zu pflegen, und wenn ein Eintrag fehlt, erscheint der deutsche
+Satz – nie ein leerer Platz und nie ein Schlüssel wie `profil.anker.titel`.
+
+Übersetzt wird an genau einer Stelle: im Vorlagen-Tag `h` in `util.js`. Von
+dort geht jeder Textlauf durch das Wörterbuch, das Markup bleibt unberührt.
+Deshalb musste keine der dreißig Ansichtsdateien angefasst werden.
+
+Ein Satz, den `${…}` unterbricht, ergibt einen Schlüssel mit Platzhaltern:
+`Noch {0} Plätze frei`. Die englische Fassung darf sie umstellen – ohne das
+wäre jeder eingeschobene Wert an die deutsche Satzstellung genagelt. Steht
+ein Zeichen vor dem Text (`${ico('herz')}Merken`), gehört es nicht zum Satz;
+der Nachschlag lässt Platzhalter am Rand deshalb weg, sonst bräche ein
+zusätzliches Symbol im Markup jede Übersetzung. Der Bauplan je Vorlage hängt
+an einer WeakMap über dem `strings`-Array, das getaggte Vorlagen bei jedem
+Aufruf identisch wiederbekommen – die Übersetzung kostet damit je Vorlage
+einmalig.
+
+Was mitziehen musste:
+
+- **Zahlen und Daten.** 1.274,50 € gegen €1,274.50, 25.08.2026 gegen
+  25/08/2026. Ohne das liest ein englischer Leser „4,5 Zimmer“ als
+  zweiundvierzig Komma fünf.
+- **Zeitangaben.** „vor 2 Tagen“ ist ein Muster, kein verketteter Text.
+- **Der erzeugte Bestand.** Titel und Beschreibungen entstehen aus
+  Textbausteinen und stehen fertig zusammengesetzt im Inserat. Er wird beim
+  Sprachwechsel neu gebaut; der Zufallsgenerator ist gesät, also kommen
+  dieselben Kennungen, Preise und Flächen wieder heraus. Eigene Inserate
+  bleiben unangetastet – das ist der Text des Menschen, nicht unserer.
+- **Die Hilfe.** Kein Wörterbuch, sondern eine eigene Wissensbasis
+  (`assets/hilfe-en.js`): Der Abgleich läuft über Wortstämme, und „kuendig“
+  findet in „how do I cancel“ nichts.
+- **Die Rechtstexte.** Übersetzt zum Verstehen, nicht zum Gelten. Über jedem
+  steht in der englischen Fassung, dass die deutsche maßgeblich ist –
+  Impressum, Erklärung und Geschäftsbedingungen wirken nach deutschem Recht,
+  und zwei gleichrangige Fassungen wären zwei Verträge. Paragraphen bleiben
+  im Original: „§ 551 BGB“ ist die Fundstelle, unter der man nachliest.
+
+Deutsch bleibt die Voreinstellung. Automatisch nach der Browsersprache zu
+schalten wäre bequem, überrascht aber: Der Bestand, die Städte und die
+Rechtstexte sind deutsch. Wer umstellt, bleibt umgestellt.
+
+Geprüft wird die Vollständigkeit nicht am Quelltext, sondern an der
+Darstellung: Ein Skript besucht alle Ansichten auf Englisch, sammelt jeden
+sichtbaren Textknoten samt Attributen und meldet, was noch deutsch ist. Von
+1055 solchen Stellen sind zwei übrig, und beide mit Absicht – die
+Beschriftung des Rückschalters und der Verweis auf die maßgebliche deutsche
+Fassung.
+
 ## Durchgang durch alle Bereiche
 
 Zum Abschluss ein Durchgang, der die Anwendung nicht entlang der Funktionen

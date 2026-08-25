@@ -38,12 +38,26 @@
 
   const rw = (feld, beschreibung) => R.wert(feld, beschreibung);
 
+  /* Rechtstexte sind keine gewöhnlichen Seiten: Impressum, Erklärung und
+     Geschäftsbedingungen wirken nach deutschem Recht, und eine
+     Übersetzung ist eine Lesehilfe, kein zweiter Vertrag. Wer das nicht
+     dazuschreibt, hat im Streitfall zwei Fassungen und keine, die gilt.
+     Der Hinweis erscheint deshalb nur in der Übersetzung. */
+  function massgeblich() {
+    if (NW.i18n.sprache() === 'de') return '';
+    return h`<p class="rechtshinweis">${ico('info')}<span><b>The German version governs.</b>
+      This translation is provided for convenience. Nestwerk operates under German law; in case of
+      any discrepancy, the German text of this document is the legally binding one.
+      <a href="#/recht">Zur deutschen Fassung</a></span></p>`;
+  }
+
   function kopf(titel, unter) {
     return h`<header class="seite__kopf">
       <p class="rechtspfad"><a href="#/recht">${ico('zurueck')}Rechtliches</a></p>
       <h1>${titel}</h1>
       ${unter ? h`<p class="seite__unter">${unter}</p>` : ''}
       <p class="fein">Fassung vom ${R.stand()}</p>
+      ${massgeblich()}
     </header>`;
   }
 
@@ -85,7 +99,8 @@
         </div>
 
         ${f.length ? h`<div class="block block--warn">
-          <h2>${ico('warnung')}Noch ${f.length} ${U.plural(f.length, 'Angabe fehlt', 'Angaben fehlen')}</h2>
+          <h2>${ico('warnung')}${U.t(U.plural(f.length, 'Noch {0} Angabe fehlt', 'Noch {0} Angaben fehlen'))
+            .replace('{0}', f.length)}</h2>
           <p>Ein Impressum ohne ladungsfähige Anschrift oder ohne schnelle Kontaktmöglichkeit erfüllt die
             Pflicht aus § 5 DDG nicht – und das ist abmahnbar. Die Lücken sind in allen Dokumenten sichtbar
             markiert, damit sie nicht untergehen.</p>
@@ -815,8 +830,9 @@ Datum: __________________
 
         ${quelle === 'bezahlt' ? h`<div class="block block--betont">
           <h2>${ico('plus5')}Nestwerk Plus, bezahlt</h2>
-          <p>Läuft seit ${S.get().tarifSeit ? U.dateDE(S.get().tarifSeit) : 'kurzem'},
-            Abrechnung ${S.get().tarifIntervall === 'jahr' ? 'jährlich' : 'monatlich'}.</p>
+          <p>${U.t('Läuft seit {0},').replace('{0}', S.get().tarifSeit ? U.dateDE(S.get().tarifSeit) : U.t('kurzem'))}
+            ${U.t('Abrechnung {0}.').replace('{0}',
+              U.t(S.get().tarifIntervall === 'jahr' ? 'jährlich' : 'monatlich'))}</p>
           <p>Die Kündigung wirkt zum Ende der laufenden Laufzeit. Bis dahin stehen alle Leistungen zur
             Verfügung. Eine Bestätigung geht in Textform zu.</p>
           <p class="werkzeug__weiter">

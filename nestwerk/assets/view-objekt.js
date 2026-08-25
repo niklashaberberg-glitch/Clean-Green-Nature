@@ -54,7 +54,7 @@
         <div class="kosten__spalte">
           <h3>Einmalig beim Einzug</h3>
           <ul class="kosten__liste">
-            ${k.einmalig.map((m) => h`<li><span>${m.label}${m.rueck ? raw('<i>wird bei Auszug zurückgezahlt</i>') : ''}</span><b>${U.eur(m.betrag)}</b></li>`)}
+            ${k.einmalig.map((m) => h`<li><span>${m.label}${m.rueck ? raw('<i>' + U.esc(U.t('wird bei Auszug zurückgezahlt')) + '</i>') : ''}</span><b>${U.eur(m.betrag)}</b></li>`)}
           </ul>
           <p class="kosten__summe"><span>Summe</span><b>${U.eur(k.einmalSumme)}</b></p>
           ${k.rueckzahlbar ? h`<p class="kosten__fein">davon ${U.eur(k.rueckzahlbar)} rückzahlbar</p>` : ''}
@@ -250,7 +250,7 @@
           <div class="ampel__zahl">${c.mitbewerber}</div>
           <div>
             <b>Andrang: ${c.andrang}</b>
-            <p>Darauf hast du keinen Einfluss${c.mitbewerber > 1 ? ' – rechnerisch ' + c.prozent + ' von 100' : ''}.</p>
+            <p>Darauf hast du keinen Einfluss${c.mitbewerber > 1 ? U.t(' – rechnerisch {0} von 100').replace('{0}', c.prozent) : ''}.</p>
           </div>
         </div>
       </div>
@@ -332,7 +332,7 @@
         <div class="wg__leute">
           ${w.bewohner.map((p) => h`<div class="wg__person">
             ${raw(NW.img.avatar(p.name, 44))}
-            <div><b>${p.name}</b><span>${p.alter} Jahre · ${p.beruf}</span></div>
+            <div><b>${p.name}</b><span>${U.t('{0} Jahre').replace('{0}', p.alter)} · ${p.beruf}</span></div>
           </div>`)}
           <div class="wg__person wg__person--frei">
             <span class="wg__frei" aria-hidden="true">?</span>
@@ -349,7 +349,7 @@
         ${w.sucht.alterVon}–${w.sucht.alterBis} Jahre</dd></div>
         <div><dt>Rauchen</dt><dd>${w.rauchen}</dd></div>
         <div><dt>Haustiere</dt><dd>${w.haustiere}</dd></div>
-        <div><dt>Sprachen</dt><dd>${w.sprachen.join(', ')}</dd></div>
+        <div><dt>Sprachen</dt><dd>${w.sprachen.map((x) => U.t(x)).join(', ')}</dd></div>
         <div><dt>Bad</dt><dd>${w.badGeteilt}</dd></div>
       </dl>
 
@@ -358,8 +358,8 @@
         ${m.details.map((d) => h`<div class="lifestyle__zeile">
           <span class="lifestyle__label">${d.label}</span>
           <span class="lifestyle__spur">
-            <i class="lifestyle__wg" style="left:${d.wg * 10}%" title="WG: ${d.wg} von 10"></i>
-            <i class="lifestyle__du" style="left:${d.du * 10}%" title="Du: ${d.du} von 10"></i>
+            <i class="lifestyle__wg" style="left:${d.wg * 10}%" title="${U.t('WG: {0} von 10').replace('{0}', d.wg)}"></i>
+            <i class="lifestyle__du" style="left:${d.du * 10}%" title="${U.t('Du: {0} von 10').replace('{0}', d.du)}"></i>
             <em class="lifestyle__brueck" style="left:${Math.min(d.du, d.wg) * 10}%;width:${d.abweichung * 10}%"></em>
           </span>
           <span class="lifestyle__enden"><i>${d.links}</i><i>${d.rechts}</i></span>

@@ -114,9 +114,9 @@
         ${P.darf('serienbewerbung') && ids.filter((id) => s.merkliste[id].status === 'gemerkt').length > 1
         ? h`<section class="block">
           <h2>${ico('nachricht')}Serienbewerbung</h2>
-          <p class="block__unter">${ids.filter((id) => s.merkliste[id].status === 'gemerkt').length} Objekte
-            stehen auf „gemerkt“. Nestwerk schreibt für jedes ein eigenes Anschreiben aus deinem Profil –
-            angepasst an Titel, Lage und Preis, nicht als Rundmail.</p>
+          <p class="block__unter">${U.t('{0} Objekte stehen auf „gemerkt“. Nestwerk schreibt für jedes ein '
+            + 'eigenes Anschreiben aus deinem Profil – angepasst an Titel, Lage und Preis, nicht als Rundmail.')
+            .replace('{0}', ids.filter((id) => s.merkliste[id].status === 'gemerkt').length)}</p>
           <button type="button" class="knopf" data-tu="serie">${ico('nachricht')}Anschreiben vorbereiten</button>
         </section>` : ''}
 
@@ -208,7 +208,9 @@
       { label: 'Energie', wert: (d) => d.l.energie ? d.l.energie.klasse + ' · ' + d.l.energie.kwh + ' kWh' : 'entfällt',
         zahl: (d) => d.l.energie ? -A.ENERGIE_RANG[d.l.energie.klasse] : -99, hoch: true },
       { label: 'Heizung', wert: (d) => d.l.energie ? d.l.energie.heizung : 'entfällt' },
-      { label: 'Etage', wert: (d) => (d.l.etage === 0 ? 'EG' : d.l.etage >= d.l.etagen ? 'DG' : d.l.etage + '. OG') + ' von ' + d.l.etagen },
+      { label: 'Etage', wert: (d) => U.t('{0} von {1}')
+        .replace('{0}', d.l.etage === 0 ? U.t('EG') : d.l.etage >= d.l.etagen ? U.t('DG')
+          : U.t('{0}. OG').replace('{0}', d.l.etage)).replace('{1}', d.l.etagen) },
       { label: 'Kaution', wert: (d) => d.l.kind === 'kauf' ? '–' : d.l.kaution ? U.eur(d.l.kalt * d.l.kaution) : 'keine', zahl: (d) => d.l.kalt * d.l.kaution, hoch: false },
       { label: 'Provision', wert: (d) => d.l.provision ? U.dec(d.l.provision) + (d.l.kind === 'kauf' ? ' %' : ' KM') : 'frei', zahl: (d) => d.l.provision, hoch: false },
       { label: 'Arbeitsweg', wert: (d) => d.b.pendel ? U.minutesLabel(d.b.pendel.min) : '–', zahl: (d) => d.b.pendel ? d.b.pendel.min : 999, hoch: false },

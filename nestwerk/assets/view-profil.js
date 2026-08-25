@@ -192,8 +192,8 @@
             <h2>${ico('person')}Konto</h2>
             ${ui.badge(st.name, st.ton)}
           </div>
-          <p class="block__unter">Angemeldet als <b>${NW.konto.anzeigeName()}</b>${k.mail ? ' · ' + k.mail : ''}.
-            Die Vertrauensstufe zählt vor allem, wenn du selbst inserierst – andere sehen sie an deinem Angebot.</p>
+          <p class="block__unter">${U.t('Angemeldet als')} <b>${NW.konto.anzeigeName()}</b>${k.mail ? ' · ' + k.mail : ''}.
+            ${U.t('Die Vertrauensstufe zählt vor allem, wenn du selbst inserierst – andere sehen sie an deinem Angebot.')}</p>
           <p class="werkzeug__weiter">
             <a class="knopf knopf--still" href="#/konto">${ico('schloss')}Konto und Vertrauensstufe</a></p>
         </section>`;
@@ -462,7 +462,7 @@
               <div>
                 <b><a href="#/objekt/${e.id}">${U.truncate(e.titel, 46)}</a>
                   ${laeuft && prod ? ui.badge(prod.name, 'info', prod.icon) : ''}</b>
-                <span>${ui.artLabel(e)} · ${e.viertel}, ${e.stadt} · seit ${U.since(e.erstellt)}${laeuft && b.bis
+                <span>${ui.artLabel(e)} · ${e.viertel}, ${e.stadt} · ${U.t('seit {0}').replace('{0}', U.since(e.erstellt))}${laeuft && b.bis
           ? ' · hervorgehoben bis ' + U.dateDE(b.bis) : ''}</span>
               </div>
               <button type="button" class="knopf knopf--klein knopf--still" data-tu="hervorheben" data-id="${e.id}">

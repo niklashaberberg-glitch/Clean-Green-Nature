@@ -5,7 +5,7 @@ Dieses Repository enthält zwei voneinander unabhängige Projekte:
 | Ordner | Was |
 |---|---|
 | Wurzel (`index.html`) | die Website von Clean Green Nature – siehe unten |
-| [`nestwerk/`](nestwerk/) | **Nestwerk**, eine Wohnungssuche, die Mietmarkt, Kauf, WG-Zimmer und Wohnungstausch in einer Oberfläche zusammenführt |
+| [`trimmotrade/`](trimmotrade/) | **TrimmoTrade**, eine Wohnungssuche, die Mietmarkt, Kauf, WG-Zimmer und Wohnungstausch in einer Oberfläche zusammenführt |
 
 Beide laufen ohne Build-Schritt, ohne Framework und ohne Abhängigkeiten.
 
@@ -161,16 +161,16 @@ Konsolenfehler, keine doppelten IDs.
 
 ---
 
-# Nestwerk – Wohnungssuche
+# TrimmoTrade – Wohnungssuche
 
-Liegt in [`nestwerk/`](nestwerk/) und hat mit der Website nichts zu tun –
+Liegt in [`trimmotrade/`](trimmotrade/) und hat mit der Website nichts zu tun –
 eigener Ordner, eigene Dateien, eigene Dokumentation.
 
-Nestwerk führt zusammen, was sonst auf drei Portale verteilt ist: Mietmarkt,
+TrimmoTrade führt zusammen, was sonst auf drei Portale verteilt ist: Mietmarkt,
 Kaufangebote, WG-Zimmer und Wohnungstausch. Ein Profil, eine Merkliste, eine
 Bewerbermappe für alle vier.
 
-**Zum Ausprobieren:** `nestwerk/dist/nestwerk.html` per Doppelklick öffnen.
+**Zum Ausprobieren:** `trimmotrade/dist/trimmotrade.html` per Doppelklick öffnen.
 
 Was dabei über die Vorlagen hinausgeht:
 
@@ -209,4 +209,4 @@ Ausdrücklich **nicht** käuflich: bessere Platzierung, Vorrang bei Vermietern,
 Frühzugang zu Inseraten. Genau das verkaufen die meisten Portale.
 
 Alles läuft im Browser. Kein Server, kein Konto, keine Übertragung an Dritte.
-Die vollständige Beschreibung steht in [`nestwerk/README.md`](nestwerk/README.md).
+Die vollständige Beschreibung steht in [`trimmotrade/README.md`](trimmotrade/README.md).

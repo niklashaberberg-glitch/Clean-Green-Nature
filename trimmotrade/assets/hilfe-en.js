@@ -342,7 +342,7 @@
       schlag: ['account', 'password', 'sign in', 'signin', 'login', 'register', 'passkey', 'access'],
       muster: [/(password|passkey|access).{0,20}(forgot|lost|reset|change)/],
       antwort: 'Through one of the four routes on the start page: <b>a passkey</b> (Face ID, Windows '
-        + 'Hello or a fingerprint), Google, Microsoft, Apple – or with your email address and a one-time '
+        + 'Hello or a fingerprint), Google, Microsoft – or with your email address and a one-time '
         + 'code.\n\n'
         + 'None of the routes involves a password. With a passkey the key is created in your device’s '
         + 'security chip and never leaves it; on the email route you get a code valid for ten minutes. '

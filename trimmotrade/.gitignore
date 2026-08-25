@@ -1,0 +1,11 @@
+# Zugangsdaten. Diese Datei entsteht auf dem Server aus
+# api/config.example.php und gehört unter keinen Umständen ins
+# Versionsverzeichnis – sie enthält Datenbankpasswort, Postfachpasswort
+# und die Geheimnisse für Google und Microsoft.
+api/config.php
+
+# Alles, was der Betrieb erzeugt: die SQLite-Datei beim Ausprobieren und
+# das Mailprotokoll des Probeversands.
+api/daten/*
+!api/daten/.gitkeep
+!api/daten/.htaccess

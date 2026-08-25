@@ -477,6 +477,11 @@ input[type="range"] {
 .block--info { border-color: var(--info); }
 
 .hinweisbox {
+/* Ein Hinweis, der etwas empfiehlt statt etwas zu erklären, bekommt die
+   Akzentfarbe – sonst geht er zwischen den Rechtshinweisen unter. */
+.hinweisbox--tipp { background: var(--akzent-hell); border-color: var(--akzent); }
+.hinweisbox--tipp > .ico { color: var(--akzent); }
+.hinweisbox--tipp a { font-weight: 550; }
   display: flex; gap: .7em; padding: .85em 1em; margin: 12px 0;
   background: var(--flaeche2); border-left: 3px solid var(--akzent); border-radius: var(--r-klein);
   font-size: .88rem;
@@ -2127,3 +2132,58 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .anbieter__stufe b { color: var(--text); }
 .anbieter__stufe.is-schwach { background: var(--warn-hell); }
 .anbieter__stufe.is-schwach > .ico { color: var(--warn); }
+
+/* --- Hinterlegte Passkeys ------------------------------------------------
+   Eine Zeile je Gerät: Zeichen, Bezeichnung mit Datum, und rechts der Weg
+   zum Entfernen. Der Knopf steht am Rand, damit er nicht versehentlich
+   getroffen wird – einen Passkey zu löschen ist nicht rückgängig zu machen. */
+.passkeyliste__kopf {
+  margin: 18px 0 0;
+  font-size: .92rem;
+  font-weight: 650;
+  color: var(--text-leise);
+}
+.passkeyliste {
+  list-style: none;
+  margin: 8px 0 12px;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.passkeyliste li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border: 1px solid var(--rand);
+  border-radius: var(--r-klein);
+  background: var(--flaeche);
+  min-width: 0;
+}
+.passkeyliste__zeichen {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--akzent-hell);
+  color: var(--akzent);
+}
+.passkeyliste__zeichen svg { width: 16px; height: 16px; }
+.passkeyliste__wort {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow-wrap: anywhere;
+}
+.passkeyliste__wort b { font-size: .95rem; }
+.passkeyliste__wort i {
+  font-style: normal;
+  font-size: .8rem;
+  color: var(--text-still);
+}
+.passkeyliste .link { flex: 0 0 auto; }

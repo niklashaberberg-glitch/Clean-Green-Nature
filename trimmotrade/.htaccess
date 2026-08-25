@@ -1,0 +1,94 @@
+# =====================================================================
+# TrimmoTrade – Apache-Konfiguration für netcup Webhosting
+#
+# Reihenfolge ist Absicht: Erst die Umleitungen, damit alles Weitere nur
+# noch auf der endgültigen Adresse passiert, dann die Kopfzeilen, dann
+# Kompression und Zwischenspeicher.
+# =====================================================================
+
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # --- Eine einzige richtige Adresse --------------------------------
+  # Ohne das ist dieselbe Seite unter vier Adressen erreichbar
+  # (mit und ohne www, mit und ohne TLS). Suchmaschinen sehen darin
+  # vier Seiten mit gleichem Inhalt und teilen die Bewertung auf.
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://www.trimmotrade.de%{REQUEST_URI} [R=301,L]
+
+  RewriteCond %{HTTP_HOST} !^www\. [NC]
+  RewriteRule ^ https://www.trimmotrade.de%{REQUEST_URI} [R=301,L]
+
+  # --- Was unter /api niemand abrufen darf ---------------------------
+  # Diese Regeln stehen VOR der Weiterleitung an den Einstiegspunkt.
+  # Stünden sie dahinter, kämen sie nie zum Zug: Die Weiterleitung
+  # trägt [L] und beendet die Verarbeitung.
+  RewriteRule ^api/(lib|daten)/ - [F,L]
+  RewriteRule ^api/(config|schema-ausgeben)\.php$ - [F,L]
+  RewriteRule ^api/.*\.(sql|sqlite|sqlite3|log|md)$ - [F,L]
+
+  # --- Anmeldung ----------------------------------------------------
+  # Alles Übrige unter /api geht an einen einzigen Einstiegspunkt. Der
+  # Rest der Anwendung bleibt statisch und wird direkt ausgeliefert.
+  RewriteRule ^api/(.*)$ api/index.php [QSA,L]
+</IfModule>
+
+# --- Kopfzeilen -------------------------------------------------------
+<IfModule mod_headers.c>
+  # Kein Framing durch Fremde: Eine nachgebaute Seite, die TrimmoTrade in
+  # einen unsichtbaren Rahmen legt, kann sonst Klicks abfangen.
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), interest-cohort=()"
+
+  # HSTS erst einschalten, wenn TLS sicher steht – ein Fehler hier
+  # sperrt Besucher für die angegebene Dauer aus.
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+
+  # Inhaltsrichtlinie: Die Anwendung lädt nichts von fremden Servern.
+  # 'unsafe-inline' für Stil, weil einzelne Elemente ihre Maße als
+  # style-Attribut tragen (Diagramme, Karte). Skripte brauchen es nicht.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; form-action 'self' https://accounts.google.com https://login.microsoftonline.com; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+
+  # Die Anmeldung darf nie aus dem Zwischenspeicher kommen.
+  <FilesMatch "\.(php)$">
+    Header always set Cache-Control "no-store, no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# --- Kompression ------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE application/xml application/rss+xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# --- Zwischenspeicher -------------------------------------------------
+# Die Anwendung ist eine Datei je Art; ändert sich etwas, ändert sich der
+# Dateiname nicht. Deshalb für HTML kurz, für Beiwerk lang.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 10 minutes"
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType application/manifest+json "access plus 7 days"
+</IfModule>
+
+# --- Nichts preisgeben ------------------------------------------------
+# Zweiter Riegel, falls mod_rewrite fehlt oder abgeschaltet ist. In
+# api/lib/ und api/daten/ liegt zusätzlich je eine eigene .htaccess –
+# drei Riegel für dieselbe Tür sind hier keine Übertreibung, sondern
+# billig: Was hinter ihr liegt, sind Zugangsdaten.
+<FilesMatch "^(config\.php|schema\.sql|schema-ausgeben\.php|\.env|composer\.(json|lock)|.*\.(sqlite|sqlite3|log))$">
+  Require all denied
+</FilesMatch>
+
+ErrorDocument 404 /404.html

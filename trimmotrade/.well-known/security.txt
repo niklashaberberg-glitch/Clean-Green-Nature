@@ -1,0 +1,6 @@
+# Wer eine Sicherheitslücke findet, soll sie melden können, ohne lange zu
+# suchen, wohin. Nach RFC 9116.
+Contact: mailto:sicherheit@trimmotrade.de
+Expires: 2027-08-25T00:00:00.000Z
+Preferred-Languages: de, en
+Canonical: https://www.trimmotrade.de/.well-known/security.txt

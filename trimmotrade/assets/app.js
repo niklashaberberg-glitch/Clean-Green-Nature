@@ -11,6 +11,21 @@
        nicht kurz auf Deutsch aufblitzen. */
     TT.i18n.laden();
 
+    /* Dann die Frage, ob eine Serverseite antwortet. Sie entscheidet, ob
+       die Anmeldung echt ist oder nachgebildet, und ob jemand schon
+       angemeldet ist – beides muss vor dem ersten Zeichnen feststehen.
+       Der Aufruf hat eine kurze eigene Frist und schlägt nie fehl; ohne
+       Antwort läuft die Anwendung als Vorführung weiter. */
+    if (TT.api) TT.api.pruefen().then(weiter, weiter);
+    else weiter();
+  }
+
+  let schonGelaufen = false;
+
+  function weiter() {
+    if (schonGelaufen) return;
+    schonGelaufen = true;
+
     /* Wechselt das System zwischen hell und dunkel, während die App läuft,
        und steht die Einstellung auf „automatisch“, wird neu gezeichnet. */
     const medium = window.matchMedia('(prefers-color-scheme: dark)');

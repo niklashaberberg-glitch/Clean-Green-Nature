@@ -758,7 +758,7 @@
     'Was du nicht schreiben darfst': 'What you may not write',
     'Formulierungen, die nach Herkunft, Religion, Geschlecht, Behinderung oder Alter aussortieren, sind nach dem Allgemeinen Gleichbehandlungsgesetz unzulässig. Bei WG-Zimmern in der eigenen Wohnung ist die Auswahl freier – trotzdem gilt: Beschreibe die WG, nicht wen du ausschließt.':
       'Wording that filters by origin, religion, gender, disability or age is unlawful under the German Equal Treatment Act (AGG). For a room in your own flatshare you have more freedom to choose – even so: describe the flatshare, not who you are excluding.',
-    '{18}Inserat anlegen': '{18}Create listing',
+    '{19}Inserat anlegen': '{19}Create listing',
 
     /* Fotos */
     'Fotos': 'Photos',
@@ -927,7 +927,7 @@
     'Willkommen bei TrimmoTrade': 'Welcome to TrimmoTrade',
     'Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil, eine Bewerbermappe. Zum Start brauchst du eine Anmeldung.':
       'Rentals, property to buy, flatshare rooms and apartment swaps – one search, one profile, one application folder. To begin you need to sign in.',
-    '{1}Warum steht der Passkey oben?': '{1}Why is the passkey at the top?',
+    '{2}Warum steht der Passkey oben?': '{2}Why is the passkey at the top?',
     'Weil er als Einziges gegen die häufigste Masche schützt: eine nachgebaute Anmeldeseite. Ein Passkey ist an die Adresse gebunden, unter der er angelegt wurde. Wer auf eine gefälschte Seite hereinfällt, gibt dort nichts preis – es gibt nichts einzugeben. Der Schlüssel entsteht im Sicherheitschip deines Geräts und verlässt ihn nie.':
       'Because it is the only one that protects against the commonest trick: a fake sign-in page. A passkey is bound to the address it was created under. Anyone falling for a forged page gives nothing away – there is nothing to type. The key is created in your device’s security chip and never leaves it.',
     'Bei Google, Microsoft und Apple bekommt TrimmoTrade Name und E-Mail-Adresse, dein Passwort dort aber nie zu sehen. Beim Weg über die E-Mail-Adresse gibt es gar kein Passwort, sondern einen Code, der zehn Minuten gilt.':
@@ -979,11 +979,11 @@
     'Zuletzt angemeldet': 'Last signed in',
     'Passkey': 'Passkey',
     '{10}Abmelden': '{10}Sign out',
-    '{11}Konto löschen': '{11}Delete account',
-    '{12}Vertrauensstufe': '{12}Trust level',
+    '{12}Konto löschen': '{12}Delete account',
+    '{13}Vertrauensstufe': '{13}Trust level',
     'Was über ein Konto bekannt ist, entscheidet, wie viel es darf – und was andere über es sehen. Genau hier, nicht bei der Anmeldung selbst, sitzt der Schutz vor Betrug.':
       'What is known about an account decides how much it may do – and what others see about it. This, not the sign-in itself, is where protection from fraud sits.',
-    '{18}Angaben ändern': '{18}Change details',
+    '{21}Angaben ändern': '{21}Change details',
     '{21}Übernehmen': '{21}Apply',
     'Wird die Adresse geändert, gilt sie erst nach einer neuen Bestätigung – sonst könnte man ein Konto auf eine fremde Adresse umschreiben.':
       'If the address is changed it only takes effect after fresh verification – otherwise an account could be rewritten to someone else’s address.',
@@ -1980,8 +1980,8 @@
       'If you write by email, the provider processes the details in your message in order to answer it. The legal basis is Art. 6(1)(b) GDPR for contract-related enquiries, otherwise Art. 6(1)(f) GDPR. Messages are deleted once the enquiry has been dealt with conclusively and no statutory retention periods stand in the way.',
     'Die Hilfe in der Anwendung beantwortet Fragen': 'The help inside the application answers questions',
     'im Browser': 'in the browser',
-    '; dabei wird nichts übertragen. Führt sie nicht weiter, kannst du die Zusammenfassung an {7} weitergeben. Das geschieht nur auf deinen ausdrücklichen Klick, über dein eigenes E-Mail-Programm – und':
-      '; nothing is transmitted in the process. If it leads nowhere you can pass the summary on to {7}. That happens only on your explicit click, through your own email program – and',
+    '; dabei wird nichts übertragen. Führt sie nicht weiter, kannst du die Zusammenfassung an {16} weitergeben. Das geschieht nur auf deinen ausdrücklichen Klick, über dein eigenes E-Mail-Programm – und':
+      '; nothing is transmitted in the process. If it leads nowhere you can pass the summary on to {16}. That happens only on your explicit click, through your own email program – and',
     'der vollständige Text wird dir vorher angezeigt': 'the full text is shown to you beforehand',
     '. Übertragen wird ausschließlich, was dort steht: deine Fragen, die Themen der gegebenen Antworten, dein Freitext und die Kontaktangaben, die du selbst einträgst. Profil, Merkliste und die Inhalte des Dokumententresors sind nicht enthalten und werden auch nicht angehängt.':
       '. The only thing transmitted is what it says there: your questions, the topics of the answers given, your free text and the contact details you enter yourself. Your profile, saved list and the contents of the document vault are not included and are not attached.',
@@ -2022,19 +2022,19 @@
   /* ------------------------- Geschäftsbedingungen ------------------------- */
 
   e({
-    'Für die Ausübung genügt eine formlose Nachricht an {15}.':
-      'An informal message to {15} is enough to exercise them.',
+    'Für die Ausübung genügt eine formlose Nachricht an {24}.':
+      'An informal message to {24} is enough to exercise them.',
     'Weil deine Eingaben ausschließlich in deinem Browser liegen, kannst du Auskunft, Übertragbarkeit und Löschung dort unmittelbar selbst ausüben: im Fußbereich unter „Meine Daten“.':
       'Because what you enter lives solely in your browser, you can exercise access, portability and erasure there yourself directly: under “My data” in the footer.',
     '13. Beschwerderecht': '13. Right to complain',
-    'Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in dem Mitgliedstaat deines Aufenthaltsorts, deines Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes. Für den Anbieter zuständig ist {16}.':
-      'You can complain to a data protection supervisory authority (Art. 77 GDPR), in particular in the member state of your residence, your place of work or the place of the alleged infringement. The authority responsible for the provider is {16}.',
+    'Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in dem Mitgliedstaat deines Aufenthaltsorts, deines Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes. Für den Anbieter zuständig ist {25}.':
+      'You can complain to a data protection supervisory authority (Art. 77 GDPR), in particular in the member state of your residence, your place of work or the place of the alleged infringement. The authority responsible for the provider is {25}.',
     '14. Pflicht zur Bereitstellung': '14. Obligation to provide data',
     'Du bist nicht verpflichtet, personenbezogene Daten bereitzustellen. Ohne die Angaben im Profil fallen allerdings die Funktionen weg, die darauf aufbauen – etwa die Passung oder die Chancenschätzung.':
       'You are not obliged to provide personal data. Without the details in your profile, however, the features that build on them fall away – the match score or the estimate of your chances, for instance.',
     '15. Änderungen': '15. Changes',
-    'Diese Erklärung gilt in der Fassung vom {17}. Ändert sich die Anwendung, wird sie angepasst.':
-      'This policy applies in the version of {17}. If the application changes, it will be adapted.',
+    'Diese Erklärung gilt in der Fassung vom {26}. Ändert sich die Anwendung, wird sie angepasst.':
+      'This policy applies in the version of {26}. If the application changes, it will be adapted.',
 
     '§ 1 Anbieter, Geltungsbereich': '§ 1 Provider, scope',
     '(1) Anbieter von TrimmoTrade ist {2}, {3} (nachfolgend „Anbieter“). Die vollständigen Angaben stehen im':
@@ -2613,7 +2613,151 @@
     'an, dann füllt TrimmoTrade diese Filter von selbst – und du musst nichts zweimal eintippen.':
       'and TrimmoTrade fills these filters in by itself – so you do not have to type anything twice.',
     'Weicht ab:': 'Differs:',
-    'Gemessen ab {0} mit {1}.': 'Measured from {0} by {1}.'
+    'Gemessen ab {0} mit {1}.': 'Measured from {0} by {1}.',
+
+    /* ---------------------------------------------------------------
+       Anmeldung mit Serverseite, Datenschutzerklärung dazu
+       --------------------------------------------------------------- */
+
+    'Beispielanfragen dieser Vorführung. Es hat niemand wirklich geschrieben – die Namen und Texte entstehen aus der Kennung des Inserats und bleiben deshalb gleich.':
+      'Sample enquiries for this demonstration. Nobody actually wrote them – the names and texts are derived from the listing’s identifier and therefore stay the same.',
+    'TrimmoTrade sortiert und rechnet ausschließlich mit diesen Angaben. Sie liegen im Speicher dieses Browsers und werden nirgendwohin übertragen.':
+      'TrimmoTrade sorts and calculates using these details only. They live in this browser’s storage and are not transmitted anywhere.',
+    'Die Bilder werden beim Ablegen auf {4} Pixel Kantenlänge verkleinert und bleiben im Speicher dieses Geräts. Übertragen wird keines davon.':
+      'On upload the images are reduced to {4} pixels along the longer edge and stay in this device’s storage. None of them is transmitted.',
+    'Niemand kennt es außer dir – auch der Server nicht, der die Anmeldung erledigt; der sieht weder deine Unterlagen noch dieses Kennwort. Eine Wiederherstellung per E-Mail gibt es deshalb nicht, und genau das ist der Punkt: Wer den Speicher dieses Geräts in die Hände bekommt, kommt ohne das Kennwort nicht an deine Unterlagen. Vergisst du es, sind sie auch für dich verloren – dann bleibt nur, den Tresor zu leeren und neu zu füllen.':
+      'Nobody knows it but you – not even the server that handles sign-in; it sees neither your documents nor this password. That is why there is no recovery by email, and that is exactly the point: anyone who gets hold of this device’s storage cannot reach your documents without the password. If you forget it, they are lost to you as well – then all that remains is to empty the vault and fill it afresh.',
+    'Die Plätze werden hier nicht zentral gezählt: Der Zähler oben ist eine Hochrechnung aus der Zeit seit dem Start, keine Messung. Sobald die Vergabe wirklich läuft, bekommt jede Nummer genau einen Platz.':
+      'The places are not counted centrally here: the figure above is an extrapolation from the time since launch, not a measurement. Once places are really being issued, each number gets exactly one.',
+    'Nein. Welche Anzeige erscheint, entscheidet sich im Browser anhand der Stelle auf der Seite – nicht anhand deines Profils, deiner Suche oder deines Verhaltens. Es gibt kein Werbenetzwerk, keine Kennung und nichts, was übertragen würde.':
+      'No. Which advert appears is decided in the browser from its position on the page – not from your profile, your search or your behaviour. There is no ad network, no identifier and nothing that would be transmitted.',
+    'Passkey auf diesem Gerät oder ein bestätigtes Konto bei Google oder Microsoft. Massenhaftes Anlegen wird damit deutlich mühsamer.':
+      'A passkey on this device or a verified account with Google or Microsoft. Creating accounts in bulk becomes considerably more laborious.',
+    '„Konto löschen“ entfernt diese Angaben vollständig{27}. Merkliste, Profil und Notizen bleiben erhalten; beides zusammen löschst du über':
+      '“Delete account” removes these details completely{27}. Shortlist, profile and notes remain; you delete both together under',
+
+    /* Kontoseite mit Server */
+    'Auf allen Geräten abmelden': 'Sign out on all devices',
+    'Auf allen Geräten abmelden? Du musst dich danach überall neu anmelden.':
+      'Sign out on all devices? You will have to sign in again everywhere afterwards.',
+    'Überall abgemeldet.': 'Signed out everywhere.',
+    'Weiteres Gerät hinterlegen': 'Add another device',
+    'Damit du dich auch von deinem anderen Gerät anmelden kannst':
+      'So you can sign in from your other device too',
+    'Passkeys': 'Passkeys',
+    'keine': 'none',
+    'entfernen': 'remove',
+    'Geräte': 'devices',
+    'Dein Passkey': 'Your passkey',
+    'Deine Passkeys': 'Your passkeys',
+    'hinterlegt am': 'registered on',
+    'Diesen Passkey entfernen? Von diesem Gerät kannst du dich danach nicht mehr damit anmelden.':
+      'Remove this passkey? You will no longer be able to sign in with it from this device.',
+    'Passkey entfernt.': 'Passkey removed.',
+    'noch nicht bestätigt': 'not yet verified',
+    'Die Stufen 3 und 4 brauchen einen Prüfdienst – einen SMS-Versender für die Nummer, POSTIDENT oder eID für den Ausweis. Beides ist auf diesem Server noch nicht eingerichtet, deshalb steht hier kein Knopf, der nichts täte.':
+      'Levels 3 and 4 need a verification service – an SMS sender for the number, POSTIDENT or eID for the identity document. Neither is set up on this server yet, which is why there is no button here that would do nothing.',
+    'Auf dem Server: E-Mail-Adresse, Name, das gewählte Verfahren, die Vertrauensstufe und der öffentliche Teil deiner Passkeys. Sonst nichts – keine Inserate, keine Merkliste, keine Nachrichten, kein Profil. Das alles bleibt im Speicher dieses Browsers.':
+      'On the server: email address, name, the chosen method, the trust level and the public part of your passkeys. Nothing else – no listings, no shortlist, no messages, no profile. All of that stays in this browser’s storage.',
+    'Der private Teil des Passkeys bleibt im Sicherheitschip deines Geräts und ist weder von hier noch vom Server aus lesbar.':
+      'The private part of the passkey stays in your device’s secure chip and is readable neither from here nor from the server.',
+    ' – auch auf dem Server': ' – on the server as well',
+    'Gerät': 'device',
+
+    /* Anmeldeseite mit Server */
+    'einen Moment …': 'one moment …',
+    'Code wird verschickt …': 'sending code …',
+    'wird geprüft …': 'checking …',
+    'Nichts angekommen? Schau in den Spam-Ordner. Die Mail kommt von': 'Nothing arrived? Check the spam folder. The mail comes from',
+    'Diese Kopie läuft ohne Server, also gibt es niemanden, der eine Mail verschicken könnte. Auf':
+      'This copy runs without a server, so there is nobody who could send an email. On',
+    'steht hier nichts – der Code kommt dann in dein Postfach.':
+      'nothing appears here – the code then arrives in your inbox.',
+    'Diese Kopie läuft ohne Server. Das echte Verfahren braucht zwingend eine Serverseite, die das Geheimnis hält und das zurückgegebene Token prüft; ein reiner Browser kann das nicht. Was du gleich siehst, entspricht dem Ablauf – die Bestätigung kommt aber nicht von {0}.':
+      'This copy runs without a server. The real procedure strictly requires a server side that holds the secret and verifies the returned token; a browser alone cannot do that. What you are about to see matches the flow – but the confirmation does not come from {0}.',
+    'Diese Kopie läuft ohne Server, also kann niemand eine SMS verschicken. Im Betrieb käme jetzt ein Code auf das Telefon – über einen Versanddienst, der pro Nachricht abrechnet.':
+      'This copy runs without a server, so nobody can send a text message. In production a code would now arrive on the phone – via a sending service that charges per message.',
+    'Noch kein Passkey auf diesem Gerät?': 'No passkey on this device yet?',
+    'Jetzt einen anlegen und damit ein Konto eröffnen': 'Create one now and open an account with it',
+    'Konto mit Passkey anlegen': 'Create an account with a passkey',
+    'Dein Gerät erzeugt gleich einen Schlüssel, der nur für trimmotrade.de gilt und den Sicherheitschip nie verlässt. Eine E-Mail-Adresse brauchst du dafür nicht – die kannst du später auf der Kontoseite nachtragen.':
+      'Your device is about to create a key that is valid only for trimmotrade.de and never leaves the secure chip. You do not need an email address for it – you can add one later on the account page.',
+    'Passkey anlegen': 'Create passkey',
+    'Du wirst gleich zu {0} weitergeleitet und kommst danach hierher zurück.':
+      'You will now be forwarded to {0} and will come back here afterwards.',
+    'Weiter': 'Continue',
+    'Neuer Code verschickt.': 'New code sent.',
+    'Die Anmeldung wurde abgebrochen. Es ist nichts passiert.': 'The sign-in was cancelled. Nothing happened.',
+    'Der Anbieter hat die Anmeldung nicht abgeschlossen. Versuch es noch einmal oder nimm ein anderes Verfahren.':
+      'The provider did not complete the sign-in. Try again or use a different method.',
+    'Dieses Verfahren ist auf diesem Server nicht eingerichtet.': 'This method is not set up on this server.',
+    'Geht nur im Web – ein Passkey braucht eine Domain, eine Datei auf der Platte hat keine':
+      'Only works on the web – a passkey needs a domain, and a file on disk has none',
+    'Ein Passkey ist an eine Domain gebunden. Diese Kopie läuft als Datei auf der Platte und hat keine – öffne die Anwendung unter trimmotrade.de, dann geht es.':
+      'A passkey is bound to a domain. This copy runs as a file on disk and has none – open the application at trimmotrade.de and it will work.',
+    'Auf diesem Gerät liegt schon ein Passkey für dieses Konto.': 'This device already holds a passkey for this account.',
+    'Der Vorgang wurde abgebrochen.': 'The operation was cancelled.',
+    'Der Server ist gerade nicht erreichbar. Versuch es gleich noch einmal.':
+      'The server cannot be reached right now. Try again in a moment.',
+    'Bei Google und Microsoft bekommt TrimmoTrade Name und E-Mail-Adresse, dein Passwort dort aber nie zu sehen. Beim Weg über die E-Mail-Adresse gibt es gar kein Passwort, sondern einen Code, der zehn Minuten gilt.':
+      'With Google and Microsoft, TrimmoTrade gets your name and email address but never sees your password there. The email route has no password at all, only a code valid for ten minutes.',
+    'Über einen der Wege auf der Startseite: {0} (Face ID, Windows Hello oder Fingerabdruck), Google, Microsoft – oder mit deiner E-Mail-Adresse und einem Einmalcode.':
+      'Through one of the routes on the start page: {0} (Face ID, Windows Hello or a fingerprint), Google, Microsoft – or with your email address and a one-time code.',
+
+    /* Meine Daten */
+    'Alles, was du hier eingibst, liegt im Speicher dieses Browsers – Merkliste, Suchaufträge, Nachrichten, eigene Inserate, Profil und Notizen. Nichts davon geht an einen Server, nichts an Dritte. Übertragen wird allein die Anmeldung; was dabei gespeichert wird, steht in der':
+      'Everything you enter here lives in this browser’s storage – shortlist, saved searches, messages, your own listings, profile and notes. None of it goes to a server, none to third parties. Only the sign-in is transmitted; what is stored in the process is set out in the',
+    'Datenschutzerklärung': 'privacy policy',
+    'TrimmoTrade verschickt die Nachricht nicht selbst, sondern übergibt sie dem E-Mail-Programm dieses Geräts – dort kannst du sie vor dem Senden noch ändern. Wo kein Programm eingerichtet ist, kopier den Text oder sichere ihn als Datei.':
+      'TrimmoTrade does not send the message itself but hands it to this device’s email program – there you can still change it before sending. Where no program is set up, copy the text or save it as a file.',
+
+    /* Datenschutzerklärung: Abschnitt zur Serverseite */
+    'TrimmoTrade rechnet im Browser. Suche, Bewertung, Karte, Ringtausch, Merkliste, Nachrichten, eigene Inserate und Profil entstehen auf deinem Gerät und bleiben dort. Sie werden nicht an den Anbieter übertragen und nicht an Dritte weitergegeben.':
+      'TrimmoTrade computes in the browser. Search, assessment, map, ring swap, shortlist, messages, your own listings and profile arise on your device and stay there. They are not transmitted to the provider and not passed on to third parties.',
+    'Zum Server geht genau eine Sache: die': 'Exactly one thing goes to the server: the',
+    '. Er beantwortet die Frage, wer du bist – mehr kennt er nicht. Was dort gespeichert wird, steht vollständig in Abschnitt 4; es ist eine kurze Liste, und sie enthält nichts von dem, was du in der Anwendung eingibst.':
+      '. It answers the question of who you are – it knows nothing more. What is stored there is set out in full in section 4; it is a short list, and it contains nothing of what you enter in the application.',
+    'Die Nutzung setzt eine Anmeldung voraus. Dafür – und nur dafür – gibt es eine Serverseite. Gespeichert wird dort genau Folgendes:':
+      'Use requires signing in. For that – and only for that – there is a server side. Exactly the following is stored there:',
+    'eine zufällige Kontonummer, die nichts über dich verrät': 'a random account number that reveals nothing about you',
+    'deine E-Mail-Adresse, sofern du eine angegeben hast, und ob sie bestätigt ist':
+      'your email address, if you gave one, and whether it is verified',
+    'ein Name, wenn du einen angibst – freiwillig': 'a name, if you give one – voluntary',
+    'das gewählte Anmeldeverfahren und die Vertrauensstufe': 'the chosen sign-in method and the trust level',
+    'der öffentliche Teil deiner Passkeys nebst Gerätebezeichnung':
+      'the public part of your passkeys together with the device designation',
+    'bei Anmeldung über Google oder Microsoft deren unveränderliche Kontokennung':
+      'when signing in via Google or Microsoft, their immutable account identifier',
+    'deine offenen Sitzungen: Zeitpunkt, IP-Adresse und Browserangabe des Geräts, damit du sie beenden kannst':
+      'your open sessions: time, IP address and browser designation of the device, so that you can end them',
+    'Nicht auf dem Server liegen:': 'Not held on the server:',
+    'Inserate, Merkliste, Suchaufträge, Nachrichten, Notizen, Profil, Bilder und der Dokumententresor. Diese Daten verlassen deinen Browser nicht.':
+      'listings, shortlist, saved searches, messages, notes, profile, images and the document vault. These data do not leave your browser.',
+    'bis zur Löschung des Kontos; sie ist jederzeit ohne Angabe von Gründen möglich und wirkt sofort. Sitzungen enden spätestens nach dreißig Tagen ohne Nutzung, Anmeldecodes nach {13} Minuten.':
+      'until the account is deleted; that is possible at any time without giving reasons and takes effect immediately. Sessions end after thirty days without use at the latest, sign-in codes after {13} minutes.',
+    'Cookies der Anmeldung': 'Cookies used for signing in',
+    'Für die Anmeldung werden zwei Cookies gesetzt. Das eine hält die Sitzung offen und ist für Skripte nicht lesbar; das andere schützt vor Anfragen, die dir eine fremde Seite unterschiebt. Beide sind für den von dir gewünschten Dienst unbedingt erforderlich, weshalb dafür keine Einwilligung nötig ist (§ 25 Abs. 2 Nr. 2 TDDDG). Cookies zu Werbe- oder Analysezwecken werden nicht gesetzt – es gibt keine.':
+      'Two cookies are set for signing in. One keeps the session open and is not readable by scripts; the other protects against requests slipped to you by an external page. Both are strictly necessary for the service you requested, which is why no consent is required for them (§ 25(2) no. 2 TDDDG). No cookies for advertising or analytics are set – there are none.',
+    'Anmeldung über Google oder Microsoft': 'Signing in via Google or Microsoft',
+    'Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst: Google Ireland Limited und Microsoft Ireland Operations Limited, beide mit Sitz in Irland. Soweit dabei Daten in die Vereinigten Staaten übermittelt werden, stützt sich das auf den Angemessenheitsbeschluss der Europäischen Kommission zum EU-US Data Privacy Framework; beide Anbieter sind darunter zertifiziert.':
+      'Responsible for the processing on their side are the providers themselves: Google Ireland Limited and Microsoft Ireland Operations Limited, both based in Ireland. Insofar as data are transferred to the United States in the process, this relies on the European Commission’s adequacy decision on the EU-US Data Privacy Framework; both providers are certified under it.',
+    'Beim Passkey entsteht das Schlüsselpaar im Sicherheitsbaustein deines Geräts. Der private Schlüssel verlässt das Gerät nicht und ist für TrimmoTrade nicht lesbar; auf dem Server liegt nur der öffentliche Teil, mit dem sich Signaturen prüfen, aber keine erzeugen lassen. Biometrische Merkmale – Gesicht, Fingerabdruck – werden weder übertragen noch verarbeitet: Sie entsperren ausschließlich lokal das Gerät (Art. 9 DSGVO ist damit nicht berührt).':
+      'With a passkey the key pair arises in your device’s security element. The private key does not leave the device and is not readable by TrimmoTrade; only the public part is held on the server, with which signatures can be verified but none created. Biometric features – face, fingerprint – are neither transmitted nor processed: they unlock the device locally and nothing else (Art. 9 GDPR is therefore not engaged).',
+    'Bestätigung der Adresse': 'Verification of the address',
+    'Der Einmalcode dient allein der Bestätigung, dass du die angegebene Adresse abrufen kannst. Er gilt {14} Minuten, wird nur als Hashwert gespeichert und nach Ablauf, nach {15} Fehlversuchen oder nach erfolgreicher Anmeldung gelöscht. Die Zustellung erfolgt über das Postfach des Anbieters bei seinem Hostinganbieter; ein weiterer Versanddienst ist nicht beteiligt.':
+      'The one-time code serves solely to confirm that you can access the address given. It is valid for {14} minutes, is stored only as a hash value and is deleted on expiry, after {15} failed attempts or after a successful sign-in. Delivery goes through the provider’s mailbox at its hosting provider; no further sending service is involved.',
+    'Abwehr von Angriffen auf die Anmeldung': 'Defence against attacks on the sign-in',
+    'Um das Durchprobieren von Codes zu verhindern, wird für kurze Zeit festgehalten, wie viele Anmeldeversuche von einer IP-Adresse und zu einer Adresse ausgingen. Diese Zähler werden nach spätestens 24 Stunden gelöscht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO – ohne diese Maßnahme wäre ein sechsstelliger Code in kurzer Zeit zu erraten.':
+      'To prevent codes being tried out one after another, a record is kept for a short time of how many sign-in attempts came from an IP address and were made for an address. These counters are deleted after 24 hours at the latest. The legal basis is Art. 6(1)(f) GDPR – without this measure a six-digit code could be guessed in short order.',
+    'Für den Zugriff auf diesen Speicher ist keine Einwilligung erforderlich: Er ist unbedingt erforderlich, damit der von dir ausdrücklich gewünschte Dienst überhaupt funktioniert (§ 25 Abs. 2 Nr. 2 des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes).':
+      'No consent is required for access to this storage: it is strictly necessary for the service you expressly requested to work at all (§ 25(2) no. 2 of the Telecommunications Digital Services Data Protection Act).',
+    'Auch die verschlüsselten Dateien liegen ausschließlich in deinem Browser. Der Server der Anmeldung sieht sie nie – er kennt weder Dateien noch Kennwort noch Schlüssel.':
+      'The encrypted files, too, live solely in your browser. The sign-in server never sees them – it knows neither files nor password nor key.',
+    'Über die in Abschnitt 4 beschriebene Anmeldung bei Google oder Microsoft hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus.':
+      'Beyond the sign-in via Google or Microsoft described in section 4, no personal data are transferred to countries outside the European Union and the European Economic Area. Anyone wishing to avoid that signs in with a passkey or with an email address – both routes work without an external provider.',
+    '(1) Die Nutzung setzt eine Anmeldung voraus. Sie ist möglich mit einem Passkey, über ein Konto bei Google oder Microsoft oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande.':
+      '(1) Use requires signing in. This is possible with a passkey, via an account with Google or Microsoft, or with an email address and a one-time code. Signing in forms a free-of-charge usage contract covering the free tier.',
+
   });
 
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });

@@ -19,7 +19,7 @@ const dist = path.join(wurzel, 'dist');
 const SKRIPTE = [
   'i18n.js', 'sprache-en.js',
   'util.js', 'geo.js', 'images.js', 'ring-bild.js', 'data.js',
-  'analyse.js', 'match.js', 'werkzeuge.js', 'store.js', 'plan.js', 'tresor.js', 'recht.js', 'hilfe.js', 'konto.js',
+  'analyse.js', 'match.js', 'werkzeuge.js', 'store.js', 'plan.js', 'tresor.js', 'recht.js', 'hilfe.js', 'api.js', 'konto.js',
   'hilfe-en.js', 'karte.js', 'ui.js',
   'view-start.js', 'view-suche.js', 'view-objekt.js',
   'view-tausch.js', 'view-tools.js', 'view-profil.js',
@@ -44,7 +44,7 @@ const noscript =
   '    <h1>TrimmoTrade braucht JavaScript</h1>\n' +
   '    <p>Die Anwendung rechnet vollständig im Browser: Suche, Bewertung, Kartendarstellung und Ringtausch\n' +
   '      entstehen erst beim Aufruf. Ohne JavaScript lässt sich davon nichts anzeigen.</p>\n' +
-  '    <p>Es werden dabei keine Daten an einen Server gesendet – es gibt keinen.</p>\n' +
+  '    <p>Deine Eingaben bleiben dabei im Browser. Zum Server geht nur die Anmeldung.</p>\n' +
   '  </div>\n' +
   '</noscript>';
 

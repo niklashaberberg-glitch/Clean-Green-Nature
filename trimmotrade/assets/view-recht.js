@@ -220,9 +220,12 @@
 
         <div class="block block--betont">
           <h2>${ico('schloss')}Das Wichtigste zuerst</h2>
-          <p>TrimmoTrade rechnet vollständig im Browser. Suche, Bewertung, Karte, Ringtausch, Merkliste und
-            Profil entstehen auf deinem Gerät und bleiben dort. Es gibt kein Nutzerkonto, keine Übertragung
-            deiner Eingaben an den Anbieter und keine Weitergabe an Dritte.</p>
+          <p>TrimmoTrade rechnet im Browser. Suche, Bewertung, Karte, Ringtausch, Merkliste, Nachrichten,
+            eigene Inserate und Profil entstehen auf deinem Gerät und bleiben dort. Sie werden nicht an den
+            Anbieter übertragen und nicht an Dritte weitergegeben.</p>
+          <p>Zum Server geht genau eine Sache: die <b>Anmeldung</b>. Er beantwortet die Frage, wer du bist –
+            mehr kennt er nicht. Was dort gespeichert wird, steht vollständig in Abschnitt 4; es ist eine
+            kurze Liste, und sie enthält nichts von dem, was du in der Anwendung eingibst.</p>
           <p>Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten
             gebildet und keine Werbung nach deinen Interessen ausgespielt. Deshalb erscheint auch kein Fenster,
             das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.</p>
@@ -253,43 +256,70 @@
           </dl>
 
           <h2>4. Anmeldung und Konto</h2>
-          <p>Die Nutzung setzt eine Anmeldung voraus. Verarbeitet werden dabei Name (freiwillig),
-            E-Mail-Adresse, das gewählte Anmeldeverfahren, der Zeitpunkt der letzten Anmeldung und die
-            Vertrauensstufe.</p>
+          <p>Die Nutzung setzt eine Anmeldung voraus. Dafür – und nur dafür – gibt es eine Serverseite.
+            Gespeichert wird dort genau Folgendes:</p>
+          <ul class="pruef">
+            <li>${ico('pruefen')}<span>eine zufällige Kontonummer, die nichts über dich verrät</span></li>
+            <li>${ico('pruefen')}<span>deine E-Mail-Adresse, sofern du eine angegeben hast, und ob sie
+              bestätigt ist</span></li>
+            <li>${ico('pruefen')}<span>ein Name, wenn du einen angibst – freiwillig</span></li>
+            <li>${ico('pruefen')}<span>das gewählte Anmeldeverfahren und die Vertrauensstufe</span></li>
+            <li>${ico('pruefen')}<span>der öffentliche Teil deiner Passkeys nebst Gerätebezeichnung</span></li>
+            <li>${ico('pruefen')}<span>bei Anmeldung über Google oder Microsoft deren unveränderliche
+              Kontokennung</span></li>
+            <li>${ico('pruefen')}<span>deine offenen Sitzungen: Zeitpunkt, IP-Adresse und Browserangabe des
+              Geräts, damit du sie beenden kannst</span></li>
+          </ul>
+          <p><b>Nicht auf dem Server liegen:</b> Inserate, Merkliste, Suchaufträge, Nachrichten, Notizen,
+            Profil, Bilder und der Dokumententresor. Diese Daten verlassen deinen Browser nicht.</p>
           <dl class="rechtsliste">
             <dt>Zweck</dt><dd>Bereitstellung des Zugangs, Zuordnung von Inseraten und Anfragen, Schutz vor
               missbräuchlicher Mehrfachanlage</dd>
             <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags; für die
               Missbrauchsabwehr zusätzlich Art. 6 Abs. 1 lit. f DSGVO</dd>
             <dt>Speicherdauer</dt><dd>bis zur Löschung des Kontos; sie ist jederzeit ohne Angabe von Gründen
-              möglich</dd>
+              möglich und wirkt sofort. Sitzungen enden spätestens nach dreißig Tagen ohne Nutzung,
+              Anmeldecodes nach ${TT.konto ? TT.konto.CODE_GUELTIG_MIN : 10} Minuten.</dd>
+            <dt>Empfänger</dt><dd>der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO</dd>
           </dl>
 
-          <h3>Anmeldung über Google, Microsoft oder Apple</h3>
+          <h3>Cookies der Anmeldung</h3>
+          <p>Für die Anmeldung werden zwei Cookies gesetzt. Das eine hält die Sitzung offen und ist für
+            Skripte nicht lesbar; das andere schützt vor Anfragen, die dir eine fremde Seite unterschiebt.
+            Beide sind für den von dir gewünschten Dienst unbedingt erforderlich, weshalb dafür keine
+            Einwilligung nötig ist (§ 25 Abs. 2 Nr. 2 TDDDG). Cookies zu Werbe- oder Analysezwecken werden
+            nicht gesetzt – es gibt keine.</p>
+
+          <h3>Anmeldung über Google oder Microsoft</h3>
           <p>Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei TrimmoTrade anmeldest.
             An TrimmoTrade übermittelt werden Name, E-Mail-Adresse und die Angabe, ob sie bestätigt ist – nicht
             dein dortiges Passwort und keine weiteren Inhalte deines Kontos. Es besteht kein Zugriff auf
             Kontakte, Kalender, Dateien oder Postfach.</p>
           <p>Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst:
-            Google Ireland Limited, Microsoft Ireland Operations Limited und Apple Distribution International
-            Limited, jeweils mit Sitz in Irland. Soweit dabei Daten in die Vereinigten Staaten übermittelt
-            werden, stützt sich das auf den Angemessenheitsbeschluss der Europäischen Kommission zum
-            EU-US Data Privacy Framework; die genannten Anbieter sind darunter zertifiziert.</p>
-          <p>Bei Apple lässt sich die eigene Adresse verbergen. TrimmoTrade erhält dann eine
-            Weiterleitungsadresse bei <code>privaterelay.appleid.com</code> und kennt die echte Adresse nicht.
-            Die Anwendung behandelt beide gleich.</p>
+            Google Ireland Limited und Microsoft Ireland Operations Limited, beide mit Sitz in Irland. Soweit
+            dabei Daten in die Vereinigten Staaten übermittelt werden, stützt sich das auf den
+            Angemessenheitsbeschluss der Europäischen Kommission zum EU-US Data Privacy Framework; beide
+            Anbieter sind darunter zertifiziert.</p>
 
           <h3>Passkey</h3>
           <p>Beim Passkey entsteht das Schlüsselpaar im Sicherheitsbaustein deines Geräts. Der private
-            Schlüssel verlässt das Gerät nicht und ist für TrimmoTrade nicht lesbar; gespeichert wird nur die
-            Kennung des Schlüssels. Biometrische Merkmale – Gesicht, Fingerabdruck – werden weder übertragen
-            noch verarbeitet: Sie entsperren ausschließlich lokal das Gerät (Art. 9 DSGVO ist damit nicht
-            berührt).</p>
+            Schlüssel verlässt das Gerät nicht und ist für TrimmoTrade nicht lesbar; auf dem Server liegt nur
+            der öffentliche Teil, mit dem sich Signaturen prüfen, aber keine erzeugen lassen. Biometrische
+            Merkmale – Gesicht, Fingerabdruck – werden weder übertragen noch verarbeitet: Sie entsperren
+            ausschließlich lokal das Gerät (Art. 9 DSGVO ist damit nicht berührt).</p>
 
-          <h3>Bestätigung von Adresse und Telefonnummer</h3>
+          <h3>Bestätigung der Adresse</h3>
           <p>Der Einmalcode dient allein der Bestätigung, dass du die angegebene Adresse abrufen kannst. Er
-            gilt ${TT.konto ? TT.konto.CODE_GUELTIG_MIN : 10} Minuten und wird danach verworfen. Eine
-            Telefonnummer wird nur verarbeitet, wenn du sie selbst zur Bestätigung angibst.</p>
+            gilt ${TT.konto ? TT.konto.CODE_GUELTIG_MIN : 10} Minuten, wird nur als Hashwert gespeichert und
+            nach Ablauf, nach ${TT.konto ? TT.konto.CODE_VERSUCHE : 5} Fehlversuchen oder nach erfolgreicher
+            Anmeldung gelöscht. Die Zustellung erfolgt über das Postfach des Anbieters bei seinem
+            Hostinganbieter; ein weiterer Versanddienst ist nicht beteiligt.</p>
+
+          <h3>Abwehr von Angriffen auf die Anmeldung</h3>
+          <p>Um das Durchprobieren von Codes zu verhindern, wird für kurze Zeit festgehalten, wie viele
+            Anmeldeversuche von einer IP-Adresse und zu einer Adresse ausgingen. Diese Zähler werden nach
+            spätestens 24 Stunden gelöscht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO – ohne diese
+            Maßnahme wäre ein sechsstelliger Code in kurzer Zeit zu erraten.</p>
 
           <h2>5. Speicher deines Browsers</h2>
           <p>TrimmoTrade legt deine Eingaben im lokalen Speicher deines Browsers ab – Profil, Merkliste,
@@ -297,8 +327,7 @@
             verlassen dein Gerät nicht. Der Anbieter hat keinen Zugriff darauf.</p>
           <p>Für den Zugriff auf diesen Speicher ist keine Einwilligung erforderlich: Er ist unbedingt
             erforderlich, damit der von dir ausdrücklich gewünschte Dienst überhaupt funktioniert
-            (§ 25 Abs. 2 Nr. 2 des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes). Cookies zu
-            Werbe- oder Analysezwecken werden nicht gesetzt.</p>
+            (§ 25 Abs. 2 Nr. 2 des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes).</p>
           <p>Du kannst diese Daten jederzeit im Fußbereich unter „Meine Daten“ als Datei sichern oder
             vollständig löschen. Sie verschwinden ebenfalls, wenn du die Browserdaten löschst.</p>
 
@@ -316,8 +345,8 @@
               Art. 32 DSGVO – Sicherheit der Verarbeitung</dd>
             <dt>Speicherdauer</dt><dd>bis du das Dokument löschst oder den Tresor leerst</dd>
           </dl>
-          <p class="fein">In dieser Vorführfassung liegen auch die verschlüsselten Dateien ausschließlich in
-            deinem Browser. Im Betrieb läge dort das Chiffrat und sonst nichts.</p>
+          <p class="fein">Auch die verschlüsselten Dateien liegen ausschließlich in deinem Browser. Der
+            Server der Anmeldung sieht sie nie – er kennt weder Dateien noch Kennwort noch Schlüssel.</p>
 
           <h2>7. Werbung im freien Tarif</h2>
           <p>Der freie Tarif wird über Anzeigen finanziert. Diese Anzeigen sind fest hinterlegt und werden
@@ -361,7 +390,7 @@
             findet nicht statt.</p>
 
           <h2>11. Übermittlung in Drittländer</h2>
-          <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft oder Apple hinaus findet
+          <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google oder Microsoft hinaus findet
             keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des
             Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit
             E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus.</p>
@@ -441,7 +470,7 @@
 
           <h2>§ 3 Anmeldung und Zustandekommen des Vertrags</h2>
           <p>(1) Die Nutzung setzt eine Anmeldung voraus. Sie ist möglich mit einem Passkey, über ein Konto bei
-            Google, Microsoft oder Apple oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung
+            Google oder Microsoft oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung
             kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande.</p>
           <p>(2) Die Anmeldung setzt die Zustimmung zu diesen Bedingungen und die Kenntnisnahme der
             Datenschutzerklärung voraus. Beide sind vor der Anmeldung ohne Anmeldung abrufbar.</p>

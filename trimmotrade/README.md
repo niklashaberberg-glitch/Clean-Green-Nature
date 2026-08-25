@@ -75,10 +75,10 @@ Zahlungsdaten hinterlegt, nichts verlängert sich, und niemand muss kündigen.
 Vier Wochen vor Ablauf erscheint ein Hinweisband, danach greift wieder der
 freie Tarif. Wer weitermachen will, entscheidet sich aktiv dafür.
 
-Weil es keinen Server gibt, kann in dieser Vorführung kein Browser wissen, wie
-viele Plätze anderswo vergeben sind. Der Zähler ist deshalb ausdrücklich eine
-Hochrechnung aus der Zeit seit dem Start, und die Anwendung sagt das an jeder
-Stelle dazu, an der sie ihn zeigt.
+Die Plätze werden nicht zentral gezählt — dafür müsste die Serverseite mehr
+tun als anmelden. Der Zähler ist deshalb ausdrücklich eine Hochrechnung aus
+der Zeit seit dem Start, und die Anwendung sagt das an jeder Stelle dazu, an
+der sie ihn zeigt.
 
 | | TrimmoTrade frei | TrimmoTrade Plus |
 |---|---|---|
@@ -99,7 +99,8 @@ Stelle dazu, an der sie ihn zeigt.
 Die Anzeigen im freien Tarif sind immer als Anzeige gekennzeichnet, sehen nie
 aus wie ein Inserat und stehen nie in der Trefferreihenfolge. Welche erscheint,
 entscheidet sich im Browser anhand der Stelle auf der Seite – nicht anhand des
-Profils. Es gibt keinen Server, an den Daten gehen könnten.
+Profils. Es gibt kein Werbenetzwerk, keine Kennung und nichts, was übertragen
+würde.
 
 In der Vorführung lässt sich Plus oben rechts mit einem Klick an- und
 abschalten, damit beide Welten vergleichbar sind.
@@ -121,6 +122,11 @@ python3 -m http.server 8080      # dann http://localhost:8080 öffnen
 
 Beide Fassungen enthalten denselben Stand. Die Einzeldatei entsteht aus den
 Quelldateien mit `node build.js` und braucht dafür nichts installiert.
+
+In beiden Fällen ist die Anmeldung **nachgebildet** und sagt das an jeder
+Stelle: Ohne Serverseite gibt es niemanden, der eine Mail verschicken oder
+eine Signatur prüfen könnte. Wie die echte Anmeldung aufgesetzt wird, steht
+in [DEPLOY.md](DEPLOY.md); was dahintersteckt, unter [Anmeldung](#anmeldung).
 
 ---
 
@@ -516,30 +522,70 @@ Dazu drei Regeln, die nicht verhandelbar sind:
 Die Nutzung setzt eine Anmeldung voraus. Vier Wege, sortiert nach
 Sicherheit statt nach Bekanntheit:
 
-| Weg | Stufe | Was daran echt ist |
+| Weg | Stufe | Was dahintersteckt |
 |---|---|---|
-| **Passkey** | 2 | vollständig – WebAuthn spricht mit dem Betriebssystem |
-| Google / Microsoft / Apple | 2 | Ablauf nachgebildet, Konfiguration dokumentiert |
-| E-Mail mit Einmalcode | 1 | Code, Frist, Fehlversuchszähler echt – nur der Versand nicht |
+| **Passkey** | 2 | WebAuthn, serverseitig geprüfte Signatur |
+| Google | 2 | OpenID Connect mit PKCE, ID-Token gegen Googles Schlüssel geprüft |
+| Microsoft | 2 | dasselbe über Microsoft Entra ID, Mandant `common` |
+| E-Mail mit Einmalcode | 1 | sechsstelliger Code per SMTP, gehasht gespeichert |
 
 **Der Passkey steht oben, weil er als Einziges gegen die häufigste Masche
 schützt:** eine nachgebaute Anmeldeseite. Ein Passkey ist an die Domain
 gebunden, unter der er angelegt wurde. Wer auf eine gefälschte Seite
-hereinfällt, gibt dort nichts preis — es gibt nichts einzugeben. Das ist der
-eine Teil, der hier wirklich läuft: `navigator.credentials` spricht mit dem
-Betriebssystem, Face ID und Windows Hello gehen auf, und der Schlüssel
-entsteht im Sicherheitschip des Geräts.
+hereinfällt, gibt dort nichts preis — es gibt nichts einzugeben. Der
+Schlüssel entsteht im Sicherheitschip des Geräts und verlässt ihn nie; auf
+dem Server liegt nur der öffentliche Teil.
 
 Ein Passwort gibt es in keinem der vier Wege.
 
-Was ohne Server nicht echt sein *kann*: das Versenden der Bestätigungsmail
-und der Rückkanal zu Google, Microsoft und Apple. Deren Verfahren braucht
-zwingend eine Serverseite, die das Client-Geheimnis hält und das
-zurückgegebene ID-Token prüft — ein reiner Browser kann das nicht, und wer
-behauptet, er könne es, hat es falsch gebaut. Die Anwendung bildet den Ablauf
-deshalb vollständig nach, sagt an jeder Stelle dazu, dass er nachgebildet
-ist, und schreibt in `assets/konto.js` unter `ANBIETER` auf, was im Betrieb
-je Anbieter einzutragen ist.
+### Zwei Lagen, eine Oberfläche
+
+Die Anwendung läuft in zwei Lagen und funktioniert in beiden ganz:
+
+**Mit Server** — unter `www.trimmotrade.de`, wo `api/` liegt und
+`api/config.php` ausgefüllt ist. Dann ist die Anmeldung echt: Der Code geht
+per Mail hinaus, die Signatur des Passkeys wird gegen den hinterlegten
+öffentlichen Schlüssel gerechnet, Google und Microsoft antworten wirklich.
+Die Sitzung hängt an einem Cookie, das kein Skript lesen kann.
+
+**Ohne Server** — die Einzeldatei, eine Kopie auf dem Stick, `file://`. Dann
+ist die Anmeldung nachgebildet und sagt das an jeder Stelle. Nichts verlangt
+eine Verbindung, nichts bricht ab.
+
+Welche Lage vorliegt, entscheidet ein einziger Aufruf beim Start
+(`assets/api.js`). Verfahren, für die keine Zugangsdaten hinterlegt sind,
+erscheinen gar nicht erst als Knopf — statt in eine Fehlermeldung zu führen.
+
+### Die Serverseite
+
+`api/` ist bewusst klein: PHP 8.1+, PDO, keine Abhängigkeiten, kein
+Composer. Auf einem Webhosting-Paket ohne Kommandozeile lässt sich das
+hochladen und es läuft. Die Tabellen legt die Anwendung beim ersten Aufruf
+selbst an.
+
+| Datei | Wofür |
+|---|---|
+| `api/index.php` | einziger Einstiegspunkt; hier stehen die Prüfungen, die für alle Wege gelten |
+| `api/lib/webauthn.php` | Passkeys prüfen: Aufforderung, Herkunft, RP-ID, Flags, Signatur, Zähler |
+| `api/lib/cbor.php` | so viel CBOR, wie WebAuthn braucht — Lesepfad, keine Ratefunktion |
+| `api/lib/oauth.php` | OpenID Connect mit `state`, `nonce` und PKCE |
+| `api/lib/jwt.php` | ID-Token prüfen: `alg`, Signatur, `iss`, `aud`, `exp` |
+| `api/lib/der.php` | COSE- und JWK-Schlüssel nach PEM, für beides dieselben Bausteine |
+| `api/lib/sitzung.php` | Sitzungscookie (HttpOnly, SameSite) und Schutz gegen untergeschobene Anfragen |
+| `api/lib/grenze.php` | gleitende Sperren gegen das Durchprobieren von Codes |
+| `api/lib/mail.php` | SMTP von Hand — eine kurze Textmail, mehr wird nicht gebraucht |
+| `api/lib/konto.php` | Konten, Verknüpfungen, Vertrauensstufe, Löschung nach Art. 17 DSGVO |
+| `api/lib/schema.php` | das Datenmodell an einer Stelle, für MariaDB und SQLite |
+
+**Was der Server speichert:** Kontonummer, E-Mail-Adresse, Name,
+Anmeldeverfahren, Vertrauensstufe, die öffentlichen Teile der Passkeys und
+die offenen Sitzungen. **Was er nicht speichert:** Inserate, Merklisten,
+Suchaufträge, Nachrichten, Notizen, Profile, Bilder, den Dokumententresor.
+Das alles bleibt im Browser. Ein Anmeldeserver, der nichts weiter speichert,
+ist ein kleines Ziel — und ein kleines Ziel ist die beste Vorsorge.
+
+Wie das bei netcup einzurichten ist, steht Schritt für Schritt in
+[DEPLOY.md](DEPLOY.md).
 
 ### Ohne Anmeldung erreichbar
 
@@ -739,8 +785,13 @@ keine doppelten IDs, kein waagerechter Überlauf von 320 px bis 1920 px,
 
 ## Datenschutz
 
-Es gibt keinen Server. Merkliste, Profil, Suchaufträge, Nachrichten und
-eigene Inserate liegen im `localStorage` dieses Browsers unter dem Schlüssel
+Zum Server geht genau eine Sache: die Anmeldung. Er beantwortet die Frage,
+wer jemand ist, und speichert dafür Kontonummer, E-Mail-Adresse, Name,
+Verfahren, Vertrauensstufe, die öffentlichen Teile der Passkeys und die
+offenen Sitzungen. Mehr kennt er nicht.
+
+Alles Übrige bleibt im Browser: Merkliste, Profil, Suchaufträge, Nachrichten
+und eigene Inserate im `localStorage` unter dem Schlüssel
 `trimmotrade.v1`, das Konto getrennt davon unter `trimmotrade.konto.v1` — wer sich
 abmeldet, soll seine Merkliste behalten, und wer seine Daten löscht, nicht
 ungewollt ausgesperrt werden. Unter „Meine Daten“ im Fußbereich lässt sich der Stand als
@@ -773,6 +824,14 @@ Bedienelement ohne Beschriftung, kein Eingabefeld ohne Label, kein waagerechter
 Überlauf bei 390 px. Zusätzlich geprüft: Regler lassen sich ziehen, ohne dass
 die Eingabe abbricht, Textfelder behalten beim Tippen den Fokus, und keine
 Zahl erscheint doppelt.
+
+Die Serverseite wird gegen ihre eigenen Angriffe geprüft, nicht nur auf
+Funktion: wiederverwendete Aufforderung, verfälschte Signatur, gefälschte
+Herkunft, vertauschte Aufforderungen, als Anmeldung ausgegebene
+Registrierung, unbekannter Schlüssel — dazu die Tokenprüfung gegen
+`alg: none`, `alg: HS256`, falschen Aussteller, falsche Zielgruppe,
+abgelaufene und nachträglich veränderte Token. Der Passkey-Durchgang läuft
+über einen virtuellen Authentikator, einmal mit ES256 und einmal mit RS256.
 
 Dazu ein durchgespielter Weg einer erfundenen Nutzerin – von der leeren Seite
 über Profil, Suche, Bewerbung und Rechner bis zum Umzugsplan. Automatische

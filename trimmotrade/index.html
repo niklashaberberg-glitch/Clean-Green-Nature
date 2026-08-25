@@ -5,11 +5,90 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>TrimmoTrade – Mieten, WG und Wohnungstausch in einer Suche</title>
 <meta name="description" content="TrimmoTrade führt Mietmarkt, Kaufangebote, WG-Zimmer und Wohnungstausch zusammen: mit Vergleichsmiete, Vertragslupe, Betrugserkennung, echten Monatskosten und Ringtausch über mehrere Haushalte.">
-<meta name="robots" content="noindex">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="author" content="TrimmoTrade – Niklas Haberberg">
 <meta name="theme-color" content="#1a5c37" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0f120f" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231a5c37'/%3E%3Cpath d='M5 16L16 6l11 10' stroke='%23fff' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8 14.5V26h16V14.5' stroke='%23fff' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='20' r='3.2' stroke='%23fff' stroke-width='2.6' fill='none'/%3E%3C/svg%3E">
+<meta name="format-detection" content="telephone=no">
+<link rel="canonical" href="https://www.trimmotrade.de/">
+
+<!-- Geteilte Verweise: Ohne Vorschau wirkt ein Verweis in Messengern wie
+     ein toter Link, und genau so werden Wohnungen weitergegeben. -->
+<meta property="og:site_name" content="TrimmoTrade">
+<meta property="og:title" content="TrimmoTrade – Mieten, Kaufen, WG und Wohnungstausch in einer Suche">
+<meta property="og:description" content="Vergleichsmiete, Vertragslupe, echte Monatskosten und Ringtausch über mehrere Haushalte. Die Reihenfolge der Treffer entsteht aus deinem Profil, nicht aus bezahlten Plätzen.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.trimmotrade.de/">
+<meta property="og:image" content="https://www.trimmotrade.de/vorschau.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="TrimmoTrade – Mietmarkt, Kauf, WG-Zimmer und Wohnungstausch in einer Oberfläche">
+<meta property="og:locale" content="de_DE">
+<meta property="og:locale:alternate" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TrimmoTrade – Mieten, Kaufen, WG und Wohnungstausch">
+<meta name="twitter:description" content="Vergleichsmiete, Vertragslupe, echte Monatskosten und Ringtausch. Keine gekauften Plätze in der Trefferliste.">
+<meta name="twitter:image" content="https://www.trimmotrade.de/vorschau.png">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Strukturierte Daten: Damit die Suche weiß, was das hier ist, und die
+     Suchleiste als Treffer anbieten kann. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.trimmotrade.de/#website",
+      "url": "https://www.trimmotrade.de/",
+      "name": "TrimmoTrade",
+      "inLanguage": "de-DE",
+      "description": "Mietmarkt, Kaufangebote, WG-Zimmer und Wohnungstausch in einer Suche.",
+      "publisher": { "@id": "https://www.trimmotrade.de/#anbieter" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": { "@type": "EntryPoint", "urlTemplate": "https://www.trimmotrade.de/#/suche?q={search_term_string}" },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.trimmotrade.de/#anbieter",
+      "name": "TrimmoTrade",
+      "url": "https://www.trimmotrade.de/",
+      "logo": "https://www.trimmotrade.de/icon-512.png",
+      "founder": { "@type": "Person", "name": "Niklas Haberberg" },
+      "areaServed": { "@type": "Country", "name": "Deutschland" },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "info@trimmotrade.de",
+        "availableLanguage": ["German", "English"]
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "name": "TrimmoTrade",
+      "url": "https://www.trimmotrade.de/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "browserRequirements": "JavaScript erforderlich",
+      "inLanguage": ["de-DE", "en-GB"],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR",
+        "description": "Suche, Vergleichsmiete, Prüfhinweis und alle Rechner sind kostenlos."
+      }
+    }
+  ]
+}
+</script>
+
 <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
@@ -41,7 +120,8 @@
 <script src="assets/tresor.js"></script>
 <script src="assets/recht.js"></script>
 <script src="assets/hilfe.js"></script>
-<script src="assets/konto.js"></script>
+<script src="assets/api.js"></script>
+  <script src="assets/konto.js"></script>
 
 <!-- Oberfläche -->
 <script src="assets/hilfe-en.js"></script>

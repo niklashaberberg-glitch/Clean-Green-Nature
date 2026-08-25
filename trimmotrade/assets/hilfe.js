@@ -2,10 +2,10 @@
    TrimmoTrade – Hilfe: Wissensbasis und Abgleich
 
    Was das hier ist und was es nicht ist, gehört an den Anfang, weil die
-   Erwartung sonst falsch gesetzt wird: Das ist kein Sprachmodell. Es gibt
-   keinen Server und nichts, was „versteht“. Was es gibt, ist eine
+   Erwartung sonst falsch gesetzt wird: Das ist kein Sprachmodell. Die
+   Hilfe fragt nichts an, sie versteht nichts. Was es gibt, ist eine
    gepflegte Liste von Antworten und ein Abgleich, der die Frage der
-   passendsten Antwort zuordnet.
+   passendsten Antwort zuordnet – alles im Browser.
 
    Das ist für einen Hilfebereich kein Nachteil, sondern meistens besser:
    Die Antworten stimmen, weil jemand sie geschrieben hat, sie verweisen
@@ -238,8 +238,9 @@
         + 'jederzeit widerrufen kannst.\n\n'
         + 'Verschlüsselt wird im Browser mit AES-GCM und 256 Bit, der Schlüssel entsteht aus deinem Kennwort '
         + 'und wird nirgends gespeichert. Auch der Dateiname ist verschlüsselt.\n\n'
-        + '<b>Das Kennwort lässt sich nicht zurücksetzen.</b> Es gibt keinen Server, der es kennt. Vergisst du '
-        + 'es, bleibt nur, den Tresor zu leeren und neu zu füllen.',
+        + '<b>Das Kennwort lässt sich nicht zurücksetzen.</b> Niemand kennt es außer dir – auch der Server '
+        + 'nicht, der die Anmeldung erledigt; der sieht weder Tresor noch Kennwort. Vergisst du es, bleibt '
+        + 'nur, den Tresor zu leeren und neu zu füllen.',
       ziele: [['Zum Dokumententresor', 'tresor']]
     },
     {
@@ -412,8 +413,8 @@
         'was ist ein passkey', 'anmeldung mit google'],
       schlag: ['konto', 'passwort', 'kennwort', 'account', 'registrier', 'anmeld', 'einlogg', 'login', 'zugang'],
       muster: [/(passwort|kennwort|zugang).{0,20}(vergess|verlor|zuruecksetz|aendern)/],
-      antwort: 'Über einen der vier Wege auf der Startseite: <b>Passkey</b> (Face ID, Windows Hello oder '
-        + 'Fingerabdruck), Google, Microsoft, Apple – oder mit deiner E-Mail-Adresse und einem Einmalcode.\n\n'
+      antwort: 'Über einen der Wege auf der Startseite: <b>Passkey</b> (Face ID, Windows Hello oder '
+        + 'Fingerabdruck), Google, Microsoft – oder mit deiner E-Mail-Adresse und einem Einmalcode.\n\n'
         + 'Ein Passwort gibt es in keinem der Wege. Beim Passkey entsteht der Schlüssel im Sicherheitschip '
         + 'deines Geräts und verlässt ihn nie; beim E-Mail-Weg bekommst du einen Code, der zehn Minuten gilt. '
         + 'Es gibt also nichts zu vergessen und nichts, was jemand abfischen könnte.\n\n'

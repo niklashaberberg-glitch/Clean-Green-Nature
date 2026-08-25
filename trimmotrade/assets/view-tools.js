@@ -395,9 +395,9 @@
               Reihenfolge des Eingangs – gelöscht oder versteckt wird keine.</p>
             <p class="fein">Du kannst die Reihenfolge ignorieren; die Liste zeigt alle Anfragen vollständig.</p>
           </details>
-          <p class="fein anfragen__demo">${ico('info')}Beispielanfragen dieser Vorführung. Es gibt keinen
-            Server, also auch niemanden, der wirklich geschrieben hätte – die Namen und Texte entstehen aus der
-            Kennung des Inserats und bleiben deshalb gleich.</p>
+          <p class="fein anfragen__demo">${ico('info')}Beispielanfragen dieser Vorführung. Es hat niemand
+            wirklich geschrieben – die Namen und Texte entstehen aus der Kennung des Inserats und bleiben
+            deshalb gleich.</p>
         </article>`;
     })}
     </section>`;

@@ -53,7 +53,7 @@
         <header class="seite__kopf">
           <h1>${ico('person')}Dein Profil</h1>
           <p class="seite__unter">TrimmoTrade sortiert und rechnet ausschließlich mit diesen Angaben.
-            Sie liegen im Speicher dieses Browsers – es gibt keinen Server und kein Konto.</p>
+            Sie liegen im Speicher dieses Browsers und werden nirgendwohin übertragen.</p>
           <p class="gespeichert" id="profil-gespeichert" aria-live="polite">${ico('speichern')}Änderungen werden sofort übernommen</p>
         </header>
 
@@ -400,7 +400,7 @@
       </div>
       <ul class="bilder__liste" id="inserat-bilder-liste">${bilderListe()}</ul>
       <p class="fein">Die Bilder werden beim Ablegen auf ${U.num(BILD_KANTE)} Pixel Kantenlänge verkleinert und
-        bleiben im Speicher dieses Geräts. Sie werden nirgendwohin übertragen – es gibt keinen Server.</p>
+        bleiben im Speicher dieses Geräts. Übertragen wird keines davon.</p>
       <div class="hinweisbox">${ico('warnung')}
         <div><b>Was auf ein Inseratsfoto nicht gehört</b>
         <p>Keine Personen ohne deren Einwilligung, keine Kennzeichen, keine Namensschilder an Klingel oder
@@ -582,6 +582,22 @@
               (§§ 656c, 656d BGB). Für Grundstücke und Mehrfamilienhäuser gilt das nicht. TrimmoTrade rechnet die
               Nebenkosten des Erwerbs – Grunderwerbsteuer nach Bundesland, Notar und Grundbuch – bei jedem
               Angebot durch und zeigt sie neben dem Kaufpreis.</p></div>
+          </div>
+
+          <!-- Wer verkauft, entscheidet den Preis vor der ersten Besichtigung.
+               Der Hinweis steht deshalb hier und nicht irgendwo im Fußbereich:
+               an der Stelle, an der jemand gerade die Fotos plant. -->
+          <div class="hinweisbox hinweisbox--tipp" data-gruppe="kauf">${ico('info')}
+            <div><b>Vor den Fotos: der erste Eindruck von außen</b>
+            <p>Eine besprühte Fassade drückt den Preis und lässt Kaufinteressenten auf
+              Vernachlässigung schließen – auch bei einer sanierten Wohnung. Entfernen lohnt sich
+              deshalb vor dem ersten Termin. Sandstrahlen und Chemie greifen Putz und Klinker an;
+              Laserreinigung arbeitet chemiefrei und ist auch bei Denkmalschutz zulässig.</p>
+            <p><a href="/wohnung-verkaufen-vorbereiten.html">Was den Verkaufspreis sonst noch
+              bewegt</a> · <a href="https://www.cleangreennature.de" target="_blank"
+              rel="noopener">Laser-Graffitientfernung bei Clean Green Nature</a></p>
+            <p class="fein">Eigenständiges Unternehmen desselben Inhabers. Für TrimmoTrade entsteht
+              daraus kein Vermittlungsentgelt.</p></div>
           </div>
 
           <fieldset class="filter__gruppe" data-gruppe="wohnung"><legend>Ausstattung</legend>

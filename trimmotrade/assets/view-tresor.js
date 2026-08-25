@@ -70,10 +70,11 @@
         </div>
         <div class="hinweisbox">${ico('warnung')}
           <div><b>Dieses Kennwort lässt sich nicht zurücksetzen</b>
-          <p>Es gibt keinen Server, der es kennt, und keine Wiederherstellung per E-Mail. Genau das ist der
-            Punkt: Wer den Speicher dieses Geräts in die Hände bekommt, kommt ohne das Kennwort nicht an deine
-            Unterlagen. Vergisst du es, sind sie auch für dich verloren – dann bleibt nur, den Tresor zu leeren
-            und neu zu füllen.</p></div>
+          <p>Niemand kennt es außer dir – auch der Server nicht, der die Anmeldung erledigt; der sieht weder
+            deine Unterlagen noch dieses Kennwort. Eine Wiederherstellung per E-Mail gibt es deshalb nicht,
+            und genau das ist der Punkt: Wer den Speicher dieses Geräts in die Hände bekommt, kommt ohne das
+            Kennwort nicht an deine Unterlagen. Vergisst du es, sind sie auch für dich verloren – dann bleibt
+            nur, den Tresor zu leeren und neu zu füllen.</p></div>
         </div>
         <button type="submit" class="knopf">${ico('schloss')}Tresor anlegen</button>
       </form>

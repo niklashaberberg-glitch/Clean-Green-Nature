@@ -1,0 +1,10 @@
+# Hier liegt nichts, was ein Browser abrufen dürfte: Programmteile und
+# Zugangsdaten. Der Riegel steht zusätzlich in der .htaccess der Wurzel;
+# dieser hier greift auch dann, wenn mod_rewrite fehlt.
+Require all denied
+
+# Für Apache 2.2, falls der Hoster noch darauf läuft.
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Deny from all
+</IfModule>

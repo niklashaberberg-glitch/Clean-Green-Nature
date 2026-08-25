@@ -176,9 +176,9 @@
       <p class="fein">Mit dem Sichern gelten die <a href="#/recht/agb">Geschäftsbedingungen</a>, insbesondere § 6.
         Ein Widerrufsrecht besteht nicht, weil keine Zahlungspflicht entsteht – beenden lässt sich der Platz
         trotzdem jederzeit.</p>
-      <p class="fein gruender__demo">${ico('info')}In dieser Vorführung gibt es keinen Server, der die Plätze
-        zentral zählt. Der Zähler oben ist deshalb eine Hochrechnung aus der Zeit seit dem Start, keine
-        Messung. Im Betrieb vergibt der Server jede Nummer genau einmal.</p>
+      <p class="fein gruender__demo">${ico('info')}Die Plätze werden hier nicht zentral gezählt: Der Zähler
+        oben ist eine Hochrechnung aus der Zeit seit dem Start, keine Messung. Sobald die Vergabe wirklich
+        läuft, bekommt jede Nummer genau einen Platz.</p>
     </section>`;
   }
 
@@ -270,8 +270,8 @@
             <details>
               <summary>Bekommen Werbetreibende meine Daten?</summary>
               <p>Nein. Welche Anzeige erscheint, entscheidet sich im Browser anhand der Stelle auf der Seite –
-                nicht anhand deines Profils, deiner Suche oder deines Verhaltens. Es gibt keinen Server, an den
-                etwas gehen könnte.</p>
+                nicht anhand deines Profils, deiner Suche oder deines Verhaltens. Es gibt kein Werbenetzwerk,
+                keine Kennung und nichts, was übertragen würde.</p>
             </details>
             <details>
               <summary>Bringt Plus mir eine Wohnung schneller?</summary>

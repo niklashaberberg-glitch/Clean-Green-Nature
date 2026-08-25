@@ -954,8 +954,10 @@
       const groesse = new Blob([JSON.stringify(s)]).size;
       dialog({
         titel: 'Meine Daten',
-        inhalt: h`<p>TrimmoTrade speichert alles ausschließlich im Speicher dieses Browsers. Es gibt keinen Server,
-          kein Konto und keine Übertragung an Dritte.</p>
+        inhalt: h`<p>Alles, was du hier eingibst, liegt im Speicher dieses Browsers – Merkliste,
+          Suchaufträge, Nachrichten, eigene Inserate, Profil und Notizen. Nichts davon geht an einen Server,
+          nichts an Dritte. Übertragen wird allein die Anmeldung; was dabei gespeichert wird, steht in der
+          <a href="#/recht/datenschutz">Datenschutzerklärung</a>.</p>
         <ul class="liste-schlicht">
           <li>${Object.keys(s.merkliste).length} Merkungen</li>
           <li>${s.agenten.length} Suchaufträge</li>
@@ -1078,9 +1080,10 @@
         if (grund === 'abmeldung' || grund === 'anmeldung') neuZeichnen();
       });
       window.addEventListener('storage', (e) => {
-        if (e.key !== 'trimmotrade.konto.v1') return;
-        TT.konto.laden();
-        neuZeichnen();
+        if (e.key !== 'trimmotrade.konto.v1' && e.key !== 'trimmotrade.sitzung.v1') return;
+        /* Mit Server entscheidet der Server, nicht der gemeinsame
+           Speicher: Der Kritzel sagt nur, dass es etwas Neues gibt. */
+        TT.konto.auffrischen().then(neuZeichnen, neuZeichnen);
       });
     }
     if (!location.hash) location.hash = '#/start';

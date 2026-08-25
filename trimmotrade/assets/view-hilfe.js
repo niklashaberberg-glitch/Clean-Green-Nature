@@ -7,10 +7,10 @@
    einmal als vollständige Seite: verlinkbar, druckbar und ohne die
    Einschränkungen eines kleinen Fensters.
 
-   Zur Weitergabe: Es gibt keinen Server, der eine E-Mail verschicken
-   könnte. Die Anwendung baut deshalb die Nachricht vollständig zusammen
-   und übergibt sie dem E-Mail-Programm des Geräts. Das ist keine
-   Notlösung, sondern datenschutzrechtlich die saubere Variante – es
+   Zur Weitergabe: Die Anwendung verschickt selbst keine Post. Sie baut
+   die Nachricht vollständig zusammen und übergibt sie dem E-Mail-Programm
+   des Geräts. Das ist keine Notlösung, sondern datenschutzrechtlich die
+   saubere Variante – es
    verlässt nichts das Gerät, bevor jemand bewusst auf Senden geklickt
    hat, und der Text steht vorher sichtbar da. Wo kein Mailprogramm
    eingerichtet ist, lässt sich derselbe Text kopieren oder sichern.
@@ -273,9 +273,9 @@
             der gezeigten Antworten, dein Anliegen und die Kontaktangaben, die du selbst einträgst. <b>Nicht
             übertragen werden</b> dein Profil, deine Merkliste, deine Suchaufträge und die Unterlagen aus dem
             Dokumententresor.</p>
-          <p>Es gibt keinen Server, der das verschicken könnte. Die Nachricht wird an das E-Mail-Programm
-            dieses Geräts übergeben – dort kannst du sie vor dem Senden noch ändern. Wo kein Programm
-            eingerichtet ist, kopier den Text oder sichere ihn als Datei.</p></div>
+          <p>TrimmoTrade verschickt die Nachricht nicht selbst, sondern übergibt sie dem E-Mail-Programm
+            dieses Geräts – dort kannst du sie vor dem Senden noch ändern. Wo kein Programm eingerichtet ist,
+            kopier den Text oder sichere ihn als Datei.</p></div>
         </div>`,
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="hilfe-kopieren">${ico('kopieren')}Text kopieren</button>
         <button type="button" class="knopf knopf--still" data-tu="hilfe-sichern">${ico('speichern')}Als Datei</button>

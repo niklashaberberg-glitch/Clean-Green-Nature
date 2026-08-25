@@ -1,0 +1,18 @@
+# TrimmoTrade – www.trimmotrade.de
+
+User-agent: *
+Allow: /
+
+# Die Schnittstelle der Anmeldung gehört nicht in einen Index.
+Disallow: /api/
+
+# Die drei folgenden Zeilen wirken technisch nicht: Suchmaschinen sehen den
+# Teil hinter dem Rautezeichen gar nicht, und ein freigegebener Verweis auf
+# Unterlagen trägt seinen Schlüssel genau dort. Sie stehen hier, damit die
+# Absicht dokumentiert ist – falls die Anwendung eines Tages echte Pfade
+# statt Fragmente verwendet, sind sie schon richtig.
+Disallow: /#/konto
+Disallow: /#/tresor
+Disallow: /#/freigabe
+
+Sitemap: https://www.trimmotrade.de/sitemap.xml

@@ -1043,8 +1043,10 @@
     '{0}Dieser Browser kann das nicht': '{0}This browser cannot do it',
     'Für den Tresor braucht es die Verschlüsselungsfunktionen des Browsers und einen lokalen Datenspeicher. Beides fehlt hier – meist, weil die Seite ohne gesicherte Verbindung geöffnet wurde oder der private Modus den Speicher sperrt.':
       'The vault needs the browser’s cryptography functions and local storage. Both are missing here – usually because the page was opened without a secure connection, or private mode is blocking storage.',
+    /* „Profil“ steht in der Navigation und mitten in diesem Satz – ein
+       Schlüssel, zwei Stellen. Deshalb hier großgeschrieben: Es ist der
+       Name eines Bereichs, nicht ein beliebiges Wort. */
     'Die Bewerbermappe im': 'The application folder in your',
-    'Profil': 'profile',
     'funktioniert weiterhin; du verschickst deine Unterlagen dann wie gewohnt selbst.':
       'still works; you then send your documents yourself as usual.',
 
@@ -2592,5 +2594,28 @@
     'Ein Impressum ohne ladungsfähige Anschrift oder ohne schnelle Kontaktmöglichkeit erfüllt die Pflicht aus § 5 DDG nicht – und das ist abmahnbar. Die Lücken sind in allen Dokumenten sichtbar markiert, damit sie nicht untergehen.':
       'A legal notice without a serviceable address or a rapid means of contact does not meet the obligation under § 5 DDG – and that can attract a formal warning. The gaps are visibly marked in every document so they do not get lost.'
   });
+
+  e({
+    /* Kurze Beschriftungen ohne eindeutige deutsche Marker – die findet
+       kein Prüfer über Wortlisten, nur das Auge. */
+    'Mieten': 'Rent', 'Kaufen': 'Buy', 'Tauschen': 'Swap',
+    'neu': 'new', 'geprüft': 'verified',
+    '{0} Zi.': '{0} rm', 'ab {0}': 'from {0}', 'ab {0} Zi.': 'from {0} rm',
+    '({0} €/m² kalt)': '({0} €/m² base rent)',
+    'Interessent': 'interested party', 'Interessenten': 'interested parties',
+    'Treffer zeigen': 'show results',
+    'Umkreis': 'Radius', 'Städte': 'Cities', 'Viertel wählen': 'Choose neighbourhoods'
+  });
+
+  e({
+    'Plus entdecken': 'Discover Plus',
+    'Leg ein': 'Create a',
+    'an, dann füllt Nestwerk diese Filter von selbst – und du musst nichts zweimal eintippen.':
+      'and Nestwerk fills these filters in by itself – so you do not have to type anything twice.',
+    'Weicht ab:': 'Differs:',
+    'Gemessen ab {0} mit {1}.': 'Measured from {0} by {1}.'
+  });
+
+  e({ 'Nestwerk Plus aktiv': 'Nestwerk Plus active' });
 
 })(window.NW = window.NW || {});

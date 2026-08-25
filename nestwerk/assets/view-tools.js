@@ -341,7 +341,7 @@
     if (f.staedte.length) teile.push(f.staedte.join(', '));
     if (f.viertel.length) teile.push(f.viertel.map((v) => v.split('|')[1]).join(', '));
     if (f.preisMax) teile.push('bis ' + U.eur(f.preisMax));
-    if (f.zimmerMin) teile.push('ab ' + U.dec(f.zimmerMin) + ' Zi.');
+    if (f.zimmerMin) teile.push(U.t('ab {0} Zi.').replace('{0}', U.dec(f.zimmerMin)));
     if (f.flaecheMin) teile.push('ab ' + f.flaecheMin + ' m²');
     if (f.ausstattung.length) teile.push(f.ausstattung.join(', '));
     if (f.provisionsfrei) teile.push('provisionsfrei');

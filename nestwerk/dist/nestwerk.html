@@ -3328,8 +3328,10 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     '{0}Dieser Browser kann das nicht': '{0}This browser cannot do it',
     'Für den Tresor braucht es die Verschlüsselungsfunktionen des Browsers und einen lokalen Datenspeicher. Beides fehlt hier – meist, weil die Seite ohne gesicherte Verbindung geöffnet wurde oder der private Modus den Speicher sperrt.':
       'The vault needs the browser’s cryptography functions and local storage. Both are missing here – usually because the page was opened without a secure connection, or private mode is blocking storage.',
+    /* „Profil“ steht in der Navigation und mitten in diesem Satz – ein
+       Schlüssel, zwei Stellen. Deshalb hier großgeschrieben: Es ist der
+       Name eines Bereichs, nicht ein beliebiges Wort. */
     'Die Bewerbermappe im': 'The application folder in your',
-    'Profil': 'profile',
     'funktioniert weiterhin; du verschickst deine Unterlagen dann wie gewohnt selbst.':
       'still works; you then send your documents yourself as usual.',
 
@@ -4877,6 +4879,29 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     'Ein Impressum ohne ladungsfähige Anschrift oder ohne schnelle Kontaktmöglichkeit erfüllt die Pflicht aus § 5 DDG nicht – und das ist abmahnbar. Die Lücken sind in allen Dokumenten sichtbar markiert, damit sie nicht untergehen.':
       'A legal notice without a serviceable address or a rapid means of contact does not meet the obligation under § 5 DDG – and that can attract a formal warning. The gaps are visibly marked in every document so they do not get lost.'
   });
+
+  e({
+    /* Kurze Beschriftungen ohne eindeutige deutsche Marker – die findet
+       kein Prüfer über Wortlisten, nur das Auge. */
+    'Mieten': 'Rent', 'Kaufen': 'Buy', 'Tauschen': 'Swap',
+    'neu': 'new', 'geprüft': 'verified',
+    '{0} Zi.': '{0} rm', 'ab {0}': 'from {0}', 'ab {0} Zi.': 'from {0} rm',
+    '({0} €/m² kalt)': '({0} €/m² base rent)',
+    'Interessent': 'interested party', 'Interessenten': 'interested parties',
+    'Treffer zeigen': 'show results',
+    'Umkreis': 'Radius', 'Städte': 'Cities', 'Viertel wählen': 'Choose neighbourhoods'
+  });
+
+  e({
+    'Plus entdecken': 'Discover Plus',
+    'Leg ein': 'Create a',
+    'an, dann füllt Nestwerk diese Filter von selbst – und du musst nichts zweimal eintippen.':
+      'and Nestwerk fills these filters in by itself – so you do not have to type anything twice.',
+    'Weicht ab:': 'Differs:',
+    'Gemessen ab {0} mit {1}.': 'Measured from {0} by {1}.'
+  });
+
+  e({ 'Nestwerk Plus aktiv': 'Nestwerk Plus active' });
 
 })(window.NW = window.NW || {});
 
@@ -11779,14 +11804,14 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       eck.push(String((l.grund || {}).baulandArt || 'Bauland').split(',')[0]);
       eck.push('GRZ ' + U.dec((l.grund || {}).grz || 0));
     } else {
-      eck.push(U.dec(l.zimmer) + ' Zi.');
+      eck.push(U.t('{0} Zi.').replace('{0}', U.dec(l.zimmer)));
       eck.push(l.flaeche + ' m²');
       if (l.kind === 'wg') eck.push(U.t('WG mit {0}').replace('{0}', l.wg.groesse));
       else if (l.type === 'haus') eck.push(l.grundstueck ? U.num(l.grundstueck) + ' m² Grund' : 'Haus');
       else eck.push(l.etage === 0 ? U.t('EG') : l.etage >= l.etagen ? U.t('DG')
         : U.t('{0}. OG').replace('{0}', l.etage));
     }
-    eck.push('ab ' + U.dateDE(l.freiAb));
+    eck.push(U.t('ab {0}').replace('{0}', U.dateDE(l.freiAb)));
 
     const hervor = NW.plan.istHervorgehoben(l);
     return h`<article class="karte-inserat ${opt.kompakt ? 'is-kompakt' : ''} ${hervor ? 'is-hervor' : ''}" data-id="${l.id}">
@@ -12183,7 +12208,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           ${sprachknopf()}
           <a class="tarifknopf ${NW.plan.istPlus() ? 'is-plus' : ''}" href="#/plus"
             title="${NW.plan.istPlus() ? 'Nestwerk Plus aktiv' : 'Tarife ansehen'}">
-            ${NW.plan.istPlus() ? raw(ico('plus5').__raw + '<span>Plus</span>') : raw('<span>Plus entdecken</span>')}</a>
+            ${NW.plan.istPlus() ? raw(ico('plus5').__raw + '<span>Plus</span>')
+              : raw('<span>' + U.esc(U.t('Plus entdecken')) + '</span>')}</a>
           <a class="knopf knopf--klein nur-breit" href="#/inserieren">${ico('plus')}<span>Inserieren</span></a>
           <a class="ikon-btn nur-angemeldet" href="#/konto" title="Konto" aria-label="Konto">${ico('person')}</a>
         </div>
@@ -12277,10 +12303,10 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     if (tarifknopf) {
       const plus = NW.plan.istPlus();
       tarifknopf.classList.toggle('is-plus', plus);
-      tarifknopf.title = plus ? 'Nestwerk Plus aktiv' : 'Tarife ansehen';
+      tarifknopf.title = U.t(plus ? 'Nestwerk Plus aktiv' : 'Tarife ansehen');
       tarifknopf.innerHTML = plus
         ? ico('plus5').__raw + '<span>Plus</span>'
-        : '<span>Plus entdecken</span>';
+        : '<span>' + U.esc(U.t('Plus entdecken')) + '</span>';
     }
 
     const setze = (name, wert) => {
@@ -13200,7 +13226,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     return h`<div class="markt">
       <span><b>${U.num(m.anzahl)}</b> ${U.plural(m.anzahl, 'Treffer', 'Treffer')}</span>
       ${m.medianWarm ? h`<span><b>${U.eur(m.medianWarm)}</b> mittlere Warmmiete
-        ${m.medianQm ? h`(${U.dec(m.medianQm)} €/m² kalt)` : ''}</span>` : ''}
+        ${m.medianQm ? U.t('({0} €/m² kalt)').replace('{0}', U.dec(m.medianQm)) : ''}</span>` : ''}
       ${m.medianZimmerWarm ? h`<span><b>${U.eur(m.medianZimmerWarm)}</b> mittleres WG-Zimmer</span>` : ''}
       ${m.medianKauf ? h`<span><b>${U.eur(m.medianKauf)}</b> mittlerer Kaufpreis</span>` : ''}
       <span><b>${m.neu7}</b> neu in 7 Tagen</span>
@@ -15463,7 +15489,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     if (f.staedte.length) teile.push(f.staedte.join(', '));
     if (f.viertel.length) teile.push(f.viertel.map((v) => v.split('|')[1]).join(', '));
     if (f.preisMax) teile.push('bis ' + U.eur(f.preisMax));
-    if (f.zimmerMin) teile.push('ab ' + U.dec(f.zimmerMin) + ' Zi.');
+    if (f.zimmerMin) teile.push(U.t('ab {0} Zi.').replace('{0}', U.dec(f.zimmerMin)));
     if (f.flaecheMin) teile.push('ab ' + f.flaecheMin + ' m²');
     if (f.ausstattung.length) teile.push(f.ausstattung.join(', '));
     if (f.provisionsfrei) teile.push('provisionsfrei');

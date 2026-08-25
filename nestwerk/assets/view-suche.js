@@ -238,7 +238,7 @@
     return h`<div class="markt">
       <span><b>${U.num(m.anzahl)}</b> ${U.plural(m.anzahl, 'Treffer', 'Treffer')}</span>
       ${m.medianWarm ? h`<span><b>${U.eur(m.medianWarm)}</b> mittlere Warmmiete
-        ${m.medianQm ? h`(${U.dec(m.medianQm)} €/m² kalt)` : ''}</span>` : ''}
+        ${m.medianQm ? U.t('({0} €/m² kalt)').replace('{0}', U.dec(m.medianQm)) : ''}</span>` : ''}
       ${m.medianZimmerWarm ? h`<span><b>${U.eur(m.medianZimmerWarm)}</b> mittleres WG-Zimmer</span>` : ''}
       ${m.medianKauf ? h`<span><b>${U.eur(m.medianKauf)}</b> mittlerer Kaufpreis</span>` : ''}
       <span><b>${m.neu7}</b> neu in 7 Tagen</span>

@@ -170,14 +170,14 @@
       eck.push(String((l.grund || {}).baulandArt || 'Bauland').split(',')[0]);
       eck.push('GRZ ' + U.dec((l.grund || {}).grz || 0));
     } else {
-      eck.push(U.dec(l.zimmer) + ' Zi.');
+      eck.push(U.t('{0} Zi.').replace('{0}', U.dec(l.zimmer)));
       eck.push(l.flaeche + ' m²');
       if (l.kind === 'wg') eck.push(U.t('WG mit {0}').replace('{0}', l.wg.groesse));
       else if (l.type === 'haus') eck.push(l.grundstueck ? U.num(l.grundstueck) + ' m² Grund' : 'Haus');
       else eck.push(l.etage === 0 ? U.t('EG') : l.etage >= l.etagen ? U.t('DG')
         : U.t('{0}. OG').replace('{0}', l.etage));
     }
-    eck.push('ab ' + U.dateDE(l.freiAb));
+    eck.push(U.t('ab {0}').replace('{0}', U.dateDE(l.freiAb)));
 
     const hervor = NW.plan.istHervorgehoben(l);
     return h`<article class="karte-inserat ${opt.kompakt ? 'is-kompakt' : ''} ${hervor ? 'is-hervor' : ''}" data-id="${l.id}">
@@ -574,7 +574,8 @@
           ${sprachknopf()}
           <a class="tarifknopf ${NW.plan.istPlus() ? 'is-plus' : ''}" href="#/plus"
             title="${NW.plan.istPlus() ? 'Nestwerk Plus aktiv' : 'Tarife ansehen'}">
-            ${NW.plan.istPlus() ? raw(ico('plus5').__raw + '<span>Plus</span>') : raw('<span>Plus entdecken</span>')}</a>
+            ${NW.plan.istPlus() ? raw(ico('plus5').__raw + '<span>Plus</span>')
+              : raw('<span>' + U.esc(U.t('Plus entdecken')) + '</span>')}</a>
           <a class="knopf knopf--klein nur-breit" href="#/inserieren">${ico('plus')}<span>Inserieren</span></a>
           <a class="ikon-btn nur-angemeldet" href="#/konto" title="Konto" aria-label="Konto">${ico('person')}</a>
         </div>
@@ -668,10 +669,10 @@
     if (tarifknopf) {
       const plus = NW.plan.istPlus();
       tarifknopf.classList.toggle('is-plus', plus);
-      tarifknopf.title = plus ? 'Nestwerk Plus aktiv' : 'Tarife ansehen';
+      tarifknopf.title = U.t(plus ? 'Nestwerk Plus aktiv' : 'Tarife ansehen');
       tarifknopf.innerHTML = plus
         ? ico('plus5').__raw + '<span>Plus</span>'
-        : '<span>Plus entdecken</span>';
+        : '<span>' + U.esc(U.t('Plus entdecken')) + '</span>';
     }
 
     const setze = (name, wert) => {

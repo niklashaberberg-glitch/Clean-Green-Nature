@@ -55,51 +55,74 @@
 
   /* ------------------------- Formate ------------------------- */
 
-  const nfEur = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
-  const nfEur2 = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const nfNum = new Intl.NumberFormat('de-DE');
-  const nfDec = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 1 });
+  /* Zahlen schreiben sich je Sprache anders: 1.274,50 € im Deutschen,
+     €1,274.50 im Englischen. Wer das nicht umstellt, zeigt einem
+     englischen Leser „4,5 Zimmer“ und meint viereinhalb. Die Formatierer
+     werden zwischengespeichert, weil Intl.NumberFormat teuer ist und in
+     jeder Trefferliste hundertfach gebraucht wird. */
+  const nfCache = Object.create(null);
+  function nf(art) {
+    const ort = NW.i18n && NW.i18n.sprache() === 'en' ? 'en-GB' : 'de-DE';
+    const schluessel = ort + ':' + art;
+    if (!nfCache[schluessel]) {
+      const opt = art === 'eur' ? { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }
+        : art === 'eur2' ? { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }
+        : art === 'dec' ? { maximumFractionDigits: 1 } : {};
+      nfCache[schluessel] = new Intl.NumberFormat(ort, opt);
+    }
+    return nfCache[schluessel];
+  }
 
-  const eur = (v) => nfEur.format(Math.round(Number(v) || 0));
-  const eur2 = (v) => nfEur2.format(Number(v) || 0);
-  const num = (v) => nfNum.format(Math.round(Number(v) || 0));
-  const dec = (v) => nfDec.format(Number(v) || 0);
+  const eur = (v) => nf('eur').format(Math.round(Number(v) || 0));
+  const eur2 = (v) => nf('eur2').format(Number(v) || 0);
+  const num = (v) => nf('num').format(Math.round(Number(v) || 0));
+  const dec = (v) => nf('dec').format(Number(v) || 0);
   const qm = (v) => dec(v) + ' m²';
   const pct = (v) => dec(v) + ' %';
 
   function rooms(v) {
-    const s = dec(v);
-    return s + (v === 1 ? ' Zimmer' : ' Zimmer');
+    return dec(v) + ' ' + uebersetze('Zimmer');
   }
 
   function dateDE(iso) {
     if (!iso) return '';
     const d = new Date(iso + (iso.length === 10 ? 'T12:00:00' : ''));
     if (isNaN(d)) return String(iso);
-    return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    /* Englisch schreibt 25/08/2026, Deutsch 25.08.2026 – dieselbe Reihenfolge,
+       anderes Trennzeichen. Die amerikanische Reihenfolge wäre hier falsch:
+       Der Bestand und die Fristen sind deutsch. */
+    return d.toLocaleDateString(NW.i18n && NW.i18n.sprache() === 'en' ? 'en-GB' : 'de-DE',
+      { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
 
   function monthDE(iso) {
     const d = new Date(iso + (iso.length === 10 ? 'T12:00:00' : ''));
     if (isNaN(d)) return String(iso);
-    return d.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+    return d.toLocaleDateString(NW.i18n && NW.i18n.sprache() === 'en' ? 'en-GB' : 'de-DE', { month: 'long', year: 'numeric' });
   }
 
   /* „vor 3 Tagen“ – relativ zum eingefrorenen Heute der App. */
+  /* Ein Muster mit {0} durch das Wörterbuch schicken und die Zahl
+     danach einsetzen. So darf Englisch die Stellung ändern („vor 2
+     Tagen“ wird „2 days ago“) statt an der deutschen zu kleben. */
+  function muster(vorlage, wert) {
+    return uebersetze(vorlage).replace('{0}', wert);
+  }
+
   function since(iso, now) {
     const then = new Date(iso + (iso.length === 10 ? 'T12:00:00' : ''));
     const ms = (now || NW.now()) - then;
     const min = Math.round(ms / 60000);
-    if (min < 1) return 'gerade eben';
-    if (min < 60) return 'vor ' + min + ' Min.';
+    if (min < 1) return uebersetze('gerade eben');
+    if (min < 60) return muster('vor {0} Min.', min);
     const h = Math.round(min / 60);
-    if (h < 24) return 'vor ' + h + ' Std.';
+    if (h < 24) return muster('vor {0} Std.', h);
     const d = Math.round(h / 24);
-    if (d === 1) return 'gestern';
-    if (d < 31) return 'vor ' + d + ' Tagen';
+    if (d === 1) return uebersetze('gestern');
+    if (d < 31) return muster('vor {0} Tagen', d);
     const mo = Math.round(d / 30);
-    if (mo < 24) return 'vor ' + mo + ' Monaten';
-    return 'vor ' + Math.round(mo / 12) + ' Jahren';
+    if (mo < 24) return muster('vor {0} Monaten', mo);
+    return muster('vor {0} Jahren', Math.round(mo / 12));
   }
 
   /* Alter eines Inserats in Tagen. */
@@ -159,17 +182,95 @@
     if (v === null || v === undefined || v === false || v === true) return '';
     if (Array.isArray(v)) return v.map(val).join('');
     if (typeof v === 'object' && v.__raw !== undefined) return v.__raw;
-    return esc(String(v));
+    /* Auch eingesetzte Werte durchlaufen das Wörterbuch: Beschriftungen
+       aus Tabellen im Quelltext („Gemerkt“, „Zusage“) kommen als Wert an,
+       nicht als Teil der Vorlage. Was nicht im Wörterbuch steht – Namen,
+       Notizen, alles Eingetippte – geht unverändert durch. */
+    return esc(uebersetze(String(v)));
+  }
+
+  /* ------------------------- Sprache ------------------------- */
+
+  function uebersetze(text) {
+    return NW.i18n ? NW.i18n.t(text) : text;
+  }
+
+  /* Ein Zeichen, das in Markup nicht vorkommt, markiert die Stellen der
+     eingesetzten Werte, solange der Satz durch das Wörterbuch geht. */
+  const MARKE = '\u0001';
+
+  /* Im Wörterbuch stehen die Platzhalter als {0}, {1} – lesbar für den,
+     der übersetzt. Innerhalb der Vorlage sind es Steuerzeichen, damit
+     eine geschweifte Klammer im Fließtext nichts kaputtmacht. */
+  const zuLesbar = (s) => s.replace(new RegExp(MARKE + '(\\d+)' + MARKE, 'g'), '{$1}');
+  const zurueck = (s) => s.replace(/\{(\d+)\}/g, MARKE + '$1' + MARKE);
+
+  function uebersetzeLauf(text) {
+    if (text.indexOf(MARKE) < 0) return uebersetze(text);
+    return zurueck(uebersetze(zuLesbar(text)));
+  }
+
+  const ATTRIBUTE = /\b(aria-label|aria-description|title|placeholder|alt)\s*=\s*"([^"]*)"/gi;
+
+  /* Textläufe sind alles außerhalb von <…>. Das Markup bleibt unberührt,
+     übersetzt wird nur, was ein Mensch liest – dazu die Attribute, die
+     ein Screenreader vorliest. */
+  function laeufeUebersetzen(muster) {
+    let out = '';
+    let text = '';
+    let i = 0;
+    const spuelen = () => { out += uebersetzeLauf(text); text = ''; };
+    while (i < muster.length) {
+      const c = muster[i];
+      /* Nur ein echtes Tag beendet den Textlauf – ein einzelnes „<“ im
+         Fließtext (etwa „< 30 Minuten“) ist keins. */
+      if (c === '<' && /[a-zA-Z/!]/.test(muster[i + 1] || '')) {
+        spuelen();
+        let tag = '';
+        while (i < muster.length && muster[i] !== '>') { tag += muster[i]; i++; }
+        tag += muster[i] || ''; i++;
+        out += tag.replace(ATTRIBUTE, (ganz, name, wert) => name + '="' + uebersetzeLauf(wert) + '"');
+        continue;
+      }
+      text += c; i++;
+    }
+    spuelen();
+    return out;
+  }
+
+  /* Der Bauplan einer Vorlage: abwechselnd fester Text und die Nummer des
+     Werts, der dort hingehört. Getaggte Vorlagen bekommen bei jedem Aufruf
+     dasselbe strings-Array – deshalb lässt sich der Plan daran festmachen
+     und muss je Sprache nur einmal gerechnet werden. */
+  const plaene = new WeakMap();
+
+  function planFuer(strings) {
+    const sprache = NW.i18n ? NW.i18n.sprache() : 'de';
+    const gemerkt = plaene.get(strings);
+    if (gemerkt && gemerkt.sprache === sprache) return gemerkt.teile;
+
+    let muster = '';
+    for (let i = 0; i < strings.length; i++) {
+      muster += strings[i];
+      if (i + 1 < strings.length) muster += MARKE + i + MARKE;
+    }
+    const teile = laeufeUebersetzen(muster).split(new RegExp(MARKE + '(\\d+)' + MARKE));
+    plaene.set(strings, { sprache, teile });
+    return teile;
   }
 
   /* Tagged Template: eingesetzte Werte werden escaped, außer sie sind
      selbst schon Markup – also das Ergebnis von html() oder raw().
      Dadurch lassen sich Bausteine beliebig ineinander schachteln. */
   function html(strings) {
+    const teile = planFuer(strings);
     let out = '';
-    for (let i = 0; i < strings.length; i++) {
-      out += strings[i];
-      if (i + 1 < arguments.length) out += val(arguments[i + 1]);
+    /* Ungerade Stellen tragen die Nummer des Werts. Dass die Nummer
+       mitläuft statt der Reihenfolge zu folgen, ist der Punkt: Eine
+       englische Fassung darf die Platzhalter umstellen. */
+    for (let i = 0; i < teile.length; i++) {
+      if (i % 2 === 0) out += teile[i];
+      else out += val(arguments[Number(teile[i]) + 1]);
     }
     return markup(out);
   }
@@ -243,9 +344,9 @@
   }
 
   function minutesLabel(min) {
-    if (min < 60) return min + ' Min.';
+    if (min < 60) return muster('{0} Min.', min);
     const h = Math.floor(min / 60), r = min % 60;
-    return h + ' Std.' + (r ? ' ' + r + ' Min.' : '');
+    return muster('{0} Std.', h) + (r ? ' ' + muster('{0} Min.', r) : '');
   }
 
   /* ------------------------- Speicher ------------------------- */
@@ -276,6 +377,7 @@
     clamp, sum, uniq, debounce, rng, hash, pick, pickN, between, intBetween,
     eur, eur2, num, dec, qm, pct, rooms, dateDE, monthDE, since, daysSince, addDays, isoDate,
     esc, raw, markup, html, norm, slug, plural, truncate,
+    t: uebersetze,
     karte, hole,
     $, $$, on, setHTML, svg,
     distKm, travelMin, minutesLabel, TRAVEL,

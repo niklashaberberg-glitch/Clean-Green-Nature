@@ -583,6 +583,16 @@
     </section>`;
   }
 
+  /* Die Etage wird zweimal gebraucht – auf der Seite und im Exposé.
+     Als Muster, damit „2. OG von 3“ im Englischen „floor 2 of 3“ wird
+     und nicht die deutsche Zählweise mitschleppt. */
+  function etagenText(l) {
+    const wo = l.etage === 0 ? U.t('Erdgeschoss')
+      : l.etage >= l.etagen ? U.t('Dachgeschoss')
+      : U.t('{0}. OG').replace('{0}', l.etage);
+    return U.t('{0} von {1}').replace('{0}', wo).replace('{1}', l.etagen);
+  }
+
   /* ------------------------- Seite ------------------------- */
 
   function ansicht(route) {
@@ -658,7 +668,7 @@
                 ${l.kind === 'wg' ? h`<div><dt>Wohnung gesamt</dt><dd>${l.wohnflaeche} m²</dd></div>` : ''}
                 ${l.grundstueck ? h`<div><dt>Grundstück</dt><dd>${U.num(l.grundstueck)} m²</dd></div>` : ''}
                 ${l.bauweise ? h`<div><dt>Bauweise</dt><dd>${l.bauweise}</dd></div>` : ''}
-                ${l.type === 'haus' ? '' : h`<div><dt>Etage</dt><dd>${l.etage === 0 ? 'Erdgeschoss' : l.etage >= l.etagen ? 'Dachgeschoss' : l.etage + '. OG'} von ${l.etagen}</dd></div>`}
+                ${l.type === 'haus' ? '' : h`<div><dt>Etage</dt><dd>${etagenText(l)}</dd></div>`}
                 <div><dt>Baujahr</dt><dd>${l.baujahr}${l.saniert ? ' · saniert' : ''}</dd></div>
                 <div><dt>Frei ab</dt><dd>${U.daysSince(l.freiAb) > 0 ? 'sofort' : U.dateDE(l.freiAb)}</dd></div>
                 ${l.befristetBis ? h`<div><dt>Befristet bis</dt><dd>${U.dateDE(l.befristetBis)}</dd></div>` : ''}
@@ -802,7 +812,7 @@
       z.push('  Fläche:        ' + l.flaeche + ' m²');
       if (l.grundstueck) z.push('  Grundstück:    ' + U.num(l.grundstueck) + ' m²');
       if (l.type !== 'haus') {
-        z.push('  Etage:         ' + (l.etage === 0 ? 'Erdgeschoss' : l.etage >= l.etagen ? 'Dachgeschoss' : l.etage + '. OG') + ' von ' + l.etagen);
+        z.push('  ' + U.t('Etage:').padEnd(15) + etagenText(l));
       }
       z.push('  Baujahr:       ' + l.baujahr + (l.saniert ? ' (saniert)' : ''));
       if (l.energie) z.push('  Energie:       ' + l.energie.klasse + ', ' + l.energie.kwh + ' kWh/(m²·a), ' + l.energie.heizung);

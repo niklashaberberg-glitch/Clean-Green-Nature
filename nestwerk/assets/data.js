@@ -9,6 +9,15 @@
   'use strict';
 
   const U = NW.util;
+  /* Der Bestand entsteht in der eingestellten Sprache. Ganze Sätze sind
+     ihr eigener Schlüssel; f() setzt danach die Zahlen ein und lässt der
+     Übersetzung die Freiheit, sie umzustellen. */
+  const t = (x) => U.t(x);
+  const f = function (vorlage) {
+    let out = U.t(vorlage);
+    for (let i = 1; i < arguments.length; i++) out = out.split('{' + (i - 1) + '}').join(arguments[i]);
+    return out;
+  };
   const G = NW.geo;
   const SEED = 20260821;
 
@@ -369,18 +378,24 @@
 
     /* Text */
     const stil = isZimmer ? 'zimmer' : isHaus ? 'haus' : year < 1949 ? 'altbau' : year < 2000 ? 'nachkrieg' : 'modern';
-    const teile = [U.pick(r, T_EROEFFNUNG[stil])];
-    teile.push('Die ' + (isZimmer ? 'Wohnung' : isHaus ? 'Immobilie' : 'Wohnung') + ' liegt in ' + district.name +
-      ' und umfasst ' + (isZimmer ? area + ' m² Zimmerfläche in einer ' + wohnflaeche + ' m² großen Wohnung'
-        : U.dec(rooms) + ' Zimmer auf ' + area + ' m²') +
-      (isHaus ? '' : floor === 0 ? ' im Erdgeschoss' : floor >= floors ? ' im Dachgeschoss' : ' im ' + floor + '. Obergeschoss') + '.');
-    teile.push(U.pick(r, T_ZUSTAND));
+    const teile = [t(U.pick(r, T_EROEFFNUNG[stil]))];
+    const grosse = isZimmer
+      ? f('{0} m² Zimmerfläche in einer {1} m² großen Wohnung', area, wohnflaeche)
+      : f('{0} Zimmer auf {1} m²', U.dec(rooms), area);
+    const lage = isHaus ? '' : floor === 0 ? t(' im Erdgeschoss')
+      : floor >= floors ? t(' im Dachgeschoss') : f(' im {0}. Obergeschoss', floor);
+    teile.push(f(isHaus ? 'Die Immobilie liegt in {0} und umfasst {1}{2}.'
+      : 'Die Wohnung liegt in {0} und umfasst {1}{2}.', district.name, grosse, lage));
+    teile.push(t(U.pick(r, T_ZUSTAND)));
     if (feats.length) {
-      teile.push('Zur Ausstattung gehören ' + feats.slice(0, 4).join(', ').replace(/, ([^,]*)$/, ' und $1') + '.');
+      const namen = feats.slice(0, 4).map(t);
+      const letzte = namen.pop();
+      teile.push(f('Zur Ausstattung gehören {0}.',
+        namen.length ? namen.join(', ') + t(' und ') + letzte : letzte));
     }
-    teile.push(U.pick(r, T_LAGE));
-    quirks.forEach((q) => teile.push(QUIRKS[q]));
-    if (!fake) teile.push(U.pick(r, T_FORMAL));
+    teile.push(t(U.pick(r, T_LAGE)));
+    quirks.forEach((q) => teile.push(t(QUIRKS[q])));
+    if (!fake) teile.push(t(U.pick(r, T_FORMAL)));
     const desc = teile.join(' ');
 
     /* Streuung der Koordinaten innerhalb des Viertels */
@@ -392,9 +407,10 @@
     const freiTage = U.pick(r, [0, 0, 14, 30, 45, 60, 90, 120, -20]);
 
     const titelTeil = isZimmer
-      ? area + ' m² Zimmer in ' + U.intBetween(r, 2, 4) + 'er-WG'
-      : (isHaus ? 'Haus' : U.dec(rooms) + '-Zimmer-Wohnung') +
-        (feats.includes('Balkon') ? ' mit Balkon' : feats.includes('Garten') ? ' mit Garten' : feats.includes('Terrasse') ? ' mit Terrasse' : '');
+      ? f('{0} m² Zimmer in {1}er-WG', area, U.intBetween(r, 2, 4))
+      : (isHaus ? t('Haus') : f('{0}-Zimmer-Wohnung', U.dec(rooms))) +
+        (feats.includes('Balkon') ? t(' mit Balkon') : feats.includes('Garten') ? t(' mit Garten')
+          : feats.includes('Terrasse') ? t(' mit Terrasse') : '');
 
     const listing = {
       id, kind,
@@ -498,14 +514,16 @@
 
     if (!listing.wg.sprachen.includes('Deutsch')) listing.wg.sprachen.unshift('Deutsch');
 
-    const beschreibungWG = 'Wir sind eine ' + listing.wg.groesse + 'er-WG (' +
-      bewohner.map((b) => b.name + ', ' + b.alter).join('; ') + '). ' +
-      'Wir verstehen uns als ' + listing.wg.art.join(' und ') + '. ' +
-      (listing.wg.putzplan ? 'Es gibt einen Putzplan, an den sich alle halten. ' : 'Geputzt wird ohne festen Plan, aber es klappt. ') +
-      (listing.wg.gemeinsamesEssen ? 'Ein- bis zweimal die Woche kochen wir zusammen. ' : 'Jeder kocht für sich, gemeinsam essen ist möglich, aber kein Muss. ') +
-      'Rauchen: ' + listing.wg.rauchen + '. Haustiere: ' + listing.wg.haustiere + '.';
+    const beschreibungWG = f('Wir sind eine {0}er-WG ({1}).', listing.wg.groesse,
+      bewohner.map((b) => b.name + ', ' + b.alter).join('; ')) + ' ' +
+      f('Wir verstehen uns als {0}.', listing.wg.art.map(t).join(t(' und '))) + ' ' +
+      t(listing.wg.putzplan ? 'Es gibt einen Putzplan, an den sich alle halten.'
+        : 'Geputzt wird ohne festen Plan, aber es klappt.') + ' ' +
+      t(listing.wg.gemeinsamesEssen ? 'Ein- bis zweimal die Woche kochen wir zusammen.'
+        : 'Jeder kocht für sich, gemeinsam essen ist möglich, aber kein Muss.') + ' ' +
+      f('Rauchen: {0}. Haustiere: {1}.', t(listing.wg.rauchen), t(listing.wg.haustiere));
     listing.beschreibung = beschreibungWG + ' ' + listing.beschreibung;
-    listing.titel = listing.flaeche + ' m² Zimmer in ' + groesse + 'er-WG – ' + listing.viertel;
+    listing.titel = f('{0} m² Zimmer in {1}er-WG', listing.flaeche, groesse) + ' – ' + listing.viertel;
     listing.anbieter.name = bewohner.length ? bewohner[0].name + ' & WG' : listing.anbieter.name;
     return listing;
   }
@@ -536,12 +554,12 @@
       dreiecktauschOk: r() < 0.78,
       vermieterZustimmung: U.pick(r, ['liegt vor', 'in Klärung', 'in Klärung', 'noch offen'])
     };
-    listing.titel = U.dec(listing.zimmer) + '-Zimmer-Wohnung zum Tausch – ' + listing.viertel;
-    listing.beschreibung = 'Tauschangebot: ' + listing.tausch.grund + ' ' + listing.beschreibung +
-      ' Gesucht wird eine Wohnung in ' + wunschStaedte.join(' oder ') + ' mit mindestens ' +
-      U.dec(listing.tausch.suche.zimmerMin) + ' Zimmern und ' + listing.tausch.suche.flaecheMin +
-      ' m², warm bis ' + U.eur(listing.tausch.suche.warmMax) + '.' +
-      ' Zustimmung des Vermieters: ' + listing.tausch.vermieterZustimmung + '.';
+    listing.titel = f('{0}-Zimmer-Wohnung zum Tausch', U.dec(listing.zimmer)) + ' – ' + listing.viertel;
+    listing.beschreibung = f('Tauschangebot: {0}', t(listing.tausch.grund)) + ' ' + listing.beschreibung +
+      ' ' + f('Gesucht wird eine Wohnung in {0} mit mindestens {1} Zimmern und {2} m², warm bis {3}.',
+        wunschStaedte.join(t(' oder ')), U.dec(listing.tausch.suche.zimmerMin),
+        listing.tausch.suche.flaecheMin, U.eur(listing.tausch.suche.warmMax)) +
+      ' ' + f('Zustimmung des Vermieters: {0}.', t(listing.tausch.vermieterZustimmung));
     return listing;
   }
 
@@ -578,10 +596,19 @@
         ich.tausch.suche.warmMax = Math.max(ich.tausch.suche.warmMax, ziel.warm);
         ich.tausch.dreiecktauschOk = true;
         ich.tausch.suche.wunschAusstattung = ich.tausch.suche.wunschAusstattung.filter((a) => ziel.ausstattung.includes(a));
-        ich.beschreibung = ich.beschreibung.replace(/Gesucht wird eine Wohnung in [^.]*\./,
-          'Gesucht wird eine Wohnung in ' + ich.tausch.suche.staedte.join(' oder ') + ' mit mindestens ' +
-          U.dec(ich.tausch.suche.zimmerMin) + ' Zimmern und ' + ich.tausch.suche.flaecheMin + ' m², warm bis ' +
-          U.eur(ich.tausch.suche.warmMax) + '.');
+        /* Der Satz steckt schon übersetzt in der Beschreibung – gesucht wird
+           deshalb nach seinem übersetzten Anfang, nicht nach dem deutschen. */
+        const satz = f('Gesucht wird eine Wohnung in {0} mit mindestens {1} Zimmern und {2} m², warm bis {3}.',
+          ich.tausch.suche.staedte.join(t(' oder ')), U.dec(ich.tausch.suche.zimmerMin),
+          ich.tausch.suche.flaecheMin, U.eur(ich.tausch.suche.warmMax));
+        const anfang = f('Gesucht wird eine Wohnung in {0} mit mindestens {1} Zimmern und {2} m², warm bis {3}.',
+          '\u0000', '\u0000', '\u0000', '\u0000').split('\u0000')[0];
+        const von = ich.beschreibung.indexOf(anfang);
+        if (von >= 0) {
+          const bis = ich.beschreibung.indexOf('.', von + anfang.length);
+          ich.beschreibung = ich.beschreibung.slice(0, von) + satz
+            + (bis >= 0 ? ich.beschreibung.slice(bis + 1) : '');
+        }
       }
     }
     if (tausche.length >= 9) {
@@ -620,9 +647,9 @@
       };
       zwilling.besichtigungen = [];
       /* Anderer Text, gleiche Wohnung – so sieht es in der Praxis aus. */
-      zwilling.beschreibung = U.pick(r, T_EROEFFNUNG[zwilling.baujahr < 1949 ? 'altbau' : zwilling.baujahr < 2000 ? 'nachkrieg' : 'modern']) +
-        ' ' + U.dec(zwilling.zimmer) + ' Zimmer auf ' + zwilling.flaeche + ' m² in ' + zwilling.viertel + '. ' +
-        U.pick(r, T_ZUSTAND) + ' ' + U.pick(r, T_LAGE) + ' ' + U.pick(r, T_FORMAL);
+      zwilling.beschreibung = t(U.pick(r, T_EROEFFNUNG[zwilling.baujahr < 1949 ? 'altbau' : zwilling.baujahr < 2000 ? 'nachkrieg' : 'modern'])) +
+        ' ' + f('{0} Zimmer auf {1} m² in {2}.', U.dec(zwilling.zimmer), zwilling.flaeche, zwilling.viertel) + ' ' +
+        t(U.pick(r, T_ZUSTAND)) + ' ' + t(U.pick(r, T_LAGE)) + ' ' + t(U.pick(r, T_FORMAL));
       zwilling.quirks = [];
       listings.push(zwilling);
     });
@@ -631,10 +658,28 @@
     return listings;
   }
 
-  const listings = build();
+  let listings = build();
   /* Ohne Prototyp: #/objekt/constructor darf kein Objekt zurückgeben. */
-  const byId = Object.create(null);
+  let byId = Object.create(null);
   listings.forEach((l) => { byId[l.id] = l; });
+
+  /* Titel und Beschreibungen entstehen beim Aufbau aus Textbausteinen und
+     stehen dann fertig im Bestand – ein Wörterbuch kann sie nachträglich
+     nicht mehr auseinandernehmen. Beim Sprachwechsel wird der Bestand
+     deshalb neu gebaut. Der Zufallsgenerator ist gesät, also kommen
+     dieselben Kennungen, Preise und Flächen wieder heraus; es ändert
+     sich ausschließlich die Sprache. Eigene Inserate bleiben, wie sie
+     eingetippt wurden – das ist der Text des Menschen, nicht unserer. */
+  function neuAufbauen() {
+    const eigene = Object.keys(byId).filter((k) => byId[k] && byId[k].eigen).map((k) => byId[k]);
+    const frisch = build();
+    listings.length = 0;
+    frisch.forEach((l) => listings.push(l));
+    Object.keys(byId).forEach((k) => { delete byId[k]; });
+    listings.forEach((l) => { byId[l.id] = l; });
+    eigene.forEach((l) => { byId[l.id] = l; });
+    return listings;
+  }
 
   /* ------------------------- Eigenes Profil ------------------------- */
 
@@ -730,14 +775,14 @@
       /* Ältere Anfrage zuerst in der Zeit, damit die Reihenfolge nach
          Eingang überhaupt eine Aussage hat. */
       zeit: U.isoDate(U.addDays(NW.now(), -(anzahl - i) * 2 - U.intBetween(r, 0, 2))),
-      text: ANFRAGE_TEXTE[U.intBetween(r, 0, ANFRAGE_TEXTE.length - 1)],
+      text: t(ANFRAGE_TEXTE[U.intBetween(r, 0, ANFRAGE_TEXTE.length - 1)]),
       unterlagen: r() < 0.55,
       beispiel: true
     }));
   }
 
   NW.data = {
-    listings, byId, profilVorlage,
+    listings, byId, profilVorlage, neuAufbauen,
     startThreads, anfragenFuer,
     LIFESTYLE_KEYS, WG_ART, AUSSTATTUNG, SPRACHEN, QUIRKS, BERUFE,
     staedte: G.CITIES.map((c) => c.name)

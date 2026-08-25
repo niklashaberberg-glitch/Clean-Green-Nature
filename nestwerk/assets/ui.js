@@ -150,8 +150,8 @@
     else if (l.anbieter.verifiziert) marken.push(badge('geprüft', 'neutral', 'pruefen'));
     if (b && b.risiko.stufe === 'warnung') marken.push(badge('Prüfhinweis', 'schlecht', 'warnung'));
     else if (b && b.risiko.stufe === 'achtung') marken.push(badge('genau lesen', 'warn', 'warnung'));
-    if (b && b.mietCheck && b.mietCheck.diff <= -12) marken.push(badge(b.mietCheck.diff + ' % zum Spiegel', 'gut'));
-    if (b && b.mietCheck && b.mietCheck.diff > 25) marken.push(badge('+' + b.mietCheck.diff + ' % zum Spiegel', 'schlecht'));
+    if (b && b.mietCheck && b.mietCheck.diff <= -12) marken.push(badge(U.t('{0} % zum Spiegel').replace('{0}', b.mietCheck.diff), 'gut'));
+    if (b && b.mietCheck && b.mietCheck.diff > 25) marken.push(badge(U.t('{0} % zum Spiegel').replace('{0}', '+' + b.mietCheck.diff), 'schlecht'));
     if (l.befristetBis) marken.push(badge('befristet', 'warn'));
     if (l.kind === 'wg' && b && b.wg && b.wg.ausschluss.length) marken.push(badge('Ausschlusskriterium', 'schlecht'));
     /* Bezahlte Sichtbarkeit steht als Erstes und heißt beim Namen. */
@@ -172,7 +172,7 @@
     } else {
       eck.push(U.dec(l.zimmer) + ' Zi.');
       eck.push(l.flaeche + ' m²');
-      if (l.kind === 'wg') eck.push('WG mit ' + l.wg.groesse);
+      if (l.kind === 'wg') eck.push(U.t('WG mit {0}').replace('{0}', l.wg.groesse));
       else if (l.type === 'haus') eck.push(l.grundstueck ? U.num(l.grundstueck) + ' m² Grund' : 'Haus');
       else eck.push(l.etage === 0 ? 'EG' : l.etage >= l.etagen ? 'DG' : l.etage + '. OG');
     }
@@ -260,9 +260,10 @@
      Wand aus Meldungen statt der Seite. Deshalb: gleiche Meldung wird
      aufgefrischt statt verdoppelt, und mehr als drei gleichzeitig gibt
      es nie. */
-  function toast(text, art) {
+  function toast(roh, art) {
     const box = U.$('#toasts');
     if (!box) return;
+    const text = U.t(roh);
 
     const vorhanden = U.$$('.toast', box).find((t) => t.dataset.text === String(text));
     if (vorhanden) {
@@ -428,7 +429,7 @@
 
     const haupt = U.$('#haupt');
     const ergebnis = ansicht(r) || {};
-    document.title = (ergebnis.titel ? ergebnis.titel + ' – ' : '') + 'Nestwerk';
+    document.title = (ergebnis.titel ? U.t(ergebnis.titel) + ' – ' : '') + 'Nestwerk';
     haupt.innerHTML = ergebnis.html || '';
     haupt.dataset.ansicht = name;
 
@@ -523,6 +524,29 @@
     { route: 'profil', label: 'Profil', icon: 'person', unten: false }
   ];
 
+  /* Der Sprachknopf zeigt an, wohin er führt, nicht wo man ist: „EN“
+     heißt „auf Englisch umschalten“. Ein Knopf, der den Ist-Zustand
+     zeigt, wird regelmäßig falsch verstanden. */
+  function sprachknopf() {
+    const jetzt = NW.i18n.sprache();
+    const ziel = NW.i18n.SPRACHEN.find((x) => x.id !== jetzt) || NW.i18n.SPRACHEN[0];
+    const wort = jetzt === 'de' ? 'Switch to English' : 'Auf Deutsch umschalten';
+    return h`<button type="button" class="sprachknopf" data-tu="sprache" data-ziel="${ziel.id}"
+      title="${wort}" aria-label="${wort}" lang="${ziel.htmlLang}">${ziel.kurz}</button>`;
+  }
+
+  /* Die Schale noch einmal zeichnen – nach einem Sprachwechsel, denn
+     Navigation, Fußbereich und Knöpfe stehen selbst in Vorlagen. Die
+     Ereignisse hängen am document, überleben das also. */
+  function schaleZeichnen() {
+    const wurzel = document.getElementById('nestwerk');
+    if (!wurzel) return;
+    wurzel.innerHTML = schale();
+    aktualisiereZaehler();
+    bandZeichnen();
+    if (NW.viewHilfe) NW.viewHilfe.zeichnen();
+  }
+
   function schale() {
     return h`${raw(sprite())}
     <a class="sprung" href="#haupt">Zum Inhalt springen</a>
@@ -545,6 +569,7 @@
           <a class="ikon-btn" href="#/vergleich" title="Vergleich" aria-label="Vergleich">${ico('waage')}<b class="zaehler" data-zaehler="vergleich" hidden></b></a>
           <button type="button" class="ikon-btn" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
             ${ico('sonne', 'nur-hell')}${ico('mond', 'nur-dunkel')}</button>
+          ${sprachknopf()}
           <a class="tarifknopf ${NW.plan.istPlus() ? 'is-plus' : ''}" href="#/plus"
             title="${NW.plan.istPlus() ? 'Nestwerk Plus aktiv' : 'Tarife ansehen'}">
             ${NW.plan.istPlus() ? raw(ico('plus5').__raw + '<span>Plus</span>') : raw('<span>Plus entdecken</span>')}</a>
@@ -675,6 +700,20 @@
     NW.store.set({ theme: wert }, 'theme');
   }
 
+  function spracheWechseln(ziel) {
+    if (NW.i18n.sprache() === ziel) return;
+    NW.i18n.setze(ziel);
+    /* Der erzeugte Bestand trägt seine Texte fertig zusammengesetzt bei
+       sich – der muss neu gebaut werden, bevor irgendetwas zeichnet. */
+    NW.data.neuAufbauen();
+    /* Die Schale trägt Navigation, Fußbereich und Knöpfe – die stehen
+       alle in Vorlagen und müssen mit. Danach die Ansicht erzwingen,
+       weil sich die Route nicht geändert hat. */
+    schaleZeichnen();
+    zeichnen(true);
+    toast(ziel === 'en' ? 'Language switched to English.' : 'Sprache auf Deutsch gestellt.', 'gut');
+  }
+
   function themeWechseln() {
     const jetzt = NW.store.get().theme;
     const dunkelSystem = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -802,6 +841,7 @@
       neuZeichnen();
     },
     theme() { themeWechseln(); },
+    sprache(el) { spracheWechseln(el.dataset.ziel); },
 
     sperre(el) {
       const id = el.dataset.leistung;
@@ -1044,7 +1084,7 @@
   }
 
   Object.assign(ui, {
-    start, gehe, zeichnen, neuZeichnen, toast, dialog, dialogZu,
+    start, gehe, zeichnen, neuZeichnen, schaleZeichnen, toast, dialog, dialogZu,
     badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
     ART_LABEL, ART_ICON, artLabel, artIcon, ico, aktionRegistrieren, AKTIONEN,
     sperrHinweis, anzeige, NAV, dateiSichern,

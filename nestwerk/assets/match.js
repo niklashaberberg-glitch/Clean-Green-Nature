@@ -102,19 +102,19 @@
       const fehl = s.zimmerMin - b.zimmer;
       if (fehl > 1) return null;
       wert -= fehl * 0.28;
-      maengel.push(U.dec(fehl) + ' Zimmer weniger als gewünscht');
+      maengel.push(U.t('{0} Zimmer weniger als gewünscht').replace('{0}', U.dec(fehl)));
     }
     if (s.flaecheMin && b.flaeche < s.flaecheMin) {
       const fehl = (s.flaecheMin - b.flaeche) / s.flaecheMin;
       if (fehl > 0.2) return null;
       wert -= fehl * 1.4;
-      maengel.push(Math.round(s.flaecheMin - b.flaeche) + ' m² weniger als gewünscht');
+      maengel.push(U.t('{0} m² weniger als gewünscht').replace('{0}', Math.round(s.flaecheMin - b.flaeche)));
     }
     if (s.warmMax && b.warm > s.warmMax) {
       const ueber = (b.warm - s.warmMax) / s.warmMax;
       if (ueber > 0.15) return null;
       wert -= ueber * 2;
-      maengel.push(U.eur(b.warm - s.warmMax) + ' über der Preisgrenze');
+      maengel.push(U.t('{0} über der Preisgrenze').replace('{0}', U.eur(b.warm - s.warmMax)));
     }
     (s.wunschAusstattung || []).forEach((f) => {
       if (b.ausstattung.indexOf(f) < 0) { wert -= 0.08; maengel.push('ohne ' + f); }

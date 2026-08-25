@@ -17,6 +17,7 @@ const assets = path.join(wurzel, 'assets');
 const dist = path.join(wurzel, 'dist');
 
 const SKRIPTE = [
+  'i18n.js', 'sprache-en.js',
   'util.js', 'geo.js', 'images.js', 'ring-bild.js', 'data.js',
   'analyse.js', 'match.js', 'werkzeuge.js', 'store.js', 'plan.js', 'tresor.js', 'recht.js', 'hilfe.js', 'konto.js',
   'karte.js', 'ui.js',

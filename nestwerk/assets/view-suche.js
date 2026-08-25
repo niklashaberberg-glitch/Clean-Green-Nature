@@ -425,7 +425,7 @@
     </div>${knapp}` : ''}
     ${rest > 0 ? h`<div class="mehr">
       <button type="button" class="knopf knopf--still" data-tu="mehr-zeigen">
-        ${ico('pfeilUnten')}Weitere ${Math.min(SEITE, rest)} von ${U.num(rest)} zeigen</button>
+        ${ico('pfeilUnten')}${U.t('Weitere {0} von {1} zeigen').replace('{0}', Math.min(SEITE, rest)).replace('{1}', U.num(rest))}</button>
       <p class="fein">${U.num(teil.length)} von ${U.num(organisch.length)} Treffern geladen</p>
     </div>` : organisch.length > SEITE ? h`<p class="mehr__fertig fein">Alle ${U.num(organisch.length)} Treffer geladen.</p>` : ''}`;
   }

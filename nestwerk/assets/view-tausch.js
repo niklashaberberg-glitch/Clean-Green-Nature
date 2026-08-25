@@ -73,7 +73,9 @@
               <span class="ringkarte__marke">${buchstabe(i)}</span>
               <div>
                 <b><a href="#/objekt/${k.id}">${U.dec(k.zimmer)} Zi., ${k.flaeche} m², ${U.eur(k.warm)} warm</a></b>
-                <span>${k.viertel}, ${k.stadt} → zieht nach ${ziel.viertel}, ${ziel.stadt}</span>
+                <span>${U.t('{0}, {1} → zieht nach {2}, {3}')
+                  .replace('{0}', k.viertel).replace('{1}', k.stadt)
+                  .replace('{2}', ziel.viertel).replace('{3}', ziel.stadt)}</span>
                 ${r.kanten[i] && r.kanten[i].maengel.length
           ? h`<i class="ringkarte__mangel">${ico('warnung')}${r.kanten[i].maengel.join(' · ')}</i>` : ''}
               </div>

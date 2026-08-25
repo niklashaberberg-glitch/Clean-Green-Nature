@@ -296,6 +296,20 @@ svg { display: block; }
 .ikon-btn.is-an { color: var(--akzent); background: var(--akzent-hell); }
 .ikon-btn .ico { width: 19px; height: 19px; }
 
+/* Der Sprachknopf trägt Text, kein Zeichen: „DE“ und „EN“ versteht man
+   ohne Erklärung, eine Weltkugel oder ein Fähnchen nicht – Flaggen stehen
+   für Länder, nicht für Sprachen. Höhe und Fläche wie die Nachbarn, damit
+   die rechte Gruppe eine Reihe bleibt. */
+.sprachknopf {
+  display: grid; place-items: center;
+  min-width: 38px; height: 38px; padding: 0 .5em;
+  background: none; border: 1px solid transparent; border-radius: var(--r-klein);
+  color: var(--text-leise); font: inherit; font-size: .78rem; font-weight: 700;
+  letter-spacing: .04em; cursor: pointer;
+  transition: background var(--tempo), color var(--tempo), border-color var(--tempo);
+}
+.sprachknopf:hover { background: var(--flaeche2); color: var(--text); }
+
 .nur-hell { display: block; }
 .nur-dunkel { display: none; }
 :root[data-theme="dark"] .nur-hell { display: none; }
@@ -1182,6 +1196,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .marke__text { display: none; }
   .kopf__tun { gap: 2px; }
   .kopf__tun .ikon-btn { width: 36px; height: 36px; }
+  .sprachknopf { min-width: 32px; height: 36px; padding: 0 .3em; font-size: .72rem; }
   /* Auf 320 Pixeln passt die rechte Gruppe sonst nicht. Das Konto bleibt
      über Profil, Fußbereich und Schnellsuche erreichbar. */
   body.ist-angemeldet .kopf__tun .nur-angemeldet { display: none; }
@@ -1993,7 +2008,7 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
    Rechtstexte im Fußbereich. */
 body:not(.ist-angemeldet) .kopf__nav,
 body:not(.ist-angemeldet) .unten,
-body:not(.ist-angemeldet) .kopf__tun > :not([data-tu="theme"]) { display: none; }
+body:not(.ist-angemeldet) .kopf__tun > :not([data-tu="theme"], [data-tu="sprache"]) { display: none; }
 body:not(.ist-angemeldet) .kopf__innen { justify-content: space-between; }
 /* Dasselbe im Fußbereich: Die Rechtstexte und die Hilfe bleiben stehen,
    die Verweise in die Anwendung verschwinden. */

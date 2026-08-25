@@ -7,6 +7,10 @@
   'use strict';
 
   function los() {
+    /* Zuerst die Sprache: Der erste Aufbau soll gleich richtig sein und
+       nicht kurz auf Deutsch aufblitzen. */
+    NW.i18n.laden();
+
     /* Wechselt das System zwischen hell und dunkel, während die App läuft,
        und steht die Einstellung auf „automatisch“, wird neu gezeichnet. */
     const medium = window.matchMedia('(prefers-color-scheme: dark)');

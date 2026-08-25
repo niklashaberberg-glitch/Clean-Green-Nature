@@ -519,8 +519,9 @@ Dazu drei Regeln, die nicht verhandelbar sind:
 
 ## Anmeldung
 
-Die Nutzung setzt eine Anmeldung voraus. Vier Wege, sortiert nach
-Sicherheit statt nach Bekanntheit:
+Suchen und Inserate ansehen geht ohne Anmeldung. Für alles, was etwas
+festhält, braucht es ein Konto — vier Wege, sortiert nach Sicherheit statt
+nach Bekanntheit:
 
 | Weg | Stufe | Was dahintersteckt |
 |---|---|---|
@@ -589,10 +590,39 @@ Wie das bei netcup einzurichten ist, steht Schritt für Schritt in
 
 ### Ohne Anmeldung erreichbar
 
-Impressum, Datenschutzerklärung, AGB, Widerrufsbelehrung, der Meldeweg und
+**Die Suche und jedes Inserat.** Vollständig: Eckdaten, Beschreibung, Bilder,
+Vergleichsmiete, Prüfhinweis, Vertragslupe, echte Monatskosten, Lage, Anbieter
+und dessen Vertrauensstufe. Filtern, sortieren, blättern, Karte — alles geht.
+Eine Wohnungsplattform, die ihren Bestand hinter einer Anmeldung versteckt,
+verliert die Hälfte ihrer Besucher an der Tür und in den Suchmaschinen ohnehin.
+
+Dazu Impressum, Datenschutzerklärung, AGB, Widerrufsbelehrung, der Meldeweg und
 die Hilfe. § 5 DDG verlangt „ständig verfügbar" — hinter einer Anmeldung ist
 nichts ständig verfügbar. Und wer nicht hereinkommt, braucht die Hilfe am
 dringendsten.
+
+### Was ein Konto braucht
+
+Alles, was etwas anlegt, festhält, verschickt oder bucht: merken, vergleichen,
+anschreiben, Suchaufträge, Notizen, Bewerbungsstand, Besichtigungstermine,
+Checkliste, Exposé, Profil, eigene Inserate, Ringtausch, Werkzeuge,
+Dokumententresor, Plus.
+
+Ebenso alles, was mit dem Profil rechnet: Passungsring, Fahrzeit zur Arbeit,
+WG-Abgleich, die Sortierung „Beste Passung“. Ohne Profil gäbe es dort nichts zu
+rechnen — und eine Zahl auszugeben, hinter der nichts steht, wäre schlimmer als
+keine.
+
+**Der Riegel sitzt an einer Stelle**, im Verteiler der Aktionen
+(`darfOhneKonto` in `assets/ui.js`), und er zählt das Erlaubte auf, nicht das
+Verbotene. Wer eine neue Aktion einbaut und sie in einer Verbotsliste zu
+ergänzen vergisst, hat ein Loch; wer sie in der Erlaubnisliste vergisst, hat
+einen Knopf, der zur Anmeldung führt — ärgerlich, aber harmlos. Deshalb
+herum.
+
+Ein gesperrter Knopf verschwindet nicht, er erklärt sich: „Dafür brauchst du
+ein Konto“, was genau daran hängt, und dass Ansehen weiterhin ohne Anmeldung
+geht.
 
 ### Vertrauensstufen — hier sitzt der Schutz, nicht in der Anmeldung
 

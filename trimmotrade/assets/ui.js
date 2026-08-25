@@ -153,17 +153,35 @@
     if (b && b.mietCheck && b.mietCheck.diff <= -12) marken.push(badge(U.t('{0} % zum Spiegel').replace('{0}', b.mietCheck.diff), 'gut'));
     if (b && b.mietCheck && b.mietCheck.diff > 25) marken.push(badge(U.t('{0} % zum Spiegel').replace('{0}', '+' + b.mietCheck.diff), 'schlecht'));
     if (l.befristetBis) marken.push(badge('befristet', 'warn'));
-    if (l.kind === 'wg' && b && b.wg && b.wg.ausschluss.length) marken.push(badge('Ausschlusskriterium', 'schlecht'));
+    /* „Ausschlusskriterium“ heißt: gegen deine Angaben. Ohne Konto gibt
+       es keine, also auch kein Urteil darüber. */
+    if (l.kind === 'wg' && b && b.wg && b.wg.ausschluss.length
+      && !(TT.konto && !TT.konto.angemeldet())) marken.push(badge('Ausschlusskriterium', 'schlecht'));
     /* Bezahlte Sichtbarkeit steht als Erstes und heißt beim Namen. */
     if (TT.plan.istTop(l)) marken.unshift(badge('Top-Anzeige', 'info', 'blitz'));
     else if (TT.plan.istHervorgehoben(l)) marken.unshift(badge('hervorgehoben', 'info', 'stern'));
     return marken;
   }
 
+  /* Ohne Anmeldung ist die Anwendung eine Schaufensterscheibe: Man sieht
+     alles, man fasst nichts an. Diese eine Zeile entscheidet darüber –
+     und sie steht bewusst nicht in jeder Ansicht einzeln. */
+  const gast = () => !!(TT.konto && !TT.konto.angemeldet());
+
   function inseratsKarte(l, b, optionen) {
     const opt = optionen || {};
-    const gemerkt = TT.store.gemerkt(l.id);
-    const imVergleich = TT.store.imVergleich(l.id);
+    /* Ein Besucher ohne Konto sieht keine Passung, keine Fahrzeit und
+       keinen WG-Abgleich: Alle drei rechnen mit seinem Profil, und ein
+       Profil hat er nicht. Stand aus einer früheren Sitzung noch eines
+       im Speicher, wäre es erst recht falsch – abgemeldet ist abgemeldet.
+
+       Der Prüfhinweis und der Abstand zum Mietspiegel bleiben dagegen
+       stehen. Sie sagen etwas über das Inserat aus, nicht über den, der
+       es liest – und wer vor einem auffälligen Angebot gewarnt werden
+       muss, hat meistens gerade kein Konto. */
+    const persoenlich = !gast();
+    const gemerkt = persoenlich && TT.store.gemerkt(l.id);
+    const imVergleich = persoenlich && TT.store.imVergleich(l.id);
     const eck = [];
     if (l.type === 'grundstueck') {
       eck.push(U.num(l.grundstueck || l.flaeche) + ' m² Grund');
@@ -184,7 +202,7 @@
       <a class="karte-inserat__bild" href="#/objekt/${l.id}" aria-label="${l.titel} ansehen">
         ${raw(TT.img.make(l, 0))}
         <span class="karte-inserat__art">${ico(artIcon(l))}${artLabel(l)}</span>
-        ${b ? h`<span class="karte-inserat__ring">${passungsRing(b.score)}</span>` : ''}
+        ${b && persoenlich ? h`<span class="karte-inserat__ring">${passungsRing(b.score)}</span>` : ''}
       </a>
       <div class="karte-inserat__text">
         <div class="karte-inserat__marken">${kartenMarken(l, b)}</div>
@@ -192,8 +210,8 @@
         <p class="karte-inserat__ort">${ico('karte')}${l.viertel}, ${l.stadt} · ${l.strasse}</p>
         <p class="karte-inserat__preis">${raw(preisZeile(l))}</p>
         <ul class="karte-inserat__eck">${eck.map((e) => h`<li>${e}</li>`)}</ul>
-        ${b && b.pendel ? h`<p class="karte-inserat__pendel">${ico('zug')}${U.minutesLabel(b.pendel.min)} nach ${b.pendel.anker.name}</p>` : ''}
-        ${l.kind === 'wg' && b && b.wg && !b.wg.ausschluss.length
+        ${b && persoenlich && b.pendel ? h`<p class="karte-inserat__pendel">${ico('zug')}${U.minutesLabel(b.pendel.min)} nach ${b.pendel.anker.name}</p>` : ''}
+        ${l.kind === 'wg' && persoenlich && b && b.wg && !b.wg.ausschluss.length
         ? h`<p class="karte-inserat__wg">${ico('wg')}${U.t('WG-Passung {0} % – {1}')
           .replace('{0}', b.wg.score).replace('{1}', U.t(b.wg.kurz))}</p>` : ''}
         ${l.kind === 'tausch' ? h`<p class="karte-inserat__wg">${ico('tausch')}sucht ${l.tausch.suche.staedte.join(', ')}</p>` : ''}
@@ -419,8 +437,19 @@
        Impressum, Datenschutzerklärung und AGB, weil § 5 DDG „ständig
        verfügbar“ verlangt und hinter einer Anmeldung nichts ständig
        verfügbar ist – dazu Widerruf, Meldeweg und die Hilfe. Wer nicht
-       hereinkommt, braucht die Hilfe am dringendsten. */
-    const OHNE_ANMELDUNG = ['anmelden', 'recht', 'hilfe', 'freigabe'];
+       hereinkommt, braucht die Hilfe am dringendsten.
+
+       Dazu die Suche und die Objektseite: Wer wissen will, ob hier
+       überhaupt etwas für ihn dabei ist, soll das sehen können, ohne
+       vorher ein Konto anzulegen. Eine Wohnungsplattform, die ihren
+       Bestand hinter einer Anmeldung versteckt, verliert die Hälfte
+       ihrer Besucher an der Tür – und in den Suchmaschinen ohnehin.
+
+       Gesehen werden heißt aber nicht mitgemacht: Merken, Vergleichen,
+       Anschreiben, Suchaufträge, Notizen, Inserieren – alles das braucht
+       weiterhin ein Konto. Wo das durchgesetzt wird, steht bei
+       `darfOhneKonto`. */
+    const OHNE_ANMELDUNG = ['anmelden', 'recht', 'hilfe', 'freigabe', 'suche', 'objekt'];
     const gesperrt = TT.konto && !TT.konto.angemeldet() && OHNE_ANMELDUNG.indexOf(r.name) < 0;
     const name = gesperrt ? 'anmelden' : r.name;
 
@@ -434,6 +463,9 @@
     document.title = (ergebnis.titel ? U.t(ergebnis.titel) + ' – ' : '') + 'TrimmoTrade';
     haupt.innerHTML = ergebnis.html || '';
     haupt.dataset.ansicht = name;
+    /* Auch am body, damit der Stil auf die Ansicht reagieren kann –
+       etwa um den Anmeldeknopf auf der Anmeldeseite wegzulassen. */
+    document.body.dataset.ansicht = name;
 
     U.$$('[data-route]').forEach((a) => {
       a.classList.toggle('is-aktiv', a.dataset.route === name);
@@ -533,7 +565,7 @@
     const jetzt = TT.i18n.sprache();
     const ziel = TT.i18n.SPRACHEN.find((x) => x.id !== jetzt) || TT.i18n.SPRACHEN[0];
     const wort = jetzt === 'de' ? 'Switch to English' : 'Auf Deutsch umschalten';
-    return h`<button type="button" class="sprachknopf" data-tu="sprache" data-ziel="${ziel.id}"
+    return h`<button type="button" class="sprachknopf auch-ohne-konto" data-tu="sprache" data-ziel="${ziel.id}"
       title="${wort}" aria-label="${wort}" lang="${ziel.htmlLang}">${ziel.kurz}</button>`;
   }
 
@@ -554,7 +586,8 @@
     <a class="sprung" href="#haupt">Zum Inhalt springen</a>
     <header class="kopf">
       <div class="kopf__innen">
-        <a class="marke" href="#/start" aria-label="TrimmoTrade, zur Startseite">
+        <a class="marke" href="#/${gast() ? 'suche' : 'start'}"
+          aria-label="${gast() ? 'TrimmoTrade, zur Suche' : 'TrimmoTrade, zur Startseite'}">
           <span class="marke__zeichen" aria-hidden="true">
             <svg viewBox="0 0 32 32" fill="none"><path d="M4 16L16 5l12 11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 14v12h17V14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="20" r="3.2" stroke="currentColor" stroke-width="2.4"/></svg>
           </span>
@@ -569,7 +602,7 @@
           <button type="button" class="ikon-btn" data-tu="palette" title="Schnellsuche (Strg + K)" aria-label="Schnellsuche">${ico('lupe')}</button>
           <a class="ikon-btn" href="#/agenten" title="Suchaufträge" aria-label="Suchaufträge">${ico('glocke')}<b class="zaehler" data-zaehler="agenten" hidden></b></a>
           <a class="ikon-btn" href="#/vergleich" title="Vergleich" aria-label="Vergleich">${ico('waage')}<b class="zaehler" data-zaehler="vergleich" hidden></b></a>
-          <button type="button" class="ikon-btn" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
+          <button type="button" class="ikon-btn auch-ohne-konto" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
             ${ico('sonne', 'nur-hell')}${ico('mond', 'nur-dunkel')}</button>
           ${sprachknopf()}
           <a class="tarifknopf ${TT.plan.istPlus() ? 'is-plus' : ''}" href="#/plus"
@@ -578,6 +611,7 @@
               : raw('<span>' + U.esc(U.t('Plus entdecken')) + '</span>')}</a>
           <a class="knopf knopf--klein nur-breit" href="#/inserieren">${ico('plus')}<span>Inserieren</span></a>
           <a class="ikon-btn nur-angemeldet" href="#/konto" title="Konto" aria-label="Konto">${ico('person')}</a>
+          <a class="knopf knopf--klein auch-ohne-konto nur-gast" href="#/anmelden">${ico('person')}<span>Anmelden</span></a>
         </div>
       </div>
     </header>
@@ -825,6 +859,105 @@
   }
 
   /* ================================================================
+     Was ohne Konto erlaubt ist
+
+     Umgekehrt aufgezählt, und das ist Absicht: Hier steht, was ein
+     Besucher ohne Anmeldung darf – alles Übrige ist gesperrt. Eine
+     Liste des Verbotenen wäre bequemer zu pflegen und genau deshalb
+     falsch: Wer eine neue Aktion einbaut und sie dort einzutragen
+     vergisst, hat ein Loch. Wer sie hier einzutragen vergisst, hat
+     einen Knopf, der zur Anmeldung führt – ärgerlich, aber harmlos.
+
+     Erlaubt ist, was nichts festhält und niemandem etwas verspricht:
+     suchen, filtern, sortieren, blättern, ein Inserat ansehen, die
+     Bildergalerie, die Hilfe, die Rechtstexte. Gesperrt ist alles, was
+     etwas anlegt, speichert, verschickt oder bucht.
+     ================================================================ */
+
+  const OHNE_KONTO = new Set([
+    /* Schale und Fenster */
+    'theme', 'sprache', 'palette', 'palette-zu', 'dialog-zu', 'nichts',
+    /* Trefferliste */
+    'ansicht', 'art-um', 'sortieren', 'such-text', 'such-leeren', 'mehr-zeigen',
+    'filter-auf', 'filter-chip', 'filter-leeren', 'filter-abschicken',
+    'filter-schalter', 'filter-wert', 'filter-wgrauchen', 'filter-wgtiere', 'filter-zahl',
+    /* Objektseite: ansehen, nicht anfassen */
+    'bild', 'bild-zu', 'objekt-teilen', 'warum-top',
+    /* Rechtstexte und geteilte Unterlagen */
+    'betreiber-speichern', 'betreiber-zuruecksetzen', 'widerruf-sichern',
+    /* Auskunft über den eigenen Browserspeicher, Sicherung und Löschung.
+       Das ist kein Leistungsmerkmal, sondern ein Recht (Art. 15 und 17
+       DSGVO) – es an ein Konto zu binden wäre absurd: Die Daten liegen
+       auf dem Gerät des Besuchers, nicht bei uns. */
+    'daten', 'daten-export', 'daten-loeschen',
+    /* Erklärungen, keine Funktionen: die Tastaturhilfe, die Auskunft
+       darüber, warum eine Anzeige erscheint, und die Anzeige selbst.
+       Gerade die Werbetransparenz darf hinter keiner Anmeldung liegen. */
+    'hilfe', 'warum-werbung', 'anzeige-klick'
+  ]);
+
+  /* Ganze Familien statt einzelner Namen: Die Hilfe ist ohne Anmeldung
+     erreichbar – wer nicht hereinkommt, braucht sie am dringendsten –,
+     die Lockerungsvorschläge ändern nur den Filter, und die Ansicht
+     einer freigegebenen Unterlage lebt vom Verweis, nicht vom Konto. */
+  const OHNE_KONTO_FAMILIEN = [
+    /* Die Anmeldeseite selbst. Ohne diese Zeile sperrt der Riegel genau
+       die Tür zu, die er bewachen soll – jeder Knopf auf der
+       Anmeldeseite gehört einem, der noch kein Konto hat. */
+    'anmelden-',
+    'hilfe-', 'lockern-', 'freigabe-ansehen'
+  ];
+
+  function darfOhneKonto(name) {
+    if (!TT.konto || TT.konto.angemeldet()) return true;
+    if (OHNE_KONTO.has(name)) return true;
+    return OHNE_KONTO_FAMILIEN.some((v) => name.indexOf(v) === 0);
+  }
+
+  /* Der Hinweis sagt, was fehlt und wie man es bekommt – und er sagt es
+     an der Stelle, an der jemand gerade etwas wollte. Ein Wegwerfen auf
+     die Anmeldeseite ohne Erklärung wäre die schlechtere Antwort. */
+  function kontoNoetig(was) {
+    dialog({
+      titel: 'Dafür brauchst du ein Konto',
+      inhalt: h`<p>${was || 'Diese Funktion'} gehört zu deinem Konto – dabei entsteht etwas, das dir
+          gehört und das du wiederfinden willst.</p>
+        <p><b>Ansehen kannst du weiterhin alles ohne Anmeldung:</b> die Suche, jedes Inserat, die
+          Vergleichsmiete, den Prüfhinweis und die echten Monatskosten.</p>
+        <div class="hinweisbox">${ico('schluessel')}
+          <div><b>Ein Konto dauert eine halbe Minute</b>
+          <p>Mit einem Passkey ganz ohne Eingabe – Face ID, Windows Hello oder Fingerabdruck. Ein Passwort
+            gibt es hier nicht.</p></div>
+        </div>`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Weiter stöbern</button>
+        <a class="knopf" href="#/anmelden" data-tu="dialog-zu">${ico('person')}Anmelden</a>`
+    });
+  }
+
+  /* Wofür genau – damit im Hinweis nicht „Diese Funktion“ steht, wo ein
+     Wort möglich ist. */
+  const WOFUER = {
+    merken: 'Inserate merken',
+    vergleich: 'Inserate vergleichen',
+    anschreiben: 'Eine Anfrage schreiben',
+    'agent-speichern': 'Suchaufträge speichern',
+    'agent-aus-filter': 'Suchaufträge speichern',
+    'filter-aus-profil': 'Filter aus deinem Profil füllen',
+    'umkreis-modus': 'Einen Umkreis um deinen Ankerpunkt setzen',
+    'umkreis-radius': 'Einen Umkreis um deinen Ankerpunkt setzen',
+    'umkreis-weg': 'Einen Umkreis um deinen Ankerpunkt setzen',
+    notiz: 'Notizen zu einem Inserat',
+    'status-setzen': 'Den Stand deiner Bewerbung festhalten',
+    checkliste: 'Die Besichtigungs-Checkliste',
+    'termin-buchen': 'Einen Besichtigungstermin buchen',
+    'termin-ab': 'Einen Besichtigungstermin absagen',
+    expose: 'Das Exposé als Datei',
+    'kosten-anpassen': 'Die Kostenrechnung auf deinen Haushalt einstellen',
+    'kosten-uebernehmen': 'Werte in dein Profil übernehmen',
+    sperre: 'TrimmoTrade Plus'
+  };
+
+  /* ================================================================
      Globale Aktionen
      ================================================================ */
 
@@ -1027,35 +1160,53 @@
     const s = TT.store.get();
     if (s.theme && s.theme !== 'auto') document.documentElement.setAttribute('data-theme', s.theme);
 
+    /* Der Riegel sitzt im Verteiler, nicht in den Ansichten. Damit gilt
+       er für jede Aktion, auch für eine, die morgen dazukommt – und er
+       lässt sich nicht dadurch umgehen, dass jemand den Knopf mit den
+       Werkzeugen des Browsers wieder sichtbar macht. */
     document.addEventListener('click', (e) => {
       const el = e.target.closest('[data-tu]');
       if (!el) return;
-      const fn = AKTIONEN[el.dataset.tu];
+      const name = el.dataset.tu;
+      const fn = AKTIONEN[name];
       if (!fn) return;
       e.preventDefault();
+      if (!darfOhneKonto(name)) { kontoNoetig(WOFUER[name]); return; }
       fn(el, e);
     });
 
     document.addEventListener('change', (e) => {
       const el = e.target.closest('[data-tu-change]');
       if (!el) return;
-      const fn = AKTIONEN[el.dataset.tuChange];
-      if (fn) fn(el, e);
+      const name = el.dataset.tuChange;
+      const fn = AKTIONEN[name];
+      if (!fn) return;
+      if (!darfOhneKonto(name)) { kontoNoetig(WOFUER[name]); return; }
+      fn(el, e);
     });
 
     document.addEventListener('input', (e) => {
       const el = e.target.closest('[data-tu-input]');
       if (!el) return;
-      const fn = AKTIONEN[el.dataset.tuInput];
-      if (fn) fn(el, e);
+      const name = el.dataset.tuInput;
+      const fn = AKTIONEN[name];
+      if (!fn) return;
+      /* Beim Tippen wortlos abbrechen: Ein Fenster je Anschlag wäre
+         unerträglich. Ein gesperrtes Eingabefeld erscheint ohnehin
+         nicht – das hier ist der Riegel dahinter, nicht die Meldung. */
+      if (!darfOhneKonto(name)) return;
+      fn(el, e);
     });
 
     document.addEventListener('submit', (e) => {
       const el = e.target.closest('[data-tu-submit]');
       if (!el) return;
       e.preventDefault();
-      const fn = AKTIONEN[el.dataset.tuSubmit];
-      if (fn) fn(el, e);
+      const name = el.dataset.tuSubmit;
+      const fn = AKTIONEN[name];
+      if (!fn) return;
+      if (!darfOhneKonto(name)) { kontoNoetig(WOFUER[name]); return; }
+      fn(el, e);
     });
 
     document.addEventListener('keydown', (e) => {
@@ -1077,7 +1228,11 @@
        die nach dem Abmelden noch offensteht, hat nicht abgemeldet. */
     if (TT.konto) {
       TT.konto.on((k, grund) => {
-        if (grund === 'abmeldung' || grund === 'anmeldung') neuZeichnen();
+        if (grund !== 'abmeldung' && grund !== 'anmeldung') return;
+        /* Nicht nur den Inhalt: Die Kopfzeile trägt im Gastzustand einen
+           anderen Verweis auf der Marke und einen Anmeldeknopf. */
+        schaleZeichnen();
+        neuZeichnen();
       });
       window.addEventListener('storage', (e) => {
         if (e.key !== 'trimmotrade.konto.v1' && e.key !== 'trimmotrade.sitzung.v1') return;

@@ -9,6 +9,12 @@
   const U = TT.util, ui = TT.ui, A = TT.analyse, S = TT.store, M = TT.match, P = TT.plan, W = TT.werkzeuge;
   const h = U.html, raw = U.raw, ico = U.svg;
 
+  /* Ohne Anmeldung ist jedes Inserat vollständig zu sehen – Eckdaten,
+     Beschreibung, Vergleichsmiete, Prüfhinweis, echte Monatskosten. Was
+     fehlt, ist alles, was mit dem eigenen Profil rechnet oder etwas
+     festhält: Passung, Aussicht, Merken, Notizen, Termine. */
+  const gast = () => !!(TT.konto && !TT.konto.angemeldet());
+
   let bildIndex = 0;
 
   /* ------------------------- Galerie ------------------------- */
@@ -228,6 +234,7 @@
   /* ------------------------- Chancen ------------------------- */
 
   function chancenBlock(l) {
+    if (gast()) return '';
     if (l.kind === 'kauf') return '';
     const c = W.chancen(l, S.get().profil);
     const ton = { gut: 'gut', mittel: 'warn', schwach: 'schlecht', unbekannt: 'neutral' }[c.stufe];
@@ -301,6 +308,22 @@
 
   /* ------------------------- Passung ------------------------- */
 
+  /* An der Stelle, an der sonst die Passung steht, steht für Besucher
+     ohne Konto der Grund. Ein leerer Fleck erklärt nichts, ein Ring mit
+     einer erfundenen Zahl wäre gelogen. */
+  function passungWerbung() {
+    return h`<section class="block" id="passung">
+      <h2>${ico('ziel')}Passt das zu dir?</h2>
+      <p class="block__unter">Mit einem Konto rechnet TrimmoTrade für jedes Inserat aus, wie gut es zu
+        deinen Angaben passt – Preis, Größe, Lage, Fahrzeit zur Arbeit, Ausstattung – und sortiert die
+        Suche danach. Nach deinem Profil, nicht nach bezahlter Platzierung.</p>
+      <p class="werkzeug__weiter">
+        <a class="knopf" href="#/anmelden">${ico('person')}Konto anlegen</a>
+      </p>
+      <p class="fein">Ansehen kannst du ohne Anmeldung alles auf dieser Seite.</p>
+    </section>`;
+  }
+
   function passungBlock(l, b) {
     return h`<section class="block" id="passung">
       <h2>${ico('ziel')}Passung zu deinem Profil</h2>
@@ -325,7 +348,7 @@
 
   function wgBlock(l, b) {
     if (l.kind !== 'wg' || !l.wg) return '';
-    const w = l.wg, m = b.wg;
+    const w = l.wg, m = gast() ? null : b.wg;
     return h`<section class="block" id="wg">
       <h2>${ico('wg')}Die WG</h2>
       <div class="wg__kopf">
@@ -373,7 +396,9 @@
       ${m.hinweise.length ? h`<p class="info-meldung">${ico('info')}${m.hinweise.join(' ')}</p>` : ''}
       <p class="fein">Größte Übereinstimmung: ${m.staerke.label}. Größter Unterschied: ${m.schwaeche.label}.
         <a href="#/profil">Eigene Angaben ändern</a></p>` :
-      h`<p class="info-meldung">${ico('info')}Fülle im <a href="#/profil">Profil</a> deine WG-Angaben aus,
+      gast() ? h`<p class="info-meldung">${ico('info')}Wie gut ihr zusammenpasst, rechnet TrimmoTrade aus,
+        sobald ein paar Angaben zu dir vorliegen. <a href="#/anmelden">Konto anlegen</a></p>`
+      : h`<p class="info-meldung">${ico('info')}Fülle im <a href="#/profil">Profil</a> deine WG-Angaben aus,
         dann rechnet TrimmoTrade die Passung aus.</p>`}
     </section>`;
   }
@@ -404,7 +429,9 @@
             <em>${Math.round(r.wert * 100)} % Güte</em>
           </li>`)}
         </ul>
-        <p><a class="knopf knopf--still" href="#/tausch">${ico('ring')}Alle Ketten im Ringtausch ansehen</a></p>`
+        <p><a class="knopf knopf--still" href="#/${gast() ? 'anmelden' : 'tausch'}">${ico('ring')}Alle Ketten im Ringtausch ansehen</a></p>`
+      : gast() ? h`<p class="info-meldung">${ico('info')}Für dieses Angebot gibt es aktuell keine geschlossene
+        Kette. Mit einem eigenen Angebot schließt du sie vielleicht. <a href="#/anmelden">Konto anlegen</a></p>`
       : h`<p class="info-meldung">${ico('info')}Für dieses Angebot gibt es aktuell keine geschlossene Kette.
         Lege im <a href="#/tausch">Ringtausch</a> dein eigenes Angebot an – vielleicht schließt du den Ring.</p>`}
       <div class="hinweisbox">${ico('info')}
@@ -422,7 +449,7 @@
     const d = TT.geo.districtByKey[l.viertelKey];
     const werte = d ? [['ÖPNV', d.oepnv], ['Grün', d.gruen], ['Ruhe', d.ruhe], ['Einkauf', d.einkauf], ['Ausgehen', d.ausgehen]] : [];
     const profil = S.get().profil;
-    const wege = (profil.anker || []).map((a) => ({
+    const wege = (gast() ? [] : profil.anker || []).map((a) => ({
       name: a.name,
       zeiten: Object.keys(U.TRAVEL).map((mo) => ({ mo, label: U.TRAVEL[mo].label, min: U.travelMin(l, a, mo) }))
     }));
@@ -448,6 +475,8 @@
           </tbody>
         </table>
         <p class="fein">Geschätzt aus Entfernung, Umwegfaktor und Zu-/Abgang – kein Fahrplan.</p>`
+      : gast() ? h`<p class="info-meldung">${ico('info')}Die Fahrzeiten stehen hier, sobald eine Arbeits- oder
+        Studienadresse im Profil hinterlegt ist. <a href="#/anmelden">Konto anlegen</a></p>`
       : h`<p class="info-meldung">${ico('info')}Trag im <a href="#/profil">Profil</a> deine Arbeits- oder Studienadresse ein,
         dann zeigt TrimmoTrade hier die Fahrzeiten.</p>`}
     </section>`;
@@ -608,12 +637,16 @@
           <p><a class="knopf" href="#/suche">${ico('suche')}Zur Suche</a></p></div>
       </div>` };
     }
-    S.gesehenMerken(l.id);
+    /* Wer nicht angemeldet ist, hinterlässt auch keine Spur: Der
+       Gesehen-Vermerk dient allein den Suchaufträgen, und die gibt es
+       ohne Konto nicht. */
+    if (!gast()) S.gesehenMerken(l.id);
     const s = S.get();
     const b = A.bewerten(l, s.profil);
     const k = A.kosten(l, s.profil);
-    const gemerkt = S.gemerkt(l.id), imVergleich = S.imVergleich(l.id);
-    const eintrag = s.merkliste[l.id];
+    const gemerkt = !gast() && S.gemerkt(l.id);
+    const imVergleich = !gast() && S.imVergleich(l.id);
+    const eintrag = gast() ? null : s.merkliste[l.id];
 
     return {
       titel: l.titel,
@@ -711,7 +744,7 @@
 
           <aside class="objekt__seite">
             <div class="haftbox">
-              ${passungBlock(l, b)}
+              ${gast() ? passungWerbung() : passungBlock(l, b)}
               <div class="haftbox__tun">
                 <button type="button" class="knopf knopf--voll" data-tu="anschreiben" data-id="${l.id}">${ico('nachricht')}${anfrageWort(l)}</button>
                 <a class="knopf knopf--still knopf--voll" href="#kosten">${ico('rechner')}${U.eur(k.monatSumme)} echte Monatskosten</a>

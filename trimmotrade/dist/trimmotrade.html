@@ -2033,14 +2033,29 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .nur-angemeldet { display: none; }
 body.ist-angemeldet .nur-angemeldet { display: grid; }
 
-/* Ohne Anmeldung führt jeder Punkt der Navigation auf diese Seite zurück –
-   ein Menü, das nur zu sich selbst führt, ist eine Sackgasse. Sichtbar
-   bleibt, was ohne Konto trägt: Marke, Darstellung, Hilfefenster und die
-   Rechtstexte im Fußbereich. */
-body:not(.ist-angemeldet) .kopf__nav,
+/* Ohne Anmeldung führt der größte Teil der Navigation auf die
+   Anmeldeseite zurück – ein Menü, das nur zu sich selbst führt, ist eine
+   Sackgasse. Sichtbar bleibt, was ohne Konto trägt: Marke, Suche,
+   Darstellung, Sprache, Hilfefenster, die Rechtstexte im Fußbereich –
+   und der Weg zur Anmeldung.
+
+   Ausgewählt wird über eine Klasse statt über eine Aufzählung von
+   Ausnahmen im Selektor: Die Aufzählung wuchs mit jedem Knopf, und wer
+   einen neuen hinzufügte, musste sie kennen. */
+body:not(.ist-angemeldet) .kopf__nav a:not([data-route="suche"]),
 body:not(.ist-angemeldet) .unten,
-body:not(.ist-angemeldet) .kopf__tun > :not([data-tu="theme"], [data-tu="sprache"]) { display: none; }
+body:not(.ist-angemeldet) .kopf__tun > :not(.auch-ohne-konto) { display: none; }
 body:not(.ist-angemeldet) .kopf__innen { justify-content: space-between; }
+/* Ein einzelner Punkt, den der automatische Rand in die Mitte schiebt,
+   sieht aus wie vergessen. Ohne Anmeldung steht „Suchen“ deshalb dort,
+   wo es hingehört: direkt neben der Marke. */
+body:not(.ist-angemeldet) .kopf__nav { margin-left: 0; }
+
+.nur-gast { display: none; }
+body:not(.ist-angemeldet) .nur-gast { display: inline-flex; }
+/* Auf der Anmeldeseite selbst wäre der Anmeldeknopf ein Verweis auf das,
+   was ohnehin gerade offen ist. */
+body[data-ansicht="anmelden"] .nur-gast { display: none; }
 /* Dasselbe im Fußbereich: Die Rechtstexte und die Hilfe bleiben stehen,
    die Verweise in die Anwendung verschwinden. */
 body:not(.ist-angemeldet) .nur-innen { display: none; }
@@ -2104,6 +2119,16 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .anmeldung__code { display: inline-block; margin-top: .5em; padding: .25em .7em; border-radius: var(--r-klein);
   background: var(--flaeche); font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 1.35rem; font-weight: 700; letter-spacing: .22em; }
+
+/* Der Weg ins Schaufenster. Ruhig gehalten – er ist die Nebentür, nicht
+   der Haupteingang –, aber mit voller Trefferfläche und einem Zeichen,
+   damit er zwischen den Verfahren nicht verschwindet. */
+.anmeldung__stoebern { margin: 14px 0 0; text-align: center; }
+.anmeldung__stoebern a {
+  display: inline-flex; align-items: center; gap: .45em;
+  min-height: 24px; padding: .35em .2em; font-size: .88rem;
+}
+.anmeldung__stoebern .ico { width: 16px; height: 16px; }
 
 .anmeldung__warum { margin-top: 14px; border: 1px solid var(--rand); border-radius: var(--r-klein);
   background: var(--flaeche2); }
@@ -3271,9 +3296,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   e({
     'Willkommen bei TrimmoTrade': 'Welcome to TrimmoTrade',
-    'Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil, eine Bewerbermappe. Zum Start brauchst du eine Anmeldung.':
-      'Rentals, property to buy, flatshare rooms and apartment swaps – one search, one profile, one application folder. To begin you need to sign in.',
-    '{2}Warum steht der Passkey oben?': '{2}Why is the passkey at the top?',
+    '{3}Warum steht der Passkey oben?': '{3}Why is the passkey at the top?',
     'Weil er als Einziges gegen die häufigste Masche schützt: eine nachgebaute Anmeldeseite. Ein Passkey ist an die Adresse gebunden, unter der er angelegt wurde. Wer auf eine gefälschte Seite hereinfällt, gibt dort nichts preis – es gibt nichts einzugeben. Der Schlüssel entsteht im Sicherheitschip deines Geräts und verlässt ihn nie.':
       'Because it is the only one that protects against the commonest trick: a fake sign-in page. A passkey is bound to the address it was created under. Anyone falling for a forged page gives nothing away – there is nothing to type. The key is created in your device’s security chip and never leaves it.',
     'Bei Google, Microsoft und Apple bekommt TrimmoTrade Name und E-Mail-Adresse, dein Passwort dort aber nie zu sehen. Beim Weg über die E-Mail-Adresse gibt es gar kein Passwort, sondern einen Code, der zehn Minuten gilt.':
@@ -3287,7 +3310,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     'Wir haben einen sechsstelligen Code an': 'We have sent a six-digit code to',
     'geschickt. Er gilt {1} Minuten.': '. It is valid for {1} minutes.',
     'Code': 'Code',
-    '{3}Anmelden': '{3}Sign in',
+    '{0}Anmelden': '{0}Sign in',
     'neuen Code anfordern': 'request a new code',
     'Adresse ändern': 'change address',
     'Nachgebildeter Ablauf': 'Simulated flow',
@@ -4408,8 +4431,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       '(4) The provider does not warrant the accuracy, completeness or currency of offers posted by third parties.',
 
     '§ 3 Anmeldung und Zustandekommen des Vertrags': '§ 3 Signing in and formation of the contract',
-    '(1) Die Nutzung setzt eine Anmeldung voraus. Sie ist möglich mit einem Passkey, über ein Konto bei Google, Microsoft oder Apple oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande.':
-      '(1) Use requires signing in. This is possible with a passkey, via an account with Google, Microsoft or Apple, or with an email address and a one-time code. Signing in forms a free-of-charge user agreement covering the free plan.',
     '(2) Die Anmeldung setzt die Zustimmung zu diesen Bedingungen und die Kenntnisnahme der Datenschutzerklärung voraus. Beide sind vor der Anmeldung ohne Anmeldung abrufbar.':
       '(2) Signing in requires agreement to these terms and acknowledgement of the privacy policy. Both are available before signing in, without signing in.',
     '(3) Es besteht kein Anspruch auf Anmeldung. Der Anbieter kann sie ablehnen, insbesondere bei begründetem Verdacht auf missbräuchliche Mehrfachanlage.':
@@ -5063,8 +5084,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     'Zum Server geht genau eine Sache: die': 'Exactly one thing goes to the server: the',
     '. Er beantwortet die Frage, wer du bist – mehr kennt er nicht. Was dort gespeichert wird, steht vollständig in Abschnitt 4; es ist eine kurze Liste, und sie enthält nichts von dem, was du in der Anwendung eingibst.':
       '. It answers the question of who you are – it knows nothing more. What is stored there is set out in full in section 4; it is a short list, and it contains nothing of what you enter in the application.',
-    'Die Nutzung setzt eine Anmeldung voraus. Dafür – und nur dafür – gibt es eine Serverseite. Gespeichert wird dort genau Folgendes:':
-      'Use requires signing in. For that – and only for that – there is a server side. Exactly the following is stored there:',
     'eine zufällige Kontonummer, die nichts über dich verrät': 'a random account number that reveals nothing about you',
     'deine E-Mail-Adresse, sofern du eine angegeben hast, und ob sie bestätigt ist':
       'your email address, if you gave one, and whether it is verified',
@@ -5101,8 +5120,80 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       'The encrypted files, too, live solely in your browser. The sign-in server never sees them – it knows neither files nor password nor key.',
     'Über die in Abschnitt 4 beschriebene Anmeldung bei Google oder Microsoft hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus.':
       'Beyond the sign-in via Google or Microsoft described in section 4, no personal data are transferred to countries outside the European Union and the European Economic Area. Anyone wishing to avoid that signs in with a passkey or with an email address – both routes work without an external provider.',
-    '(1) Die Nutzung setzt eine Anmeldung voraus. Sie ist möglich mit einem Passkey, über ein Konto bei Google oder Microsoft oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande.':
-      '(1) Use requires signing in. This is possible with a passkey, via an account with Google or Microsoft, or with an email address and a one-time code. Signing in forms a free-of-charge usage contract covering the free tier.',
+
+    /* ---------------------------------------------------------------
+       Ohne Anmeldung stöbern
+       --------------------------------------------------------------- */
+
+    'Dafür brauchst du ein Konto': 'You need an account for that',
+    'gehört zu deinem Konto – dabei entsteht etwas, das dir gehört und das du wiederfinden willst.':
+      'belongs to your account – it creates something that is yours and that you will want to find again.',
+    'Diese Funktion': 'This feature',
+    'Ansehen kannst du weiterhin alles ohne Anmeldung:': 'You can still look at everything without signing in:',
+    'die Suche, jedes Inserat, die Vergleichsmiete, den Prüfhinweis und die echten Monatskosten.':
+      'the search, every listing, the comparable rent, the fraud warning and the true monthly costs.',
+    'Ein Konto dauert eine halbe Minute': 'An account takes half a minute',
+    'Mit einem Passkey ganz ohne Eingabe – Face ID, Windows Hello oder Fingerabdruck. Ein Passwort gibt es hier nicht.':
+      'With a passkey, without typing anything – Face ID, Windows Hello or a fingerprint. There is no password here.',
+    'Weiter stöbern': 'Keep browsing',
+    'Konto anlegen': 'Create an account',
+
+    /* Wofür genau ein Konto nötig ist */
+    'Inserate merken': 'Saving listings',
+    'Inserate vergleichen': 'Comparing listings',
+    'Eine Anfrage schreiben': 'Writing an enquiry',
+    'Suchaufträge speichern': 'Saving searches',
+    'Filter aus deinem Profil füllen': 'Filling the filters from your profile',
+    'Einen Umkreis um deinen Ankerpunkt setzen': 'Setting a radius around your anchor point',
+    'Notizen zu einem Inserat': 'Notes on a listing',
+    'Den Stand deiner Bewerbung festhalten': 'Recording where your application stands',
+    'Die Besichtigungs-Checkliste': 'The viewing checklist',
+    'Einen Besichtigungstermin buchen': 'Booking a viewing appointment',
+    'Einen Besichtigungstermin absagen': 'Cancelling a viewing appointment',
+    'Das Exposé als Datei': 'The listing details as a file',
+    'Die Kostenrechnung auf deinen Haushalt einstellen': 'Adjusting the cost calculation to your household',
+    'Werte in dein Profil übernehmen': 'Copying values into your profile',
+
+    /* Anmeldeseite und Schaufenster */
+    'Erst einmal umsehen – Angebote ohne Anmeldung ansehen':
+      'Have a look around first – browse listings without signing in',
+    'TrimmoTrade, zur Suche': 'TrimmoTrade, to the search',
+
+    /* Statt der Passung */
+    'Passt das zu dir?': 'Does this suit you?',
+    'Mit einem Konto rechnet TrimmoTrade für jedes Inserat aus, wie gut es zu deinen Angaben passt – Preis, Größe, Lage, Fahrzeit zur Arbeit, Ausstattung – und sortiert die Suche danach. Nach deinem Profil, nicht nach bezahlter Platzierung.':
+      'With an account, TrimmoTrade works out for every listing how well it matches what you said you need – price, size, location, commute, features – and orders the search by that. By your profile, not by paid placement.',
+    'Ansehen kannst du ohne Anmeldung alles auf dieser Seite.':
+      'Everything on this page is visible without signing in.',
+    'Suchen und ansehen geht ohne Anmeldung. Mit einem Profil füllt TrimmoTrade diese Filter von selbst und rechnet Passung und Fahrzeit aus.':
+      'Searching and browsing work without signing in. With a profile, TrimmoTrade fills these filters in by itself and works out match and commute.',
+    'Wie gut ihr zusammenpasst, rechnet TrimmoTrade aus, sobald ein paar Angaben zu dir vorliegen.':
+      'TrimmoTrade works out how well you fit together as soon as it knows a few things about you.',
+    'Die Fahrzeiten stehen hier, sobald eine Arbeits- oder Studienadresse im Profil hinterlegt ist.':
+      'Travel times appear here as soon as a work or study address is stored in the profile.',
+    'Für dieses Angebot gibt es aktuell keine geschlossene Kette. Mit einem eigenen Angebot schließt du sie vielleicht.':
+      'There is currently no closed chain for this offer. With an offer of your own you might close it.',
+
+    /* Lücken, die erst im Gastzustand sichtbar wurden */
+    'Weiter mit Google': 'Continue with Google',
+    'Weiter mit Microsoft': 'Continue with Microsoft',
+    'Google-Konto': 'Google account',
+    'Privat oder geschäftlich': 'Personal or work',
+    'Alle Ketten im Ringtausch ansehen': 'See all chains in the ring swap',
+    'passende {1} im Bestand': 'matching {1} in the market',
+    'Internet an der neuen Adresse prüfen': 'Check internet availability at the new address',
+    'Verfügbarkeit und Schaltdauer vor dem Einzug klären.':
+      'Clarify availability and activation time before moving in.',
+    'Face ID, Windows Hello oder Fingerabdruck': 'Face ID, Windows Hello or a fingerprint',
+    'Helles Zimmer in entspannter WG.': 'Bright room in a relaxed flatshare.',
+    'Freies Zimmer in gewachsener Wohngemeinschaft.': 'Room available in an established flatshare.',
+    'Schönes, ruhiges Zimmer mit eigenem Balkonzugang.': 'Attractive, quiet room with its own balcony access.',
+    '(1) Suche und Inserate lassen sich ohne Anmeldung ansehen. Ein Konto braucht, wer Inserate merken oder vergleichen, Anbieter anschreiben, Suchaufträge anlegen, Unterlagen ablegen oder selbst inserieren will. Die Anmeldung ist möglich mit einem Passkey, über ein Konto bei Google oder Microsoft oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande; ohne Anmeldung entsteht kein Vertragsverhältnis.':
+      '(1) The search and the listings can be viewed without signing in. An account is needed to save or compare listings, to contact providers, to create saved searches, to store documents or to advertise. Signing in is possible with a passkey, via an account with Google or Microsoft, or with an email address and a one-time code. Signing in forms a free-of-charge usage contract covering the free tier; without signing in no contractual relationship arises.',
+    'Suche und Inserate lassen sich ohne Anmeldung ansehen; dabei entsteht kein Konto und wird nichts über dich gespeichert. Wer ein Konto anlegt, wird auf der Serverseite geführt – und die gibt es für nichts anderes. Gespeichert wird dort genau Folgendes:':
+      'The search and the listings can be viewed without signing in; no account is created and nothing about you is stored in the process. Anyone who creates an account is held on the server side – and that exists for nothing else. Exactly the following is stored there:',
+    'Ohne Anmeldung geht auch das nicht: Suche und Inserate lassen sich ansehen, ohne dass ein Konto entsteht.':
+      'Without signing in, not even that happens: the search and the listings can be viewed without an account coming into being.',
 
   });
 
@@ -12374,17 +12465,35 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     if (b && b.mietCheck && b.mietCheck.diff <= -12) marken.push(badge(U.t('{0} % zum Spiegel').replace('{0}', b.mietCheck.diff), 'gut'));
     if (b && b.mietCheck && b.mietCheck.diff > 25) marken.push(badge(U.t('{0} % zum Spiegel').replace('{0}', '+' + b.mietCheck.diff), 'schlecht'));
     if (l.befristetBis) marken.push(badge('befristet', 'warn'));
-    if (l.kind === 'wg' && b && b.wg && b.wg.ausschluss.length) marken.push(badge('Ausschlusskriterium', 'schlecht'));
+    /* „Ausschlusskriterium“ heißt: gegen deine Angaben. Ohne Konto gibt
+       es keine, also auch kein Urteil darüber. */
+    if (l.kind === 'wg' && b && b.wg && b.wg.ausschluss.length
+      && !(TT.konto && !TT.konto.angemeldet())) marken.push(badge('Ausschlusskriterium', 'schlecht'));
     /* Bezahlte Sichtbarkeit steht als Erstes und heißt beim Namen. */
     if (TT.plan.istTop(l)) marken.unshift(badge('Top-Anzeige', 'info', 'blitz'));
     else if (TT.plan.istHervorgehoben(l)) marken.unshift(badge('hervorgehoben', 'info', 'stern'));
     return marken;
   }
 
+  /* Ohne Anmeldung ist die Anwendung eine Schaufensterscheibe: Man sieht
+     alles, man fasst nichts an. Diese eine Zeile entscheidet darüber –
+     und sie steht bewusst nicht in jeder Ansicht einzeln. */
+  const gast = () => !!(TT.konto && !TT.konto.angemeldet());
+
   function inseratsKarte(l, b, optionen) {
     const opt = optionen || {};
-    const gemerkt = TT.store.gemerkt(l.id);
-    const imVergleich = TT.store.imVergleich(l.id);
+    /* Ein Besucher ohne Konto sieht keine Passung, keine Fahrzeit und
+       keinen WG-Abgleich: Alle drei rechnen mit seinem Profil, und ein
+       Profil hat er nicht. Stand aus einer früheren Sitzung noch eines
+       im Speicher, wäre es erst recht falsch – abgemeldet ist abgemeldet.
+
+       Der Prüfhinweis und der Abstand zum Mietspiegel bleiben dagegen
+       stehen. Sie sagen etwas über das Inserat aus, nicht über den, der
+       es liest – und wer vor einem auffälligen Angebot gewarnt werden
+       muss, hat meistens gerade kein Konto. */
+    const persoenlich = !gast();
+    const gemerkt = persoenlich && TT.store.gemerkt(l.id);
+    const imVergleich = persoenlich && TT.store.imVergleich(l.id);
     const eck = [];
     if (l.type === 'grundstueck') {
       eck.push(U.num(l.grundstueck || l.flaeche) + ' m² Grund');
@@ -12405,7 +12514,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       <a class="karte-inserat__bild" href="#/objekt/${l.id}" aria-label="${l.titel} ansehen">
         ${raw(TT.img.make(l, 0))}
         <span class="karte-inserat__art">${ico(artIcon(l))}${artLabel(l)}</span>
-        ${b ? h`<span class="karte-inserat__ring">${passungsRing(b.score)}</span>` : ''}
+        ${b && persoenlich ? h`<span class="karte-inserat__ring">${passungsRing(b.score)}</span>` : ''}
       </a>
       <div class="karte-inserat__text">
         <div class="karte-inserat__marken">${kartenMarken(l, b)}</div>
@@ -12413,8 +12522,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         <p class="karte-inserat__ort">${ico('karte')}${l.viertel}, ${l.stadt} · ${l.strasse}</p>
         <p class="karte-inserat__preis">${raw(preisZeile(l))}</p>
         <ul class="karte-inserat__eck">${eck.map((e) => h`<li>${e}</li>`)}</ul>
-        ${b && b.pendel ? h`<p class="karte-inserat__pendel">${ico('zug')}${U.minutesLabel(b.pendel.min)} nach ${b.pendel.anker.name}</p>` : ''}
-        ${l.kind === 'wg' && b && b.wg && !b.wg.ausschluss.length
+        ${b && persoenlich && b.pendel ? h`<p class="karte-inserat__pendel">${ico('zug')}${U.minutesLabel(b.pendel.min)} nach ${b.pendel.anker.name}</p>` : ''}
+        ${l.kind === 'wg' && persoenlich && b && b.wg && !b.wg.ausschluss.length
         ? h`<p class="karte-inserat__wg">${ico('wg')}${U.t('WG-Passung {0} % – {1}')
           .replace('{0}', b.wg.score).replace('{1}', U.t(b.wg.kurz))}</p>` : ''}
         ${l.kind === 'tausch' ? h`<p class="karte-inserat__wg">${ico('tausch')}sucht ${l.tausch.suche.staedte.join(', ')}</p>` : ''}
@@ -12640,8 +12749,19 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
        Impressum, Datenschutzerklärung und AGB, weil § 5 DDG „ständig
        verfügbar“ verlangt und hinter einer Anmeldung nichts ständig
        verfügbar ist – dazu Widerruf, Meldeweg und die Hilfe. Wer nicht
-       hereinkommt, braucht die Hilfe am dringendsten. */
-    const OHNE_ANMELDUNG = ['anmelden', 'recht', 'hilfe', 'freigabe'];
+       hereinkommt, braucht die Hilfe am dringendsten.
+
+       Dazu die Suche und die Objektseite: Wer wissen will, ob hier
+       überhaupt etwas für ihn dabei ist, soll das sehen können, ohne
+       vorher ein Konto anzulegen. Eine Wohnungsplattform, die ihren
+       Bestand hinter einer Anmeldung versteckt, verliert die Hälfte
+       ihrer Besucher an der Tür – und in den Suchmaschinen ohnehin.
+
+       Gesehen werden heißt aber nicht mitgemacht: Merken, Vergleichen,
+       Anschreiben, Suchaufträge, Notizen, Inserieren – alles das braucht
+       weiterhin ein Konto. Wo das durchgesetzt wird, steht bei
+       `darfOhneKonto`. */
+    const OHNE_ANMELDUNG = ['anmelden', 'recht', 'hilfe', 'freigabe', 'suche', 'objekt'];
     const gesperrt = TT.konto && !TT.konto.angemeldet() && OHNE_ANMELDUNG.indexOf(r.name) < 0;
     const name = gesperrt ? 'anmelden' : r.name;
 
@@ -12655,6 +12775,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     document.title = (ergebnis.titel ? U.t(ergebnis.titel) + ' – ' : '') + 'TrimmoTrade';
     haupt.innerHTML = ergebnis.html || '';
     haupt.dataset.ansicht = name;
+    /* Auch am body, damit der Stil auf die Ansicht reagieren kann –
+       etwa um den Anmeldeknopf auf der Anmeldeseite wegzulassen. */
+    document.body.dataset.ansicht = name;
 
     U.$$('[data-route]').forEach((a) => {
       a.classList.toggle('is-aktiv', a.dataset.route === name);
@@ -12754,7 +12877,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     const jetzt = TT.i18n.sprache();
     const ziel = TT.i18n.SPRACHEN.find((x) => x.id !== jetzt) || TT.i18n.SPRACHEN[0];
     const wort = jetzt === 'de' ? 'Switch to English' : 'Auf Deutsch umschalten';
-    return h`<button type="button" class="sprachknopf" data-tu="sprache" data-ziel="${ziel.id}"
+    return h`<button type="button" class="sprachknopf auch-ohne-konto" data-tu="sprache" data-ziel="${ziel.id}"
       title="${wort}" aria-label="${wort}" lang="${ziel.htmlLang}">${ziel.kurz}</button>`;
   }
 
@@ -12775,7 +12898,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     <a class="sprung" href="#haupt">Zum Inhalt springen</a>
     <header class="kopf">
       <div class="kopf__innen">
-        <a class="marke" href="#/start" aria-label="TrimmoTrade, zur Startseite">
+        <a class="marke" href="#/${gast() ? 'suche' : 'start'}"
+          aria-label="${gast() ? 'TrimmoTrade, zur Suche' : 'TrimmoTrade, zur Startseite'}">
           <span class="marke__zeichen" aria-hidden="true">
             <svg viewBox="0 0 32 32" fill="none"><path d="M4 16L16 5l12 11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 14v12h17V14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="20" r="3.2" stroke="currentColor" stroke-width="2.4"/></svg>
           </span>
@@ -12790,7 +12914,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <button type="button" class="ikon-btn" data-tu="palette" title="Schnellsuche (Strg + K)" aria-label="Schnellsuche">${ico('lupe')}</button>
           <a class="ikon-btn" href="#/agenten" title="Suchaufträge" aria-label="Suchaufträge">${ico('glocke')}<b class="zaehler" data-zaehler="agenten" hidden></b></a>
           <a class="ikon-btn" href="#/vergleich" title="Vergleich" aria-label="Vergleich">${ico('waage')}<b class="zaehler" data-zaehler="vergleich" hidden></b></a>
-          <button type="button" class="ikon-btn" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
+          <button type="button" class="ikon-btn auch-ohne-konto" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
             ${ico('sonne', 'nur-hell')}${ico('mond', 'nur-dunkel')}</button>
           ${sprachknopf()}
           <a class="tarifknopf ${TT.plan.istPlus() ? 'is-plus' : ''}" href="#/plus"
@@ -12799,6 +12923,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
               : raw('<span>' + U.esc(U.t('Plus entdecken')) + '</span>')}</a>
           <a class="knopf knopf--klein nur-breit" href="#/inserieren">${ico('plus')}<span>Inserieren</span></a>
           <a class="ikon-btn nur-angemeldet" href="#/konto" title="Konto" aria-label="Konto">${ico('person')}</a>
+          <a class="knopf knopf--klein auch-ohne-konto nur-gast" href="#/anmelden">${ico('person')}<span>Anmelden</span></a>
         </div>
       </div>
     </header>
@@ -13046,6 +13171,105 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   }
 
   /* ================================================================
+     Was ohne Konto erlaubt ist
+
+     Umgekehrt aufgezählt, und das ist Absicht: Hier steht, was ein
+     Besucher ohne Anmeldung darf – alles Übrige ist gesperrt. Eine
+     Liste des Verbotenen wäre bequemer zu pflegen und genau deshalb
+     falsch: Wer eine neue Aktion einbaut und sie dort einzutragen
+     vergisst, hat ein Loch. Wer sie hier einzutragen vergisst, hat
+     einen Knopf, der zur Anmeldung führt – ärgerlich, aber harmlos.
+
+     Erlaubt ist, was nichts festhält und niemandem etwas verspricht:
+     suchen, filtern, sortieren, blättern, ein Inserat ansehen, die
+     Bildergalerie, die Hilfe, die Rechtstexte. Gesperrt ist alles, was
+     etwas anlegt, speichert, verschickt oder bucht.
+     ================================================================ */
+
+  const OHNE_KONTO = new Set([
+    /* Schale und Fenster */
+    'theme', 'sprache', 'palette', 'palette-zu', 'dialog-zu', 'nichts',
+    /* Trefferliste */
+    'ansicht', 'art-um', 'sortieren', 'such-text', 'such-leeren', 'mehr-zeigen',
+    'filter-auf', 'filter-chip', 'filter-leeren', 'filter-abschicken',
+    'filter-schalter', 'filter-wert', 'filter-wgrauchen', 'filter-wgtiere', 'filter-zahl',
+    /* Objektseite: ansehen, nicht anfassen */
+    'bild', 'bild-zu', 'objekt-teilen', 'warum-top',
+    /* Rechtstexte und geteilte Unterlagen */
+    'betreiber-speichern', 'betreiber-zuruecksetzen', 'widerruf-sichern',
+    /* Auskunft über den eigenen Browserspeicher, Sicherung und Löschung.
+       Das ist kein Leistungsmerkmal, sondern ein Recht (Art. 15 und 17
+       DSGVO) – es an ein Konto zu binden wäre absurd: Die Daten liegen
+       auf dem Gerät des Besuchers, nicht bei uns. */
+    'daten', 'daten-export', 'daten-loeschen',
+    /* Erklärungen, keine Funktionen: die Tastaturhilfe, die Auskunft
+       darüber, warum eine Anzeige erscheint, und die Anzeige selbst.
+       Gerade die Werbetransparenz darf hinter keiner Anmeldung liegen. */
+    'hilfe', 'warum-werbung', 'anzeige-klick'
+  ]);
+
+  /* Ganze Familien statt einzelner Namen: Die Hilfe ist ohne Anmeldung
+     erreichbar – wer nicht hereinkommt, braucht sie am dringendsten –,
+     die Lockerungsvorschläge ändern nur den Filter, und die Ansicht
+     einer freigegebenen Unterlage lebt vom Verweis, nicht vom Konto. */
+  const OHNE_KONTO_FAMILIEN = [
+    /* Die Anmeldeseite selbst. Ohne diese Zeile sperrt der Riegel genau
+       die Tür zu, die er bewachen soll – jeder Knopf auf der
+       Anmeldeseite gehört einem, der noch kein Konto hat. */
+    'anmelden-',
+    'hilfe-', 'lockern-', 'freigabe-ansehen'
+  ];
+
+  function darfOhneKonto(name) {
+    if (!TT.konto || TT.konto.angemeldet()) return true;
+    if (OHNE_KONTO.has(name)) return true;
+    return OHNE_KONTO_FAMILIEN.some((v) => name.indexOf(v) === 0);
+  }
+
+  /* Der Hinweis sagt, was fehlt und wie man es bekommt – und er sagt es
+     an der Stelle, an der jemand gerade etwas wollte. Ein Wegwerfen auf
+     die Anmeldeseite ohne Erklärung wäre die schlechtere Antwort. */
+  function kontoNoetig(was) {
+    dialog({
+      titel: 'Dafür brauchst du ein Konto',
+      inhalt: h`<p>${was || 'Diese Funktion'} gehört zu deinem Konto – dabei entsteht etwas, das dir
+          gehört und das du wiederfinden willst.</p>
+        <p><b>Ansehen kannst du weiterhin alles ohne Anmeldung:</b> die Suche, jedes Inserat, die
+          Vergleichsmiete, den Prüfhinweis und die echten Monatskosten.</p>
+        <div class="hinweisbox">${ico('schluessel')}
+          <div><b>Ein Konto dauert eine halbe Minute</b>
+          <p>Mit einem Passkey ganz ohne Eingabe – Face ID, Windows Hello oder Fingerabdruck. Ein Passwort
+            gibt es hier nicht.</p></div>
+        </div>`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Weiter stöbern</button>
+        <a class="knopf" href="#/anmelden" data-tu="dialog-zu">${ico('person')}Anmelden</a>`
+    });
+  }
+
+  /* Wofür genau – damit im Hinweis nicht „Diese Funktion“ steht, wo ein
+     Wort möglich ist. */
+  const WOFUER = {
+    merken: 'Inserate merken',
+    vergleich: 'Inserate vergleichen',
+    anschreiben: 'Eine Anfrage schreiben',
+    'agent-speichern': 'Suchaufträge speichern',
+    'agent-aus-filter': 'Suchaufträge speichern',
+    'filter-aus-profil': 'Filter aus deinem Profil füllen',
+    'umkreis-modus': 'Einen Umkreis um deinen Ankerpunkt setzen',
+    'umkreis-radius': 'Einen Umkreis um deinen Ankerpunkt setzen',
+    'umkreis-weg': 'Einen Umkreis um deinen Ankerpunkt setzen',
+    notiz: 'Notizen zu einem Inserat',
+    'status-setzen': 'Den Stand deiner Bewerbung festhalten',
+    checkliste: 'Die Besichtigungs-Checkliste',
+    'termin-buchen': 'Einen Besichtigungstermin buchen',
+    'termin-ab': 'Einen Besichtigungstermin absagen',
+    expose: 'Das Exposé als Datei',
+    'kosten-anpassen': 'Die Kostenrechnung auf deinen Haushalt einstellen',
+    'kosten-uebernehmen': 'Werte in dein Profil übernehmen',
+    sperre: 'TrimmoTrade Plus'
+  };
+
+  /* ================================================================
      Globale Aktionen
      ================================================================ */
 
@@ -13248,35 +13472,53 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     const s = TT.store.get();
     if (s.theme && s.theme !== 'auto') document.documentElement.setAttribute('data-theme', s.theme);
 
+    /* Der Riegel sitzt im Verteiler, nicht in den Ansichten. Damit gilt
+       er für jede Aktion, auch für eine, die morgen dazukommt – und er
+       lässt sich nicht dadurch umgehen, dass jemand den Knopf mit den
+       Werkzeugen des Browsers wieder sichtbar macht. */
     document.addEventListener('click', (e) => {
       const el = e.target.closest('[data-tu]');
       if (!el) return;
-      const fn = AKTIONEN[el.dataset.tu];
+      const name = el.dataset.tu;
+      const fn = AKTIONEN[name];
       if (!fn) return;
       e.preventDefault();
+      if (!darfOhneKonto(name)) { kontoNoetig(WOFUER[name]); return; }
       fn(el, e);
     });
 
     document.addEventListener('change', (e) => {
       const el = e.target.closest('[data-tu-change]');
       if (!el) return;
-      const fn = AKTIONEN[el.dataset.tuChange];
-      if (fn) fn(el, e);
+      const name = el.dataset.tuChange;
+      const fn = AKTIONEN[name];
+      if (!fn) return;
+      if (!darfOhneKonto(name)) { kontoNoetig(WOFUER[name]); return; }
+      fn(el, e);
     });
 
     document.addEventListener('input', (e) => {
       const el = e.target.closest('[data-tu-input]');
       if (!el) return;
-      const fn = AKTIONEN[el.dataset.tuInput];
-      if (fn) fn(el, e);
+      const name = el.dataset.tuInput;
+      const fn = AKTIONEN[name];
+      if (!fn) return;
+      /* Beim Tippen wortlos abbrechen: Ein Fenster je Anschlag wäre
+         unerträglich. Ein gesperrtes Eingabefeld erscheint ohnehin
+         nicht – das hier ist der Riegel dahinter, nicht die Meldung. */
+      if (!darfOhneKonto(name)) return;
+      fn(el, e);
     });
 
     document.addEventListener('submit', (e) => {
       const el = e.target.closest('[data-tu-submit]');
       if (!el) return;
       e.preventDefault();
-      const fn = AKTIONEN[el.dataset.tuSubmit];
-      if (fn) fn(el, e);
+      const name = el.dataset.tuSubmit;
+      const fn = AKTIONEN[name];
+      if (!fn) return;
+      if (!darfOhneKonto(name)) { kontoNoetig(WOFUER[name]); return; }
+      fn(el, e);
     });
 
     document.addEventListener('keydown', (e) => {
@@ -13298,7 +13540,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
        die nach dem Abmelden noch offensteht, hat nicht abgemeldet. */
     if (TT.konto) {
       TT.konto.on((k, grund) => {
-        if (grund === 'abmeldung' || grund === 'anmeldung') neuZeichnen();
+        if (grund !== 'abmeldung' && grund !== 'anmeldung') return;
+        /* Nicht nur den Inhalt: Die Kopfzeile trägt im Gastzustand einen
+           anderen Verweis auf der Marke und einen Anmeldeknopf. */
+        schaleZeichnen();
+        neuZeichnen();
       });
       window.addEventListener('storage', (e) => {
         if (e.key !== 'trimmotrade.konto.v1' && e.key !== 'trimmotrade.sitzung.v1') return;
@@ -13587,6 +13833,12 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   const U = TT.util, ui = TT.ui, A = TT.analyse, S = TT.store, P = TT.plan;
   const h = U.html, raw = U.raw, ico = U.svg;
 
+  /* Ohne Anmeldung ist die Suche vollständig benutzbar – nur eben ohne
+     alles, was mit einem Profil rechnet. Stünde aus einer früheren
+     Sitzung noch eines im Browserspeicher, wäre es hier erst recht
+     falsch: Abgemeldet ist abgemeldet. */
+  const gast = () => !!(TT.konto && !TT.konto.angemeldet());
+
   let karte = null;
   let letzteTreffer = [];
   let umkreisModus = false;
@@ -13667,9 +13919,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     const alleViertel = f.staedte.length
       ? TT.geo.DISTRICTS.filter((d) => f.staedte.indexOf(d.city) >= 0)
       : [];
-    const hatAnker = s.profil.anker && s.profil.anker.length;
+    const ohneKonto = gast();
+    const mitProfil = !ohneKonto && s.profilAngelegt;
+    const hatAnker = !ohneKonto && s.profil.anker && s.profil.anker.length;
 
-    const abweichung = s.profilAngelegt ? A.profilAbweichung(f, s.profil) : [];
+    const abweichung = mitProfil ? A.profilAbweichung(f, s.profil) : [];
 
     return h`<form class="filter" data-tu-submit="filter-abschicken">
       <div class="filter__kopf">
@@ -13677,12 +13931,14 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         <button type="button" class="link" data-tu="filter-leeren">Zurücksetzen</button>
       </div>
 
-      ${s.profilAngelegt ? h`<div class="profilbezug">
+      ${mitProfil ? h`<div class="profilbezug">
         <button type="button" class="knopf knopf--still knopf--klein knopf--voll" data-tu="filter-aus-profil">
           ${ico('person')}Aus meinem Profil füllen</button>
         ${abweichung.length ? h`<p class="profilbezug__abweichung">
           ${ico('info')}Weicht ab: ${abweichung.map((a) => a.label + ' (Profil: ' + a.profil + ')').join(', ')}</p>` : ''}
-      </div>` : h`<p class="filter__hinweis filter__hinweis--tipp">
+      </div>` : ohneKonto ? h`<p class="filter__hinweis filter__hinweis--tipp">
+        ${ico('person')}Suchen und ansehen geht ohne Anmeldung. Mit einem Profil füllt TrimmoTrade diese
+        Filter von selbst und rechnet Passung und Fahrzeit aus. <a href="#/anmelden">Konto anlegen</a></p>` : h`<p class="filter__hinweis filter__hinweis--tipp">
         ${ico('person')}Leg ein <a href="#/profil">Profil</a> an, dann füllt TrimmoTrade diese Filter von selbst –
         und du musst nichts zweimal eintippen.</p>`}
 
@@ -13757,7 +14013,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         <legend>Arbeitsweg</legend>
         ${zahlFeld('höchstens', 'maxPendel', '35', 'Min.')}
         <p class="filter__hinweis">Gemessen ab ${s.profil.anker.map((a) => a.name).join(', ')} mit ${U.TRAVEL[s.profil.verkehrsmittel].label}.</p>
-      </fieldset>` : h`<p class="filter__hinweis filter__hinweis--tipp">
+      </fieldset>` : ohneKonto ? '' : h`<p class="filter__hinweis filter__hinweis--tipp">
         ${ico('zug')} Trag im <a href="#/profil">Profil</a> einen Arbeits- oder Uniort ein, dann filtert TrimmoTrade nach echter Fahrzeit statt nach Luftlinie.</p>`}
 
       ${f.umkreis ? h`<fieldset class="filter__gruppe">
@@ -13801,7 +14057,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
       <div class="filter__fuss">
         <button type="button" class="knopf knopf--voll" data-tu="agent-aus-filter">${ico('glocke')}Als Suchauftrag merken</button>
-        ${s.agenten.length >= P.grenze('suchauftraege')
+        ${!ohneKonto && s.agenten.length >= P.grenze('suchauftraege')
         ? h`<p class="filter__hinweis">${ico('schloss')}Im freien Tarif ist ein Suchauftrag möglich.
             <a href="#/plus">Mit Plus unbegrenzt viele.</a></p>` : ''}
       </div>
@@ -14009,9 +14265,20 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     </div>` : organisch.length > SEITE ? h`<p class="mehr__fertig fein">Alle ${U.num(organisch.length)} Treffer geladen.</p>` : ''}`;
   }
 
+  /* Zwei Ordnungen rechnen mit dem Profil: die Passung und die Aussicht.
+     Ohne Konto gibt es kein Profil – und eine Sortierung, die dann eine
+     beliebige Reihenfolge ausgibt und „Beste Passung“ darüberschreibt,
+     wäre eine Behauptung ohne Deckung. Also fällt sie auf „Neueste
+     zuerst“ zurück, und die beiden Punkte stehen gar nicht erst im
+     Auswahlfeld. */
+  const PROFILSORTEN = ['passung', 'chance'];
+  const sortJetzt = (wunsch) => (gast() && PROFILSORTEN.indexOf(wunsch) >= 0 ? 'neu' : wunsch);
+  const sortierungJetzt = () => (gast()
+    ? SORTIERUNG.filter((so) => PROFILSORTEN.indexOf(so[0]) < 0) : SORTIERUNG);
+
   /* Erklärt, warum das erste Ergebnis vorne steht. */
   function rankingErklaerung(bewertet) {
-    if (!bewertet.length || S.get().filter.sort !== 'passung') return '';
+    if (!bewertet.length || sortJetzt(S.get().filter.sort) !== 'passung') return '';
     const top = bewertet[0];
     const gruende = top.b.teile.slice(0, 3).map((t) =>
       t.label.toLowerCase() + ' (' + Math.round(t.anteil * 100) + ' %)');
@@ -14030,7 +14297,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   function rechnen() {
     const s = S.get();
     const gefiltert = A.filtern(TT.data.listings.concat(s.eigeneInserate), s.filter, s.profil);
-    const bewertet = A.sortieren(gefiltert, s.filter.sort, s.profil);
+    const bewertet = A.sortieren(gefiltert, sortJetzt(s.filter.sort), s.profil);
     letzteTreffer = bewertet.map((x) => x.l);
     return bewertet;
   }
@@ -14055,7 +14322,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
     /* Solange niemand die Filter angefasst hat, folgt die Suche dem
        Profil. Wer einmal selbst filtert, behält die Kontrolle. */
-    if (!s.filterBeruehrt && s.profilAngelegt) {
+    if (!s.filterBeruehrt && s.profilAngelegt && !gast()) {
       const abgeleitet = A.filterAusProfil(s.profil, f);
       Object.assign(f, abgeleitet);
       S.set({ filter: f }, 'filter');
@@ -14096,7 +14363,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <label class="feld feld--flach">
               <span class="nur-sr">Sortierung</span>
               <select data-tu-change="sortieren" aria-label="Sortierung">
-                ${SORTIERUNG.map((so) => h`<option value="${so[0]}" ${f.sort === so[0] ? 'selected' : ''}>${so[1]}</option>`)}
+                ${sortierungJetzt().map((so) => h`<option value="${so[0]}"
+                  ${sortJetzt(f.sort) === so[0] ? 'selected' : ''}>${so[1]}</option>`)}
               </select>
             </label>
             <div class="umschalter" role="group" aria-label="Darstellung">
@@ -14329,6 +14597,12 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   const U = TT.util, ui = TT.ui, A = TT.analyse, S = TT.store, M = TT.match, P = TT.plan, W = TT.werkzeuge;
   const h = U.html, raw = U.raw, ico = U.svg;
 
+  /* Ohne Anmeldung ist jedes Inserat vollständig zu sehen – Eckdaten,
+     Beschreibung, Vergleichsmiete, Prüfhinweis, echte Monatskosten. Was
+     fehlt, ist alles, was mit dem eigenen Profil rechnet oder etwas
+     festhält: Passung, Aussicht, Merken, Notizen, Termine. */
+  const gast = () => !!(TT.konto && !TT.konto.angemeldet());
+
   let bildIndex = 0;
 
   /* ------------------------- Galerie ------------------------- */
@@ -14548,6 +14822,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   /* ------------------------- Chancen ------------------------- */
 
   function chancenBlock(l) {
+    if (gast()) return '';
     if (l.kind === 'kauf') return '';
     const c = W.chancen(l, S.get().profil);
     const ton = { gut: 'gut', mittel: 'warn', schwach: 'schlecht', unbekannt: 'neutral' }[c.stufe];
@@ -14621,6 +14896,22 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   /* ------------------------- Passung ------------------------- */
 
+  /* An der Stelle, an der sonst die Passung steht, steht für Besucher
+     ohne Konto der Grund. Ein leerer Fleck erklärt nichts, ein Ring mit
+     einer erfundenen Zahl wäre gelogen. */
+  function passungWerbung() {
+    return h`<section class="block" id="passung">
+      <h2>${ico('ziel')}Passt das zu dir?</h2>
+      <p class="block__unter">Mit einem Konto rechnet TrimmoTrade für jedes Inserat aus, wie gut es zu
+        deinen Angaben passt – Preis, Größe, Lage, Fahrzeit zur Arbeit, Ausstattung – und sortiert die
+        Suche danach. Nach deinem Profil, nicht nach bezahlter Platzierung.</p>
+      <p class="werkzeug__weiter">
+        <a class="knopf" href="#/anmelden">${ico('person')}Konto anlegen</a>
+      </p>
+      <p class="fein">Ansehen kannst du ohne Anmeldung alles auf dieser Seite.</p>
+    </section>`;
+  }
+
   function passungBlock(l, b) {
     return h`<section class="block" id="passung">
       <h2>${ico('ziel')}Passung zu deinem Profil</h2>
@@ -14645,7 +14936,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   function wgBlock(l, b) {
     if (l.kind !== 'wg' || !l.wg) return '';
-    const w = l.wg, m = b.wg;
+    const w = l.wg, m = gast() ? null : b.wg;
     return h`<section class="block" id="wg">
       <h2>${ico('wg')}Die WG</h2>
       <div class="wg__kopf">
@@ -14693,7 +14984,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       ${m.hinweise.length ? h`<p class="info-meldung">${ico('info')}${m.hinweise.join(' ')}</p>` : ''}
       <p class="fein">Größte Übereinstimmung: ${m.staerke.label}. Größter Unterschied: ${m.schwaeche.label}.
         <a href="#/profil">Eigene Angaben ändern</a></p>` :
-      h`<p class="info-meldung">${ico('info')}Fülle im <a href="#/profil">Profil</a> deine WG-Angaben aus,
+      gast() ? h`<p class="info-meldung">${ico('info')}Wie gut ihr zusammenpasst, rechnet TrimmoTrade aus,
+        sobald ein paar Angaben zu dir vorliegen. <a href="#/anmelden">Konto anlegen</a></p>`
+      : h`<p class="info-meldung">${ico('info')}Fülle im <a href="#/profil">Profil</a> deine WG-Angaben aus,
         dann rechnet TrimmoTrade die Passung aus.</p>`}
     </section>`;
   }
@@ -14724,7 +15017,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <em>${Math.round(r.wert * 100)} % Güte</em>
           </li>`)}
         </ul>
-        <p><a class="knopf knopf--still" href="#/tausch">${ico('ring')}Alle Ketten im Ringtausch ansehen</a></p>`
+        <p><a class="knopf knopf--still" href="#/${gast() ? 'anmelden' : 'tausch'}">${ico('ring')}Alle Ketten im Ringtausch ansehen</a></p>`
+      : gast() ? h`<p class="info-meldung">${ico('info')}Für dieses Angebot gibt es aktuell keine geschlossene
+        Kette. Mit einem eigenen Angebot schließt du sie vielleicht. <a href="#/anmelden">Konto anlegen</a></p>`
       : h`<p class="info-meldung">${ico('info')}Für dieses Angebot gibt es aktuell keine geschlossene Kette.
         Lege im <a href="#/tausch">Ringtausch</a> dein eigenes Angebot an – vielleicht schließt du den Ring.</p>`}
       <div class="hinweisbox">${ico('info')}
@@ -14742,7 +15037,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     const d = TT.geo.districtByKey[l.viertelKey];
     const werte = d ? [['ÖPNV', d.oepnv], ['Grün', d.gruen], ['Ruhe', d.ruhe], ['Einkauf', d.einkauf], ['Ausgehen', d.ausgehen]] : [];
     const profil = S.get().profil;
-    const wege = (profil.anker || []).map((a) => ({
+    const wege = (gast() ? [] : profil.anker || []).map((a) => ({
       name: a.name,
       zeiten: Object.keys(U.TRAVEL).map((mo) => ({ mo, label: U.TRAVEL[mo].label, min: U.travelMin(l, a, mo) }))
     }));
@@ -14768,6 +15063,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           </tbody>
         </table>
         <p class="fein">Geschätzt aus Entfernung, Umwegfaktor und Zu-/Abgang – kein Fahrplan.</p>`
+      : gast() ? h`<p class="info-meldung">${ico('info')}Die Fahrzeiten stehen hier, sobald eine Arbeits- oder
+        Studienadresse im Profil hinterlegt ist. <a href="#/anmelden">Konto anlegen</a></p>`
       : h`<p class="info-meldung">${ico('info')}Trag im <a href="#/profil">Profil</a> deine Arbeits- oder Studienadresse ein,
         dann zeigt TrimmoTrade hier die Fahrzeiten.</p>`}
     </section>`;
@@ -14928,12 +15225,16 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p><a class="knopf" href="#/suche">${ico('suche')}Zur Suche</a></p></div>
       </div>` };
     }
-    S.gesehenMerken(l.id);
+    /* Wer nicht angemeldet ist, hinterlässt auch keine Spur: Der
+       Gesehen-Vermerk dient allein den Suchaufträgen, und die gibt es
+       ohne Konto nicht. */
+    if (!gast()) S.gesehenMerken(l.id);
     const s = S.get();
     const b = A.bewerten(l, s.profil);
     const k = A.kosten(l, s.profil);
-    const gemerkt = S.gemerkt(l.id), imVergleich = S.imVergleich(l.id);
-    const eintrag = s.merkliste[l.id];
+    const gemerkt = !gast() && S.gemerkt(l.id);
+    const imVergleich = !gast() && S.imVergleich(l.id);
+    const eintrag = gast() ? null : s.merkliste[l.id];
 
     return {
       titel: l.titel,
@@ -15031,7 +15332,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
           <aside class="objekt__seite">
             <div class="haftbox">
-              ${passungBlock(l, b)}
+              ${gast() ? passungWerbung() : passungBlock(l, b)}
               <div class="haftbox__tun">
                 <button type="button" class="knopf knopf--voll" data-tu="anschreiben" data-id="${l.id}">${ico('nachricht')}${anfrageWort(l)}</button>
                 <a class="knopf knopf--still knopf--voll" href="#kosten">${ico('rechner')}${U.eur(k.monatSumme)} echte Monatskosten</a>
@@ -20161,6 +20462,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p>Zum Server geht genau eine Sache: die <b>Anmeldung</b>. Er beantwortet die Frage, wer du bist –
             mehr kennt er nicht. Was dort gespeichert wird, steht vollständig in Abschnitt 4; es ist eine
             kurze Liste, und sie enthält nichts von dem, was du in der Anwendung eingibst.</p>
+          <p>Ohne Anmeldung geht auch das nicht: Suche und Inserate lassen sich ansehen, ohne dass ein
+            Konto entsteht.</p>
           <p>Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten
             gebildet und keine Werbung nach deinen Interessen ausgespielt. Deshalb erscheint auch kein Fenster,
             das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.</p>
@@ -20191,8 +20494,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           </dl>
 
           <h2>4. Anmeldung und Konto</h2>
-          <p>Die Nutzung setzt eine Anmeldung voraus. Dafür – und nur dafür – gibt es eine Serverseite.
-            Gespeichert wird dort genau Folgendes:</p>
+          <p>Suche und Inserate lassen sich ohne Anmeldung ansehen; dabei entsteht kein Konto und wird
+            nichts über dich gespeichert. Wer ein Konto anlegt, wird auf der Serverseite geführt – und die
+            gibt es für nichts anderes. Gespeichert wird dort genau Folgendes:</p>
           <ul class="pruef">
             <li>${ico('pruefen')}<span>eine zufällige Kontonummer, die nichts über dich verrät</span></li>
             <li>${ico('pruefen')}<span>deine E-Mail-Adresse, sofern du eine angegeben hast, und ob sie
@@ -20404,9 +20708,12 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             der Anbieter nicht ein.</p>
 
           <h2>§ 3 Anmeldung und Zustandekommen des Vertrags</h2>
-          <p>(1) Die Nutzung setzt eine Anmeldung voraus. Sie ist möglich mit einem Passkey, über ein Konto bei
-            Google oder Microsoft oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung
-            kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande.</p>
+          <p>(1) Suche und Inserate lassen sich ohne Anmeldung ansehen. Ein Konto braucht, wer Inserate
+            merken oder vergleichen, Anbieter anschreiben, Suchaufträge anlegen, Unterlagen ablegen oder
+            selbst inserieren will. Die Anmeldung ist möglich mit einem Passkey, über ein Konto bei Google
+            oder Microsoft oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung kommt ein
+            unentgeltlicher Nutzungsvertrag über den freien Tarif zustande; ohne Anmeldung entsteht kein
+            Vertragsverhältnis.</p>
           <p>(2) Die Anmeldung setzt die Zustimmung zu diesen Bedingungen und die Kenntnisnahme der
             Datenschutzerklärung voraus. Beide sind vor der Anmeldung ohne Anmeldung abrufbar.</p>
           <p>(3) Es besteht kein Anspruch auf Anmeldung. Der Anbieter kann sie ablehnen, insbesondere bei
@@ -21510,6 +21817,9 @@ Datum: __________________
       ${neuAnbieten ? h`<div class="info-meldung">${ico('info')}Noch kein Passkey auf diesem Gerät?
         <button type="button" class="link" data-tu="anmelden-passkey-neu">Jetzt einen anlegen und
         damit ein Konto eröffnen</button></div>` : ''}
+      <p class="anmeldung__stoebern">
+        <a href="#/suche">${ico('suche')}Erst einmal umsehen – Angebote ohne Anmeldung ansehen</a>
+      </p>
       <details class="anmeldung__warum">
         <summary>${ico('schloss')}Warum steht der Passkey oben?</summary>
         <p>Weil er als Einziges gegen die häufigste Masche schützt: eine nachgebaute Anmeldeseite. Ein Passkey
@@ -21631,8 +21941,8 @@ Datum: __________________
           <header class="anmeldung__kopf">
             <span class="anmeldung__logo">${ico('dach')}</span>
             <h1>Willkommen bei TrimmoTrade</h1>
-            <p>Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil,
-              eine Bewerbermappe. Zum Start brauchst du eine Anmeldung.</p>
+              <p>Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil,
+              eine Bewerbermappe.</p>
           </header>
 
           ${meldung ? h`<p class="warn-meldung">${ico('warnung')}${meldung}</p>` : ''}

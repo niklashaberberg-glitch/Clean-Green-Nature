@@ -226,6 +226,8 @@
           <p>Zum Server geht genau eine Sache: die <b>Anmeldung</b>. Er beantwortet die Frage, wer du bist –
             mehr kennt er nicht. Was dort gespeichert wird, steht vollständig in Abschnitt 4; es ist eine
             kurze Liste, und sie enthält nichts von dem, was du in der Anwendung eingibst.</p>
+          <p>Ohne Anmeldung geht auch das nicht: Suche und Inserate lassen sich ansehen, ohne dass ein
+            Konto entsteht.</p>
           <p>Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten
             gebildet und keine Werbung nach deinen Interessen ausgespielt. Deshalb erscheint auch kein Fenster,
             das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.</p>
@@ -256,8 +258,9 @@
           </dl>
 
           <h2>4. Anmeldung und Konto</h2>
-          <p>Die Nutzung setzt eine Anmeldung voraus. Dafür – und nur dafür – gibt es eine Serverseite.
-            Gespeichert wird dort genau Folgendes:</p>
+          <p>Suche und Inserate lassen sich ohne Anmeldung ansehen; dabei entsteht kein Konto und wird
+            nichts über dich gespeichert. Wer ein Konto anlegt, wird auf der Serverseite geführt – und die
+            gibt es für nichts anderes. Gespeichert wird dort genau Folgendes:</p>
           <ul class="pruef">
             <li>${ico('pruefen')}<span>eine zufällige Kontonummer, die nichts über dich verrät</span></li>
             <li>${ico('pruefen')}<span>deine E-Mail-Adresse, sofern du eine angegeben hast, und ob sie
@@ -469,9 +472,12 @@
             der Anbieter nicht ein.</p>
 
           <h2>§ 3 Anmeldung und Zustandekommen des Vertrags</h2>
-          <p>(1) Die Nutzung setzt eine Anmeldung voraus. Sie ist möglich mit einem Passkey, über ein Konto bei
-            Google oder Microsoft oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung
-            kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande.</p>
+          <p>(1) Suche und Inserate lassen sich ohne Anmeldung ansehen. Ein Konto braucht, wer Inserate
+            merken oder vergleichen, Anbieter anschreiben, Suchaufträge anlegen, Unterlagen ablegen oder
+            selbst inserieren will. Die Anmeldung ist möglich mit einem Passkey, über ein Konto bei Google
+            oder Microsoft oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung kommt ein
+            unentgeltlicher Nutzungsvertrag über den freien Tarif zustande; ohne Anmeldung entsteht kein
+            Vertragsverhältnis.</p>
           <p>(2) Die Anmeldung setzt die Zustimmung zu diesen Bedingungen und die Kenntnisnahme der
             Datenschutzerklärung voraus. Beide sind vor der Anmeldung ohne Anmeldung abrufbar.</p>
           <p>(3) Es besteht kein Anspruch auf Anmeldung. Der Anbieter kann sie ablehnen, insbesondere bei

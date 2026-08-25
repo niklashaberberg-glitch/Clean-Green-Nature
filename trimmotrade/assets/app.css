@@ -2018,14 +2018,29 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .nur-angemeldet { display: none; }
 body.ist-angemeldet .nur-angemeldet { display: grid; }
 
-/* Ohne Anmeldung führt jeder Punkt der Navigation auf diese Seite zurück –
-   ein Menü, das nur zu sich selbst führt, ist eine Sackgasse. Sichtbar
-   bleibt, was ohne Konto trägt: Marke, Darstellung, Hilfefenster und die
-   Rechtstexte im Fußbereich. */
-body:not(.ist-angemeldet) .kopf__nav,
+/* Ohne Anmeldung führt der größte Teil der Navigation auf die
+   Anmeldeseite zurück – ein Menü, das nur zu sich selbst führt, ist eine
+   Sackgasse. Sichtbar bleibt, was ohne Konto trägt: Marke, Suche,
+   Darstellung, Sprache, Hilfefenster, die Rechtstexte im Fußbereich –
+   und der Weg zur Anmeldung.
+
+   Ausgewählt wird über eine Klasse statt über eine Aufzählung von
+   Ausnahmen im Selektor: Die Aufzählung wuchs mit jedem Knopf, und wer
+   einen neuen hinzufügte, musste sie kennen. */
+body:not(.ist-angemeldet) .kopf__nav a:not([data-route="suche"]),
 body:not(.ist-angemeldet) .unten,
-body:not(.ist-angemeldet) .kopf__tun > :not([data-tu="theme"], [data-tu="sprache"]) { display: none; }
+body:not(.ist-angemeldet) .kopf__tun > :not(.auch-ohne-konto) { display: none; }
 body:not(.ist-angemeldet) .kopf__innen { justify-content: space-between; }
+/* Ein einzelner Punkt, den der automatische Rand in die Mitte schiebt,
+   sieht aus wie vergessen. Ohne Anmeldung steht „Suchen“ deshalb dort,
+   wo es hingehört: direkt neben der Marke. */
+body:not(.ist-angemeldet) .kopf__nav { margin-left: 0; }
+
+.nur-gast { display: none; }
+body:not(.ist-angemeldet) .nur-gast { display: inline-flex; }
+/* Auf der Anmeldeseite selbst wäre der Anmeldeknopf ein Verweis auf das,
+   was ohnehin gerade offen ist. */
+body[data-ansicht="anmelden"] .nur-gast { display: none; }
 /* Dasselbe im Fußbereich: Die Rechtstexte und die Hilfe bleiben stehen,
    die Verweise in die Anwendung verschwinden. */
 body:not(.ist-angemeldet) .nur-innen { display: none; }
@@ -2089,6 +2104,16 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .anmeldung__code { display: inline-block; margin-top: .5em; padding: .25em .7em; border-radius: var(--r-klein);
   background: var(--flaeche); font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 1.35rem; font-weight: 700; letter-spacing: .22em; }
+
+/* Der Weg ins Schaufenster. Ruhig gehalten – er ist die Nebentür, nicht
+   der Haupteingang –, aber mit voller Trefferfläche und einem Zeichen,
+   damit er zwischen den Verfahren nicht verschwindet. */
+.anmeldung__stoebern { margin: 14px 0 0; text-align: center; }
+.anmeldung__stoebern a {
+  display: inline-flex; align-items: center; gap: .45em;
+  min-height: 24px; padding: .35em .2em; font-size: .88rem;
+}
+.anmeldung__stoebern .ico { width: 16px; height: 16px; }
 
 .anmeldung__warum { margin-top: 14px; border: 1px solid var(--rand); border-radius: var(--r-klein);
   background: var(--flaeche2); }

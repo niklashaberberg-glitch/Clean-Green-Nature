@@ -9,6 +9,12 @@
   const U = TT.util, ui = TT.ui, A = TT.analyse, S = TT.store, P = TT.plan;
   const h = U.html, raw = U.raw, ico = U.svg;
 
+  /* Ohne Anmeldung ist die Suche vollständig benutzbar – nur eben ohne
+     alles, was mit einem Profil rechnet. Stünde aus einer früheren
+     Sitzung noch eines im Browserspeicher, wäre es hier erst recht
+     falsch: Abgemeldet ist abgemeldet. */
+  const gast = () => !!(TT.konto && !TT.konto.angemeldet());
+
   let karte = null;
   let letzteTreffer = [];
   let umkreisModus = false;
@@ -89,9 +95,11 @@
     const alleViertel = f.staedte.length
       ? TT.geo.DISTRICTS.filter((d) => f.staedte.indexOf(d.city) >= 0)
       : [];
-    const hatAnker = s.profil.anker && s.profil.anker.length;
+    const ohneKonto = gast();
+    const mitProfil = !ohneKonto && s.profilAngelegt;
+    const hatAnker = !ohneKonto && s.profil.anker && s.profil.anker.length;
 
-    const abweichung = s.profilAngelegt ? A.profilAbweichung(f, s.profil) : [];
+    const abweichung = mitProfil ? A.profilAbweichung(f, s.profil) : [];
 
     return h`<form class="filter" data-tu-submit="filter-abschicken">
       <div class="filter__kopf">
@@ -99,12 +107,14 @@
         <button type="button" class="link" data-tu="filter-leeren">Zurücksetzen</button>
       </div>
 
-      ${s.profilAngelegt ? h`<div class="profilbezug">
+      ${mitProfil ? h`<div class="profilbezug">
         <button type="button" class="knopf knopf--still knopf--klein knopf--voll" data-tu="filter-aus-profil">
           ${ico('person')}Aus meinem Profil füllen</button>
         ${abweichung.length ? h`<p class="profilbezug__abweichung">
           ${ico('info')}Weicht ab: ${abweichung.map((a) => a.label + ' (Profil: ' + a.profil + ')').join(', ')}</p>` : ''}
-      </div>` : h`<p class="filter__hinweis filter__hinweis--tipp">
+      </div>` : ohneKonto ? h`<p class="filter__hinweis filter__hinweis--tipp">
+        ${ico('person')}Suchen und ansehen geht ohne Anmeldung. Mit einem Profil füllt TrimmoTrade diese
+        Filter von selbst und rechnet Passung und Fahrzeit aus. <a href="#/anmelden">Konto anlegen</a></p>` : h`<p class="filter__hinweis filter__hinweis--tipp">
         ${ico('person')}Leg ein <a href="#/profil">Profil</a> an, dann füllt TrimmoTrade diese Filter von selbst –
         und du musst nichts zweimal eintippen.</p>`}
 
@@ -179,7 +189,7 @@
         <legend>Arbeitsweg</legend>
         ${zahlFeld('höchstens', 'maxPendel', '35', 'Min.')}
         <p class="filter__hinweis">Gemessen ab ${s.profil.anker.map((a) => a.name).join(', ')} mit ${U.TRAVEL[s.profil.verkehrsmittel].label}.</p>
-      </fieldset>` : h`<p class="filter__hinweis filter__hinweis--tipp">
+      </fieldset>` : ohneKonto ? '' : h`<p class="filter__hinweis filter__hinweis--tipp">
         ${ico('zug')} Trag im <a href="#/profil">Profil</a> einen Arbeits- oder Uniort ein, dann filtert TrimmoTrade nach echter Fahrzeit statt nach Luftlinie.</p>`}
 
       ${f.umkreis ? h`<fieldset class="filter__gruppe">
@@ -223,7 +233,7 @@
 
       <div class="filter__fuss">
         <button type="button" class="knopf knopf--voll" data-tu="agent-aus-filter">${ico('glocke')}Als Suchauftrag merken</button>
-        ${s.agenten.length >= P.grenze('suchauftraege')
+        ${!ohneKonto && s.agenten.length >= P.grenze('suchauftraege')
         ? h`<p class="filter__hinweis">${ico('schloss')}Im freien Tarif ist ein Suchauftrag möglich.
             <a href="#/plus">Mit Plus unbegrenzt viele.</a></p>` : ''}
       </div>
@@ -431,9 +441,20 @@
     </div>` : organisch.length > SEITE ? h`<p class="mehr__fertig fein">Alle ${U.num(organisch.length)} Treffer geladen.</p>` : ''}`;
   }
 
+  /* Zwei Ordnungen rechnen mit dem Profil: die Passung und die Aussicht.
+     Ohne Konto gibt es kein Profil – und eine Sortierung, die dann eine
+     beliebige Reihenfolge ausgibt und „Beste Passung“ darüberschreibt,
+     wäre eine Behauptung ohne Deckung. Also fällt sie auf „Neueste
+     zuerst“ zurück, und die beiden Punkte stehen gar nicht erst im
+     Auswahlfeld. */
+  const PROFILSORTEN = ['passung', 'chance'];
+  const sortJetzt = (wunsch) => (gast() && PROFILSORTEN.indexOf(wunsch) >= 0 ? 'neu' : wunsch);
+  const sortierungJetzt = () => (gast()
+    ? SORTIERUNG.filter((so) => PROFILSORTEN.indexOf(so[0]) < 0) : SORTIERUNG);
+
   /* Erklärt, warum das erste Ergebnis vorne steht. */
   function rankingErklaerung(bewertet) {
-    if (!bewertet.length || S.get().filter.sort !== 'passung') return '';
+    if (!bewertet.length || sortJetzt(S.get().filter.sort) !== 'passung') return '';
     const top = bewertet[0];
     const gruende = top.b.teile.slice(0, 3).map((t) =>
       t.label.toLowerCase() + ' (' + Math.round(t.anteil * 100) + ' %)');
@@ -452,7 +473,7 @@
   function rechnen() {
     const s = S.get();
     const gefiltert = A.filtern(TT.data.listings.concat(s.eigeneInserate), s.filter, s.profil);
-    const bewertet = A.sortieren(gefiltert, s.filter.sort, s.profil);
+    const bewertet = A.sortieren(gefiltert, sortJetzt(s.filter.sort), s.profil);
     letzteTreffer = bewertet.map((x) => x.l);
     return bewertet;
   }
@@ -477,7 +498,7 @@
 
     /* Solange niemand die Filter angefasst hat, folgt die Suche dem
        Profil. Wer einmal selbst filtert, behält die Kontrolle. */
-    if (!s.filterBeruehrt && s.profilAngelegt) {
+    if (!s.filterBeruehrt && s.profilAngelegt && !gast()) {
       const abgeleitet = A.filterAusProfil(s.profil, f);
       Object.assign(f, abgeleitet);
       S.set({ filter: f }, 'filter');
@@ -518,7 +539,8 @@
             <label class="feld feld--flach">
               <span class="nur-sr">Sortierung</span>
               <select data-tu-change="sortieren" aria-label="Sortierung">
-                ${SORTIERUNG.map((so) => h`<option value="${so[0]}" ${f.sort === so[0] ? 'selected' : ''}>${so[1]}</option>`)}
+                ${sortierungJetzt().map((so) => h`<option value="${so[0]}"
+                  ${sortJetzt(f.sort) === so[0] ? 'selected' : ''}>${so[1]}</option>`)}
               </select>
             </label>
             <div class="umschalter" role="group" aria-label="Darstellung">

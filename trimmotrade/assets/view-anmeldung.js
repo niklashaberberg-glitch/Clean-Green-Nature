@@ -79,6 +79,9 @@
       ${neuAnbieten ? h`<div class="info-meldung">${ico('info')}Noch kein Passkey auf diesem Gerät?
         <button type="button" class="link" data-tu="anmelden-passkey-neu">Jetzt einen anlegen und
         damit ein Konto eröffnen</button></div>` : ''}
+      <p class="anmeldung__stoebern">
+        <a href="#/suche">${ico('suche')}Erst einmal umsehen – Angebote ohne Anmeldung ansehen</a>
+      </p>
       <details class="anmeldung__warum">
         <summary>${ico('schloss')}Warum steht der Passkey oben?</summary>
         <p>Weil er als Einziges gegen die häufigste Masche schützt: eine nachgebaute Anmeldeseite. Ein Passkey
@@ -200,8 +203,8 @@
           <header class="anmeldung__kopf">
             <span class="anmeldung__logo">${ico('dach')}</span>
             <h1>Willkommen bei TrimmoTrade</h1>
-            <p>Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil,
-              eine Bewerbermappe. Zum Start brauchst du eine Anmeldung.</p>
+              <p>Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil,
+              eine Bewerbermappe.</p>
           </header>
 
           ${meldung ? h`<p class="warn-meldung">${ico('warnung')}${meldung}</p>` : ''}

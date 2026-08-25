@@ -925,9 +925,7 @@
 
   e({
     'Willkommen bei TrimmoTrade': 'Welcome to TrimmoTrade',
-    'Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil, eine Bewerbermappe. Zum Start brauchst du eine Anmeldung.':
-      'Rentals, property to buy, flatshare rooms and apartment swaps – one search, one profile, one application folder. To begin you need to sign in.',
-    '{2}Warum steht der Passkey oben?': '{2}Why is the passkey at the top?',
+    '{3}Warum steht der Passkey oben?': '{3}Why is the passkey at the top?',
     'Weil er als Einziges gegen die häufigste Masche schützt: eine nachgebaute Anmeldeseite. Ein Passkey ist an die Adresse gebunden, unter der er angelegt wurde. Wer auf eine gefälschte Seite hereinfällt, gibt dort nichts preis – es gibt nichts einzugeben. Der Schlüssel entsteht im Sicherheitschip deines Geräts und verlässt ihn nie.':
       'Because it is the only one that protects against the commonest trick: a fake sign-in page. A passkey is bound to the address it was created under. Anyone falling for a forged page gives nothing away – there is nothing to type. The key is created in your device’s security chip and never leaves it.',
     'Bei Google, Microsoft und Apple bekommt TrimmoTrade Name und E-Mail-Adresse, dein Passwort dort aber nie zu sehen. Beim Weg über die E-Mail-Adresse gibt es gar kein Passwort, sondern einen Code, der zehn Minuten gilt.':
@@ -941,7 +939,7 @@
     'Wir haben einen sechsstelligen Code an': 'We have sent a six-digit code to',
     'geschickt. Er gilt {1} Minuten.': '. It is valid for {1} minutes.',
     'Code': 'Code',
-    '{3}Anmelden': '{3}Sign in',
+    '{0}Anmelden': '{0}Sign in',
     'neuen Code anfordern': 'request a new code',
     'Adresse ändern': 'change address',
     'Nachgebildeter Ablauf': 'Simulated flow',
@@ -2062,8 +2060,6 @@
       '(4) The provider does not warrant the accuracy, completeness or currency of offers posted by third parties.',
 
     '§ 3 Anmeldung und Zustandekommen des Vertrags': '§ 3 Signing in and formation of the contract',
-    '(1) Die Nutzung setzt eine Anmeldung voraus. Sie ist möglich mit einem Passkey, über ein Konto bei Google, Microsoft oder Apple oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande.':
-      '(1) Use requires signing in. This is possible with a passkey, via an account with Google, Microsoft or Apple, or with an email address and a one-time code. Signing in forms a free-of-charge user agreement covering the free plan.',
     '(2) Die Anmeldung setzt die Zustimmung zu diesen Bedingungen und die Kenntnisnahme der Datenschutzerklärung voraus. Beide sind vor der Anmeldung ohne Anmeldung abrufbar.':
       '(2) Signing in requires agreement to these terms and acknowledgement of the privacy policy. Both are available before signing in, without signing in.',
     '(3) Es besteht kein Anspruch auf Anmeldung. Der Anbieter kann sie ablehnen, insbesondere bei begründetem Verdacht auf missbräuchliche Mehrfachanlage.':
@@ -2717,8 +2713,6 @@
     'Zum Server geht genau eine Sache: die': 'Exactly one thing goes to the server: the',
     '. Er beantwortet die Frage, wer du bist – mehr kennt er nicht. Was dort gespeichert wird, steht vollständig in Abschnitt 4; es ist eine kurze Liste, und sie enthält nichts von dem, was du in der Anwendung eingibst.':
       '. It answers the question of who you are – it knows nothing more. What is stored there is set out in full in section 4; it is a short list, and it contains nothing of what you enter in the application.',
-    'Die Nutzung setzt eine Anmeldung voraus. Dafür – und nur dafür – gibt es eine Serverseite. Gespeichert wird dort genau Folgendes:':
-      'Use requires signing in. For that – and only for that – there is a server side. Exactly the following is stored there:',
     'eine zufällige Kontonummer, die nichts über dich verrät': 'a random account number that reveals nothing about you',
     'deine E-Mail-Adresse, sofern du eine angegeben hast, und ob sie bestätigt ist':
       'your email address, if you gave one, and whether it is verified',
@@ -2755,8 +2749,80 @@
       'The encrypted files, too, live solely in your browser. The sign-in server never sees them – it knows neither files nor password nor key.',
     'Über die in Abschnitt 4 beschriebene Anmeldung bei Google oder Microsoft hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus.':
       'Beyond the sign-in via Google or Microsoft described in section 4, no personal data are transferred to countries outside the European Union and the European Economic Area. Anyone wishing to avoid that signs in with a passkey or with an email address – both routes work without an external provider.',
-    '(1) Die Nutzung setzt eine Anmeldung voraus. Sie ist möglich mit einem Passkey, über ein Konto bei Google oder Microsoft oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande.':
-      '(1) Use requires signing in. This is possible with a passkey, via an account with Google or Microsoft, or with an email address and a one-time code. Signing in forms a free-of-charge usage contract covering the free tier.',
+
+    /* ---------------------------------------------------------------
+       Ohne Anmeldung stöbern
+       --------------------------------------------------------------- */
+
+    'Dafür brauchst du ein Konto': 'You need an account for that',
+    'gehört zu deinem Konto – dabei entsteht etwas, das dir gehört und das du wiederfinden willst.':
+      'belongs to your account – it creates something that is yours and that you will want to find again.',
+    'Diese Funktion': 'This feature',
+    'Ansehen kannst du weiterhin alles ohne Anmeldung:': 'You can still look at everything without signing in:',
+    'die Suche, jedes Inserat, die Vergleichsmiete, den Prüfhinweis und die echten Monatskosten.':
+      'the search, every listing, the comparable rent, the fraud warning and the true monthly costs.',
+    'Ein Konto dauert eine halbe Minute': 'An account takes half a minute',
+    'Mit einem Passkey ganz ohne Eingabe – Face ID, Windows Hello oder Fingerabdruck. Ein Passwort gibt es hier nicht.':
+      'With a passkey, without typing anything – Face ID, Windows Hello or a fingerprint. There is no password here.',
+    'Weiter stöbern': 'Keep browsing',
+    'Konto anlegen': 'Create an account',
+
+    /* Wofür genau ein Konto nötig ist */
+    'Inserate merken': 'Saving listings',
+    'Inserate vergleichen': 'Comparing listings',
+    'Eine Anfrage schreiben': 'Writing an enquiry',
+    'Suchaufträge speichern': 'Saving searches',
+    'Filter aus deinem Profil füllen': 'Filling the filters from your profile',
+    'Einen Umkreis um deinen Ankerpunkt setzen': 'Setting a radius around your anchor point',
+    'Notizen zu einem Inserat': 'Notes on a listing',
+    'Den Stand deiner Bewerbung festhalten': 'Recording where your application stands',
+    'Die Besichtigungs-Checkliste': 'The viewing checklist',
+    'Einen Besichtigungstermin buchen': 'Booking a viewing appointment',
+    'Einen Besichtigungstermin absagen': 'Cancelling a viewing appointment',
+    'Das Exposé als Datei': 'The listing details as a file',
+    'Die Kostenrechnung auf deinen Haushalt einstellen': 'Adjusting the cost calculation to your household',
+    'Werte in dein Profil übernehmen': 'Copying values into your profile',
+
+    /* Anmeldeseite und Schaufenster */
+    'Erst einmal umsehen – Angebote ohne Anmeldung ansehen':
+      'Have a look around first – browse listings without signing in',
+    'TrimmoTrade, zur Suche': 'TrimmoTrade, to the search',
+
+    /* Statt der Passung */
+    'Passt das zu dir?': 'Does this suit you?',
+    'Mit einem Konto rechnet TrimmoTrade für jedes Inserat aus, wie gut es zu deinen Angaben passt – Preis, Größe, Lage, Fahrzeit zur Arbeit, Ausstattung – und sortiert die Suche danach. Nach deinem Profil, nicht nach bezahlter Platzierung.':
+      'With an account, TrimmoTrade works out for every listing how well it matches what you said you need – price, size, location, commute, features – and orders the search by that. By your profile, not by paid placement.',
+    'Ansehen kannst du ohne Anmeldung alles auf dieser Seite.':
+      'Everything on this page is visible without signing in.',
+    'Suchen und ansehen geht ohne Anmeldung. Mit einem Profil füllt TrimmoTrade diese Filter von selbst und rechnet Passung und Fahrzeit aus.':
+      'Searching and browsing work without signing in. With a profile, TrimmoTrade fills these filters in by itself and works out match and commute.',
+    'Wie gut ihr zusammenpasst, rechnet TrimmoTrade aus, sobald ein paar Angaben zu dir vorliegen.':
+      'TrimmoTrade works out how well you fit together as soon as it knows a few things about you.',
+    'Die Fahrzeiten stehen hier, sobald eine Arbeits- oder Studienadresse im Profil hinterlegt ist.':
+      'Travel times appear here as soon as a work or study address is stored in the profile.',
+    'Für dieses Angebot gibt es aktuell keine geschlossene Kette. Mit einem eigenen Angebot schließt du sie vielleicht.':
+      'There is currently no closed chain for this offer. With an offer of your own you might close it.',
+
+    /* Lücken, die erst im Gastzustand sichtbar wurden */
+    'Weiter mit Google': 'Continue with Google',
+    'Weiter mit Microsoft': 'Continue with Microsoft',
+    'Google-Konto': 'Google account',
+    'Privat oder geschäftlich': 'Personal or work',
+    'Alle Ketten im Ringtausch ansehen': 'See all chains in the ring swap',
+    'passende {1} im Bestand': 'matching {1} in the market',
+    'Internet an der neuen Adresse prüfen': 'Check internet availability at the new address',
+    'Verfügbarkeit und Schaltdauer vor dem Einzug klären.':
+      'Clarify availability and activation time before moving in.',
+    'Face ID, Windows Hello oder Fingerabdruck': 'Face ID, Windows Hello or a fingerprint',
+    'Helles Zimmer in entspannter WG.': 'Bright room in a relaxed flatshare.',
+    'Freies Zimmer in gewachsener Wohngemeinschaft.': 'Room available in an established flatshare.',
+    'Schönes, ruhiges Zimmer mit eigenem Balkonzugang.': 'Attractive, quiet room with its own balcony access.',
+    '(1) Suche und Inserate lassen sich ohne Anmeldung ansehen. Ein Konto braucht, wer Inserate merken oder vergleichen, Anbieter anschreiben, Suchaufträge anlegen, Unterlagen ablegen oder selbst inserieren will. Die Anmeldung ist möglich mit einem Passkey, über ein Konto bei Google oder Microsoft oder mit einer E-Mail-Adresse und einem Einmalcode. Mit der Anmeldung kommt ein unentgeltlicher Nutzungsvertrag über den freien Tarif zustande; ohne Anmeldung entsteht kein Vertragsverhältnis.':
+      '(1) The search and the listings can be viewed without signing in. An account is needed to save or compare listings, to contact providers, to create saved searches, to store documents or to advertise. Signing in is possible with a passkey, via an account with Google or Microsoft, or with an email address and a one-time code. Signing in forms a free-of-charge usage contract covering the free tier; without signing in no contractual relationship arises.',
+    'Suche und Inserate lassen sich ohne Anmeldung ansehen; dabei entsteht kein Konto und wird nichts über dich gespeichert. Wer ein Konto anlegt, wird auf der Serverseite geführt – und die gibt es für nichts anderes. Gespeichert wird dort genau Folgendes:':
+      'The search and the listings can be viewed without signing in; no account is created and nothing about you is stored in the process. Anyone who creates an account is held on the server side – and that exists for nothing else. Exactly the following is stored there:',
+    'Ohne Anmeldung geht auch das nicht: Suche und Inserate lassen sich ansehen, ohne dass ein Konto entsteht.':
+      'Without signing in, not even that happens: the search and the listings can be viewed without an account coming into being.',
 
   });
 

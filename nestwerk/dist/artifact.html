@@ -862,7 +862,10 @@ input[type="range"] {
 .lifestyle__du { width: 11px; height: 11px; background: var(--akzent); border: 2px solid var(--flaeche); z-index: 2; }
 .lifestyle__enden { display: flex; justify-content: space-between; font-size: .73rem; color: var(--text-still); }
 .lifestyle__enden i { font-style: normal; }
+/* Ohne die Paare stand jedes Zeichen als eigenes Flex-Kind da und der
+   Abstand zum eigenen Wort war so groß wie der zum nächsten Paar. */
 .lifestyle__legende { display: flex; align-items: center; gap: .4em 1em; font-size: .78rem; color: var(--text-leise); flex-wrap: wrap; }
+.lifestyle__legende > span { display: inline-flex; align-items: center; gap: .35em; }
 .lifestyle__punkt { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
 .lifestyle__punkt--du { background: var(--akzent); }
 .lifestyle__punkt--wg { background: var(--akzent2); }
@@ -10658,8 +10661,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <span class="lifestyle__enden"><i>${d.links}</i><i>${d.rechts}</i></span>
         </div>`)}
         <p class="lifestyle__legende">
-          <span class="lifestyle__punkt lifestyle__punkt--du"></span>du
-          <span class="lifestyle__punkt lifestyle__punkt--wg"></span>diese WG
+          <span><span class="lifestyle__punkt lifestyle__punkt--du"></span>du</span>
+          <span><span class="lifestyle__punkt lifestyle__punkt--wg"></span>diese WG</span>
         </p>
       </div>
       ${m.ausschluss.length ? h`<p class="warn-meldung">${ico('warnung')}${m.ausschluss.join(' ')}</p>` : ''}

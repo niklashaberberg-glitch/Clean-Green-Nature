@@ -365,8 +365,8 @@
           <span class="lifestyle__enden"><i>${d.links}</i><i>${d.rechts}</i></span>
         </div>`)}
         <p class="lifestyle__legende">
-          <span class="lifestyle__punkt lifestyle__punkt--du"></span>du
-          <span class="lifestyle__punkt lifestyle__punkt--wg"></span>diese WG
+          <span><span class="lifestyle__punkt lifestyle__punkt--du"></span>du</span>
+          <span><span class="lifestyle__punkt lifestyle__punkt--wg"></span>diese WG</span>
         </p>
       </div>
       ${m.ausschluss.length ? h`<p class="warn-meldung">${ico('warnung')}${m.ausschluss.join(' ')}</p>` : ''}

@@ -784,4 +784,49 @@ Lockerungsvorschlag, der die Nutzerin an den falschen Ort geführt hätte.
 
 Die Diagrammfarben sind mit einem Palettenprüfer gegen Farbfehlsichtigkeit
 gerechnet – alle Paare, hell und dunkel, ΔE ≥ 9 unter Deuteranopie,
-Protanopie und Tritanopie.
+Protanopie und Tritanopie (`scripts/farben-pruefen.js`).
+
+## Durchgang durch alle Bereiche
+
+Zum Abschluss ein Durchgang, der die Anwendung nicht entlang der Funktionen
+prüft, sondern entlang der Annahmen. Jede Prüfung wurde vorher an einem
+absichtlich eingebauten Fehler gemessen – ein Prüfer, der nie etwas findet,
+sagt nichts.
+
+Geprüft wurde:
+
+- **Jedes Bedienelement anklicken** in allen Ansichten, in beiden Tarifen,
+  angemeldet und nicht: 237 Elemente, keine Konsolenfehler.
+- **Stumme Knöpfe**: Wo führt ein Klick zu gar nichts? So kam heraus, dass
+  „Tausch anlegen“ eine Aktion trug, die es nie gab.
+- **Zahlen**: kein NaN, kein Infinity, keine leere Einheit über alle 275
+  Inserate und 14 Tauschketten.
+- **Gespeicherter Zustand**: absichtlich verdorbene Werte, falsche Arten,
+  abgeschnittenes JSON, voller Speicher.
+- **Sehr lange Wörter** ohne Trennstelle in Titel, Adresse, Anbietername,
+  Nachrichten und Notizen, bei 320, 390 und 1366 Pixeln.
+- **Kennungen aus der Adresszeile**: `#/objekt/constructor` und Verwandte,
+  die über den Prototyp ein Objekt liefern statt undefined.
+- **Semantik**: Überschriftenfolge, zugängliche Namen, Landmarken,
+  aria-Verweise, doppelte IDs.
+- **Fokus**, mit der Tabulatortaste statt mit `element.focus()` – nur so
+  greift `:focus-visible`, sonst misst man das Falsche.
+- **Jede Feldart** in jeder Ansicht gegen die nackte Browservorgabe.
+- **Flex- und Rasterbereiche mit Fließtext**, in denen ein Satz in
+  getrennte Kästen zerfällt.
+- **Typografie**: Anführungszeichen, Auslassungszeichen, Gedankenstriche,
+  Einheiten, Schreibweisen.
+- **Tempo**: Median 17 ms für die schwerste Ansicht, 6 ms auf einen
+  Tastendruck in der Suche.
+- **Tiefe Verweise und die Zurück-Taste**: jede Adresse beim Kaltstart, dazu
+  Unsinn wie `#/objekt/` oder ein 300 Zeichen langer Name.
+
+Gefunden und behoben wurden dabei unter anderem: ein Formular, das eigene
+Inserate nicht laden konnte, Lockinserate mit widersprüchlicher Warm- und
+Kaltmiete, ein weißer Bildschirm nach einem Wert falscher Art im Speicher,
+eigene Inserate, die nach dem Neuladen aus dem Verzeichnis fielen, neun
+Eingabefelder in nackter Browservorgabe (darunter die Anmeldung und der
+Tresor), Meldungskästen, die Sätze mit Verweisen in drei Blöcke zerlegten,
+ein abgeschalteter Fokusring an allen Formularfeldern und eine vollständige
+Navigation auf der Anmeldeseite, in der jeder Punkt zur Anmeldeseite
+zurückführte.

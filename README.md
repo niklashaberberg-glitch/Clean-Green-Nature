@@ -197,8 +197,34 @@ bewusst:
   ausdrücklich hervorgehoben werden sollte, steht sie weiterhin in der Vision
   und in den Strukturdaten.
 
+## Anfrageformular
+
+Die Felder heißen im E-Mail-Eingang so, wie sie hier stehen:
+
+| Block | Felder |
+|---|---|
+| Kontakt | `Name_Firma`, `email`, `Telefon`, `Ort_Stadtteil` |
+| Leistungsbereich | `Leistung_Graffitientfernung`, `Leistung_Fassade_Denkmal`, `Leistung_Industrie_Anlagen`, `Leistung_Verkehr`, `Leistung_Aussenanlagen_Parkraum`, `Leistung_Clean_Advertising` |
+| Zusätzlich | `Wunsch_Probelaserung`, `Interesse_Dokumentation`, `Interesse_Rahmenvertrag`, `Interesse_Objektbesichtigung` |
+| Einzelauftrag | `Flaeche_in_qm`, `Entfernung_in_km`, `Untergrund_Material`, `Verschmutzungsgrad`, `Berechneter_Richtpreis` |
+| Portfolio | `Interesse_GraffitiCare_Portfolio`, `GraffitiCare_Objektumfang`, `GraffitiCare_Untergrund`, `GraffitiCare_Freitext`, `GraffitiCare_Kalkulation` |
+| Sonstiges | `Allgemeine_Beschreibung`, `attachment` |
+
+Nur ausgefüllte Felder werden übertragen – die E-Mail bleibt dadurch kurz.
+Zugeklappte Detailblöcke werden abgeschaltet, damit ihre Vorgabewerte nicht als
+scheinbare Angaben mitgesendet werden.
+
 ## Getestet
 
 Chromium, Breiten von 320 px bis 1920 px, heller und dunkler Modus, mit und
-ohne JavaScript, Maus/Tastatur/Touch. Kein horizontaler Überlauf, keine
-Konsolenfehler, keine doppelten IDs.
+ohne JavaScript, Maus/Tastatur/Touch.
+
+Automatisch geprüft und ohne Befund:
+
+* HTML-Verschachtelung, doppelte IDs, tote Anker, nicht auflösbare Icons
+* Farbkontrast nach WCAG AA in beiden Modi, inklusive Flächen über Farbverläufen
+* Fokusfalle, Fokusrückgabe und Escape in allen sechs Fenstern und in der Suche
+* Überschriftenhierarchie ohne Sprünge, genau eine `h1`, alle Bereiche
+  ausgezeichnet, jedes Eingabefeld mit zugänglichem Namen
+* kein horizontaler Überlauf, Layoutverschiebung (CLS) = 0
+* keine Konsolen- oder Laufzeitfehler

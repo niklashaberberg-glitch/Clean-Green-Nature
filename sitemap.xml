@@ -5,9 +5,11 @@
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
+  <!-- Falls eine eigene Unterseite fuer Koeln angelegt wird, hier wieder eintragen:
   <url>
     <loc>https://www.cleangreennature.de/graffitientfernung-koeln.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  -->
 </urlset>

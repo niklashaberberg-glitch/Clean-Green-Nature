@@ -375,7 +375,7 @@
   --border-strong: #cbd7e0;
   --text:          #0d1729;
   --text-muted:    #4a5a6b;
-  --text-soft:     #6b7c8d;
+  --text-soft:     #5e7082;
   --brand:         #0d7c72;
   --brand-hover:   #0a655d;
   --brand-contrast:#062e2a;
@@ -385,6 +385,7 @@
   --warn-bg:       #fff8e8;
   --warn-line:     #f2dfae;
   --warn-text:     #6b4e10;
+  --danger:        #cf1a42;
   --ring:          #14b8a6;
 
   --shadow-1: 0 1px 2px rgba(13,23,41,.05), 0 2px 6px rgba(13,23,41,.05);
@@ -416,6 +417,7 @@ html[data-theme="dark"] {
   --warn-bg:       #2a2313;
   --warn-line:     #574722;
   --warn-text:     #f2d79a;
+  --danger:        #fb7185;
   --ring:          #2dd4bf;
 
   --shadow-1: 0 1px 2px rgba(0,0,0,.4);
@@ -720,20 +722,21 @@ html[data-theme="dark"] .theme-toggle .ico-moon { transform: translateY(0) rotat
   padding: 1.25rem var(--gutter) 2.5rem;
   overflow-y: auto; overscroll-behavior: contain;
   display: flex; flex-direction: column; gap: .25rem;
-  opacity: 0; visibility: hidden; transform: translateY(-8px);
-  transition: opacity .28s var(--ease-out), transform .28s var(--ease-out), visibility .28s;
+  opacity: 0; pointer-events: none; transform: translateY(-8px);
+  transition: opacity .28s var(--ease-out), transform .28s var(--ease-out);
 }
-.mobile-nav.is-open { opacity: 1; visibility: visible; transform: translateY(0); }
+.mobile-nav.is-open { opacity: 1; pointer-events: auto; transform: translateY(0); }
 .mobile-nav[hidden] { display: none; }
 @media (min-width: 1140px) { .mobile-nav { display: none; } }
-.mobile-nav a[data-mnav] {
+.mobile-nav [data-mnav] {
+  width: 100%; background: none; border: 0; text-align: left; font: inherit; cursor: pointer;
   display: flex; align-items: center; justify-content: space-between;
   padding: .95rem .25rem; font-weight: 650; font-size: 1.05rem;
   border-bottom: 1px solid var(--border); color: var(--text);
   transform: translateY(10px); opacity: 0;
 }
-.mobile-nav.is-open a[data-mnav] { animation: mnavIn .4s var(--ease-out) forwards; }
-.mobile-nav a[data-mnav] span { color: var(--text-soft); font-size: .78rem; font-weight: 600; }
+.mobile-nav.is-open [data-mnav] { animation: mnavIn .4s var(--ease-out) forwards; }
+.mobile-nav [data-mnav] span { color: var(--text-soft); font-size: .78rem; font-weight: 600; }
 @keyframes mnavIn { to { transform: translateY(0); opacity: 1; } }
 .mobile-nav__foot { margin-top: 1.5rem; display: grid; gap: .6rem; }
 
@@ -801,7 +804,7 @@ html[data-theme="dark"] .theme-toggle .ico-moon { transform: translateY(0) rotat
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
 }
 .hero__stats dt { font-size: clamp(1.4rem, 1rem + 1.6vw, 2rem); font-weight: 850; color: var(--brand-300); letter-spacing: -.02em; }
-.hero__stats dd { font-size: .78rem; color: #93a7b8; margin-top: .15rem; line-height: 1.35; }
+.hero__stats dd { font-size: .78rem; color: #aec0ce; margin-top: .15rem; line-height: 1.35; }
 
 .hero__panel {
   position: relative; border-radius: var(--radius-xl); padding: .75rem;
@@ -1016,15 +1019,14 @@ html[data-theme="dark"] .step__num { background: var(--brand-500); color: #04211
   background: var(--surface);
 }
 .input[aria-invalid="true"], .select[aria-invalid="true"] {
-  border-color: #e11d48; box-shadow: 0 0 0 3px rgba(225,29,72,.16);
+  border-color: var(--danger); box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 20%, transparent);
 }
 .select {
   appearance: none; padding-right: 2.6rem; cursor: pointer;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7c8d' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right .9rem center; background-size: 17px;
 }
-.error-text { display: none; color: #e11d48; font-size: .76rem; font-weight: 650; margin-top: .4rem; }
-html[data-theme="dark"] .error-text { color: #fb7185; }
+.error-text { display: none; color: var(--danger); font-size: .76rem; font-weight: 650; margin-top: .4rem; }
 .field.has-error .error-text { display: block; }
 
 /* Presets */
@@ -1145,6 +1147,9 @@ input[type="range"]:active::-webkit-slider-thumb { box-shadow: 0 0 0 8px color-m
 .filerow__drop:hover { background: #e11d48; border-color: #e11d48; color: #fff; }
 .filerow__drop svg { width: 14px; height: 14px; }
 
+.check-grid { display: grid; gap: .6rem; }
+@media (min-width: 620px) { .check-grid { grid-template-columns: repeat(2, 1fr); } }
+
 /* Preis-Box */
 .price-box {
   position: relative; overflow: hidden;
@@ -1219,9 +1224,12 @@ html[data-theme="dark"] .notice strong { color: var(--text); }
   display: grid; place-items: center; padding: clamp(.75rem, 2vw, 2rem);
   background: rgba(6,12,20,.62);
   backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px);
-  opacity: 0; visibility: hidden; transition: opacity .28s var(--ease-out), visibility .28s;
+  /* Bewusst ohne visibility im Übergang: diese schaltet erst zur Hälfte der
+     Laufzeit um, wodurch ein Element in dieser Zeit nicht fokussierbar wäre. */
+  opacity: 0; pointer-events: none; transition: opacity .28s var(--ease-out);
 }
-.modal.is-open { opacity: 1; visibility: visible; }
+.modal[hidden] { display: none; }
+.modal.is-open { opacity: 1; pointer-events: auto; }
 .modal__box {
   width: min(100%, var(--modal-w, 760px)); max-height: min(86dvh, 900px);
   display: flex; flex-direction: column;
@@ -1284,9 +1292,10 @@ html[data-theme="dark"] .notice strong { color: var(--text); }
   position: fixed; inset: 0; z-index: 140; padding: clamp(1rem, 8vh, 7rem) 1rem 1rem;
   display: flex; justify-content: center; align-items: flex-start;
   background: rgba(6,12,20,.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-  opacity: 0; visibility: hidden; transition: opacity .22s, visibility .22s;
+  opacity: 0; pointer-events: none; transition: opacity .22s var(--ease-out);
 }
-.palette.is-open { opacity: 1; visibility: visible; }
+.palette[hidden] { display: none; }
+.palette.is-open { opacity: 1; pointer-events: auto; }
 .palette__box {
   width: min(100%, 620px); background: var(--surface);
   border: 1px solid var(--border); border-radius: var(--radius-lg);
@@ -1388,7 +1397,10 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
 .footer a { transition: color .2s; }
 .footer a:hover { color: var(--brand-300); }
 .footer li + li { margin-top: .55rem; }
-.footer li a, .footer li button { font-size: .89rem; text-align: left; }
+.footer li a, .footer li button {
+  font-size: .89rem; text-align: left;
+  padding: 0; margin: 0; border: 0; background: none; font-family: inherit; color: inherit;
+}
 .footer__bar {
   margin-top: 3rem; padding-top: 1.6rem; border-top: 1px solid rgba(148,163,184,.16);
   display: flex; flex-wrap: wrap; gap: 1rem 1.6rem; justify-content: space-between; align-items: center;
@@ -1448,6 +1460,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
   <symbol id="ic-tools" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0 5.3 5.3l-8 8a2.8 2.8 0 0 1-4-4l8-8Z"/><path d="m6 6 3 3M4 12l2 2"/></symbol>
   <symbol id="ic-train" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14M9 3V2m6 1V2"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="m7 16-2 5m12-5 2 5M8 21h8"/></symbol>
   <symbol id="ic-road" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22 7 2h10l3 20"/><path d="M12 4v3M12 11v3M12 18v3"/></symbol>
+  <symbol id="ic-megaphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h3l9 5V5L7 10H4a1 1 0 0 0-1 1Z"/><path d="M19 9a3.5 3.5 0 0 1 0 6"/></symbol>
   <symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4.5 4.5L19 7"/></symbol>
   <symbol id="ic-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.2"/><path d="m8 12.3 2.6 2.6L16 9.4"/></symbol>
   <symbol id="ic-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
@@ -1488,8 +1501,8 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     <nav class="nav" id="primary-nav" aria-label="Hauptnavigation">
       <a class="nav__link" href="#leistungen">Leistungen</a>
       <a class="nav__link" href="#einsatzbereiche">Einsatzbereiche</a>
-      <a class="nav__link" href="#graffiticare">GraffitiCare</a>
       <a class="nav__link" href="#ablauf">Ablauf</a>
+      <a class="nav__link" href="#graffiticare">GraffitiCare</a>
       <a class="nav__link" href="#rechner">Anfrage</a>
     </nav>
 
@@ -1528,8 +1541,8 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     <a href="#graffiticare" data-mnav style="animation-delay:.28s">GraffitiCare Portfolio <span>Ab 35 € je Objekt/Monat</span></a>
     <a href="#rechner" data-mnav style="animation-delay:.32s">Anfrage &amp; Richtpreis <span>Sofort kalkulieren</span></a>
     <a href="#faq" data-mnav style="animation-delay:.36s">FAQ <span>Häufige Fragen</span></a>
-    <a href="#" data-mnav data-modal-open="modal-graffitientfernung-koeln" style="animation-delay:.4s">Graffitientfernung Köln <span>Lokaler Service</span></a>
-    <a href="#" data-mnav data-modal-open="modal-vision" style="animation-delay:.44s">Vision <span>Über Clean Green Nature</span></a>
+    <button type="button" data-mnav data-modal-open="modal-graffitientfernung-koeln" style="animation-delay:.4s">Graffitientfernung Köln <span>Lokaler Service</span></button>
+    <button type="button" data-mnav data-modal-open="modal-vision" style="animation-delay:.44s">Vision <span>Über Clean Green Nature</span></button>
     <div class="mobile-nav__foot">
       <a class="btn btn--primary btn--block" href="#rechner">Angebot anfragen</a>
       <a class="btn btn--ghost btn--block" href="mailto:info@cleangreennature.de">
@@ -2276,8 +2289,8 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
               <option data-price="40" value="Sichtbeton">Sichtbeton</option>
               <option data-price="35" value="Metall / Tore">Metall / Tore</option>
               <option data-price="65" value="Denkmalschutz / Historische Fassade">Denkmalschutz / Historische Fassade</option>
-              <option data-price="55" value="Objekt / Kleinteil nach Prüfung">Objekt / Kleinteil nach Prüfung</option>
-              <option data-price="55" value="Einfahrt / Pflaster / Betonfläche nach Prüfung">Einfahrt / Pflaster / Betonfläche nach Prüfung</option>
+              <option data-price="55" value="Stahlbau / Anlagenteil nach Prüfung">Stahlbau / Anlagenteil nach Prüfung</option>
+              <option data-price="55" value="Außenanlage / Pflaster / Betonfläche nach Prüfung">Außenanlage / Pflaster / Betonfläche nach Prüfung</option>
             </select>
           </div>
 
@@ -2290,7 +2303,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           </div>
 
           <label class="check-card" style="margin-bottom:1.35rem">
-            <input type="checkbox" id="graffiticare-check" name="Interesse_GraffitiCare_Abo"
+            <input type="checkbox" id="graffiticare-check" name="Interesse_GraffitiCare_Portfolio"
                    value="Ja, Interesse am GraffitiCare Portfolio">
             <span>
               <strong>GraffitiCare Portfolio statt Einzelauftrag</strong>
@@ -2338,13 +2351,13 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
 
           <div class="grid grid--2" style="gap:1rem;margin-bottom:1.35rem">
             <div class="field" style="margin:0" data-field>
-              <label for="f-name">Name / Firma <span aria-hidden="true" style="color:#e11d48">*</span></label>
+              <label for="f-name">Name / Firma <span aria-hidden="true" style="color:var(--danger)">*</span></label>
               <input id="f-name" class="input" type="text" name="Name_Firma" required
                      autocomplete="organization" placeholder="Max Mustermann GmbH">
               <p class="error-text">Bitte geben Sie Ihren Namen oder Ihre Firma an.</p>
             </div>
             <div class="field" style="margin:0" data-field>
-              <label for="f-email">E-Mail <span aria-hidden="true" style="color:#e11d48">*</span></label>
+              <label for="f-email">E-Mail <span aria-hidden="true" style="color:var(--danger)">*</span></label>
               <input id="f-email" class="input" type="email" name="email" required
                      autocomplete="email" inputmode="email" placeholder="name@beispiel.de">
               <p class="error-text">Bitte geben Sie eine gültige E-Mail-Adresse an.</p>
@@ -2361,37 +2374,71 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
             </div>
           </div>
 
-          <p class="field__label" style="margin-bottom:.6rem">Interessante Zusatzleistungen</p>
-          <div style="display:grid;gap:.6rem;margin-bottom:1.35rem">
+          <p class="field__label" style="margin-bottom:.6rem">Welcher Bereich betrifft Ihre Anfrage?</p>
+          <div class="check-grid" style="margin-bottom:1.35rem">
+            <label class="check-card">
+              <input type="checkbox" name="Leistung_Graffitientfernung"
+                     value="Laser-Graffitientfernung">
+              <span><strong>Laser-Graffitientfernung</strong>
+                <small>Tags und Farbschichten auf Infrastruktur, Lärmschutzwänden, Brückenpfeilern und Werbeträgern.</small></span>
+            </label>
+            <label class="check-card">
+              <input type="checkbox" name="Leistung_Fassade_Denkmal"
+                     value="Fassaden- und Denkmalreinigung">
+              <span><strong>Fassaden- &amp; Denkmalreinigung</strong>
+                <small>Naturstein, Klinker, Tuff und historische Fassaden nach Freigabe.</small></span>
+            </label>
+            <label class="check-card">
+              <input type="checkbox" name="Leistung_Industrie_Anlagen"
+                     value="Industrie- und Anlagenreinigung">
+              <span><strong>Industrie- &amp; Anlagenreinigung</strong>
+                <small>Entrostung, Altlack- und Zunderentfernung an Maschinen und Stahlbau.</small></span>
+            </label>
+            <label class="check-card">
+              <input type="checkbox" name="Leistung_Verkehr"
+                     value="Spezialreinigung Verkehr">
+              <span><strong>Spezialreinigung Verkehr</strong>
+                <small>Haltestellen, Fahrzeugaußenhäute und Gleisbereiche ohne Abwasser.</small></span>
+            </label>
+            <label class="check-card">
+              <input type="checkbox" name="Leistung_Aussenanlagen_Parkraum"
+                     value="Außenanlagen und Parkraum">
+              <span><strong>Außenanlagen &amp; Parkraum</strong>
+                <small>Ölspuren, Gummiabrieb und Schmutz in Treppenhäusern und Parkhäusern.</small></span>
+            </label>
+            <label class="check-card">
+              <input type="checkbox" id="advertising-check" name="Leistung_Clean_Advertising"
+                     value="Clean Advertising / Reverse Graffiti">
+              <span><strong>Clean Advertising</strong>
+                <small>Motiv per Schablone aus Verschmutzung herauslasern. Genehmigungs-Check erforderlich.</small></span>
+            </label>
+          </div>
+
+          <p class="field__label" style="margin-bottom:.6rem">Zusätzlich gewünscht</p>
+          <div class="check-grid" style="margin-bottom:1.35rem">
             <label class="check-card">
               <input type="checkbox" id="pilot-check" name="Wunsch_Probelaserung"
-                     value="Ja, bitte vorab eine Probelaserung an einer kleinen Teilstelle">
-              <span><strong>Probelaserung vorab</strong>
-                <small>Wir lasern zuerst eine kleine, unauffällige Teilstelle, damit Sie das Ergebnis auf Ihrem Untergrund sehen.</small></span>
+                     value="Ja, bitte vorab eine kostenlose Probelaserung">
+              <span><strong>Kostenlose Probelaserung</strong>
+                <small>Wir lasern vorab eine kleine, unauffällige Teilstelle – dokumentiert für Ihre Entscheider.</small></span>
             </label>
             <label class="check-card">
               <input type="checkbox" id="documentation-check" name="Interesse_Dokumentation"
-                     value="Ja, bitte Dokumentation kostenpflichtig anbieten">
-              <span><strong>Dokumentation gewünscht</strong>
-                <small>Kostenpflichtige Zusatzleistung: Vorher-nachher-Fotos, Flächenangaben und Reinigungsbericht.</small></span>
+                     value="Ja, bitte Dokumentation anbieten">
+              <span><strong>Dokumentation der Einsätze</strong>
+                <small>Vorher-nachher-Fotos, Flächenangaben und Reinigungsbericht. Im GraffitiCare Portfolio enthalten, sonst kostenpflichtig.</small></span>
             </label>
             <label class="check-card">
-              <input type="checkbox" name="Interesse_Objekt_Laserreinigung"
-                     value="Ja, Interesse an Objekt-Laserreinigung (Bring-in oder Vor-Ort)">
-              <span><strong>Objekt-Laserreinigung</strong>
-                <small>Gegenstand vorbeibringen oder mobilen Einsatz anfragen.</small></span>
+              <input type="checkbox" name="Interesse_Rahmenvertrag"
+                     value="Ja, Interesse an einem Rahmenvertrag / Ausschreibung">
+              <span><strong>Rahmenvertrag oder Ausschreibung</strong>
+                <small>Mehrjährige Vereinbarung für Großportfolios oder Teilnahme an einer Ausschreibung.</small></span>
             </label>
             <label class="check-card">
-              <input type="checkbox" id="advertising-check" name="Interesse_Clean_Advertising"
-                     value="Ja, Interesse an Clean Advertising / Reverse Graffiti">
-              <span><strong>Clean Advertising</strong>
-                <small>Logo oder Motiv per Schablone aus Verschmutzung herauslasern. Genehmigungs-Check erforderlich.</small></span>
-            </label>
-            <label class="check-card">
-              <input type="checkbox" name="Interesse_Einfahrt_Pflasterflaeche"
-                     value="Ja, Interesse an Einfahrten- oder Pflasterflächenreinigung">
-              <span><strong>Einfahrt / Pflasterfläche reinigen</strong>
-                <small>Pflastereinfahrten, Betonflächen, Natursteinpflaster, Stellplätze, Hof- und Terrassenflächen, Treppen und punktuelle Flecken nach Prüfung.</small></span>
+              <input type="checkbox" name="Interesse_Objektbesichtigung"
+                     value="Ja, bitte Vor-Ort-Termin zur Besichtigung">
+              <span><strong>Vor-Ort-Termin</strong>
+                <small>Gemeinsame Begehung zur Prüfung von Untergrund, Zugänglichkeit und Sicherheitsanforderungen.</small></span>
             </label>
           </div>
 
@@ -2422,11 +2469,12 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
             <p style="font-weight:750;margin-bottom:.8rem;color:var(--text)">Details zum GraffitiCare Portfolio</p>
             <div class="grid grid--2" style="gap:.7rem;margin-bottom:.7rem">
               <input id="f-portfolio-umfang" class="input" type="text" name="GraffitiCare_Objektumfang"
-                     placeholder="Objektumfang, z. B. 12 Objekte">
+                     aria-label="Objektumfang" placeholder="Objektumfang, z. B. 12 Objekte">
               <input class="input" type="text" name="GraffitiCare_Untergrund"
-                     placeholder="Untergründe, z. B. Klinker, Beton, Stahlbau">
+                     aria-label="Untergründe" placeholder="Untergründe, z. B. Klinker, Beton, Stahlbau">
             </div>
             <textarea class="textarea" name="GraffitiCare_Freitext" rows="4"
+                      aria-label="Weitere Angaben zum GraffitiCare Portfolio"
                       placeholder="Objektarten, gewünschtes Paket, Reaktionszeit, Kontrollturnus, bekannte Hotspots, Dokumentationsbedarf, Ausschreibungsrahmen oder sonstige Besonderheiten."></textarea>
             <input type="hidden" id="form-portfolio" name="GraffitiCare_Kalkulation" value="">
           </div>
@@ -2465,7 +2513,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
 
           <label class="check-card" data-field style="margin-bottom:1.2rem">
             <input type="checkbox" id="f-privacy" required>
-            <span><strong>Datenschutz akzeptieren <span aria-hidden="true" style="color:#e11d48">*</span></strong>
+            <span><strong>Datenschutz akzeptieren <span aria-hidden="true" style="color:var(--danger)">*</span></strong>
               <small>Ich habe die <button type="button" data-modal-open="modal-datenschutz"
                      style="color:var(--brand);text-decoration:underline;text-underline-offset:3px;font:inherit">Datenschutzerklärung</button>
                      gelesen und stimme der Verarbeitung meiner Angaben zur Bearbeitung der Anfrage zu.</small></span>
@@ -2662,8 +2710,8 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           <span><span class="brand__name" style="color:#fff">Clean <em style="color:var(--brand-300)">Green</em> Nature</span></span>
         </a>
         <p style="font-size:.89rem;max-width:34ch">
-          Ihr Spezialist für ökologische Laserreinigung, Graffitientfernung und Fassadenschutz
-          in Köln und im Kölner Umland.
+          Chemiefreie Laserreinigung für Industrie, Infrastruktur und Denkmäler –
+          trocken, ohne Strahlmittel und ohne Schmutzwasser. In Köln und im Rheinland.
         </p>
         <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem">
           <span class="chip" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.28);color:var(--brand-300)">
@@ -2678,13 +2726,14 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       <nav aria-label="Leistungen">
         <h3>Leistungen</h3>
         <ul>
+          <li><a href="#leistungen">Fassaden- &amp; Denkmalreinigung</a></li>
           <li><a href="#leistungen">Laser-Graffitientfernung</a></li>
-          <li><a href="#leistungen">Schadensdokumentation</a></li>
-          <li><a href="#leistungen">Objekt-Laserreinigung</a></li>
-          <li><a href="#leistungen">Einfahrten &amp; Pflasterflächen</a></li>
-          <li><a href="#leistungen">Clean Advertising</a></li>
+          <li><a href="#leistungen">Industrie- &amp; Anlagenreinigung</a></li>
+          <li><a href="#leistungen">Spezialreinigung Verkehr</a></li>
+          <li><a href="#leistungen">Außenanlagen &amp; Parkraum</a></li>
           <li><a href="#graffiticare">GraffitiCare Portfolio</a></li>
-          <li><a href="graffitientfernung-koeln.html">Graffitientfernung Köln</a></li>
+          <li><a href="#leistungen">Clean Advertising</a></li>
+          <li><button type="button" data-modal-open="modal-graffitientfernung-koeln">Graffitientfernung Köln</button></li>
         </ul>
       </nav>
 
@@ -2719,7 +2768,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
 <nav class="dock" id="dock" aria-label="Schnellkontakt">
   <a href="tel:+491635021968"><svg aria-hidden="true"><use href="#ic-phone"/></svg> Anrufen</a>
   <a href="mailto:info@cleangreennature.de"><svg aria-hidden="true"><use href="#ic-mail"/></svg> E-Mail</a>
-  <a class="dock--cta" href="#rechner"><svg aria-hidden="true"><use href="#ic-euro"/></svg> Richtpreis</a>
+  <a class="dock--cta" href="#rechner"><svg aria-hidden="true"><use href="#ic-arrow-right"/></svg> Anfragen</a>
 </nav>
 
 <button class="to-top" id="to-top" type="button" aria-label="Nach oben scrollen">
@@ -2733,7 +2782,8 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
   <div class="palette__box" role="dialog" aria-modal="true" aria-label="Seite durchsuchen">
     <div class="palette__search">
       <svg aria-hidden="true"><use href="#ic-search"/></svg>
-      <input id="palette-input" type="text" placeholder="Leistung, Frage oder Bereich suchen …"
+      <input id="palette-input" type="text" aria-label="Seite durchsuchen"
+             placeholder="Leistung, Frage oder Bereich suchen …"
              autocomplete="off" spellcheck="false" role="combobox"
              aria-expanded="true" aria-controls="palette-list" aria-autocomplete="list">
       <button class="icon-btn" type="button" data-palette-close aria-label="Suche schließen" style="width:32px;height:32px">
@@ -2770,31 +2820,32 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
           <p class="muted" style="line-height:1.8">
             Clean Green Nature entfernt Graffiti, Lacke und Verschmutzungen in Köln mit mobiler
             Lasertechnologie. Das Verfahren arbeitet kontaktlos, präzise und ohne chemische
-            Reinigungsmittel. Besonders interessant ist das für Hausverwaltungen, WEGs,
-            Gewerbeimmobilien, Eigentümer und sensible Untergründe.
+            Reinigungsmittel – ohne Schmutzwasser, ohne Strahlmittel und mit kurzen Sperrzeiten.
+            Im Fokus stehen Verkehr und Infrastruktur, Industrie, Denkmäler und Parkraum;
+            Einzelaufträge für Eigentümer und Gewerbeobjekte nehmen wir ebenso an.
           </p>
           <div class="grid grid--2" style="gap:.8rem;margin-top:1.5rem">
             <div class="card" style="padding:1.1rem;box-shadow:none;background:var(--surface-2)">
               <h4 style="font-size:.95rem">Geeignete Untergründe</h4>
-              <p style="font-size:.82rem">Klinker, Naturstein, Sichtbeton, Metall, Tore, historische Fassaden
-                 und ausgewählte Objekte nach vorheriger Prüfung.</p>
+              <p style="font-size:.82rem">Klinker, Naturstein, Tuff, Sichtbeton, Stahlbau, Lärmschutzwände
+                 und historische Fassaden – nach vorheriger Prüfung.</p>
             </div>
             <div class="card" style="padding:1.1rem;box-shadow:none;background:var(--surface-2)">
-              <h4 style="font-size:.95rem">Optional dokumentiert</h4>
-              <p style="font-size:.82rem">Auf Wunsch mit kostenpflichtigen Vorher-nachher-Fotos,
-                 Flächenangaben und kurzem Reinigungsbericht.</p>
+              <h4 style="font-size:.95rem">Dokumentiert</h4>
+              <p style="font-size:.82rem">Vorher-nachher-Fotos, Flächenangaben und Reinigungsbericht –
+                 im GraffitiCare Portfolio enthalten, sonst als Zusatzleistung.</p>
             </div>
           </div>
           <ul style="display:grid;gap:.7rem;margin-top:1.5rem;font-size:.88rem">
             <li style="display:flex;gap:.7rem"><svg style="width:18px;height:18px;flex:none;margin-top:.2rem;color:var(--brand)" aria-hidden="true"><use href="#ic-check"/></svg>
-              <span class="muted">Richtpreis ab 1 m² direkt über das Formular anfragen.</span></li>
+              <span class="muted">Kostenlose Probelaserung an einer kleinen Teilstelle – vorab und unverbindlich.</span></li>
             <li style="display:flex;gap:.7rem"><svg style="width:18px;height:18px;flex:none;margin-top:.2rem;color:var(--brand)" aria-hidden="true"><use href="#ic-check"/></svg>
-              <span class="muted">Für wiederkehrende Fälle gibt es das GraffitiCare Portfolio.</span></li>
+              <span class="muted">Für wiederkehrenden Bedarf: GraffitiCare Portfolio ab 35 € je Objekt und Monat.</span></li>
             <li style="display:flex;gap:.7rem"><svg style="width:18px;height:18px;flex:none;margin-top:.2rem;color:var(--brand)" aria-hidden="true"><use href="#ic-check"/></svg>
               <span class="muted">Für sensible Flächen empfehlen wir eine Prüfung oder Probelaserung.</span></li>
           </ul>
           <div style="display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.8rem">
-            <a class="btn btn--dark" href="#rechner" data-modal-close>Richtpreis berechnen</a>
+            <a class="btn btn--dark" href="#rechner" data-modal-close>Anfrage stellen</a>
             <a class="btn btn--ghost" href="mailto:info@cleangreennature.de">
               <svg aria-hidden="true"><use href="#ic-camera"/></svg> Foto per E-Mail senden
             </a>
@@ -3162,17 +3213,14 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       <h3>14. Dienstleistungen von Clean Green Nature</h3>
       <p>Über diese Website informieren wir über unsere Leistungen insbesondere in den Bereichen:</p>
       <ul>
+        <li>Fassaden- und Denkmalreinigung</li>
         <li>Laser-Graffitientfernung</li>
-        <li>Laser-Fassadenreinigung</li>
-        <li>Reinigung von Naturstein</li>
-        <li>Reinigung von Klinkerfassaden</li>
-        <li>Reinigung von Metalloberflächen</li>
-        <li>Entfernung von Verschmutzungen ohne Chemikalien</li>
-        <li>Nachhaltige und materialschonende Oberflächenreinigung</li>
-        <li>Dokumentationsleistungen für Reinigungs- und Schadensfälle</li>
-        <li>Objekt-Laserreinigung als Bring-in- oder Vor-Ort-Service</li>
+        <li>Industrie- und Anlagenreinigung</li>
+        <li>Spezialreinigung im Verkehrsbereich</li>
+        <li>Reinigung von Außenanlagen und Parkraum</li>
+        <li>GraffitiCare Portfolio als laufende Objektbetreuung</li>
         <li>Clean Advertising / Reverse-Graffiti-Motive auf geeigneten Flächen</li>
-        <li>Einfahrten- und Pflasterflächenreinigung nach Prüfung</li>
+        <li>Dokumentationsleistungen für Reinigungs- und Schadensfälle</li>
       </ul>
       <p>Personenbezogene Daten werden ausschließlich zur Bearbeitung von Anfragen, zur Angebotserstellung
          und zur Kommunikation mit Interessenten und Kunden verarbeitet.</p>
@@ -3250,7 +3298,9 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
      ==================================================================== */
   const $  = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let reduceMotion = motionQuery.matches;
+  motionQuery.addEventListener('change', (e) => { reduceMotion = e.matches; });
   const nf = new Intl.NumberFormat('de-DE');
 
   function toast(message, icon) {
@@ -3281,18 +3331,23 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
      1 · Farbmodus
      ==================================================================== */
   const themeBtn = $('#theme-toggle');
-  function applyTheme(theme, announce) {
+  // Gespeichert wird ausschließlich eine bewusste Auswahl. Beim reinen Aufruf
+  // darf nichts geschrieben werden, sonst folgt die Seite nie wieder der
+  // Systemeinstellung – und die Datenschutzerklärung wäre unzutreffend.
+  function applyTheme(theme, opts) {
+    opts = opts || {};
     document.documentElement.setAttribute('data-theme', theme);
-    try { localStorage.setItem('cgn-theme', theme); } catch (e) {}
+    if (opts.persist) { try { localStorage.setItem('cgn-theme', theme); } catch (e) {} }
     if (themeBtn) themeBtn.setAttribute('aria-label',
       theme === 'dark' ? 'Zum hellen Modus wechseln' : 'Zum dunklen Modus wechseln');
-    if (announce) toast(theme === 'dark' ? 'Dunkler Modus aktiv' : 'Heller Modus aktiv',
-                        theme === 'dark' ? 'ic-moon' : 'ic-sun');
+    if (opts.announce) toast(theme === 'dark' ? 'Dunkler Modus aktiv' : 'Heller Modus aktiv',
+                             theme === 'dark' ? 'ic-moon' : 'ic-sun');
   }
-  applyTheme(document.documentElement.getAttribute('data-theme') || 'light', false);
+  applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
   if (themeBtn) {
     themeBtn.addEventListener('click', () => {
-      applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(next, { persist: true, announce: true });
     });
   }
   // Systemwechsel übernehmen, solange nichts manuell gewählt wurde
@@ -3324,11 +3379,14 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     if (toTop)  toTop.classList.toggle('is-visible', y > 700);
     if (dock)   dock.classList.toggle('is-visible', y > 400);
 
-    // Scrollspy: der Abschnitt, der die obere Bildschirmhälfte dominiert
+    // Scrollspy: der oberste Abschnitt, der die Messlinie bereits passiert hat.
+    // Bewusst über die tatsächliche Position statt über die Reihenfolge im Menü –
+    // beide müssen nicht übereinstimmen.
     const line = y + window.innerHeight * 0.32;
     let current = null;
     for (const s of spySections) {
-      if (s.el.offsetTop <= line) current = s;
+      const top = s.el.getBoundingClientRect().top + y;
+      if (top <= line && (!current || top > current.top)) current = { link: s.link, top: top };
     }
     navLinks.forEach(a => a.classList.remove('is-active'));
     if (current) current.link.classList.add('is-active');
@@ -3351,6 +3409,12 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
      3 · Einblenden beim Scrollen + Zähler
      ==================================================================== */
   const revealables = $$('[data-reveal]');
+  // Wer per Tabulator in einen noch nicht eingeblendeten Bereich springt,
+  // soll ihn sofort sehen – sonst läge der Fokus auf unsichtbarem Inhalt.
+  document.addEventListener('focusin', (e) => {
+    const block = e.target.closest && e.target.closest('[data-reveal]:not(.is-revealed)');
+    if (block) block.classList.add('is-revealed');
+  });
   if ('IntersectionObserver' in window && !reduceMotion) {
     const io = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
@@ -3452,7 +3516,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
   });
   if (mobileNav) {
     mobileNav.addEventListener('click', (e) => {
-      if (e.target.closest('a')) setMobileNav(false);
+      if (e.target.closest('a, [data-mnav], .btn')) setMobileNav(false);
     });
   }
   window.addEventListener('resize', () => {
@@ -3466,20 +3530,35 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
      ==================================================================== */
   const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), ' +
                     'textarea:not([disabled]), details > summary, [tabindex]:not([tabindex="-1"])';
+
+  // Setzt den Fokus, sobald das Ziel wirklich fokussierbar ist. Ein einzelner
+  // Versuch kann fehlschlagen, solange Layout oder Übergang noch nicht greifen.
+  function focusInto(target) {
+    if (!target) return;
+    let tries = 0;
+    (function attempt() {
+      try { target.focus({ preventScroll: true }); } catch (e) {}
+      if (document.activeElement === target || target.contains(document.activeElement)) return;
+      if (++tries > 8) return;
+      requestAnimationFrame(attempt);
+    })();
+  }
   const modalStack = [];
 
   function openModal(id, restoreTo) {
     const modal = document.getElementById(id);
     if (!modal || modalStack.some(m => m.modal === id)) return;
+    const restore = restoreTo || document.activeElement;
     modal.hidden = false;
     requestAnimationFrame(() => modal.classList.add('is-open'));
     lockScroll();
-    modalStack.push({ modal: id, restore: restoreTo || document.activeElement });
+    modalStack.push({ modal: id, restore: restore });
 
     const box = $('.modal__box', modal);
-    const first = $(FOCUSABLE, box);
-    setTimeout(() => { (first || box).focus({ preventScroll: true }); }, 60);
     if (box && !box.hasAttribute('tabindex')) box.setAttribute('tabindex', '-1');
+    // Der Dialog selbst bekommt den Fokus: Vorlesesoftware liest damit den Titel,
+    // und die erste Tabulatortaste führt danach zur Schließen-Schaltfläche.
+    focusInto(box || modal);
   }
 
   function closeModal(id) {
@@ -3533,14 +3612,24 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       if (burger && burger.getAttribute('aria-expanded') === 'true') { setMobileNav(false); }
       return;
     }
-    if (e.key !== 'Tab' || !modalStack.length) return;
+    if (e.key !== 'Tab') return;
 
-    const top = modalStack[modalStack.length - 1];
-    const box = $('.modal__box', document.getElementById(top.modal));
+    // Fokusfalle: aktuell offene Ebene bestimmen – Suche liegt über den Fenstern
+    let box = null;
+    if (paletteOpen) {
+      box = $('.palette__box');
+    } else if (modalStack.length) {
+      const top = modalStack[modalStack.length - 1];
+      box = $('.modal__box', document.getElementById(top.modal));
+    }
     if (!box) return;
     const items = $$(FOCUSABLE, box).filter(el => el.offsetParent !== null || el === document.activeElement);
     if (!items.length) return;
     const first = items[0], last = items[items.length - 1];
+    // Fokus außerhalb der Ebene (z. B. durch Klick dahinter) zurückholen
+    if (!box.contains(document.activeElement) && document.activeElement !== box) {
+      e.preventDefault(); first.focus(); return;
+    }
     if (e.shiftKey && (document.activeElement === first || document.activeElement === box)) {
       e.preventDefault(); last.focus();
     } else if (!e.shiftKey && document.activeElement === last) {
@@ -3690,7 +3779,8 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       } else if (act.type === 'href') {
         window.location.href = act.href;
       } else if (act.type === 'theme') {
-        applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+        applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark',
+                   { persist: true, announce: true });
       } else if (act.type === 'faq') {
         const acc = document.getElementById(act.id);
         if (acc) {
@@ -3714,7 +3804,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     paletteResults = search('');
     paletteCursor = 0;
     renderPalette();
-    setTimeout(() => paletteInput.focus({ preventScroll: true }), 60);
+    focusInto(paletteInput);
   }
 
   function closePalette() {
@@ -3866,7 +3956,7 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
     if (areaOut) areaOut.textContent = nf.format(m2) + ' m²';
     updateRangeFill();
 
-    $$('.preset').forEach(p => p.classList.toggle('is-active', Number(p.dataset.area) === m2));
+    $$('#rechner .preset').forEach(p => p.classList.toggle('is-active', Number(p.dataset.area) === m2));
     // Zugeklappte Detailblöcke werden abgeschaltet, damit ihre Vorgabewerte
     // nicht als scheinbare Angaben in der E-Mail landen.
     function setBlock(block, open) {
@@ -3946,9 +4036,9 @@ html[data-theme="dark"] .toast { background: var(--surface-3); color: var(--text
       el.addEventListener('change', updatePrice);
     });
 
-  $$('.preset').forEach(btn => {
+  $$('#rechner .preset').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (!areaRange) return;
+      if (!areaRange || !btn.dataset.area) return;
       areaRange.value = btn.dataset.area;
       updatePrice();
       areaRange.focus({ preventScroll: true });

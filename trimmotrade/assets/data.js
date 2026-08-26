@@ -671,13 +671,20 @@
      sich ausschließlich die Sprache. Eigene Inserate bleiben, wie sie
      eingetippt wurden – das ist der Text des Menschen, nicht unserer. */
   function neuAufbauen() {
-    const eigene = Object.keys(byId).filter((k) => byId[k] && byId[k].eigen).map((k) => byId[k]);
+    /* Eigene und echte Inserate überleben den Neuaufbau: Die erzeugten
+       Beispiele hängen an der Sprache, die echten nicht – und ein
+       Sprachwechsel darf den Bestand nicht leeren. */
+    const eigene = Object.keys(byId)
+      .filter((k) => byId[k] && (byId[k].eigen || byId[k].echt)).map((k) => byId[k]);
     const frisch = build();
     listings.length = 0;
     frisch.forEach((l) => listings.push(l));
     Object.keys(byId).forEach((k) => { delete byId[k]; });
     listings.forEach((l) => { byId[l.id] = l; });
-    eigene.forEach((l) => { byId[l.id] = l; });
+    eigene.forEach((l) => {
+      byId[l.id] = l;
+      if (l.echt && listings.indexOf(l) < 0) listings.unshift(l);
+    });
     return listings;
   }
 

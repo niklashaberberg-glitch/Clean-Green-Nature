@@ -74,7 +74,7 @@
             <label class="feld"><span>Personen im Haushalt</span>
               <input type="number" min="1" max="6" data-tu-change="profil-zahl" data-feld="haushalt" value="${p.haushalt}"></label>
             <label class="feld"><span>Nettoeinkommen im Monat</span>
-              <input type="number" min="0" step="50" data-tu-change="profil-zahl" data-feld="nettoEinkommen" value="${p.nettoEinkommen}"></label>
+              <input type="number" min="0" step="any" data-tu-change="profil-zahl" data-feld="nettoEinkommen" value="${p.nettoEinkommen}"></label>
             <label class="feld"><span>Haustiere</span>
               <select data-tu-change="profil-text" data-feld="haustiere">
                 ${[['keine', 'keine'], ['katze', 'Katze'], ['hund', 'Hund'], ['klein', 'Kleintier']].map((o) =>
@@ -92,11 +92,11 @@
           <h2>Was du suchst</h2>
           <div class="formraster">
             <label class="feld"><span>Budget Warmmiete</span>
-              <input type="number" min="0" step="50" data-tu-change="profil-zahl" data-feld="budgetWarm" value="${p.budgetWarm}"></label>
+              <input type="number" min="0" step="any" data-tu-change="profil-zahl" data-feld="budgetWarm" value="${p.budgetWarm}"></label>
             <label class="feld"><span>Budget Kaufpreis</span>
-              <input type="number" min="0" step="10000" data-tu-change="profil-zahl" data-feld="budgetKauf" value="${p.budgetKauf || ''}" placeholder="nur bei Kaufinteresse"></label>
+              <input type="number" min="0" step="any" data-tu-change="profil-zahl" data-feld="budgetKauf" value="${p.budgetKauf || ''}" placeholder="nur bei Kaufinteresse"></label>
             <label class="feld"><span>Zimmer mindestens</span>
-              <input type="number" min="1" max="8" step="0.5" data-tu-change="profil-zahl" data-feld="zimmerMin" value="${p.zimmerMin}"></label>
+              <input type="number" min="1" max="8" step="any" data-tu-change="profil-zahl" data-feld="zimmerMin" value="${p.zimmerMin}"></label>
             <label class="feld"><span>Fläche mindestens (m²)</span>
               <input type="number" min="10" max="300" data-tu-change="profil-zahl" data-feld="flaecheMin" value="${p.flaecheMin}"></label>
             <label class="feld"><span>Einzug ab</span>
@@ -430,32 +430,58 @@
     </li>`)}`;
   }
 
-  function inserieren(route) {
-    const s = S.get();
-    const params = (route && route.params) || {};
-    /* Bearbeiten heißt hier: dieselbe Maske, vorbelegt, und beim Speichern
-       ersetzt der neue Eintrag den alten. Ein Knopf „Ändern“, der ein
-       leeres Formular öffnet, ist schlimmer als gar keiner. */
-    const bearbeitet = params.bearbeiten
-      ? s.eigeneInserate.find((x) => x.id === params.bearbeiten) : null;
-    const vorgabeArt = bearbeitet
-      ? (ARTEN.find((a) => a.kind === bearbeitet.kind && a.type === bearbeitet.type)
-        || ARTEN.find((a) => a.kind === bearbeitet.kind) || ARTEN[0]).id
-      : (ARTEN.some((a) => a.id === params.art) ? params.art : ARTEN[0].id);
-    return {
-      titel: 'Inserieren',
-      html: h`<div class="seite seite--schmal">
-        <header class="seite__kopf">
-          <h1>${ico('plus')}Inserat aufgeben</h1>
-          <p class="seite__unter">Vermieten, verkaufen, ein Zimmer anbieten oder tauschen – ein Formular für
-            alles. Das Inserat bleibt auf diesem Gerät und taucht in deiner Suche, in der Karte und im
-            Ringtausch auf.</p>
-        </header>
+  /* ==================================================================
+     Inserate: auf dem Gerät oder auf dem Server?
 
-        ${s.eigeneInserate.length ? h`<section class="block">
+     Beides gibt es, und das ist keine Unentschlossenheit. Ohne Server –
+     die Einzeldatei, eine Kopie auf dem Stick, file:// – bleibt ein
+     Inserat im Browser und taucht in der eigenen Suche auf. Das ist als
+     Vorführung sinnvoll und als Angebot wertlos: Niemand sonst sieht es.
+
+     Sobald ein Server antwortet und jemand angemeldet ist, geht das
+     Inserat hinaus. Erst damit ist es ein Angebot. Der Unterschied steht
+     im Formular, in einem Satz, und nicht im Kleingedruckten – wer
+     glaubt, er habe inseriert, und hat es nicht, wartet wochenlang
+     vergeblich auf eine Anfrage.
+     ================================================================== */
+  const amServer = () => !!(TT.api && TT.api.da && TT.konto && TT.konto.angemeldet());
+
+  let serverInserate = null;   // null = noch nicht geholt
+
+  function serverInserateHolen() {
+    if (!amServer()) return Promise.resolve([]);
+    return TT.api.ruf('inserat/meine').then((d) => {
+      serverInserate = (d.inserate || []).map((l) => {
+        l.eigen = true;
+        l.echt = true;
+        return l;
+      });
+      /* In den Bestand einmischen: Sonst zeigt ein Verweis aus der
+         Liste auf ein Inserat, das es scheinbar nicht gibt. */
+      if (TT.markt) TT.markt.einmischen(serverInserate.slice());
+      serverInserate.forEach((l) => {
+        if (TT.data.byId[l.id]) TT.data.byId[l.id].eigen = true;
+      });
+      return serverInserate;
+    }, () => {
+      serverInserate = [];
+      return serverInserate;
+    });
+  }
+
+  /* Die Liste, die das Formular oben zeigt. */
+  const eigeneListe = (s) => (amServer() ? (serverInserate || []) : s.eigeneInserate);
+
+  /* Die Liste der eigenen Inserate. Steht als eigene Funktion da, weil
+     sie sich austauschen lassen muss, ohne das Formular darunter
+     anzufassen. */
+  function eigeneKasten(s) {
+    const meine = eigeneListe(s);
+    if (!meine.length) return '';
+    return h`<section class="block">
           <h2>Deine Inserate</h2>
           <ul class="eigene">
-            ${s.eigeneInserate.map((e) => {
+            ${meine.map((e) => {
         const b = e.boost, prod = b ? P.hervorhebung(b.art) : null;
         const laeuft = P.boostAktiv(e);
         return h`<li>
@@ -465,6 +491,11 @@
                 <span>${ui.artLabel(e)} · ${e.viertel}, ${e.stadt} · ${U.t('seit {0}').replace('{0}', U.since(e.erstellt))}${laeuft && b.bis
           ? ' · hervorgehoben bis ' + U.dateDE(b.bis) : ''}</span>
               </div>
+              ${e.laeuftAb ? h`<span class="eigene__stand ${U.daysUntil(e.laeuftAb) <= 7 ? 'eigene__stand--laeuft' : ''}">
+                ${ico('kalender')}${U.daysUntil(e.laeuftAb) <= 0 ? U.t('abgelaufen')
+          : U.t('läuft in {0} Tagen aus').replace('{0}', U.daysUntil(e.laeuftAb))}</span>` : ''}
+              ${amServer() ? h`<button type="button" class="knopf knopf--klein knopf--still"
+                data-tu="inserat-steht" data-id="${e.id}">${ico('check')}Steht noch</button>` : ''}
               <button type="button" class="knopf knopf--klein knopf--still" data-tu="hervorheben" data-id="${e.id}">
                 ${ico('blitz')}${laeuft ? 'Ändern' : 'Hervorheben'}</button>
               <button type="button" class="ikon-btn" data-tu="inserat-weg" data-id="${e.id}" aria-label="Löschen">${ico('muell')}</button>
@@ -473,7 +504,64 @@
           </ul>
           <p class="fein">Hervorgehobene Inserate stehen in einem eigenen, als bezahlt gekennzeichneten Block
             über den Treffern – nie zwischen ihnen. Die Reihenfolge der Suche bleibt unberührt.</p>
-        </section>` : ''}
+        </section>`;
+  }
+
+  function inserieren(route) {
+    const s = S.get();
+    const params = (route && route.params) || {};
+
+    /* Beim ersten Öffnen den Bestand vom Server holen. Die Seite steht
+       sofort; kommt die Antwort, wird nur die Liste oben nachgetragen.
+       Ein Wartekreisel für eine Liste, die meistens leer ist, wäre
+       lauter als das Ergebnis. */
+    if (amServer() && serverInserate === null) {
+      serverInserate = [];
+      serverInserateHolen().then(() => {
+        /* Nur die Liste austauschen, nie die ganze Seite.
+
+           Das ist kein Feinschliff: Die Antwort des Servers kommt
+           typischerweise nach ein paar hundert Millisekunden – also
+           genau dann, wenn jemand angefangen hat zu tippen. Ein
+           Neuzeichnen der Seite in diesem Moment leert das Formular,
+           und der Mensch sieht nur, dass seine Eingaben weg sind. */
+        if (ui.aktuell !== 'inserieren') return;
+        const kasten = U.$('#eigene-inserate');
+        if (kasten) kasten.innerHTML = String(eigeneKasten(S.get()));
+      });
+    }
+    /* Bearbeiten heißt hier: dieselbe Maske, vorbelegt, und beim Speichern
+       ersetzt der neue Eintrag den alten. Ein Knopf „Ändern“, der ein
+       leeres Formular öffnet, ist schlimmer als gar keiner. */
+    const meine = eigeneListe(s);
+    const bearbeitet = params.bearbeiten
+      ? (meine.find((x) => x.id === params.bearbeiten) || null) : null;
+    const vorgabeArt = bearbeitet
+      ? (ARTEN.find((a) => a.kind === bearbeitet.kind && a.type === bearbeitet.type)
+        || ARTEN.find((a) => a.kind === bearbeitet.kind) || ARTEN[0]).id
+      : (ARTEN.some((a) => a.id === params.art) ? params.art : ARTEN[0].id);
+    return {
+      titel: 'Inserieren',
+      html: h`<div class="seite seite--schmal">
+        <header class="seite__kopf">
+          <h1>${ico('plus')}Inserat aufgeben</h1>
+          <p class="seite__unter">${amServer()
+        ? 'Vermieten, verkaufen, ein Zimmer anbieten oder tauschen – ein Formular für alles. Das Inserat '
+        + 'wird veröffentlicht: Es steht danach in der Suche aller, in der Karte und im Ringtausch.'
+        : 'Vermieten, verkaufen, ein Zimmer anbieten oder tauschen – ein Formular für alles. Ohne '
+        + 'Verbindung bleibt das Inserat auf diesem Gerät und taucht nur in deiner eigenen Suche auf.'}</p>
+        </header>
+
+        ${!amServer() ? h`<div class="hinweisbox">${ico('info')}
+          <div><b>Dieses Inserat sieht sonst niemand</b>
+          <p>${TT.api && TT.api.da
+        ? h`Zum Veröffentlichen brauchst du ein Konto. <a href="#/anmelden">Anmelden</a> dauert eine
+            halbe Minute – der Entwurf bleibt dabei stehen.`
+        : 'Diese Kopie läuft ohne Verbindung zum Server. Das Inserat bleibt im Speicher dieses '
+        + 'Browsers und ist eine Vorführung, kein Angebot.'}</p></div>
+        </div>` : ''}
+
+        <div id="eigene-inserate">${eigeneKasten(s)}</div>
 
         <form class="block" data-tu-submit="inserat-speichern" id="inserat-form">
           <h2>${bearbeitet ? 'Inserat ändern' : 'Neues Inserat'}</h2>
@@ -502,15 +590,15 @@
 
           <div class="formraster" data-gruppe="wohnung">
             <label class="feld"><span>Zimmer</span>
-              <input type="number" name="zimmer" min="1" max="9" step="0.5" value="2"></label>
+              <input type="number" name="zimmer" min="1" max="20" step="any" value="2"></label>
             <label class="feld"><span>Wohnfläche in m²</span>
-              <input type="number" name="flaeche" min="8" max="900" value="60"></label>
+              <input type="number" name="flaeche" min="8" max="2000" value="60"></label>
             <label class="feld"><span>Etage</span>
               <input type="number" name="etage" min="0" max="20" value="1"></label>
             <label class="feld"><span>Etagen im Haus</span>
               <input type="number" name="etagen" min="1" max="25" value="4"></label>
             <label class="feld"><span>Baujahr</span>
-              <input type="number" name="baujahr" min="1800" max="2030" value="1965"></label>
+              <input type="number" name="baujahr" min="1500" max="${new Date(TT.now()).getFullYear() + 8}" value="1965"></label>
             <label class="feld"><span>Heizung</span>
               <select name="heizung">
                 ${['Gas-Zentralheizung', 'Fernwärme', 'Wärmepumpe', 'Öl-Zentralheizung', 'Gasetagenheizung', 'Pelletheizung'].map((x) =>
@@ -520,7 +608,7 @@
 
           <div class="formraster" data-gruppe="haus">
             <label class="feld"><span>Grundstücksfläche in m²</span>
-              <input type="number" name="grundstueck" min="0" max="20000" value="420"></label>
+              <input type="number" name="grundstueck" min="0" max="200000" value="420"></label>
             <label class="feld"><span>Bauweise</span>
               <select name="bauweise">
                 ${['freistehend', 'Doppelhaushälfte', 'Reihenmittelhaus', 'Reihenendhaus', 'Bungalow', 'Stadtvilla'].map((x) =>
@@ -542,9 +630,9 @@
             h`<option>${x}</option>`)}
               </select></label>
             <label class="feld"><span>Grundflächenzahl (GRZ)</span>
-              <input type="number" name="grz" min="0" max="1" step="0.05" value="0.4"></label>
+              <input type="number" name="grz" min="0" max="1" step="any" value="0.4"></label>
             <label class="feld"><span>Geschossflächenzahl (GFZ)</span>
-              <input type="number" name="gfz" min="0" max="3" step="0.1" value="0.8"></label>
+              <input type="number" name="gfz" min="0" max="3" step="any" value="0.8"></label>
             <label class="feld"><span>Erschließungskosten</span>
               <select name="erschliessung">
                 ${['bereits bezahlt', 'noch offen', 'anteilig offen', 'unbekannt'].map((x) => h`<option>${x}</option>`)}
@@ -553,11 +641,11 @@
 
           <div class="formraster" data-gruppe="miete">
             <label class="feld"><span>Kaltmiete</span>
-              <input type="number" name="kalt" min="0" step="10" value="750"></label>
+              <input type="number" name="kalt" min="0" step="any" value="750"></label>
             <label class="feld"><span>Nebenkosten</span>
-              <input type="number" name="nebenkosten" min="0" step="10" value="140"></label>
+              <input type="number" name="nebenkosten" min="0" step="any" value="140"></label>
             <label class="feld"><span>Heizkosten</span>
-              <input type="number" name="heizkosten" min="0" step="10" value="90"></label>
+              <input type="number" name="heizkosten" min="0" step="any" value="90"></label>
             <label class="feld"><span>Kaution in Kaltmieten</span>
               <input type="number" name="kaution" min="0" max="3" value="3"></label>
             <label class="feld"><span>Frei ab</span>
@@ -566,11 +654,11 @@
 
           <div class="formraster" data-gruppe="kauf">
             <label class="feld"><span>Kaufpreis</span>
-              <input type="number" name="kaufpreis" min="0" step="1000" value="350000"></label>
+              <input type="number" name="kaufpreis" min="0" step="any" value="350000"></label>
             <label class="feld"><span>Käuferprovision in Prozent</span>
-              <input type="number" name="provision" min="0" max="8" step="0.01" value="0"></label>
+              <input type="number" name="provision" min="0" max="8" step="any" value="0"></label>
             <label class="feld" data-gruppe="wohnung"><span>Hausgeld im Monat</span>
-              <input type="number" name="hausgeld" min="0" step="10" value="260"></label>
+              <input type="number" name="hausgeld" min="0" step="any" value="260"></label>
             <label class="feld"><span>Bezugsfrei ab</span>
               <input type="date" name="freiAbKauf" value="${U.isoDate(U.addDays(TT.now(), 90))}"></label>
           </div>
@@ -615,9 +703,9 @@
                 h`<label class="chip chip--radio"><input type="checkbox" name="wunschStadt" value="${c}"> ${c}</label>`)}
             </div>
             <div class="formraster">
-              <label class="feld"><span>Zimmer mindestens</span><input type="number" name="tZimmer" min="1" step="0.5" value="2"></label>
+              <label class="feld"><span>Zimmer mindestens</span><input type="number" name="tZimmer" min="1" step="any" value="2"></label>
               <label class="feld"><span>Fläche mindestens</span><input type="number" name="tFlaeche" min="10" value="55"></label>
-              <label class="feld"><span>Warmmiete höchstens</span><input type="number" name="tWarm" min="0" step="50" value="1100"></label>
+              <label class="feld"><span>Warmmiete höchstens</span><input type="number" name="tWarm" min="0" step="any" value="1100"></label>
             </div>
             <label class="schalter"><input type="checkbox" name="ringOk" checked><span>auch Ringtausch über mehrere Haushalte</span></label>
           </fieldset>
@@ -634,7 +722,8 @@
               Auswahl freier – trotzdem gilt: Beschreibe die WG, nicht wen du ausschließt.</p></div>
           </div>
 
-          <button type="submit" class="knopf knopf--voll">${ico('speichern')}Inserat anlegen</button>
+          <button type="submit" class="knopf knopf--voll">${ico('speichern')}${bearbeitet
+        ? 'Änderung speichern' : (amServer() ? 'Inserat veröffentlichen' : 'Inserat anlegen')}</button>
         </form>
       </div>`,
       /* Die Feldgruppen richten sich nach der Art. Beim ersten Aufbau
@@ -1184,6 +1273,12 @@
     }
 
     const alt = f.get('bearbeitet');
+
+    if (amServer()) {
+      veroeffentlichen(el, alt, daten, kind);
+      return;
+    }
+
     let id;
     try {
       id = alt ? S.inseratErsetzen(alt, daten) : S.inseratAnlegen(daten);
@@ -1204,11 +1299,107 @@
     ui.gehe(kind === 'tausch' ? 'tausch' : 'objekt/' + id);
   });
 
+  /* ------------------------------------------------------------------
+     Veröffentlichen
+
+     Zwei Schritte, und die Reihenfolge ist wichtig: erst das Inserat,
+     dann die Bilder. Andersherum gäbe es Bilder ohne Inserat, und die
+     lägen für immer im Ordner.
+
+     Schlägt ein Bild fehl, steht das Inserat trotzdem – mit einem
+     Hinweis, welche Bilder fehlen. Ein Inserat wegen eines Fotos
+     wegzuwerfen, das der Server nicht mochte, wäre die schlechtere
+     Antwort: Der Text ist die Arbeit, das Foto ist ein Klick.
+     ------------------------------------------------------------------ */
+  function veroeffentlichen(formular, alteId, daten, kind) {
+    const knopf = U.$('button[type="submit"]', formular) || formular;
+    const bilder = neueBilder.slice();
+    /* Die Bilder gehen einzeln hinaus, nicht im Inserat: Ein Rumpf mit
+       zwölf Fotos wäre größer als alles, was dieser Server sonst
+       entgegennimmt. */
+    delete daten.bilder;
+
+    const weg = alteId ? 'inserat/aendern' : 'inserat/neu';
+    const rumpf = alteId ? Object.assign({ id: alteId }, daten) : daten;
+
+    ui.knopfArbeit(knopf, TT.api.ruf(weg, rumpf).then((d) => {
+      const inserat = d.inserat || {};
+      const id = inserat.id;
+      if (!id) throw new Error('Der Server hat keine Kennung zurückgegeben.');
+      return bilderHochladen(id, bilder).then((fehlgeschlagen) => {
+        neueBilder = [];
+        serverInserate = null;
+        return (TT.markt ? TT.markt.nachladen() : Promise.resolve()).then(serverInserateHolen).then(() => {
+          if (TT.markt) TT.markt.zaehle(alteId ? 'inserat-verlaengert' : 'inserat-neu');
+          ui.toast(fehlgeschlagen
+            ? U.t('Inserat steht – {0} Bilder gingen nicht durch.').replace('{0}', fehlgeschlagen)
+            : (alteId ? 'Inserat geändert. Die Änderung ist sofort sichtbar.'
+              : 'Inserat veröffentlicht. Ab jetzt steht es in der Suche.'),
+            fehlgeschlagen ? 'warn' : 'gut');
+          ui.gehe(kind === 'tausch' ? 'tausch' : 'objekt/' + id);
+        });
+      });
+    }, (e) => {
+      /* Das Feld, das der Server beanstandet, wird angesprungen: Eine
+         Meldung am oberen Rand über einem langen Formular findet
+         niemand. */
+      if (e && e.feld) {
+        const feld = U.$('[name="' + e.feld + '"]', formular);
+        if (feld) { feld.focus(); feld.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+      }
+      ui.toast((e && e.text) || 'Das Inserat ging nicht hinaus.', 'schlecht');
+    }), alteId ? 'Wird geändert …' : 'Wird veröffentlicht …');
+  }
+
+  /* Nacheinander, nicht gleichzeitig: Zwölf gleichzeitige Uploads
+     bringen ein Webhosting-Paket eher zum Stolpern als zwölf hintereinander,
+     und schneller sind sie auf einer Mobilverbindung ohnehin nicht. */
+  function bilderHochladen(id, bilder) {
+    let fehlgeschlagen = 0;
+    return bilder.reduce((kette, b, i) => kette.then(() => {
+      if (!b || !b.datei || String(b.datei).indexOf('data:') !== 0) return null;
+      return TT.api.ruf('bild/neu', { id, bild: b.datei, pos: i })
+        .catch(() => { fehlgeschlagen++; });
+    }), Promise.resolve()).then(() => fehlgeschlagen);
+  }
+
   A_('inserat-weg', (el) => {
-    if (!confirm('Dieses Inserat löschen?')) return;
-    S.inseratLoeschen(el.dataset.id);
-    ui.neuZeichnen();
-    ui.toast('Inserat gelöscht.');
+    if (!confirm(U.t('Dieses Inserat löschen?'))) return;
+    if (!amServer()) {
+      S.inseratLoeschen(el.dataset.id);
+      ui.neuZeichnen();
+      ui.toast('Inserat gelöscht.');
+      return;
+    }
+    ui.knopfArbeit(el, TT.api.ruf('inserat/loeschen', { id: el.dataset.id }).then(() => {
+      S.inseratLoeschen(el.dataset.id);
+      serverInserate = null;
+      return (TT.markt ? TT.markt.nachladen() : Promise.resolve()).then(serverInserateHolen).then(() => {
+        ui.neuZeichnen();
+        ui.toast('Inserat gelöscht. Es ist aus der Suche verschwunden.');
+      });
+    }, (e) => ui.toast((e && e.text) || 'Löschen ging nicht.', 'schlecht')));
+  });
+
+  /* „Steht noch“ – der Klick, der ein Inserat um 60 Tage verlängert.
+
+     Es ist der wichtigste Knopf dieser Seite, auch wenn er der
+     unscheinbarste ist. Ein Portal ist nur so viel wert wie der Anteil
+     seiner Inserate, die es wirklich noch gibt: Wer dreimal hintereinander
+     eine Absage bekommt, weil die Wohnung längst weg war, sucht woanders
+     weiter. Deshalb läuft hier jedes Inserat aus, und deshalb ist das
+     Verlängern ein Klick und keine Formularrunde. */
+  A_('inserat-steht', (el) => {
+    ui.knopfArbeit(el, TT.api.ruf('inserat/steht', { id: el.dataset.id }).then((d) => {
+      serverInserate = null;
+      return serverInserateHolen().then(() => {
+        ui.neuZeichnen();
+        const bis = d.inserat && d.inserat.laeuftAb;
+        ui.toast(bis
+          ? U.t('Verlängert bis {0}.').replace('{0}', U.dateDE(bis))
+          : 'Verlängert.', 'gut');
+      });
+    }, (e) => ui.toast((e && e.text) || 'Verlängern ging nicht.', 'schlecht')), 'Einen Moment …');
   });
 
   /* Nur die Ergebnisbereiche austauschen. Würde die ganze Seite neu

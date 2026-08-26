@@ -16,8 +16,17 @@
        angemeldet ist – beides muss vor dem ersten Zeichnen feststehen.
        Der Aufruf hat eine kurze eigene Frist und schlägt nie fehl; ohne
        Antwort läuft die Anwendung als Vorführung weiter. */
-    if (TT.api) TT.api.pruefen().then(weiter, weiter);
-    else weiter();
+    if (TT.api) {
+      /* Erst der Server, dann der Bestand: Ohne die echten Inserate
+         würde die Suche einmal mit Beispielen aufblitzen und gleich
+         darauf springen. Beides hat eine kurze Frist und schlägt nie
+         fehl – ohne Antwort läuft die Anwendung als Vorführung weiter. */
+      TT.api.pruefen()
+        .then(() => (TT.markt ? TT.markt.laden() : null))
+        .then(weiter, weiter);
+    } else {
+      weiter();
+    }
   }
 
   let schonGelaufen = false;
@@ -38,6 +47,10 @@
     else if (medium.addListener) medium.addListener(beobachten);
 
     TT.ui.start();
+
+    /* Ein Besuch. Mehr wird darüber nicht festgehalten – keine Kennung,
+       kein Verlauf, nur eine Tagessumme. */
+    if (TT.markt) TT.markt.zaehle('besuch');
 
     /* Der Tresor liegt in einer eigenen Datenbank und antwortet erst kurz
        nach dem Start. Vorladen, damit die Freigabe im Anschreiben sofort

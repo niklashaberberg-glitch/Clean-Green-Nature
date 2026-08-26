@@ -133,7 +133,7 @@ final class Anfrage
             . 'Von: ' . ($name !== '' ? $name : 'jemandem ohne Namensangabe') . "\n"
             . ($zeilen ? "\n" . implode("\n", $zeilen) . "\n" : '')
             . "\nDie Nachricht selbst steht in deinem Postfach:\n"
-            . $basis . "/#/postfach\n\n"
+            . $basis . "/#/nachrichten\n\n"
             . "Warum nicht hier? Weil in dieser Mail weder deine noch die Adresse der anfragenden\n"
             . "Seite stehen soll. Wer antwortet, gibt seine Adresse selbst frei – niemand sonst.\n";
         Post::senden($an, 'Neue Anfrage zu „' . mb_substr((string) $inserat['titel'], 0, 60, 'UTF-8') . '“', $text);

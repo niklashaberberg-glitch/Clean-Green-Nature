@@ -160,6 +160,15 @@
     /* Bezahlte Sichtbarkeit steht als Erstes und heißt beim Namen. */
     if (TT.plan.istTop(l)) marken.unshift(badge('Top-Anzeige', 'info', 'blitz'));
     else if (TT.plan.istHervorgehoben(l)) marken.unshift(badge('hervorgehoben', 'info', 'stern'));
+    /* Und ganz vorn, vor allem anderen: ob es diese Wohnung gibt.
+
+       Ein Beispiel darf man zeigen, solange der Markt noch leer ist –
+       aber niemand darf eine Minute lang glauben, er habe etwas
+       gefunden. Deshalb steht die Marke vor der Top-Anzeige, vor dem
+       Preisurteil und vor allem, was Aufmerksamkeit auf sich zieht. */
+    if (TT.markt && TT.markt.istBeispiel(l)) {
+      marken.unshift(badge('Beispiel', 'warn', 'info'));
+    }
     return marken;
   }
 
@@ -474,6 +483,14 @@
     });
 
     if (ergebnis.danach) ergebnis.danach(haupt);
+    /* Der Trichter. Gezählt wird die Ansicht, nicht der Mensch: eine
+       Tagessumme je Name, ohne Kennung und ohne Reihenfolge. */
+    if (TT.markt) {
+      const zaehlbar = { suche: 'suche', objekt: 'objekt', plus: 'plus-seite',
+        inserieren: 'inserieren-seite', recht: 'recht', hilfe: 'hilfe', tausch: 'tausch',
+        werkzeuge: 'werkzeug', markt: 'werkzeug' };
+      if (zaehlbar[name]) TT.markt.zaehle(zaehlbar[name]);
+    }
     bandZeichnen();
     if (TT.viewHilfe) TT.viewHilfe.zeichnen(false);
     /* Nur bei einem echten Ansichtswechsel nach oben – nicht bei jedem
@@ -884,6 +901,11 @@
     'filter-schalter', 'filter-wert', 'filter-wgrauchen', 'filter-wgtiere', 'filter-zahl',
     /* Objektseite: ansehen, nicht anfassen */
     'bild', 'bild-zu', 'objekt-teilen', 'warum-top',
+    /* Der Meldeweg. Art. 16 Abs. 1 DSA verlangt ihn „leicht zugänglich“;
+       ein Meldeweg hinter einer Anmeldung ist das nicht. Wer ein
+       betrügerisches Inserat sieht, legt dafür kein Konto an – er geht
+       weiter, und das Inserat bleibt stehen. */
+    'melden', 'melden-senden',
     /* Rechtstexte und geteilte Unterlagen */
     'betreiber-speichern', 'betreiber-zuruecksetzen', 'widerruf-sichern',
     /* Auskunft über den eigenen Browserspeicher, Sicherung und Löschung.
@@ -1285,8 +1307,33 @@
     zeichnen(true);
   }
 
+  /* Ein Knopf, der auf den Server wartet.
+
+     Zwei Dinge müssen dabei zusammenkommen, und beide werden gern
+     vergessen: Der Knopf darf sich nicht ein zweites Mal drücken lassen
+     – sonst geht dieselbe Anfrage zweimal hinaus –, und er muss sagen,
+     dass etwas läuft. Ein Knopf, der nach dem Druck einfach dasteht,
+     wird gedrückt, bis etwas passiert.
+
+     Am Ende steht der alte Zustand wieder da, auch im Fehlerfall. Ein
+     dauerhaft gesperrter Knopf nach einem Netzfehler ist eine Sackgasse. */
+  function knopfArbeit(el, versprechen, wortWaehrend) {
+    if (!el || el.disabled) return Promise.resolve(null);
+    const vorher = el.innerHTML;
+    el.disabled = true;
+    el.setAttribute('aria-busy', 'true');
+    if (wortWaehrend) el.innerHTML = String(h`${wortWaehrend}`);
+    const zurueck = () => {
+      el.disabled = false;
+      el.removeAttribute('aria-busy');
+      el.innerHTML = vorher;
+    };
+    return versprechen.then((w) => { zurueck(); return w; },
+      (e) => { zurueck(); throw e; });
+  }
+
   Object.assign(ui, {
-    start, gehe, zeichnen, neuZeichnen, schaleZeichnen, toast, dialog, dialogZu,
+    start, gehe, zeichnen, neuZeichnen, schaleZeichnen, toast, dialog, dialogZu, knopfArbeit,
     zielMerken, zielHolen,
     badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
     ART_LABEL, ART_ICON, artLabel, artIcon, ico, aktionRegistrieren, AKTIONEN,

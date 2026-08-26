@@ -67,7 +67,7 @@
       <span class="nkzeile__label">${b.label}
         ${b.hinweis ? h`<i>${b.hinweis}</i>` : ''}</span>
       <span class="nkzeile__eingabe">
-        <input type="number" min="0" step="1" value="${(w.positionen || {})[b.id] || ''}"
+        <input type="number" min="0" step="any" value="${(w.positionen || {})[b.id] || ''}"
           data-tu-input="nk-position" data-feld="${b.id}" placeholder="0" aria-label="Betrag für ${b.label}">
         <i>€</i>
       </span>
@@ -91,9 +91,9 @@
             <label class="feld"><span>Abrechnung bei dir eingegangen am</span>
               <input type="date" value="${w.zugang}" data-tu-change="nk-wert" data-feld="zugang"></label>
             <label class="feld"><span>Geleistete Vorauszahlungen</span>
-              <input type="number" min="0" step="10" value="${w.vorauszahlung || ''}" data-tu-input="nk-zahl" data-feld="vorauszahlung"></label>
+              <input type="number" min="0" step="any" value="${w.vorauszahlung || ''}" data-tu-input="nk-zahl" data-feld="vorauszahlung"></label>
             <label class="feld"><span>Auf dich entfallende Gesamtkosten</span>
-              <input type="number" min="0" step="10" value="${w.gesamt || ''}" data-tu-input="nk-zahl" data-feld="gesamt"></label>
+              <input type="number" min="0" step="any" value="${w.gesamt || ''}" data-tu-input="nk-zahl" data-feld="gesamt"></label>
           </div>
           <fieldset class="filter__gruppe"><legend>Auffälligkeiten</legend>
             <label class="schalter"><input type="checkbox" ${w.heizungNachFlaeche ? 'checked' : ''}

@@ -22,7 +22,7 @@ const SKRIPTE = [
   'i18n.js', 'sprache-en.js',
   'util.js', 'geo.js', 'images.js', 'ring-bild.js', 'data.js',
   'analyse.js', 'match.js', 'werkzeuge.js', 'store.js', 'plan.js', 'tresor.js', 'recht.js', 'hilfe.js', 'api.js', 'konto.js',
-  'hilfe-en.js', 'karte.js', 'ui.js',
+  'hilfe-en.js', 'markt.js', 'karte.js', 'ui.js',
   'view-start.js', 'view-suche.js', 'view-objekt.js',
   'view-tausch.js', 'view-tools.js', 'view-profil.js',
   'view-werkzeuge.js', 'view-werkzeuge2.js', 'view-markt.js', 'view-plus.js',
@@ -35,6 +35,17 @@ const sicher = (s) => s.replace(/<\/script/gi, '<\\/script');
 
 function lies(datei) {
   return fs.readFileSync(path.join(assets, datei), 'utf8');
+}
+
+/* Die Ortsliste für die Serverseite entsteht aus assets/geo.js. Sie hier
+   mitzubauen kostet nichts und verhindert den einen Fehler, der sonst
+   sicher kommt: ein neues Viertel in der Anwendung, das der Server nicht
+   kennt und deshalb bei jedem Inserat ablehnt. */
+try {
+  require('./scripts/orte-bauen.js');
+} catch (e) {
+  console.error('Ortsliste konnte nicht erzeugt werden: ' + e.message);
+  process.exit(1);
 }
 
 const css = fs.readFileSync(path.join(assets, 'app.css'), 'utf8');

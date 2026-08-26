@@ -131,6 +131,15 @@
     return Math.max(0, Math.round(((now || TT.now()) - then) / 86400000));
   }
 
+  /* Wie viele Tage bleiben. Negativ, wenn der Tag vorbei ist – ein
+     abgelaufenes Inserat soll nicht als „läuft in 0 Tagen aus“ stehen,
+     sondern als abgelaufen. */
+  function daysUntil(iso, now) {
+    if (!iso) return 0;
+    const dann = new Date(iso + (String(iso).length === 10 ? 'T12:00:00' : ''));
+    return Math.ceil((dann - (now || TT.now())) / 86400000);
+  }
+
   function addDays(date, days) {
     const d = new Date(date.getTime());
     d.setDate(d.getDate() + days);
@@ -442,7 +451,7 @@
 
   TT.util = {
     clamp, sum, uniq, debounce, rng, hash, pick, pickN, between, intBetween,
-    eur, eur2, num, dec, qm, pct, rooms, dateDE, monthDE, since, daysSince, addDays, isoDate,
+    eur, eur2, num, dec, qm, pct, rooms, dateDE, monthDE, since, daysSince, daysUntil, addDays, isoDate,
     esc, raw, markup, html, norm, slug, plural, truncate, addJahre, addMonate, dritterWerktag,
     t: uebersetze,
     karte, hole,

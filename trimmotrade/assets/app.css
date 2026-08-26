@@ -2212,3 +2212,62 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   color: var(--text-still);
 }
 .passkeyliste .link { flex: 0 0 auto; }
+
+/* =====================================================================
+   Der Bestandshinweis
+
+   Er steht über der Trefferliste, solange Beispiele dabei sind, und er
+   ist absichtlich nicht wegklickbar. Ein Hinweis, den man schließen
+   kann, ist nach dem ersten Besuch keiner mehr – und die Aussage, dass
+   ein Teil dieser Wohnungen erfunden ist, muss jedes Mal gelten.
+
+   Farblich liegt er auf der Warnfarbe, nicht auf der Akzentfarbe: Er
+   empfiehlt nichts, er schränkt ein.
+   ===================================================================== */
+.bestand {
+  display: flex; gap: .7em; align-items: flex-start;
+  padding: .9em 1.05em; margin: 0 0 14px;
+  background: var(--warn-hell); color: var(--warn);
+  border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent);
+  border-radius: var(--r-klein);
+  font-size: .88rem; line-height: 1.55;
+}
+.bestand > .ico { flex: none; margin-top: .15em; }
+.bestand b:first-child { display: block; margin-bottom: .2em; }
+.bestand p { margin: .35em 0 0; }
+.bestand p:first-of-type { margin-top: .2em; }
+/* Der Verweis muss sich vom Warnton abheben, ohne die 4,5:1 zu
+   unterschreiten – deshalb dieselbe Farbe, aber unterstrichen und
+   fett statt in einem zweiten Ton. */
+.bestand a { color: inherit; font-weight: 650; text-decoration: underline; text-underline-offset: .18em; }
+
+/* =====================================================================
+   Die Eckdaten einer Anfrage
+
+   Sichtbar aufgelistet, bevor jemand absendet. Das ist kein
+   Gestaltungsdetail: Was hier steht, verlässt das Gerät.
+   ===================================================================== */
+.eckdaten__liste {
+  list-style: none; margin: 0 0 .8em; padding: 0;
+  display: grid; gap: .1em;
+}
+.eckdaten__liste li {
+  display: flex; justify-content: space-between; gap: 1em;
+  padding: .4em .1em; border-bottom: 1px solid var(--rand);
+  font-size: .9rem;
+}
+.eckdaten__liste li:last-child { border-bottom: 0; }
+.eckdaten__liste span { color: var(--text2); }
+.eckdaten__liste b { text-align: right; }
+
+/* Ein Knopf, der da sein muss, aber nichts anpreist: der Meldeweg.
+   Er soll findbar sein und nicht werben. */
+.knopf--leise { color: var(--text2); }
+.knopf--leise:hover { color: var(--text); }
+
+/* Eigene Inserate: was der Server über sie weiß. */
+.eigene__stand {
+  display: inline-flex; align-items: center; gap: .3em;
+  font-size: .78rem; font-weight: 600;
+}
+.eigene__stand--laeuft { color: var(--warn); }

@@ -242,6 +242,48 @@
 
   /* ------------------------- Marktüberblick ------------------------- */
 
+  /* ------------------------------------------------------------------
+     Der Hinweis, ohne den das Ganze eine Lüge wäre
+
+     Solange nicht genug echte Inserate da sind, füllt ein erzeugter
+     Beispielmarkt die Suche. Das ist vertretbar – eine leere Suche
+     zeigt niemandem, was die Anwendung kann. Vertretbar ist es aber nur
+     unter einer Bedingung: Es muss dort stehen, wo gesucht wird, in
+     ganzen Sätzen, ohne Wegklicken.
+
+     Nach § 5 Abs. 1 UWG ist eine Angabe über die Verfügbarkeit einer
+     Ware irreführend, wenn sie nicht stimmt. Und lange bevor das jemand
+     abmahnt, richtet es größeren Schaden an: Wer eine Wohnung
+     anschreibt, die es nicht gibt, kommt nicht wieder. Ein
+     Wohnungsportal lebt von genau einer Sache, und das ist der Glaube
+     daran, dass die Wohnungen echt sind.
+     ------------------------------------------------------------------ */
+  function bestandsHinweis() {
+    if (!TT.markt) return '';
+    const z = TT.markt.zustand;
+    const beispiele = TT.markt.zeigtBeispiele();
+
+    if (z.fehler) {
+      return h`<div class="warn-meldung bestand">${ico('warnung')}<span><b>Der Bestand ließ sich gerade nicht
+        laden.</b> Was du hier siehst, sind Beispiele. ${z.fehler}</span></div>`;
+    }
+    if (!beispiele) return '';
+
+    const echte = z.echte || 0;
+    return h`<div class="bestand bestand--beispiel">${ico('info')}
+      <div>
+        <b>${echte > 0
+        ? U.t('{0} echte Inserate – der Rest sind Beispiele').replace('{0}', U.num(echte))
+        : 'Diese Wohnungen sind Beispiele'}</b>
+        <p>TrimmoTrade zeigt einen erzeugten Beispielmarkt, solange noch wenige echte Inserate da sind.
+          Jedes Beispiel trägt oben links das Wort <b>Beispiel</b>. Dahinter steht niemand: Eine Anfrage
+          erreicht keinen Menschen, und die Preise sind gerechnet, nicht verlangt.</p>
+        <p>Echte Inserate sind daran zu erkennen, dass die Marke fehlt. ${TT.api && TT.api.da
+        ? h`<a href="#/inserieren">Selbst inserieren</a> dauert zwei Minuten und ist kostenlos.` : ''}</p>
+      </div>
+    </div>`;
+  }
+
   function marktLeiste(treffer) {
     const m = A.marktLage(treffer);
     if (!m) return '';
@@ -556,6 +598,7 @@
           <aside class="suche__filter" id="filterspalte">${filterPanel()}</aside>
 
           <section class="suche__ergebnis" aria-label="Suchergebnisse">
+            ${bestandsHinweis()}
             <div id="markt">${marktLeiste(letzteTreffer)}</div>
             <div id="erklaerung">${rankingErklaerung(bewertet)}</div>
             <div id="ergebnisse">${ergebnisListe(bewertet)}</div>

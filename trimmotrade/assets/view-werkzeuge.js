@@ -179,14 +179,14 @@
           <h2>Deine Zahlen</h2>
           <div class="formraster">
             <label class="feld"><span>Nettoeinkommen des Haushalts im Monat</span>
-              <input type="number" min="0" step="50" value="${w.netto}" data-tu-input="leistbarkeit" data-feld="netto"></label>
+              <input type="number" min="0" step="any" value="${w.netto}" data-tu-input="leistbarkeit" data-feld="netto"></label>
             <label class="feld"><span>Personen im Haushalt</span>
               <input type="number" min="1" max="8" value="${w.haushalt}" data-tu-input="leistbarkeit" data-feld="haushalt"></label>
             <label class="feld"><span>Andere feste Raten im Monat</span>
-              <input type="number" min="0" step="25" value="${w.rateSonstige}" data-tu-input="leistbarkeit" data-feld="rateSonstige"
+              <input type="number" min="0" step="any" value="${w.rateSonstige}" data-tu-input="leistbarkeit" data-feld="rateSonstige"
                 placeholder="Kredit, Leasing, Unterhalt"></label>
             <label class="feld"><span>Eigenkapital für einen Kauf</span>
-              <input type="number" min="0" step="5000" value="${w.eigenkapital}" data-tu-input="leistbarkeit" data-feld="eigenkapital"></label>
+              <input type="number" min="0" step="any" value="${w.eigenkapital}" data-tu-input="leistbarkeit" data-feld="eigenkapital"></label>
           </div>
         </form>
 
@@ -265,7 +265,7 @@
           <h2>Deine Angaben</h2>
           <div class="formraster">
             <label class="feld"><span>Bruttojahreseinkommen des Haushalts</span>
-              <input type="number" min="0" step="500" value="${w.brutto}" data-tu-input="wbs" data-feld="brutto"></label>
+              <input type="number" min="0" step="any" value="${w.brutto}" data-tu-input="wbs" data-feld="brutto"></label>
             <label class="feld"><span>Personen im Haushalt</span>
               <input type="number" min="1" max="10" value="${w.personen}" data-tu-input="wbs" data-feld="personen"></label>
             <label class="feld"><span>davon Kinder</span>
@@ -273,7 +273,7 @@
             <label class="feld"><span>davon erwerbstätig</span>
               <input type="number" min="0" max="10" value="${w.erwerbstaetige}" data-tu-input="wbs" data-feld="erwerbstaetige"></label>
             <label class="feld"><span>Einkommensgrenze deines Landes</span>
-              <input type="number" min="0" step="500" value="${w.grenze || ''}" data-tu-input="wbs" data-feld="grenze"
+              <input type="number" min="0" step="any" value="${w.grenze || ''}" data-tu-input="wbs" data-feld="grenze"
                 placeholder="leer = Bundesrahmen ${U.num(bundGrenze)} €"></label>
           </div>
           <fieldset class="filter__gruppe"><legend>Abzüge und Freibeträge</legend>
@@ -364,9 +364,9 @@
             <label class="feld"><span>Personen im Haushalt</span>
               <input type="number" min="1" max="12" value="${w.personen}" data-tu-input="wohngeld" data-feld="personen"></label>
             <label class="feld"><span>Bruttoeinkommen des Haushalts im Monat</span>
-              <input type="number" min="0" step="50" value="${w.brutto}" data-tu-input="wohngeld" data-feld="brutto"></label>
+              <input type="number" min="0" step="any" value="${w.brutto}" data-tu-input="wohngeld" data-feld="brutto"></label>
             <label class="feld"><span>Warmmiete im Monat</span>
-              <input type="number" min="0" step="25" value="${w.miete}" data-tu-input="wohngeld" data-feld="miete"></label>
+              <input type="number" min="0" step="any" value="${w.miete}" data-tu-input="wohngeld" data-feld="miete"></label>
           </div>
           <fieldset class="filter__gruppe"><legend>Trifft eines davon auf dich zu?</legend>
             ${W.WOHNGELD_AUSSCHLUSS.map((a) => h`<label class="schalter">

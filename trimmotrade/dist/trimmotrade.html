@@ -2228,6 +2228,65 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 }
 .passkeyliste .link { flex: 0 0 auto; }
 
+/* =====================================================================
+   Der Bestandshinweis
+
+   Er steht über der Trefferliste, solange Beispiele dabei sind, und er
+   ist absichtlich nicht wegklickbar. Ein Hinweis, den man schließen
+   kann, ist nach dem ersten Besuch keiner mehr – und die Aussage, dass
+   ein Teil dieser Wohnungen erfunden ist, muss jedes Mal gelten.
+
+   Farblich liegt er auf der Warnfarbe, nicht auf der Akzentfarbe: Er
+   empfiehlt nichts, er schränkt ein.
+   ===================================================================== */
+.bestand {
+  display: flex; gap: .7em; align-items: flex-start;
+  padding: .9em 1.05em; margin: 0 0 14px;
+  background: var(--warn-hell); color: var(--warn);
+  border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent);
+  border-radius: var(--r-klein);
+  font-size: .88rem; line-height: 1.55;
+}
+.bestand > .ico { flex: none; margin-top: .15em; }
+.bestand b:first-child { display: block; margin-bottom: .2em; }
+.bestand p { margin: .35em 0 0; }
+.bestand p:first-of-type { margin-top: .2em; }
+/* Der Verweis muss sich vom Warnton abheben, ohne die 4,5:1 zu
+   unterschreiten – deshalb dieselbe Farbe, aber unterstrichen und
+   fett statt in einem zweiten Ton. */
+.bestand a { color: inherit; font-weight: 650; text-decoration: underline; text-underline-offset: .18em; }
+
+/* =====================================================================
+   Die Eckdaten einer Anfrage
+
+   Sichtbar aufgelistet, bevor jemand absendet. Das ist kein
+   Gestaltungsdetail: Was hier steht, verlässt das Gerät.
+   ===================================================================== */
+.eckdaten__liste {
+  list-style: none; margin: 0 0 .8em; padding: 0;
+  display: grid; gap: .1em;
+}
+.eckdaten__liste li {
+  display: flex; justify-content: space-between; gap: 1em;
+  padding: .4em .1em; border-bottom: 1px solid var(--rand);
+  font-size: .9rem;
+}
+.eckdaten__liste li:last-child { border-bottom: 0; }
+.eckdaten__liste span { color: var(--text2); }
+.eckdaten__liste b { text-align: right; }
+
+/* Ein Knopf, der da sein muss, aber nichts anpreist: der Meldeweg.
+   Er soll findbar sein und nicht werben. */
+.knopf--leise { color: var(--text2); }
+.knopf--leise:hover { color: var(--text); }
+
+/* Eigene Inserate: was der Server über sie weiß. */
+.eigene__stand {
+  display: inline-flex; align-items: center; gap: .3em;
+  font-size: .78rem; font-weight: 600;
+}
+.eigene__stand--laeuft { color: var(--warn); }
+
 </style>
 <noscript>
   <div style="max-width:640px;margin:12vh auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.6">
@@ -5340,6 +5399,15 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     return Math.max(0, Math.round(((now || TT.now()) - then) / 86400000));
   }
 
+  /* Wie viele Tage bleiben. Negativ, wenn der Tag vorbei ist – ein
+     abgelaufenes Inserat soll nicht als „läuft in 0 Tagen aus“ stehen,
+     sondern als abgelaufen. */
+  function daysUntil(iso, now) {
+    if (!iso) return 0;
+    const dann = new Date(iso + (String(iso).length === 10 ? 'T12:00:00' : ''));
+    return Math.ceil((dann - (now || TT.now())) / 86400000);
+  }
+
   function addDays(date, days) {
     const d = new Date(date.getTime());
     d.setDate(d.getDate() + days);
@@ -5651,7 +5719,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   TT.util = {
     clamp, sum, uniq, debounce, rng, hash, pick, pickN, between, intBetween,
-    eur, eur2, num, dec, qm, pct, rooms, dateDE, monthDE, since, daysSince, addDays, isoDate,
+    eur, eur2, num, dec, qm, pct, rooms, dateDE, monthDE, since, daysSince, daysUntil, addDays, isoDate,
     esc, raw, markup, html, norm, slug, plural, truncate, addJahre, addMonate, dritterWerktag,
     t: uebersetze,
     karte, hole,
@@ -6183,8 +6251,12 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     const eigen = eigeneBilder(listing);
     if (eigen) {
       const b = eigen[index % eigen.length];
-      return '<img class="eigenbild" src="' + U.esc(b.datei) + '" alt="' + U.esc(b.text || 'Foto zum Inserat') +
-        '" loading="lazy" decoding="async">';
+      /* Breite und Höhe stehen dabei, sobald sie bekannt sind: Ohne sie
+         hat das Bild vor dem Laden keine Höhe, und der Text darunter
+         springt in dem Moment nach unten, in dem jemand ihn liest. */
+      const masse = b.breite && b.hoehe ? ' width="' + b.breite + '" height="' + b.hoehe + '"' : '';
+      return '<img class="eigenbild" src="' + U.esc(b.datei) + '"' + masse + ' alt="' +
+        U.esc(b.text || 'Foto zum Inserat') + '" loading="lazy" decoding="async">';
     }
     const seq = sequenceFor(listing);
     const name = seq[index % seq.length];
@@ -7126,13 +7198,20 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
      sich ausschließlich die Sprache. Eigene Inserate bleiben, wie sie
      eingetippt wurden – das ist der Text des Menschen, nicht unserer. */
   function neuAufbauen() {
-    const eigene = Object.keys(byId).filter((k) => byId[k] && byId[k].eigen).map((k) => byId[k]);
+    /* Eigene und echte Inserate überleben den Neuaufbau: Die erzeugten
+       Beispiele hängen an der Sprache, die echten nicht – und ein
+       Sprachwechsel darf den Bestand nicht leeren. */
+    const eigene = Object.keys(byId)
+      .filter((k) => byId[k] && (byId[k].eigen || byId[k].echt)).map((k) => byId[k]);
     const frisch = build();
     listings.length = 0;
     frisch.forEach((l) => listings.push(l));
     Object.keys(byId).forEach((k) => { delete byId[k]; });
     listings.forEach((l) => { byId[l.id] = l; });
-    eigene.forEach((l) => { byId[l.id] = l; });
+    eigene.forEach((l) => {
+      byId[l.id] = l;
+      if (l.echt && listings.indexOf(l) < 0) listings.unshift(l);
+    });
     return listings;
   }
 
@@ -10896,7 +10975,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     verfahren: [],           // Was er anbietet: passkey, mail, google, microsoft
     rpId: '',
     konto: null,             // Wer angemeldet ist – vom Server, nicht aus dem Browser
-    grund: ''                // Warum kein Server, falls keiner da ist
+    grund: '',               // Warum kein Server, falls keiner da ist
+    /* Wie viele echte Inserate es gibt und ob daneben Beispiele gezeigt
+       werden dürfen. Beides kommt vom Server, weil beides eine
+       Entscheidung des Betriebs ist und keine des Browsers. */
+    markt: { inserate: 0, beispiele: true, bilder: false }
   };
 
   const eigenerServer = () => location.protocol === 'http:' || location.protocol === 'https:';
@@ -10992,6 +11075,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           zustand.verfahren = d.verfahren || [];
           zustand.rpId = d.rpId || '';
           zustand.konto = d.konto || null;
+          if (d.markt) zustand.markt = d.markt;
         } else {
           /* Ein Server, der zwar da ist, aber keine Anmeldung anbietet –
              etwa weil config.php fehlt. Für die Anwendung ist das
@@ -11017,6 +11101,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     get geprueft() { return zustand.geprueft; },
     get verfahren() { return zustand.verfahren; },
     get konto() { return zustand.konto; },
+    get markt() { return zustand.markt; },
+    marktMerken: (m) => { if (m) zustand.markt = m; },
     get grund() { return zustand.grund; },
     kann: (v) => zustand.da && zustand.verfahren.indexOf(v) >= 0,
     pruefen, ruf: rufMitNachfassen, kontoMerken
@@ -12028,6 +12114,254 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   TT.hilfe.themenEintragen('en', THEMEN_EN);
 })(window.TT = window.TT || {});
 
+/* ===== markt.js ===== */
+/* =====================================================================
+   TrimmoTrade – der echte Markt
+
+   Bis hierhin kannte die Anwendung 275 Wohnungen, die sie selbst
+   erzeugt: aus einer festen Zufallsfolge, immer dieselben, überall
+   gleich. Das war richtig, solange es niemanden gab, der inseriert –
+   eine leere Suche ist keine Anwendung, an der sich etwas ausprobieren
+   lässt.
+
+   Sobald aber ein Server antwortet und echte Inserate darauf liegen,
+   kehrt sich das um. Dann sind die erzeugten Wohnungen nicht mehr
+   Anschauung, sondern Behauptung: Wer eine davon anschreibt, schreibt
+   ins Leere. Nach § 5 Abs. 1 UWG ist eine Angebotsangabe, die es nicht
+   gibt, irreführend – und noch bevor irgendein Gericht das feststellt,
+   hat der erste enttäuschte Suchende es allen erzählt.
+
+   Deshalb gilt hier eine klare Reihenfolge:
+
+     1. Echte Inserate stehen immer zuerst.
+     2. Beispiele erscheinen nur, solange der Betrieb sie zulässt, und
+        tragen sichtbar das Wort „Beispiel“.
+     3. Über der Trefferliste steht ein Hinweis, solange Beispiele
+        dabei sind. Er lässt sich nicht wegklicken.
+     4. Schaltet der Betrieb sie ab, verschwinden sie vollständig – auch
+        aus der Karte, dem Ringtausch und jeder Auswertung.
+
+   Ohne Server bleibt alles wie bisher: die Anwendung läuft als
+   Vorführung, mit Beispielen, und sagt das an jeder Stelle.
+   ===================================================================== */
+(function (TT) {
+  'use strict';
+
+  const U = TT.util;
+  const G = TT.geo;
+
+  let zustand = {
+    geladen: false,
+    echte: 0,        // wie viele echte Inserate es insgesamt gibt
+    geholt: 0,       // wie viele davon hier liegen
+    beispiele: true, // dürfen Beispiele gezeigt werden?
+    fehler: ''
+  };
+
+  const horcher = [];
+  const melden = () => horcher.forEach((f) => { try { f(zustand); } catch (e) { /* ein Horcher darf den nächsten nicht mitreißen */ } });
+
+  /* ------------------------------------------------------------------
+     Ein Inserat vom Server in die Form bringen, die der Rest der
+     Anwendung kennt. Der Server schickt bewusst nicht alles: Was sich
+     ausrechnen lässt, rechnet der Browser – die Vergleichsmiete etwa
+     hängt an derselben Tabelle, die auch die Suche benutzt, und sie
+     zweimal zu pflegen hieße, sie auseinanderlaufen zu lassen.
+     ------------------------------------------------------------------ */
+  function einpassen(l) {
+    if (!l || !l.id) return null;
+    l.echt = true;
+    l.beispiel = false;
+
+    /* Bilder: Der Server liefert Verweise, die Anwendung erwartet die
+       Form, in der auch selbst hochgeladene Bilder vorliegen. */
+    if (Array.isArray(l.bilder)) {
+      l.bilder = l.bilder.map((b) => (b && b.url
+        ? { id: b.id, datei: b.url, klein: b.klein, breite: b.breite, hoehe: b.hoehe, text: b.text || '' }
+        : b));
+    } else {
+      l.bilder = [];
+    }
+
+    if (!Array.isArray(l.besichtigungen)) l.besichtigungen = [];
+    if (!Array.isArray(l.quirks)) l.quirks = [];
+
+    /* Die ortsübliche Vergleichsmiete. Ohne sie fehlt der Prüfhinweis
+       zur Mietpreisbremse – und der ist der Grund, warum jemand hier
+       sucht statt anderswo. */
+    if (l.kind !== 'kauf' && l.viertelKey && G.districtByKey[l.viertelKey]) {
+      l.vergleichsmiete = G.vergleichsmiete(l.viertelKey, l.flaeche || 1, l.baujahr || 1970, !!l.saniert);
+    }
+    if (!l.stats) l.stats = { aufrufe: 0, bewerber: 0, online: l.erstellt || '' };
+    return l;
+  }
+
+  /* ------------------------------------------------------------------
+     Einmischen und Aussortieren
+     ------------------------------------------------------------------ */
+
+  function einmischen(inserate) {
+    const liste = TT.data.listings;
+    const byId = TT.data.byId;
+
+    /* Was schon da ist, wird ersetzt statt verdoppelt: Ein zweiter
+       Aufruf derselben Suche darf keine Zwillinge erzeugen. */
+    inserate.forEach((roh) => {
+      const l = einpassen(roh);
+      if (!l) return;
+      const alt = byId[l.id];
+      byId[l.id] = l;
+      const stelle = alt ? liste.indexOf(alt) : -1;
+      if (stelle >= 0) liste[stelle] = l;
+      else liste.unshift(l);
+    });
+    zustand.geholt = liste.filter((l) => l.echt).length;
+  }
+
+  /* Beispiele aus allen Listen nehmen. Nicht ausblenden – entfernen:
+     Ein ausgeblendetes Beispiel taucht sonst in der Karte, im
+     Ringtausch oder in einer Auswertung doch wieder auf. */
+  function beispieleRaus() {
+    const liste = TT.data.listings;
+    const byId = TT.data.byId;
+    for (let i = liste.length - 1; i >= 0; i--) {
+      const l = liste[i];
+      if (!l.echt && !l.eigen) {
+        delete byId[l.id];
+        liste.splice(i, 1);
+      }
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     Laden
+     ------------------------------------------------------------------ */
+
+  let laeuft = null;
+
+  function laden() {
+    if (laeuft) return laeuft;
+    if (!TT.api || !TT.api.da) {
+      zustand.geladen = true;
+      laeuft = Promise.resolve(zustand);
+      return laeuft;
+    }
+
+    const angaben = (TT.api.markt) || {};
+    zustand.echte = Number(angaben.inserate) || 0;
+    zustand.beispiele = angaben.beispiele !== false;
+
+    if (!zustand.beispiele) beispieleRaus();
+
+    if (!zustand.echte) {
+      zustand.geladen = true;
+      laeuft = Promise.resolve(zustand);
+      melden();
+      return laeuft;
+    }
+
+    laeuft = TT.api.ruf('markt?wieviele=120&sortierung=neu')
+      .then((d) => {
+        einmischen(d.inserate || []);
+        zustand.echte = Number(d.gesamt) || zustand.geholt;
+        zustand.geladen = true;
+        melden();
+        return zustand;
+      })
+      .catch((e) => {
+        /* Ein Marktplatz, dessen Server schweigt, ist immer noch ein
+           Rechenwerkzeug. Sichtbar bleibt der Fehler trotzdem: Sonst
+           sucht jemand in Beispielen und hält sie für den Bestand. */
+        zustand.fehler = e && e.text ? e.text : 'Der Bestand ließ sich nicht laden.';
+        zustand.geladen = true;
+        melden();
+        return zustand;
+      });
+    return laeuft;
+  }
+
+  /* Nach jeder eigenen Änderung: Bestand neu holen, ohne den Zwischen-
+     speicher zu behalten. */
+  function nachladen() {
+    laeuft = null;
+    if (TT.api && TT.api.da) {
+      return TT.api.ruf('status').then((d) => {
+        if (d && d.markt) TT.api.marktMerken(d.markt);
+        return laden();
+      }, () => laden());
+    }
+    return laden();
+  }
+
+  /* Ein einzelnes echtes Inserat nachholen – für einen geteilten
+     Verweis auf etwas, das nicht in den ersten 120 lag. */
+  function objekt(id) {
+    if (TT.data.byId[id]) return Promise.resolve(TT.data.byId[id]);
+    if (!TT.api || !TT.api.da || !/^tt[0-9a-f]{16}$/.test(String(id))) {
+      return Promise.resolve(null);
+    }
+    return TT.api.ruf('objekt/' + encodeURIComponent(id))
+      .then((d) => {
+        if (!d || !d.inserat) return null;
+        einmischen([d.inserat]);
+        return TT.data.byId[id] || null;
+      })
+      .catch(() => null);
+  }
+
+  const istEcht = (l) => !!(l && l.echt);
+  const istBeispiel = (l) => !!(l && !l.echt && !l.eigen);
+  /* Sind Beispiele im Umlauf? Danach entscheidet sich, ob über der
+     Trefferliste der Hinweis steht. */
+  const zeigtBeispiele = () => TT.data.listings.some(istBeispiel);
+
+  /* ------------------------------------------------------------------
+     Zählen
+
+     Gebündelt und mit Verzögerung: Eine Anfrage je Klick wäre ein
+     Vielfaches des Verkehrs, den die Anwendung sonst erzeugt. Verloren
+     geht dabei nichts, was zählt – beim Verlassen der Seite geht der
+     Rest noch heraus.
+     ------------------------------------------------------------------ */
+  let offen = [];
+  let uhr = null;
+
+  function zaehle(name) {
+    if (!TT.api || !TT.api.da || !name) return;
+    offen.push(name);
+    if (offen.length > 40) offen = offen.slice(-40);
+    if (uhr) return;
+    uhr = setTimeout(abschicken, 4000);
+  }
+
+  function abschicken() {
+    clearTimeout(uhr);
+    uhr = null;
+    if (!offen.length || !TT.api || !TT.api.da) return;
+    const namen = offen.slice();
+    offen = [];
+    /* Kein Nachfassen, kein Fehler nach außen: Eine Zahl, die nicht
+       ankommt, darf niemandem auffallen. */
+    TT.api.ruf('zaehlen', { namen }).catch(() => { });
+  }
+
+  if (typeof window !== 'undefined' && window.addEventListener) {
+    window.addEventListener('pagehide', abschicken);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') abschicken();
+    });
+  }
+
+  TT.markt = {
+    laden, nachladen, objekt, einmischen, zaehle,
+    istEcht, istBeispiel, zeigtBeispiele,
+    horchen: (f) => { horcher.push(f); },
+    get zustand() { return zustand; },
+    get echte() { return zustand.echte; },
+    get beispieleErlaubt() { return zustand.beispiele; }
+  };
+})(window.TT = window.TT || {});
+
 /* ===== karte.js ===== */
 /* =====================================================================
    TrimmoTrade – Karte
@@ -12529,6 +12863,15 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     /* Bezahlte Sichtbarkeit steht als Erstes und heißt beim Namen. */
     if (TT.plan.istTop(l)) marken.unshift(badge('Top-Anzeige', 'info', 'blitz'));
     else if (TT.plan.istHervorgehoben(l)) marken.unshift(badge('hervorgehoben', 'info', 'stern'));
+    /* Und ganz vorn, vor allem anderen: ob es diese Wohnung gibt.
+
+       Ein Beispiel darf man zeigen, solange der Markt noch leer ist –
+       aber niemand darf eine Minute lang glauben, er habe etwas
+       gefunden. Deshalb steht die Marke vor der Top-Anzeige, vor dem
+       Preisurteil und vor allem, was Aufmerksamkeit auf sich zieht. */
+    if (TT.markt && TT.markt.istBeispiel(l)) {
+      marken.unshift(badge('Beispiel', 'warn', 'info'));
+    }
     return marken;
   }
 
@@ -12843,6 +13186,14 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     });
 
     if (ergebnis.danach) ergebnis.danach(haupt);
+    /* Der Trichter. Gezählt wird die Ansicht, nicht der Mensch: eine
+       Tagessumme je Name, ohne Kennung und ohne Reihenfolge. */
+    if (TT.markt) {
+      const zaehlbar = { suche: 'suche', objekt: 'objekt', plus: 'plus-seite',
+        inserieren: 'inserieren-seite', recht: 'recht', hilfe: 'hilfe', tausch: 'tausch',
+        werkzeuge: 'werkzeug', markt: 'werkzeug' };
+      if (zaehlbar[name]) TT.markt.zaehle(zaehlbar[name]);
+    }
     bandZeichnen();
     if (TT.viewHilfe) TT.viewHilfe.zeichnen(false);
     /* Nur bei einem echten Ansichtswechsel nach oben – nicht bei jedem
@@ -13253,6 +13604,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     'filter-schalter', 'filter-wert', 'filter-wgrauchen', 'filter-wgtiere', 'filter-zahl',
     /* Objektseite: ansehen, nicht anfassen */
     'bild', 'bild-zu', 'objekt-teilen', 'warum-top',
+    /* Der Meldeweg. Art. 16 Abs. 1 DSA verlangt ihn „leicht zugänglich“;
+       ein Meldeweg hinter einer Anmeldung ist das nicht. Wer ein
+       betrügerisches Inserat sieht, legt dafür kein Konto an – er geht
+       weiter, und das Inserat bleibt stehen. */
+    'melden', 'melden-senden',
     /* Rechtstexte und geteilte Unterlagen */
     'betreiber-speichern', 'betreiber-zuruecksetzen', 'widerruf-sichern',
     /* Auskunft über den eigenen Browserspeicher, Sicherung und Löschung.
@@ -13654,8 +14010,33 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     zeichnen(true);
   }
 
+  /* Ein Knopf, der auf den Server wartet.
+
+     Zwei Dinge müssen dabei zusammenkommen, und beide werden gern
+     vergessen: Der Knopf darf sich nicht ein zweites Mal drücken lassen
+     – sonst geht dieselbe Anfrage zweimal hinaus –, und er muss sagen,
+     dass etwas läuft. Ein Knopf, der nach dem Druck einfach dasteht,
+     wird gedrückt, bis etwas passiert.
+
+     Am Ende steht der alte Zustand wieder da, auch im Fehlerfall. Ein
+     dauerhaft gesperrter Knopf nach einem Netzfehler ist eine Sackgasse. */
+  function knopfArbeit(el, versprechen, wortWaehrend) {
+    if (!el || el.disabled) return Promise.resolve(null);
+    const vorher = el.innerHTML;
+    el.disabled = true;
+    el.setAttribute('aria-busy', 'true');
+    if (wortWaehrend) el.innerHTML = String(h`${wortWaehrend}`);
+    const zurueck = () => {
+      el.disabled = false;
+      el.removeAttribute('aria-busy');
+      el.innerHTML = vorher;
+    };
+    return versprechen.then((w) => { zurueck(); return w; },
+      (e) => { zurueck(); throw e; });
+  }
+
   Object.assign(ui, {
-    start, gehe, zeichnen, neuZeichnen, schaleZeichnen, toast, dialog, dialogZu,
+    start, gehe, zeichnen, neuZeichnen, schaleZeichnen, toast, dialog, dialogZu, knopfArbeit,
     zielMerken, zielHolen,
     badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
     ART_LABEL, ART_ICON, artLabel, artIcon, ico, aktionRegistrieren, AKTIONEN,
@@ -14164,6 +14545,48 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   /* ------------------------- Marktüberblick ------------------------- */
 
+  /* ------------------------------------------------------------------
+     Der Hinweis, ohne den das Ganze eine Lüge wäre
+
+     Solange nicht genug echte Inserate da sind, füllt ein erzeugter
+     Beispielmarkt die Suche. Das ist vertretbar – eine leere Suche
+     zeigt niemandem, was die Anwendung kann. Vertretbar ist es aber nur
+     unter einer Bedingung: Es muss dort stehen, wo gesucht wird, in
+     ganzen Sätzen, ohne Wegklicken.
+
+     Nach § 5 Abs. 1 UWG ist eine Angabe über die Verfügbarkeit einer
+     Ware irreführend, wenn sie nicht stimmt. Und lange bevor das jemand
+     abmahnt, richtet es größeren Schaden an: Wer eine Wohnung
+     anschreibt, die es nicht gibt, kommt nicht wieder. Ein
+     Wohnungsportal lebt von genau einer Sache, und das ist der Glaube
+     daran, dass die Wohnungen echt sind.
+     ------------------------------------------------------------------ */
+  function bestandsHinweis() {
+    if (!TT.markt) return '';
+    const z = TT.markt.zustand;
+    const beispiele = TT.markt.zeigtBeispiele();
+
+    if (z.fehler) {
+      return h`<div class="warn-meldung bestand">${ico('warnung')}<span><b>Der Bestand ließ sich gerade nicht
+        laden.</b> Was du hier siehst, sind Beispiele. ${z.fehler}</span></div>`;
+    }
+    if (!beispiele) return '';
+
+    const echte = z.echte || 0;
+    return h`<div class="bestand bestand--beispiel">${ico('info')}
+      <div>
+        <b>${echte > 0
+        ? U.t('{0} echte Inserate – der Rest sind Beispiele').replace('{0}', U.num(echte))
+        : 'Diese Wohnungen sind Beispiele'}</b>
+        <p>TrimmoTrade zeigt einen erzeugten Beispielmarkt, solange noch wenige echte Inserate da sind.
+          Jedes Beispiel trägt oben links das Wort <b>Beispiel</b>. Dahinter steht niemand: Eine Anfrage
+          erreicht keinen Menschen, und die Preise sind gerechnet, nicht verlangt.</p>
+        <p>Echte Inserate sind daran zu erkennen, dass die Marke fehlt. ${TT.api && TT.api.da
+        ? h`<a href="#/inserieren">Selbst inserieren</a> dauert zwei Minuten und ist kostenlos.` : ''}</p>
+      </div>
+    </div>`;
+  }
+
   function marktLeiste(treffer) {
     const m = A.marktLage(treffer);
     if (!m) return '';
@@ -14478,6 +14901,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <aside class="suche__filter" id="filterspalte">${filterPanel()}</aside>
 
           <section class="suche__ergebnis" aria-label="Suchergebnisse">
+            ${bestandsHinweis()}
             <div id="markt">${marktLeiste(letzteTreffer)}</div>
             <div id="erklaerung">${rankingErklaerung(bewertet)}</div>
             <div id="ergebnisse">${ergebnisListe(bewertet)}</div>
@@ -15363,6 +15787,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <button type="button" class="knopf knopf--still ${imVergleich ? 'is-an' : ''}" data-tu="vergleich" data-id="${l.id}"
             aria-pressed="${imVergleich ? 'true' : 'false'}">${ico('waage')}Vergleichen</button>
           <button type="button" class="knopf knopf--still" data-tu="objekt-teilen" data-id="${l.id}">${ico('teilen')}Teilen</button>
+          ${l.echt && !l.eigen ? h`<button type="button" class="knopf knopf--still knopf--leise"
+            data-tu="melden" data-id="${l.id}">${ico('warnung')}Melden</button>` : ''}
           ${eintrag ? h`<label class="feld feld--flach objekt__status">
             <span class="nur-sr">Status</span>
             <select data-tu-change="status-setzen" data-id="${l.id}">
@@ -15602,7 +16028,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       inhalt: h`<label class="feld"><span>Personen im Haushalt</span>
           <input type="number" min="1" max="6" id="k-haushalt" value="${p.haushalt}"></label>
         <label class="feld"><span>Nettoeinkommen im Monat (Haushalt)</span>
-          <input type="number" min="0" step="50" id="k-netto" value="${p.nettoEinkommen}"></label>
+          <input type="number" min="0" step="any" id="k-netto" value="${p.nettoEinkommen}"></label>
         <p class="fein">Beides fließt nur in die Rechnung auf diesem Gerät ein.</p>`,
       fuss: h`<button type="button" class="knopf" data-tu="kosten-uebernehmen">Übernehmen</button>`
     });
@@ -15661,6 +16087,80 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   });
 
   /* Bewerbung mit Mieterprofil */
+  /* ------------------------------------------------------------------
+     Was mit einer Anfrage mitgeht
+
+     Die erste Frage jeder anbietenden Seite ist immer dieselbe: Wer seid
+     ihr, wann könnt ihr, reicht das Einkommen. Steht das nicht in der
+     Anfrage, kommt eine Rückfrage – oder gar nichts. Deshalb schlägt
+     TrimmoTrade diese Angaben vor.
+
+     Zwei Regeln dabei, und beide stehen nicht zur Debatte:
+
+     Erstens steht hier, was mitgeht – Feld für Feld, im Dialog, bevor
+     jemand auf Absenden drückt. Profildaten still mitzuschicken wäre
+     genau die Sorte Bequemlichkeit, gegen die diese Anwendung sonst
+     überall antritt.
+
+     Zweitens geht das Einkommen als Spanne hinaus, nicht auf den Euro.
+     Für die Frage „reicht es?“ genügt die Spanne vollständig; die genaue
+     Zahl ist eine Auskunft über einen Menschen, die niemand braucht, um
+     eine Wohnung zu vergeben. */
+  function eckdatenAus(p) {
+    const e = {};
+    if (p.haushalt > 0) {
+      e.haushalt = p.haushalt === 1 ? U.t('1 Person') : p.haushalt + ' ' + U.t('Personen');
+    }
+    if (p.einzugAb) e.einzug = U.dateDE(p.einzugAb);
+    if (p.beruf) e.beschaeftigung = p.beruf;
+    if (p.nettoEinkommen > 0) {
+      /* Auf 200 € abgerundet, Spanne bis zur nächsten Stufe. Aus „3140 €“
+         wird „3000 bis 3200 €“ – nah genug für die Entscheidung, weit
+         genug weg von der Gehaltsabrechnung. */
+      const unten = Math.floor(p.nettoEinkommen / 200) * 200;
+      e.einkommen = U.eur(unten) + ' ' + U.t('bis') + ' ' + U.eur(unten + 200);
+    }
+    if (p.haustiere && p.haustiere !== 'keine') e.haustiere = p.haustiere;
+    else if (p.haustiere === 'keine') e.haustiere = U.t('keine');
+    e.raucher = p.raucher ? U.t('ja') : U.t('nein');
+    if (p.unterlagen && p.unterlagen.wbs) e.wbs = U.t('liegt vor');
+    if (p.unterlagen && p.unterlagen.buergschaft) e.buergschaft = U.t('möglich');
+    return e;
+  }
+
+  const ECK_WORT = {
+    haushalt: 'Haushalt', einzug: 'Einzug ab', beschaeftigung: 'Beschäftigung',
+    einkommen: 'Einkommen', haustiere: 'Haustiere', raucher: 'Rauchen',
+    wbs: 'Wohnberechtigungsschein', buergschaft: 'Bürgschaft'
+  };
+
+  /* Beim Kauf geht davon nichts mit: Wer beim ersten Kontakt sein
+     Einkommen nennt, verhandelt danach schlechter. */
+  function eckdatenBlock(l, p) {
+    if (l.kind === 'kauf') return '';
+    const e = eckdatenAus(p);
+    const felder = Object.keys(e);
+    if (!felder.length) {
+      return h`<div class="hinweisbox">${ico('info')}
+        <div><b>Dein Profil ist noch leer</b>
+        <p>Haushaltsgröße, Einzugstermin und Beschäftigung sind die drei Angaben, nach denen sonst
+          zurückgefragt wird. <a href="#/profil">Im Profil ergänzen</a> – dann stehen sie beim nächsten
+          Mal von selbst dabei.</p></div>
+      </div>`;
+    }
+    return h`<fieldset class="filter__gruppe eckdaten">
+      <legend>Diese Eckdaten gehen mit</legend>
+      <ul class="eckdaten__liste">
+        ${felder.map((k) => h`<li><span>${ECK_WORT[k] || k}</span><b>${e[k]}</b></li>`)}
+      </ul>
+      <label class="chip chip--radio"><input type="checkbox" id="eckdaten-mit" checked>
+        ${ico('check')}Mitschicken</label>
+      <p class="fein">Mehr als das geht nie hinaus. Das Einkommen als Spanne, nie auf den Euro –
+        und nichts, wonach niemand fragen darf: keine Herkunft, keine Religion, keine Gesundheit,
+        keine Familienplanung (Art. 9 DSGVO, § 19 AGG).</p>
+    </fieldset>`;
+  }
+
   A_('anschreiben', (el) => {
     const l = TT.data.byId[el.dataset.id];
     const p = S.get().profil;
@@ -15694,6 +16194,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           ${fehlt.length ? h`<p class="warn-meldung">${ico('warnung')}Es fehlen: ${fehlt.map((f) => namen[f]).join(', ')}.
             <a href="#/profil">Im Profil ergänzen</a></p>` : h`<p class="gut-meldung">${ico('pruefen')}Deine Mappe ist vollständig.</p>`}
         </fieldset>
+        ${l.echt ? eckdatenBlock(l, p) : ''}
         ${TT.viewTresor ? TT.viewTresor.freigabeAbschnitt(l.id, l.anbieter.name) : ''}`}
         ${P.darf('anfrageVorne')
         ? h`<p class="gut-meldung">${ico('plus5')}<span>Deine Anfrage erscheint im Postfach der anbietenden
@@ -15767,10 +16268,100 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   A_('anschreiben-senden', (el) => {
     const text = (U.$('#anschreiben-text') || {}).value || '';
     if (!text.trim()) { ui.toast('Der Text ist leer.', 'schlecht'); return; }
-    S.anschreiben(el.dataset.id, text);
-    ui.dialogZu();
-    ui.toast('Nachricht abgeschickt. Du findest sie unter Nachrichten.', 'gut');
-    ui.neuZeichnen();
+    const l = TT.data.byId[el.dataset.id];
+
+    /* Ein Beispielinserat hat keine Gegenseite. Die Nachricht bleibt
+       dann im Browser – und der Hinweis sagt das, statt eine Zustellung
+       vorzutäuschen, die nicht stattfindet. */
+    if (!l || !l.echt || !TT.api || !TT.api.da) {
+      S.anschreiben(el.dataset.id, text);
+      ui.dialogZu();
+      ui.toast(l && !l.echt
+        ? 'Das ist ein Beispielinserat – die Nachricht bleibt bei dir.'
+        : 'Nachricht abgeschickt. Du findest sie unter Nachrichten.', l && !l.echt ? 'info' : 'gut');
+      ui.neuZeichnen();
+      return;
+    }
+
+    const p = S.get().profil;
+    const mit = U.$('#eckdaten-mit');
+    const eckdaten = mit && mit.checked ? eckdatenAus(p) : {};
+    ui.knopfArbeit(el, TT.api.ruf('anfrage/neu', {
+      id: l.id, text, name: p.name || '', telefon: p.telefon || '', eckdaten
+    }).then(() => {
+      /* Auch im Browser vermerken: Die Bewerbungstafel, die Merkliste
+         und der Nachfass-Hinweis hängen daran, und die kennt nur der
+         Browser. */
+      S.anschreiben(l.id, text);
+      ui.dialogZu();
+      ui.toast('Anfrage abgeschickt. Die anbietende Seite bekommt eine Mail.', 'gut');
+      ui.neuZeichnen();
+    }, (e) => {
+      ui.toast((e && e.text) || 'Die Anfrage ging nicht hinaus.', 'schlecht');
+    }), 'Wird gesendet …');
+  });
+
+  /* ------------------------------------------------------------------
+     Melden – Art. 16 DSA
+
+     Ein Portal, auf dem Fremde veröffentlichen, muss einen Meldeweg
+     haben, der ohne Konto erreichbar ist. Das ist nicht nur Pflicht,
+     sondern der einzige Weg, wie Betrugsinserate schnell auffallen:
+     Der Erste, der die Masche erkennt, ist fast nie der Betreiber.
+     ------------------------------------------------------------------ */
+  const MELDEGRUENDE = [
+    ['betrug', 'Betrugsverdacht – Vorkasse, kein Besichtigungstermin'],
+    ['weg', 'Wohnung ist längst vergeben'],
+    ['falsch', 'Falsche Angaben zu Preis, Fläche oder Lage'],
+    ['doppelt', 'Dasselbe Objekt steht mehrfach hier'],
+    ['diskriminierung', 'Diskriminierende Formulierung (§ 19 AGG)'],
+    ['rechte', 'Fremde Bilder oder Texte'],
+    ['sonst', 'Etwas anderes']
+  ];
+
+  A_('melden', (el) => {
+    const l = TT.data.byId[el.dataset.id];
+    if (!l) return;
+    const angemeldet = TT.konto && TT.konto.angemeldet();
+    ui.dialog({
+      titel: 'Inserat melden',
+      inhalt: h`<p class="block__unter">Sag uns in einem Satz, was nicht stimmt. Wir sehen es uns an und
+          antworten mit einer Entscheidung und ihrer Begründung.</p>
+        <label class="feld"><span>Was ist los?</span>
+          <select id="melden-grund">
+            ${MELDEGRUENDE.map((g) => h`<option value="${g[0]}">${g[1]}</option>`)}
+          </select></label>
+        <label class="feld"><span>Beschreibung</span>
+          <textarea rows="5" id="melden-text" placeholder="Zum Beispiel: Der Anbieter verlangt die Kaution vorab per Überweisung, eine Besichtigung sei nicht möglich."></textarea></label>
+        ${angemeldet ? '' : h`<label class="feld"><span>Deine E-Mail-Adresse (freiwillig)</span>
+          <input type="email" id="melden-mail" autocomplete="email" placeholder="damit du die Antwort bekommst"></label>`}
+        <p class="fein">Melden geht ohne Konto – so verlangt es Art. 16 Abs. 1 der Verordnung (EU) 2022/2065.
+          Ohne Adresse können wir dir allerdings nicht sagen, was daraus wurde.</p>`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Abbrechen</button>
+        <button type="button" class="knopf" data-tu="melden-senden" data-id="${l.id}">${ico('warnung')}Melden</button>`
+    });
+  });
+
+  A_('melden-senden', (el) => {
+    const grund = (U.$('#melden-grund') || {}).value || 'sonst';
+    const text = (U.$('#melden-text') || {}).value || '';
+    const mail = (U.$('#melden-mail') || {}).value || '';
+    if (text.trim().length < 10) {
+      ui.toast('Beschreib in einem Satz, was nicht stimmt.', 'schlecht');
+      return;
+    }
+    const l = TT.data.byId[el.dataset.id];
+    if (!l || !l.echt || !TT.api || !TT.api.da) {
+      ui.dialogZu();
+      ui.toast('Das ist ein Beispielinserat – dahinter steht niemand, den man melden könnte.', 'info');
+      return;
+    }
+    ui.knopfArbeit(el, TT.api.ruf('melden', { id: l.id, grund, text, mail }).then((d) => {
+      ui.dialogZu();
+      ui.toast('Danke. Vorgang ' + (d.vorgang || '') + ' liegt bei uns.', 'gut');
+    }, (e) => {
+      ui.toast((e && e.text) || 'Die Meldung ging nicht hinaus.', 'schlecht');
+    }), 'Wird gemeldet …');
   });
 
   ui.ansichten.objekt = ansicht;
@@ -16956,7 +17547,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <label class="feld"><span>Personen im Haushalt</span>
               <input type="number" min="1" max="6" data-tu-change="profil-zahl" data-feld="haushalt" value="${p.haushalt}"></label>
             <label class="feld"><span>Nettoeinkommen im Monat</span>
-              <input type="number" min="0" step="50" data-tu-change="profil-zahl" data-feld="nettoEinkommen" value="${p.nettoEinkommen}"></label>
+              <input type="number" min="0" step="any" data-tu-change="profil-zahl" data-feld="nettoEinkommen" value="${p.nettoEinkommen}"></label>
             <label class="feld"><span>Haustiere</span>
               <select data-tu-change="profil-text" data-feld="haustiere">
                 ${[['keine', 'keine'], ['katze', 'Katze'], ['hund', 'Hund'], ['klein', 'Kleintier']].map((o) =>
@@ -16974,11 +17565,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <h2>Was du suchst</h2>
           <div class="formraster">
             <label class="feld"><span>Budget Warmmiete</span>
-              <input type="number" min="0" step="50" data-tu-change="profil-zahl" data-feld="budgetWarm" value="${p.budgetWarm}"></label>
+              <input type="number" min="0" step="any" data-tu-change="profil-zahl" data-feld="budgetWarm" value="${p.budgetWarm}"></label>
             <label class="feld"><span>Budget Kaufpreis</span>
-              <input type="number" min="0" step="10000" data-tu-change="profil-zahl" data-feld="budgetKauf" value="${p.budgetKauf || ''}" placeholder="nur bei Kaufinteresse"></label>
+              <input type="number" min="0" step="any" data-tu-change="profil-zahl" data-feld="budgetKauf" value="${p.budgetKauf || ''}" placeholder="nur bei Kaufinteresse"></label>
             <label class="feld"><span>Zimmer mindestens</span>
-              <input type="number" min="1" max="8" step="0.5" data-tu-change="profil-zahl" data-feld="zimmerMin" value="${p.zimmerMin}"></label>
+              <input type="number" min="1" max="8" step="any" data-tu-change="profil-zahl" data-feld="zimmerMin" value="${p.zimmerMin}"></label>
             <label class="feld"><span>Fläche mindestens (m²)</span>
               <input type="number" min="10" max="300" data-tu-change="profil-zahl" data-feld="flaecheMin" value="${p.flaecheMin}"></label>
             <label class="feld"><span>Einzug ab</span>
@@ -17312,32 +17903,58 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     </li>`)}`;
   }
 
-  function inserieren(route) {
-    const s = S.get();
-    const params = (route && route.params) || {};
-    /* Bearbeiten heißt hier: dieselbe Maske, vorbelegt, und beim Speichern
-       ersetzt der neue Eintrag den alten. Ein Knopf „Ändern“, der ein
-       leeres Formular öffnet, ist schlimmer als gar keiner. */
-    const bearbeitet = params.bearbeiten
-      ? s.eigeneInserate.find((x) => x.id === params.bearbeiten) : null;
-    const vorgabeArt = bearbeitet
-      ? (ARTEN.find((a) => a.kind === bearbeitet.kind && a.type === bearbeitet.type)
-        || ARTEN.find((a) => a.kind === bearbeitet.kind) || ARTEN[0]).id
-      : (ARTEN.some((a) => a.id === params.art) ? params.art : ARTEN[0].id);
-    return {
-      titel: 'Inserieren',
-      html: h`<div class="seite seite--schmal">
-        <header class="seite__kopf">
-          <h1>${ico('plus')}Inserat aufgeben</h1>
-          <p class="seite__unter">Vermieten, verkaufen, ein Zimmer anbieten oder tauschen – ein Formular für
-            alles. Das Inserat bleibt auf diesem Gerät und taucht in deiner Suche, in der Karte und im
-            Ringtausch auf.</p>
-        </header>
+  /* ==================================================================
+     Inserate: auf dem Gerät oder auf dem Server?
 
-        ${s.eigeneInserate.length ? h`<section class="block">
+     Beides gibt es, und das ist keine Unentschlossenheit. Ohne Server –
+     die Einzeldatei, eine Kopie auf dem Stick, file:// – bleibt ein
+     Inserat im Browser und taucht in der eigenen Suche auf. Das ist als
+     Vorführung sinnvoll und als Angebot wertlos: Niemand sonst sieht es.
+
+     Sobald ein Server antwortet und jemand angemeldet ist, geht das
+     Inserat hinaus. Erst damit ist es ein Angebot. Der Unterschied steht
+     im Formular, in einem Satz, und nicht im Kleingedruckten – wer
+     glaubt, er habe inseriert, und hat es nicht, wartet wochenlang
+     vergeblich auf eine Anfrage.
+     ================================================================== */
+  const amServer = () => !!(TT.api && TT.api.da && TT.konto && TT.konto.angemeldet());
+
+  let serverInserate = null;   // null = noch nicht geholt
+
+  function serverInserateHolen() {
+    if (!amServer()) return Promise.resolve([]);
+    return TT.api.ruf('inserat/meine').then((d) => {
+      serverInserate = (d.inserate || []).map((l) => {
+        l.eigen = true;
+        l.echt = true;
+        return l;
+      });
+      /* In den Bestand einmischen: Sonst zeigt ein Verweis aus der
+         Liste auf ein Inserat, das es scheinbar nicht gibt. */
+      if (TT.markt) TT.markt.einmischen(serverInserate.slice());
+      serverInserate.forEach((l) => {
+        if (TT.data.byId[l.id]) TT.data.byId[l.id].eigen = true;
+      });
+      return serverInserate;
+    }, () => {
+      serverInserate = [];
+      return serverInserate;
+    });
+  }
+
+  /* Die Liste, die das Formular oben zeigt. */
+  const eigeneListe = (s) => (amServer() ? (serverInserate || []) : s.eigeneInserate);
+
+  /* Die Liste der eigenen Inserate. Steht als eigene Funktion da, weil
+     sie sich austauschen lassen muss, ohne das Formular darunter
+     anzufassen. */
+  function eigeneKasten(s) {
+    const meine = eigeneListe(s);
+    if (!meine.length) return '';
+    return h`<section class="block">
           <h2>Deine Inserate</h2>
           <ul class="eigene">
-            ${s.eigeneInserate.map((e) => {
+            ${meine.map((e) => {
         const b = e.boost, prod = b ? P.hervorhebung(b.art) : null;
         const laeuft = P.boostAktiv(e);
         return h`<li>
@@ -17347,6 +17964,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
                 <span>${ui.artLabel(e)} · ${e.viertel}, ${e.stadt} · ${U.t('seit {0}').replace('{0}', U.since(e.erstellt))}${laeuft && b.bis
           ? ' · hervorgehoben bis ' + U.dateDE(b.bis) : ''}</span>
               </div>
+              ${e.laeuftAb ? h`<span class="eigene__stand ${U.daysUntil(e.laeuftAb) <= 7 ? 'eigene__stand--laeuft' : ''}">
+                ${ico('kalender')}${U.daysUntil(e.laeuftAb) <= 0 ? U.t('abgelaufen')
+          : U.t('läuft in {0} Tagen aus').replace('{0}', U.daysUntil(e.laeuftAb))}</span>` : ''}
+              ${amServer() ? h`<button type="button" class="knopf knopf--klein knopf--still"
+                data-tu="inserat-steht" data-id="${e.id}">${ico('check')}Steht noch</button>` : ''}
               <button type="button" class="knopf knopf--klein knopf--still" data-tu="hervorheben" data-id="${e.id}">
                 ${ico('blitz')}${laeuft ? 'Ändern' : 'Hervorheben'}</button>
               <button type="button" class="ikon-btn" data-tu="inserat-weg" data-id="${e.id}" aria-label="Löschen">${ico('muell')}</button>
@@ -17355,7 +17977,64 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           </ul>
           <p class="fein">Hervorgehobene Inserate stehen in einem eigenen, als bezahlt gekennzeichneten Block
             über den Treffern – nie zwischen ihnen. Die Reihenfolge der Suche bleibt unberührt.</p>
-        </section>` : ''}
+        </section>`;
+  }
+
+  function inserieren(route) {
+    const s = S.get();
+    const params = (route && route.params) || {};
+
+    /* Beim ersten Öffnen den Bestand vom Server holen. Die Seite steht
+       sofort; kommt die Antwort, wird nur die Liste oben nachgetragen.
+       Ein Wartekreisel für eine Liste, die meistens leer ist, wäre
+       lauter als das Ergebnis. */
+    if (amServer() && serverInserate === null) {
+      serverInserate = [];
+      serverInserateHolen().then(() => {
+        /* Nur die Liste austauschen, nie die ganze Seite.
+
+           Das ist kein Feinschliff: Die Antwort des Servers kommt
+           typischerweise nach ein paar hundert Millisekunden – also
+           genau dann, wenn jemand angefangen hat zu tippen. Ein
+           Neuzeichnen der Seite in diesem Moment leert das Formular,
+           und der Mensch sieht nur, dass seine Eingaben weg sind. */
+        if (ui.aktuell !== 'inserieren') return;
+        const kasten = U.$('#eigene-inserate');
+        if (kasten) kasten.innerHTML = String(eigeneKasten(S.get()));
+      });
+    }
+    /* Bearbeiten heißt hier: dieselbe Maske, vorbelegt, und beim Speichern
+       ersetzt der neue Eintrag den alten. Ein Knopf „Ändern“, der ein
+       leeres Formular öffnet, ist schlimmer als gar keiner. */
+    const meine = eigeneListe(s);
+    const bearbeitet = params.bearbeiten
+      ? (meine.find((x) => x.id === params.bearbeiten) || null) : null;
+    const vorgabeArt = bearbeitet
+      ? (ARTEN.find((a) => a.kind === bearbeitet.kind && a.type === bearbeitet.type)
+        || ARTEN.find((a) => a.kind === bearbeitet.kind) || ARTEN[0]).id
+      : (ARTEN.some((a) => a.id === params.art) ? params.art : ARTEN[0].id);
+    return {
+      titel: 'Inserieren',
+      html: h`<div class="seite seite--schmal">
+        <header class="seite__kopf">
+          <h1>${ico('plus')}Inserat aufgeben</h1>
+          <p class="seite__unter">${amServer()
+        ? 'Vermieten, verkaufen, ein Zimmer anbieten oder tauschen – ein Formular für alles. Das Inserat '
+        + 'wird veröffentlicht: Es steht danach in der Suche aller, in der Karte und im Ringtausch.'
+        : 'Vermieten, verkaufen, ein Zimmer anbieten oder tauschen – ein Formular für alles. Ohne '
+        + 'Verbindung bleibt das Inserat auf diesem Gerät und taucht nur in deiner eigenen Suche auf.'}</p>
+        </header>
+
+        ${!amServer() ? h`<div class="hinweisbox">${ico('info')}
+          <div><b>Dieses Inserat sieht sonst niemand</b>
+          <p>${TT.api && TT.api.da
+        ? h`Zum Veröffentlichen brauchst du ein Konto. <a href="#/anmelden">Anmelden</a> dauert eine
+            halbe Minute – der Entwurf bleibt dabei stehen.`
+        : 'Diese Kopie läuft ohne Verbindung zum Server. Das Inserat bleibt im Speicher dieses '
+        + 'Browsers und ist eine Vorführung, kein Angebot.'}</p></div>
+        </div>` : ''}
+
+        <div id="eigene-inserate">${eigeneKasten(s)}</div>
 
         <form class="block" data-tu-submit="inserat-speichern" id="inserat-form">
           <h2>${bearbeitet ? 'Inserat ändern' : 'Neues Inserat'}</h2>
@@ -17384,15 +18063,15 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
           <div class="formraster" data-gruppe="wohnung">
             <label class="feld"><span>Zimmer</span>
-              <input type="number" name="zimmer" min="1" max="9" step="0.5" value="2"></label>
+              <input type="number" name="zimmer" min="1" max="20" step="any" value="2"></label>
             <label class="feld"><span>Wohnfläche in m²</span>
-              <input type="number" name="flaeche" min="8" max="900" value="60"></label>
+              <input type="number" name="flaeche" min="8" max="2000" value="60"></label>
             <label class="feld"><span>Etage</span>
               <input type="number" name="etage" min="0" max="20" value="1"></label>
             <label class="feld"><span>Etagen im Haus</span>
               <input type="number" name="etagen" min="1" max="25" value="4"></label>
             <label class="feld"><span>Baujahr</span>
-              <input type="number" name="baujahr" min="1800" max="2030" value="1965"></label>
+              <input type="number" name="baujahr" min="1500" max="${new Date(TT.now()).getFullYear() + 8}" value="1965"></label>
             <label class="feld"><span>Heizung</span>
               <select name="heizung">
                 ${['Gas-Zentralheizung', 'Fernwärme', 'Wärmepumpe', 'Öl-Zentralheizung', 'Gasetagenheizung', 'Pelletheizung'].map((x) =>
@@ -17402,7 +18081,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
           <div class="formraster" data-gruppe="haus">
             <label class="feld"><span>Grundstücksfläche in m²</span>
-              <input type="number" name="grundstueck" min="0" max="20000" value="420"></label>
+              <input type="number" name="grundstueck" min="0" max="200000" value="420"></label>
             <label class="feld"><span>Bauweise</span>
               <select name="bauweise">
                 ${['freistehend', 'Doppelhaushälfte', 'Reihenmittelhaus', 'Reihenendhaus', 'Bungalow', 'Stadtvilla'].map((x) =>
@@ -17424,9 +18103,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             h`<option>${x}</option>`)}
               </select></label>
             <label class="feld"><span>Grundflächenzahl (GRZ)</span>
-              <input type="number" name="grz" min="0" max="1" step="0.05" value="0.4"></label>
+              <input type="number" name="grz" min="0" max="1" step="any" value="0.4"></label>
             <label class="feld"><span>Geschossflächenzahl (GFZ)</span>
-              <input type="number" name="gfz" min="0" max="3" step="0.1" value="0.8"></label>
+              <input type="number" name="gfz" min="0" max="3" step="any" value="0.8"></label>
             <label class="feld"><span>Erschließungskosten</span>
               <select name="erschliessung">
                 ${['bereits bezahlt', 'noch offen', 'anteilig offen', 'unbekannt'].map((x) => h`<option>${x}</option>`)}
@@ -17435,11 +18114,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
           <div class="formraster" data-gruppe="miete">
             <label class="feld"><span>Kaltmiete</span>
-              <input type="number" name="kalt" min="0" step="10" value="750"></label>
+              <input type="number" name="kalt" min="0" step="any" value="750"></label>
             <label class="feld"><span>Nebenkosten</span>
-              <input type="number" name="nebenkosten" min="0" step="10" value="140"></label>
+              <input type="number" name="nebenkosten" min="0" step="any" value="140"></label>
             <label class="feld"><span>Heizkosten</span>
-              <input type="number" name="heizkosten" min="0" step="10" value="90"></label>
+              <input type="number" name="heizkosten" min="0" step="any" value="90"></label>
             <label class="feld"><span>Kaution in Kaltmieten</span>
               <input type="number" name="kaution" min="0" max="3" value="3"></label>
             <label class="feld"><span>Frei ab</span>
@@ -17448,11 +18127,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
           <div class="formraster" data-gruppe="kauf">
             <label class="feld"><span>Kaufpreis</span>
-              <input type="number" name="kaufpreis" min="0" step="1000" value="350000"></label>
+              <input type="number" name="kaufpreis" min="0" step="any" value="350000"></label>
             <label class="feld"><span>Käuferprovision in Prozent</span>
-              <input type="number" name="provision" min="0" max="8" step="0.01" value="0"></label>
+              <input type="number" name="provision" min="0" max="8" step="any" value="0"></label>
             <label class="feld" data-gruppe="wohnung"><span>Hausgeld im Monat</span>
-              <input type="number" name="hausgeld" min="0" step="10" value="260"></label>
+              <input type="number" name="hausgeld" min="0" step="any" value="260"></label>
             <label class="feld"><span>Bezugsfrei ab</span>
               <input type="date" name="freiAbKauf" value="${U.isoDate(U.addDays(TT.now(), 90))}"></label>
           </div>
@@ -17497,9 +18176,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
                 h`<label class="chip chip--radio"><input type="checkbox" name="wunschStadt" value="${c}"> ${c}</label>`)}
             </div>
             <div class="formraster">
-              <label class="feld"><span>Zimmer mindestens</span><input type="number" name="tZimmer" min="1" step="0.5" value="2"></label>
+              <label class="feld"><span>Zimmer mindestens</span><input type="number" name="tZimmer" min="1" step="any" value="2"></label>
               <label class="feld"><span>Fläche mindestens</span><input type="number" name="tFlaeche" min="10" value="55"></label>
-              <label class="feld"><span>Warmmiete höchstens</span><input type="number" name="tWarm" min="0" step="50" value="1100"></label>
+              <label class="feld"><span>Warmmiete höchstens</span><input type="number" name="tWarm" min="0" step="any" value="1100"></label>
             </div>
             <label class="schalter"><input type="checkbox" name="ringOk" checked><span>auch Ringtausch über mehrere Haushalte</span></label>
           </fieldset>
@@ -17516,7 +18195,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
               Auswahl freier – trotzdem gilt: Beschreibe die WG, nicht wen du ausschließt.</p></div>
           </div>
 
-          <button type="submit" class="knopf knopf--voll">${ico('speichern')}Inserat anlegen</button>
+          <button type="submit" class="knopf knopf--voll">${ico('speichern')}${bearbeitet
+        ? 'Änderung speichern' : (amServer() ? 'Inserat veröffentlichen' : 'Inserat anlegen')}</button>
         </form>
       </div>`,
       /* Die Feldgruppen richten sich nach der Art. Beim ersten Aufbau
@@ -18066,6 +18746,12 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     }
 
     const alt = f.get('bearbeitet');
+
+    if (amServer()) {
+      veroeffentlichen(el, alt, daten, kind);
+      return;
+    }
+
     let id;
     try {
       id = alt ? S.inseratErsetzen(alt, daten) : S.inseratAnlegen(daten);
@@ -18086,11 +18772,107 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     ui.gehe(kind === 'tausch' ? 'tausch' : 'objekt/' + id);
   });
 
+  /* ------------------------------------------------------------------
+     Veröffentlichen
+
+     Zwei Schritte, und die Reihenfolge ist wichtig: erst das Inserat,
+     dann die Bilder. Andersherum gäbe es Bilder ohne Inserat, und die
+     lägen für immer im Ordner.
+
+     Schlägt ein Bild fehl, steht das Inserat trotzdem – mit einem
+     Hinweis, welche Bilder fehlen. Ein Inserat wegen eines Fotos
+     wegzuwerfen, das der Server nicht mochte, wäre die schlechtere
+     Antwort: Der Text ist die Arbeit, das Foto ist ein Klick.
+     ------------------------------------------------------------------ */
+  function veroeffentlichen(formular, alteId, daten, kind) {
+    const knopf = U.$('button[type="submit"]', formular) || formular;
+    const bilder = neueBilder.slice();
+    /* Die Bilder gehen einzeln hinaus, nicht im Inserat: Ein Rumpf mit
+       zwölf Fotos wäre größer als alles, was dieser Server sonst
+       entgegennimmt. */
+    delete daten.bilder;
+
+    const weg = alteId ? 'inserat/aendern' : 'inserat/neu';
+    const rumpf = alteId ? Object.assign({ id: alteId }, daten) : daten;
+
+    ui.knopfArbeit(knopf, TT.api.ruf(weg, rumpf).then((d) => {
+      const inserat = d.inserat || {};
+      const id = inserat.id;
+      if (!id) throw new Error('Der Server hat keine Kennung zurückgegeben.');
+      return bilderHochladen(id, bilder).then((fehlgeschlagen) => {
+        neueBilder = [];
+        serverInserate = null;
+        return (TT.markt ? TT.markt.nachladen() : Promise.resolve()).then(serverInserateHolen).then(() => {
+          if (TT.markt) TT.markt.zaehle(alteId ? 'inserat-verlaengert' : 'inserat-neu');
+          ui.toast(fehlgeschlagen
+            ? U.t('Inserat steht – {0} Bilder gingen nicht durch.').replace('{0}', fehlgeschlagen)
+            : (alteId ? 'Inserat geändert. Die Änderung ist sofort sichtbar.'
+              : 'Inserat veröffentlicht. Ab jetzt steht es in der Suche.'),
+            fehlgeschlagen ? 'warn' : 'gut');
+          ui.gehe(kind === 'tausch' ? 'tausch' : 'objekt/' + id);
+        });
+      });
+    }, (e) => {
+      /* Das Feld, das der Server beanstandet, wird angesprungen: Eine
+         Meldung am oberen Rand über einem langen Formular findet
+         niemand. */
+      if (e && e.feld) {
+        const feld = U.$('[name="' + e.feld + '"]', formular);
+        if (feld) { feld.focus(); feld.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+      }
+      ui.toast((e && e.text) || 'Das Inserat ging nicht hinaus.', 'schlecht');
+    }), alteId ? 'Wird geändert …' : 'Wird veröffentlicht …');
+  }
+
+  /* Nacheinander, nicht gleichzeitig: Zwölf gleichzeitige Uploads
+     bringen ein Webhosting-Paket eher zum Stolpern als zwölf hintereinander,
+     und schneller sind sie auf einer Mobilverbindung ohnehin nicht. */
+  function bilderHochladen(id, bilder) {
+    let fehlgeschlagen = 0;
+    return bilder.reduce((kette, b, i) => kette.then(() => {
+      if (!b || !b.datei || String(b.datei).indexOf('data:') !== 0) return null;
+      return TT.api.ruf('bild/neu', { id, bild: b.datei, pos: i })
+        .catch(() => { fehlgeschlagen++; });
+    }), Promise.resolve()).then(() => fehlgeschlagen);
+  }
+
   A_('inserat-weg', (el) => {
-    if (!confirm('Dieses Inserat löschen?')) return;
-    S.inseratLoeschen(el.dataset.id);
-    ui.neuZeichnen();
-    ui.toast('Inserat gelöscht.');
+    if (!confirm(U.t('Dieses Inserat löschen?'))) return;
+    if (!amServer()) {
+      S.inseratLoeschen(el.dataset.id);
+      ui.neuZeichnen();
+      ui.toast('Inserat gelöscht.');
+      return;
+    }
+    ui.knopfArbeit(el, TT.api.ruf('inserat/loeschen', { id: el.dataset.id }).then(() => {
+      S.inseratLoeschen(el.dataset.id);
+      serverInserate = null;
+      return (TT.markt ? TT.markt.nachladen() : Promise.resolve()).then(serverInserateHolen).then(() => {
+        ui.neuZeichnen();
+        ui.toast('Inserat gelöscht. Es ist aus der Suche verschwunden.');
+      });
+    }, (e) => ui.toast((e && e.text) || 'Löschen ging nicht.', 'schlecht')));
+  });
+
+  /* „Steht noch“ – der Klick, der ein Inserat um 60 Tage verlängert.
+
+     Es ist der wichtigste Knopf dieser Seite, auch wenn er der
+     unscheinbarste ist. Ein Portal ist nur so viel wert wie der Anteil
+     seiner Inserate, die es wirklich noch gibt: Wer dreimal hintereinander
+     eine Absage bekommt, weil die Wohnung längst weg war, sucht woanders
+     weiter. Deshalb läuft hier jedes Inserat aus, und deshalb ist das
+     Verlängern ein Klick und keine Formularrunde. */
+  A_('inserat-steht', (el) => {
+    ui.knopfArbeit(el, TT.api.ruf('inserat/steht', { id: el.dataset.id }).then((d) => {
+      serverInserate = null;
+      return serverInserateHolen().then(() => {
+        ui.neuZeichnen();
+        const bis = d.inserat && d.inserat.laeuftAb;
+        ui.toast(bis
+          ? U.t('Verlängert bis {0}.').replace('{0}', U.dateDE(bis))
+          : 'Verlängert.', 'gut');
+      });
+    }, (e) => ui.toast((e && e.text) || 'Verlängern ging nicht.', 'schlecht')), 'Einen Moment …');
   });
 
   /* Nur die Ergebnisbereiche austauschen. Würde die ganze Seite neu
@@ -18301,14 +19083,14 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <h2>Deine Zahlen</h2>
           <div class="formraster">
             <label class="feld"><span>Nettoeinkommen des Haushalts im Monat</span>
-              <input type="number" min="0" step="50" value="${w.netto}" data-tu-input="leistbarkeit" data-feld="netto"></label>
+              <input type="number" min="0" step="any" value="${w.netto}" data-tu-input="leistbarkeit" data-feld="netto"></label>
             <label class="feld"><span>Personen im Haushalt</span>
               <input type="number" min="1" max="8" value="${w.haushalt}" data-tu-input="leistbarkeit" data-feld="haushalt"></label>
             <label class="feld"><span>Andere feste Raten im Monat</span>
-              <input type="number" min="0" step="25" value="${w.rateSonstige}" data-tu-input="leistbarkeit" data-feld="rateSonstige"
+              <input type="number" min="0" step="any" value="${w.rateSonstige}" data-tu-input="leistbarkeit" data-feld="rateSonstige"
                 placeholder="Kredit, Leasing, Unterhalt"></label>
             <label class="feld"><span>Eigenkapital für einen Kauf</span>
-              <input type="number" min="0" step="5000" value="${w.eigenkapital}" data-tu-input="leistbarkeit" data-feld="eigenkapital"></label>
+              <input type="number" min="0" step="any" value="${w.eigenkapital}" data-tu-input="leistbarkeit" data-feld="eigenkapital"></label>
           </div>
         </form>
 
@@ -18387,7 +19169,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <h2>Deine Angaben</h2>
           <div class="formraster">
             <label class="feld"><span>Bruttojahreseinkommen des Haushalts</span>
-              <input type="number" min="0" step="500" value="${w.brutto}" data-tu-input="wbs" data-feld="brutto"></label>
+              <input type="number" min="0" step="any" value="${w.brutto}" data-tu-input="wbs" data-feld="brutto"></label>
             <label class="feld"><span>Personen im Haushalt</span>
               <input type="number" min="1" max="10" value="${w.personen}" data-tu-input="wbs" data-feld="personen"></label>
             <label class="feld"><span>davon Kinder</span>
@@ -18395,7 +19177,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <label class="feld"><span>davon erwerbstätig</span>
               <input type="number" min="0" max="10" value="${w.erwerbstaetige}" data-tu-input="wbs" data-feld="erwerbstaetige"></label>
             <label class="feld"><span>Einkommensgrenze deines Landes</span>
-              <input type="number" min="0" step="500" value="${w.grenze || ''}" data-tu-input="wbs" data-feld="grenze"
+              <input type="number" min="0" step="any" value="${w.grenze || ''}" data-tu-input="wbs" data-feld="grenze"
                 placeholder="leer = Bundesrahmen ${U.num(bundGrenze)} €"></label>
           </div>
           <fieldset class="filter__gruppe"><legend>Abzüge und Freibeträge</legend>
@@ -18486,9 +19268,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <label class="feld"><span>Personen im Haushalt</span>
               <input type="number" min="1" max="12" value="${w.personen}" data-tu-input="wohngeld" data-feld="personen"></label>
             <label class="feld"><span>Bruttoeinkommen des Haushalts im Monat</span>
-              <input type="number" min="0" step="50" value="${w.brutto}" data-tu-input="wohngeld" data-feld="brutto"></label>
+              <input type="number" min="0" step="any" value="${w.brutto}" data-tu-input="wohngeld" data-feld="brutto"></label>
             <label class="feld"><span>Warmmiete im Monat</span>
-              <input type="number" min="0" step="25" value="${w.miete}" data-tu-input="wohngeld" data-feld="miete"></label>
+              <input type="number" min="0" step="any" value="${w.miete}" data-tu-input="wohngeld" data-feld="miete"></label>
           </div>
           <fieldset class="filter__gruppe"><legend>Trifft eines davon auf dich zu?</legend>
             ${W.WOHNGELD_AUSSCHLUSS.map((a) => h`<label class="schalter">
@@ -18629,7 +19411,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       <span class="nkzeile__label">${b.label}
         ${b.hinweis ? h`<i>${b.hinweis}</i>` : ''}</span>
       <span class="nkzeile__eingabe">
-        <input type="number" min="0" step="1" value="${(w.positionen || {})[b.id] || ''}"
+        <input type="number" min="0" step="any" value="${(w.positionen || {})[b.id] || ''}"
           data-tu-input="nk-position" data-feld="${b.id}" placeholder="0" aria-label="Betrag für ${b.label}">
         <i>€</i>
       </span>
@@ -18653,9 +19435,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <label class="feld"><span>Abrechnung bei dir eingegangen am</span>
               <input type="date" value="${w.zugang}" data-tu-change="nk-wert" data-feld="zugang"></label>
             <label class="feld"><span>Geleistete Vorauszahlungen</span>
-              <input type="number" min="0" step="10" value="${w.vorauszahlung || ''}" data-tu-input="nk-zahl" data-feld="vorauszahlung"></label>
+              <input type="number" min="0" step="any" value="${w.vorauszahlung || ''}" data-tu-input="nk-zahl" data-feld="vorauszahlung"></label>
             <label class="feld"><span>Auf dich entfallende Gesamtkosten</span>
-              <input type="number" min="0" step="10" value="${w.gesamt || ''}" data-tu-input="nk-zahl" data-feld="gesamt"></label>
+              <input type="number" min="0" step="any" value="${w.gesamt || ''}" data-tu-input="nk-zahl" data-feld="gesamt"></label>
           </div>
           <fieldset class="filter__gruppe"><legend>Auffälligkeiten</legend>
             <label class="schalter"><input type="checkbox" ${w.heizungNachFlaeche ? 'checked' : ''}
@@ -22587,8 +23369,17 @@ Datum: __________________
        angemeldet ist – beides muss vor dem ersten Zeichnen feststehen.
        Der Aufruf hat eine kurze eigene Frist und schlägt nie fehl; ohne
        Antwort läuft die Anwendung als Vorführung weiter. */
-    if (TT.api) TT.api.pruefen().then(weiter, weiter);
-    else weiter();
+    if (TT.api) {
+      /* Erst der Server, dann der Bestand: Ohne die echten Inserate
+         würde die Suche einmal mit Beispielen aufblitzen und gleich
+         darauf springen. Beides hat eine kurze Frist und schlägt nie
+         fehl – ohne Antwort läuft die Anwendung als Vorführung weiter. */
+      TT.api.pruefen()
+        .then(() => (TT.markt ? TT.markt.laden() : null))
+        .then(weiter, weiter);
+    } else {
+      weiter();
+    }
   }
 
   let schonGelaufen = false;
@@ -22609,6 +23400,10 @@ Datum: __________________
     else if (medium.addListener) medium.addListener(beobachten);
 
     TT.ui.start();
+
+    /* Ein Besuch. Mehr wird darüber nicht festgehalten – keine Kennung,
+       kein Verlauf, nur eine Tagessumme. */
+    if (TT.markt) TT.markt.zaehle('besuch');
 
     /* Der Tresor liegt in einer eigenen Datenbank und antwortet erst kurz
        nach dem Start. Vorladen, damit die Freigabe im Anschreiben sofort

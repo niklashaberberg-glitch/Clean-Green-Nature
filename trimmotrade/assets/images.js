@@ -301,8 +301,12 @@
     const eigen = eigeneBilder(listing);
     if (eigen) {
       const b = eigen[index % eigen.length];
-      return '<img class="eigenbild" src="' + U.esc(b.datei) + '" alt="' + U.esc(b.text || 'Foto zum Inserat') +
-        '" loading="lazy" decoding="async">';
+      /* Breite und Höhe stehen dabei, sobald sie bekannt sind: Ohne sie
+         hat das Bild vor dem Laden keine Höhe, und der Text darunter
+         springt in dem Moment nach unten, in dem jemand ihn liest. */
+      const masse = b.breite && b.hoehe ? ' width="' + b.breite + '" height="' + b.hoehe + '"' : '';
+      return '<img class="eigenbild" src="' + U.esc(b.datei) + '"' + masse + ' alt="' +
+        U.esc(b.text || 'Foto zum Inserat') + '" loading="lazy" decoding="async">';
     }
     const seq = sequenceFor(listing);
     const name = seq[index % seq.length];

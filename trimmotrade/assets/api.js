@@ -37,7 +37,11 @@
     verfahren: [],           // Was er anbietet: passkey, mail, google, microsoft
     rpId: '',
     konto: null,             // Wer angemeldet ist – vom Server, nicht aus dem Browser
-    grund: ''                // Warum kein Server, falls keiner da ist
+    grund: '',               // Warum kein Server, falls keiner da ist
+    /* Wie viele echte Inserate es gibt und ob daneben Beispiele gezeigt
+       werden dürfen. Beides kommt vom Server, weil beides eine
+       Entscheidung des Betriebs ist und keine des Browsers. */
+    markt: { inserate: 0, beispiele: true, bilder: false }
   };
 
   const eigenerServer = () => location.protocol === 'http:' || location.protocol === 'https:';
@@ -133,6 +137,7 @@
           zustand.verfahren = d.verfahren || [];
           zustand.rpId = d.rpId || '';
           zustand.konto = d.konto || null;
+          if (d.markt) zustand.markt = d.markt;
         } else {
           /* Ein Server, der zwar da ist, aber keine Anmeldung anbietet –
              etwa weil config.php fehlt. Für die Anwendung ist das
@@ -158,6 +163,8 @@
     get geprueft() { return zustand.geprueft; },
     get verfahren() { return zustand.verfahren; },
     get konto() { return zustand.konto; },
+    get markt() { return zustand.markt; },
+    marktMerken: (m) => { if (m) zustand.markt = m; },
     get grund() { return zustand.grund; },
     kann: (v) => zustand.da && zustand.verfahren.indexOf(v) >= 0,
     pruefen, ruf: rufMitNachfassen, kontoMerken

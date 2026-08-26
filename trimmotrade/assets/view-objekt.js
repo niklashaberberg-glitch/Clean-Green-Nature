@@ -677,6 +677,8 @@
           <button type="button" class="knopf knopf--still ${imVergleich ? 'is-an' : ''}" data-tu="vergleich" data-id="${l.id}"
             aria-pressed="${imVergleich ? 'true' : 'false'}">${ico('waage')}Vergleichen</button>
           <button type="button" class="knopf knopf--still" data-tu="objekt-teilen" data-id="${l.id}">${ico('teilen')}Teilen</button>
+          ${l.echt && !l.eigen ? h`<button type="button" class="knopf knopf--still knopf--leise"
+            data-tu="melden" data-id="${l.id}">${ico('warnung')}Melden</button>` : ''}
           ${eintrag ? h`<label class="feld feld--flach objekt__status">
             <span class="nur-sr">Status</span>
             <select data-tu-change="status-setzen" data-id="${l.id}">
@@ -916,7 +918,7 @@
       inhalt: h`<label class="feld"><span>Personen im Haushalt</span>
           <input type="number" min="1" max="6" id="k-haushalt" value="${p.haushalt}"></label>
         <label class="feld"><span>Nettoeinkommen im Monat (Haushalt)</span>
-          <input type="number" min="0" step="50" id="k-netto" value="${p.nettoEinkommen}"></label>
+          <input type="number" min="0" step="any" id="k-netto" value="${p.nettoEinkommen}"></label>
         <p class="fein">Beides fließt nur in die Rechnung auf diesem Gerät ein.</p>`,
       fuss: h`<button type="button" class="knopf" data-tu="kosten-uebernehmen">Übernehmen</button>`
     });
@@ -975,6 +977,80 @@
   });
 
   /* Bewerbung mit Mieterprofil */
+  /* ------------------------------------------------------------------
+     Was mit einer Anfrage mitgeht
+
+     Die erste Frage jeder anbietenden Seite ist immer dieselbe: Wer seid
+     ihr, wann könnt ihr, reicht das Einkommen. Steht das nicht in der
+     Anfrage, kommt eine Rückfrage – oder gar nichts. Deshalb schlägt
+     TrimmoTrade diese Angaben vor.
+
+     Zwei Regeln dabei, und beide stehen nicht zur Debatte:
+
+     Erstens steht hier, was mitgeht – Feld für Feld, im Dialog, bevor
+     jemand auf Absenden drückt. Profildaten still mitzuschicken wäre
+     genau die Sorte Bequemlichkeit, gegen die diese Anwendung sonst
+     überall antritt.
+
+     Zweitens geht das Einkommen als Spanne hinaus, nicht auf den Euro.
+     Für die Frage „reicht es?“ genügt die Spanne vollständig; die genaue
+     Zahl ist eine Auskunft über einen Menschen, die niemand braucht, um
+     eine Wohnung zu vergeben. */
+  function eckdatenAus(p) {
+    const e = {};
+    if (p.haushalt > 0) {
+      e.haushalt = p.haushalt === 1 ? U.t('1 Person') : p.haushalt + ' ' + U.t('Personen');
+    }
+    if (p.einzugAb) e.einzug = U.dateDE(p.einzugAb);
+    if (p.beruf) e.beschaeftigung = p.beruf;
+    if (p.nettoEinkommen > 0) {
+      /* Auf 200 € abgerundet, Spanne bis zur nächsten Stufe. Aus „3140 €“
+         wird „3000 bis 3200 €“ – nah genug für die Entscheidung, weit
+         genug weg von der Gehaltsabrechnung. */
+      const unten = Math.floor(p.nettoEinkommen / 200) * 200;
+      e.einkommen = U.eur(unten) + ' ' + U.t('bis') + ' ' + U.eur(unten + 200);
+    }
+    if (p.haustiere && p.haustiere !== 'keine') e.haustiere = p.haustiere;
+    else if (p.haustiere === 'keine') e.haustiere = U.t('keine');
+    e.raucher = p.raucher ? U.t('ja') : U.t('nein');
+    if (p.unterlagen && p.unterlagen.wbs) e.wbs = U.t('liegt vor');
+    if (p.unterlagen && p.unterlagen.buergschaft) e.buergschaft = U.t('möglich');
+    return e;
+  }
+
+  const ECK_WORT = {
+    haushalt: 'Haushalt', einzug: 'Einzug ab', beschaeftigung: 'Beschäftigung',
+    einkommen: 'Einkommen', haustiere: 'Haustiere', raucher: 'Rauchen',
+    wbs: 'Wohnberechtigungsschein', buergschaft: 'Bürgschaft'
+  };
+
+  /* Beim Kauf geht davon nichts mit: Wer beim ersten Kontakt sein
+     Einkommen nennt, verhandelt danach schlechter. */
+  function eckdatenBlock(l, p) {
+    if (l.kind === 'kauf') return '';
+    const e = eckdatenAus(p);
+    const felder = Object.keys(e);
+    if (!felder.length) {
+      return h`<div class="hinweisbox">${ico('info')}
+        <div><b>Dein Profil ist noch leer</b>
+        <p>Haushaltsgröße, Einzugstermin und Beschäftigung sind die drei Angaben, nach denen sonst
+          zurückgefragt wird. <a href="#/profil">Im Profil ergänzen</a> – dann stehen sie beim nächsten
+          Mal von selbst dabei.</p></div>
+      </div>`;
+    }
+    return h`<fieldset class="filter__gruppe eckdaten">
+      <legend>Diese Eckdaten gehen mit</legend>
+      <ul class="eckdaten__liste">
+        ${felder.map((k) => h`<li><span>${ECK_WORT[k] || k}</span><b>${e[k]}</b></li>`)}
+      </ul>
+      <label class="chip chip--radio"><input type="checkbox" id="eckdaten-mit" checked>
+        ${ico('check')}Mitschicken</label>
+      <p class="fein">Mehr als das geht nie hinaus. Das Einkommen als Spanne, nie auf den Euro –
+        und nichts, wonach niemand fragen darf: keine Herkunft, keine Religion, keine Gesundheit,
+        keine Familienplanung (Art. 9 DSGVO, § 19 AGG).</p>
+    </fieldset>`;
+  }
+
   A_('anschreiben', (el) => {
     const l = TT.data.byId[el.dataset.id];
     const p = S.get().profil;
@@ -1008,6 +1084,7 @@
           ${fehlt.length ? h`<p class="warn-meldung">${ico('warnung')}Es fehlen: ${fehlt.map((f) => namen[f]).join(', ')}.
             <a href="#/profil">Im Profil ergänzen</a></p>` : h`<p class="gut-meldung">${ico('pruefen')}Deine Mappe ist vollständig.</p>`}
         </fieldset>
+        ${l.echt ? eckdatenBlock(l, p) : ''}
         ${TT.viewTresor ? TT.viewTresor.freigabeAbschnitt(l.id, l.anbieter.name) : ''}`}
         ${P.darf('anfrageVorne')
         ? h`<p class="gut-meldung">${ico('plus5')}<span>Deine Anfrage erscheint im Postfach der anbietenden
@@ -1081,10 +1158,100 @@
   A_('anschreiben-senden', (el) => {
     const text = (U.$('#anschreiben-text') || {}).value || '';
     if (!text.trim()) { ui.toast('Der Text ist leer.', 'schlecht'); return; }
-    S.anschreiben(el.dataset.id, text);
-    ui.dialogZu();
-    ui.toast('Nachricht abgeschickt. Du findest sie unter Nachrichten.', 'gut');
-    ui.neuZeichnen();
+    const l = TT.data.byId[el.dataset.id];
+
+    /* Ein Beispielinserat hat keine Gegenseite. Die Nachricht bleibt
+       dann im Browser – und der Hinweis sagt das, statt eine Zustellung
+       vorzutäuschen, die nicht stattfindet. */
+    if (!l || !l.echt || !TT.api || !TT.api.da) {
+      S.anschreiben(el.dataset.id, text);
+      ui.dialogZu();
+      ui.toast(l && !l.echt
+        ? 'Das ist ein Beispielinserat – die Nachricht bleibt bei dir.'
+        : 'Nachricht abgeschickt. Du findest sie unter Nachrichten.', l && !l.echt ? 'info' : 'gut');
+      ui.neuZeichnen();
+      return;
+    }
+
+    const p = S.get().profil;
+    const mit = U.$('#eckdaten-mit');
+    const eckdaten = mit && mit.checked ? eckdatenAus(p) : {};
+    ui.knopfArbeit(el, TT.api.ruf('anfrage/neu', {
+      id: l.id, text, name: p.name || '', telefon: p.telefon || '', eckdaten
+    }).then(() => {
+      /* Auch im Browser vermerken: Die Bewerbungstafel, die Merkliste
+         und der Nachfass-Hinweis hängen daran, und die kennt nur der
+         Browser. */
+      S.anschreiben(l.id, text);
+      ui.dialogZu();
+      ui.toast('Anfrage abgeschickt. Die anbietende Seite bekommt eine Mail.', 'gut');
+      ui.neuZeichnen();
+    }, (e) => {
+      ui.toast((e && e.text) || 'Die Anfrage ging nicht hinaus.', 'schlecht');
+    }), 'Wird gesendet …');
+  });
+
+  /* ------------------------------------------------------------------
+     Melden – Art. 16 DSA
+
+     Ein Portal, auf dem Fremde veröffentlichen, muss einen Meldeweg
+     haben, der ohne Konto erreichbar ist. Das ist nicht nur Pflicht,
+     sondern der einzige Weg, wie Betrugsinserate schnell auffallen:
+     Der Erste, der die Masche erkennt, ist fast nie der Betreiber.
+     ------------------------------------------------------------------ */
+  const MELDEGRUENDE = [
+    ['betrug', 'Betrugsverdacht – Vorkasse, kein Besichtigungstermin'],
+    ['weg', 'Wohnung ist längst vergeben'],
+    ['falsch', 'Falsche Angaben zu Preis, Fläche oder Lage'],
+    ['doppelt', 'Dasselbe Objekt steht mehrfach hier'],
+    ['diskriminierung', 'Diskriminierende Formulierung (§ 19 AGG)'],
+    ['rechte', 'Fremde Bilder oder Texte'],
+    ['sonst', 'Etwas anderes']
+  ];
+
+  A_('melden', (el) => {
+    const l = TT.data.byId[el.dataset.id];
+    if (!l) return;
+    const angemeldet = TT.konto && TT.konto.angemeldet();
+    ui.dialog({
+      titel: 'Inserat melden',
+      inhalt: h`<p class="block__unter">Sag uns in einem Satz, was nicht stimmt. Wir sehen es uns an und
+          antworten mit einer Entscheidung und ihrer Begründung.</p>
+        <label class="feld"><span>Was ist los?</span>
+          <select id="melden-grund">
+            ${MELDEGRUENDE.map((g) => h`<option value="${g[0]}">${g[1]}</option>`)}
+          </select></label>
+        <label class="feld"><span>Beschreibung</span>
+          <textarea rows="5" id="melden-text" placeholder="Zum Beispiel: Der Anbieter verlangt die Kaution vorab per Überweisung, eine Besichtigung sei nicht möglich."></textarea></label>
+        ${angemeldet ? '' : h`<label class="feld"><span>Deine E-Mail-Adresse (freiwillig)</span>
+          <input type="email" id="melden-mail" autocomplete="email" placeholder="damit du die Antwort bekommst"></label>`}
+        <p class="fein">Melden geht ohne Konto – so verlangt es Art. 16 Abs. 1 der Verordnung (EU) 2022/2065.
+          Ohne Adresse können wir dir allerdings nicht sagen, was daraus wurde.</p>`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Abbrechen</button>
+        <button type="button" class="knopf" data-tu="melden-senden" data-id="${l.id}">${ico('warnung')}Melden</button>`
+    });
+  });
+
+  A_('melden-senden', (el) => {
+    const grund = (U.$('#melden-grund') || {}).value || 'sonst';
+    const text = (U.$('#melden-text') || {}).value || '';
+    const mail = (U.$('#melden-mail') || {}).value || '';
+    if (text.trim().length < 10) {
+      ui.toast('Beschreib in einem Satz, was nicht stimmt.', 'schlecht');
+      return;
+    }
+    const l = TT.data.byId[el.dataset.id];
+    if (!l || !l.echt || !TT.api || !TT.api.da) {
+      ui.dialogZu();
+      ui.toast('Das ist ein Beispielinserat – dahinter steht niemand, den man melden könnte.', 'info');
+      return;
+    }
+    ui.knopfArbeit(el, TT.api.ruf('melden', { id: l.id, grund, text, mail }).then((d) => {
+      ui.dialogZu();
+      ui.toast('Danke. Vorgang ' + (d.vorgang || '') + ' liegt bei uns.', 'gut');
+    }, (e) => {
+      ui.toast((e && e.text) || 'Die Meldung ging nicht hinaus.', 'schlecht');
+    }), 'Wird gemeldet …');
   });
 
   ui.ansichten.objekt = ansicht;

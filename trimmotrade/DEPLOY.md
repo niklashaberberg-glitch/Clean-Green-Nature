@@ -296,17 +296,82 @@ Inhalte erst im Browser entstehen.
 
 ---
 
-## Schritt 9 · Aufräumauftrag (freiwillig)
+## Schritt 9 · Cron-Aufträge · **nicht freiwillig**
 
-Abgelaufene Anmeldecodes und alte Sitzungen räumt die Anwendung
-gelegentlich beim normalen Zugriff selbst weg. Wer das lieber geordnet
-hat, legt im CCP unter *Cronjobs* einen täglichen Auftrag an:
+Drei Aufträge, und nur der letzte davon ist Kür. Im CCP unter *Cronjobs*
+anlegen; den vollen Pfad zu `php` zeigt der Kundenbereich an.
 
 ```
-php /pfad/zum/dokumentenstamm/api/index.php aufraeumen
+# Suchaufträge abarbeiten und neue Treffer verschicken – stündlich
+0 * * * *    /usr/bin/php /pfad/zum/dokumentenstamm/api/index.php melden
+
+# „Steht dein Inserat noch?“ – täglich um 9 Uhr
+0 9 * * *    /usr/bin/php /pfad/zum/dokumentenstamm/api/index.php erinnern
+
+# Aufräumen – nachts
+30 3 * * *   /usr/bin/php /pfad/zum/dokumentenstamm/api/index.php aufraeumen
 ```
 
-Nötig ist er nicht. Er nimmt den Besuchern nur ein paar Millisekunden ab.
+**Ohne den ersten Auftrag verschickt der Suchauftrag nichts.** Das ist
+kein Schönheitsfehler: Die Mail an eine suchende Person, wenn eine
+passende Wohnung dazukommt, ist der Grund, warum jemand wiederkommt.
+Ohne sie ist jeder Besuch ein Einwegbesuch.
+
+Der zweite Auftrag ist der gegen Karteileichen. Ein Inserat läuft nach
+60 Tagen aus; sieben Tage vorher fragt diese Mail nach, ob das Angebot
+noch steht. Ein Klick auf *Steht noch* verlängert es.
+
+Ein vierter Aufruf ist für die Kommandozeile gedacht, nicht für Cron:
+
+```
+php api/index.php zahlen        # der Trichter der letzten 14 Tage
+php api/index.php zahlen 60     # oder über 60 Tage
+```
+
+---
+
+## Schritt 10 · Bilder
+
+Inserate mit Fotos werden deutlich häufiger geöffnet. Damit der Upload
+funktioniert, müssen zwei Dinge stimmen:
+
+**Die Bildbibliothek GD.** Bei netcup ist sie in der Regel aktiv. Prüfen
+lässt es sich ohne Umweg: `https://www.trimmotrade.de/api/status` zeigt
+im Feld `markt.bilder` ein `true`. Steht dort `false`, lässt sich das
+Inserat trotzdem anlegen – nur Bilder gehen dann nicht, und die Anwendung
+sagt das mit klarem Grund.
+
+**Die Datei `.user.ini`.** Sie liegt im Dokumentenstamm und setzt
+`post_max_size = 16M`. Ohne sie schneidet PHP den Upload ab. Achten Sie
+beim Hochladen darauf, dass sie mitkommt – sie beginnt mit einem Punkt
+und wird von manchen FTP-Programmen versteckt, genau wie die `.htaccess`.
+
+Die Bilder landen als Dateien unter `api/daten/bilder`, nicht in der
+Datenbank. Beim Hochladen werden sie neu berechnet: Das begrenzt sie auf
+1600 Pixel **und entfernt die EXIF-Daten**. Letzteres ist kein Beiwerk –
+in Handyfotos steht der Aufnahmeort, und ein Wohnungsfoto mit
+GPS-Koordinaten verrät die Adresse einer Wohnung, deren Inserat bewusst
+nur „Nähe Ehrenfeld“ sagt.
+
+---
+
+## Schritt 11 · Der Beispielmarkt
+
+In `api/config.php`:
+
+```php
+'beispielmarkt' => true,
+```
+
+Solange das auf `true` steht, füllt ein erzeugter Beispielbestand die
+Suche. Jedes Beispiel trägt die Marke **Beispiel**, über der Trefferliste
+steht ein Hinweis, der sich nicht wegklicken lässt, und eine Anfrage
+darauf erreicht niemanden.
+
+**Sobald in einer Stadt etwa 300 echte Inserate stehen, gehört hier
+`false` hin.** Erfundene Wohnungen neben echten zu zeigen, ist nach
+§ 5 UWG irreführend – und zerstört das Vertrauen, von dem der ganze
+Betrieb lebt, spätestens bei der ersten Anfrage ins Leere.
 
 ---
 
@@ -324,6 +389,11 @@ Nötig ist er nicht. Er nimmt den Besuchern nur ein paar Millisekunden ab.
 | Google: `redirect_uri_mismatch` | Die Weiterleitungs-URI in der Cloud Console stimmt nicht zeichengenau. |
 | Microsoft: `AADSTS7000215` | Falsches Client-Geheimnis – vermutlich wurde die Geheimnis-**ID** statt des **Werts** kopiert. |
 | Nach Wochen: „unauthorized_client“ bei Microsoft | Das Client-Geheimnis ist abgelaufen. Im Azure-Portal ein neues erzeugen. |
+| Bildupload: „Der Server hat die Anfrage abgeschnitten“ | `.user.ini` fehlt oder wurde nicht mit hochgeladen. Sie beginnt mit einem Punkt. |
+| Bildupload: „Auf diesem Server fehlt die Bildbibliothek GD“ | Im CCP die PHP-Erweiterung GD einschalten. Das Inserat selbst geht auch ohne. |
+| Inserat anlegen: „Zum Inserieren braucht es eine bestätigte E-Mail-Adresse“ | So gewollt. Ein Inserat ist eine Veröffentlichung mit Rechtsfolgen; wer sie abgibt, muss erreichbar sein. |
+| Suchauftrag verschickt nichts | Der Cron-Auftrag `melden` fehlt oder läuft nicht. Einmal von Hand aufrufen und die Ausgabe ansehen. |
+| „Das Bild ließ sich nicht ablegen“ | Der Ordner `api/daten` ist nicht beschreibbar. Rechte auf 750 setzen. |
 
 ---
 
@@ -335,22 +405,47 @@ Nötig ist er nicht. Er nimmt den Besuchern nur ein paar Millisekunden ab.
 - **PHP-Version**: bleibt die Anwendung stehen, weil netcup eine alte
   Version abschaltet, im CCP auf die nächste stellen. Die Anwendung
   läuft mit allem ab 8.1.
-- **Datensicherung**: netcup sichert das Webhosting-Paket. Die Datenbank
-  enthält ausschließlich Konten – ist sie weg, müssen sich alle neu
-  anmelden, verloren geht nichts anderes. Der eigentliche Inhalt der
-  Anwendung liegt ohnehin in den Browsern der Nutzenden.
+- **Datensicherung**: netcup sichert das Webhosting-Paket. Ziehen Sie
+  zusätzlich einmal im Monat eine eigene Kopie und legen Sie sie
+  **außerhalb** des Servers ab. Zwei Dinge gehören dazu:
+  1. ein Datenbankexport (phpMyAdmin → Exportieren),
+  2. der Ordner `api/daten/bilder` – die Fotos liegen als Dateien, nicht
+     in der Datenbank, und ein Datenbankexport allein holt sie nicht
+     zurück.
+
+  Was in der Datenbank steht, ist inzwischen mehr als nur die Anmeldung:
+  Inserate, Anfragen, Suchaufträge und Meldungen. Ist sie weg, ist der
+  Markt weg. Merkliste, Profil und Dokumententresor der Nutzenden liegen
+  weiterhin nur in deren Browsern und sind von einer Sicherung weder
+  erfasst noch betroffen.
 
 ---
 
-## Was der Server *nicht* tut
+## Was der Server tut – und was nicht
 
-Damit klar ist, was hier verantwortet wird: Der Server beantwortet
-ausschließlich die Frage, wer jemand ist. Er speichert Kontonummer,
-E-Mail-Adresse, Name, Verfahren, Vertrauensstufe, die öffentlichen Teile
-der Passkeys und die offenen Sitzungen. Inserate, Merklisten,
-Nachrichten, Notizen, Profile, Bilder und der Dokumententresor bleiben im
-Browser der Nutzenden und erreichen ihn nie.
+Damit klar ist, was hier verantwortet wird.
 
-Das ist eine Entscheidung, keine Auslassung: Ein Anmeldeserver, der
-nichts weiter speichert, ist ein kleines Ziel – und ein kleines Ziel ist
-die beste Vorsorge.
+**Auf dem Server liegt:**
+
+- Konten: Kontonummer, E-Mail-Adresse, Name, Verfahren, Vertrauensstufe,
+  die öffentlichen Teile der Passkeys, die offenen Sitzungen.
+- Inserate mit ihren Bildern – sie sind Veröffentlichungen und müssen
+  andere erreichen.
+- Anfragen darauf, mit den Angaben, die die anfragende Seite ausdrücklich
+  freigegeben hat.
+- Suchaufträge, damit die Mail auch dann herausgeht, wenn niemand die
+  Seite geöffnet hat.
+- Meldungen nach Art. 16 DSA mit ihrem Bearbeitungsstand.
+- Tagessummen für den Trichter – ohne Kennung, ohne IP-Adresse, ohne
+  Cookie und ohne Personenbezug.
+
+**Im Browser bleibt:**
+
+Merkliste, Vergleich, Bewerbungstafel, Notizen, Profil, jede Berechnung
+und der Dokumententresor mit seinen Ende-zu-Ende verschlüsselten
+Unterlagen. Nichts davon erreicht den Server jemals.
+
+Die Grenze verläuft nicht willkürlich: Ein Inserat ist eine
+Veröffentlichung. Eine Merkliste ist eine Notiz und geht niemanden etwas
+an. Je weniger auf dem Server liegt, desto kleiner ist das Ziel – und ein
+kleines Ziel ist die beste Vorsorge.

@@ -4,8 +4,21 @@ Eine Wohnungssuche, die Mietmarkt, Kaufangebote, WG-Zimmer und Wohnungstausch
 in **einer** Oberfläche zusammenführt – mit einem Profil, einer Merkliste und
 einer Bewerbermappe für alle vier Welten.
 
-Läuft vollständig im Browser. Kein Server, kein Konto, keine Übertragung an
-Dritte. Alles, was du eingibst, bleibt im Speicher deines Geräts.
+Läuft in zwei Lagen, und in beiden vollständig:
+
+**Mit Server** (www.trimmotrade.de): ein echter Marktplatz. Inserate werden
+veröffentlicht, Anfragen erreichen Menschen, Suchaufträge schicken Mails.
+Auf dem Server liegen genau zwei Dinge – wer jemand ist, und was öffentlich
+angeboten wird. Merkliste, Vergleich, Profil, Dokumententresor und jede
+Berechnung bleiben im Browser.
+
+**Ohne Server** (Einzeldatei, Kopie auf dem Stick, `file://`): dieselbe
+Anwendung als Vorführung. Nichts verlangt eine Verbindung, nichts bricht ab,
+und an jeder Stelle steht, dass es eine Vorführung ist.
+
+> **Was jetzt zu tun ist**, damit daraus ein Betrieb wird, steht in
+> [`START.md`](START.md). Warum – und woran ein Wohnungsportal in Deutschland
+> scheitert – steht in [`GESCHAEFT.md`](GESCHAEFT.md).
 
 ---
 
@@ -517,6 +530,112 @@ Dazu drei Regeln, die nicht verhandelbar sind:
 * Neben jeder Anzeige steht ein **„?“**, das genau das erklärt, und ein Weg zum
   anzeigenfreien Tarif.
 
+## Der Markt
+
+Bis vor Kurzem war TrimmoTrade ein sehr gutes Einzelplatzwerkzeug: Ein Inserat
+verließ nie das Gerät, auf dem es entstand. Damit konnten sich Suchende und
+Anbietende nicht erreichen – und ein Wohnungsportal, auf dem das nicht geht,
+ist keins.
+
+### Was ein Inserat durchläuft
+
+1. **Anlegen.** Ein Formular für alle vier Angebotsarten. Zum Veröffentlichen
+   braucht es eine bestätigte E-Mail-Adresse: Ein Inserat ist eine
+   Veröffentlichung mit Rechtsfolgen – § 5a UWG bei falschen Angaben, § 87 GEG
+   beim Energieausweis –, und wer sie abgibt, muss erreichbar sein.
+2. **Prüfen.** Der Server glaubt dem Browser kein einziges Feld. Anbieterangaben,
+   Koordinaten und Aufrufzahlen setzt er selbst aus Konto und Ortsliste; alles
+   Übrige läuft durch eine feste Liste erlaubter Felder mit festen Grenzen.
+   Ein selbst vergebenes „verifiziert“ fällt dabei genauso weg wie eine
+   erfundene Wohnung in „Musterhausen“.
+3. **Bilder.** Jedes Bild wird neu berechnet, nie durchgereicht. Das begrenzt es
+   auf 1600 Pixel und entfernt die EXIF-Daten – in Handyfotos steht der
+   Aufnahmeort, und ein Wohnungsfoto mit GPS-Koordinaten verrät die Adresse
+   einer Wohnung, deren Inserat bewusst nur „Nähe Ehrenfeld“ sagt.
+4. **Betrugsprüfung.** Serverseitig, nicht im Browser: Ein Hinweis, den man
+   abschalten kann, schützt niemanden. Gesucht wird nach der üblichen Masche –
+   Vorkasse, Treuhänder, Schlüssel per Post, Anbieter „im Ausland“, keine
+   Besichtigung, Drängeln – und nach einem Preis unter der halben
+   Vergleichsmiete. Gefunden wird nicht gelöscht, sondern markiert.
+5. **Ablaufen.** Nach 60 Tagen verfällt ein Inserat, wenn niemand bestätigt,
+   dass das Angebot noch steht. Sieben Tage vorher fragt eine Mail nach.
+   Karteileichen sind der häufigste Vorwurf an Wohnungsportale – hier
+   verhindert sie die Datenbank, nicht der gute Wille.
+
+### Die Anfrage
+
+Der einzige Weg, auf dem sich hier zwei Menschen erreichen. Er steht unter zwei
+Regeln, die sich widersprechen könnten und es nicht tun:
+
+**Sie muss ankommen.** Nicht „liegt im Postfach, falls sich jemand einloggt“,
+sondern eine Mail an die anbietende Seite, sofort.
+
+**Keine der beiden Adressen steht in der Mail der anderen.** Wer eine Wohnung
+inseriert, bekommt sonst zwei Wochen später Werbung von Küchenstudios; wer sich
+bewirbt, bekommt sonst eine Absage per Telefon um 22 Uhr. Die Adresse gibt frei,
+wer antwortet – und dann auch nur die eigene.
+
+Mitgehen dürfen Eckdaten aus dem Profil: Haushaltsgröße, Einzugstermin,
+Beschäftigung, Einkommen **als Spanne**, Haustiere, Rauchen, WBS, Bürgschaft.
+Was mitgeht, steht vor dem Absenden im Dialog – Feld für Feld. Profildaten
+still mitzuschicken wäre genau die Sorte Bequemlichkeit, gegen die diese
+Anwendung sonst überall antritt. Und was niemand fragen darf, kommt gar nicht
+erst durch: keine Herkunft, keine Religion, keine Gesundheit, keine
+Familienplanung (Art. 9 DSGVO, § 19 AGG).
+
+### Der Suchauftrag
+
+Die wichtigste Funktion dieser Anwendung, und das liegt nicht an ihr, sondern
+an der Wohnungssuche: Sie besteht aus Warten. Wer sucht, öffnet nicht dreimal
+täglich ein Portal – er tut es zwei Wochen lang und hört dann auf. Was ihn
+zurückholt, ist eine Mail mit einer Wohnung, die passt.
+
+Drei Dinge sind daran nicht verhandelbar: kein Doppelversand (die laufende
+Nummer merkt sich die Grenze, nicht die Uhrzeit), ein Abmeldeverweis in jeder
+Mail, der ohne Anmeldung wirkt (§ 7 UWG, Art. 21 DSGVO), und keine Mail, wenn
+nichts da ist – „0 neue Treffer“ ist der schnellste Weg in den Spam-Ordner.
+
+Der Serverfilter kann weniger als der Filter im Browser: Ausstattung,
+Pendelzeit und WG-Merkmale rechnet die Anwendung aus dem Profil, und das kennt
+der Server nicht. Statt das zu verschweigen, steht unter dem Schalter, welche
+Kriterien die Mail nicht berücksichtigt. Lieber ein Treffer zu viel in der Mail
+als eine Wohnung, die nie ankommt.
+
+### Melden
+
+Ein Portal, auf dem Fremde veröffentlichen, ist ein Hostingdienst im Sinne des
+Digital Services Act. Daraus folgt ein Meldeweg, der **ohne Konto** erreichbar
+ist (Art. 16 Abs. 1), eine Empfangsbestätigung (Abs. 4) und eine Entscheidung
+mit Begründung (Abs. 5). Alle drei sind eingebaut, und der Vorgang steht in der
+Datenbank – was nicht darin steht, ist nicht passiert, und im Streitfall zählt
+genau das.
+
+Der Meldeweg ohne Konto ist dabei nicht nur Pflicht, sondern das Wirksamste
+daran: Wer ein Betrugsinserat erkennt, legt dafür kein Konto an. Er geht
+weiter, und das Inserat bleibt stehen.
+
+### Zählen, ohne jemanden zu zählen
+
+Ein Geschäft, das seinen Trichter nicht kennt, rät. Die übliche Antwort darauf
+ist ein Messdienst, ein Cookie-Banner und ein Auftragsverarbeitungsvertrag mit
+einem Unternehmen in Kalifornien. Die Antwort hier ist eine Tabelle mit drei
+Spalten: `tag | name | wert`.
+
+Mehr wird nicht gespeichert. Keine Kennung, keine IP-Adresse, keine Sitzung,
+kein Verlauf. Aus „am 3. März 412 Suchen“ lässt sich niemand herauslesen – es
+ist kein personenbezogenes Datum, und weil auf dem Gerät nichts abgelegt wird,
+stellt sich die Frage nach § 25 TDDDG gar nicht erst. Kein Banner, keine
+Einwilligung.
+
+Auf der Kommandozeile:
+
+```
+php api/index.php zahlen        # der Trichter der letzten 14 Tage
+php api/index.php melden        # Suchaufträge abarbeiten (stündlich per Cron)
+php api/index.php erinnern      # „Steht dein Inserat noch?“ (täglich)
+php api/index.php aufraeumen    # abgelaufene Sitzungen und Vorgänge
+```
+
 ## Anmeldung
 
 Suchen und Inserate ansehen geht ohne Anmeldung. Für alles, was etwas
@@ -744,8 +863,14 @@ Ladezeit und ohne kaputte Platzhalter.
 trimmotrade/
   index.html            lädt die Einzelteile, kein Build nötig
   build.js              baut daraus die Einzeldatei (node build.js)
+  GESCHAEFT.md          Markt, Keil, Kaltstart, Zahlen, Risiken
+  START.md              die ersten 90 Tage: Recht, Betrieb, erste Inserate
+  DEPLOY.md             Schritt für Schritt zu netcup
+  .user.ini             PHP-Einstellungen (Bildupload braucht 16 MB)
   scripts/
     farben-pruefen.js   rechnet Kontraste und Farbabstände nach
+    seiten-bauen.js     baut die Ratgeberseiten, 404 und sitemap.xml
+    orte-bauen.js       erzeugt api/lib/orte.php aus assets/geo.js
   dist/
     trimmotrade.html       vollständige Seite in einer Datei
     artifact.html       nur der Seiteninhalt, zum Einbetten
@@ -767,9 +892,30 @@ trimmotrade/
     hilfe.js            Wissensbasis der Hilfe und der Abgleich
     konto.js            Anmeldung, Passkeys, Einmalcode, Vertrauensstufen
     karte.js            die Karte
+    markt.js            holt echte Inserate, trennt sie von den Beispielen,
+                        zählt den Trichter ohne Personenbezug
     ui.js               Schale, Router, geteilte Bausteine
     view-*.js           die einzelnen Ansichten
     app.js              Start
+  api/                  die Serverseite (PHP 8.1, kein Composer)
+    index.php           einziger Einstiegspunkt, alle Wege
+    schema.sql          Tabellen, erzeugt aus lib/schema.php
+    lib/
+      schema.php        das Datenmodell an einer Stelle
+      orte.php          Städte und Viertel – erzeugt, nicht gepflegt
+      inserat.php       Inserate: prüfen, speichern, suchen
+      bild.php          Bilder neu berechnen (entfernt GPS aus Fotos)
+      anfrage.php       Anfragen und Meldungen nach Art. 16 DSA
+      auftrag.php       Suchaufträge, Meldelauf, Ablauferinnerung
+      zaehler.php       Tagessummen ohne Kennung
+      konto.php         Konten und Vertrauensstufen
+      sitzung.php       Sitzungen, Schutzmerkmal, Herkunftsprüfung
+      webauthn.php      Passkeys, serverseitig geprüft
+      oauth.php         Google und Microsoft, mit PKCE
+      jwt.php           ID-Token prüfen
+      mail.php          SMTP von Hand, ohne Bibliothek
+      grenze.php        Sperren gegen Durchprobieren
+      db.php            MariaDB und SQLite, ein Verhalten
 ```
 
 Reihenfolge der Skripte ist bewusst: `util` zuerst, `app` zuletzt. Jede Datei
@@ -837,8 +983,25 @@ das Gegenteil dessen, wofür er da ist.
 
 ## Hinweis zum Bestand
 
-Alle Inserate, Anbieter, Namen, Adressen und Bewertungen sind erzeugt. Die
-Vergleichswerte für Miete und Kaufpreis sind plausible Rechengrößen, kein
+Es gibt zwei Sorten Inserate, und sie sind unterscheidbar:
+
+**Echte Inserate** stammen von Menschen, die sie eingestellt haben. Sie liegen
+auf dem Server, sie lassen sich anschreiben, und sie laufen nach 60 Tagen aus,
+wenn niemand bestätigt, dass das Angebot noch steht.
+
+**Beispiele** sind erzeugt – Anbieter, Namen, Adressen und Bewertungen sind
+erfunden. Sie tragen oben links die Marke **Beispiel**, über der Trefferliste
+steht ein Hinweis, der sich nicht wegklicken lässt, und eine Anfrage darauf
+erreicht niemanden. Sie füllen die Suche, solange es zu wenige echte Inserate
+gibt; abgeschaltet werden sie mit `'beispielmarkt' => false` in
+`api/config.php`.
+
+Warum das so genau genommen wird: Erfundene Wohnungen neben echten zu zeigen,
+ohne es zu sagen, ist nach § 5 UWG irreführend – und spätestens die erste
+Anfrage an eine erfundene Adresse zerstört das Einzige, wovon ein
+Wohnungsportal lebt.
+
+Die Vergleichswerte für Miete und Kaufpreis sind plausible Rechengrößen, kein
 amtlicher Mietspiegel. Rechtliche Erläuterungen sind allgemeine Hinweise und
 ersetzen keine Beratung.
 
@@ -868,6 +1031,28 @@ Dieselbe Sorgfalt bei der Kündigungsfrist: § 573c Abs. 1 BGB knüpft nicht
 an einen Abstand in Tagen an, sondern an den Monat — Zugang bis zum
 dritten Werktag, Ende mit Ablauf des übernächsten Monats. `U.dritterWerktag`
 rechnet das aus.
+
+### Der Markt, von außen geprüft
+
+Der Marktplatz wird über die Schnittstelle geprüft, nicht über die Innereien –
+62 Prüfungen, jede zweimal, mit derselben Antwort. Darunter die Fälle, in denen
+etwas **nicht** gehen darf:
+
+* ein Inserat, das sich selbst „verifiziert“ nennt, eigene Koordinaten mitbringt
+  oder 99.999 Aufrufe behauptet — alle drei Angaben setzt der Server neu,
+* ein Viertel, das es nicht gibt,
+* `DROP TABLE tt_konto` im Sortierfeld (die Kontentabelle steht danach noch),
+* eine PHP-Datei, die sich als JPEG ausgibt,
+* ein Bild mit GPS-Koordinaten im EXIF (danach ist nichts davon übrig),
+* das fremde Inserat ändern, löschen, bebildern; die fremde Anfrage umschalten,
+* dieselbe Anfrage zweimal, die Anfrage an das eigene Inserat, die leere Anfrage,
+* derselbe Suchauftrag zweimal gemeldet,
+* ein gefälschter Abmeldeverweis.
+
+Dazu ein Durchgang im echten Browser gegen den echten Server über den ganzen
+Kreis: anmelden, inserieren mit Bild, ohne Konto in der Suche wiederfinden,
+melden, anschreiben, Mail beim Anbieter — und die Gegenprobe, dass in dieser
+Mail die Adresse der anfragenden Seite **nicht** steht.
 
 ### Geprüft
 

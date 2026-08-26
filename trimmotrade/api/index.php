@@ -7,10 +7,17 @@
    die für alle gelten – Herkunft, Schutzmerkmal, Sperren –, stehen dann
    an einer Stelle und lassen sich nicht versehentlich übergehen.
 
-   Was dieser Server kann: sagen, wer jemand ist. Was er nicht kann und
-   nicht soll: Inserate, Merklisten, Nachrichten, Profile. Die bleiben im
-   Browser. Ein Anmeldeserver, der nichts weiter speichert, ist ein
-   kleines Ziel – und ein kleines Ziel ist die beste Vorsorge.
+   Was dieser Server kann, ist bewusst knapp gehalten: sagen, wer jemand
+   ist, und verwalten, was öffentlich angeboten wird – Inserate, Anfragen
+   darauf, Suchaufträge, Meldungen. Was er nicht kann und nicht soll:
+   Merklisten, Vergleiche, Profile, den Dokumententresor, irgendeine
+   Berechnung. Die bleiben im Browser.
+
+   Die Grenze verläuft nicht willkürlich: Ein Inserat ist eine
+   Veröffentlichung und muss andere erreichen. Eine Merkliste ist eine
+   Notiz und geht niemanden etwas an. Je weniger auf dem Server liegt,
+   desto kleiner ist das Ziel – und ein kleines Ziel ist die beste
+   Vorsorge.
    ===================================================================== */
 
 declare(strict_types=1);
@@ -48,12 +55,19 @@ require_once __DIR__ . '/lib/grenze.php';
 require_once __DIR__ . '/lib/mail.php';
 require_once __DIR__ . '/lib/webauthn.php';
 require_once __DIR__ . '/lib/oauth.php';
+require_once __DIR__ . '/lib/orte.php';
+require_once __DIR__ . '/lib/zaehler.php';
+require_once __DIR__ . '/lib/inserat.php';
+require_once __DIR__ . '/lib/bild.php';
+require_once __DIR__ . '/lib/anfrage.php';
+require_once __DIR__ . '/lib/auftrag.php';
 
 Db::start($cfg);
 Sitzung::start($cfg);
 Grenze::start($cfg);
 Post::start($cfg);
 Oauth::start($cfg);
+Bild::start($cfg);
 
 const ANKER_COOKIE = 'tt_anker';
 
@@ -66,14 +80,30 @@ $RP_ID  = (string) ($cfg['rp_id'] ?? parse_url($BASIS, PHP_URL_HOST) ?: 'localho
    Zugriff selbst auf. Er nimmt den Besuchern nur die paar Millisekunden
    ab und macht das Aufräumen vorhersagbar. */
 if (PHP_SAPI === 'cli') {
-    if (($argv[1] ?? '') !== 'aufraeumen') {
-        fwrite(STDERR, "Aufruf: php api/index.php aufraeumen\n");
+    $befehl = $argv[1] ?? '';
+    $bekannt = ['aufraeumen', 'melden', 'erinnern', 'zahlen'];
+    if (!in_array($befehl, $bekannt, true)) {
+        fwrite(STDERR, "Aufruf: php api/index.php <" . implode('|', $bekannt) . ">\n\n"
+            . "  aufraeumen  abgelaufene Sitzungen, Vorgänge und Inserate wegräumen\n"
+            . "  melden      Suchaufträge abarbeiten und neue Treffer verschicken\n"
+            . "  erinnern    anbietende Seite fragen, ob ein Inserat noch steht\n"
+            . "  zahlen      den Trichter der letzten 14 Tage ausgeben\n");
         exit(1);
     }
     try {
         Db::pdo();
-        Db::aufraeumen(true);
-        echo "Aufgeräumt.\n";
+        if ($befehl === 'aufraeumen') {
+            Db::aufraeumen(true);
+            echo "Aufgeräumt.\n";
+        } elseif ($befehl === 'melden') {
+            $n = Auftrag::lauf($BASIS, true);
+            echo $n === 1 ? "1 Mail verschickt.\n" : $n . " Mails verschickt.\n";
+        } elseif ($befehl === 'erinnern') {
+            $n = Auftrag::erinnern($BASIS, true);
+            echo $n === 1 ? "1 Erinnerung verschickt.\n" : $n . " Erinnerungen verschickt.\n";
+        } else {
+            echo Zaehler::bericht((int) ($argv[2] ?? 14));
+        }
         exit(0);
     } catch (Throwable $e) {
         fwrite(STDERR, 'Fehlgeschlagen: ' . $e->getMessage() . "\n");
@@ -88,6 +118,28 @@ $pfad = preg_replace('#^.*?/api/#', '', '/' . ltrim($pfad, '/'));
 $pfad = trim((string) $pfad, '/');
 $art  = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
 
+/* Zwei Wege tragen ihre Kennung im Pfad statt im Rumpf, weil sie
+   verweisbar sein müssen: ein Inserat, das jemand teilt, und ein Bild,
+   das im <img> steht. Alles Übrige nimmt die Kennung als JSON entgegen.
+
+   Erkannt wird an der Form der Kennung, nicht am Anfang des Wegs: Sonst
+   würde aus `bild/neu` ein Bild mit der Kennung „neu“ statt des Wegs,
+   der ein Bild anlegt. */
+$stueck = '';
+if (preg_match('#^objekt/(tt[0-9a-f]{16})$#', $pfad, $m)) {
+    $stueck = $m[1];
+    $pfad = 'objekt';
+} elseif (preg_match('#^bild/(b[0-9a-f]{18}(?:-k)?)$#', $pfad, $m)) {
+    $stueck = $m[1];
+    $pfad = 'bild';
+}
+
+/* Bilder sind um Größenordnungen größer als alles andere, was hier
+   hereinkommt. Die Grenze steigt deshalb nur für diesen einen Weg. */
+if ($pfad === 'bild/neu') {
+    $GLOBALS['ROH_HOECHSTENS'] = 12000000;
+}
+
 /* Der Rumpf kommt als JSON. Formulare gibt es hier nicht – und weil es
    sie nicht gibt, kann auch keine fremde Seite eines abschicken. */
 function rumpf(): array
@@ -97,8 +149,17 @@ function rumpf(): array
         return $d;
     }
     $roh = file_get_contents('php://input') ?: '';
-    if (strlen($roh) > 100000) {
+    $hoechstens = (int) ($GLOBALS['ROH_HOECHSTENS'] ?? 100000);
+    if (strlen($roh) > $hoechstens) {
         Antwort::fehler('Die Anfrage ist zu groß.', 413);
+    }
+    /* Leerer Rumpf trotz angekündigter Länge: Dann hat PHP ihn selbst
+       abgeschnitten, weil post_max_size kleiner ist als das, was
+       ankam. Ohne diesen Hinweis sucht man den Fehler stundenlang im
+       eigenen Code. */
+    if ($roh === '' && (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
+        Antwort::fehler('Der Server hat die Anfrage abgeschnitten. '
+            . 'In der Datei .user.ini muss post_max_size größer sein als das, was hochgeladen wird.', 413);
     }
     $j = json_decode($roh, true);
     $d = is_array($j) ? $j : [];
@@ -145,6 +206,7 @@ try {
            -------------------------------------------------------------- */
         case 'status':
             $k = Sitzung::konto();
+            $echte = Inserat::anzahl();
             Antwort::gut([
                 'eingerichtet' => true,
                 'verfahren' => array_values(array_filter([
@@ -155,6 +217,18 @@ try {
                 'schutz'   => Sitzung::schutzMerkmal(),
                 'rpId'     => $RP_ID,
                 'konto'    => $k ? Konto::nachAussen($k) : null,
+                /* Wie viele echte Inserate es gibt, und ob daneben der
+                   Beispielmarkt gezeigt werden darf. Beides entscheidet
+                   im Browser darüber, ob oben ein Hinweis steht. Ein
+                   Portal, das erfundene Wohnungen zeigt, ohne es zu
+                   sagen, wäre nach § 5 UWG irreführend – und wäre nach
+                   der ersten Anfrage an eine erfundene Adresse ohnehin
+                   erledigt. */
+                'markt' => [
+                    'inserate' => $echte,
+                    'beispiele' => (bool) ($cfg['beispielmarkt'] ?? true),
+                    'bilder' => Bild::moeglich(),
+                ],
             ]);
             // no break – Antwort beendet
 
@@ -585,6 +659,287 @@ try {
             Sitzung::beenden();
             Antwort::gut();
 
+
+        /* ==============================================================
+           Der Markt
+
+           Ab hier ist die Anwendung kein Werkzeug mehr, sondern ein Ort,
+           an dem sich zwei Seiten treffen. Alles darunter folgt einer
+           Regel: Lesen darf jeder, schreiben nur, wer angemeldet ist.
+           Wer eine Wohnung sucht, soll nicht erst ein Konto anlegen, um
+           zu sehen, ob es sich lohnt.
+           ============================================================== */
+
+        /* Öffentliche Suche. Antwortet auch ohne Konto und ohne Cookie. */
+        case 'markt':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $f = [];
+            foreach (['art', 'stadt', 'viertelKey', 'sortierung', 'zimmerMin', 'zimmerMax',
+                      'flaecheMin', 'flaecheMax', 'warmMax', 'kaltMax', 'preisMax'] as $name) {
+                if (isset($_GET[$name]) && is_string($_GET[$name]) && $_GET[$name] !== '') {
+                    $f[$name] = mb_substr($_GET[$name], 0, 80, 'UTF-8');
+                }
+            }
+            if (!empty($_GET['nurMitBild'])) {
+                $f['nurMitBild'] = true;
+            }
+            $ab = (int) ($_GET['ab'] ?? 0);
+            $zeilen = Inserat::suchen($f, $ab, (int) ($_GET['wieviele'] ?? 60));
+            Antwort::gut([
+                'inserate' => array_map(static fn ($z) => Inserat::nachAussen($z), $zeilen),
+                'gesamt' => Inserat::anzahl(),
+                'ab' => $ab,
+            ]);
+
+        /* Ein einzelnes Inserat. Der Weg trägt die Kennung, damit er
+           sich teilen lässt. */
+        case 'objekt':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $z = Inserat::nachKennung($stueck);
+            if (!$z) {
+                Antwort::fehler('Dieses Inserat gibt es nicht.', 404);
+            }
+            $ich = Sitzung::konto();
+            $meins = $ich && (int) $ich['id'] === (int) $z['konto_id'];
+            if (!$meins && ($z['stand'] !== 'aktiv' || (int) $z['laeuft_ab'] < time())) {
+                Antwort::fehler('Dieses Inserat steht nicht mehr zur Verfügung.', 410, ['weg' => true]);
+            }
+            /* Aufrufe zählt nur, wer nicht selbst inseriert hat – sonst
+               zählt jeder Blick auf die eigene Wohnung mit und die Zahl
+               ist wertlos. */
+            if (!$meins) {
+                Db::fuehre('UPDATE tt_inserat SET aufrufe = aufrufe + 1 WHERE id = ?', [$z['id']]);
+                Zaehler::plus('objekt');
+            }
+            Antwort::gut(['inserat' => Inserat::nachAussen($z), 'meins' => $meins]);
+
+        case 'bild':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            Bild::ausliefern($stueck);
+
+        /* --------------------------------------------------------------
+           Eigene Inserate
+           -------------------------------------------------------------- */
+
+        case 'inserat/meine':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(['inserate' => array_map(
+                static fn ($z) => Inserat::nachAussen($z),
+                Inserat::meine((int) $k['id'])
+            )]);
+
+        case 'inserat/neu':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            /* Ein Inserat ist eine Veröffentlichung mit Rechtsfolgen –
+               § 5a UWG bei falschen Angaben, § 87 GEG beim
+               Energieausweis. Wer sie abgibt, muss erreichbar sein.
+               Deshalb: bestätigte Adresse, sonst nicht. */
+            if ((int) $k['stufe'] < 1) {
+                Antwort::fehler('Zum Inserieren braucht es eine bestätigte E-Mail-Adresse. '
+                    . 'Sonst kann dich niemand erreichen – auch wir nicht.', 403, ['stufe' => (int) $k['stufe']]);
+            }
+            Grenze::sperreOderWeiter('inserat', (string) $k['kennung']);
+            $neu = Inserat::anlegen($k, rumpf());
+            Zaehler::plus('inserat-neu');
+            Antwort::gut(['inserat' => $neu]);
+
+        case 'inserat/aendern':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(['inserat' => Inserat::aendern($k, feld('id'), rumpf())]);
+
+        case 'inserat/stand':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(['inserat' => Inserat::stand($k, feld('id'), feld('stand'))]);
+
+        /* „Steht noch“ – der Klick, der ein Inserat um 60 Tage
+           verlängert und Karteileichen verhindert. */
+        case 'inserat/steht':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Zaehler::plus('inserat-verlaengert');
+            Antwort::gut(['inserat' => Inserat::bestaetigen($k, feld('id'))]);
+
+        case 'inserat/loeschen':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Inserat::loeschen($k, feld('id'));
+            Antwort::gut();
+
+        case 'bild/neu':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            $z = Inserat::nachKennung(feld('id'));
+            if (!$z || (int) $z['konto_id'] !== (int) $k['id']) {
+                Antwort::fehler('Dieses Inserat gibt es nicht oder es gehört einem anderen Konto.', 404);
+            }
+            Grenze::sperreOderWeiter('bild', (string) $k['kennung']);
+            $b = Bild::anlegen((int) $z['id'], (string) (rumpf()['bild'] ?? ''), (int) (rumpf()['pos'] ?? 0));
+            Zaehler::plus('inserat-bild');
+            Antwort::gut(['bilder' => Bild::zuInserat((int) $z['id'])]);
+
+        case 'bild/weg':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            $z = Inserat::nachKennung(feld('id'));
+            if (!$z || (int) $z['konto_id'] !== (int) $k['id']) {
+                Antwort::fehler('Dieses Inserat gibt es nicht oder es gehört einem anderen Konto.', 404);
+            }
+            Bild::loeschen((int) $z['id'], feld('bild'));
+            Antwort::gut(['bilder' => Bild::zuInserat((int) $z['id'])]);
+
+        /* --------------------------------------------------------------
+           Anfragen
+           -------------------------------------------------------------- */
+
+        case 'anfrage/neu':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            $z = Inserat::nachKennung(feld('id'));
+            if (!$z) {
+                Antwort::fehler('Dieses Inserat gibt es nicht.', 404);
+            }
+            Grenze::sperreOderWeiter('anfrage', (string) $k['kennung']);
+            $a = Anfrage::senden($k, $z, rumpf(), $BASIS);
+            Antwort::gut(['anfrage' => Anfrage::nachAussen($a + ['inserat_kennung' => $z['kennung'],
+                'inserat_titel' => $z['titel']], false)]);
+
+        case 'anfrage/postfach':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut([
+                'eingang' => array_map(
+                    static fn ($z) => Anfrage::nachAussen($z, true),
+                    Anfrage::eingang((int) $k['id'])
+                ),
+                'ausgang' => array_map(
+                    static fn ($z) => Anfrage::nachAussen($z, false),
+                    Anfrage::ausgang((int) $k['id'])
+                ),
+            ]);
+
+        case 'anfrage/stand':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Anfrage::standSetzen((int) $k['id'], feld('id'), feld('stand'));
+            Antwort::gut();
+
+        /* --------------------------------------------------------------
+           Suchaufträge
+           -------------------------------------------------------------- */
+
+        case 'auftrag/neu':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            if ((int) $k['stufe'] < 1) {
+                Antwort::fehler('Ein Suchauftrag schickt Mails. Dafür muss die Adresse bestätigt sein.',
+                    403, ['stufe' => (int) $k['stufe']]);
+            }
+            Antwort::gut(['auftrag' => Auftrag::nachAussen(
+                Auftrag::anlegen($k, rumpf(), !empty(rumpf()['plus']))
+            )]);
+
+        case 'auftrag/meine':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(['auftraege' => array_map(
+                static fn ($z) => Auftrag::nachAussen($z),
+                Auftrag::meine((int) $k['id'])
+            )]);
+
+        case 'auftrag/weg':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Auftrag::loeschen((int) $k['id'], feld('id'));
+            Antwort::gut();
+
+        /* Abmelden aus der Mail heraus – ohne Konto, mit einem Klick.
+           Antwortet als Seite, nicht als JSON: Wer hier landet, kommt
+           aus einem Mailprogramm und erwartet etwas Lesbares. */
+        case 'auftrag/aus':
+            $ok = Auftrag::abmelden(
+                (string) ($_GET['k'] ?? ''),
+                (string) ($_GET['h'] ?? '')
+            );
+            header('Content-Type: text/html; charset=utf-8');
+            header('Cache-Control: no-store');
+            echo abmeldeSeite($ok, $BASIS);
+            exit;
+
+        /* --------------------------------------------------------------
+           Meldungen nach Art. 16 DSA – ausdrücklich ohne Kontozwang
+           -------------------------------------------------------------- */
+
+        case 'melden':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $z = Inserat::nachKennung(feld('id'));
+            if (!$z) {
+                Antwort::fehler('Dieses Inserat gibt es nicht.', 404);
+            }
+            Grenze::sperreOderWeiter('melden', besucher_ip());
+            $m = Meldung::anlegen($z, Sitzung::konto(), rumpf(), $BASIS);
+            Antwort::gut(['vorgang' => $m['kennung']]);
+
+        /* --------------------------------------------------------------
+           Zählen
+
+           Nimmt einen Namen aus einer festen Liste entgegen und erhöht
+           eine Tagessumme. Keine Kennung, keine Antwort mit Inhalt.
+           -------------------------------------------------------------- */
+
+        case 'zaehlen':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $namen = rumpf()['namen'] ?? [];
+            if (is_array($namen)) {
+                foreach (array_slice($namen, 0, 20) as $n) {
+                    if (is_string($n)) {
+                        Zaehler::plus($n);
+                    }
+                }
+            }
+            Antwort::gut();
+
         default:
             Antwort::fehler('Diesen Weg gibt es nicht.', 404);
     }
@@ -654,4 +1009,35 @@ function mailText(string $code, int $minuten, string $basis): string
         . "Code kommt niemand hinein. Der Code ist nur für dich: Wir fragen dich\n"
         . "nie danach, weder per Mail noch am Telefon.\n\n"
         . ($basis !== '' ? "$basis\n" : '');
+}
+
+/** Die Seite, auf der jemand landet, der einen Suchauftrag abbestellt.
+    Bewusst eine eigene, winzige Seite ohne JavaScript: Sie muss auch
+    dann funktionieren, wenn die Anwendung gerade nicht läuft. */
+function abmeldeSeite(bool $ok, string $basis): string
+{
+    $titel = $ok ? 'Abbestellt' : 'Das hat nicht geklappt';
+    $text = $ok
+        ? 'Dieser Suchauftrag schickt dir keine Mails mehr. Deine anderen Suchaufträge laufen weiter.'
+        : 'Der Verweis stimmt nicht oder der Suchauftrag ist längst gelöscht. In beiden Fällen kommt '
+          . 'von diesem Auftrag nichts mehr.';
+    $h = static fn (string $t): string => htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    return '<!doctype html><html lang="de"><head><meta charset="utf-8">'
+        . '<meta name="viewport" content="width=device-width,initial-scale=1">'
+        . '<meta name="robots" content="noindex">'
+        . '<title>' . $h($titel) . ' – TrimmoTrade</title>'
+        . '<style>:root{color-scheme:light dark}'
+        . 'body{font:1rem/1.6 system-ui,sans-serif;margin:0;display:grid;place-items:center;'
+        . 'min-height:100vh;padding:2rem;background:#f6f7f9;color:#14161a}'
+        . '@media(prefers-color-scheme:dark){body{background:#14161a;color:#e9eaee}}'
+        . 'main{max-width:34rem;background:#fff;padding:2rem;border-radius:14px;'
+        . 'box-shadow:0 1px 3px rgba(0,0,0,.12)}'
+        . '@media(prefers-color-scheme:dark){main{background:#1d2026;box-shadow:none;'
+        . 'border:1px solid #33373f}}'
+        . 'h1{font-size:1.35rem;margin:0 0 .6rem}p{margin:0 0 1rem}'
+        . 'a{color:#1b6b4a;font-weight:600}'
+        . '@media(prefers-color-scheme:dark){a{color:#6fd3a4}}</style></head><body><main>'
+        . '<h1>' . $h($titel) . '</h1><p>' . $h($text) . '</p>'
+        . '<p><a href="' . $h($basis !== '' ? $basis . '/' : '/') . '">Zurück zu TrimmoTrade</a></p>'
+        . '</main></body></html>';
 }

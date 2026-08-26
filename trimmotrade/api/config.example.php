@@ -102,7 +102,32 @@ return [
     'code_pruefen'   => ['kennung' => [10, 60], 'ip' => [60, 60]],
     'passkey'        => ['kennung' => [20, 60], 'ip' => [60, 60]],
     'oauth'          => ['kennung' => [20, 60], 'ip' => [60, 60]],
+    /* Der Markt. Großzügiger als die Anmeldung, weil hier niemand etwas
+       durchprobieren kann – die Grenzen stehen gegen Massenversand und
+       gegen den, der tausend Wohnungen erfindet. */
+    'inserat'        => ['kennung' => [20, 1440], 'ip' => [40, 1440]],
+    'bild'           => ['kennung' => [120, 60],  'ip' => [200, 60]],
+    'anfrage'        => ['kennung' => [40, 1440], 'ip' => [80, 1440]],
+    'melden'         => ['ip' => [20, 1440]],
   ],
+
+  /* --- Der Markt ------------------------------------------------------
+     Solange noch keine echten Inserate da sind, zeigt die Anwendung
+     einen Beispielmarkt – erkennbar gekennzeichnet, mit einem Hinweis
+     über der Trefferliste. Sobald genug echte Inserate stehen, gehört
+     hier false hin: Erfundene Wohnungen neben echten zu zeigen, ist
+     nach § 5 UWG irreführend, und spätestens die erste Anfrage an eine
+     erfundene Adresse zerstört das Vertrauen, das der ganze Betrieb
+     braucht.
+
+     Der Hinweis über der Liste verschwindet nicht dadurch, dass man
+     ihn hier abschaltet – er verschwindet dadurch, dass keine
+     Beispiele mehr gezeigt werden. */
+  'beispielmarkt' => true,
+
+  /* Wo die Bilder der Inserate liegen. Der Ordner ist für den Browser
+     gesperrt; ausgeliefert wird über /api/bild/… */
+  'bilder' => __DIR__ . '/daten/bilder',
 
   /* Auf true setzen, solange etwas nicht läuft: dann stehen echte
      Fehlermeldungen in der Antwort statt nur „Da ist etwas schiefgegangen“.

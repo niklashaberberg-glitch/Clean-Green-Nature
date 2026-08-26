@@ -590,6 +590,44 @@
   /* Die Schale noch einmal zeichnen – nach einem Sprachwechsel, denn
      Navigation, Fußbereich und Knöpfe stehen selbst in Vorlagen. Die
      Ereignisse hängen am document, überleben das also. */
+  /* Der Hinweis unter dem Namen. Er muss stimmen, und was stimmt, hängt
+     davon ab, ob gerade Beispiele mitlaufen.
+
+     Die alte Fassung sagte pauschal „alle Angaben, Anbieter und Adressen
+     sind erfunden“. Für eine Vorführung war das richtig. Steht daneben
+     ein echtes Inserat, ist derselbe Satz eine Falschaussage – und zwar
+     eine, die dem echten Inserat schadet. */
+  function fussHinweis() {
+    const beispiele = TT.markt ? TT.markt.zeigtBeispiele() : true;
+    const echte = TT.markt ? TT.markt.echte : 0;
+    const rechtlich = 'Rechtliche Erläuterungen sind allgemeine Hinweise und ersetzen keine Beratung. '
+      + 'Merkliste, Profil und Unterlagen bleiben im Browser dieses Geräts.';
+    if (!beispiele) {
+      return U.t('Alle Inserate stammen von den Menschen, die sie eingestellt haben.') + ' ' + U.t(rechtlich);
+    }
+    if (echte > 0) {
+      return U.t('Neben {0} echten Inseraten läuft ein erzeugter Beispielbestand mit; jedes Beispiel ist als solches markiert.')
+        .replace('{0}', U.num(echte)) + ' ' + U.t(rechtlich);
+    }
+    return U.t('Erzeugter Beispielbestand: Anbieter und Adressen sind erfunden.') + ' ' + U.t(rechtlich);
+  }
+
+  /* Die Ratgeberseiten sind eigene HTML-Dateien und existieren nur auf
+     der Website – in der Einzeldatei und im Artefakt gäbe es tote
+     Verweise. Deshalb erscheinen sie nur dort, wo sie auch liegen. */
+  const RATGEBER = [
+    ['wohnung-vermieten.html', 'Wohnung vermieten'],
+    ['nachmieter-finden.html', 'Nachmieter finden'],
+    ['wohnungstausch.html', 'Wohnungstausch'],
+    ['mietpreisbremse-pruefen.html', 'Mietpreisbremse'],
+    ['nebenkostenabrechnung-pruefen.html', 'Nebenkosten prüfen'],
+    ['wohnberechtigungsschein.html', 'Wohnberechtigungsschein'],
+    ['wohnung-verkaufen-vorbereiten.html', 'Verkauf vorbereiten']
+  ];
+  const RATGEBER_DA = typeof location !== 'undefined'
+    && (location.protocol === 'http:' || location.protocol === 'https:')
+    && !/\/(dist|artifact)/.test(location.pathname);
+
   function schaleZeichnen() {
     const wurzel = document.getElementById('trimmotrade');
     if (!wurzel) return;
@@ -643,9 +681,7 @@
     </nav>
     <footer class="fuss">
       <p><b>TrimmoTrade</b> führt Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche zusammen.</p>
-      <p class="fuss__hinweis">Vorführfassung mit erzeugtem Beispielbestand. Alle Angaben, Anbieter und Adressen sind erfunden.
-      Rechtliche Erläuterungen sind allgemeine Hinweise und ersetzen keine Beratung.
-      Deine Eingaben bleiben im Browser dieses Geräts.</p>
+      <p class="fuss__hinweis">${fussHinweis()}</p>
       <p class="fuss__links fuss__links--recht">
         <a href="#/recht/impressum">Impressum</a>
         <a href="#/recht/datenschutz">Datenschutz</a>
@@ -655,6 +691,9 @@
         <a href="#/recht/melden">Inhalt melden</a>
         <a href="#/recht/barrierefreiheit">Barrierefreiheit</a>
       </p>
+      ${RATGEBER_DA ? h`<p class="fuss__links fuss__links--ratgeber">
+        ${RATGEBER.map((r) => h`<a href="/${r[0]}">${r[1]}</a>`)}
+      </p>` : ''}
       <p class="fuss__links">
         <button type="button" class="link" data-tu="hilfe-oeffnen">Hilfe</button>
         <a class="nur-innen" href="#/konto">Konto</a>

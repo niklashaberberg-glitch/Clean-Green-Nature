@@ -2301,3 +2301,18 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .anfragen__weg { display: flex; flex-wrap: wrap; gap: .3em 1em; margin: .4em 0; font-size: .85rem; }
 .anfragen__weg a { display: inline-flex; align-items: center; gap: .35em; }
 .anfragen__liste--echt .feld--flach { max-width: 12rem; margin-top: .4em; }
+
+/* Zwei Spalten auf den Ratgeberseiten – etwa „zulässig“ neben
+   „unzulässig“. Nebeneinander ist hier keine Zierde: Der Vergleich ist
+   die Aussage, und untereinander liest ihn niemand als Gegenüberstellung.
+   Unter 44 rem stapeln sie trotzdem, weil zwei enge Spalten schlechter
+   sind als zwei volle. */
+.spalten2 {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1rem 2rem;
+}
+.spalten2 > div > h3 { margin-top: 0; }
+
+/* Die Ratgeberzeile im Fuß. Etwas kleiner als die Rechtszeile darüber:
+   Sie ist Angebot, nicht Pflicht. */
+.fuss__links--ratgeber { font-size: .82rem; opacity: .9; }

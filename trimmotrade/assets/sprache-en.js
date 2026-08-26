@@ -2831,6 +2831,178 @@
 
   });
 
+
+  /* -------------------------------------------------------------------
+     Der echte Markt
+
+     Ab hier geht es um Inserate, die es wirklich gibt, um Anfragen, die
+     wirklich ankommen, und um den Hinweis, dass daneben Beispiele
+     stehen. Gerade dieser Hinweis muss auf Englisch genauso deutlich
+     sein wie auf Deutsch: Eine abgeschwächte Übersetzung wäre eine
+     andere Aussage.
+     ------------------------------------------------------------------- */
+  e({
+    /* Bestand und Beispiele */
+    'Beispiel': 'Example',
+    'Diese Wohnungen sind Beispiele': 'These flats are examples',
+    '{0} echte Inserate – der Rest sind Beispiele': '{0} real listings – the rest are examples',
+    'TrimmoTrade zeigt einen erzeugten Beispielmarkt, solange noch wenige echte Inserate da sind. Jedes Beispiel trägt oben links das Wort':
+      'TrimmoTrade shows a generated example market while there are still few real listings. Every example is labelled',
+    '. Dahinter steht niemand: Eine Anfrage erreicht keinen Menschen, und die Preise sind gerechnet, nicht verlangt.':
+      ' in the top left corner. There is nobody behind them: an enquiry reaches no one, and the prices are calculated, not asked for.',
+    'Echte Inserate sind daran zu erkennen, dass die Marke fehlt. {2}':
+      'Real listings are the ones without that label. {2}',
+    'Echte Inserate sind daran zu erkennen, dass die Marke fehlt.':
+      'Real listings are the ones without that label.',
+    'Selbst inserieren': 'Post your own listing',
+    ' dauert zwei Minuten und ist kostenlos.': ' takes two minutes and is free.',
+    'Der Bestand ließ sich gerade nicht laden.': 'The listings could not be loaded just now.',
+    ' Was du hier siehst, sind Beispiele. {1}': ' What you see here are examples. {1}',
+    'Der Bestand ließ sich nicht laden.': 'The listings could not be loaded.',
+
+    /* Fußzeile */
+    'Alle Inserate stammen von den Menschen, die sie eingestellt haben.':
+      'Every listing comes from the person who posted it.',
+    'Neben {0} echten Inseraten läuft ein erzeugter Beispielbestand mit; jedes Beispiel ist als solches markiert.':
+      'Alongside {0} real listings a generated example set is running; every example is labelled as one.',
+    'Erzeugter Beispielbestand: Anbieter und Adressen sind erfunden.':
+      'Generated example listings: advertisers and addresses are invented.',
+    'Rechtliche Erläuterungen sind allgemeine Hinweise und ersetzen keine Beratung. Merkliste, Profil und Unterlagen bleiben im Browser dieses Geräts.':
+      'Legal notes are general information and no substitute for advice. Shortlist, profile and documents stay in this device’s browser.',
+    'Wohnung vermieten': 'Letting a flat',
+    'Nachmieter finden': 'Finding a successor tenant',
+    'Nebenkosten prüfen': 'Check service charges',
+    'Verkauf vorbereiten': 'Preparing a sale',
+
+    /* Anschreiben mit Eckdaten */
+    'Diese Eckdaten gehen mit': 'These key facts go along',
+    'Mitschicken': 'Send along',
+    'Mehr als das geht nie hinaus. Das Einkommen als Spanne, nie auf den Euro – und nichts, wonach niemand fragen darf: keine Herkunft, keine Religion, keine Gesundheit, keine Familienplanung (Art. 9 DSGVO, § 19 AGG).':
+      'Nothing beyond this ever leaves. Income as a range, never to the euro – and nothing nobody may ask about: no origin, no religion, no health, no family planning (Art. 9 GDPR, § 19 AGG).',
+    'Dein Profil ist noch leer': 'Your profile is still empty',
+    'Haushaltsgröße, Einzugstermin und Beschäftigung sind die drei Angaben, nach denen sonst zurückgefragt wird.':
+      'Household size, move-in date and employment are the three things people otherwise ask back about.',
+    'Im Profil ergänzen': 'Add them in your profile',
+    ' – dann stehen sie beim nächsten Mal von selbst dabei.': ' – then they are there by themselves next time.',
+    'Haushalt': 'Household', 'Einzug ab': 'Moving in from', 'Beschäftigung': 'Employment',
+    'Einkommen': 'Income', 'Rauchen': 'Smoking', 'Wohnberechtigungsschein': 'WBS certificate',
+    'Bürgschaft': 'Guarantor',
+    '1 Person': '1 person', 'Personen': 'people', 'bis': 'to', 'keine': 'none',
+    'ja': 'yes', 'nein': 'no', 'liegt vor': 'available', 'möglich': 'possible',
+    'Wird gesendet …': 'Sending …',
+    'Anfrage abgeschickt. Die anbietende Seite bekommt eine Mail.':
+      'Enquiry sent. The advertiser receives an email.',
+    'Das ist ein Beispielinserat – die Nachricht bleibt bei dir.':
+      'This is an example listing – the message stays with you.',
+    'Die Anfrage ging nicht hinaus.': 'The enquiry did not go out.',
+
+    /* Melden nach Art. 16 DSA */
+    'Inserat melden': 'Report listing',
+    'Melden': 'Report',
+    'Sag uns in einem Satz, was nicht stimmt. Wir sehen es uns an und antworten mit einer Entscheidung und ihrer Begründung.':
+      'Tell us in one sentence what is wrong. We will look into it and reply with a decision and its reasons.',
+    'Was ist los?': 'What is wrong?',
+    'Beschreibung': 'Description',
+    'Zum Beispiel: Der Anbieter verlangt die Kaution vorab per Überweisung, eine Besichtigung sei nicht möglich.':
+      'For example: the advertiser wants the deposit up front by bank transfer and says a viewing is not possible.',
+    'Deine E-Mail-Adresse (freiwillig)': 'Your email address (optional)',
+    'damit du die Antwort bekommst': 'so that you get the answer',
+    'Melden geht ohne Konto – so verlangt es Art. 16 Abs. 1 der Verordnung (EU) 2022/2065. Ohne Adresse können wir dir allerdings nicht sagen, was daraus wurde.':
+      'Reporting works without an account – Art. 16(1) of Regulation (EU) 2022/2065 requires that. Without an address, though, we cannot tell you what came of it.',
+    'Betrugsverdacht – Vorkasse, kein Besichtigungstermin': 'Suspected fraud – payment up front, no viewing',
+    'Wohnung ist längst vergeben': 'The flat has long been taken',
+    'Falsche Angaben zu Preis, Fläche oder Lage': 'Wrong details on price, size or location',
+    'Dasselbe Objekt steht mehrfach hier': 'The same property is listed more than once',
+    'Diskriminierende Formulierung (§ 19 AGG)': 'Discriminatory wording (§ 19 AGG)',
+    'Fremde Bilder oder Texte': 'Someone else’s images or text',
+    'Etwas anderes': 'Something else',
+    'Wird gemeldet …': 'Reporting …',
+    'Beschreib in einem Satz, was nicht stimmt.': 'Describe in one sentence what is wrong.',
+    'Das ist ein Beispielinserat – dahinter steht niemand, den man melden könnte.':
+      'This is an example listing – there is nobody behind it to report.',
+    'Die Meldung ging nicht hinaus.': 'The report did not go out.',
+
+    /* Inserieren */
+    'Vermieten, verkaufen, ein Zimmer anbieten oder tauschen – ein Formular für alles. Das Inserat wird veröffentlicht: Es steht danach in der Suche aller, in der Karte und im Ringtausch.':
+      'Let, sell, offer a room or swap – one form for everything. The listing is published: it then appears in everybody’s search, on the map and in the swap ring.',
+    'Vermieten, verkaufen, ein Zimmer anbieten oder tauschen – ein Formular für alles. Ohne Verbindung bleibt das Inserat auf diesem Gerät und taucht nur in deiner eigenen Suche auf.':
+      'Let, sell, offer a room or swap – one form for everything. Without a connection the listing stays on this device and only appears in your own search.',
+    'Dieses Inserat sieht sonst niemand': 'Nobody else sees this listing',
+    'Zum Veröffentlichen brauchst du ein Konto.': 'You need an account to publish.',
+    'Anmelden': 'Sign in',
+    ' dauert eine halbe Minute – der Entwurf bleibt dabei stehen.':
+      ' takes half a minute – your draft stays where it is.',
+    'Diese Kopie läuft ohne Verbindung zum Server. Das Inserat bleibt im Speicher dieses Browsers und ist eine Vorführung, kein Angebot.':
+      'This copy runs without a connection to the server. The listing stays in this browser’s storage and is a demonstration, not an offer.',
+    'Inserat anlegen': 'Create listing',
+    'Inserat veröffentlichen': 'Publish listing',
+    'Änderung speichern': 'Save change',
+    'Wird veröffentlicht …': 'Publishing …',
+    'Wird geändert …': 'Saving …',
+    'Inserat veröffentlicht. Ab jetzt steht es in der Suche.':
+      'Listing published. From now on it is in the search.',
+    'Inserat geändert. Die Änderung ist sofort sichtbar.':
+      'Listing changed. The change is visible right away.',
+    'Inserat steht – {0} Bilder gingen nicht durch.': 'Listing is up – {0} images did not get through.',
+    'Das Inserat ging nicht hinaus.': 'The listing did not go out.',
+    'Dieses Inserat löschen?': 'Delete this listing?',
+    'Inserat gelöscht. Es ist aus der Suche verschwunden.':
+      'Listing deleted. It has gone from the search.',
+    'Löschen ging nicht.': 'Deleting did not work.',
+    'Steht noch': 'Still available',
+    'Einen Moment …': 'One moment …',
+    'abgelaufen': 'expired',
+    'läuft in {0} Tagen aus': 'expires in {0} days',
+    'Verlängert bis {0}.': 'Extended to {0}.',
+    'Verlängert.': 'Extended.',
+    'Verlängern ging nicht.': 'Extending did not work.',
+
+    /* Postfach */
+    'Echte Anfragen': 'Real enquiries',
+    'An deine Inserate': 'To your listings',
+    'Von dir geschrieben': 'Written by you',
+    'ohne Namen': 'without a name',
+    'Inserat gelöscht': 'Listing deleted',
+    'noch ungelesen': 'not read yet',
+    'beantwortet': 'answered',
+    'abgesagt': 'declined',
+    'gelesen': 'read',
+    'neu': 'new',
+    'eingegangen': 'received',
+    'geschrieben': 'written',
+    'Die Adresse steht hier und in keiner Mail. Wer antwortet, gibt seine eigene frei – niemand sonst.':
+      'The address is here and in no email. Whoever answers releases their own – nobody else.',
+    '„Noch ungelesen“ heißt nicht ignoriert. Viele öffnen ihr Postfach einmal am Tag. Nachfassen lohnt sich erfahrungsgemäß nach drei bis vier Tagen, nicht früher.':
+      '“Not read yet” does not mean ignored. Many people open their inbox once a day. Following up pays off after three or four days, not earlier.',
+    'Vermerkt.': 'Noted.',
+    'Das ließ sich nicht vermerken.': 'That could not be noted.',
+
+    /* Suchauftrag per Mail */
+    'per Mail melden': 'notify by email',
+    'Mail-Benachrichtigung braucht ein Konto auf trimmotrade.de.':
+      'Email notification needs an account on trimmotrade.de.',
+    '{0}Mail-Benachrichtigung braucht ein Konto auf trimmotrade.de.':
+      '{0}Email notification needs an account on trimmotrade.de.',
+    'stündlich': 'hourly', 'täglich': 'daily', 'wöchentlich': 'weekly',
+    'Die Mail kann nicht alles: {0}': 'The email cannot do everything: {0}',
+    'Eingerichtet. Du bekommst eine Mail, sobald etwas Passendes dazukommt.':
+      'Set up. You get an email as soon as something matching appears.',
+    'Keine Mails mehr für diesen Suchauftrag.': 'No more emails for this saved search.',
+    'Das ging nicht.': 'That did not work.',
+    'mehrere Angebotsarten': 'several offer types',
+    'mehrere Städte': 'several cities',
+    'einzelne Viertel': 'individual districts',
+    'Ausstattung': 'Features',
+    'Pendelzeit': 'commuting time',
+    'Energieklasse': 'energy class',
+    'Baujahr': 'year built',
+    'WG-Merkmale': 'flatshare criteria',
+
+    /* Sonstiges, das ohne Eintrag deutsch geblieben war */
+    '{4}Zur Suche': '{4}To the search',
+    'Zur Suche': 'To the search'
+  });
+
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
 })(window.TT = window.TT || {});

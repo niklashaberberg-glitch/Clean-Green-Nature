@@ -462,6 +462,273 @@ const SEITEN = [
         antwort: 'Bei Wohnungen und Einfamilienhäusern an Verbraucher wird die Provision seit dem 23. Dezember 2020 geteilt; die Käuferseite zahlt höchstens so viel wie die Verkäuferseite (§§ 656c, 656d BGB). Für Grundstücke und Mehrfamilienhäuser gilt das nicht.' }
     ],
     tun: { text: 'Objekt bei TrimmoTrade inserieren', ziel: '/#/inserieren?art=kauf-wohnung' }
+  },
+
+  /* -------------------------------------------------------------------
+     Die anbietende Seite
+
+     Ein Wohnungsportal hat ein Henne-Ei-Problem, und es ist nicht
+     symmetrisch: Suchende kommen von allein, sobald es Wohnungen gibt.
+     Wohnungen kommen nicht von allein. Wer vermietet, geht dahin, wo
+     schon Suchende sind – und das ist am Anfang nirgends hier.
+
+     Der einzige Ausweg, der ohne Werbebudget funktioniert, ist eine
+     Seite, die jemand findet, der gerade wirklich vermieten will, und
+     die ihm dabei so weit hilft, dass das Inserieren am Ende nur noch
+     der letzte Schritt ist. Deshalb steht auf dieser Seite alles, was
+     ein privater Vermieter falsch machen kann – und erst am Schluss
+     der Verweis auf das Formular.
+     ------------------------------------------------------------------- */
+  {
+    datei: 'wohnung-vermieten.html',
+    rang: '0.9',
+    kurz: 'Wohnung vermieten',
+    titel: 'Wohnung vermieten: kostenlos inserieren – TrimmoTrade',
+    h1: 'Wohnung vermieten',
+    beschreibung: 'Pflichtangaben im Inserat, zulässige Fragen an Bewerber, Kaution, Mietpreisbremse und Übergabe – und ein kostenloses Inserat bei TrimmoTrade.',
+    vorspann: 'Vermieten ist einfacher, als es aussieht – bis auf fünf Stellen, an denen es teuer wird. Die stehen hier, in der Reihenfolge, in der sie auf Sie zukommen.',
+    stand: STAND,
+    inhalt: `
+  <section class="block">
+    <h2>1. Was ins Inserat gehört – und zwar von Gesetzes wegen</h2>
+    <p>§ 87 des Gebäudeenergiegesetzes verlangt in <b>jeder</b> Immobilienanzeige fünf Angaben,
+      sobald ein Energieausweis vorliegt:</p>
+    <ul class="pruef">
+      <li><span><b>Art des Energieausweises</b> – Bedarfs- oder Verbrauchsausweis.</span></li>
+      <li><span><b>Der Energiekennwert</b> in Kilowattstunden je Quadratmeter und Jahr.</span></li>
+      <li><span><b>Der wesentliche Energieträger</b> der Heizung – Gas, Fernwärme, Wärmepumpe.</span></li>
+      <li><span><b>Das Baujahr</b> des Gebäudes.</span></li>
+      <li><span><b>Die Energieeffizienzklasse</b> von A+ bis H.</span></li>
+    </ul>
+    <p>Wer sie weglässt, begeht eine Ordnungswidrigkeit; der Bußgeldrahmen reicht bis 10.000 Euro
+      (§ 108 GEG). In der Praxis wird das selten verfolgt – abgemahnt wird dafür regelmäßig,
+      und zwar von Mitbewerbern und Verbänden nach dem Gesetz gegen den unlauteren Wettbewerb.</p>
+    <p>Beim Formular von TrimmoTrade sind diese Felder Teil des normalen Ablaufs. Die
+      Effizienzklasse wird aus dem Kennwert nach Anlage 10 GEG berechnet, damit sie nicht
+      geschätzt wird.</p>
+  </section>
+
+  <section class="block">
+    <h2>2. Die Mietpreisbremse betrifft auch Sie</h2>
+    <p>In Gebieten mit angespanntem Wohnungsmarkt darf die neue Miete höchstens zehn Prozent über
+      der ortsüblichen Vergleichsmiete liegen (§ 556d BGB). Es gibt Ausnahmen – Neubauten ab
+      Oktober 2014, umfassend modernisierte Wohnungen, und die Vormiete, wenn sie schon höher
+      war (§§ 556e, 556f BGB).</p>
+    <p>Entscheidend ist eine Pflicht, die viele übersehen: Wer sich auf eine dieser Ausnahmen
+      berufen will, <b>muss unaufgefordert und vor Abgabe der Vertragserklärung</b> darüber
+      Auskunft geben (§ 556g Abs. 1a BGB). Wer das versäumt, kann sich auf die Ausnahme später
+      nicht mehr berufen – und muss die zu viel gezahlte Miete zurückzahlen.</p>
+    <p class="werkzeug__weiter"><a class="knopf knopf--still" href="/mietpreisbremse-pruefen.html">Wie die Vergleichsmiete ermittelt wird</a></p>
+  </section>
+
+  <section class="block">
+    <h2>3. Was Sie Bewerbern nicht fragen dürfen</h2>
+    <p>Eine Mieterselbstauskunft ist zulässig – aber nicht in jedem Punkt. Unzulässige Fragen
+      dürfen falsch beantwortet werden, ohne dass daraus je ein Kündigungsgrund wird. Zulässig
+      sind Angaben, die für die Vertragsabwicklung zählen; unzulässig ist alles, was in die
+      persönliche Lebensführung greift.</p>
+    <div class="spalten2">
+      <div>
+        <h3>Zulässig</h3>
+        <ul class="pruef">
+          <li><span>Name, Anschrift, Zahl der einziehenden Personen</span></li>
+          <li><span>Beruf und Arbeitgeber</span></li>
+          <li><span>Einkommen der Höhe nach</span></li>
+          <li><span>Bestehende Mietschulden</span></li>
+          <li><span>Haustiere, soweit zustimmungsbedürftig</span></li>
+          <li><span>Bonitätsauskunft – sinnvollerweise erst in der engeren Auswahl</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Unzulässig</h3>
+        <ul class="pruef">
+          <li><span>Schwangerschaft und Kinderwunsch</span></li>
+          <li><span>Religion, Weltanschauung, Parteizugehörigkeit</span></li>
+          <li><span>Herkunft und Staatsangehörigkeit</span></li>
+          <li><span>Gesundheit, Behinderung, sexuelle Orientierung</span></li>
+          <li><span>Vorstrafen ohne Bezug zum Mietverhältnis</span></li>
+          <li><span>Heiratsabsichten und Familienplanung</span></li>
+        </ul>
+      </div>
+    </div>
+    <p>Der Hintergrund ist nicht nur Höflichkeit: Nach § 19 des Allgemeinen
+      Gleichbehandlungsgesetzes ist eine Benachteiligung wegen Herkunft, Geschlecht, Religion,
+      Behinderung, Alter oder sexueller Identität bei der Vermietung unzulässig, sobald es sich
+      um Massengeschäfte handelt. Wer mehr als 50 Wohnungen vermietet, ist immer erfasst; darunter
+      kommt es auf den Einzelfall an. Schadensersatzansprüche daraus sind kein theoretisches
+      Risiko.</p>
+    <p>TrimmoTrade fragt in einer Anfrage deshalb nur nach Haushaltsgröße, Einzugstermin,
+      Beschäftigung und Einkommensspanne – und schickt nichts davon ohne ausdrückliche Freigabe
+      der anfragenden Person mit.</p>
+  </section>
+
+  <section class="block">
+    <h2>4. Kaution, Provision, Nebenkosten</h2>
+    <ul class="pruef">
+      <li><span><b>Kaution: höchstens drei Nettokaltmieten</b> (§ 551 Abs. 1 BGB). Die Mieterseite
+        darf in drei gleichen Monatsraten zahlen; die erste ist zu Mietbeginn fällig. Eine Klausel,
+        die alles vorab verlangt, ist unwirksam.</span></li>
+      <li><span><b>Getrennt anlegen.</b> Die Kaution ist insolvenzfest vom eigenen Vermögen getrennt
+        anzulegen und zu verzinsen (§ 551 Abs. 3 BGB).</span></li>
+      <li><span><b>Maklerprovision zahlt, wer bestellt.</b> Seit dem Bestellerprinzip
+        (§ 2 Abs. 1a Wohnungsvermittlungsgesetz) darf die Mieterseite nur zahlen, wenn sie den
+        Makler selbst beauftragt hat. Bei TrimmoTrade fällt keine Provision an.</span></li>
+      <li><span><b>Nebenkosten müssen vereinbart sein.</b> Ohne ausdrückliche Vereinbarung im
+        Vertrag ist die Miete eine Inklusivmiete – umlegen lässt sich dann nichts (§ 556 BGB).</span></li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2>5. Übergabe und Steuer</h2>
+    <p>Bei der Übergabe entscheidet sich, wer später die Renovierung zahlt. Ein Protokoll mit
+      Zählerständen, Schlüsselzahl und jedem Mangel – von beiden Seiten unterschrieben – ist das
+      einzige Beweismittel, das im Streitfall zählt. Wichtig ist auch die Ausgangslage: Wer eine
+      unrenovierte Wohnung übergibt, kann die Renovierung beim Auszug nicht verlangen; eine
+      Klausel, die das doch tut, ist nach ständiger Rechtsprechung unwirksam.</p>
+    <p>Steuerlich sind Mieteinnahmen Einkünfte aus Vermietung und Verpachtung (§ 21 EStG) und
+      gehören in die Anlage V. Absetzbar sind unter anderem Abschreibung, Zinsen, Verwaltung,
+      Instandhaltung und Fahrtkosten. Die Umsatzsteuer bleibt außen vor: Die Vermietung zu
+      Wohnzwecken ist nach § 4 Nr. 12 UStG steuerfrei.</p>
+    <p class="werkzeug__weiter"><a class="knopf knopf--still" href="/#/uebergabe">Übergabeprotokoll ausfüllen</a></p>
+  </section>
+
+  <section class="block">
+    <h2>Warum bei TrimmoTrade inserieren?</h2>
+    <ul class="pruef">
+      <li><span><b>Kostenlos, ohne Laufzeit.</b> Ein Inserat kostet nichts. Bezahlt wird nur, wer
+        zusätzlich hervorgehoben werden will – und das steht dann sichtbar dran.</span></li>
+      <li><span><b>Anfragen mit Eckdaten.</b> Haushaltsgröße, Einzugstermin, Beschäftigung und
+        Einkommensspanne stehen in der Anfrage. Das spart die erste Rückfragerunde.</span></li>
+      <li><span><b>Ihre Adresse bleibt bei Ihnen.</b> Weder Ihre E-Mail-Adresse noch Ihre
+        Telefonnummer stehen im Inserat oder in einer Mail an Suchende.</span></li>
+      <li><span><b>Kein Karteileichen-Problem.</b> Nach 60 Tagen fragen wir nach, ob das Angebot
+        noch steht. Was niemand bestätigt, verschwindet – auch Ihres.</span></li>
+      <li><span><b>Betrugsprüfung.</b> Jedes Inserat wird auf die üblichen Muster geprüft. Das
+        schützt auch Sie: Betrugsanzeigen mit gestohlenen Fotos laufen häufig auf Ihre Wohnung.</span></li>
+    </ul>
+  </section>
+`,
+    fragen: [
+      { frage: 'Was kostet es, eine Wohnung bei TrimmoTrade zu inserieren?',
+        antwort: 'Nichts. Ein Inserat ist kostenlos und ohne Laufzeit. Kostenpflichtig ist nur die freiwillige Hervorhebung, die als bezahlte Platzierung gekennzeichnet wird und die Reihenfolge der übrigen Treffer nicht verändert.' },
+      { frage: 'Brauche ich einen Energieausweis, um zu inserieren?',
+        antwort: 'Für die Vermietung ja: Nach § 80 GEG ist er spätestens bei der Besichtigung unaufgefordert vorzulegen. Liegt er vor, müssen die Kennwerte schon in der Anzeige stehen (§ 87 GEG). Ausgenommen sind unter anderem kleine Gebäude unter 50 Quadratmetern und Baudenkmäler.' },
+      { frage: 'Darf ich Bewerber nach der Schufa fragen?',
+        antwort: 'Ja, aber sinnvollerweise erst in der engeren Auswahl. Eine Bonitätsauskunft von allen Interessenten gleich zu Beginn einzusammeln ist datenschutzrechtlich kaum zu rechtfertigen – gebraucht wird sie nur für die Person, mit der Sie tatsächlich abschließen wollen.' },
+      { frage: 'Wie viel Kaution darf ich verlangen?',
+        antwort: 'Höchstens drei Nettokaltmieten, also ohne Nebenkosten (§ 551 Abs. 1 BGB). Die Mieterseite darf in drei Monatsraten zahlen. Angelegt werden muss die Kaution getrennt vom eigenen Vermögen und verzinst.' },
+      { frage: 'Muss ich Interessenten sagen, warum die Miete über der Vergleichsmiete liegt?',
+        antwort: 'Ja, wenn Sie sich auf eine Ausnahme von der Mietpreisbremse berufen wollen. Die Auskunft muss unaufgefordert und vor Abgabe der Vertragserklärung erfolgen (§ 556g Abs. 1a BGB). Wird sie nachgeholt, gilt sie erst zwei Jahre später.' }
+    ],
+    tun: { text: 'Wohnung kostenlos inserieren', ziel: '/#/inserieren' }
+  },
+
+  /* -------------------------------------------------------------------
+     Nachmieter
+
+     Die wertvollste Seite dieses Portals, und zwar aus einem Grund, der
+     mit Suchmaschinen nichts zu tun hat: Wer einen Nachmieter sucht, ist
+     beide Seiten des Marktes zugleich. Er hat eine Wohnung abzugeben und
+     braucht eine neue. Ein Nutzer, ein Inserat, eine Suche – genau das,
+     woran ein Marktplatz am Anfang scheitert.
+     ------------------------------------------------------------------- */
+  {
+    datei: 'nachmieter-finden.html',
+    rang: '0.9',
+    kurz: 'Nachmieter finden',
+    titel: 'Nachmieter finden: Rechte, Fristen, Ablöse – TrimmoTrade',
+    h1: 'Nachmieter finden',
+    beschreibung: 'Wann Sie mit einem Nachmieter früher aus dem Vertrag kommen, was eine Ablöse kosten darf und wie Sie gleichzeitig etwas Neues finden.',
+    vorspann: 'Der häufigste Irrtum zuerst: Einen Nachmieter zu stellen, verkürzt die Kündigungsfrist nicht automatisch. Es gibt aber drei Fälle, in denen es funktioniert.',
+    stand: STAND,
+    inhalt: `
+  <section class="block">
+    <h2>Der Grundsatz: kein Anspruch</h2>
+    <p>Ein Mietverhältnis endet mit der Kündigungsfrist, nicht mit dem Fund eines Nachfolgers.
+      Die ordentliche Kündigung durch die Mieterseite beträgt drei Monate und muss spätestens am
+      dritten Werktag eines Monats zugehen, damit dieser Monat mitzählt (§ 573c Abs. 1 BGB).
+      Einen allgemeinen Anspruch darauf, jemanden zu stellen und früher zu gehen, kennt das
+      Gesetz nicht.</p>
+    <p>Wer trotzdem früher aus dem Vertrag will, hat drei Ansatzpunkte:</p>
+  </section>
+
+  <section class="block">
+    <h2>Fall 1: Der Vertrag erlaubt es</h2>
+    <p>Manche Mietverträge enthalten eine <b>Nachmieterklausel</b>: Wer einen zumutbaren
+      Nachfolger stellt, kommt vorzeitig heraus. Ein Blick in den eigenen Vertrag lohnt sich –
+      besonders bei Genossenschaften und kommunalen Wohnungsgesellschaften ist die Klausel
+      verbreitet. Steht sie drin, gilt sie; die Vermieterseite darf einen Vorschlag dann nur aus
+      sachlichen Gründen ablehnen, etwa wegen erkennbar fehlender Zahlungsfähigkeit.</p>
+  </section>
+
+  <section class="block">
+    <h2>Fall 2: Sie kommen sonst gar nicht heraus</h2>
+    <p>Bei einem befristeten Mietvertrag (§ 575 BGB) oder einem wirksam vereinbarten
+      Kündigungsverzicht ist die ordentliche Kündigung ausgeschlossen. Genau dann kann sich aus
+      Treu und Glauben (§ 242 BGB) ein Anspruch auf Entlassung ergeben – wenn ein
+      <b>berechtigtes Interesse</b> vorliegt und ein zumutbarer Nachmieter bereitsteht.</p>
+    <p>Als berechtigtes Interesse anerkannt sind unter anderem ein berufsbedingter Umzug in eine
+      andere Stadt, eine schwere Erkrankung, Pflegebedürftigkeit, deutlich veränderte
+      Familienverhältnisse oder der Einzug in ein Pflegeheim. Nicht ausreichend ist der Wunsch
+      nach einer schöneren Wohnung am selben Ort.</p>
+    <p>„Zumutbar“ heißt: solvent, bereit, in den bestehenden Vertrag zu denselben Bedingungen
+      einzutreten, und ohne Anhaltspunkte gegen die Person. Üblich ist, gleich mehrere Vorschläge
+      zu machen – die häufig genannte Zahl von drei steht in keinem Gesetz, hat sich aber als
+      Maßstab dafür durchgesetzt, dass es ernst gemeint ist.</p>
+  </section>
+
+  <section class="block">
+    <h2>Fall 3: Alle sind einverstanden</h2>
+    <p>Der einfachste und mit Abstand häufigste Weg: ein <b>Aufhebungsvertrag</b>. Vermieterseite,
+      bisherige und künftige Mietseite einigen sich schriftlich auf einen Übergabetermin. Das
+      braucht keinen Rechtsgrund, nur drei Unterschriften – und es ist für die Vermieterseite oft
+      attraktiv, weil sie sich Leerstand und Inserat spart.</p>
+    <p>Wichtig: Der neue Vertrag ist ein <b>neuer</b> Vertrag. Ihre alte, womöglich günstige Miete
+      geht nicht auf den Nachfolger über, und Ihre Kaution kommt nicht von ihm, sondern von der
+      Vermieterseite zurück – nach Abrechnung, üblicherweise innerhalb von drei bis sechs Monaten.</p>
+  </section>
+
+  <section class="block">
+    <h2>Was eine Ablöse kosten darf</h2>
+    <p>Einbauküche, Einbauschränke, Markise: Was Sie hinterlassen, dürfen Sie dem Nachfolger
+      verkaufen. Zwei Grenzen gelten dabei.</p>
+    <ul class="pruef">
+      <li><span><b>Kein Kopplungsgeschäft.</b> Der Mietvertrag darf nicht davon abhängen, dass die
+        Ablöse gezahlt wird. Eine solche Abrede ist nach § 4a Abs. 1 des
+        Wohnungsvermittlungsgesetzes unwirksam.</span></li>
+      <li><span><b>Kein Missverhältnis.</b> Übersteigt die Ablöse den Zeitwert der Sache
+        auffällig – die Rechtsprechung zieht die Linie bei etwa 50 Prozent darüber –, kann der
+        übersteigende Teil zurückverlangt werden (§ 4a Abs. 2 WoVermRG).</span></li>
+    </ul>
+    <p>Rechnen Sie den Zeitwert ehrlich: Eine Küche verliert je nach Qualität rund zehn Prozent
+      pro Jahr. Eine acht Jahre alte Küche für 8.000 Euro ist heute etwa 3.000 Euro wert, nicht
+      6.000.</p>
+  </section>
+
+  <section class="block">
+    <h2>Der Teil, den fast alle vergessen</h2>
+    <p>Wer einen Nachmieter sucht, sucht in aller Regel selbst eine Wohnung. Das ist die
+      unangenehmste Konstellation der Wohnungssuche: Zwei Termine müssen zusammenpassen, und
+      wer zuerst zusagt, trägt das Risiko doppelter Miete.</p>
+    <p>Bei TrimmoTrade lässt sich beides in einem Konto führen: Ihr Inserat für die abzugebende
+      Wohnung und Ihre eigene Suche, samt Suchauftrag per Mail. Wenn Sie ohnehin gehen wollen,
+      lohnt zusätzlich ein Blick auf den <a href="/wohnungstausch.html">Ringtausch</a> – dort
+      finden sich Ketten aus mehreren Haushalten, in denen die Termine gemeinsam gelegt werden.</p>
+  </section>
+`,
+    fragen: [
+      { frage: 'Muss der Vermieter meinen Nachmieter akzeptieren?',
+        antwort: 'Nur wenn der Mietvertrag es vorsieht oder ein berechtigtes Interesse an vorzeitiger Entlassung vorliegt und der Vorschlag zumutbar ist. Ohne diese Voraussetzungen gilt die ordentliche Kündigungsfrist von drei Monaten nach § 573c Abs. 1 BGB.' },
+      { frage: 'Wie viele Nachmieter muss ich vorschlagen?',
+        antwort: 'Eine gesetzliche Zahl gibt es nicht. In der Praxis hat sich eingebürgert, drei zumutbare Interessenten zu benennen – das gilt als Beleg dafür, dass der Vorschlag ernsthaft ist und die Vermieterseite die Wahl hat.' },
+      { frage: 'Was ist eine zumutbare Nachmieterin?',
+        antwort: 'Jemand, der zahlungsfähig ist, den bestehenden Vertrag zu unveränderten Bedingungen übernimmt und gegen den keine sachlichen Bedenken sprechen. Ablehnen darf die Vermieterseite aus sachlichen Gründen, nicht aus Willkür und nicht aus Gründen, die das AGG untersagt.' },
+      { frage: 'Darf ich für die Einbauküche Geld verlangen?',
+        antwort: 'Ja, aber die Zahlung darf nicht Bedingung für den Mietvertrag sein, und der Preis darf den Zeitwert nicht auffällig übersteigen. Als Richtwert gilt eine Grenze von rund 50 Prozent über dem Zeitwert (§ 4a Wohnungsvermittlungsgesetz).' },
+      { frage: 'Wann bekomme ich meine Kaution zurück?',
+        antwort: 'Von der Vermieterseite, nicht vom Nachmieter. Sie darf die Abrechnung abwarten – bei laufenden Nebenkosten in der Regel drei bis sechs Monate. Ein Einbehalt darüber hinaus ist nur für konkret bezifferte Ansprüche zulässig.' }
+    ],
+    tun: { text: 'Wohnung inserieren und gleichzeitig suchen', ziel: '/#/inserieren' }
   }
 ];
 

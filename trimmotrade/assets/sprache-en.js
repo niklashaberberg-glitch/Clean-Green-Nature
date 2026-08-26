@@ -2823,6 +2823,11 @@
       'The search and the listings can be viewed without signing in; no account is created and nothing about you is stored in the process. Anyone who creates an account is held on the server side – and that exists for nothing else. Exactly the following is stored there:',
     'Ohne Anmeldung geht auch das nicht: Suche und Inserate lassen sich ansehen, ohne dass ein Konto entsteht.':
       'Without signing in, not even that happens: the search and the listings can be viewed without an account coming into being.',
+    /* Kündigungsfrist nach § 573c BGB */
+    'Um das alte Mietverhältnis zum {1} zu beenden, muss die Kündigung spätestens am {2} beim Vermieter sein: bis zum dritten Werktag eines Monats, dann endet das Mietverhältnis mit Ablauf des übernächsten Monats (§ 573c Abs. 1 BGB).':
+      'To end the old tenancy on {1}, the notice must reach the landlord by {2} at the latest: by the third working day of a month, the tenancy then ends at the close of the month after next (§ 573c(1) BGB).',
+    'Feiertage sind dabei nicht berücksichtigt – sie sind je Bundesland verschieden. Gib die Kündigung ein paar Tage früher ab und lass dir den Zugang bestätigen: Es zählt der Zugang, nicht das Absendedatum.':
+      'Public holidays are not taken into account – they differ from state to state. Hand in the notice a few days earlier and get receipt confirmed: what counts is arrival, not the date you sent it.',
 
   });
 

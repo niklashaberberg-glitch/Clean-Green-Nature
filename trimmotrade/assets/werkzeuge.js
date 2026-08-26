@@ -506,7 +506,7 @@
     /* Fristen sind hier das schärfste Schwert – und werden am häufigsten verpasst. */
     if (angaben.endeZeitraum) {
       const ende = new Date(angaben.endeZeitraum + 'T12:00:00');
-      const frist = U.addDays(ende, 365);
+      const frist = U.addJahre(ende, 1);
       const zugang = angaben.zugang ? new Date(angaben.zugang + 'T12:00:00') : null;
       if (zugang && zugang > frist) {
         befunde.push({
@@ -515,7 +515,7 @@
           text: 'Die Abrechnung musste bis zum ' + U.dateDE(U.isoDate(frist)) + ' bei dir sein. Danach kann keine Nachzahlung mehr verlangt werden – ein Guthaben musst du trotzdem bekommen.'
         });
       } else if (zugang) {
-        const einwendung = U.addDays(zugang, 365);
+        const einwendung = U.addJahre(zugang, 1);
         befunde.push({
           art: 'info',
           titel: 'Deine Einwendungsfrist läuft bis ' + U.dateDE(U.isoDate(einwendung)),

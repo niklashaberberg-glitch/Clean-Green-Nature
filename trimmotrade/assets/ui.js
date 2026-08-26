@@ -451,6 +451,7 @@
        `darfOhneKonto`. */
     const OHNE_ANMELDUNG = ['anmelden', 'recht', 'hilfe', 'freigabe', 'suche', 'objekt'];
     const gesperrt = TT.konto && !TT.konto.angemeldet() && OHNE_ANMELDUNG.indexOf(r.name) < 0;
+    if (gesperrt) zielMerken(location.hash);
     const name = gesperrt ? 'anmelden' : r.name;
 
     const ansicht = ui.ansichten[name] || ui.ansichten.start;
@@ -914,10 +915,32 @@
     return OHNE_KONTO_FAMILIEN.some((v) => name.indexOf(v) === 0);
   }
 
+  /* Wohin nach der Anmeldung?
+
+     Ohne diese drei Zeilen landet jeder auf der Startseite – auch wer
+     gerade ein bestimmtes Inserat merken wollte und dafür durch die
+     Anmeldung geschickt wurde. Er müsste es danach wiederfinden. Das
+     ist die Stelle, an der eine Anmeldepflicht von „kurz lästig“ zu
+     „ich suche das jetzt nochmal“ wird. */
+  let zurueckZiel = '';
+
+  function zielMerken(hash) {
+    const w = String(hash || '').replace(/^#\/?/, '');
+    if (!w || w.indexOf('anmelden') === 0) return;
+    zurueckZiel = w;
+  }
+
+  function zielHolen() {
+    const w = zurueckZiel;
+    zurueckZiel = '';
+    return w;
+  }
+
   /* Der Hinweis sagt, was fehlt und wie man es bekommt – und er sagt es
      an der Stelle, an der jemand gerade etwas wollte. Ein Wegwerfen auf
      die Anmeldeseite ohne Erklärung wäre die schlechtere Antwort. */
   function kontoNoetig(was) {
+    zielMerken(location.hash);
     dialog({
       titel: 'Dafür brauchst du ein Konto',
       inhalt: h`<p>${was || 'Diese Funktion'} gehört zu deinem Konto – dabei entsteht etwas, das dir
@@ -1170,8 +1193,25 @@
       const name = el.dataset.tu;
       const fn = AKTIONEN[name];
       if (!fn) return;
-      e.preventDefault();
-      if (!darfOhneKonto(name)) { kontoNoetig(WOFUER[name]); return; }
+
+      /* Ein Verweis, der auch eine Aktion trägt, muss beides tun.
+         Vorher wurde die Vorgabe hier ausnahmslos unterdrückt – damit
+         schloss „Anmelden“ im Kontohinweis brav den Dialog und blieb
+         dann stehen, ebenso „Alle Unterschiede ansehen“ in der
+         Tarifsperre und „Ohne Anzeigen lesen“ unter einer Anzeige. Fünf
+         Knöpfe, die aussahen wie Verweise und keine waren.
+
+         Deshalb: Bei einem echten Ziel läuft erst die Aktion (sie
+         schließt den Dialog), dann folgt der Browser dem Verweis. */
+      const ziel = el.tagName === 'A' ? el.getAttribute('href') : null;
+      const istVerweis = !!ziel && ziel !== '#' && ziel.charAt(0) !== 'j';
+      if (!istVerweis) e.preventDefault();
+
+      if (!darfOhneKonto(name)) {
+        e.preventDefault();
+        kontoNoetig(WOFUER[name]);
+        return;
+      }
       fn(el, e);
     });
 
@@ -1247,6 +1287,7 @@
 
   Object.assign(ui, {
     start, gehe, zeichnen, neuZeichnen, schaleZeichnen, toast, dialog, dialogZu,
+    zielMerken, zielHolen,
     badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
     ART_LABEL, ART_ICON, artLabel, artIcon, ico, aktionRegistrieren, AKTIONEN,
     sperrHinweis, anzeige, NAV, dateiSichern,

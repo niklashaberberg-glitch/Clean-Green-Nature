@@ -137,6 +137,60 @@
     return d;
   }
 
+  /* Jahresfristen sind keine 365-Tage-Fristen.
+
+     § 188 Abs. 2 BGB: Eine nach Jahren bestimmte Frist endet an dem Tag
+     des letzten Jahres, der dem Anfangstag nach seiner Benennung
+     entspricht – der 31. Dezember bleibt der 31. Dezember, auch wenn
+     dazwischen ein Schalttag liegt. Mit 365 Tagen zu rechnen ergibt
+     dann den 30. Dezember: ein Tag zu früh, und bei einer Frist, nach
+     deren Ablauf keine Nachzahlung mehr verlangt werden kann, ist ein
+     Tag zu früh ein Fehler mit Folgen.
+
+     § 188 Abs. 3 BGB fängt den einzigen Sonderfall ab: Fehlt im
+     Zielmonat der entsprechende Tag – 29. Februar –, endet die Frist
+     mit dem letzten Tag dieses Monats, also am 28. Februar. Ohne diese
+     Zeile ließe JavaScript den Tag auf den 1. März überlaufen. */
+  /* Dieselbe Regel für Monatsfristen. `setMonth` allein läuft über: Der
+     31. August plus sechs Monate ergäbe den 3. März, weil der Februar
+     keinen 31. hat. § 188 Abs. 3 BGB will den 28. Februar. */
+  function addMonate(date, monate) {
+    const d = new Date(date.getTime());
+    const tag = d.getDate();
+    d.setDate(1);
+    d.setMonth(d.getMonth() + monate);
+    const letzterImMonat = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    d.setDate(Math.min(tag, letzterImMonat));
+    return d;
+  }
+
+  /* Der dritte Werktag eines Monats – die Frist des § 573c Abs. 1 BGB.
+     Werktage sind Montag bis Samstag; der Sonntag zählt nicht. Feiertage
+     bleiben außen vor: Sie sind je Bundesland verschieden, und ein
+     Datum, das in Bayern stimmt und in Berlin nicht, wäre schlechter als
+     eines, zu dem dabeisteht, dass man nicht auf den letzten Tag warten
+     soll. */
+  function dritterWerktag(jahr, monat) {
+    const d = new Date(jahr, monat, 1, 12);
+    let gezaehlt = 0;
+    while (true) {
+      if (d.getDay() !== 0) gezaehlt++;
+      if (gezaehlt === 3) return d;
+      d.setDate(d.getDate() + 1);
+    }
+  }
+
+  function addJahre(date, jahre) {
+    const d = new Date(date.getTime());
+    const tag = d.getDate();
+    d.setFullYear(d.getFullYear() + jahre);
+    if (d.getDate() !== tag) {
+      /* Übergelaufen – zurück auf den letzten Tag des Zielmonats. */
+      d.setDate(0);
+    }
+    return d;
+  }
+
   const isoDate = (d) => d.toISOString().slice(0, 10);
 
   /* Eingefrorenes „Heute“, damit Daten und Texte zusammenpassen. */
@@ -389,7 +443,7 @@
   TT.util = {
     clamp, sum, uniq, debounce, rng, hash, pick, pickN, between, intBetween,
     eur, eur2, num, dec, qm, pct, rooms, dateDE, monthDE, since, daysSince, addDays, isoDate,
-    esc, raw, markup, html, norm, slug, plural, truncate,
+    esc, raw, markup, html, norm, slug, plural, truncate, addJahre, addMonate, dritterWerktag,
     t: uebersetze,
     karte, hole,
     $, $$, on, setHTML, svg,

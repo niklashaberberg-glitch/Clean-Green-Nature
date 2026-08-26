@@ -287,8 +287,7 @@
     if (gruender().nummer) return 0;
     if (!gruenderFrei()) return 0;
     const nummer = gruenderVergeben() + 1;
-    const bis = new Date(TT.now().getTime());
-    bis.setMonth(bis.getMonth() + GRUENDER.monate);
+    const bis = U.addMonate(TT.now(), GRUENDER.monate);
     TT.store.set({ gruender: { nummer, seit: U.isoDate(TT.now()), bis: U.isoDate(bis) } }, 'tarif');
     return nummer;
   }

@@ -416,11 +416,14 @@
     neuAnbieten = false;
     if (id === 'passkey') { passkeyAnmelden(); return; }
     if (id !== 'mail' && K.echt()) {
+      /* Vor dem Verlassen der Seite festhalten, wohin es zurückgehen
+         soll – nach der Rückkehr ist der alte Stand weg. */
+      const weiter = ui.zielHolen();
       /* Mit Server: erst zustimmen, dann zum Anbieter. Die Zustimmung
          muss vor dem Vertragsschluss vorliegen, und der beginnt mit dem
          Anlegen des Kontos beim Rückweg. */
-      if (!entwurf.agb) { anbieterZustimmung(id); return; }
-      K.anbieterStarten(id);
+      if (!entwurf.agb) { ui.zielMerken('#/' + weiter); anbieterZustimmung(id); return; }
+      K.anbieterStarten(id, weiter);
       return;
     }
     entwurf.anbieter = id;
@@ -457,7 +460,9 @@
     }
     entwurf.agb = true;
     ui.dialogZu();
-    K.anbieterStarten(el.dataset.id);
+    /* Der Server gibt `weiter` nach der Rückkehr wieder heraus – so
+       überlebt das Ziel auch den Ausflug zum Anbieter. */
+    K.anbieterStarten(el.dataset.id, ui.zielHolen());
   });
 
   A_('anmelden-zurueck', () => {
@@ -584,7 +589,12 @@
     demoCode = '';
     neuAnbieten = false;
     entwurf = { mail: '', name: '', anbieter: '', agb: false };
-    ui.gehe(k && k.stufe < 2 ? 'konto' : 'start');
+    /* Zurück dorthin, wo jemand hinwollte, als die Anmeldung dazwischen
+       kam. Nur wer von sich aus zur Anmeldung ging, landet auf der
+       Startseite – oder auf der Kontoseite, solange die Stufe niedrig
+       ist und dort noch etwas zu tun wäre. */
+    const ziel = ui.zielHolen();
+    ui.gehe(ziel || (k && k.stufe < 2 ? 'konto' : 'start'));
     ui.neuZeichnen();
     ui.toast('Angemeldet als ' + K.anzeigeName() + '.', 'gut');
   }

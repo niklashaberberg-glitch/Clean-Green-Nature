@@ -5194,6 +5194,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       'The search and the listings can be viewed without signing in; no account is created and nothing about you is stored in the process. Anyone who creates an account is held on the server side – and that exists for nothing else. Exactly the following is stored there:',
     'Ohne Anmeldung geht auch das nicht: Suche und Inserate lassen sich ansehen, ohne dass ein Konto entsteht.':
       'Without signing in, not even that happens: the search and the listings can be viewed without an account coming into being.',
+    /* Kündigungsfrist nach § 573c BGB */
+    'Um das alte Mietverhältnis zum {1} zu beenden, muss die Kündigung spätestens am {2} beim Vermieter sein: bis zum dritten Werktag eines Monats, dann endet das Mietverhältnis mit Ablauf des übernächsten Monats (§ 573c Abs. 1 BGB).':
+      'To end the old tenancy on {1}, the notice must reach the landlord by {2} at the latest: by the third working day of a month, the tenancy then ends at the close of the month after next (§ 573c(1) BGB).',
+    'Feiertage sind dabei nicht berücksichtigt – sie sind je Bundesland verschieden. Gib die Kündigung ein paar Tage früher ab und lass dir den Zugang bestätigen: Es zählt der Zugang, nicht das Absendedatum.':
+      'Public holidays are not taken into account – they differ from state to state. Hand in the notice a few days earlier and get receipt confirmed: what counts is arrival, not the date you sent it.',
 
   });
 
@@ -5338,6 +5343,60 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   function addDays(date, days) {
     const d = new Date(date.getTime());
     d.setDate(d.getDate() + days);
+    return d;
+  }
+
+  /* Jahresfristen sind keine 365-Tage-Fristen.
+
+     § 188 Abs. 2 BGB: Eine nach Jahren bestimmte Frist endet an dem Tag
+     des letzten Jahres, der dem Anfangstag nach seiner Benennung
+     entspricht – der 31. Dezember bleibt der 31. Dezember, auch wenn
+     dazwischen ein Schalttag liegt. Mit 365 Tagen zu rechnen ergibt
+     dann den 30. Dezember: ein Tag zu früh, und bei einer Frist, nach
+     deren Ablauf keine Nachzahlung mehr verlangt werden kann, ist ein
+     Tag zu früh ein Fehler mit Folgen.
+
+     § 188 Abs. 3 BGB fängt den einzigen Sonderfall ab: Fehlt im
+     Zielmonat der entsprechende Tag – 29. Februar –, endet die Frist
+     mit dem letzten Tag dieses Monats, also am 28. Februar. Ohne diese
+     Zeile ließe JavaScript den Tag auf den 1. März überlaufen. */
+  /* Dieselbe Regel für Monatsfristen. `setMonth` allein läuft über: Der
+     31. August plus sechs Monate ergäbe den 3. März, weil der Februar
+     keinen 31. hat. § 188 Abs. 3 BGB will den 28. Februar. */
+  function addMonate(date, monate) {
+    const d = new Date(date.getTime());
+    const tag = d.getDate();
+    d.setDate(1);
+    d.setMonth(d.getMonth() + monate);
+    const letzterImMonat = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    d.setDate(Math.min(tag, letzterImMonat));
+    return d;
+  }
+
+  /* Der dritte Werktag eines Monats – die Frist des § 573c Abs. 1 BGB.
+     Werktage sind Montag bis Samstag; der Sonntag zählt nicht. Feiertage
+     bleiben außen vor: Sie sind je Bundesland verschieden, und ein
+     Datum, das in Bayern stimmt und in Berlin nicht, wäre schlechter als
+     eines, zu dem dabeisteht, dass man nicht auf den letzten Tag warten
+     soll. */
+  function dritterWerktag(jahr, monat) {
+    const d = new Date(jahr, monat, 1, 12);
+    let gezaehlt = 0;
+    while (true) {
+      if (d.getDay() !== 0) gezaehlt++;
+      if (gezaehlt === 3) return d;
+      d.setDate(d.getDate() + 1);
+    }
+  }
+
+  function addJahre(date, jahre) {
+    const d = new Date(date.getTime());
+    const tag = d.getDate();
+    d.setFullYear(d.getFullYear() + jahre);
+    if (d.getDate() !== tag) {
+      /* Übergelaufen – zurück auf den letzten Tag des Zielmonats. */
+      d.setDate(0);
+    }
     return d;
   }
 
@@ -5593,7 +5652,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   TT.util = {
     clamp, sum, uniq, debounce, rng, hash, pick, pickN, between, intBetween,
     eur, eur2, num, dec, qm, pct, rooms, dateDE, monthDE, since, daysSince, addDays, isoDate,
-    esc, raw, markup, html, norm, slug, plural, truncate,
+    esc, raw, markup, html, norm, slug, plural, truncate, addJahre, addMonate, dritterWerktag,
     t: uebersetze,
     karte, hole,
     $, $$, on, setHTML, svg,
@@ -7216,8 +7275,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   function mietCheck(l) {
     if (l.kind === 'kauf') return null;
-    const bezug = l.kind === 'wg' ? l.flaeche : l.flaeche;
-    const proQm = l.kalt / bezug;
+    const proQm = l.kalt / l.flaeche;
     const vergleich = l.vergleichsmiete ||
       G.vergleichsmiete(l.viertelKey, l.kind === 'wg' ? l.wohnflaeche : l.flaeche, l.baujahr, l.saniert);
     /* WG-Zimmer sind je m² grundsätzlich teurer – der Aufschlag ist
@@ -7237,7 +7295,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       urteil, ton,
       mietpreisbremse: diff > 10 && l.kind !== 'kauf',
       /* Was bei gedeckelter Miete zulässig wäre: Vergleich + 10 %. */
-      zulaessig: Math.round(referenz * 1.1 * bezug)
+      zulaessig: Math.round(referenz * 1.1 * l.flaeche)
     };
   }
 
@@ -8599,7 +8657,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     /* Fristen sind hier das schärfste Schwert – und werden am häufigsten verpasst. */
     if (angaben.endeZeitraum) {
       const ende = new Date(angaben.endeZeitraum + 'T12:00:00');
-      const frist = U.addDays(ende, 365);
+      const frist = U.addJahre(ende, 1);
       const zugang = angaben.zugang ? new Date(angaben.zugang + 'T12:00:00') : null;
       if (zugang && zugang > frist) {
         befunde.push({
@@ -8608,7 +8666,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           text: 'Die Abrechnung musste bis zum ' + U.dateDE(U.isoDate(frist)) + ' bei dir sein. Danach kann keine Nachzahlung mehr verlangt werden – ein Guthaben musst du trotzdem bekommen.'
         });
       } else if (zugang) {
-        const einwendung = U.addDays(zugang, 365);
+        const einwendung = U.addJahre(zugang, 1);
         befunde.push({
           art: 'info',
           titel: 'Deine Einwendungsfrist läuft bis ' + U.dateDE(U.isoDate(einwendung)),
@@ -9528,8 +9586,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     if (gruender().nummer) return 0;
     if (!gruenderFrei()) return 0;
     const nummer = gruenderVergeben() + 1;
-    const bis = new Date(TT.now().getTime());
-    bis.setMonth(bis.getMonth() + GRUENDER.monate);
+    const bis = U.addMonate(TT.now(), GRUENDER.monate);
     TT.store.set({ gruender: { nummer, seit: U.isoDate(TT.now()), bis: U.isoDate(bis) } }, 'tarif');
     return nummer;
   }
@@ -12763,6 +12820,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
        `darfOhneKonto`. */
     const OHNE_ANMELDUNG = ['anmelden', 'recht', 'hilfe', 'freigabe', 'suche', 'objekt'];
     const gesperrt = TT.konto && !TT.konto.angemeldet() && OHNE_ANMELDUNG.indexOf(r.name) < 0;
+    if (gesperrt) zielMerken(location.hash);
     const name = gesperrt ? 'anmelden' : r.name;
 
     const ansicht = ui.ansichten[name] || ui.ansichten.start;
@@ -13226,10 +13284,32 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     return OHNE_KONTO_FAMILIEN.some((v) => name.indexOf(v) === 0);
   }
 
+  /* Wohin nach der Anmeldung?
+
+     Ohne diese drei Zeilen landet jeder auf der Startseite – auch wer
+     gerade ein bestimmtes Inserat merken wollte und dafür durch die
+     Anmeldung geschickt wurde. Er müsste es danach wiederfinden. Das
+     ist die Stelle, an der eine Anmeldepflicht von „kurz lästig“ zu
+     „ich suche das jetzt nochmal“ wird. */
+  let zurueckZiel = '';
+
+  function zielMerken(hash) {
+    const w = String(hash || '').replace(/^#\/?/, '');
+    if (!w || w.indexOf('anmelden') === 0) return;
+    zurueckZiel = w;
+  }
+
+  function zielHolen() {
+    const w = zurueckZiel;
+    zurueckZiel = '';
+    return w;
+  }
+
   /* Der Hinweis sagt, was fehlt und wie man es bekommt – und er sagt es
      an der Stelle, an der jemand gerade etwas wollte. Ein Wegwerfen auf
      die Anmeldeseite ohne Erklärung wäre die schlechtere Antwort. */
   function kontoNoetig(was) {
+    zielMerken(location.hash);
     dialog({
       titel: 'Dafür brauchst du ein Konto',
       inhalt: h`<p>${was || 'Diese Funktion'} gehört zu deinem Konto – dabei entsteht etwas, das dir
@@ -13482,8 +13562,25 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       const name = el.dataset.tu;
       const fn = AKTIONEN[name];
       if (!fn) return;
-      e.preventDefault();
-      if (!darfOhneKonto(name)) { kontoNoetig(WOFUER[name]); return; }
+
+      /* Ein Verweis, der auch eine Aktion trägt, muss beides tun.
+         Vorher wurde die Vorgabe hier ausnahmslos unterdrückt – damit
+         schloss „Anmelden“ im Kontohinweis brav den Dialog und blieb
+         dann stehen, ebenso „Alle Unterschiede ansehen“ in der
+         Tarifsperre und „Ohne Anzeigen lesen“ unter einer Anzeige. Fünf
+         Knöpfe, die aussahen wie Verweise und keine waren.
+
+         Deshalb: Bei einem echten Ziel läuft erst die Aktion (sie
+         schließt den Dialog), dann folgt der Browser dem Verweis. */
+      const ziel = el.tagName === 'A' ? el.getAttribute('href') : null;
+      const istVerweis = !!ziel && ziel !== '#' && ziel.charAt(0) !== 'j';
+      if (!istVerweis) e.preventDefault();
+
+      if (!darfOhneKonto(name)) {
+        e.preventDefault();
+        kontoNoetig(WOFUER[name]);
+        return;
+      }
       fn(el, e);
     });
 
@@ -13559,6 +13656,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   Object.assign(ui, {
     start, gehe, zeichnen, neuZeichnen, schaleZeichnen, toast, dialog, dialogZu,
+    zielMerken, zielHolen,
     badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
     ART_LABEL, ART_ICON, artLabel, artIcon, ico, aktionRegistrieren, AKTIONEN,
     sperrHinweis, anzeige, NAV, dateiSichern,
@@ -16517,6 +16615,33 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
      Umzugsplan
      ================================================================ */
 
+  /* Wann die Kündigung der alten Wohnung draußen sein muss.
+
+     Die frühere Fassung rechnete „Einzug minus 90 Tage“. Das ist keine
+     Näherung, sondern die falsche Regel: § 573c Abs. 1 BGB knüpft nicht
+     an einen Abstand in Tagen an, sondern an den Monat. Die Kündigung
+     muss bis zum dritten Werktag eines Monats zugehen, dann endet das
+     Mietverhältnis mit Ablauf des übernächsten Monats.
+
+     Wer zum 15. März einzieht, will das alte Mietverhältnis zum 31. März
+     beenden – dafür muss die Kündigung bis zum dritten Werktag im Januar
+     da sein. Die 90-Tage-Rechnung nannte den 15. Dezember: drei Wochen
+     zu früh, und das unter der Überschrift „spätestens“. Wer daraufhin
+     glaubt, die Frist verpasst zu haben, zahlt einen Monat länger doppelt. */
+  function kuendigungsHinweis(datum, ausProfil) {
+    const d = new Date(datum + 'T12:00:00');
+    if (isNaN(d.getTime())) return '';
+    const zu = new Date(d.getFullYear(), d.getMonth() + 1, 0, 12);
+    const frist = U.dritterWerktag(d.getFullYear(), d.getMonth() - 2);
+    return h`<p class="fein">${ausProfil ? 'Übernommen aus deinem Profil. ' : ''}Um das alte Mietverhältnis
+      zum ${U.dateDE(U.isoDate(zu))} zu beenden, muss die Kündigung spätestens am
+      ${U.dateDE(U.isoDate(frist))} beim Vermieter sein: bis zum dritten Werktag eines Monats, dann endet
+      das Mietverhältnis mit Ablauf des übernächsten Monats (§ 573c Abs. 1 BGB).</p>
+      <p class="fein">Feiertage sind dabei nicht berücksichtigt – sie sind je Bundesland verschieden. Gib
+      die Kündigung ein paar Tage früher ab und lass dir den Zugang bestätigen: Es zählt der Zugang, nicht
+      das Absendedatum.</p>`;
+  }
+
   function umzug() {
     const s = S.get();
     const datum = S.einzugsdatum();
@@ -16538,10 +16663,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         <section class="block">
           <label class="feld"><span>Geplanter Einzug</span>
             <input type="date" value="${datum}" data-tu-change="umzug-datum"></label>
-          ${datum ? h`<p class="fein">${!s.einzugsdatum ? 'Übernommen aus deinem Profil. ' : ''}Die Kündigung der alten
-            Wohnung müsste spätestens am
-            ${U.dateDE(U.isoDate(U.addDays(new Date(datum + 'T12:00:00'), -90)))} raus sein –
-            drei Monate Frist, zum Monatsende, spätestens am dritten Werktag des Monats.</p>` : ''}
+          ${datum ? kuendigungsHinweis(datum, !s.einzugsdatum) : ''}
           <div class="fortschritt">
             <div class="fortschritt__spur"><i style="width:${Math.round(erledigt / plan.length * 100)}%"></i></div>
             <b>${erledigt} von ${plan.length} erledigt</b>
@@ -22154,11 +22276,14 @@ Datum: __________________
     neuAnbieten = false;
     if (id === 'passkey') { passkeyAnmelden(); return; }
     if (id !== 'mail' && K.echt()) {
+      /* Vor dem Verlassen der Seite festhalten, wohin es zurückgehen
+         soll – nach der Rückkehr ist der alte Stand weg. */
+      const weiter = ui.zielHolen();
       /* Mit Server: erst zustimmen, dann zum Anbieter. Die Zustimmung
          muss vor dem Vertragsschluss vorliegen, und der beginnt mit dem
          Anlegen des Kontos beim Rückweg. */
-      if (!entwurf.agb) { anbieterZustimmung(id); return; }
-      K.anbieterStarten(id);
+      if (!entwurf.agb) { ui.zielMerken('#/' + weiter); anbieterZustimmung(id); return; }
+      K.anbieterStarten(id, weiter);
       return;
     }
     entwurf.anbieter = id;
@@ -22195,7 +22320,9 @@ Datum: __________________
     }
     entwurf.agb = true;
     ui.dialogZu();
-    K.anbieterStarten(el.dataset.id);
+    /* Der Server gibt `weiter` nach der Rückkehr wieder heraus – so
+       überlebt das Ziel auch den Ausflug zum Anbieter. */
+    K.anbieterStarten(el.dataset.id, ui.zielHolen());
   });
 
   A_('anmelden-zurueck', () => {
@@ -22322,7 +22449,12 @@ Datum: __________________
     demoCode = '';
     neuAnbieten = false;
     entwurf = { mail: '', name: '', anbieter: '', agb: false };
-    ui.gehe(k && k.stufe < 2 ? 'konto' : 'start');
+    /* Zurück dorthin, wo jemand hinwollte, als die Anmeldung dazwischen
+       kam. Nur wer von sich aus zur Anmeldung ging, landet auf der
+       Startseite – oder auf der Kontoseite, solange die Stufe niedrig
+       ist und dort noch etwas zu tun wäre. */
+    const ziel = ui.zielHolen();
+    ui.gehe(ziel || (k && k.stufe < 2 ? 'konto' : 'start'));
     ui.neuZeichnen();
     ui.toast('Angemeldet als ' + K.anzeigeName() + '.', 'gut');
   }

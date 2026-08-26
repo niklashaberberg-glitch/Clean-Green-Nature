@@ -28,8 +28,7 @@
 
   function mietCheck(l) {
     if (l.kind === 'kauf') return null;
-    const bezug = l.kind === 'wg' ? l.flaeche : l.flaeche;
-    const proQm = l.kalt / bezug;
+    const proQm = l.kalt / l.flaeche;
     const vergleich = l.vergleichsmiete ||
       G.vergleichsmiete(l.viertelKey, l.kind === 'wg' ? l.wohnflaeche : l.flaeche, l.baujahr, l.saniert);
     /* WG-Zimmer sind je m² grundsätzlich teurer – der Aufschlag ist
@@ -49,7 +48,7 @@
       urteil, ton,
       mietpreisbremse: diff > 10 && l.kind !== 'kauf',
       /* Was bei gedeckelter Miete zulässig wäre: Vergleich + 10 %. */
-      zulaessig: Math.round(referenz * 1.1 * bezug)
+      zulaessig: Math.round(referenz * 1.1 * l.flaeche)
     };
   }
 

@@ -172,7 +172,7 @@ const SEITEN = [
     kurz: 'Wohnungstausch',
     titel: 'Wohnungstausch: Wie ein Ringtausch funktioniert – TrimmoTrade',
     h1: 'Wohnungstausch und Ringtausch',
-    beschreibung: 'Der direkte Wohnungstausch scheitert fast immer am doppelten Zufall. Ein Ringtausch über drei oder vier Haushalte funktioniert – so läuft er ab, und das sagt das Mietrecht dazu.',
+    beschreibung: 'Der direkte Wohnungstausch scheitert am doppelten Zufall. Ein Ringtausch über drei oder vier Haushalte funktioniert – so läuft er ab, das sagt das Mietrecht.',
     vorspann: 'Zwei Menschen, die exakt das Gegenteil voneinander wollen – das passiert fast nie. In einer Kette reicht es, wenn jeder die Wohnung des Nächsten möchte.',
     stand: STAND,
     inhalt: `
@@ -287,7 +287,7 @@ const SEITEN = [
   {
     datei: 'nebenkostenabrechnung-pruefen.html',
     kurz: 'Nebenkosten',
-    titel: 'Nebenkostenabrechnung prüfen: Fristen und unzulässige Posten – TrimmoTrade',
+    titel: 'Nebenkostenabrechnung prüfen: Fristen und Posten – TrimmoTrade',
     h1: 'Nebenkostenabrechnung prüfen',
     beschreibung: 'Etwa jede zweite Betriebskostenabrechnung ist fehlerhaft. Welche Posten umgelegt werden dürfen, welche nie, und welche Frist über die Nachzahlung entscheidet.',
     vorspann: 'Zwei Fristen und ein abschließender Katalog – mehr braucht es meist nicht, um eine Nachforderung zu kippen.',
@@ -393,7 +393,7 @@ const SEITEN = [
   {
     datei: 'wohnung-verkaufen-vorbereiten.html',
     kurz: 'Verkauf vorbereiten',
-    titel: 'Wohnung oder Haus verkaufen: Vorbereitung, Unterlagen, Wertsteigerung – TrimmoTrade',
+    titel: 'Wohnung verkaufen: Unterlagen und Wertsteigerung – TrimmoTrade',
     h1: 'Verkauf vorbereiten',
     beschreibung: 'Welche Unterlagen vor dem Verkauf beschafft sein müssen, welche Nebenkosten anfallen, und welche Arbeiten am Gebäude sich im Preis wirklich niederschlagen.',
     vorspann: 'Der Preis entsteht nicht beim Notar, sondern in den Wochen davor. Zwei Dinge entscheiden: vollständige Unterlagen und der erste Eindruck von außen.',

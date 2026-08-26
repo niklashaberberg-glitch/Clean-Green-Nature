@@ -478,6 +478,33 @@
      Umzugsplan
      ================================================================ */
 
+  /* Wann die Kündigung der alten Wohnung draußen sein muss.
+
+     Die frühere Fassung rechnete „Einzug minus 90 Tage“. Das ist keine
+     Näherung, sondern die falsche Regel: § 573c Abs. 1 BGB knüpft nicht
+     an einen Abstand in Tagen an, sondern an den Monat. Die Kündigung
+     muss bis zum dritten Werktag eines Monats zugehen, dann endet das
+     Mietverhältnis mit Ablauf des übernächsten Monats.
+
+     Wer zum 15. März einzieht, will das alte Mietverhältnis zum 31. März
+     beenden – dafür muss die Kündigung bis zum dritten Werktag im Januar
+     da sein. Die 90-Tage-Rechnung nannte den 15. Dezember: drei Wochen
+     zu früh, und das unter der Überschrift „spätestens“. Wer daraufhin
+     glaubt, die Frist verpasst zu haben, zahlt einen Monat länger doppelt. */
+  function kuendigungsHinweis(datum, ausProfil) {
+    const d = new Date(datum + 'T12:00:00');
+    if (isNaN(d.getTime())) return '';
+    const zu = new Date(d.getFullYear(), d.getMonth() + 1, 0, 12);
+    const frist = U.dritterWerktag(d.getFullYear(), d.getMonth() - 2);
+    return h`<p class="fein">${ausProfil ? 'Übernommen aus deinem Profil. ' : ''}Um das alte Mietverhältnis
+      zum ${U.dateDE(U.isoDate(zu))} zu beenden, muss die Kündigung spätestens am
+      ${U.dateDE(U.isoDate(frist))} beim Vermieter sein: bis zum dritten Werktag eines Monats, dann endet
+      das Mietverhältnis mit Ablauf des übernächsten Monats (§ 573c Abs. 1 BGB).</p>
+      <p class="fein">Feiertage sind dabei nicht berücksichtigt – sie sind je Bundesland verschieden. Gib
+      die Kündigung ein paar Tage früher ab und lass dir den Zugang bestätigen: Es zählt der Zugang, nicht
+      das Absendedatum.</p>`;
+  }
+
   function umzug() {
     const s = S.get();
     const datum = S.einzugsdatum();
@@ -499,10 +526,7 @@
         <section class="block">
           <label class="feld"><span>Geplanter Einzug</span>
             <input type="date" value="${datum}" data-tu-change="umzug-datum"></label>
-          ${datum ? h`<p class="fein">${!s.einzugsdatum ? 'Übernommen aus deinem Profil. ' : ''}Die Kündigung der alten
-            Wohnung müsste spätestens am
-            ${U.dateDE(U.isoDate(U.addDays(new Date(datum + 'T12:00:00'), -90)))} raus sein –
-            drei Monate Frist, zum Monatsende, spätestens am dritten Werktag des Monats.</p>` : ''}
+          ${datum ? kuendigungsHinweis(datum, !s.einzugsdatum) : ''}
           <div class="fortschritt">
             <div class="fortschritt__spur"><i style="width:${Math.round(erledigt / plan.length * 100)}%"></i></div>
             <b>${erledigt} von ${plan.length} erledigt</b>

@@ -855,6 +855,22 @@ Bedienelement ohne Beschriftung, kein Eingabefeld ohne Label, kein waagerechter
 die Eingabe abbricht, Textfelder behalten beim Tippen den Fokus, und keine
 Zahl erscheint doppelt.
 
+### Fristen sind Kalenderfristen
+
+Eine nach Jahren oder Monaten bestimmte Frist rechnet man nicht in Tagen
+(§§ 187, 188 BGB). Der 31. Dezember plus ein Jahr ist der 31. Dezember —
+nicht der 30., wie 365 Tage ergäben, sobald ein Schalttag dazwischenliegt.
+Der 29. Februar plus ein Jahr ist der 28. Februar, nicht der 1. März.
+`U.addJahre` und `U.addMonate` in `assets/util.js` rechnen so; wer eine
+neue Frist einbaut, nimmt sie und nicht `addDays`.
+
+Dieselbe Sorgfalt bei der Kündigungsfrist: § 573c Abs. 1 BGB knüpft nicht
+an einen Abstand in Tagen an, sondern an den Monat — Zugang bis zum
+dritten Werktag, Ende mit Ablauf des übernächsten Monats. `U.dritterWerktag`
+rechnet das aus.
+
+### Geprüft
+
 Die Serverseite wird gegen ihre eigenen Angriffe geprüft, nicht nur auf
 Funktion: wiederverwendete Aufforderung, verfälschte Signatur, gefälschte
 Herkunft, vertauschte Aufforderungen, als Anmeldung ausgegebene
@@ -862,6 +878,19 @@ Registrierung, unbekannter Schlüssel — dazu die Tokenprüfung gegen
 `alg: none`, `alg: HS256`, falschen Aussteller, falsche Zielgruppe,
 abgelaufene und nachträglich veränderte Token. Der Passkey-Durchgang läuft
 über einen virtuellen Authentikator, einmal mit ES256 und einmal mit RS256.
+
+Die Rechner werden nicht auf „läuft durch“ geprüft, sondern auf „stimmt
+die Zahl“: Rate, Restschuld und Volltilgungsdauer gegen die geschlossene
+Form der Annuitätenrechnung, die Grunderwerbsteuersätze gegen die
+amtlichen, die Einkommensgrenzen gegen § 9 WoFG, die Mietpreisbremse
+gegen § 556d, jede Kostensumme gegen die Summe ihrer Posten — über den
+ganzen Bestand, ohne einen negativen Betrag und ohne ein NaN.
+
+Dazu ungeordnetes Bedienen: mehrere tausend zufällige Klicks, Eingaben
+und Sprünge mit festem Startwert, angemeldet wie als Gast. Und die Lagen,
+in denen der Browser nicht mitspielt — Speicher gesperrt, Speicher voll,
+Stand kaputt, Server weg, Server antwortet Unsinn, Sitzung serverseitig
+gelöscht.
 
 Dazu ein durchgespielter Weg einer erfundenen Nutzerin – von der leeren Seite
 über Profil, Suche, Bewerbung und Rechner bis zum Umzugsplan. Automatische

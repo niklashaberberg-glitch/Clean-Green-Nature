@@ -2287,6 +2287,36 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 }
 .eigene__stand--laeuft { color: var(--warn); }
 
+/* Die Mail-Zeile unter einem Suchauftrag. Sie steht unter der Fußzeile
+   und nicht darin: Was eine Mail auslöst, ist keine Schaltfläche unter
+   anderen. */
+.agent__mail {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5em 1em;
+  padding: .6em .9em; border-top: 1px solid var(--rand);
+  background: var(--flaeche2);
+  border-radius: 0 0 var(--r-klein) var(--r-klein);
+}
+.agent__mail p { flex: 1 1 100%; margin: 0; }
+.agent__mail--aus { display: block; padding: .6em .9em; color: var(--text2); }
+
+/* Echte Anfragen im Postfach: mehr Zeilen je Eintrag als bei den
+   Beispielen, weil hier Adresse, Eckdaten und Zustand dazukommen. */
+.anfragen__ueber { font-size: .95rem; margin: 1.1em 0 .5em; }
+.anfragen__liste--echt > li { align-items: flex-start; padding: .8em 0; }
+.anfragen__zu { display: block; font-size: .82rem; color: var(--text2); }
+.anfragen__eck {
+  list-style: none; margin: .5em 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: .3em .8em; font-size: .82rem;
+}
+.anfragen__eck li {
+  background: var(--flaeche2); border-radius: var(--r-klein); padding: .18em .55em;
+}
+.anfragen__eck span { color: var(--text2); }
+.anfragen__text { margin: .5em 0; white-space: pre-wrap; }
+.anfragen__weg { display: flex; flex-wrap: wrap; gap: .3em 1em; margin: .4em 0; font-size: .85rem; }
+.anfragen__weg a { display: inline-flex; align-items: center; gap: .35em; }
+.anfragen__liste--echt .feld--flach { max-width: 12rem; margin-top: .4em; }
+
 </style>
 <noscript>
   <div style="max-width:640px;margin:12vh auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.6">
@@ -17003,8 +17033,99 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
      Suchaufträge
      ================================================================ */
 
+  /* ==================================================================
+     Suchauftrag per Mail
+
+     Der Suchauftrag im Browser zeigt beim nächsten Besuch, was neu ist.
+     Das ist nützlich – und es setzt voraus, dass jemand vorbeikommt.
+     Wohnungssuche besteht aber aus Warten: Man sucht zwei Wochen
+     täglich und hört dann auf. Was zurückholt, ist eine Mail mit einer
+     Wohnung, die passt, bevor dreihundert andere sie gesehen haben.
+
+     Deshalb hat jeder Suchauftrag hier einen zweiten Schalter. Er legt
+     denselben Filter noch einmal auf dem Server an – nur die Felder,
+     die der Server auch prüfen kann. Alles Übrige (Ausstattung,
+     Pendelzeit, WG-Merkmale) rechnet der Browser aus dem Profil, und
+     das kennt der Server nicht und soll es nicht kennen.
+
+     Die Folge davon ist ehrlich zu benennen: Die Mail meldet etwas
+     mehr, als die Suche im Browser zeigen würde. Lieber ein Treffer zu
+     viel in der Mail als eine Wohnung, die nie ankommt.
+     ================================================================== */
+  function serverFilter(f) {
+    const raus = {};
+    if (f.arten && f.arten.length === 1) raus.art = f.arten[0];
+    if (f.staedte && f.staedte.length === 1) raus.stadt = f.staedte[0];
+    if (f.viertel && f.viertel.length === 1) raus.viertelKey = f.viertel[0];
+    ['zimmerMin', 'zimmerMax', 'flaecheMin', 'flaecheMax'].forEach((k) => {
+      if (f[k] !== null && f[k] !== undefined && f[k] !== '') raus[k] = Number(f[k]);
+    });
+    if (f.preisMax) {
+      /* Ein Preisfeld, zwei Bedeutungen: bei Miete die Warmmiete, beim
+         Kauf der Kaufpreis. Beide zu setzen wäre falsch – dann fiele
+         jede Mietwohnung durch die Kaufpreisgrenze. */
+      if (raus.art === 'kauf') raus.preisMax = Number(f.preisMax);
+      else raus.warmMax = Number(f.preisMax);
+    }
+    return raus;
+  }
+
+  /* Was die Mail mehr meldet als die Suche – in Worten, nicht als
+     Fußnote. */
+  function mailUnschaerfe(f) {
+    const weg = [];
+    if (f.arten && f.arten.length > 1) weg.push('mehrere Angebotsarten');
+    if (f.staedte && f.staedte.length > 1) weg.push('mehrere Städte');
+    if (f.viertel && f.viertel.length > 1) weg.push('einzelne Viertel');
+    if (f.ausstattung && f.ausstattung.length) weg.push('Ausstattung');
+    if (f.maxPendel) weg.push('Pendelzeit');
+    if (f.energieMax) weg.push('Energieklasse');
+    if (f.baujahrMin) weg.push('Baujahr');
+    if (f.wgArt && f.wgArt.length) weg.push('WG-Merkmale');
+    return weg;
+  }
+
+  let mailAuftraege = null;   // vom Server, Kennung des lokalen Auftrags im Namen
+
+  function mailAuftraegeHolen() {
+    if (!amServer()) return Promise.resolve([]);
+    return TT.api.ruf('auftrag/meine').then((d) => {
+      mailAuftraege = d.auftraege || [];
+      return mailAuftraege;
+    }, () => { mailAuftraege = []; return mailAuftraege; });
+  }
+
+  const mailAuftragZu = (a) => (mailAuftraege || []).find((x) => x.name === a.name);
+
+  function mailSchalter(a) {
+    if (!amServer()) {
+      return h`<span class="fein agent__mail agent__mail--aus">${ico('nachricht')}Mail-Benachrichtigung
+        braucht ein Konto auf trimmotrade.de.</span>`;
+    }
+    const da = mailAuftragZu(a);
+    const unschaerfe = mailUnschaerfe(a.filter);
+    return h`<div class="agent__mail">
+      <label class="schalter schalter--klein">
+        <input type="checkbox" data-tu-change="agent-mail" data-id="${a.id}" ${da ? 'checked' : ''}>
+        <span>${ico('nachricht')}per Mail melden</span></label>
+      ${da ? h`<span class="fein">${da.takt === 'sofort' ? 'stündlich' : da.takt === 'woechentlich'
+        ? 'wöchentlich' : 'täglich'}${da.gesendet ? ' · zuletzt ' + U.since(new Date(da.gesendet * 1000).toISOString().slice(0, 10)) : ''}</span>`
+        : ''}
+      ${da && unschaerfe.length ? h`<p class="fein">Die Mail kann nicht alles: ${unschaerfe.join(', ')}
+        ${unschaerfe.length === 1 ? 'bleibt' : 'bleiben'} beim Verschicken unberücksichtigt. Lieber ein
+        Treffer zu viel in der Mail als eine Wohnung, die dich nie erreicht.</p>` : ''}
+    </div>`;
+  }
+
   function agenten() {
     const s = S.get();
+
+    if (amServer() && mailAuftraege === null) {
+      mailAuftraege = [];
+      mailAuftraegeHolen().then(() => {
+        if (ui.aktuell === 'agenten') ui.neuZeichnen();
+      });
+    }
     if (!s.agenten.length) {
       return {
         titel: 'Suchaufträge',
@@ -17057,6 +17178,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
                 <span>aktiv</span></label>
               <button type="button" class="link" data-tu="agent-weg" data-id="${a.id}">löschen</button>
             </footer>
+            ${mailSchalter(a)}
           </section>`;
       })}
       </div>`
@@ -17086,6 +17208,104 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
      Hier wird sichtbar, was auf der Preisseite behauptet wird: Anfragen
      mit Plus stehen oben. Damit das kein blindes Versprechen bleibt,
      steht daneben, warum – und zwar für die anbietende Seite lesbar. */
+
+  /* ==================================================================
+     Das echte Postfach
+
+     Hier landet, was wirklich geschrieben wurde. Der Unterschied zum
+     Block darunter ist kein technischer: Dort stehen Beispielanfragen
+     einer Vorführung, hier stehen Menschen, die auf eine Antwort warten.
+
+     Deshalb steht in jeder Zeile die Adresse und die Telefonnummer, wenn
+     jemand sie mitgeschickt hat, und deshalb gibt es den Zustand
+     „beantwortet“. Ein Postfach ohne Zustand ist nach zwanzig Anfragen
+     ein Haufen: Man weiß nicht mehr, wem man geschrieben hat, und
+     antwortet zweimal oder gar nicht.
+     ================================================================== */
+  let postfach = null;   // null = noch nicht geholt
+
+  const amServer = () => !!(TT.api && TT.api.da && TT.konto && TT.konto.angemeldet());
+
+  function postfachHolen() {
+    if (!amServer()) return Promise.resolve(null);
+    return TT.api.ruf('anfrage/postfach').then((d) => {
+      postfach = { eingang: d.eingang || [], ausgang: d.ausgang || [] };
+      return postfach;
+    }, () => {
+      postfach = { eingang: [], ausgang: [], fehler: true };
+      return postfach;
+    });
+  }
+
+  const ANFRAGE_STAND = [
+    ['neu', 'neu'], ['gelesen', 'gelesen'], ['beantwortet', 'beantwortet'], ['abgelehnt', 'abgesagt']
+  ];
+
+  const ECK_WORT = {
+    haushalt: 'Haushalt', einzug: 'Einzug ab', beschaeftigung: 'Beschäftigung',
+    einkommen: 'Einkommen', haustiere: 'Haustiere', raucher: 'Rauchen',
+    wbs: 'Wohnberechtigungsschein', buergschaft: 'Bürgschaft'
+  };
+
+  function echtesPostfach() {
+    if (!amServer() || !postfach) return '';
+    const ein = postfach.eingang || [];
+    const aus = postfach.ausgang || [];
+    if (!ein.length && !aus.length) return '';
+
+    return h`<section class="block">
+      <div class="block__kopfzeile">
+        <h2>${ico('nachricht')}Echte Anfragen</h2>
+        <span class="fein">${ein.length} ${U.plural(ein.length, 'eingegangen', 'eingegangen')} ·
+          ${aus.length} ${U.plural(aus.length, 'geschrieben', 'geschrieben')}</span>
+      </div>
+
+      ${ein.length ? h`<h3 class="anfragen__ueber">An deine Inserate</h3>
+        <ol class="anfragen__liste anfragen__liste--echt">
+          ${ein.map((a) => h`<li class="stand-${a.stand}">
+            ${raw(TT.img.avatar(a.name || '?', 34))}
+            <div>
+              <b>${a.name || 'ohne Namen'}
+                ${a.stand === 'neu' ? ui.badge('neu', 'gut') : ''}
+                ${a.stand === 'weg' ? ui.badge('Inserat gelöscht', 'neutral') : ''}</b>
+              <span class="anfragen__zu"><a href="#/objekt/${a.inserat}">${U.truncate(a.titel || '', 44)}</a>
+                · ${U.since(new Date(a.angelegt * 1000).toISOString().slice(0, 10))}</span>
+              ${Object.keys(a.eckdaten || {}).length ? h`<ul class="anfragen__eck">
+                ${Object.keys(a.eckdaten).map((k) => h`<li><span>${ECK_WORT[k] || k}</span> ${a.eckdaten[k]}</li>`)}
+              </ul>` : ''}
+              <p class="anfragen__text">${a.text}</p>
+              <p class="anfragen__weg">
+                ${a.mail ? h`<a href="mailto:${a.mail}">${ico('nachricht')}${a.mail}</a>` : ''}
+                ${a.telefon ? h`<a href="tel:${String(a.telefon).replace(/\s/g, '')}">${ico('person')}${a.telefon}</a>` : ''}
+              </p>
+              <label class="feld feld--flach"><span class="nur-sr">Stand</span>
+                <select data-tu-change="anfrage-stand" data-id="${a.id}">
+                  ${ANFRAGE_STAND.map((st) => h`<option value="${st[0]}" ${a.stand === st[0] ? 'selected' : ''}>${st[1]}</option>`)}
+                </select></label>
+            </div>
+          </li>`)}
+        </ol>
+        <p class="fein">Die Adresse steht hier und in keiner Mail. Wer antwortet, gibt seine eigene frei –
+          niemand sonst.</p>` : ''}
+
+      ${aus.length ? h`<h3 class="anfragen__ueber">Von dir geschrieben</h3>
+        <ol class="anfragen__liste anfragen__liste--echt">
+          ${aus.map((a) => h`<li class="stand-${a.stand}">
+            <div>
+              <b><a href="#/objekt/${a.inserat}">${U.truncate(a.titel || 'Inserat entfernt', 46)}</a>
+                ${a.stand === 'beantwortet' ? ui.badge('beantwortet', 'gut') : ''}
+                ${a.stand === 'abgelehnt' ? ui.badge('abgesagt', 'neutral') : ''}
+                ${a.stand === 'weg' ? ui.badge('Inserat gelöscht', 'neutral') : ''}
+                ${a.stand === 'neu' ? ui.badge('noch ungelesen', 'warn') : ''}</b>
+              <span>${U.since(new Date(a.angelegt * 1000).toISOString().slice(0, 10))}</span>
+              <p class="anfragen__text">${U.truncate(a.text, 220)}</p>
+            </div>
+          </li>`)}
+        </ol>
+        <p class="fein">„Noch ungelesen“ heißt nicht ignoriert. Viele öffnen ihr Postfach einmal am Tag.
+          Nachfassen lohnt sich erfahrungsgemäß nach drei bis vier Tagen, nicht früher.</p>` : ''}
+    </section>`;
+  }
 
   function eigenesPostfach() {
     const s = S.get();
@@ -17133,6 +17353,18 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   function nachrichten(route) {
     const s = S.get();
+
+    /* Beim ersten Öffnen vom Server holen und danach nur diesen einen
+       Block nachtragen – nicht die Seite neu zeichnen: Darunter steht
+       ein Verlauf, in dem jemand gerade tippt. */
+    if (amServer() && postfach === null) {
+      postfach = { eingang: [], ausgang: [] };
+      postfachHolen().then(() => {
+        if (ui.aktuell !== 'nachrichten') return;
+        const kasten = U.$('#echtes-postfach');
+        if (kasten) kasten.innerHTML = String(echtesPostfach());
+      });
+    }
     const aktivId = route.arg || (s.threads[0] ? s.threads[0].id : null);
     const aktiv = s.threads.find((t) => t.id === aktivId);
     if (aktiv && aktiv.ungelesen) setTimeout(() => { S.threadGelesen(aktiv.id); ui.aktualisiereZaehler(); }, 400);
@@ -17142,6 +17374,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         titel: 'Nachrichten',
         html: h`<div class="seite seite--schmal">
           <header class="seite__kopf"><h1>${ico('nachricht')}Nachrichten</h1></header>
+          <div id="echtes-postfach">${echtesPostfach()}</div>
           ${eigenesPostfach()}
           <div class="leer">${ico('nachricht')}<h2>Noch kein eigener Verlauf</h2>
             <p>Sobald du ein Inserat anschreibst, erscheint der Verlauf hier.</p>
@@ -17153,6 +17386,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       titel: 'Nachrichten',
       html: h`<div class="seite">
         <header class="seite__kopf"><h1>${ico('nachricht')}Nachrichten</h1></header>
+        <div id="echtes-postfach">${echtesPostfach()}</div>
         ${eigenesPostfach()}
         <div class="post">
           <nav class="post__liste" aria-label="Verläufe">
@@ -17464,6 +17698,46 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   ui.ansichten.merkliste = merkliste;
   ui.ansichten.vergleich = vergleich;
+  ui.aktionRegistrieren('agent-mail', (el) => {
+    const a = S.get().agenten.find((x) => x.id === el.dataset.id);
+    if (!a) return;
+    const da = mailAuftragZu(a);
+    el.disabled = true;
+    const fertig = () => { el.disabled = false; ui.neuZeichnen(); };
+
+    if (da) {
+      TT.api.ruf('auftrag/weg', { id: da.id })
+        .then(() => mailAuftraegeHolen())
+        .then(() => { ui.toast('Keine Mails mehr für diesen Suchauftrag.'); fertig(); },
+          (e) => { ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht'); fertig(); });
+      return;
+    }
+    TT.api.ruf('auftrag/neu', {
+      name: a.name,
+      filter: serverFilter(a.filter),
+      takt: P.istPlus() ? 'sofort' : 'taeglich',
+      plus: P.istPlus()
+    }).then(() => mailAuftraegeHolen())
+      .then(() => {
+        ui.toast('Eingerichtet. Du bekommst eine Mail, sobald etwas Passendes dazukommt.', 'gut');
+        if (TT.markt) TT.markt.zaehle('auftrag-neu');
+        fertig();
+      }, (e) => {
+        ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht');
+        fertig();
+      });
+  });
+
+  ui.aktionRegistrieren('anfrage-stand', (el) => {
+    const id = el.dataset.id;
+    const stand = el.value;
+    TT.api.ruf('anfrage/stand', { id, stand }).then(() => {
+      const a = (postfach.eingang || []).find((x) => x.id === id);
+      if (a) a.stand = stand;
+      ui.toast('Vermerkt.', 'gut');
+    }, (e) => ui.toast((e && e.text) || 'Das ließ sich nicht vermerken.', 'schlecht'));
+  });
+
   ui.ansichten.agenten = agenten;
   ui.ansichten.nachrichten = nachrichten;
   ui.ansichten.umzug = umzug;

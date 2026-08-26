@@ -2271,3 +2271,33 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   font-size: .78rem; font-weight: 600;
 }
 .eigene__stand--laeuft { color: var(--warn); }
+
+/* Die Mail-Zeile unter einem Suchauftrag. Sie steht unter der Fußzeile
+   und nicht darin: Was eine Mail auslöst, ist keine Schaltfläche unter
+   anderen. */
+.agent__mail {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5em 1em;
+  padding: .6em .9em; border-top: 1px solid var(--rand);
+  background: var(--flaeche2);
+  border-radius: 0 0 var(--r-klein) var(--r-klein);
+}
+.agent__mail p { flex: 1 1 100%; margin: 0; }
+.agent__mail--aus { display: block; padding: .6em .9em; color: var(--text2); }
+
+/* Echte Anfragen im Postfach: mehr Zeilen je Eintrag als bei den
+   Beispielen, weil hier Adresse, Eckdaten und Zustand dazukommen. */
+.anfragen__ueber { font-size: .95rem; margin: 1.1em 0 .5em; }
+.anfragen__liste--echt > li { align-items: flex-start; padding: .8em 0; }
+.anfragen__zu { display: block; font-size: .82rem; color: var(--text2); }
+.anfragen__eck {
+  list-style: none; margin: .5em 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: .3em .8em; font-size: .82rem;
+}
+.anfragen__eck li {
+  background: var(--flaeche2); border-radius: var(--r-klein); padding: .18em .55em;
+}
+.anfragen__eck span { color: var(--text2); }
+.anfragen__text { margin: .5em 0; white-space: pre-wrap; }
+.anfragen__weg { display: flex; flex-wrap: wrap; gap: .3em 1em; margin: .4em 0; font-size: .85rem; }
+.anfragen__weg a { display: inline-flex; align-items: center; gap: .35em; }
+.anfragen__liste--echt .feld--flach { max-width: 12rem; margin-top: .4em; }

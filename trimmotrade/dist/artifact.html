@@ -13657,9 +13657,13 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     ['wohnberechtigungsschein.html', 'Wohnberechtigungsschein'],
     ['wohnung-verkaufen-vorbereiten.html', 'Verkauf vorbereiten']
   ];
+  /* Nur dort, wo die Dateien auch liegen: im Stamm der Website, neben
+     index.html. In der Einzeldatei, im Artefakt und in einer
+     eingebetteten Kopie wären es tote Verweise – und ein toter Verweis
+     ist schlimmer als ein fehlender. */
   const RATGEBER_DA = typeof location !== 'undefined'
     && (location.protocol === 'http:' || location.protocol === 'https:')
-    && !/\/(dist|artifact)/.test(location.pathname);
+    && /^\/(index\.html)?$/.test(location.pathname);
 
   function schaleZeichnen() {
     const wurzel = document.getElementById('trimmotrade');

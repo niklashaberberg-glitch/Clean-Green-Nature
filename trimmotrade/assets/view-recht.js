@@ -220,17 +220,22 @@
 
         <div class="block block--betont">
           <h2>${ico('schloss')}Das Wichtigste zuerst</h2>
-          <p>TrimmoTrade rechnet im Browser. Suche, Bewertung, Karte, Ringtausch, Merkliste, Nachrichten,
-            eigene Inserate und Profil entstehen auf deinem Gerät und bleiben dort. Sie werden nicht an den
+          <p>TrimmoTrade rechnet im Browser. Suche, Bewertung, Karte, Ringtausch, Merkliste, Vergleich,
+            Notizen und Profil entstehen auf deinem Gerät und bleiben dort. Sie werden nicht an den
             Anbieter übertragen und nicht an Dritte weitergegeben.</p>
-          <p>Zum Server geht genau eine Sache: die <b>Anmeldung</b>. Er beantwortet die Frage, wer du bist –
-            mehr kennt er nicht. Was dort gespeichert wird, steht vollständig in Abschnitt 4; es ist eine
-            kurze Liste, und sie enthält nichts von dem, was du in der Anwendung eingibst.</p>
+          <p>Zum Server geht, was andere erreichen muss – und sonst nichts. Das sind vier Dinge: die
+            <b>Anmeldung</b> (Abschnitt 4), die <b>Inserate</b>, die du veröffentlichst (Abschnitt 5), die
+            <b>Anfragen</b>, die du schreibst oder bekommst (Abschnitt 6), und deine <b>Suchaufträge</b>,
+            damit die Mail auch dann herausgeht, wenn du gerade nicht hier bist (Abschnitt 7).</p>
+          <p>Die Trennlinie verläuft nicht willkürlich: Ein Inserat ist eine Veröffentlichung und muss
+            andere erreichen. Eine Merkliste ist eine Notiz und geht niemanden etwas an.</p>
           <p>Ohne Anmeldung geht auch das nicht: Suche und Inserate lassen sich ansehen, ohne dass ein
             Konto entsteht.</p>
           <p>Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten
-            gebildet und keine Werbung nach deinen Interessen ausgespielt. Deshalb erscheint auch kein Fenster,
-            das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.</p>
+            gebildet und keine Werbung nach deinen Interessen ausgespielt. Gezählt wird nur, wie oft eine
+            Ansicht an einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse, ohne Verlauf
+            (Abschnitt 9). Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts,
+            wozu eine Einwilligung nötig wäre.</p>
         </div>
 
         <div class="block rechtstext">
@@ -273,8 +278,9 @@
             <li>${ico('pruefen')}<span>deine offenen Sitzungen: Zeitpunkt, IP-Adresse und Browserangabe des
               Geräts, damit du sie beenden kannst</span></li>
           </ul>
-          <p><b>Nicht auf dem Server liegen:</b> Inserate, Merkliste, Suchaufträge, Nachrichten, Notizen,
-            Profil, Bilder und der Dokumententresor. Diese Daten verlassen deinen Browser nicht.</p>
+          <p><b>Nicht auf dem Server liegen:</b> Merkliste, Vergleich, Bewerbungstafel, Notizen, Profil,
+            Suchverlauf, jede Berechnung und der Dokumententresor. Diese Daten verlassen deinen Browser
+            nicht.</p>
           <dl class="rechtsliste">
             <dt>Zweck</dt><dd>Bereitstellung des Zugangs, Zuordnung von Inseraten und Anfragen, Schutz vor
               missbräuchlicher Mehrfachanlage</dd>
@@ -324,17 +330,112 @@
             spätestens 24 Stunden gelöscht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO – ohne diese
             Maßnahme wäre ein sechsstelliger Code in kurzer Zeit zu erraten.</p>
 
-          <h2>5. Speicher deines Browsers</h2>
+          <h2>5. Inserate, die du veröffentlichst</h2>
+          <p>Ein Inserat ist eine Veröffentlichung. Es ist für jeden sichtbar, auch ohne Konto, und es lässt
+            sich verweisen und teilen. Gespeichert werden die Angaben, die du im Formular machst – Art,
+            Lage, Größe, Preis, Ausstattung, Beschreibung, Energieausweis und Bilder –, dazu die Verbindung
+            zu deinem Konto, der Zeitpunkt und die Zahl der Aufrufe und Anfragen.</p>
+          <p>Als Name der anbietenden Seite erscheint der Name aus deinem Konto. <b>Deine E-Mail-Adresse und
+            deine Telefonnummer stehen nicht im Inserat</b> und werden auch nicht an Suchende übermittelt.</p>
+          <p>Hochgeladene Bilder werden beim Empfang neu berechnet. Dabei werden Aufnahmedaten aus der Datei
+            entfernt – insbesondere Ortsangaben, die viele Kameras und Telefone einbetten. Diese Angaben
+            würden sonst die genaue Adresse verraten, obwohl im Inserat nur das Viertel steht.</p>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Veröffentlichung deines Angebots, Auffindbarkeit in der Suche, Schutz anderer
+              Nutzender vor betrügerischen Angeboten</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags; für die
+              Prüfung auf Betrugsmuster zusätzlich Art. 6 Abs. 1 lit. f DSGVO</dd>
+            <dt>Speicherdauer</dt><dd>bis du das Inserat löschst, längstens 60 Tage nach der letzten
+              Bestätigung. Danach verfällt es und wird entfernt. Mit dem Inserat verschwinden die Bilder.</dd>
+            <dt>Empfänger</dt><dd>die Öffentlichkeit, soweit das Inserat veröffentlicht ist; im Übrigen der
+              Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO</dd>
+          </dl>
+          <p class="fein">Jedes Inserat wird beim Anlegen auf typische Betrugsmuster geprüft – etwa Vorkasse,
+            Schlüsselversand per Post oder einen Preis weit unter der ortsüblichen Vergleichsmiete. Gefunden
+            wird nicht gelöscht, sondern gekennzeichnet. Eine automatisierte Entscheidung mit rechtlicher
+            Wirkung im Sinne des Art. 22 DSGVO ist damit nicht verbunden.</p>
+
+          <h2>6. Anfragen</h2>
+          <p>Wenn du auf ein Inserat antwortest, wird deine Nachricht auf dem Server gespeichert und der
+            anbietenden Seite in deren Postfach angezeigt. Gespeichert werden dein Text, dein Name, deine
+            E-Mail-Adresse und – falls angegeben – deine Telefonnummer sowie die Eckdaten, die du im Dialog
+            <b>ausdrücklich freigegeben</b> hast.</p>
+          <p>Welche Eckdaten das sind, steht vor dem Absenden im Dialog, Feld für Feld. Möglich sind
+            Haushaltsgröße, Einzugstermin, Beschäftigung, eine Einkommens<b>spanne</b>, Haustiere, Rauchen,
+            Wohnberechtigungsschein und Bürgschaft. Der Betrag deines Einkommens wird bewusst nur als Spanne
+            übermittelt. Angaben zu Herkunft, Religion, Gesundheit, Familienplanung oder sexueller
+            Orientierung – besondere Kategorien nach Art. 9 DSGVO – werden nicht übermittelt, auch dann
+            nicht, wenn sie im Text stehen sollten; danach zu fragen wäre zudem nach § 19 AGG unzulässig.</p>
+          <p><b>Die E-Mail an die anbietende Seite enthält weder deine Adresse noch deine Telefonnummer.</b>
+            Sie enthält nur den Hinweis, dass eine Anfrage vorliegt, und einen Verweis in das Postfach.
+            Umgekehrt bekommst du die Adresse der anbietenden Seite nicht – erst wer antwortet, gibt seine
+            eigene frei.</p>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Herstellung des Kontakts zwischen suchender und anbietender Seite</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – vorvertragliche Maßnahme auf deine
+              Anfrage hin</dd>
+            <dt>Speicherdauer</dt><dd>bis zur Löschung deines Kontos. Eine Anfrage bleibt bestehen, auch wenn
+              das Inserat gelöscht wird: Sie gehört beiden Seiten, und ein Verlauf, der verschwindet, weil
+              die Gegenseite aufräumt, ist keiner.</dd>
+            <dt>Empfänger</dt><dd>die anbietende Seite des jeweiligen Inserats</dd>
+          </dl>
+
+          <h2>7. Suchaufträge und Erinnerungen</h2>
+          <p>Ein Suchauftrag speichert deine Filter und deine E-Mail-Adresse auf dem Server. Kommt ein
+            passendes Inserat dazu, geht eine Mail an dich hinaus. Ohne Speicherung auf dem Server ginge das
+            nicht: Der Browser kann nichts schicken, während er geschlossen ist.</p>
+          <p>Wer inseriert, bekommt außerdem eine Erinnerung, bevor ein Inserat nach 60 Tagen verfällt.</p>
+          <p><b>Jede dieser Mails enthält einen Abmeldeverweis, der ohne Anmeldung wirkt.</b> Ein Klick
+            genügt, und es kommt nichts mehr.</p>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Benachrichtigung über neue Angebote, Aktualität des Bestands</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des von dir angelegten
+              Suchauftrags</dd>
+            <dt>Speicherdauer</dt><dd>bis du den Suchauftrag löschst oder dein Konto beendest</dd>
+            <dt>Widerspruch</dt><dd>jederzeit über den Verweis in der Mail oder in der Anwendung
+              (Art. 21 DSGVO)</dd>
+          </dl>
+
+          <h2>8. Meldungen zu Inseraten</h2>
+          <p>Ein Inserat lässt sich melden, ohne dass ein Konto nötig ist – so verlangt es Art. 16 Abs. 1 der
+            Verordnung (EU) 2022/2065 über digitale Dienste. Gespeichert werden der Grund, dein Text und,
+            falls du sie angibst, deine E-Mail-Adresse. Die Adresse ist freiwillig; ohne sie lässt sich die
+            Entscheidung nicht mitteilen.</p>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Prüfung des gemeldeten Inhalts, Empfangsbestätigung und Mitteilung der
+              Entscheidung</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. c DSGVO in Verbindung mit Art. 16 der Verordnung
+              (EU) 2022/2065 – rechtliche Verpflichtung</dd>
+            <dt>Speicherdauer</dt><dd>so lange, wie die Nachvollziehbarkeit der Entscheidung es erfordert;
+              danach Löschung</dd>
+          </dl>
+
+          <h2>9. Reichweitenmessung ohne Personenbezug</h2>
+          <p>Um zu erkennen, welche Teile der Anwendung benutzt werden, wird eine einzige Tabelle geführt.
+            Sie hat drei Spalten: <b>Tag</b>, <b>Name der Ansicht</b> und <b>Anzahl</b>. Aus „am 3. März
+            412 Suchen“ lässt sich niemand herauslesen.</p>
+          <p>Nicht gespeichert werden: Kennung, IP-Adresse, Sitzung, Reihenfolge der Aufrufe, Gerät,
+            Herkunftsseite. Auf deinem Gerät wird dafür nichts abgelegt, weshalb sich die Frage nach
+            § 25 TDDDG nicht stellt. Ein Personenbezug im Sinne des Art. 4 Nr. 1 DSGVO entsteht nicht;
+            damit ist die DSGVO auf diese Zählung nicht anwendbar.</p>
+          <p class="fein">Warum das hier trotzdem steht: Wer wissen will, was mit ihm passiert, soll nicht
+            erst herausfinden müssen, was <em>nicht</em> in der Erklärung steht.</p>
+
+          <h2>10. Speicher deines Browsers</h2>
           <p>TrimmoTrade legt deine Eingaben im lokalen Speicher deines Browsers ab – Profil, Merkliste,
-            Suchaufträge, Nachrichten, eigene Inserate und die Einstellungen zur Darstellung. Diese Daten
-            verlassen dein Gerät nicht. Der Anbieter hat keinen Zugriff darauf.</p>
+            Vergleich, Bewerbungstafel, Notizen, gespeicherte Filter und die Einstellungen zur Darstellung.
+            Diese Daten verlassen dein Gerät nicht. Der Anbieter hat keinen Zugriff darauf.</p>
+          <p class="fein">Zwei Dinge liegen dabei an beiden Stellen, und das hat einen Grund: Ein Inserat,
+            das du veröffentlichst, steht auf dem Server (Abschnitt 5) – sonst könnte es niemand sehen.
+            Ein Suchauftrag, der dir Mails schickt, steht ebenfalls dort (Abschnitt 7) – sonst käme keine
+            Mail, während dein Browser geschlossen ist. Was ohne Server auskommt, bleibt hier.</p>
           <p>Für den Zugriff auf diesen Speicher ist keine Einwilligung erforderlich: Er ist unbedingt
             erforderlich, damit der von dir ausdrücklich gewünschte Dienst überhaupt funktioniert
             (§ 25 Abs. 2 Nr. 2 des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes).</p>
           <p>Du kannst diese Daten jederzeit im Fußbereich unter „Meine Daten“ als Datei sichern oder
             vollständig löschen. Sie verschwinden ebenfalls, wenn du die Browserdaten löschst.</p>
 
-          <h2>6. Dokumententresor</h2>
+          <h2>11. Dokumententresor</h2>
           <p>Legst du Unterlagen im Dokumententresor ab, werden sie <b>vor dem Speichern</b> in deinem Browser
             verschlüsselt – mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem Kennwort und wird
             nirgends gespeichert. Verschlüsselt werden auch die Dateinamen.</p>
@@ -351,7 +452,7 @@
           <p class="fein">Auch die verschlüsselten Dateien liegen ausschließlich in deinem Browser. Der
             Server der Anmeldung sieht sie nie – er kennt weder Dateien noch Kennwort noch Schlüssel.</p>
 
-          <h2>7. Werbung im freien Tarif</h2>
+          <h2>12. Werbung im freien Tarif</h2>
           <p>Der freie Tarif wird über Anzeigen finanziert. Diese Anzeigen sind fest hinterlegt und werden
             nach der Stelle ausgewählt, an der sie erscheinen – nicht nach deiner Person, deinem Verhalten
             oder deinen Eingaben. Es findet kein Abgleich mit Werbenetzwerken statt, es werden keine Kennungen
@@ -360,7 +461,7 @@
           <p>Anzeigen sind stets als solche gekennzeichnet (§ 5a Abs. 4 des Gesetzes gegen den unlauteren
             Wettbewerb) und werden nie im Erscheinungsbild eines Inserats dargestellt.</p>
 
-          <h2>8. Kontaktaufnahme und Hilfe</h2>
+          <h2>13. Kontaktaufnahme und Hilfe</h2>
           <p>Schreibst du per E-Mail, verarbeitet der Anbieter die Angaben aus deiner Nachricht, um sie zu
             beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO bei vertragsbezogenen Anfragen, sonst
             Art. 6 Abs. 1 lit. f DSGVO. Die Nachrichten werden gelöscht, sobald die Anfrage abschließend
@@ -373,7 +474,7 @@
             die du selbst einträgst. Profil, Merkliste und die Inhalte des Dokumententresors sind nicht
             enthalten und werden auch nicht angehängt.</p>
 
-          <h2>9. Bezahlung von TrimmoTrade Plus</h2>
+          <h2>14. Bezahlung von TrimmoTrade Plus</h2>
           <p>Für bezahlte Verträge werden die zur Abwicklung nötigen Daten verarbeitet: Name, E-Mail-Adresse,
             Zahlungsdaten sowie Beginn und Laufzeit. Die Zahlung selbst wickelt ein Zahlungsdienstleister ab,
             an den die dafür erforderlichen Daten übermittelt werden.</p>
@@ -386,19 +487,19 @@
           <p class="fein">Solange Plus nur über einen Gründerplatz vergeben wird, fallen weder Zahlungsdaten
             noch Rechnungen an.</p>
 
-          <h2>10. Keine automatisierte Entscheidung über Personen</h2>
+          <h2>15. Keine automatisierte Entscheidung über Personen</h2>
           <p>TrimmoTrade bewertet Angebote, nicht Menschen. Die Passung, die Chancenschätzung und der Prüfhinweis
             beziehen sich auf Wohnungen und Inseratstexte und dienen deiner eigenen Einordnung. Eine
             automatisierte Entscheidung mit rechtlicher Wirkung gegenüber Personen im Sinne von Art. 22 DSGVO
             findet nicht statt.</p>
 
-          <h2>11. Übermittlung in Drittländer</h2>
+          <h2>16. Übermittlung in Drittländer</h2>
           <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google oder Microsoft hinaus findet
             keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des
             Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit
             E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus.</p>
 
-          <h2>12. Deine Rechte</h2>
+          <h2>17. Deine Rechte</h2>
           <ul class="pruef">
             <li>${ico('pruefen')}<span><b>Auskunft</b> darüber, welche Daten verarbeitet werden (Art. 15 DSGVO)</span></li>
             <li>${ico('pruefen')}<span><b>Berichtigung</b> unrichtiger Daten (Art. 16 DSGVO)</span></li>
@@ -414,17 +515,17 @@
           <p class="fein">Weil deine Eingaben ausschließlich in deinem Browser liegen, kannst du Auskunft,
             Übertragbarkeit und Löschung dort unmittelbar selbst ausüben: im Fußbereich unter „Meine Daten“.</p>
 
-          <h2>13. Beschwerderecht</h2>
+          <h2>18. Beschwerderecht</h2>
           <p>Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in
             dem Mitgliedstaat deines Aufenthaltsorts, deines Arbeitsplatzes oder des Orts des mutmaßlichen
             Verstoßes. Für den Anbieter zuständig ist ${rw('aufsichtsbehoerde', 'zuständige Aufsichtsbehörde')}.</p>
 
-          <h2>14. Pflicht zur Bereitstellung</h2>
+          <h2>19. Pflicht zur Bereitstellung</h2>
           <p>Du bist nicht verpflichtet, personenbezogene Daten bereitzustellen. Ohne die Angaben im Profil
             fallen allerdings die Funktionen weg, die darauf aufbauen – etwa die Passung oder die
             Chancenschätzung.</p>
 
-          <h2>15. Änderungen</h2>
+          <h2>20. Änderungen</h2>
           <p>Diese Erklärung gilt in der Fassung vom ${R.stand()}. Ändert sich die Anwendung, wird sie
             angepasst.</p>
         </div>
@@ -470,6 +571,15 @@
             Anlageberatung und ersetzen eine solche nicht.</p>
           <p>(4) Für Richtigkeit, Vollständigkeit und Aktualität von Angeboten, die Dritte einstellen, steht
             der Anbieter nicht ein.</p>
+          <p>(5) Ein eingestelltes Inserat ist eine <b>Veröffentlichung</b>: Es ist für jedermann sichtbar,
+            auch ohne Konto, und über einen dauerhaften Verweis erreichbar. Es <b>läuft 60 Tage nach der
+            letzten Bestätigung ab</b> und wird danach entfernt. Der Anbieter erinnert vorher per E-Mail;
+            eine Bestätigung verlängert die Laufzeit um weitere 60 Tage. Diese Befristung dient der
+            Aktualität des Bestands und gilt für alle gleichermaßen.</p>
+          <p>(6) Anfragen zwischen Nutzenden werden über den Dienst zugestellt. Der Anbieter gibt dabei
+            <b>weder die E-Mail-Adresse noch die Telefonnummer</b> einer Seite an die andere weiter; die
+            benachrichtigende E-Mail enthält lediglich den Hinweis auf eine vorliegende Anfrage. Welche
+            Angaben eine Anfrage begleiten, entscheidet die anfragende Person vor dem Absenden.</p>
 
           <h2>§ 3 Anmeldung und Zustandekommen des Vertrags</h2>
           <p>(1) Suche und Inserate lassen sich ohne Anmeldung ansehen. Ein Konto braucht, wer Inserate

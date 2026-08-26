@@ -3003,6 +3003,132 @@
     'Zur Suche': 'To the search'
   });
 
+
+  /* Die Rechtstexte zum Markt – Abschnitte 5 bis 9 der
+     Datenschutzerklärung und die neuen Absätze in § 2 der AGB. */
+  e({
+    "TrimmoTrade rechnet im Browser. Suche, Bewertung, Karte, Ringtausch, Merkliste, Vergleich, Notizen und Profil entstehen auf deinem Gerät und bleiben dort. Sie werden nicht an den Anbieter übertragen und nicht an Dritte weitergegeben.":
+      "TrimmoTrade does its calculating in the browser. Search, assessment, map, swap ring, shortlist, comparison, notes and profile are created on your device and stay there. They are not transmitted to the provider and not passed on to third parties.",
+    "Zum Server geht, was andere erreichen muss – und sonst nichts. Das sind vier Dinge: die":
+      "What has to reach other people goes to the server – and nothing else. That is four things: the",
+    ", die du veröffentlichst (Abschnitt 5), die":
+      "you publish (section 5), the",
+    ", die du schreibst oder bekommst (Abschnitt 6), und deine":
+      "you write or receive (section 6), and your",
+    ", damit die Mail auch dann herausgeht, wenn du gerade nicht hier bist (Abschnitt 7).":
+      "so that the email goes out even when you are not here (section 7).",
+    "Die Trennlinie verläuft nicht willkürlich: Ein Inserat ist eine Veröffentlichung und muss andere erreichen. Eine Merkliste ist eine Notiz und geht niemanden etwas an.":
+      "The dividing line is not arbitrary: a listing is a publication and has to reach other people. A shortlist is a note and is nobody else’s business.",
+    "Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten gebildet und keine Werbung nach deinen Interessen ausgespielt. Gezählt wird nur, wie oft eine Ansicht an einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse, ohne Verlauf (Abschnitt 9). Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.":
+      "No audience-measurement tools are used, no profiles of your behaviour are built and no interest-based advertising is shown. All that is counted is how often a view was opened in total on a given day – with no identifier, no address, no history (section 9). That is why no window appears asking for consent: there is nothing consent would be needed for.",
+    "Merkliste, Vergleich, Bewerbungstafel, Notizen, Profil, Suchverlauf, jede Berechnung und der Dokumententresor. Diese Daten verlassen deinen Browser nicht.":
+      "Shortlist, comparison, application board, notes, profile, search history, every calculation and the document vault. This data does not leave your browser.",
+    "5. Inserate, die du veröffentlichst":
+      "5. Listings you publish",
+    "Ein Inserat ist eine Veröffentlichung. Es ist für jeden sichtbar, auch ohne Konto, und es lässt sich verweisen und teilen. Gespeichert werden die Angaben, die du im Formular machst – Art, Lage, Größe, Preis, Ausstattung, Beschreibung, Energieausweis und Bilder –, dazu die Verbindung zu deinem Konto, der Zeitpunkt und die Zahl der Aufrufe und Anfragen.":
+      "A listing is a publication. It is visible to anyone, with or without an account, and it can be linked to and shared. What is stored is what you enter in the form – type, location, size, price, features, description, energy certificate and images – plus the link to your account, the time and the number of views and enquiries.",
+    "Als Name der anbietenden Seite erscheint der Name aus deinem Konto.":
+      "The advertiser name shown is the name from your account.",
+    "Deine E-Mail-Adresse und deine Telefonnummer stehen nicht im Inserat":
+      "Your email address and your phone number do not appear in the listing",
+    "und werden auch nicht an Suchende übermittelt.":
+      "and are not passed on to searchers either.",
+    "Hochgeladene Bilder werden beim Empfang neu berechnet. Dabei werden Aufnahmedaten aus der Datei entfernt – insbesondere Ortsangaben, die viele Kameras und Telefone einbetten. Diese Angaben würden sonst die genaue Adresse verraten, obwohl im Inserat nur das Viertel steht.":
+      "Uploaded images are recalculated on receipt. Capture data is removed from the file in the process – in particular location data, which many cameras and phones embed. Otherwise that data would give away the exact address even though the listing names only the district.",
+    "Veröffentlichung deines Angebots, Auffindbarkeit in der Suche, Schutz anderer Nutzender vor betrügerischen Angeboten":
+      "Publishing your offer, making it findable in the search, protecting other users from fraudulent offers",
+    "Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags; für die Prüfung auf Betrugsmuster zusätzlich Art. 6 Abs. 1 lit. f DSGVO":
+      "Art. 6(1)(b) GDPR – performance of the user agreement; for the fraud-pattern check additionally Art. 6(1)(f) GDPR",
+    "bis du das Inserat löschst, längstens 60 Tage nach der letzten Bestätigung. Danach verfällt es und wird entfernt. Mit dem Inserat verschwinden die Bilder.":
+      "until you delete the listing, at most 60 days after the last confirmation. After that it expires and is removed. The images go with the listing.",
+    "die Öffentlichkeit, soweit das Inserat veröffentlicht ist; im Übrigen der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO":
+      "the public, insofar as the listing is published; otherwise the hosting provider as a processor under Art. 28 GDPR",
+    "Jedes Inserat wird beim Anlegen auf typische Betrugsmuster geprüft – etwa Vorkasse, Schlüsselversand per Post oder einen Preis weit unter der ortsüblichen Vergleichsmiete. Gefunden wird nicht gelöscht, sondern gekennzeichnet. Eine automatisierte Entscheidung mit rechtlicher Wirkung im Sinne des Art. 22 DSGVO ist damit nicht verbunden.":
+      "Every listing is checked for typical fraud patterns when it is created – payment up front, keys sent by post, or a price far below the local comparable rent. What is found is not deleted but labelled. No automated decision with legal effect within the meaning of Art. 22 GDPR is involved.",
+    "Wenn du auf ein Inserat antwortest, wird deine Nachricht auf dem Server gespeichert und der anbietenden Seite in deren Postfach angezeigt. Gespeichert werden dein Text, dein Name, deine E-Mail-Adresse und – falls angegeben – deine Telefonnummer sowie die Eckdaten, die du im Dialog":
+      "When you reply to a listing, your message is stored on the server and shown to the advertiser in their inbox. What is stored is your text, your name, your email address and – if given – your phone number, along with the key facts you",
+    "Welche Eckdaten das sind, steht vor dem Absenden im Dialog, Feld für Feld. Möglich sind Haushaltsgröße, Einzugstermin, Beschäftigung, eine Einkommens":
+      "Which key facts those are is shown in the dialog before you send, field by field. Possible are household size, move-in date, employment, an income",
+    ", Haustiere, Rauchen, Wohnberechtigungsschein und Bürgschaft. Der Betrag deines Einkommens wird bewusst nur als Spanne übermittelt. Angaben zu Herkunft, Religion, Gesundheit, Familienplanung oder sexueller Orientierung – besondere Kategorien nach Art. 9 DSGVO – werden nicht übermittelt, auch dann nicht, wenn sie im Text stehen sollten; danach zu fragen wäre zudem nach § 19 AGG unzulässig.":
+      ", pets, smoking, WBS certificate and guarantor. The amount of your income is deliberately transmitted only as a range. Data on origin, religion, health, family planning or sexual orientation – special categories under Art. 9 GDPR – is not transmitted, not even if it appears in the text; asking for it would also be unlawful under § 19 AGG.",
+    "Die E-Mail an die anbietende Seite enthält weder deine Adresse noch deine Telefonnummer.":
+      "The email to the advertiser contains neither your address nor your phone number.",
+    "Sie enthält nur den Hinweis, dass eine Anfrage vorliegt, und einen Verweis in das Postfach. Umgekehrt bekommst du die Adresse der anbietenden Seite nicht – erst wer antwortet, gibt seine eigene frei.":
+      "It only says that an enquiry has arrived and links to the inbox. Conversely you do not get the advertiser’s address – only whoever answers releases their own.",
+    "Herstellung des Kontakts zwischen suchender und anbietender Seite":
+      "Establishing contact between the searching and the advertising side",
+    "Art. 6 Abs. 1 lit. b DSGVO – vorvertragliche Maßnahme auf deine Anfrage hin":
+      "Art. 6(1)(b) GDPR – pre-contractual measure at your request",
+    "bis zur Löschung deines Kontos. Eine Anfrage bleibt bestehen, auch wenn das Inserat gelöscht wird: Sie gehört beiden Seiten, und ein Verlauf, der verschwindet, weil die Gegenseite aufräumt, ist keiner.":
+      "until your account is deleted. An enquiry stays even when the listing is deleted: it belongs to both sides, and a thread that disappears because the other side tidies up is not a thread.",
+    "die anbietende Seite des jeweiligen Inserats":
+      "the advertiser of the listing in question",
+    "7. Suchaufträge und Erinnerungen":
+      "7. Saved searches and reminders",
+    "Ein Suchauftrag speichert deine Filter und deine E-Mail-Adresse auf dem Server. Kommt ein passendes Inserat dazu, geht eine Mail an dich hinaus. Ohne Speicherung auf dem Server ginge das nicht: Der Browser kann nichts schicken, während er geschlossen ist.":
+      "A saved search stores your filters and your email address on the server. When a matching listing appears, an email goes out to you. Without storage on the server that would not work: a browser cannot send anything while it is closed.",
+    "Wer inseriert, bekommt außerdem eine Erinnerung, bevor ein Inserat nach 60 Tagen verfällt.":
+      "Anyone who advertises also gets a reminder before a listing expires after 60 days.",
+    "Jede dieser Mails enthält einen Abmeldeverweis, der ohne Anmeldung wirkt.":
+      "Every one of these emails contains an unsubscribe link that works without signing in.",
+    "Ein Klick genügt, und es kommt nichts mehr.":
+      "One click, and nothing more arrives.",
+    "Benachrichtigung über neue Angebote, Aktualität des Bestands":
+      "Notification about new offers, keeping the listings current",
+    "Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des von dir angelegten Suchauftrags":
+      "Art. 6(1)(b) GDPR – performance of the saved search you created",
+    "bis du den Suchauftrag löschst oder dein Konto beendest":
+      "until you delete the saved search or close your account",
+    "jederzeit über den Verweis in der Mail oder in der Anwendung (Art. 21 DSGVO)":
+      "at any time via the link in the email or in the application (Art. 21 GDPR)",
+    "Ein Inserat lässt sich melden, ohne dass ein Konto nötig ist – so verlangt es Art. 16 Abs. 1 der Verordnung (EU) 2022/2065 über digitale Dienste. Gespeichert werden der Grund, dein Text und, falls du sie angibst, deine E-Mail-Adresse. Die Adresse ist freiwillig; ohne sie lässt sich die Entscheidung nicht mitteilen.":
+      "A listing can be reported without an account being needed – Art. 16(1) of Regulation (EU) 2022/2065 on digital services requires that. What is stored is the reason, your text and, if you give it, your email address. The address is optional; without it the decision cannot be communicated to you.",
+    "Prüfung des gemeldeten Inhalts, Empfangsbestätigung und Mitteilung der Entscheidung":
+      "Examining the reported content, acknowledging receipt and communicating the decision",
+    "so lange, wie die Nachvollziehbarkeit der Entscheidung es erfordert; danach Löschung":
+      "Art. 6(1)(c) GDPR in conjunction with Art. 16 of Regulation (EU) 2022/2065 – legal obligation",
+    "9. Reichweitenmessung ohne Personenbezug":
+      "9. Audience measurement without personal data",
+    "Um zu erkennen, welche Teile der Anwendung benutzt werden, wird eine einzige Tabelle geführt. Sie hat drei Spalten:":
+      "To see which parts of the application are used, a single table is kept. It has three columns:",
+    "Name der Ansicht":
+      "name of the view",
+    ". Aus „am 3. März 412 Suchen“ lässt sich niemand herauslesen.":
+      ". Nobody can be picked out of “412 searches on 3 March”.",
+    "Nicht gespeichert werden: Kennung, IP-Adresse, Sitzung, Reihenfolge der Aufrufe, Gerät, Herkunftsseite. Auf deinem Gerät wird dafür nichts abgelegt, weshalb sich die Frage nach § 25 TDDDG nicht stellt. Ein Personenbezug im Sinne des Art. 4 Nr. 1 DSGVO entsteht nicht; damit ist die DSGVO auf diese Zählung nicht anwendbar.":
+      "Not stored: identifier, IP address, session, order of views, device, referring page. Nothing is stored on your device for this, so the question of § 25 TDDDG does not arise. No personal reference within the meaning of Art. 4(1) GDPR comes about; the GDPR therefore does not apply to this count.",
+    "Warum das hier trotzdem steht: Wer wissen will, was mit ihm passiert, soll nicht erst herausfinden müssen, was":
+      "Why it is stated here anyway: whoever wants to know what happens to them should not first have to work out what is",
+    "TrimmoTrade legt deine Eingaben im lokalen Speicher deines Browsers ab – Profil, Merkliste, Vergleich, Bewerbungstafel, Notizen, gespeicherte Filter und die Einstellungen zur Darstellung. Diese Daten verlassen dein Gerät nicht. Der Anbieter hat keinen Zugriff darauf.":
+      "TrimmoTrade stores your entries in your browser’s local storage – profile, shortlist, comparison, application board, notes, saved filters and the display settings. This data does not leave your device. The provider has no access to it.",
+    "Zwei Dinge liegen dabei an beiden Stellen, und das hat einen Grund: Ein Inserat, das du veröffentlichst, steht auf dem Server (Abschnitt 5) – sonst könnte es niemand sehen. Ein Suchauftrag, der dir Mails schickt, steht ebenfalls dort (Abschnitt 7) – sonst käme keine Mail, während dein Browser geschlossen ist. Was ohne Server auskommt, bleibt hier.":
+      "Two things are in both places, and there is a reason: a listing you publish is on the server (section 5) – otherwise nobody could see it. A saved search that sends you emails is there too (section 7) – otherwise no email would arrive while your browser is closed. What works without a server stays here.",
+    "13. Kontaktaufnahme und Hilfe":
+      "13. Getting in touch and help",
+    "14. Bezahlung von TrimmoTrade Plus":
+      "14. Paying for TrimmoTrade Plus",
+    "15. Keine automatisierte Entscheidung über Personen":
+      "15. No automated decisions about people",
+    "17. Deine Rechte":
+      "17. Your rights",
+    "19. Pflicht zur Bereitstellung":
+      "19. Obligation to provide data",
+    "(5) Ein eingestelltes Inserat ist eine":
+      "(5) A published listing is a",
+    ": Es ist für jedermann sichtbar, auch ohne Konto, und über einen dauerhaften Verweis erreichbar. Es":
+      ": it is visible to anyone, with or without an account, and reachable via a permanent link. It",
+    "läuft 60 Tage nach der letzten Bestätigung ab":
+      "expires 60 days after the last confirmation",
+    "und wird danach entfernt. Der Anbieter erinnert vorher per E-Mail; eine Bestätigung verlängert die Laufzeit um weitere 60 Tage. Diese Befristung dient der Aktualität des Bestands und gilt für alle gleichermaßen.":
+      "and is removed after that. The provider sends a reminder by email beforehand; a confirmation extends the term by another 60 days. This time limit serves to keep the listings current and applies to everyone alike.",
+    "(6) Anfragen zwischen Nutzenden werden über den Dienst zugestellt. Der Anbieter gibt dabei":
+      "(6) Enquiries between users are delivered through the service. In doing so the provider passes on",
+    "weder die E-Mail-Adresse noch die Telefonnummer":
+      "neither the email address nor the phone number",
+    "einer Seite an die andere weiter; die benachrichtigende E-Mail enthält lediglich den Hinweis auf eine vorliegende Anfrage. Welche Angaben eine Anfrage begleiten, entscheidet die anfragende Person vor dem Absenden.":
+      "of one side to the other; the notifying email merely says that an enquiry has arrived. Which details accompany an enquiry is decided by the enquiring person before sending.",
+  });
+
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
 })(window.TT = window.TT || {});

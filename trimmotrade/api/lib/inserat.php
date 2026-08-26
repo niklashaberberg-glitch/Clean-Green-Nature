@@ -395,6 +395,40 @@ final class Inserat
             ];
         }
 
+        /* --- Für eine WG-Gründung geeignet? ---------------------------
+           Das entscheidet ausschließlich die anbietende Seite, und sie
+           entscheidet es bewusst: Eine Vier-Zimmer-Wohnung an drei
+           Fremde zu vermieten ist etwas anderes, als sie an eine Familie
+           zu vermieten – gesamtschuldnerische Haftung, mehr Fluktuation,
+           mehr Verwaltungsaufwand. Wer das nicht will, bekommt keine
+           Gruppenbewerbung. Wer es anhakt, macht eine Wohnung vermietbar,
+           die als Familienwohnung monatelang steht.
+
+           Nur bei Miete und nur bei Wohnung oder Haus: Ein WG-Zimmer ist
+           schon Teil einer WG, ein Kauf ist keine Vermietung, und ein
+           Grundstück hat keine Zimmer. */
+        $gruendungMoeglich = false;
+        if ($kind === 'miete' && in_array($typ, ['wohnung', 'haus'], true) && $zimmer >= 2) {
+            $wgG = is_array($roh['wgGruendung'] ?? null) ? $roh['wgGruendung'] : [];
+            $gruendungMoeglich = !empty($wgG['moeglich']);
+            if ($gruendungMoeglich) {
+                $d['wgGruendung'] = [
+                    'moeglich' => true,
+                    /* Höchstens so viele Personen wie Zimmer. Mehr wäre
+                       keine WG, sondern eine Matratzenlage. */
+                    'maxPersonen' => (int) self::zahl(
+                        $wgG['maxPersonen'] ?? null, 2, max(2, (int) floor($zimmer)), max(2, (int) floor($zimmer))
+                    ),
+                    'vertrag' => in_array($wgG['vertrag'] ?? '', ['gemeinsam', 'einzeln', 'offen'], true)
+                        ? $wgG['vertrag'] : 'gemeinsam',
+                    'hinweis' => self::text($wgG['hinweis'] ?? '', 600),
+                ];
+            }
+        }
+        if (!$gruendungMoeglich) {
+            $d['wgGruendung'] = null;
+        }
+
         $gruende = self::verdachtsgruende($d + ['vergleichsmiete' => self::zahl($roh['vergleichsmiete'] ?? null, 0, 100, 0)]);
         $d['verdacht'] = $gruende !== [];
         $d['verdachtsgruende'] = $gruende;
@@ -415,6 +449,7 @@ final class Inserat
                 'warm' => $d['warm'],
                 'kaufpreis' => $kauf,
                 'frei_ab' => $d['freiAb'],
+                'wg_gruendung' => $gruendungMoeglich ? 1 : 0,
             ],
         ];
     }
@@ -474,13 +509,13 @@ final class Inserat
         $sp = $gebaut['spalten'];
         Db::fuehre(
             'INSERT INTO tt_inserat (kennung, konto_id, kind, typ, titel, stadt, viertel_key, lat, lng,
-              zimmer, flaeche, kalt, warm, kaufpreis, frei_ab, bilder, daten, stand,
+              zimmer, flaeche, kalt, warm, kaufpreis, frei_ab, bilder, wg_gruendung, daten, stand,
               aufrufe, anfragen, angelegt, geaendert, laeuft_ab, erinnert)
-             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?,0,0,?,?,?,0)',
+             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?,?,0,0,?,?,?,0)',
             [
                 $kennung, $konto['id'], $sp['kind'], $sp['typ'], $sp['titel'], $sp['stadt'], $sp['viertel_key'],
                 $sp['lat'], $sp['lng'], $sp['zimmer'], $sp['flaeche'], $sp['kalt'], $sp['warm'],
-                $sp['kaufpreis'], $sp['frei_ab'],
+                $sp['kaufpreis'], $sp['frei_ab'], $sp['wg_gruendung'],
                 json_encode($gebaut['daten'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
                 'aktiv', $jetzt, $jetzt, $jetzt + self::LAUFZEIT_TAGE * 86400,
             ]
@@ -503,12 +538,13 @@ final class Inserat
         $jetzt = time();
         Db::fuehre(
             'UPDATE tt_inserat SET kind=?, typ=?, titel=?, stadt=?, viertel_key=?, lat=?, lng=?,
-               zimmer=?, flaeche=?, kalt=?, warm=?, kaufpreis=?, frei_ab=?, daten=?, geaendert=?,
-               laeuft_ab=?, erinnert=0
+               zimmer=?, flaeche=?, kalt=?, warm=?, kaufpreis=?, frei_ab=?, wg_gruendung=?, daten=?,
+               geaendert=?, laeuft_ab=?, erinnert=0
              WHERE id = ?',
             [
                 $sp['kind'], $sp['typ'], $sp['titel'], $sp['stadt'], $sp['viertel_key'], $sp['lat'], $sp['lng'],
                 $sp['zimmer'], $sp['flaeche'], $sp['kalt'], $sp['warm'], $sp['kaufpreis'], $sp['frei_ab'],
+                $sp['wg_gruendung'],
                 json_encode($gebaut['daten'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
                 $jetzt, $jetzt + self::LAUFZEIT_TAGE * 86400, $alt['id'],
             ]
@@ -631,6 +667,12 @@ final class Inserat
         if (!empty($f['nurMitBild'])) {
             $wo[] = 'bilder > 0';
         }
+        /* Wohnungen, für die eine WG-Gründung vorgesehen ist. Der
+           wichtigste Filter für alle, die allein keine Wohnung bezahlen
+           können – und das sind in den großen Städten die meisten. */
+        if (!empty($f['nurWgGruendung'])) {
+            $wo[] = 'wg_gruendung = 1';
+        }
         /* Nur was seit einem Zeitpunkt dazukam – der Suchauftrag braucht
            genau das, und zwar über die laufende Nummer statt über die
            Uhrzeit: Zwei Inserate in derselben Sekunde gehen sonst
@@ -711,6 +753,7 @@ final class Inserat
             'bewerber' => (int) $z['anfragen'],
             'online' => date('Y-m-d', (int) $z['angelegt']),
         ];
+        $d['wgGruendungMoeglich'] = (int) $z['wg_gruendung'] === 1;
         $d['erstellt'] = date('Y-m-d', (int) $z['angelegt']);
         $d['laeuftAb'] = date('Y-m-d', (int) $z['laeuft_ab']);
         $d['stand'] = $z['stand'];

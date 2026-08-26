@@ -36,6 +36,12 @@ final class Zaehler
         /* Trichter der suchenden Seite */
         'besuch', 'suche', 'objekt', 'konto-noetig', 'anmeldung-start', 'anmeldung-fertig',
         'merken', 'anfrage', 'auftrag-neu',
+        /* WG-Gründung: drei Zahlen, die zusammen sagen, ob die Sache
+           trägt – wie viele Gruppen entstehen, wie viele Menschen
+           beitreten, wie viele es bis zur gemeinsamen Bewerbung
+           schaffen. Der Abstand zwischen der zweiten und der dritten
+           ist die eigentliche Frage. */
+        'wg-seite', 'wg-gruppe-neu', 'wg-beitritt', 'wg-bewerbung',
         /* Trichter der anbietenden Seite */
         'inserieren-seite', 'inserat-neu', 'inserat-bild', 'inserat-verlaengert',
         /* Geld */

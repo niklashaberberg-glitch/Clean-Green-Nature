@@ -1,5 +1,5 @@
 -- TrimmoTrade – Tabellen für die Anmeldung (MariaDB / MySQL)
--- Erzeugt aus api/lib/schema.php · Modellversion 2
+-- Erzeugt aus api/lib/schema.php · Modellversion 3
 --
 -- Die Anwendung legt diese Tabellen beim ersten Aufruf selbst an.
 -- Diese Datei ist für den Fall, dass der Datenbanknutzer keine
@@ -92,6 +92,7 @@ CREATE TABLE IF NOT EXISTS tt_inserat (
   kaufpreis INTEGER NOT NULL DEFAULT 0,
   frei_ab VARCHAR(10) NOT NULL DEFAULT '',
   bilder INTEGER NOT NULL DEFAULT 0,
+  wg_gruendung TINYINT(1) NOT NULL DEFAULT 0,
   daten MEDIUMTEXT NOT NULL,
   stand VARCHAR(12) NOT NULL DEFAULT 'aktiv',
   aufrufe BIGINT NOT NULL DEFAULT 0,
@@ -166,6 +167,38 @@ CREATE TABLE IF NOT EXISTS tt_meldung (
   UNIQUE (kennung)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS tt_gruppe (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  kennung VARCHAR(40) NOT NULL,
+  inserat_id BIGINT NOT NULL DEFAULT 0,
+  gruender_id BIGINT NOT NULL,
+  name VARCHAR(120) NOT NULL DEFAULT '',
+  ziel INTEGER NOT NULL DEFAULT 3,
+  text TEXT NOT NULL,
+  offen TINYINT(1) NOT NULL DEFAULT 0,
+  stand VARCHAR(12) NOT NULL DEFAULT 'offen',
+  anfrage_id BIGINT NOT NULL DEFAULT 0,
+  angelegt BIGINT NOT NULL,
+  geaendert BIGINT NOT NULL,
+  laeuft_ab BIGINT NOT NULL,
+  UNIQUE (kennung)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS tt_gruppe_person (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  kennung VARCHAR(40) NOT NULL,
+  gruppe_id BIGINT NOT NULL,
+  konto_id BIGINT NOT NULL,
+  rolle VARCHAR(10) NOT NULL DEFAULT 'mitglied',
+  stand VARCHAR(12) NOT NULL DEFAULT 'angefragt',
+  vorstellung TEXT NOT NULL,
+  eckdaten TEXT NOT NULL,
+  angelegt BIGINT NOT NULL,
+  entschieden BIGINT NOT NULL,
+  UNIQUE (kennung),
+  UNIQUE (gruppe_id, konto_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS tt_zaehler (
   tag VARCHAR(10) NOT NULL,
   name VARCHAR(60) NOT NULL,
@@ -212,5 +245,13 @@ CREATE INDEX IF NOT EXISTS ix_auftrag_lauf ON tt_auftrag (aus, gesendet);
 
 CREATE INDEX IF NOT EXISTS ix_meldung_stand ON tt_meldung (stand, angelegt);
 
-INSERT INTO tt_stand (name, wert) VALUES ('schema', '2')
+CREATE INDEX IF NOT EXISTS ix_gruppe_inserat ON tt_gruppe (inserat_id, stand);
+
+CREATE INDEX IF NOT EXISTS ix_gruppe_gruender ON tt_gruppe (gruender_id);
+
+CREATE INDEX IF NOT EXISTS ix_person_gruppe ON tt_gruppe_person (gruppe_id, stand);
+
+CREATE INDEX IF NOT EXISTS ix_person_konto ON tt_gruppe_person (konto_id);
+
+INSERT INTO tt_stand (name, wert) VALUES ('schema', '3')
   ON DUPLICATE KEY UPDATE wert = VALUES(wert);

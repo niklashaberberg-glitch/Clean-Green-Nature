@@ -171,6 +171,10 @@ final class Db
             self::fuehre('DELETE FROM tt_vorgang WHERE laeuft_ab < ?', [$jetzt]);
             self::fuehre('DELETE FROM tt_sitzung WHERE laeuft_ab < ?', [$jetzt]);
             self::fuehre('DELETE FROM tt_versuch WHERE wann < ?', [$jetzt - 86400]);
+            /* Abgelaufene Gruppen schließen. Nicht löschen: Wer in einer
+               war, soll nachsehen können, was daraus wurde. */
+            self::fuehre("UPDATE tt_gruppe SET stand = 'aufgeloest'
+                          WHERE laeuft_ab < ? AND stand IN ('offen','voll')", [$jetzt]);
         } catch (PDOException $e) {
             error_log('TrimmoTrade: Aufräumen fehlgeschlagen – ' . $e->getMessage());
         }

@@ -27,10 +27,21 @@ require_once __DIR__ . '/antwort.php';
 final class Post
 {
     private static array $cfg = [];
+    private static string $basis = '';
 
     public static function start(array $cfg): void
     {
         self::$cfg = $cfg['mail'] ?? [];
+        self::$basis = rtrim((string) ($cfg['basis'] ?? ''), '/');
+    }
+
+    /** Die eigene Adresse, wie sie in der Konfiguration steht. Mails,
+        die aus einem Baustein heraus verschickt werden, brauchen den
+        Verweis zurück in die Anwendung – und ihn durch fünf Aufrufe
+        durchzureichen wäre Aufwand ohne Gewinn. */
+    public static function basis(): string
+    {
+        return (string) (self::$basis ?? '');
     }
 
     public static function moeglich(): bool

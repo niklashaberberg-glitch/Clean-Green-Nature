@@ -12,7 +12,8 @@
 
      1. Wer jemand ist – Konten, Passkeys, Sitzungen.
      2. Was öffentlich angeboten wird – Inserate, Anfragen darauf,
-        Suchaufträge, Meldungen nach Art. 16 DSA.
+        Suchaufträge, Meldungen nach Art. 16 DSA und die Gruppen, die
+        sich zusammentun, um eine Wohnung gemeinsam zu nehmen.
 
    Alles Übrige bleibt im Browser: Merkliste, Vergleich, Profil, der
    Dokumententresor, jede Berechnung. Das ist keine Bequemlichkeit,
@@ -25,7 +26,7 @@ final class Schema
     /** Wird bei jeder Änderung am Modell erhöht. Die Anwendung legt
         fehlende Tabellen selbst an; diese Zahl verhindert, dass sie das
         bei jedem Aufruf nachprüft. */
-    public const VERSION = 2;
+    public const VERSION = 3;
 
     /** @return string[] */
     public static function anweisungen(string $treiber): array
@@ -172,6 +173,7 @@ final class Schema
   kaufpreis INTEGER NOT NULL DEFAULT 0,
   frei_ab VARCHAR(10) NOT NULL DEFAULT '',
   bilder INTEGER NOT NULL DEFAULT 0,
+  wg_gruendung $ja,
   daten MEDIUMTEXT NOT NULL,
   stand VARCHAR(12) NOT NULL DEFAULT 'aktiv',
   aufrufe BIGINT NOT NULL DEFAULT 0,
@@ -282,6 +284,63 @@ final class Schema
            sehen die Suche, wie viele legen ein Inserat an, wie viele
            schreiben jemanden an. Ein Trichter braucht Zahlen, keine
            Personen. */
+        /* --- WG-Gründung -----------------------------------------------
+           Eine Gruppe von Menschen, die sich nicht kennen und gemeinsam
+           eine bestimmte Wohnung nehmen wollen.
+
+           Der Unterschied zu einem WG-Zimmer ist grundlegend: Dort gibt
+           es die WG schon, und einer zieht ein. Hier gibt es sie noch
+           nicht – die Wohnung steht leer, und drei Fremde entscheiden
+           sich füreinander und für sie zugleich. Das ist derselbe
+           doppelte Zufall, an dem der direkte Wohnungstausch scheitert,
+           und er lässt sich auf dieselbe Weise auflösen: indem man die
+           Suche sichtbar macht, statt sie dem Zufall zu überlassen.
+
+           `inserat_id` darf 0 sein. Fällt die Wohnung weg, soll die
+           Gruppe nicht mit ihr sterben – drei Menschen, die sich einig
+           sind, sind das Wertvollere an der Sache. */
+        $t[] = "CREATE TABLE IF NOT EXISTS tt_gruppe (
+  id $id,
+  kennung VARCHAR(40) NOT NULL,
+  inserat_id BIGINT NOT NULL DEFAULT 0,
+  gruender_id BIGINT NOT NULL,
+  name VARCHAR(120) NOT NULL DEFAULT '',
+  ziel INTEGER NOT NULL DEFAULT 3,
+  text TEXT NOT NULL,
+  offen $ja,
+  stand VARCHAR(12) NOT NULL DEFAULT 'offen',
+  anfrage_id BIGINT NOT NULL DEFAULT 0,
+  angelegt $zeit,
+  geaendert $zeit,
+  laeuft_ab $zeit,
+  UNIQUE (kennung)
+)$ende";
+
+        /* --- Wer in einer Gruppe ist ------------------------------------
+           `stand` unterscheidet drei Lagen, und die Unterscheidung ist
+           kein Verwaltungskram, sondern Datenschutz: Wer erst angefragt
+           hat, ist für die übrigen Mitglieder unsichtbar – nur die
+           gründende Person sieht ihn. Erst wer aufgenommen ist, gehört
+           dazu und sieht die anderen.
+
+           `eckdaten` ist bewusst eine Kopie und kein Verweis aufs Profil:
+           Was jemand beim Beitritt über sich gesagt hat, soll sich nicht
+           rückwirkend ändern, wenn er später sein Profil bearbeitet. */
+        $t[] = "CREATE TABLE IF NOT EXISTS tt_gruppe_person (
+  id $id,
+  kennung VARCHAR(40) NOT NULL,
+  gruppe_id BIGINT NOT NULL,
+  konto_id BIGINT NOT NULL,
+  rolle VARCHAR(10) NOT NULL DEFAULT 'mitglied',
+  stand VARCHAR(12) NOT NULL DEFAULT 'angefragt',
+  vorstellung TEXT NOT NULL,
+  eckdaten TEXT NOT NULL,
+  angelegt $zeit,
+  entschieden $zeit,
+  UNIQUE (kennung),
+  UNIQUE (gruppe_id, konto_id)
+)$ende";
+
         $t[] = "CREATE TABLE IF NOT EXISTS tt_zaehler (
   tag VARCHAR(10) NOT NULL,
   name VARCHAR(60) NOT NULL,
@@ -315,6 +374,10 @@ final class Schema
         $t[] = 'CREATE INDEX IF NOT EXISTS ix_auftrag_konto ON tt_auftrag (konto_id)';
         $t[] = 'CREATE INDEX IF NOT EXISTS ix_auftrag_lauf ON tt_auftrag (aus, gesendet)';
         $t[] = 'CREATE INDEX IF NOT EXISTS ix_meldung_stand ON tt_meldung (stand, angelegt)';
+        $t[] = 'CREATE INDEX IF NOT EXISTS ix_gruppe_inserat ON tt_gruppe (inserat_id, stand)';
+        $t[] = 'CREATE INDEX IF NOT EXISTS ix_gruppe_gruender ON tt_gruppe (gruender_id)';
+        $t[] = 'CREATE INDEX IF NOT EXISTS ix_person_gruppe ON tt_gruppe_person (gruppe_id, stand)';
+        $t[] = 'CREATE INDEX IF NOT EXISTS ix_person_konto ON tt_gruppe_person (konto_id)';
 
         return $t;
     }

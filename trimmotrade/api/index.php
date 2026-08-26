@@ -61,6 +61,7 @@ require_once __DIR__ . '/lib/inserat.php';
 require_once __DIR__ . '/lib/bild.php';
 require_once __DIR__ . '/lib/anfrage.php';
 require_once __DIR__ . '/lib/auftrag.php';
+require_once __DIR__ . '/lib/gruppe.php';
 
 Db::start($cfg);
 Sitzung::start($cfg);
@@ -226,6 +227,10 @@ try {
                    erledigt. */
                 'markt' => [
                     'inserate' => $echte,
+                    'gruppen' => (int) Db::wert(
+                        "SELECT COUNT(*) FROM tt_gruppe WHERE stand = 'offen' AND offen = 1 AND laeuft_ab > ?",
+                        [time()]
+                    ),
                     'beispiele' => (bool) ($cfg['beispielmarkt'] ?? true),
                     'bilder' => Bild::moeglich(),
                 ],
@@ -685,6 +690,9 @@ try {
             if (!empty($_GET['nurMitBild'])) {
                 $f['nurMitBild'] = true;
             }
+            if (!empty($_GET['nurWgGruendung'])) {
+                $f['nurWgGruendung'] = true;
+            }
             $ab = (int) ($_GET['ab'] ?? 0);
             $zeilen = Inserat::suchen($f, $ab, (int) ($_GET['wieviele'] ?? 60));
             Antwort::gut([
@@ -939,6 +947,88 @@ try {
                 }
             }
             Antwort::gut();
+
+
+        /* --------------------------------------------------------------
+           WG-Gründung
+
+           Der einzige Bereich, in dem Nutzende einander begegnen, bevor
+           es zu einem Vertrag kommt. Deshalb steht hier mehr Sorgfalt
+           beim Sichtbarmachen als sonst irgendwo: Lesen darf viel, aber
+           eine Person sieht man erst, wenn man angemeldet ist, und eine
+           E-Mail-Adresse erst, wenn beide Seiten zugestimmt haben.
+           -------------------------------------------------------------- */
+
+        case 'gruppen':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $ich = Sitzung::konto();
+            $zuInserat = (string) ($_GET['inserat'] ?? '');
+            if ($zuInserat !== '') {
+                $z = Inserat::nachKennung($zuInserat);
+                if (!$z) {
+                    Antwort::fehler('Dieses Inserat gibt es nicht.', 404);
+                }
+                Antwort::gut(['gruppen' => Gruppe::zuInserat((int) $z['id'], $ich)]);
+            }
+            Antwort::gut(['gruppen' => Gruppe::offene($ich, (int) ($_GET['wieviele'] ?? 40))]);
+
+        case 'gruppe/meine':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(['gruppen' => Gruppe::meine($k)]);
+
+        case 'gruppe/neu':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            if ((int) $k['stufe'] < 1) {
+                Antwort::fehler('Zum Gründen einer WG braucht es eine bestätigte E-Mail-Adresse. '
+                    . 'Wer mit Fremden zusammenziehen will, muss erreichbar sein.', 403, ['stufe' => (int) $k['stufe']]);
+            }
+            Grenze::sperreOderWeiter('gruppe', (string) $k['kennung']);
+            Antwort::gut(['gruppe' => Gruppe::anlegen($k, rumpf())]);
+
+        case 'gruppe/beitreten':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            if ((int) $k['stufe'] < 1) {
+                Antwort::fehler('Zum Beitreten braucht es eine bestätigte E-Mail-Adresse.',
+                    403, ['stufe' => (int) $k['stufe']]);
+            }
+            Grenze::sperreOderWeiter('gruppe', (string) $k['kennung']);
+            Antwort::gut(['gruppe' => Gruppe::beitreten($k, feld('id'), rumpf())]);
+
+        case 'gruppe/entscheiden':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(['gruppe' => Gruppe::entscheiden(
+                $k, feld('id'), feld('person'), !empty(rumpf()['ja'])
+            )]);
+
+        case 'gruppe/verlassen':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            $erg = Gruppe::verlassen($k, feld('id'));
+            Antwort::gut(isset($erg['aufgeloest']) ? $erg : ['gruppe' => $erg]);
+
+        case 'gruppe/bewerben':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Grenze::sperreOderWeiter('anfrage', (string) $k['kennung']);
+            Antwort::gut(['gruppe' => Gruppe::bewerben($k, feld('id'), feld('text'), $BASIS)]);
 
         default:
             Antwort::fehler('Diesen Weg gibt es nicht.', 404);

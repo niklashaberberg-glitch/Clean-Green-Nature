@@ -510,6 +510,11 @@
       freiBis: null,
       anbieterArt: [],
       provisionsfrei: false,
+      /* Wohnungen, für die die anbietende Seite eine WG-Gründung
+         zugelassen hat. Für alle, die allein keine Wohnung bezahlen
+         können, ist das der wichtigste Filter überhaupt – und in den
+         großen Städten sind das die meisten. */
+      nurWgGruendung: false,
       nurVerifiziert: false,
       ohneVerdacht: true,
       wgArt: [], wgRauchen: null, wgHaustiere: null, wgGroesse: null, wgAlter: null,
@@ -585,6 +590,7 @@
       if (f.freiBis && l.freiAb > f.freiBis) return false;
       if (f.anbieterArt.length && f.anbieterArt.indexOf(l.anbieter.art) < 0) return false;
       if (f.provisionsfrei && l.provision > 0) return false;
+      if (f.nurWgGruendung && !l.wgGruendungMoeglich) return false;
       if (f.nurVerifiziert && !l.anbieter.verifiziert) return false;
       if (f.ohneVerdacht && risikoCheck(l).stufe === 'warnung') return false;
 

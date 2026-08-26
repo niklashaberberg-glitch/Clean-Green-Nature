@@ -583,6 +583,53 @@ Anwendung sonst überall antritt. Und was niemand fragen darf, kommt gar nicht
 erst durch: keine Herkunft, keine Religion, keine Gesundheit, keine
 Familienplanung (Art. 9 DSGVO, § 19 AGG).
 
+### WG gründen
+
+Auf jedem Portal gilt: Wer allein die Miete nicht aufbringt, sucht ein WG-Zimmer
+und hofft, dass eine bestehende WG ihn nimmt. Was nie passiert: dass sich drei
+Fremde zusammentun und eine Wohnung nehmen, die keiner von ihnen allein bekommen
+hätte.
+
+Das liegt nicht am Wollen, sondern daran, dass jeder gleichzeitig die Wohnung
+**und** die Mitbewohner bräuchte – und beides voneinander abhängt. Derselbe
+doppelte Zufall wie beim Wohnungstausch, dieselbe Auflösung: sichtbar machen, wer
+sucht.
+
+* Die anbietende Seite hakt beim Inserieren **„für eine WG-Gründung freigeben“**
+  an und wählt die Vertragsform. Nur bei Miete, nur bei Wohnung oder Haus, nie
+  mehr Personen als Zimmer.
+* Wer sucht, eröffnet eine Gruppe zu dieser Wohnung oder tritt einer bei. Der
+  Anteil je Person steht dabei – die erste Zahl, nach der gefragt wird.
+* Die Passung rechnet über dieselben sechs Alltagsfragen wie bei einer
+  bestehenden WG. Was sie **nicht** tut: nach Alter oder Geschlecht ausschließen.
+  Eine WG darf danach auswählen (§ 19 Abs. 5 AGG nimmt das gemeinsame Wohnen
+  aus) – eine Gruppe, die es noch gar nicht gibt, hat darüber nichts entschieden.
+* Ist die Gruppe voll, geht **eine** Bewerbung hinaus. Für die Vermieterseite ist
+  das der ganze Unterschied: drei einzelne Anfragen sind drei Leute, die allein
+  nicht zahlen können; eine gemeinsame Bewerbung ist ein vollständiger Haushalt.
+
+**Wer wen sieht** – die eigentliche Arbeit an dieser Funktion:
+
+| Wer | Sieht |
+|---|---|
+| ohne Konto | Zahlen und den Text der Gruppe. Keine Person. |
+| angemeldet | Rufname („Cem Y.“), Alter, Beruf, Vorstellung, Lebensrhythmus |
+| dabei | zusätzlich die E-Mail-Adressen – man hat einander angenommen |
+| gründend | zusätzlich die offenen Beitrittsanfragen |
+
+Die anbietende Seite ist von Gruppen zu ihrem eigenen Inserat ausgeschlossen:
+weder gründen noch beitreten. Was Bewerbende einander erzählen, erzählen sie
+einander.
+
+Und was hier ausdrücklich **nicht** stattfindet: eine Prüfung von Personen.
+TrimmoTrade stellt niemanden fest, bewertet niemanden und steht für niemanden
+ein. Alles andere zu behaupten wäre ein Versprechen, das niemand halten kann.
+
+Dafür steht der Rechtsteil an jeder Stelle dabei, an der jemand zusagt:
+gesamtschuldnerische Haftung (§ 421 BGB), Kaution nur einmal für die Wohnung und
+nicht je Person (§ 551 Abs. 1 BGB), ein Auszug allein ist keine Kündigung, und
+der Rundfunkbeitrag fällt einmal je Wohnung an.
+
 ### Der Suchauftrag
 
 Die wichtigste Funktion dieser Anwendung, und das liegt nicht an ihr, sondern
@@ -894,6 +941,7 @@ trimmotrade/
     karte.js            die Karte
     markt.js            holt echte Inserate, trennt sie von den Beispielen,
                         zählt den Trichter ohne Personenbezug
+    wg.js               Gruppen zur WG-Gründung, Passung, Eckdaten
     ui.js               Schale, Router, geteilte Bausteine
     view-*.js           die einzelnen Ansichten
     app.js              Start
@@ -907,6 +955,7 @@ trimmotrade/
       bild.php          Bilder neu berechnen (entfernt GPS aus Fotos)
       anfrage.php       Anfragen und Meldungen nach Art. 16 DSA
       auftrag.php       Suchaufträge, Meldelauf, Ablauferinnerung
+      gruppe.php        WG-Gründung: wer wen sehen darf, gemeinsam bewerben
       zaehler.php       Tagessummen ohne Kennung
       konto.php         Konten und Vertrauensstufen
       sitzung.php       Sitzungen, Schutzmerkmal, Herkunftsprüfung
@@ -1053,6 +1102,19 @@ Dazu ein Durchgang im echten Browser gegen den echten Server über den ganzen
 Kreis: anmelden, inserieren mit Bild, ohne Konto in der Suche wiederfinden,
 melden, anschreiben, Mail beim Anbieter — und die Gegenprobe, dass in dieser
 Mail die Adresse der anfragenden Seite **nicht** steht.
+
+Die WG-Gründung wird zweifach geprüft: 44 Prüfungen über die Schnittstelle und
+ein Durchgang mit **drei gleichzeitig geöffneten Browsern** — Vermieterin,
+Gründer, Beitretender. Dabei wird jede Stufe der Sichtbarkeit gegengeprüft: dass
+ohne Konto keine Person erscheint, dass ein Angemeldeter den Rufnamen sieht und
+die Adresse nicht, dass die Adressen erst nach der gegenseitigen Annahme
+auftauchen, und dass die Vermieterin von alldem nichts sieht außer der
+gemeinsamen Bewerbung.
+
+Geprüft wird außerdem der Weg von einer älteren Fassung: Eine Datenbank auf dem
+vorigen Stand bekommt beim ersten Aufruf die fehlende Spalte und die fehlenden
+Tabellen. `CREATE TABLE IF NOT EXISTS` allein würde das nicht tun — einer
+vorhandenen Tabelle fügt es nichts hinzu.
 
 ### Geprüft
 

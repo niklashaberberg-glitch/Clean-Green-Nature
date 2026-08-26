@@ -226,6 +226,8 @@
 
       <fieldset class="filter__gruppe">
         <legend>Nur zeigen, wenn</legend>
+        ${schalter('für WG-Gründung freigegeben', 'nurWgGruendung',
+        'Wohnungen, die an mehrere Fremde zusammen vermietet werden')}
         ${schalter('provisionsfrei', 'provisionsfrei')}
         ${schalter('Anbieter geprüft', 'nurVerifiziert')}
         ${schalter('ohne Prüfhinweis', 'ohneVerdacht', 'blendet Inserate mit deutlichen Betrugsmerkmalen aus')}
@@ -554,6 +556,7 @@
     }
     if (route.params.q !== undefined) f.q = route.params.q;
     if (route.params.art) f.arten = route.params.art.split(',');
+    if (route.params.wg) { f.nurWgGruendung = true; f.arten = ['miete']; }
     if (Object.keys(route.params).length) S.set({ filter: f, filterBeruehrt: true }, 'filter');
 
     const bewertet = rechnen();

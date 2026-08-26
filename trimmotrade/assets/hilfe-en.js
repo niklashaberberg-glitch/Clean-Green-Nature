@@ -225,6 +225,27 @@
       ziele: [['See swap chains', 'tausch']]
     },
     {
+      id: 'wg-gruenden',
+      titel: 'Renting a flat together with strangers',
+      gruppe: 'Searching',
+      fragen: ['start a flatshare', 'rent together', 'flat with strangers', 'find flatmates',
+        'apply together', 'share a big flat'],
+      schlag: ['flatshare', 'together', 'flatmate', 'share', 'group', 'three of us', 'two of us'],
+      antwort: 'A flat with three or more rooms is too big for one person and too expensive for many '
+        + 'families – but easily affordable for three people together. If the advertiser has released '
+        + 'a flat for this, the listing page shows the block “Released for founding a flatshare”. '
+        + 'There you open a group or join one.\n\nWhoever founds decides who joins. Until then the '
+        + 'other members do not see a request, and email addresses only become visible once both '
+        + 'sides have accepted each other. Once the group is full it applies as a single application – '
+        + 'for the landlord that is one complete household instead of three individuals.'
+        + '\n\nBefore you commit: with a joint tenancy agreement you are jointly and severally liable '
+        + '(§ 421 BGB) – if one person does not pay, the full rent can be demanded from any single one. '
+        + 'The deposit is capped at three months’ net rent for the whole flat, not per person '
+        + '(§ 551 Abs. 1 BGB). And moving out alone is not a notice: replacing one person needs the '
+        + 'agreement of everybody and of the landlord.',
+      ziele: [['Start a flatshare', 'wg'], ['Flats released for it', 'suche?wg=1']]
+    },
+    {
       id: 'inserieren',
       titel: 'How do I post a listing?',
       gruppe: 'Advertising',

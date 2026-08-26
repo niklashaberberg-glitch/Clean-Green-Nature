@@ -729,6 +729,149 @@ const SEITEN = [
         antwort: 'Von der Vermieterseite, nicht vom Nachmieter. Sie darf die Abrechnung abwarten – bei laufenden Nebenkosten in der Regel drei bis sechs Monate. Ein Einbehalt darüber hinaus ist nur für konkret bezifferte Ansprüche zulässig.' }
     ],
     tun: { text: 'Wohnung inserieren und gleichzeitig suchen', ziel: '/#/inserieren' }
+  },
+
+  /* -------------------------------------------------------------------
+     WG gründen
+
+     Der Suchbegriff, hinter dem eine Not steht, für die es kein Angebot
+     gibt: Wer allein die Miete nicht aufbringt, findet Portale voller
+     Zimmer in bestehenden WGs – aber nichts, das ihm hilft, mit zwei
+     Fremden zusammen eine ganze Wohnung zu nehmen.
+
+     Diese Seite beantwortet zuerst die Rechtsfragen, die dabei über sehr
+     viel Geld entscheiden, und führt danach dorthin, wo es geht.
+     ------------------------------------------------------------------- */
+  {
+    datei: 'wg-gruenden.html',
+    rang: '0.9',
+    kurz: 'WG gründen',
+    titel: 'WG gründen: zu mehreren eine Wohnung mieten – TrimmoTrade',
+    h1: 'Eine WG gründen',
+    beschreibung: 'Gemeinsamer Vertrag oder Einzelverträge, Haftung, Kaution und Auszug – und wie sich drei Fremde finden, die zusammen eine Wohnung nehmen.',
+    vorspann: 'Eine Vier-Zimmer-Wohnung für 1.600 Euro warm ist für eine Person zu groß und für viele Familien zu teuer. Für drei Leute sind es 533 Euro. Das Problem ist nicht das Geld, sondern das Finden.',
+    stand: STAND,
+    inhalt: `
+  <section class="block">
+    <h2>Warum das fast nie passiert – obwohl es allen helfen würde</h2>
+    <p>Wer allein sucht, braucht gleichzeitig zwei Dinge, die voneinander abhängen: die Wohnung und
+      die Mitbewohner. Ohne Mitbewohner kann er nicht zusagen; ohne Zusage gibt es nichts, worauf
+      sich Mitbewohner einigen könnten. Solange beides voneinander abhängt, passiert nichts – und
+      die Wohnung steht weiter leer.</p>
+    <p>Das ist derselbe doppelte Zufall, an dem auch der <a href="/wohnungstausch.html">direkte
+      Wohnungstausch</a> scheitert. Und er löst sich auf dieselbe Weise: indem sichtbar wird, wer
+      sucht. Eine Person eröffnet eine Gruppe zu einer konkreten Wohnung, andere sehen sie und
+      stellen sich vor, und wenn die Gruppe vollzählig ist, bewirbt sie sich gemeinsam.</p>
+    <p>Für die Vermieterseite ist das der entscheidende Unterschied: <b>Drei einzelne Anfragen sind
+      drei Leute, die die Wohnung allein nicht bezahlen können. Eine gemeinsame Bewerbung ist ein
+      vollständiger Haushalt.</b></p>
+  </section>
+
+  <section class="block">
+    <h2>Ein Vertrag oder mehrere? Die wichtigste Entscheidung</h2>
+    <div class="spalten2">
+      <div>
+        <h3>Ein gemeinsamer Vertrag</h3>
+        <p>Alle stehen zusammen im Vertrag. Die übliche Form, und die, die Vermietende fast immer
+          bevorzugen.</p>
+        <ul class="pruef">
+          <li><span><b>Ihr haftet als Gesamtschuldner</b> (§ 421 BGB). Zahlt eine Person nicht, kann
+            die Vermieterseite die volle Miete von jeder Einzelnen verlangen. Untereinander gibt es
+            einen Ausgleichsanspruch (§ 426 BGB) – das ist aber ein Prozess gegen die eigene
+            Mitbewohnerin.</span></li>
+          <li><span><b>Ein Auszug allein ist keine Kündigung.</b> Gekündigt wird nur gemeinsam. Wer
+            einzeln gehen will, braucht eine Vertragsänderung und damit das Ja aller Mitmietenden
+            <em>und</em> der Vermieterseite. Das überrascht fast alle.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Ein Vertrag je Zimmer</h3>
+        <p>Jede Person hat einen eigenen Vertrag über ihr Zimmer und ein Mitbenutzungsrecht an
+          Küche und Bad.</p>
+        <ul class="pruef">
+          <li><span><b>Keine Haftung für die anderen.</b> Wer nicht zahlt, ist allein das Problem der
+            Vermieterseite.</span></li>
+          <li><span><b>Jede Person kündigt für sich</b>, ohne die anderen zu fragen.</span></li>
+          <li><span><b>Deutlich seltener.</b> Für die Vermieterseite bedeutet es mehr Verwaltung, und
+            wer nachrückt, sucht sie sich dann selbst aus.</span></li>
+        </ul>
+      </div>
+    </div>
+    <p>Eine dritte Form ist die <b>Untermiete</b>: Eine Person ist Hauptmieterin, die anderen sind
+      ihre Untermieter. Dann trägt sie das ganze Risiko allein – und sie braucht die Erlaubnis der
+      Vermieterseite. Auf die hat sie einen Anspruch, wenn ihr berechtigtes Interesse erst nach
+      Vertragsschluss entstanden ist (§ 553 Abs. 1 BGB); wer von vornherein untervermieten will,
+      klärt das besser vorher.</p>
+  </section>
+
+  <section class="block">
+    <h2>Vier Dinge, die fast alle falsch machen</h2>
+    <ul class="pruef">
+      <li><span><b>Die Kaution gilt für die Wohnung, nicht je Person.</b> Höchstens drei
+        Nettokaltmieten insgesamt (§ 551 Abs. 1 BGB). Wer von jedem Mitglied drei Monatsmieten
+        verlangt, verlangt das Doppelte oder Dreifache des Erlaubten. Gezahlt werden darf außerdem in
+        drei gleichen Raten – die erste zu Mietbeginn.</span></li>
+      <li><span><b>Jede Person muss sich anmelden</b>, innerhalb von zwei Wochen nach dem Einzug. Die
+        Vermieterseite ist verpflichtet, dafür eine Wohnungsgeberbestätigung auszustellen
+        (§ 19 BMG) – auch für Untermieter.</span></li>
+      <li><span><b>Der Rundfunkbeitrag fällt einmal je Wohnung an</b>, nicht je Person. Eine WG zahlt
+        zusammen einen Beitrag. Klärt beim Einzug, wer ihn anmeldet und wie ihr teilt – sonst zahlen
+        drei Leute drei Beiträge, und zurückholen ist mühsam.</span></li>
+      <li><span><b>Die Miete darf die Mietpreisbremse nicht überschreiten</b>, nur weil ihr zu dritt
+        seid. Maßstab ist die Wohnung, nicht der Haushalt. Wie sich das prüfen lässt, steht unter
+        <a href="/mietpreisbremse-pruefen.html">Mietpreisbremse prüfen</a>.</span></li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2>Bevor ihr unterschreibt</h2>
+    <ol class="schritte">
+      <li><b>Trefft euch.</b> Ein gemeinsamer Mietvertrag über zwei Jahre ist eine größere
+        Verpflichtung als die meisten Verträge, die man sonst unterschreibt. Ein Abend reicht, um zu
+        merken, ob es passt.</li>
+      <li><b>Redet über Geld, bevor es welches gibt.</b> Wer zahlt was, wenn jemand auszieht? Wie
+        wird die Kaution geteilt? Wer meldet den Rundfunkbeitrag an?</li>
+      <li><b>Redet über den Alltag.</b> Ordnung, Lautstärke, Besuch, gemeinsames Kochen,
+        Tagesrhythmus. Das sind die sechs Fragen, an denen WGs auseinandergehen – nicht der Preis.</li>
+      <li><b>Schreibt eine WG-Vereinbarung.</b> Sie ist kein Mietvertrag und braucht keine Form:
+        Zimmerverteilung, Kostenaufteilung, Regeln beim Auszug. Im Streitfall ist sie das Einzige,
+        worauf man sich berufen kann.</li>
+      <li><b>Bei einem gemeinsamen Vertrag über mehrere Jahre lohnt der Blick eines Mietervereins</b>,
+        bevor unterschrieben wird. Das kostet einen Jahresbeitrag und spart im Zweifel ein
+        Vielfaches.</li>
+    </ol>
+  </section>
+
+  <section class="block">
+    <h2>Wie es bei TrimmoTrade läuft</h2>
+    <ol class="schritte">
+      <li><b>Wohnungen finden, die dafür freigegeben sind.</b> Vermietende haken es beim Inserieren
+        an; in der Suche gibt es dafür einen eigenen Filter.</li>
+      <li><b>Gruppe eröffnen oder beitreten.</b> Du sagst, zu wie vielt und was für eine WG es werden
+        soll. Der Anteil je Person wird ausgerechnet und steht dabei.</li>
+      <li><b>Kennenlernen.</b> Jede Person stellt sich vor; aus sechs Fragen zum Alltag rechnet sich
+        eine Passung. E-Mail-Adressen werden erst sichtbar, wenn beide Seiten einander angenommen
+        haben – vorher steht dort nur der Rufname.</li>
+      <li><b>Gemeinsam bewerben.</b> Ist die Gruppe voll, geht <b>eine</b> Bewerbung hinaus, mit
+        Haushaltsgröße und Berufen. Nicht drei einzelne.</li>
+    </ol>
+    <p>Kostenlos, und der Betreiber wird dabei nicht Partei: TrimmoTrade prüft niemanden, stellt
+      keine Identität fest und steht für niemanden ein. Wer mit wem zusammenzieht, entscheidet ihr.</p>
+  </section>
+`,
+    fragen: [
+      { frage: 'Kann man als Gruppe von Fremden eine Wohnung mieten?',
+        antwort: 'Ja. Üblich ist ein gemeinsamer Mietvertrag, in dem alle stehen; möglich sind auch Einzelverträge je Zimmer oder eine Hauptmieterin mit Untermietern. Voraussetzung ist, dass die Vermieterseite mitmacht – deshalb ist die Freigabe bei TrimmoTrade eine Angabe der anbietenden Seite.' },
+      { frage: 'Was bedeutet gesamtschuldnerische Haftung in einer WG?',
+        antwort: 'Bei einem gemeinsamen Mietvertrag schulden alle die ganze Miete (§ 421 BGB). Zahlt eine Person nicht, kann die Vermieterseite den vollen Betrag von jeder Einzelnen verlangen. Untereinander besteht ein Ausgleichsanspruch nach § 426 BGB – den muss man aber gegen die eigene Mitbewohnerin durchsetzen.' },
+      { frage: 'Wie viel Kaution darf eine WG zahlen?',
+        antwort: 'Höchstens drei Nettokaltmieten für die gesamte Wohnung (§ 551 Abs. 1 BGB), nicht je Person. Eine Forderung von drei Monatsmieten pro Mitglied ist unzulässig. Gezahlt werden darf in drei gleichen Raten.' },
+      { frage: 'Kann ich aus einer WG ausziehen, ohne dass die anderen mitgehen?',
+        antwort: 'Bei einem gemeinsamen Vertrag nicht ohne Weiteres: Der Austausch einer Person ist eine Vertragsänderung und braucht die Zustimmung aller Mitmietenden und der Vermieterseite. Bei Einzelverträgen je Zimmer kann jede Person allein kündigen.' },
+      { frage: 'Zahlt jede Person in einer WG den Rundfunkbeitrag?',
+        antwort: 'Nein. Der Beitrag fällt einmal je Wohnung an. Eine WG zahlt zusammen einen Beitrag; wer ihn anmeldet und wie er geteilt wird, sollte beim Einzug geklärt werden.' }
+    ],
+    tun: { text: 'Wohnungen für eine WG-Gründung', ziel: '/#/suche?wg=1' }
   }
 ];
 

@@ -353,6 +353,20 @@ final class Schema
   wert VARCHAR(190) NOT NULL
 )$ende";
 
+        /* --- Nachträglich hinzugekommene Spalten -----------------------
+
+           `CREATE TABLE IF NOT EXISTS` legt eine fehlende Tabelle an –
+           einer vorhandenen fügt es nichts hinzu. Wer schon eine ältere
+           Fassung betreibt, bekäme sonst beim ersten Aufruf einen
+           Datenbankfehler, weil eine Abfrage eine Spalte nennt, die es
+           bei ihm nicht gibt.
+
+           Deshalb steht jede später hinzugekommene Spalte hier noch
+           einmal als ALTER TABLE. Bei einer frischen Einrichtung
+           scheitert das mit „Spalte gibt es schon“ – und genau das ist
+           der Fall, den `istSchonDa` durchgehen lässt. */
+        $t[] = "ALTER TABLE tt_inserat ADD COLUMN wg_gruendung $ja";
+
         /* --- Indizes --------------------------------------------------
            Getrennt, weil MariaDB sie in CREATE TABLE erlaubt, SQLite
            aber nicht. Jeder deckt eine Abfrage ab, die auf jedem

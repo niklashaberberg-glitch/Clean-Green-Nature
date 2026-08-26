@@ -109,11 +109,16 @@ final class Db
         $pdo->prepare($ein)->execute(['schema', (string) Schema::VERSION]);
     }
 
+    /** „Gibt es schon“ ist bei Indizes und nachgereichten Spalten kein
+        Fehler, sondern der Normalfall bei einer frischen Einrichtung:
+        Die Tabelle wurde gerade mit allen Spalten angelegt, und das
+        nachfolgende ALTER TABLE hat nichts mehr zu tun. */
     private static function istSchonDa(PDOException $e): bool
     {
         $t = strtolower($e->getMessage());
         return str_contains($t, 'already exists')
             || str_contains($t, 'duplicate key name')
+            || str_contains($t, 'duplicate column name')
             || str_contains($t, 'existiert bereits');
     }
 

@@ -300,6 +300,27 @@
       ziele: [['Ringtausch ansehen', 'tausch']]
     },
     {
+      id: 'wg-gruenden',
+      titel: 'Mit Fremden zusammen eine Wohnung mieten',
+      gruppe: 'Suchen',
+      fragen: ['wg gruenden', 'zusammen mieten', 'wohnung mit fremden', 'mitbewohner finden',
+        'gemeinsam bewerben', 'grosse wohnung teilen'],
+      schlag: ['wg gruend', 'zusammen miet', 'mitbewohner', 'gemeinsam bewerb', 'teilen', 'zu dritt', 'zu zweit'],
+      antwort: 'Eine Wohnung ab drei Zimmern ist für eine Person zu groß und für viele Familien zu teuer – '
+        + 'für drei Leute zusammen aber gut bezahlbar. Hat die anbietende Seite eine Wohnung dafür '
+        + 'freigegeben, steht auf der Objektseite der Block „Für eine WG-Gründung freigegeben“. Dort '
+        + 'eröffnest du eine Gruppe oder trittst einer bei.\n\nWer gründet, entscheidet, wer dazukommt. '
+        + 'Bis dahin sehen die übrigen Mitglieder eine Anfrage nicht, und E-Mail-Adressen sieht man erst, '
+        + 'wenn beide Seiten einander angenommen haben. Ist die Gruppe voll, bewirbt sie sich als eine '
+        + 'Bewerbung – für die Vermieterseite ist das ein vollständiger Haushalt statt drei Einzelner.'
+        + '\n\nWichtig vorher: Bei einem gemeinsamen Mietvertrag haftet ihr als Gesamtschuldner '
+        + '(§ 421 BGB) – zahlt einer nicht, kann die volle Miete von jedem Einzelnen verlangt werden. '
+        + 'Die Kaution ist auf drei Nettokaltmieten für die ganze Wohnung begrenzt, nicht je Person '
+        + '(§ 551 Abs. 1 BGB). Und ein Auszug allein ist keine Kündigung: Der Wechsel einer Person '
+        + 'braucht die Zustimmung aller und der Vermieterseite.',
+      ziele: [['WG gründen', 'wg'], ['Wohnungen dafür', 'suche?wg=1']]
+    },
+    {
       id: 'inserieren',
       titel: 'Wie gebe ich ein Inserat auf?',
       gruppe: 'Inserieren',

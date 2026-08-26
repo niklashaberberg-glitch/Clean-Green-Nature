@@ -55,11 +55,11 @@ erreicht **[Marktanteile und Eigentümerstrukturen vor jeder externen
 Verwendung prüfen – sie ändern sich durch Übernahmen laufend]**.
 
 Nicht aussichtslos ist es, dort anzufangen, wo diese Anbieter nichts
-tun. Davon gibt es genau drei Stellen, und alle drei sind gebaut.
+tun. Davon gibt es vier Stellen, und alle vier sind gebaut.
 
 ---
 
-## 2. Der Keil: drei Eingänge, die kein Angebot brauchen
+## 2. Der Keil: vier Eingänge, die kein Angebot brauchen
 
 Ein Portal ohne Wohnungen kann trotzdem gefunden und benutzt werden –
 wenn es etwas anderes anbietet, das Menschen suchen. Das ist der einzige
@@ -94,7 +94,33 @@ machen: Er erzeugt **Inserate von Menschen, die sonst nie inseriert
 hätten**, und er ist eine Geschichte, die sich erzählen lässt – lokale
 Presse, Mietervereine, Stadtteilinitiativen.
 
-### Keil 3: Die Werkzeuge
+### Keil 3: WG-Gründung
+
+Der Keil, der beide Marktseiten zugleich bedient – und der einzige, der einer
+Vermieterseite einen Grund gibt, **hierher** zu inserieren statt woanders.
+
+Eine Vier-Zimmer-Wohnung für 1.600 Euro warm ist für eine Person zu groß und für
+viele Familien zu teuer. Sie steht deshalb lange leer. Drei Leute zahlen 533 Euro
+und nehmen sie sofort – nur finden sie sich nicht, weil jeder gleichzeitig die
+Wohnung und zwei Mitbewohner bräuchte.
+
+Was das geschäftlich wert ist:
+
+- **Ein Nutzer bringt zwei weitere.** Wer eine Gruppe eröffnet, holt die anderen
+  selbst dazu. Billiger kommt kein Portal an Nutzer.
+- **Die anbietende Seite hat einen echten Grund.** Wer eine schwer vermietbare
+  Wohnung hat, findet das bei ImmoScout nicht. Das ist das erste Argument in
+  diesem Geschäftsplan, das nicht „wir sind netter“ lautet.
+- **Es ist schwer nachzubauen.** Nicht technisch – aber ein großes Portal müsste
+  dafür Personendaten zwischen Nutzenden sichtbar machen, mit allem, was daran
+  hängt. Die Zurückhaltung großer Anbieter an genau dieser Stelle ist der Grund,
+  warum es das Angebot nicht gibt.
+
+**Zielgruppe:** Studierende, Auszubildende, Berufsanfänger, frisch Getrennte –
+alle, für die eine ganze Wohnung nicht in Frage kommt und ein WG-Zimmer nicht
+frei wird.
+
+### Keil 4: Die Werkzeuge
 
 Nebenkostenabrechnung prüfen, Mietpreisbremse rechnen,
 Wohnberechtigungsschein, Wohngeld, Übergabeprotokoll. Fünf
@@ -185,6 +211,7 @@ nicht.
 | „Konto nötig“ → Konto | Ist die Hürde niedrig genug? | Anmeldung zu umständlich oder unklar |
 | Objekt → Anfrage | Kommt es zum Kontakt? | Inserate wirken unecht oder unattraktiv |
 | Inserieren → Inserat | Kommt Angebot herein? | Das Formular ist zu lang oder verlangt zu viel |
+| WG-Beitritt → Bewerbung | Werden Gruppen vollzählig? | Zu wenige Wohnungen freigegeben, zu wenige Suchende |
 
 **Die eine Zahl, die über alles entscheidet:** Wie viele echte,
 gültige Inserate stehen heute in der Suche? Steht sie bei null, ist jede

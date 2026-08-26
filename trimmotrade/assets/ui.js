@@ -486,7 +486,7 @@
     /* Der Trichter. Gezählt wird die Ansicht, nicht der Mensch: eine
        Tagessumme je Name, ohne Kennung und ohne Reihenfolge. */
     if (TT.markt) {
-      const zaehlbar = { suche: 'suche', objekt: 'objekt', plus: 'plus-seite',
+      const zaehlbar = { suche: 'suche', objekt: 'objekt', plus: 'plus-seite', wg: 'wg-seite',
         inserieren: 'inserieren-seite', recht: 'recht', hilfe: 'hilfe', tausch: 'tausch',
         werkzeuge: 'werkzeug', markt: 'werkzeug' };
       if (zaehlbar[name]) TT.markt.zaehle(zaehlbar[name]);
@@ -570,6 +570,10 @@
     { route: 'start', label: 'Start', icon: 'dach', unten: true },
     { route: 'suche', label: 'Suchen', icon: 'suche', unten: true },
     { route: 'tausch', label: 'Ringtausch', icon: 'ring', unten: true },
+    /* Nicht in der unteren Leiste: Sechs Einträge sind auf einem
+       schmalen Gerät schon die Grenze, und die WG-Gründung erreicht man
+       dort, wo sie gebraucht wird – an der Wohnung. */
+    { route: 'wg', label: 'WG gründen', icon: 'wg', unten: false },
     { route: 'werkzeuge', label: 'Werkzeuge', icon: 'werkzeug', unten: true },
     { route: 'merkliste', label: 'Merkliste', icon: 'herz', unten: true },
     { route: 'nachrichten', label: 'Nachrichten', icon: 'nachricht', unten: true },
@@ -616,6 +620,7 @@
      der Website – in der Einzeldatei und im Artefakt gäbe es tote
      Verweise. Deshalb erscheinen sie nur dort, wo sie auch liegen. */
   const RATGEBER = [
+    ['wg-gruenden.html', 'WG gründen'],
     ['wohnung-vermieten.html', 'Wohnung vermieten'],
     ['nachmieter-finden.html', 'Nachmieter finden'],
     ['wohnungstausch.html', 'Wohnungstausch'],
@@ -851,6 +856,7 @@
         { route: 'agenten', label: 'Suchaufträge', icon: 'glocke' },
         { route: 'umzug', label: 'Umzugsplan', icon: 'umzug' },
         { route: 'inserieren', label: 'Inserat aufgeben', icon: 'plus' },
+        { route: 'wg', label: 'WG gründen – zu mehreren eine Wohnung nehmen', icon: 'wg' },
         { route: 'rechner', label: 'Mieten oder kaufen', icon: 'rechner' },
         { route: 'leistbarkeit', label: 'Was kann ich mir leisten?', icon: 'euro' },
         { route: 'wbs', label: 'Wohnberechtigungsschein', icon: 'blatt' },
@@ -1026,6 +1032,8 @@
      Wort möglich ist. */
   const WOFUER = {
     merken: 'Inserate merken',
+    'wg-gruenden': 'Eine WG gründen',
+    'wg-beitreten': 'Einer WG-Gründung beitreten',
     vergleich: 'Inserate vergleichen',
     anschreiben: 'Eine Anfrage schreiben',
     'agent-speichern': 'Suchaufträge speichern',

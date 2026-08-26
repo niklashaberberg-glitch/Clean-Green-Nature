@@ -2332,6 +2332,107 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
    Sie ist Angebot, nicht Pflicht. */
 .fuss__links--ratgeber { font-size: .82rem; opacity: .9; }
 
+/* =====================================================================
+   WG-Gründung
+
+   Der Bereich, in dem sich Menschen begegnen, die sich nicht kennen.
+   Er ist deshalb bewusst ruhiger gehalten als der Rest: keine
+   Akzentflächen, keine Rahmen in Signalfarbe. Was hier Aufmerksamkeit
+   bekommt, sind die Personen und die Zahl, die jede zahlen würde.
+   ===================================================================== */
+.wg-liste { display: grid; gap: 14px; }
+
+.wg-karte {
+  border: 1px solid var(--rand); border-radius: var(--r-mittel);
+  padding: 1em 1.1em; background: var(--flaeche);
+  display: grid; gap: .7em;
+}
+.wg-karte.is-drin { border-color: var(--akzent); }
+
+.wg-karte__kopf { display: flex; align-items: flex-start; gap: 1em; justify-content: space-between; }
+.wg-karte__kopf h3 { margin: 0; font-size: 1.05rem; }
+.wg-karte__wohnung { margin: .25em 0 0; font-size: .85rem; display: flex; align-items: center; gap: .35em; }
+
+/* Die Besetzung als Bruch: „2/3“ ist auf einen Blick lesbar, „zwei von
+   drei Plätzen belegt“ nicht. */
+.wg-karte__zahl { text-align: right; flex: none; line-height: 1.1; }
+.wg-karte__zahl b { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.wg-karte__zahl b i { font-size: .95rem; font-style: normal; color: var(--text2); }
+.wg-karte__zahl span { display: block; font-size: .75rem; color: var(--text2); }
+
+/* Der Anteil je Person. Die erste Zahl, nach der gefragt wird – deshalb
+   steht sie groß und nicht in einer Aufzählung. */
+.wg-karte__geld {
+  display: flex; align-items: baseline; gap: .45em; margin: 0;
+  padding: .5em .75em; background: var(--flaeche2); border-radius: var(--r-klein);
+}
+.wg-karte__geld b { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.wg-karte__geld span { font-size: .85rem; color: var(--text2); }
+.wg-karte__geld > .ico { align-self: center; color: var(--text2); }
+
+.wg-karte__text { margin: 0; white-space: pre-wrap; }
+.wg-karte__passung { display: flex; align-items: center; gap: .5em; margin: 0; font-size: .88rem; }
+.wg-karte__passung.is-gut > .ico { color: var(--gut); }
+.wg-karte__passung.is-warn > .ico { color: var(--warn); }
+.wg-karte__passung.is-schlecht > .ico { color: var(--schlecht); }
+.wg-karte__passung span { color: var(--text2); }
+
+.wg-karte__fuss {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .6em 1em;
+  padding-top: .6em; border-top: 1px solid var(--rand);
+}
+.wg-karte__fuss .fein { display: inline-flex; align-items: center; gap: .35em; }
+
+.wg-personen { list-style: none; margin: 0; padding: 0; display: grid; gap: .6em; }
+.wg-person { display: flex; gap: .7em; align-items: flex-start; }
+.wg-person.is-ich { opacity: .85; }
+.wg-person > svg { flex: none; border-radius: 50%; }
+.wg-person b { display: flex; flex-wrap: wrap; align-items: center; gap: .4em; }
+.wg-person__eck { display: flex; flex-wrap: wrap; gap: .25em .7em; font-size: .82rem; color: var(--text2); }
+.wg-person__eck i { font-style: normal; }
+.wg-person__text { margin: .3em 0 0; font-size: .88rem; white-space: pre-wrap; }
+.wg-person__mail {
+  display: inline-flex; align-items: center; gap: .3em;
+  margin-top: .3em; font-size: .82rem;
+}
+.wg-person__tun { display: flex; flex-wrap: wrap; gap: .4em; margin-left: auto; }
+
+.wg-anfragen {
+  padding: .8em .9em; background: var(--flaeche2); border-radius: var(--r-klein);
+  display: grid; gap: .6em;
+}
+.wg-anfragen h4 { margin: 0; font-size: .9rem; display: flex; align-items: center; gap: .4em; }
+
+/* Der Rechtsteil steht zugeklappt da. Aufgeklappt ist er lang – das ist
+   Absicht: Wer einen gemeinsamen Mietvertrag unterschreibt, sollte
+   diese vier Absätze gelesen haben, und ein Zweizeiler würde ihnen
+   nicht gerecht. */
+.wg-recht {
+  border: 1px solid var(--rand); border-radius: var(--r-klein);
+  padding: .7em .9em; background: var(--flaeche2);
+}
+.wg-recht > summary {
+  display: flex; align-items: center; gap: .5em;
+  cursor: pointer; font-size: .9rem;
+}
+.wg-recht > summary::-webkit-details-marker { display: none; }
+.wg-recht h4 {
+  margin: 1em 0 .4em; font-size: .88rem;
+  display: flex; align-items: center; gap: .35em;
+}
+.wg-recht .spalten2 { margin-top: .6em; }
+
+.wg-block__hinweis {
+  display: flex; gap: .5em; margin: 0;
+  padding: .6em .8em; background: var(--flaeche2);
+  border-left: 3px solid var(--rand); border-radius: var(--r-klein);
+  font-size: .9rem; font-style: italic;
+}
+.wg-block__hinweis > .ico { flex: none; color: var(--text2); font-style: normal; }
+
+.wg-frei .formraster { margin-top: .7em; }
+.feld--breit { grid-column: 1 / -1; }
+
 </style>
 <noscript>
   <div style="max-width:640px;margin:12vh auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.6">
@@ -5604,6 +5705,290 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       "of one side to the other; the notifying email merely says that an enquiry has arrived. Which details accompany an enquiry is decided by the enquiring person before sending.",
   });
 
+
+  /* -------------------------------------------------------------------
+     WG-Gründung
+     ------------------------------------------------------------------- */
+  e({
+    "für WG-Gründung freigegeben":
+      "released for founding a flatshare",
+    "Wohnungen, die an mehrere Fremde zusammen vermietet werden":
+      "Flats let to several strangers together",
+    "An eine WG vermieten?":
+      "Let to a flatshare?",
+    "Eine Wohnung ab drei Zimmern ist für eine Person zu groß und für viele Familien zu teuer. Drei Leute, die sich hier finden, zahlen sie zusammen ohne Mühe – und sie bewerben sich als ein Haushalt, nicht als drei Einzelne.":
+      "A flat with three or more rooms is too big for one person and too expensive for many families. Three people who find each other here pay it together without effort – and they apply as one household, not as three individuals.",
+    "Für eine WG-Gründung freigeben":
+      "Release for founding a flatshare",
+    "Mehrere Fremde können sich hier zusammentun und sich gemeinsam bewerben. Du entscheidest wie immer, wer die Wohnung bekommt.":
+      "Several strangers can team up here and apply together. You still decide who gets the flat, as always.",
+    "Bei einem gemeinsamen Vertrag haften alle als Gesamtschuldner (§ 421 BGB) – für dich die sicherere Form. Die Kaution bleibt in jedem Fall auf drei Nettokaltmieten für die ganze Wohnung begrenzt, nicht je Person (§ 551 Abs. 1 BGB).":
+      "With a joint agreement everybody is jointly and severally liable (§ 421 BGB) – the safer form for you. The deposit stays capped at three months’ net rent for the whole flat in any case, not per person (§ 551 Abs. 1 BGB).",
+    "Eine Wohnung, die für eine Person zu groß und für eine Familie zu teuer ist, wird bezahlbar, sobald sich drei Leute finden. Hier findet man sie – vor der Wohnung, nicht danach.":
+      "A flat that is too big for one person and too expensive for a family becomes affordable as soon as three people find each other. Here is where they do – before the flat, not after.",
+    "Eine WG zu gründen heißt, dass sich Menschen finden, die sich nicht kennen. Das geht nur dort, wo mehr als ein Browser beteiligt ist – auf":
+      "Founding a flatshare means people find each other who do not know each other. That only works where more than one browser is involved – on",
+    ". Diese Kopie läuft ohne Verbindung und zeigt nur, wie es aussieht.":
+      ". This copy runs without a connection and only shows what it looks like.",
+    "Was ihr rechtlich unterschreibt:":
+      "What you are signing, legally:",
+    "Ein gemeinsamer Vertrag":
+      "One joint agreement",
+    "Alle stehen zusammen im Vertrag.":
+      "Everybody is on the same contract.",
+    "Die anbietende Seite bevorzugt das fast immer.":
+      "Landlords almost always prefer this.",
+    "Wer auszieht, kann ersetzt werden – wenn alle zustimmen.":
+      "Whoever moves out can be replaced – if everybody agrees.",
+    "Solltet ihr wissen":
+      "You should know",
+    "Ihr haftet als Gesamtschuldner (§ 421 BGB): Zahlt einer nicht, kann die Vermieterseite die volle Miete von jedem Einzelnen verlangen.":
+      "You are jointly and severally liable (§ 421 BGB): if one does not pay, the landlord can demand the full rent from any single one of you.",
+    "Ein Auszug allein geht nicht. Der Wechsel einer Person ist eine Vertragsänderung und braucht die Zustimmung aller Mitmietenden und der Vermieterseite.":
+      "Moving out alone does not work. Replacing one person is a change to the contract and needs the agreement of all co-tenants and of the landlord.",
+    "Vier Dinge, die fast alle falsch machen":
+      "Four things almost everybody gets wrong",
+    "Die Kaution gilt für die Wohnung, nicht je Person.":
+      "The deposit applies to the flat, not per person.",
+    "Höchstens drei Nettokaltmieten insgesamt (§ 551 Abs. 1 BGB). Wer von jedem drei Monatsmieten verlangt, verlangt zu viel – und ihr dürft in drei Raten zahlen.":
+      "Three months’ net rent in total at most (§ 551 Abs. 1 BGB). Demanding three months from each is too much – and you may pay in three instalments.",
+    "Ein Auszug beim gemeinsamen Vertrag ist keine Kündigung.":
+      "Moving out under a joint agreement is not a notice.",
+    "Man kündigt nur gemeinsam. Wer allein gehen will, braucht eine Vertragsänderung – und damit das Ja aller anderen und der Vermieterseite.":
+      "Notice is given jointly only. Whoever wants to leave alone needs a change to the contract – and with it the yes of everybody else and of the landlord.",
+    "Jede Person muss sich anmelden":
+      "Every person has to register",
+    ", innerhalb von zwei Wochen. Die Vermieterseite ist verpflichtet, dafür eine Wohnungsgeberbestätigung auszustellen (§ 19 BMG).":
+      ", within two weeks. The landlord is obliged to issue a landlord’s confirmation for that (§ 19 BMG).",
+    "Der Rundfunkbeitrag fällt einmal je Wohnung an":
+      "The broadcasting fee is charged once per flat",
+    ", nicht je Person. Eine WG zahlt zusammen einen Beitrag – klärt gleich, wer ihn anmeldet und wie ihr teilt.":
+      ", not per person. A flatshare pays one fee together – settle right away who registers it and how you split it.",
+    "Allgemeine Hinweise, keine Rechtsberatung. Bei einem gemeinsamen Vertrag über mehrere Jahre lohnt der Blick eines Mietervereins, bevor unterschrieben wird.":
+      "General information, not legal advice. For a joint agreement running several years, a tenants’ association is worth consulting before anybody signs.",
+    ", damit die Mail auch dann herausgeht, wenn du gerade nicht hier bist (Abschnitt 7). Dazu kommt, was du einer":
+      ", so that the email goes out even when you are not here (section 7). Added to that is what you tell a",
+    "über dich erzählst, wenn du eine gründest oder ihr beitrittst (Abschnitt 8).":
+      "about yourself when you found one or join one (section 8).",
+    "Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten gebildet und keine Werbung nach deinen Interessen ausgespielt. Gezählt wird nur, wie oft eine Ansicht an einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse, ohne Verlauf (Abschnitt 10). Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.":
+      "No audience-measurement tools are used, no profiles of your behaviour are built and no interest-based advertising is shown. All that is counted is how often a view was opened in total on a given day – with no identifier, no address, no history (section 10). That is why no window appears asking for consent: there is nothing consent would be needed for.",
+    "8. Gruppen zur WG-Gründung":
+      "8. Groups for founding a flatshare",
+    "Wer eine Gruppe eröffnet oder ihr beitritt, gibt anderen Menschen etwas über sich preis – das ist der Zweck der Sache und nicht ihr Nebeneffekt. Deshalb steht hier genau, wer was zu sehen bekommt.":
+      "Whoever opens a group or joins one reveals something about themselves to other people – that is the point of the thing, not a side effect. So here is exactly who gets to see what.",
+    "Gespeichert werden dein Vorstellungstext und die Eckdaten, die du im Formular":
+      "What is stored is your introduction text and the key facts you",
+    ": Alter, Beruf, eine Einkommens":
+      "in the form: age, occupation, an income",
+    ", Rauchen, Haustiere, gewünschter Einzugstermin und deine sechs Antworten zum Alltag, aus denen sich die Passung rechnet. Diese Angaben werden als Kopie gespeichert und ändern sich nicht mehr, wenn du später dein Profil bearbeitest.":
+      ", smoking, pets, desired move-in date and your six answers about everyday life, from which the match is calculated. These details are stored as a copy and do not change later if you edit your profile.",
+    "Ohne Konto sichtbar":
+      "Visible without an account",
+    "nur Zahlen und der Text der Gruppe – keine Person":
+      "numbers and the group’s text only – no person",
+    "Rufname und erster Buchstabe des Nachnamens („Cem Y.“), Alter, Beruf, Einzugstermin, Vorstellungstext, Lebensrhythmus":
+      "First name and initial of the surname (“Cem Y.”), age, occupation, move-in date, introduction text, everyday rhythm",
+    "Für Mitglieder sichtbar":
+      "Visible to members",
+    "zusätzlich die E-Mail-Adressen – erst dann, wenn beide Seiten einander angenommen haben":
+      "in addition the email addresses – only once both sides have accepted each other",
+    "Für die gründende Person":
+      "For the founding person",
+    "Die anbietende Seite der Wohnung ist von Gruppen zu ihrem eigenen Inserat ausgeschlossen – weder gründen noch beitreten. Was Bewerbende einander erzählen, erzählen sie einander. Was die Vermieterseite erfährt, steht in der gemeinsamen Bewerbung, und das sind Haushaltsgröße und Berufe, nicht die einzelnen Vorstellungstexte.":
+      "The advertiser of the flat is excluded from groups for their own listing – neither founding nor joining. What applicants tell each other, they tell each other. What the landlord learns is in the joint application, and that is household size and occupations, not the individual introduction texts.",
+    "Zusammenfinden von Menschen, die gemeinsam eine Wohnung mieten wollen":
+      "Bringing together people who want to rent a flat jointly",
+    "Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags und vorvertragliche Maßnahme auf deine eigene Anfrage hin":
+      "Art. 6(1)(b) GDPR – performance of the user agreement and pre-contractual measure at your own request",
+    "bis die Gruppe aufgelöst wird oder abläuft, spätestens mit der Löschung deines Kontos. Eine Gruppe läuft 45 Tage nach der letzten Änderung ab.":
+      "until the group is dissolved or expires, at the latest when your account is deleted. A group expires 45 days after the last change.",
+    "die übrigen Mitglieder der Gruppe im oben beschriebenen Umfang":
+      "the other members of the group, to the extent described above",
+    "Nicht übermittelt werden Angaben zu Herkunft, Religion, Gesundheit, Familienplanung oder sexueller Orientierung (Art. 9 DSGVO) – sie kommen im Formular gar nicht erst vor. Eine Auswahl nach Alter oder Geschlecht nimmt TrimmoTrade nicht vor; dass eine WG das für sich tun darf (§ 19 Abs. 5 AGG nimmt das gemeinsame Wohnen aus), ist eine Entscheidung der Menschen, nicht dieser Anwendung.":
+      "Data on origin, religion, health, family planning or sexual orientation (Art. 9 GDPR) is not transmitted – it does not appear in the form in the first place. TrimmoTrade makes no selection by age or gender; that a flatshare may do so for itself (§ 19 Abs. 5 AGG exempts shared living) is a decision of the people, not of this application.",
+    "Was ausdrücklich nicht stattfindet:":
+      "What explicitly does not happen:",
+    "eine Prüfung von Personen. TrimmoTrade stellt niemanden fest, bewertet niemanden und steht für niemanden ein. Wer sich hier zusammentut, entscheidet selbst – alles andere zu behaupten wäre ein Versprechen, das niemand halten kann.":
+      "any vetting of people. TrimmoTrade identifies nobody, rates nobody and vouches for nobody. Whoever teams up here decides for themselves – claiming anything else would be a promise nobody can keep.",
+    "10. Reichweitenmessung ohne Personenbezug":
+      "10. Audience measurement without personal data",
+    "14. Kontaktaufnahme und Hilfe":
+      "14. Getting in touch and help",
+    "15. Bezahlung von TrimmoTrade Plus":
+      "15. Paying for TrimmoTrade Plus",
+    "16. Keine automatisierte Entscheidung über Personen":
+      "16. No automated decisions about people",
+    "18. Deine Rechte":
+      "18. Your rights",
+    "20. Pflicht zur Bereitstellung":
+      "20. Obligation to provide data",
+    "(7) Der Dienst ermöglicht es Nutzenden, sich zu Gruppen zusammenzuschließen, um eine Wohnung gemeinsam zu mieten. Der Anbieter":
+      "(7) The service lets users team up in groups in order to rent a flat jointly. The provider",
+    "prüft die Beteiligten nicht":
+      "does not vet the people involved",
+    ", stellt ihre Identität nicht fest und steht für sie nicht ein. Er wird weder Partei eines Mietvertrags noch einer Vereinbarung zwischen den Mitgliedern einer Gruppe. Die Entscheidung, mit wem jemand zusammenzieht, treffen ausschließlich die Beteiligten.":
+      ", does not establish their identity and does not vouch for them. It becomes party neither to a tenancy agreement nor to any arrangement between the members of a group. Who moves in with whom is decided solely by those involved.",
+    /* Gruppenkarten und Dialoge – sie erscheinen erst, wenn es Gruppen
+       gibt, und wurden deshalb im Durchlauf nicht gezeichnet. */
+    'WG gründen': 'Start a flatshare',
+    'WG gründen – zu mehreren eine Wohnung nehmen': 'Start a flatshare – take a flat with others',
+    'Eine WG gründen': 'Founding a flatshare',
+    'Für eine WG-Gründung freigegeben': 'Released for founding a flatshare',
+    'Die anbietende Seite vermietet diese Wohnung ausdrücklich auch an mehrere Personen, die sich nicht kennen.':
+      'The advertiser explicitly lets this flat to several people who do not know each other.',
+    ' Bei {0} Personen zahlt jede etwa {1} warm.': ' With {0} people each pays about {1} incl. bills.',
+    'bis {0} Personen': 'up to {0} people',
+    'Gruppen werden geladen …': 'Loading groups …',
+    'Zu dieser Wohnung gibt es noch keine Gruppe.': 'There is no group for this flat yet.',
+    'Gruppe gründen': 'Open a group',
+    'Beitreten': 'Join',
+    'Deine Gruppen': 'Your groups',
+    'Gruppen, die noch jemanden suchen': 'Groups still looking for someone',
+    'Gerade sucht keine Gruppe': 'No group is looking right now',
+    'Gruppen entstehen an einer konkreten Wohnung. Such dir eine, die für eine WG-Gründung freigegeben ist, und eröffne die erste.':
+      'Groups form around a specific flat. Find one released for founding a flatshare and open the first group.',
+    'Wohnungen für WG-Gründung': 'Flats for founding a flatshare',
+    'Dafür braucht es die Website': 'This needs the website',
+    'Ansehen geht ohne Konto, mitmachen nicht': 'Looking works without an account, joining does not',
+    'Wer einer Gruppe beitritt, erzählt Fremden etwas über sich. Das setzt voraus, dass man weiß, mit wem man es zu tun hat – deshalb geht es nur mit bestätigter Adresse.':
+      'Whoever joins a group tells strangers something about themselves. That presupposes knowing who you are dealing with – which is why it needs a confirmed address.',
+    '{0} % Passung': '{0} % match',
+    '{0} frei': '{0} free',
+    'voll': 'full',
+    '{0} Jahre': '{0} years old',
+    'jemand': 'somebody',
+    'gegründet': 'founded it',
+    'du': 'you',
+    'Wohnung weg': 'Flat gone',
+    'je Person warm, bei {0} Personen': 'per person incl. bills, with {0} people',
+    'Diese Gruppe hat sich gemeinsam beworben.': 'This group has applied together.',
+    'Vollzählig – die Gruppe kann sich bewerben.': 'Complete – the group can apply.',
+    'Noch niemand hat sich vorgestellt.': 'Nobody has introduced themselves yet.',
+    'Wer dabei ist, siehst du nach der Anmeldung. Ohne Konto zeigen wir keine Personen.':
+      'You see who is in it after signing in. Without an account we show no people.',
+    '{0} möchten dazukommen': '{0} would like to join',
+    'Du entscheidest. Bis dahin sehen die übrigen Mitglieder diese Anfragen nicht.':
+      'You decide. Until then the other members do not see these requests.',
+    'Aufnehmen': 'Accept',
+    'Absagen': 'Decline',
+    'Deine Anfrage liegt bei der Gruppe.': 'Your request is with the group.',
+    'zurückziehen': 'withdraw',
+    'Gemeinsam bewerben': 'Apply together',
+    'Gruppe auflösen': 'Dissolve group',
+    'Gruppe verlassen': 'Leave group',
+    'Diese Gruppe nimmt gerade niemanden auf.': 'This group is not taking anyone right now.',
+    'Für eine Einschätzung fehlt dein Alltagsprofil.': 'Your everyday profile is missing for an assessment.',
+    'Sechs Fragen im Profil': 'Six questions in your profile',
+    ' genügen.': ' are enough.',
+
+    /* Gründen */
+    'Du eröffnest eine Gruppe für': 'You are opening a group for',
+    '. Andere sehen sie, stellen sich vor, und du entscheidest, wer dazukommt.':
+      '. Others see it, introduce themselves, and you decide who joins.',
+    'Name der Gruppe': 'Name of the group',
+    'WG in {0}': 'Flatshare in {0}',
+    'Zu wie vielt?': 'How many of you?',
+    ' je Person': ' per person',
+    'Was für eine WG soll das werden?': 'What kind of flatshare should it be?',
+    'Zweck-WG oder gemeinsam kochen? Ruhig oder offen für Besuch? Je klarer, desto passender melden sich Leute.':
+      'Just sharing costs, or cooking together? Quiet, or open to visitors? The clearer you are, the better the people who get in touch.',
+    'Gruppe eröffnen': 'Open the group',
+    'Wird eröffnet …': 'Opening …',
+    'Gruppe eröffnet. Jetzt kann sich jemand melden.': 'Group opened. Now somebody can get in touch.',
+    'Schreib ein paar Sätze über dich – ohne das meldet sich niemand.':
+      'Write a few sentences about yourself – without it nobody will get in touch.',
+
+    /* Vorstellung */
+    'Ein paar Sätze über dich': 'A few sentences about yourself',
+    'Wer du bist, was du arbeitest, wie du wohnst – und warum diese Wohnung.':
+      'Who you are, what you do, how you live – and why this flat.',
+    'Das geht aus deinem Profil mit': 'This goes along from your profile',
+    'Dazu deine sechs Antworten zum Alltag – daraus rechnet sich die Passung. Ohne sie sieht die Gruppe keine Einschätzung.':
+      'Plus your six answers about everyday life – the match is calculated from them. Without them the group sees no assessment.',
+    'Dein Profil ist leer': 'Your profile is empty',
+    'Alter, Beruf und die sechs Fragen zum Alltag entscheiden darüber, ob jemand dich aufnimmt.':
+      'Age, occupation and the six everyday questions decide whether somebody takes you in.',
+    ' – es dauert zwei Minuten.': ' – it takes two minutes.',
+    'Deine E-Mail-Adresse sehen die anderen erst, wenn ihr euch gegenseitig angenommen habt. Vorher steht dort nur dein Rufname.':
+      'The others only see your email address once you have accepted each other. Before that only your first name is shown.',
+    'Alter': 'Age', 'Beruf': 'Occupation',
+
+    /* Beitreten */
+    'Der Gruppe beitreten': 'Join the group',
+    'Du stellst dich': 'You are introducing yourself to',
+    'vor. Die gründende Person entscheidet, ob du dazukommst; die übrigen Mitglieder sehen deine Anfrage bis dahin nicht.':
+      '. The founding person decides whether you join; until then the other members do not see your request.',
+    'Bevor du zusagst': 'Before you commit',
+    'Bei einem gemeinsamen Mietvertrag haftet ihr als Gesamtschuldner: Zahlt eine Person nicht, kann die Vermieterseite die volle Miete von jeder Einzelnen verlangen (§ 421 BGB). Trefft euch, bevor ihr unterschreibt.':
+      'With a joint tenancy agreement you are jointly and severally liable: if one person does not pay, the landlord can demand the full rent from any single one of you (§ 421 BGB). Meet up before you sign.',
+    'Anfrage schicken': 'Send request',
+    'Wird geschickt …': 'Sending …',
+    'Anfrage geschickt. Die Gruppe bekommt eine Mail.': 'Request sent. The group gets an email.',
+    'Schreib ein paar Sätze über dich – sonst kann niemand entscheiden.':
+      'Write a few sentences about yourself – otherwise nobody can decide.',
+
+    /* Entscheiden und verlassen */
+    'Aufgenommen. Ihr seht jetzt eure Adressen.': 'Accepted. You can now see each other’s addresses.',
+    'Abgesagt.': 'Declined.',
+    'Die Gruppe auflösen? Alle Mitglieder werden benachrichtigt.':
+      'Dissolve the group? All members will be notified.',
+    'Diese Gruppe wirklich verlassen?': 'Really leave this group?',
+    'Gruppe aufgelöst.': 'Group dissolved.',
+    'Du bist raus.': 'You are out.',
+
+    /* Bewerben */
+    'Eure Bewerbung geht als': 'Your application goes out as',
+    'eine': 'one',
+    'Anfrage hinaus – nicht als': 'enquiry – not as',
+    'einzelne. Für die anbietende Seite ist das der Unterschied zwischen':
+      'separate ones. For the advertiser that is the difference between',
+    'Leuten, die allein nicht zahlen können, und einem vollständigen Haushalt.':
+      'people who cannot pay on their own and one complete household.',
+    'Eure Nachricht': 'Your message',
+    'Das steht automatisch dabei': 'This is included automatically',
+    'Personen als WG': 'people as a flatshare',
+    'Namen und Adressen der Einzelnen gehen nicht mit. Wer antwortet, entscheidet selbst, wem er sie gibt.':
+      'Names and addresses of the individuals do not go along. Whoever answers decides for themselves who gets them.',
+    'Bewerbung abschicken': 'Send application',
+    'Bewerbung abgeschickt. Die anbietende Seite bekommt eine Mail.':
+      'Application sent. The advertiser gets an email.',
+    'zu zweit': 'two of us', 'zu dritt': 'three of us', 'zu viert': 'four of us',
+    'zu fünft': 'five of us', 'zu sechst': 'six of us',
+    'mit {0} Personen': 'a group of {0}',
+    'Guten Tag,\n\nwir sind {0} und würden die Wohnung gern gemeinsam nehmen. Wir haben uns über TrimmoTrade gefunden und stellen uns gern persönlich vor.\n\nÜber einen Besichtigungstermin würden wir uns freuen.':
+      'Hello,\n\nwe are {0} and would like to take the flat together. We found each other through TrimmoTrade and would be glad to introduce ourselves in person.\n\nWe would appreciate a viewing appointment.',
+
+    /* Formular */
+    'Höchstens wie viele Personen?': 'At most how many people?',
+    'Vertragsform': 'Form of contract',
+    'ein gemeinsamer Vertrag (üblich)': 'one joint agreement (usual)',
+    'ein Vertrag je Zimmer': 'one agreement per room',
+    'noch offen': 'still open',
+    'Hinweis an die Gruppe (freiwillig)': 'Note to the group (optional)',
+    'etwa: Ich hätte gern einen gemeinsamen Vertrag und eine Kaution von drei Kaltmieten insgesamt.':
+      'e.g.: I would prefer one joint agreement and a deposit of three months’ net rent in total.',
+    'Ein Vertrag je Zimmer': 'One agreement per room',
+    'Jede Person hat einen eigenen Vertrag.': 'Every person has their own agreement.',
+    'Keine Haftung für die anderen.': 'No liability for the others.',
+    'Jede Person kann für sich kündigen, ohne die anderen zu fragen.':
+      'Every person can give notice for themselves without asking the others.',
+    'Deutlich seltener – für die Vermieterseite ist es mehr Verwaltung.':
+      'Much rarer – it means more administration for the landlord.',
+    'Die Gemeinschaftsräume gehören dann niemandem allein; das gehört geregelt.':
+      'The shared rooms then belong to nobody alone; that needs to be settled.',
+    'Noch offen': 'Still open',
+    'Die Vertragsform ist noch nicht entschieden.': 'The form of contract has not been decided yet.',
+    'Ihr könnt danach fragen, bevor ihr euch festlegt.': 'You can ask about it before committing.',
+    'Fragt früh. Nach der Zusage ist die Verhandlungsposition schlechter.':
+      'Ask early. After the acceptance your bargaining position is weaker.',
+    'Spricht dafür': 'In favour',
+
+    /* Kontohinweis */
+    'Eine WG gründen': 'Founding a flatshare',
+    'Einer WG-Gründung beitreten': 'Joining a flatshare being founded'
+
+  });
+
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
 })(window.TT = window.TT || {});
@@ -8179,6 +8564,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       freiBis: null,
       anbieterArt: [],
       provisionsfrei: false,
+      /* Wohnungen, für die die anbietende Seite eine WG-Gründung
+         zugelassen hat. Für alle, die allein keine Wohnung bezahlen
+         können, ist das der wichtigste Filter überhaupt – und in den
+         großen Städten sind das die meisten. */
+      nurWgGruendung: false,
       nurVerifiziert: false,
       ohneVerdacht: true,
       wgArt: [], wgRauchen: null, wgHaustiere: null, wgGroesse: null, wgAlter: null,
@@ -8254,6 +8644,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       if (f.freiBis && l.freiAb > f.freiBis) return false;
       if (f.anbieterArt.length && f.anbieterArt.indexOf(l.anbieter.art) < 0) return false;
       if (f.provisionsfrei && l.provision > 0) return false;
+      if (f.nurWgGruendung && !l.wgGruendungMoeglich) return false;
       if (f.nurVerifiziert && !l.anbieter.verifiziert) return false;
       if (f.ohneVerdacht && risikoCheck(l).stufe === 'warnung') return false;
 
@@ -10991,6 +11382,27 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       ziele: [['Ringtausch ansehen', 'tausch']]
     },
     {
+      id: 'wg-gruenden',
+      titel: 'Mit Fremden zusammen eine Wohnung mieten',
+      gruppe: 'Suchen',
+      fragen: ['wg gruenden', 'zusammen mieten', 'wohnung mit fremden', 'mitbewohner finden',
+        'gemeinsam bewerben', 'grosse wohnung teilen'],
+      schlag: ['wg gruend', 'zusammen miet', 'mitbewohner', 'gemeinsam bewerb', 'teilen', 'zu dritt', 'zu zweit'],
+      antwort: 'Eine Wohnung ab drei Zimmern ist für eine Person zu groß und für viele Familien zu teuer – '
+        + 'für drei Leute zusammen aber gut bezahlbar. Hat die anbietende Seite eine Wohnung dafür '
+        + 'freigegeben, steht auf der Objektseite der Block „Für eine WG-Gründung freigegeben“. Dort '
+        + 'eröffnest du eine Gruppe oder trittst einer bei.\n\nWer gründet, entscheidet, wer dazukommt. '
+        + 'Bis dahin sehen die übrigen Mitglieder eine Anfrage nicht, und E-Mail-Adressen sieht man erst, '
+        + 'wenn beide Seiten einander angenommen haben. Ist die Gruppe voll, bewirbt sie sich als eine '
+        + 'Bewerbung – für die Vermieterseite ist das ein vollständiger Haushalt statt drei Einzelner.'
+        + '\n\nWichtig vorher: Bei einem gemeinsamen Mietvertrag haftet ihr als Gesamtschuldner '
+        + '(§ 421 BGB) – zahlt einer nicht, kann die volle Miete von jedem Einzelnen verlangt werden. '
+        + 'Die Kaution ist auf drei Nettokaltmieten für die ganze Wohnung begrenzt, nicht je Person '
+        + '(§ 551 Abs. 1 BGB). Und ein Auszug allein ist keine Kündigung: Der Wechsel einer Person '
+        + 'braucht die Zustimmung aller und der Vermieterseite.',
+      ziele: [['WG gründen', 'wg'], ['Wohnungen dafür', 'suche?wg=1']]
+    },
+    {
       id: 'inserieren',
       titel: 'Wie gebe ich ein Inserat auf?',
       gruppe: 'Inserieren',
@@ -12282,6 +12694,27 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       ziele: [['See swap chains', 'tausch']]
     },
     {
+      id: 'wg-gruenden',
+      titel: 'Renting a flat together with strangers',
+      gruppe: 'Searching',
+      fragen: ['start a flatshare', 'rent together', 'flat with strangers', 'find flatmates',
+        'apply together', 'share a big flat'],
+      schlag: ['flatshare', 'together', 'flatmate', 'share', 'group', 'three of us', 'two of us'],
+      antwort: 'A flat with three or more rooms is too big for one person and too expensive for many '
+        + 'families – but easily affordable for three people together. If the advertiser has released '
+        + 'a flat for this, the listing page shows the block “Released for founding a flatshare”. '
+        + 'There you open a group or join one.\n\nWhoever founds decides who joins. Until then the '
+        + 'other members do not see a request, and email addresses only become visible once both '
+        + 'sides have accepted each other. Once the group is full it applies as a single application – '
+        + 'for the landlord that is one complete household instead of three individuals.'
+        + '\n\nBefore you commit: with a joint tenancy agreement you are jointly and severally liable '
+        + '(§ 421 BGB) – if one person does not pay, the full rent can be demanded from any single one. '
+        + 'The deposit is capped at three months’ net rent for the whole flat, not per person '
+        + '(§ 551 Abs. 1 BGB). And moving out alone is not a notice: replacing one person needs the '
+        + 'agreement of everybody and of the landlord.',
+      ziele: [['Start a flatshare', 'wg'], ['Flats released for it', 'suche?wg=1']]
+    },
+    {
       id: 'inserieren',
       titel: 'How do I post a listing?',
       gruppe: 'Advertising',
@@ -12702,6 +13135,155 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     get zustand() { return zustand; },
     get echte() { return zustand.echte; },
     get beispieleErlaubt() { return zustand.beispiele; }
+  };
+})(window.TT = window.TT || {});
+
+/* ===== wg.js ===== */
+/* =====================================================================
+   TrimmoTrade – WG-Gründung
+
+   Der Unterschied zu allem, was Portale sonst können, in einem Satz:
+   Hier wird keine Person in eine bestehende WG vermittelt, hier
+   entsteht eine WG, die es noch nicht gibt.
+
+   Praktisch heißt das: Eine Wohnung, die für eine Person zu groß und
+   für eine Familie zu teuer ist, wird vermietbar, sobald sich drei
+   Fremde finden. Und die finden sich nicht von selbst – jeder von ihnen
+   bräuchte gleichzeitig die Wohnung und zwei passende Mitbewohner, und
+   solange beides voneinander abhängt, passiert nichts.
+
+   Dieses Stück Programm macht die Suche sichtbar. Alles Weitere –
+   Vertrauen, Sympathie, die Entscheidung – gehört den Menschen. Was
+   TrimmoTrade dabei nicht tut und nicht behauptet: Niemand wird geprüft.
+   Ein Portal, das das verspricht, verspricht etwas, das es nicht halten
+   kann.
+   ===================================================================== */
+(function (TT) {
+  'use strict';
+
+  const U = TT.util;
+
+  /* ------------------------------------------------------------------
+     Zustand
+     ------------------------------------------------------------------ */
+
+  let meine = null;            // Gruppen, an denen ich beteiligt bin
+  const zuInserat = {};        // Kennung des Inserats -> Gruppen
+
+  const amServer = () => !!(TT.api && TT.api.da);
+  const angemeldet = () => !!(TT.konto && TT.konto.angemeldet());
+
+  function meineHolen(neu) {
+    if (!amServer() || !angemeldet()) return Promise.resolve([]);
+    if (meine && !neu) return Promise.resolve(meine);
+    return TT.api.ruf('gruppe/meine').then((d) => {
+      meine = d.gruppen || [];
+      return meine;
+    }, () => { meine = []; return meine; });
+  }
+
+  function fuerInserat(id, neu) {
+    if (!amServer()) return Promise.resolve([]);
+    if (zuInserat[id] && !neu) return Promise.resolve(zuInserat[id]);
+    return TT.api.ruf('gruppen?inserat=' + encodeURIComponent(id)).then((d) => {
+      zuInserat[id] = d.gruppen || [];
+      return zuInserat[id];
+    }, () => { zuInserat[id] = []; return zuInserat[id]; });
+  }
+
+  function offeneHolen() {
+    if (!amServer()) return Promise.resolve([]);
+    return TT.api.ruf('gruppen?wieviele=40').then((d) => d.gruppen || [], () => []);
+  }
+
+  const vergessen = (id) => { if (id) delete zuInserat[id]; meine = null; };
+
+  /* ------------------------------------------------------------------
+     Passung zu einer Gruppe
+
+     Gerechnet wird mit demselben Verfahren wie bei einer bestehenden WG
+     – sechs Dimensionen, gewichtet, aus match.js. Statt es ein zweites
+     Mal zu schreiben, wird aus der Gruppe eine WG gebaut und die
+     vorhandene, geprüfte Rechnung darauf angewandt.
+
+     Was dabei bewusst NICHT entsteht: ein Ausschluss nach Alter oder
+     Geschlecht. Eine WG darf danach auswählen (§ 19 Abs. 5 AGG nimmt
+     das gemeinsame Wohnen aus), aber eine Gruppe, die es noch gar nicht
+     gibt, hat darüber nichts entschieden – und TrimmoTrade entscheidet
+     es nicht für sie.
+     ------------------------------------------------------------------ */
+
+  function alsWg(gruppe) {
+    const mit = (gruppe.mitglieder || []).filter((m) => m.eckdaten && m.eckdaten.lifestyle);
+    if (!mit.length) return null;
+
+    const lifestyle = {};
+    TT.match.DIMENSIONEN.forEach((d) => {
+      const werte = mit.map((m) => Number(m.eckdaten.lifestyle[d.key]))
+        .filter((v) => Number.isFinite(v));
+      lifestyle[d.key] = werte.length ? werte.reduce((a, b) => a + b, 0) / werte.length : 5;
+    });
+
+    const alter = (gruppe.mitglieder || []).map((m) => Number(m.eckdaten && m.eckdaten.alter))
+      .filter((v) => Number.isFinite(v) && v > 0);
+    const raucher = (gruppe.mitglieder || []).map((m) => (m.eckdaten || {}).raucher || '');
+    const tiere = (gruppe.mitglieder || []).map((m) => (m.eckdaten || {}).haustiere || '');
+
+    return {
+      wg: {
+        groesse: gruppe.ziel,
+        lifestyle,
+        durchschnittsalter: alter.length ? Math.round(alter.reduce((a, b) => a + b, 0) / alter.length) : 30,
+        /* Keine Vorauswahl: Die Gruppe hat noch nichts beschlossen. */
+        sucht: { geschlecht: 'egal', alterVon: 16, alterBis: 99 },
+        rauchen: raucher.length && raucher.every((r) => /nein|nicht/i.test(r))
+          ? 'nicht erwünscht' : 'egal',
+        haustiere: tiere.some((t) => t && !/kein/i.test(t)) ? 'vorhanden' : 'erlaubt'
+      }
+    };
+  }
+
+  function passung(gruppe, profil) {
+    const nachbau = alsWg(gruppe);
+    if (!nachbau || !profil || !profil.lifestyle) return null;
+    return TT.match.wgPassung(nachbau, profil);
+  }
+
+  /* Was aus dem eigenen Profil in eine Vorstellung übergeht. Wie bei der
+     Anfrage gilt: eine feste Liste, und sie steht sichtbar im Formular,
+     bevor jemand absendet. */
+  function eckdatenAus(p) {
+    const e = {};
+    if (p.alter) e.alter = String(p.alter);
+    if (p.beruf) e.beruf = p.beruf;
+    if (p.nettoEinkommen > 0) {
+      const unten = Math.floor(p.nettoEinkommen / 200) * 200;
+      e.einkommen = U.eur(unten) + ' ' + U.t('bis') + ' ' + U.eur(unten + 200);
+    }
+    e.raucher = p.raucher ? U.t('ja') : U.t('nein');
+    if (p.haustiere) e.haustiere = p.haustiere;
+    if (p.einzugAb) e.einzug = U.dateDE(p.einzugAb);
+    if (p.lifestyle) e.lifestyle = Object.assign({}, p.lifestyle);
+    return e;
+  }
+
+  const ECK_WORT = {
+    alter: 'Alter', beruf: 'Beruf', einkommen: 'Einkommen',
+    raucher: 'Rauchen', haustiere: 'Haustiere', einzug: 'Einzug ab'
+  };
+
+  /* Wie viel jede Person zahlen würde. Steht überall, wo eine Gruppe
+     auftaucht – es ist die Zahl, nach der als Erstes gefragt wird. */
+  function anteil(gruppe) {
+    if (!gruppe.inserat || !gruppe.inserat.warm || !gruppe.ziel) return null;
+    return Math.round(gruppe.inserat.warm / gruppe.ziel);
+  }
+
+  TT.wg = {
+    meineHolen, fuerInserat, offeneHolen, vergessen,
+    passung, alsWg, eckdatenAus, anteil, ECK_WORT,
+    get meine() { return meine || []; },
+    amServer, angemeldet
   };
 })(window.TT = window.TT || {});
 
@@ -13532,7 +14114,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     /* Der Trichter. Gezählt wird die Ansicht, nicht der Mensch: eine
        Tagessumme je Name, ohne Kennung und ohne Reihenfolge. */
     if (TT.markt) {
-      const zaehlbar = { suche: 'suche', objekt: 'objekt', plus: 'plus-seite',
+      const zaehlbar = { suche: 'suche', objekt: 'objekt', plus: 'plus-seite', wg: 'wg-seite',
         inserieren: 'inserieren-seite', recht: 'recht', hilfe: 'hilfe', tausch: 'tausch',
         werkzeuge: 'werkzeug', markt: 'werkzeug' };
       if (zaehlbar[name]) TT.markt.zaehle(zaehlbar[name]);
@@ -13616,6 +14198,10 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     { route: 'start', label: 'Start', icon: 'dach', unten: true },
     { route: 'suche', label: 'Suchen', icon: 'suche', unten: true },
     { route: 'tausch', label: 'Ringtausch', icon: 'ring', unten: true },
+    /* Nicht in der unteren Leiste: Sechs Einträge sind auf einem
+       schmalen Gerät schon die Grenze, und die WG-Gründung erreicht man
+       dort, wo sie gebraucht wird – an der Wohnung. */
+    { route: 'wg', label: 'WG gründen', icon: 'wg', unten: false },
     { route: 'werkzeuge', label: 'Werkzeuge', icon: 'werkzeug', unten: true },
     { route: 'merkliste', label: 'Merkliste', icon: 'herz', unten: true },
     { route: 'nachrichten', label: 'Nachrichten', icon: 'nachricht', unten: true },
@@ -13662,6 +14248,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
      der Website – in der Einzeldatei und im Artefakt gäbe es tote
      Verweise. Deshalb erscheinen sie nur dort, wo sie auch liegen. */
   const RATGEBER = [
+    ['wg-gruenden.html', 'WG gründen'],
     ['wohnung-vermieten.html', 'Wohnung vermieten'],
     ['nachmieter-finden.html', 'Nachmieter finden'],
     ['wohnungstausch.html', 'Wohnungstausch'],
@@ -13897,6 +14484,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         { route: 'agenten', label: 'Suchaufträge', icon: 'glocke' },
         { route: 'umzug', label: 'Umzugsplan', icon: 'umzug' },
         { route: 'inserieren', label: 'Inserat aufgeben', icon: 'plus' },
+        { route: 'wg', label: 'WG gründen – zu mehreren eine Wohnung nehmen', icon: 'wg' },
         { route: 'rechner', label: 'Mieten oder kaufen', icon: 'rechner' },
         { route: 'leistbarkeit', label: 'Was kann ich mir leisten?', icon: 'euro' },
         { route: 'wbs', label: 'Wohnberechtigungsschein', icon: 'blatt' },
@@ -14072,6 +14660,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
      Wort möglich ist. */
   const WOFUER = {
     merken: 'Inserate merken',
+    'wg-gruenden': 'Eine WG gründen',
+    'wg-beitreten': 'Einer WG-Gründung beitreten',
     vergleich: 'Inserate vergleichen',
     anschreiben: 'Eine Anfrage schreiben',
     'agent-speichern': 'Suchaufträge speichern',
@@ -14915,6 +15505,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
       <fieldset class="filter__gruppe">
         <legend>Nur zeigen, wenn</legend>
+        ${schalter('für WG-Gründung freigegeben', 'nurWgGruendung',
+        'Wohnungen, die an mehrere Fremde zusammen vermietet werden')}
         ${schalter('provisionsfrei', 'provisionsfrei')}
         ${schalter('Anbieter geprüft', 'nurVerifiziert')}
         ${schalter('ohne Prüfhinweis', 'ohneVerdacht', 'blendet Inserate mit deutlichen Betrugsmerkmalen aus')}
@@ -15243,6 +15835,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     }
     if (route.params.q !== undefined) f.q = route.params.q;
     if (route.params.art) f.arten = route.params.art.split(',');
+    if (route.params.wg) { f.nurWgGruendung = true; f.arten = ['miete']; }
     if (Object.keys(route.params).length) S.set({ filter: f, filterBeruehrt: true }, 'filter');
 
     const bewertet = rechnen();
@@ -16230,6 +16823,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             ${spiegelBlock(l, b.mietCheck, b.kaufCheck, b.bodenCheck)}
             ${klauselBlock(l)}
             ${chancenBlock(l)}
+            ${TT.viewWg ? TT.viewWg.objektBlock(l) : ''}
             ${kostenBlock(l, k)}
             ${finanzBlock(l, k)}
             ${wgBlock(l, b)}
@@ -16259,6 +16853,17 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         </div>
       </div>`,
       danach() {
+        /* Die Gruppen zu dieser Wohnung nachholen. Die Seite steht
+           sofort; kommt die Antwort, wird nur dieser Block ersetzt –
+           ein Neuzeichnen würde die Karte darunter neu aufbauen und
+           den Kartenausschnitt zurücksetzen. */
+        if (l.wgGruendungMoeglich && TT.viewWg) {
+          TT.viewWg.objektLaden(l.id, () => {
+            if (ui.aktuell !== 'objekt' || ui.params.arg !== l.id) return;
+            const kasten = U.$('#wg-block');
+            if (kasten) kasten.outerHTML = String(TT.viewWg.objektBlock(l));
+          });
+        }
         const flaeche = U.$('#objekt-karte');
         if (flaeche) {
           const umgebung = TT.data.listings.filter((x) => x.stadt === l.stadt && U.distKm(x, l) < 3.2);
@@ -17109,6 +17714,540 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   TT.viewTausch = { letzte: [] };
   ui.ansichten.tausch = ansicht;
+})(window.TT = window.TT || {});
+
+/* ===== view-wg.js ===== */
+/* =====================================================================
+   TrimmoTrade – Ansicht: WG gründen
+
+   Auf jedem Wohnungsportal gilt: Wer allein die Miete nicht aufbringt,
+   sucht ein WG-Zimmer und hofft, dass eine bestehende WG ihn nimmt. Was
+   dabei nie passiert: dass sich drei Menschen zusammentun und eine
+   Wohnung nehmen, die keiner von ihnen allein bekommen hätte.
+
+   Das liegt nicht am Wollen. Es liegt daran, dass jeder gleichzeitig die
+   Wohnung und die Mitbewohner bräuchte – und beides voneinander abhängt.
+   Genau diese Abhängigkeit löst diese Ansicht auf: Eine Person eröffnet
+   eine Gruppe zu einer konkreten Wohnung, andere sehen sie und treten
+   bei, und wenn sie voll ist, bewirbt sie sich gemeinsam.
+
+   Was hier bewusst nicht steht: eine Bewertung von Menschen. Die Passung
+   rechnet über sechs Fragen zum Alltag, und sie sagt genau das – nicht,
+   ob jemand ein guter Mensch ist.
+   ===================================================================== */
+(function (TT) {
+  'use strict';
+
+  const U = TT.util, ui = TT.ui, S = TT.store, W = TT.wg;
+  const h = U.html, raw = U.raw, ico = U.svg;
+  const A_ = ui.aktionRegistrieren;
+
+  let offene = null;      // Gruppen, die noch jemanden suchen
+  let geladen = false;
+
+  /* ==================================================================
+     Der Rechtsteil
+
+     Er steht hier und nicht im Kleingedruckten, weil er die eine
+     Entscheidung betrifft, die man nicht rückgängig machen kann. Eine
+     WG zu gründen ist rechtlich kein Zusammenwohnen, sondern ein
+     Mietvertrag – und welcher es ist, entscheidet über sehr viel Geld.
+     ================================================================== */
+
+  const VERTRAGSFORMEN = {
+    gemeinsam: {
+      name: 'Ein gemeinsamer Vertrag',
+      kurz: 'Alle stehen zusammen im Vertrag.',
+      gut: ['Die anbietende Seite bevorzugt das fast immer.',
+        'Wer auszieht, kann ersetzt werden – wenn alle zustimmen.'],
+      schlecht: ['Ihr haftet als Gesamtschuldner (§ 421 BGB): Zahlt einer nicht, kann die '
+        + 'Vermieterseite die volle Miete von jedem Einzelnen verlangen.',
+        'Ein Auszug allein geht nicht. Der Wechsel einer Person ist eine Vertragsänderung und '
+        + 'braucht die Zustimmung aller Mitmietenden und der Vermieterseite.']
+    },
+    einzeln: {
+      name: 'Ein Vertrag je Zimmer',
+      kurz: 'Jede Person hat einen eigenen Vertrag.',
+      gut: ['Keine Haftung für die anderen.',
+        'Jede Person kann für sich kündigen, ohne die anderen zu fragen.'],
+      schlecht: ['Deutlich seltener – für die Vermieterseite ist es mehr Verwaltung.',
+        'Die Gemeinschaftsräume gehören dann niemandem allein; das gehört geregelt.']
+    },
+    offen: {
+      name: 'Noch offen',
+      kurz: 'Die Vertragsform ist noch nicht entschieden.',
+      gut: ['Ihr könnt danach fragen, bevor ihr euch festlegt.'],
+      schlecht: ['Fragt früh. Nach der Zusage ist die Verhandlungsposition schlechter.']
+    }
+  };
+
+  function rechtsKasten(form) {
+    const f = VERTRAGSFORMEN[form] || VERTRAGSFORMEN.offen;
+    return h`<details class="wg-recht">
+      <summary>${ico('blatt')}<span>Was ihr rechtlich unterschreibt: <b>${f.name}</b></span></summary>
+      <p class="fein">${f.kurz}</p>
+      <div class="spalten2">
+        <div>
+          <h4>${ico('check')}Spricht dafür</h4>
+          <ul class="pruef">${f.gut.map((x) => h`<li><span>${x}</span></li>`)}</ul>
+        </div>
+        <div>
+          <h4>${ico('warnung')}Solltet ihr wissen</h4>
+          <ul class="pruef">${f.schlecht.map((x) => h`<li><span>${x}</span></li>`)}</ul>
+        </div>
+      </div>
+      <h4>Vier Dinge, die fast alle falsch machen</h4>
+      <ul class="pruef">
+        <li><span><b>Die Kaution gilt für die Wohnung, nicht je Person.</b> Höchstens drei
+          Nettokaltmieten insgesamt (§ 551 Abs. 1 BGB). Wer von jedem drei Monatsmieten verlangt,
+          verlangt zu viel – und ihr dürft in drei Raten zahlen.</span></li>
+        <li><span><b>Ein Auszug beim gemeinsamen Vertrag ist keine Kündigung.</b> Man kündigt nur
+          gemeinsam. Wer allein gehen will, braucht eine Vertragsänderung – und damit das Ja aller
+          anderen und der Vermieterseite.</span></li>
+        <li><span><b>Jede Person muss sich anmelden</b>, innerhalb von zwei Wochen. Die Vermieterseite
+          ist verpflichtet, dafür eine Wohnungsgeberbestätigung auszustellen (§ 19 BMG).</span></li>
+        <li><span><b>Der Rundfunkbeitrag fällt einmal je Wohnung an</b>, nicht je Person. Eine WG
+          zahlt zusammen einen Beitrag – klärt gleich, wer ihn anmeldet und wie ihr teilt.</span></li>
+      </ul>
+      <p class="fein">Allgemeine Hinweise, keine Rechtsberatung. Bei einem gemeinsamen Vertrag über
+        mehrere Jahre lohnt der Blick eines Mietervereins, bevor unterschrieben wird.</p>
+    </details>`;
+  }
+
+  /* ==================================================================
+     Bausteine
+     ================================================================== */
+
+  function passungsZeile(gruppe) {
+    const p = S.get().profil;
+    const b = W.passung(gruppe, p);
+    if (!b) {
+      return h`<p class="fein wg-karte__passung">${ico('info')}Für eine Einschätzung fehlt dein
+        Alltagsprofil. <a href="#/profil">Sechs Fragen im Profil</a> genügen.</p>`;
+    }
+    const ton = b.score >= 75 ? 'gut' : b.score >= 55 ? 'warn' : 'schlecht';
+    return h`<p class="wg-karte__passung is-${ton}">${ico('wg')}
+      <b>${U.t('{0} % Passung').replace('{0}', b.score)}</b>
+      <span>${U.t(b.kurz)}</span></p>`;
+  }
+
+  function person(m, gruppe) {
+    const e = m.eckdaten || {};
+    return h`<li class="wg-person ${m.ich ? 'is-ich' : ''}">
+      ${raw(TT.img.avatar(m.name || '?', 38))}
+      <div>
+        <b>${m.name || U.t('jemand')}${m.rolle === 'gruender' ? ui.badge('gegründet', 'neutral') : ''}
+          ${m.ich ? ui.badge('du', 'info') : ''}</b>
+        <span class="wg-person__eck">
+          ${['alter', 'beruf', 'einzug'].filter((k) => e[k]).map((k) =>
+        h`<i>${k === 'alter' ? U.t('{0} Jahre').replace('{0}', e[k]) : e[k]}</i>`)}
+        </span>
+        ${m.vorstellung ? h`<p class="wg-person__text">${m.vorstellung}</p>` : ''}
+        ${m.mail ? h`<a class="wg-person__mail" href="mailto:${m.mail}">${ico('nachricht')}${m.mail}</a>` : ''}
+      </div>
+      ${gruppe && gruppe.meineRolle === 'gruender' && m.rolle !== 'gruender' && m.__anfrage
+        ? h`<span class="wg-person__tun">
+            <button type="button" class="knopf knopf--klein" data-tu="wg-annehmen"
+              data-id="${gruppe.id}" data-person="${m.id}">${ico('check')}Aufnehmen</button>
+            <button type="button" class="knopf knopf--klein knopf--still" data-tu="wg-ablehnen"
+              data-id="${gruppe.id}" data-person="${m.id}">Absagen</button>
+          </span>` : ''}
+    </li>`;
+  }
+
+  /* Eine Gruppe als Karte. Dieselbe Darstellung auf der Objektseite und
+     in der Übersicht – eine Gruppe ist an beiden Stellen dieselbe Sache,
+     und zwei Darstellungen davon würden auseinanderlaufen. */
+  function karte(g, opt) {
+    const o = opt || {};
+    const teil = W.anteil(g);
+    const drin = g.meineRolle === 'dabei' || g.meineRolle === 'gruender';
+    const angefragt = g.meineRolle === 'angefragt';
+    const zu = g.stand !== 'offen' || !g.offen;
+
+    return h`<article class="wg-karte ${drin ? 'is-drin' : ''}">
+      <header class="wg-karte__kopf">
+        <div>
+          <h3>${g.name}</h3>
+          ${o.mitWohnung && g.inserat ? h`<p class="wg-karte__wohnung">${ico('haus')}
+            <a href="#/objekt/${g.inserat.id}">${U.truncate(g.inserat.titel, 44)}</a>
+            ${g.inserat.weg ? ui.badge('Wohnung weg', 'schlecht') : ''}</p>` : ''}
+        </div>
+        <div class="wg-karte__zahl">
+          <b>${g.dabei}<i>/${g.ziel}</i></b>
+          <span>${g.frei > 0 ? U.t('{0} frei').replace('{0}', g.frei) : U.t('voll')}</span>
+        </div>
+      </header>
+
+      ${teil ? h`<p class="wg-karte__geld">${ico('euro')}
+        <b>${U.eur(teil)}</b> <span>je Person warm, bei ${g.ziel} Personen</span></p>` : ''}
+
+      ${g.text ? h`<p class="wg-karte__text">${g.text}</p>` : ''}
+
+      ${g.stand === 'beworben' ? h`<p class="gut-meldung">${ico('pruefen')}Diese Gruppe hat sich
+        gemeinsam beworben.</p>` : ''}
+      ${g.stand === 'voll' && g.stand !== 'beworben' ? h`<p class="info-meldung">${ico('info')}Vollzählig –
+        die Gruppe kann sich bewerben.</p>` : ''}
+
+      ${g.mitglieder && g.mitglieder.length ? h`<ul class="wg-personen">
+        ${g.mitglieder.map((m) => person(m, g))}
+      </ul>` : h`<p class="fein">${TT.konto && TT.konto.angemeldet()
+        ? 'Noch niemand hat sich vorgestellt.'
+        : 'Wer dabei ist, siehst du nach der Anmeldung. Ohne Konto zeigen wir keine Personen.'}</p>`}
+
+      ${g.anfragen && g.anfragen.length ? h`<div class="wg-anfragen">
+        <h4>${ico('person')}${U.t('{0} möchten dazukommen').replace('{0}', g.anfragen.length)}</h4>
+        <ul class="wg-personen">
+          ${g.anfragen.map((m) => person(Object.assign({}, m, { __anfrage: true }), g))}
+        </ul>
+        <p class="fein">Du entscheidest. Bis dahin sehen die übrigen Mitglieder diese Anfragen nicht.</p>
+      </div>` : ''}
+
+      ${!drin && !angefragt && g.mitglieder && g.mitglieder.length ? passungsZeile(g) : ''}
+
+      <footer class="wg-karte__fuss">
+        ${angefragt ? h`<span class="fein">${ico('verlauf')}Deine Anfrage liegt bei der Gruppe.</span>
+          <button type="button" class="link" data-tu="wg-verlassen" data-id="${g.id}">zurückziehen</button>`
+        : drin ? h`
+          ${g.meineRolle === 'gruender' && g.dabei >= 2 && g.stand !== 'beworben' && g.inserat && !g.inserat.weg
+          ? h`<button type="button" class="knopf" data-tu="wg-bewerben" data-id="${g.id}">
+              ${ico('nachricht')}Gemeinsam bewerben</button>` : ''}
+          <button type="button" class="link" data-tu="wg-verlassen" data-id="${g.id}">
+            ${g.meineRolle === 'gruender' ? 'Gruppe auflösen' : 'Gruppe verlassen'}</button>`
+        : zu ? h`<span class="fein">Diese Gruppe nimmt gerade niemanden auf.</span>`
+          : h`<button type="button" class="knopf" data-tu="wg-beitreten" data-id="${g.id}">
+            ${ico('plus')}Beitreten</button>`}
+      </footer>
+    </article>`;
+  }
+
+  /* ==================================================================
+     Die Ansicht
+     ================================================================== */
+
+  function wg() {
+    if (!W.amServer()) {
+      return {
+        titel: 'WG gründen',
+        html: h`<div class="seite seite--schmal">
+          ${kopf()}
+          <div class="hinweisbox">${ico('info')}
+            <div><b>Dafür braucht es die Website</b>
+            <p>Eine WG zu gründen heißt, dass sich Menschen finden, die sich nicht kennen. Das geht
+              nur dort, wo mehr als ein Browser beteiligt ist – auf <b>trimmotrade.de</b>. Diese Kopie
+              läuft ohne Verbindung und zeigt nur, wie es aussieht.</p></div>
+          </div>
+          ${rechtsKasten('gemeinsam')}
+        </div>`
+      };
+    }
+
+    if (!geladen) {
+      geladen = true;
+      Promise.all([W.meineHolen(true), W.offeneHolen().then((g) => { offene = g; })])
+        .then(() => { if (ui.aktuell === 'wg') ui.neuZeichnen(); });
+    }
+
+    const meine = W.meine;
+    const fremde = (offene || []).filter((g) => !meine.some((m) => m.id === g.id));
+
+    return {
+      titel: 'WG gründen',
+      html: h`<div class="seite seite--schmal">
+        ${kopf()}
+
+        ${TT.konto && !TT.konto.angemeldet() ? h`<div class="hinweisbox">${ico('schluessel')}
+          <div><b>Ansehen geht ohne Konto, mitmachen nicht</b>
+          <p>Wer einer Gruppe beitritt, erzählt Fremden etwas über sich. Das setzt voraus, dass man
+            weiß, mit wem man es zu tun hat – deshalb geht es nur mit bestätigter Adresse.
+            <a href="#/anmelden">Anmelden</a> dauert eine halbe Minute.</p></div>
+        </div>` : ''}
+
+        ${meine.length ? h`<section class="block">
+          <h2>${ico('wg')}Deine Gruppen</h2>
+          <div class="wg-liste">${meine.map((g) => karte(g, { mitWohnung: true }))}</div>
+        </section>` : ''}
+
+        <section class="block">
+          <div class="block__kopfzeile">
+            <h2>${ico('suche')}Gruppen, die noch jemanden suchen</h2>
+            ${fremde.length ? h`<span class="fein">${fremde.length}</span>` : ''}
+          </div>
+          ${fremde.length
+        ? h`<div class="wg-liste">${fremde.map((g) => karte(g, { mitWohnung: true }))}</div>`
+        : h`<div class="leer">${ico('wg')}
+            <h3>Gerade sucht keine Gruppe</h3>
+            <p>Gruppen entstehen an einer konkreten Wohnung. Such dir eine, die für eine WG-Gründung
+              freigegeben ist, und eröffne die erste.</p>
+            <p><a class="knopf" href="#/suche?wg=1">${ico('suche')}Wohnungen für WG-Gründung</a></p>
+          </div>`}
+        </section>
+
+        ${rechtsKasten('gemeinsam')}
+      </div>`
+    };
+  }
+
+  function kopf() {
+    return h`<header class="seite__kopf">
+      <h1>${ico('wg')}WG gründen</h1>
+      <p class="seite__unter">Eine Wohnung, die für eine Person zu groß und für eine Familie zu teuer
+        ist, wird bezahlbar, sobald sich drei Leute finden. Hier findet man sie – vor der Wohnung,
+        nicht danach.</p>
+    </header>`;
+  }
+
+  /* ==================================================================
+     Der Block auf der Objektseite
+     ================================================================== */
+
+  function objektBlock(l) {
+    if (!l || !l.wgGruendungMoeglich) return '';
+    const g = (l.wgGruendung || {});
+    const gruppen = (TT.wg && TT.wg.amServer()) ? (gruppenZu[l.id] || null) : [];
+    const maxP = g.maxPersonen || Math.max(2, Math.floor(l.zimmer || 2));
+    const jeder = l.warm ? Math.round(l.warm / maxP) : null;
+
+    return h`<section class="block wg-block" id="wg-block">
+      <div class="block__kopfzeile">
+        <h2>${ico('wg')}Für eine WG-Gründung freigegeben</h2>
+        ${ui.badge('bis ' + maxP + ' Personen', 'info')}
+      </div>
+      <p class="block__unter">Die anbietende Seite vermietet diese Wohnung ausdrücklich auch an
+        mehrere Personen, die sich nicht kennen.${jeder ? U.t(' Bei {0} Personen zahlt jede etwa {1} warm.')
+        .replace('{0}', maxP).replace('{1}', U.eur(jeder)) : ''}</p>
+      ${g.hinweis ? h`<p class="wg-block__hinweis">${ico('info')}${g.hinweis}</p>` : ''}
+
+      ${gruppen === null
+        ? h`<p class="fein">${ico('verlauf')}Gruppen werden geladen …</p>`
+        : gruppen.length
+          ? h`<div class="wg-liste">${gruppen.map((x) => karte(x, { mitWohnung: false }))}</div>`
+          : h`<p class="fein">Zu dieser Wohnung gibt es noch keine Gruppe.</p>`}
+
+      ${gruppen && !gruppen.some((x) => x.meineRolle) ? h`<p class="werkzeug__weiter">
+        <button type="button" class="knopf" data-tu="wg-gruenden" data-id="${l.id}">
+          ${ico('plus')}Gruppe gründen</button></p>` : ''}
+
+      ${rechtsKasten(g.vertrag || 'offen')}
+    </section>`;
+  }
+
+  /* Der Zwischenspeicher der Objektseite. Er liegt hier und nicht in
+     wg.js, weil nur diese Ansicht ihn zeichnet. */
+  const gruppenZu = {};
+
+  function objektLaden(id, danach) {
+    if (!TT.wg || !TT.wg.amServer()) return;
+    TT.wg.fuerInserat(id, true).then((g) => {
+      gruppenZu[id] = g;
+      if (danach) danach();
+    });
+  }
+
+  /* ==================================================================
+     Aktionen
+     ================================================================== */
+
+  function vorstellungsFelder(vorgabe) {
+    const p = S.get().profil;
+    const e = W.eckdatenAus(p);
+    const felder = Object.keys(e).filter((k) => k !== 'lifestyle');
+    return h`<label class="feld"><span>Ein paar Sätze über dich</span>
+        <textarea rows="5" id="wg-vorstellung" placeholder="Wer du bist, was du arbeitest, wie du wohnst – und warum diese Wohnung.">${vorgabe || p.vorstellung || ''}</textarea></label>
+      ${felder.length ? h`<fieldset class="filter__gruppe eckdaten">
+        <legend>Das geht aus deinem Profil mit</legend>
+        <ul class="eckdaten__liste">
+          ${felder.map((k) => h`<li><span>${W.ECK_WORT[k] || k}</span><b>${e[k]}</b></li>`)}
+        </ul>
+        ${p.lifestyle ? h`<p class="fein">${ico('wg')}Dazu deine sechs Antworten zum Alltag – daraus
+          rechnet sich die Passung. Ohne sie sieht die Gruppe keine Einschätzung.</p>` : ''}
+      </fieldset>` : h`<div class="hinweisbox">${ico('info')}
+        <div><b>Dein Profil ist leer</b>
+        <p>Alter, Beruf und die sechs Fragen zum Alltag entscheiden darüber, ob jemand dich aufnimmt.
+          <a href="#/profil">Im Profil ergänzen</a> – es dauert zwei Minuten.</p></div>
+      </div>`}
+      <p class="fein">Deine E-Mail-Adresse sehen die anderen erst, wenn ihr euch gegenseitig
+        angenommen habt. Vorher steht dort nur dein Rufname.</p>`;
+  }
+
+  A_('wg-gruenden', (el) => {
+    const l = TT.data.byId[el.dataset.id];
+    if (!l) return;
+    const maxP = (l.wgGruendung || {}).maxPersonen || Math.max(2, Math.floor(l.zimmer || 2));
+    ui.dialog({
+      titel: 'Gruppe gründen',
+      breit: true,
+      inhalt: h`<p class="block__unter">Du eröffnest eine Gruppe für <b>${U.truncate(l.titel, 50)}</b>.
+          Andere sehen sie, stellen sich vor, und du entscheidest, wer dazukommt.</p>
+        <label class="feld"><span>Name der Gruppe</span>
+          <input type="text" id="wg-name" maxlength="60" value="${U.t('WG in {0}').replace('{0}', l.viertel)}"></label>
+        <label class="feld"><span>Zu wie vielt?</span>
+          <select id="wg-ziel">
+            ${Array.from({ length: maxP - 1 }, (x, i) => i + 2).map((n) =>
+        h`<option value="${n}" ${n === Math.min(3, maxP) ? 'selected' : ''}>${n} ${U.t('Personen')}${l.warm
+          ? ' · ' + U.eur(Math.round(l.warm / n)) + U.t(' je Person') : ''}</option>`)}
+          </select></label>
+        <label class="feld"><span>Was für eine WG soll das werden?</span>
+          <textarea rows="4" id="wg-text" placeholder="Zweck-WG oder gemeinsam kochen? Ruhig oder offen für Besuch? Je klarer, desto passender melden sich Leute."></textarea></label>
+        ${vorstellungsFelder()}`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Abbrechen</button>
+        <button type="button" class="knopf" data-tu="wg-gruenden-los" data-id="${l.id}">${ico('wg')}Gruppe eröffnen</button>`
+    });
+  });
+
+  A_('wg-gruenden-los', (el) => {
+    const id = el.dataset.id;
+    const p = S.get().profil;
+    const vorstellung = (U.$('#wg-vorstellung') || {}).value || '';
+    if (vorstellung.trim().length < 20) {
+      ui.toast('Schreib ein paar Sätze über dich – ohne das meldet sich niemand.', 'schlecht');
+      return;
+    }
+    ui.knopfArbeit(el, TT.api.ruf('gruppe/neu', {
+      inserat: id,
+      name: (U.$('#wg-name') || {}).value || '',
+      ziel: Number((U.$('#wg-ziel') || {}).value || 3),
+      text: (U.$('#wg-text') || {}).value || '',
+      vorstellung,
+      eckdaten: W.eckdatenAus(p)
+    }).then((d) => {
+      W.vergessen(id);
+      objektLaden(id, () => ui.neuZeichnen());
+      ui.dialogZu();
+      if (TT.markt) TT.markt.zaehle('wg-gruppe-neu');
+      ui.toast(d.gruppe && d.gruppe.hinweis
+        ? d.gruppe.hinweis
+        : 'Gruppe eröffnet. Jetzt kann sich jemand melden.', d.gruppe && d.gruppe.hinweis ? 'warn' : 'gut');
+      ui.neuZeichnen();
+    }, (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')), 'Wird eröffnet …');
+  });
+
+  A_('wg-beitreten', (el) => {
+    const id = el.dataset.id;
+    const g = alleGruppen().find((x) => x.id === id);
+    if (!g) return;
+    const teil = W.anteil(g);
+    ui.dialog({
+      titel: 'Der Gruppe beitreten',
+      breit: true,
+      inhalt: h`<p class="block__unter">Du stellst dich <b>${g.name}</b> vor. Die gründende Person
+          entscheidet, ob du dazukommst; die übrigen Mitglieder sehen deine Anfrage bis dahin nicht.</p>
+        ${teil ? h`<p class="wg-karte__geld">${ico('euro')}<b>${U.eur(teil)}</b>
+          <span>je Person warm, bei ${g.ziel} Personen</span></p>` : ''}
+        ${vorstellungsFelder()}
+        <div class="hinweisbox">${ico('warnung')}
+          <div><b>Bevor du zusagst</b>
+          <p>Bei einem gemeinsamen Mietvertrag haftet ihr als Gesamtschuldner: Zahlt eine Person nicht,
+            kann die Vermieterseite die volle Miete von jeder Einzelnen verlangen (§ 421 BGB). Trefft
+            euch, bevor ihr unterschreibt.</p></div>
+        </div>`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Abbrechen</button>
+        <button type="button" class="knopf" data-tu="wg-beitreten-los" data-id="${g.id}">${ico('plus')}Anfrage schicken</button>`
+    });
+  });
+
+  A_('wg-beitreten-los', (el) => {
+    const vorstellung = (U.$('#wg-vorstellung') || {}).value || '';
+    if (vorstellung.trim().length < 20) {
+      ui.toast('Schreib ein paar Sätze über dich – sonst kann niemand entscheiden.', 'schlecht');
+      return;
+    }
+    ui.knopfArbeit(el, TT.api.ruf('gruppe/beitreten', {
+      id: el.dataset.id, vorstellung, eckdaten: W.eckdatenAus(S.get().profil)
+    }).then(() => {
+      neuLaden();
+      ui.dialogZu();
+      if (TT.markt) TT.markt.zaehle('wg-beitritt');
+      ui.toast('Anfrage geschickt. Die Gruppe bekommt eine Mail.', 'gut');
+    }, (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')), 'Wird geschickt …');
+  });
+
+  const entscheiden = (el, ja) => ui.knopfArbeit(el, TT.api.ruf('gruppe/entscheiden', {
+    id: el.dataset.id, person: el.dataset.person, ja
+  }).then(() => {
+    neuLaden();
+    ui.toast(ja ? 'Aufgenommen. Ihr seht jetzt eure Adressen.' : 'Abgesagt.', ja ? 'gut' : 'info');
+  }, (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')), '…');
+
+  A_('wg-annehmen', (el) => entscheiden(el, true));
+  A_('wg-ablehnen', (el) => entscheiden(el, false));
+
+  A_('wg-verlassen', (el) => {
+    const g = alleGruppen().find((x) => x.id === el.dataset.id);
+    const gruender = g && g.meineRolle === 'gruender';
+    if (!confirm(U.t(gruender
+      ? 'Die Gruppe auflösen? Alle Mitglieder werden benachrichtigt.'
+      : 'Diese Gruppe wirklich verlassen?'))) return;
+    ui.knopfArbeit(el, TT.api.ruf('gruppe/verlassen', { id: el.dataset.id }).then(() => {
+      neuLaden();
+      ui.toast(gruender ? 'Gruppe aufgelöst.' : 'Du bist raus.');
+    }, (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')));
+  });
+
+  /* „zu zweit“, „zu dritt“, „zu viert“ – und ab sieben „mit sieben
+     Personen“. Aus einer Zahl mit angehängtem „t“ wird kein deutsches
+     Wort, und in der englischen Fassung erst recht nicht. */
+  const ZU = ['', '', 'zu zweit', 'zu dritt', 'zu viert', 'zu fünft', 'zu sechst'];
+  const zuWieViel = (n) => (ZU[n] ? U.t(ZU[n]) : U.t('mit {0} Personen').replace('{0}', n));
+
+  A_('wg-bewerben', (el) => {
+    const g = alleGruppen().find((x) => x.id === el.dataset.id);
+    if (!g) return;
+    ui.dialog({
+      titel: 'Gemeinsam bewerben',
+      breit: true,
+      inhalt: h`<p class="block__unter">Eure Bewerbung geht als <b>eine</b> Anfrage hinaus – nicht als
+          ${g.dabei} einzelne. Für die anbietende Seite ist das der Unterschied zwischen
+          ${g.dabei} Leuten, die allein nicht zahlen können, und einem vollständigen Haushalt.</p>
+        <label class="feld"><span>Eure Nachricht</span>
+          <textarea rows="8" id="wg-bewerbung">${U.t('Guten Tag,\n\nwir sind {0} und würden die Wohnung gern gemeinsam nehmen. Wir haben uns über TrimmoTrade gefunden und stellen uns gern persönlich vor.\n\nÜber einen Besichtigungstermin würden wir uns freuen.')
+        .replace('{0}', zuWieViel(g.dabei))}</textarea></label>
+        <fieldset class="filter__gruppe eckdaten">
+          <legend>Das steht automatisch dabei</legend>
+          <ul class="eckdaten__liste">
+            <li><span>Haushalt</span><b>${g.dabei} ${U.t('Personen als WG')}</b></li>
+            <li><span>Beschäftigung</span><b>${(g.mitglieder || []).map((m) => (m.eckdaten || {}).beruf)
+        .filter(Boolean).join(', ') || '–'}</b></li>
+          </ul>
+          <p class="fein">Namen und Adressen der Einzelnen gehen nicht mit. Wer antwortet, entscheidet
+            selbst, wem er sie gibt.</p>
+        </fieldset>`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Abbrechen</button>
+        <button type="button" class="knopf" data-tu="wg-bewerben-los" data-id="${g.id}">${ico('nachricht')}Bewerbung abschicken</button>`
+    });
+  });
+
+  A_('wg-bewerben-los', (el) => {
+    const text = (U.$('#wg-bewerbung') || {}).value || '';
+    ui.knopfArbeit(el, TT.api.ruf('gruppe/bewerben', { id: el.dataset.id, text }).then(() => {
+      neuLaden();
+      ui.dialogZu();
+      if (TT.markt) TT.markt.zaehle('wg-bewerbung');
+      ui.toast('Bewerbung abgeschickt. Die anbietende Seite bekommt eine Mail.', 'gut');
+    }, (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')), 'Wird gesendet …');
+  });
+
+  /* Alles, was gerade irgendwo gezeichnet ist – für die Aktionen, die
+     eine Gruppe nachschlagen müssen. */
+  function alleGruppen() {
+    const raus = (W.meine || []).concat(offene || []);
+    Object.keys(gruppenZu).forEach((k) => { (gruppenZu[k] || []).forEach((g) => raus.push(g)); });
+    return raus;
+  }
+
+  function neuLaden() {
+    W.vergessen();
+    Promise.all([
+      W.meineHolen(true),
+      W.offeneHolen().then((g) => { offene = g; }),
+      ui.aktuell === 'objekt' && ui.params.arg
+        ? W.fuerInserat(ui.params.arg, true).then((g) => { gruppenZu[ui.params.arg] = g; })
+        : null
+    ]).then(() => ui.neuZeichnen());
+  }
+
+  TT.viewWg = { objektBlock, objektLaden, karte, rechtsKasten };
+  ui.ansichten.wg = wg;
 })(window.TT = window.TT || {});
 
 /* ===== view-tools.js ===== */
@@ -18373,7 +19512,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
      mitschleppen und würde bei der siebten Art vergessen. */
   const ARTEN = [
     { id: 'miete', kind: 'miete', type: 'wohnung', icon: 'schluessel', label: 'Wohnung vermieten',
-      gruppen: ['wohnung', 'miete'] },
+      gruppen: ['wohnung', 'miete', 'wggruendung'] },
     { id: 'wg', kind: 'wg', type: 'zimmer', icon: 'wg', label: 'WG-Zimmer',
       gruppen: ['wohnung', 'miete'] },
     { id: 'tausch', kind: 'tausch', type: 'wohnung', icon: 'tausch', label: 'Wohnung tauschen',
@@ -18482,6 +19621,18 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       const ring = U.$('[name="ringOk"]', U.$('#inserat-form'));
       if (ring) ring.checked = !!e.tausch.dreiecktauschOk;
     }
+    if (e.wgGruendung && e.wgGruendung.moeglich) {
+      const schalter = U.$('[name="wgGruendung"]', U.$('#inserat-form'));
+      if (schalter) {
+        schalter.checked = true;
+        const kasten = U.$('#wg-felder');
+        if (kasten) kasten.hidden = false;
+      }
+      setz('wgMax', e.wgGruendung.maxPersonen);
+      setz('wgVertrag', e.wgGruendung.vertrag);
+      setz('wgHinweis', e.wgGruendung.hinweis);
+    }
+
     /* Vorhandene Bilder übernehmen, damit sie beim Ändern nicht wegfallen. */
     if (Array.isArray(e.bilder) && e.bilder.length && !neueBilder.length) {
       neueBilder = e.bilder.slice();
@@ -18754,6 +19905,34 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <label class="feld"><span>Frei ab</span>
               <input type="date" name="freiAb" value="${U.isoDate(U.addDays(TT.now(), 30))}"></label>
           </div>
+
+          <fieldset class="filter__gruppe wg-frei" data-gruppe="wggruendung">
+            <legend>An eine WG vermieten?</legend>
+            <p class="fein">Eine Wohnung ab drei Zimmern ist für eine Person zu groß und für viele
+              Familien zu teuer. Drei Leute, die sich hier finden, zahlen sie zusammen ohne Mühe –
+              und sie bewerben sich als ein Haushalt, nicht als drei Einzelne.</p>
+            <label class="schalter">
+              <input type="checkbox" name="wgGruendung" data-tu-change="inserat-wg">
+              <span>Für eine WG-Gründung freigeben<i>Mehrere Fremde können sich hier zusammentun und
+                sich gemeinsam bewerben. Du entscheidest wie immer, wer die Wohnung bekommt.</i></span>
+            </label>
+            <div class="formraster" id="wg-felder" hidden>
+              <label class="feld"><span>Höchstens wie viele Personen?</span>
+                <input type="number" name="wgMax" min="2" max="12" step="any" value="3"></label>
+              <label class="feld"><span>Vertragsform</span>
+                <select name="wgVertrag">
+                  <option value="gemeinsam">ein gemeinsamer Vertrag (üblich)</option>
+                  <option value="einzeln">ein Vertrag je Zimmer</option>
+                  <option value="offen">noch offen</option>
+                </select></label>
+              <label class="feld feld--breit"><span>Hinweis an die Gruppe (freiwillig)</span>
+                <input type="text" name="wgHinweis" maxlength="200"
+                  placeholder="etwa: Ich hätte gern einen gemeinsamen Vertrag und eine Kaution von drei Kaltmieten insgesamt."></label>
+            </div>
+            <p class="fein">Bei einem gemeinsamen Vertrag haften alle als Gesamtschuldner (§ 421 BGB) –
+              für dich die sicherere Form. Die Kaution bleibt in jedem Fall auf drei Nettokaltmieten
+              für die ganze Wohnung begrenzt, nicht je Person (§ 551 Abs. 1 BGB).</p>
+          </fieldset>
 
           <div class="formraster" data-gruppe="kauf">
             <label class="feld"><span>Kaufpreis</span>
@@ -19140,6 +20319,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   A_('inserat-art', (el) => { gruppenZeigen(el.value); });
 
+  A_('inserat-wg', (el) => {
+    const kasten = U.$('#wg-felder');
+    if (kasten) kasten.hidden = !el.checked;
+  });
+
   A_('inserat-bilder', (el) => {
     const dateien = Array.from(el.files || []);
     el.value = '';
@@ -19336,6 +20520,18 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     };
 
     if (typ === 'haus') daten.bauweise = f.get('bauweise') || 'freistehend';
+
+    /* Die Freigabe für eine WG-Gründung. Der Server prüft noch einmal,
+       ob sie zur Art und zur Zimmerzahl passt – hier steht nur, was die
+       anbietende Seite gewählt hat. */
+    if (kind === 'miete' && f.get('wgGruendung')) {
+      daten.wgGruendung = {
+        moeglich: true,
+        maxPersonen: zahl('wgMax', 3),
+        vertrag: f.get('wgVertrag') || 'gemeinsam',
+        hinweis: f.get('wgHinweis') || ''
+      };
+    }
 
     if (istGrund) {
       daten.grund = {
@@ -21996,7 +23192,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p>Zum Server geht, was andere erreichen muss – und sonst nichts. Das sind vier Dinge: die
             <b>Anmeldung</b> (Abschnitt 4), die <b>Inserate</b>, die du veröffentlichst (Abschnitt 5), die
             <b>Anfragen</b>, die du schreibst oder bekommst (Abschnitt 6), und deine <b>Suchaufträge</b>,
-            damit die Mail auch dann herausgeht, wenn du gerade nicht hier bist (Abschnitt 7).</p>
+            damit die Mail auch dann herausgeht, wenn du gerade nicht hier bist (Abschnitt 7). Dazu
+            kommt, was du einer <b>WG-Gruppe</b> über dich erzählst, wenn du eine gründest oder ihr
+            beitrittst (Abschnitt 8).</p>
           <p>Die Trennlinie verläuft nicht willkürlich: Ein Inserat ist eine Veröffentlichung und muss
             andere erreichen. Eine Merkliste ist eine Notiz und geht niemanden etwas an.</p>
           <p>Ohne Anmeldung geht auch das nicht: Suche und Inserate lassen sich ansehen, ohne dass ein
@@ -22004,7 +23202,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p>Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten
             gebildet und keine Werbung nach deinen Interessen ausgespielt. Gezählt wird nur, wie oft eine
             Ansicht an einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse, ohne Verlauf
-            (Abschnitt 9). Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts,
+            (Abschnitt 10). Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts,
             wozu eine Einwilligung nötig wäre.</p>
         </div>
 
@@ -22166,7 +23364,46 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
               (Art. 21 DSGVO)</dd>
           </dl>
 
-          <h2>8. Meldungen zu Inseraten</h2>
+          <h2>8. Gruppen zur WG-Gründung</h2>
+          <p>Wer eine Gruppe eröffnet oder ihr beitritt, gibt anderen Menschen etwas über sich preis –
+            das ist der Zweck der Sache und nicht ihr Nebeneffekt. Deshalb steht hier genau, wer was
+            zu sehen bekommt.</p>
+          <p>Gespeichert werden dein Vorstellungstext und die Eckdaten, die du im Formular
+            <b>ausdrücklich freigibst</b>: Alter, Beruf, eine Einkommens<b>spanne</b>, Rauchen,
+            Haustiere, gewünschter Einzugstermin und deine sechs Antworten zum Alltag, aus denen sich
+            die Passung rechnet. Diese Angaben werden als Kopie gespeichert und ändern sich nicht mehr,
+            wenn du später dein Profil bearbeitest.</p>
+          <dl class="rechtsliste">
+            <dt>Ohne Konto sichtbar</dt><dd>nur Zahlen und der Text der Gruppe – keine Person</dd>
+            <dt>Angemeldet sichtbar</dt><dd>Rufname und erster Buchstabe des Nachnamens („Cem Y.“),
+              Alter, Beruf, Einzugstermin, Vorstellungstext, Lebensrhythmus</dd>
+            <dt>Für Mitglieder sichtbar</dt><dd>zusätzlich die E-Mail-Adressen – erst dann, wenn beide
+              Seiten einander angenommen haben</dd>
+            <dt>Für die gründende Person</dt><dd>zusätzlich die offenen Beitrittsanfragen</dd>
+          </dl>
+          <p>Die anbietende Seite der Wohnung ist von Gruppen zu ihrem eigenen Inserat ausgeschlossen –
+            weder gründen noch beitreten. Was Bewerbende einander erzählen, erzählen sie einander.
+            Was die Vermieterseite erfährt, steht in der gemeinsamen Bewerbung, und das sind
+            Haushaltsgröße und Berufe, nicht die einzelnen Vorstellungstexte.</p>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Zusammenfinden von Menschen, die gemeinsam eine Wohnung mieten wollen</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags und
+              vorvertragliche Maßnahme auf deine eigene Anfrage hin</dd>
+            <dt>Speicherdauer</dt><dd>bis die Gruppe aufgelöst wird oder abläuft, spätestens mit der
+              Löschung deines Kontos. Eine Gruppe läuft 45 Tage nach der letzten Änderung ab.</dd>
+            <dt>Empfänger</dt><dd>die übrigen Mitglieder der Gruppe im oben beschriebenen Umfang</dd>
+          </dl>
+          <p class="fein">Nicht übermittelt werden Angaben zu Herkunft, Religion, Gesundheit,
+            Familienplanung oder sexueller Orientierung (Art. 9 DSGVO) – sie kommen im Formular gar
+            nicht erst vor. Eine Auswahl nach Alter oder Geschlecht nimmt TrimmoTrade nicht vor; dass
+            eine WG das für sich tun darf (§ 19 Abs. 5 AGG nimmt das gemeinsame Wohnen aus), ist eine
+            Entscheidung der Menschen, nicht dieser Anwendung.</p>
+          <p class="fein"><b>Was ausdrücklich nicht stattfindet:</b> eine Prüfung von Personen.
+            TrimmoTrade stellt niemanden fest, bewertet niemanden und steht für niemanden ein. Wer
+            sich hier zusammentut, entscheidet selbst – alles andere zu behaupten wäre ein
+            Versprechen, das niemand halten kann.</p>
+
+          <h2>9. Meldungen zu Inseraten</h2>
           <p>Ein Inserat lässt sich melden, ohne dass ein Konto nötig ist – so verlangt es Art. 16 Abs. 1 der
             Verordnung (EU) 2022/2065 über digitale Dienste. Gespeichert werden der Grund, dein Text und,
             falls du sie angibst, deine E-Mail-Adresse. Die Adresse ist freiwillig; ohne sie lässt sich die
@@ -22180,7 +23417,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
               danach Löschung</dd>
           </dl>
 
-          <h2>9. Reichweitenmessung ohne Personenbezug</h2>
+          <h2>10. Reichweitenmessung ohne Personenbezug</h2>
           <p>Um zu erkennen, welche Teile der Anwendung benutzt werden, wird eine einzige Tabelle geführt.
             Sie hat drei Spalten: <b>Tag</b>, <b>Name der Ansicht</b> und <b>Anzahl</b>. Aus „am 3. März
             412 Suchen“ lässt sich niemand herauslesen.</p>
@@ -22191,7 +23428,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p class="fein">Warum das hier trotzdem steht: Wer wissen will, was mit ihm passiert, soll nicht
             erst herausfinden müssen, was <em>nicht</em> in der Erklärung steht.</p>
 
-          <h2>10. Speicher deines Browsers</h2>
+          <h2>11. Speicher deines Browsers</h2>
           <p>TrimmoTrade legt deine Eingaben im lokalen Speicher deines Browsers ab – Profil, Merkliste,
             Vergleich, Bewerbungstafel, Notizen, gespeicherte Filter und die Einstellungen zur Darstellung.
             Diese Daten verlassen dein Gerät nicht. Der Anbieter hat keinen Zugriff darauf.</p>
@@ -22205,7 +23442,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p>Du kannst diese Daten jederzeit im Fußbereich unter „Meine Daten“ als Datei sichern oder
             vollständig löschen. Sie verschwinden ebenfalls, wenn du die Browserdaten löschst.</p>
 
-          <h2>11. Dokumententresor</h2>
+          <h2>12. Dokumententresor</h2>
           <p>Legst du Unterlagen im Dokumententresor ab, werden sie <b>vor dem Speichern</b> in deinem Browser
             verschlüsselt – mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem Kennwort und wird
             nirgends gespeichert. Verschlüsselt werden auch die Dateinamen.</p>
@@ -22222,7 +23459,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p class="fein">Auch die verschlüsselten Dateien liegen ausschließlich in deinem Browser. Der
             Server der Anmeldung sieht sie nie – er kennt weder Dateien noch Kennwort noch Schlüssel.</p>
 
-          <h2>12. Werbung im freien Tarif</h2>
+          <h2>13. Werbung im freien Tarif</h2>
           <p>Der freie Tarif wird über Anzeigen finanziert. Diese Anzeigen sind fest hinterlegt und werden
             nach der Stelle ausgewählt, an der sie erscheinen – nicht nach deiner Person, deinem Verhalten
             oder deinen Eingaben. Es findet kein Abgleich mit Werbenetzwerken statt, es werden keine Kennungen
@@ -22231,7 +23468,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p>Anzeigen sind stets als solche gekennzeichnet (§ 5a Abs. 4 des Gesetzes gegen den unlauteren
             Wettbewerb) und werden nie im Erscheinungsbild eines Inserats dargestellt.</p>
 
-          <h2>13. Kontaktaufnahme und Hilfe</h2>
+          <h2>14. Kontaktaufnahme und Hilfe</h2>
           <p>Schreibst du per E-Mail, verarbeitet der Anbieter die Angaben aus deiner Nachricht, um sie zu
             beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO bei vertragsbezogenen Anfragen, sonst
             Art. 6 Abs. 1 lit. f DSGVO. Die Nachrichten werden gelöscht, sobald die Anfrage abschließend
@@ -22244,7 +23481,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             die du selbst einträgst. Profil, Merkliste und die Inhalte des Dokumententresors sind nicht
             enthalten und werden auch nicht angehängt.</p>
 
-          <h2>14. Bezahlung von TrimmoTrade Plus</h2>
+          <h2>15. Bezahlung von TrimmoTrade Plus</h2>
           <p>Für bezahlte Verträge werden die zur Abwicklung nötigen Daten verarbeitet: Name, E-Mail-Adresse,
             Zahlungsdaten sowie Beginn und Laufzeit. Die Zahlung selbst wickelt ein Zahlungsdienstleister ab,
             an den die dafür erforderlichen Daten übermittelt werden.</p>
@@ -22257,19 +23494,19 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p class="fein">Solange Plus nur über einen Gründerplatz vergeben wird, fallen weder Zahlungsdaten
             noch Rechnungen an.</p>
 
-          <h2>15. Keine automatisierte Entscheidung über Personen</h2>
+          <h2>16. Keine automatisierte Entscheidung über Personen</h2>
           <p>TrimmoTrade bewertet Angebote, nicht Menschen. Die Passung, die Chancenschätzung und der Prüfhinweis
             beziehen sich auf Wohnungen und Inseratstexte und dienen deiner eigenen Einordnung. Eine
             automatisierte Entscheidung mit rechtlicher Wirkung gegenüber Personen im Sinne von Art. 22 DSGVO
             findet nicht statt.</p>
 
-          <h2>16. Übermittlung in Drittländer</h2>
+          <h2>17. Übermittlung in Drittländer</h2>
           <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google oder Microsoft hinaus findet
             keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des
             Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit
             E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus.</p>
 
-          <h2>17. Deine Rechte</h2>
+          <h2>18. Deine Rechte</h2>
           <ul class="pruef">
             <li>${ico('pruefen')}<span><b>Auskunft</b> darüber, welche Daten verarbeitet werden (Art. 15 DSGVO)</span></li>
             <li>${ico('pruefen')}<span><b>Berichtigung</b> unrichtiger Daten (Art. 16 DSGVO)</span></li>
@@ -22285,17 +23522,17 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p class="fein">Weil deine Eingaben ausschließlich in deinem Browser liegen, kannst du Auskunft,
             Übertragbarkeit und Löschung dort unmittelbar selbst ausüben: im Fußbereich unter „Meine Daten“.</p>
 
-          <h2>18. Beschwerderecht</h2>
+          <h2>19. Beschwerderecht</h2>
           <p>Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in
             dem Mitgliedstaat deines Aufenthaltsorts, deines Arbeitsplatzes oder des Orts des mutmaßlichen
             Verstoßes. Für den Anbieter zuständig ist ${rw('aufsichtsbehoerde', 'zuständige Aufsichtsbehörde')}.</p>
 
-          <h2>19. Pflicht zur Bereitstellung</h2>
+          <h2>20. Pflicht zur Bereitstellung</h2>
           <p>Du bist nicht verpflichtet, personenbezogene Daten bereitzustellen. Ohne die Angaben im Profil
             fallen allerdings die Funktionen weg, die darauf aufbauen – etwa die Passung oder die
             Chancenschätzung.</p>
 
-          <h2>20. Änderungen</h2>
+          <h2>21. Änderungen</h2>
           <p>Diese Erklärung gilt in der Fassung vom ${R.stand()}. Ändert sich die Anwendung, wird sie
             angepasst.</p>
         </div>
@@ -22350,6 +23587,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <b>weder die E-Mail-Adresse noch die Telefonnummer</b> einer Seite an die andere weiter; die
             benachrichtigende E-Mail enthält lediglich den Hinweis auf eine vorliegende Anfrage. Welche
             Angaben eine Anfrage begleiten, entscheidet die anfragende Person vor dem Absenden.</p>
+          <p>(7) Der Dienst ermöglicht es Nutzenden, sich zu Gruppen zusammenzuschließen, um eine
+            Wohnung gemeinsam zu mieten. Der Anbieter <b>prüft die Beteiligten nicht</b>, stellt ihre
+            Identität nicht fest und steht für sie nicht ein. Er wird weder Partei eines Mietvertrags
+            noch einer Vereinbarung zwischen den Mitgliedern einer Gruppe. Die Entscheidung, mit wem
+            jemand zusammenzieht, treffen ausschließlich die Beteiligten.</p>
 
           <h2>§ 3 Anmeldung und Zustandekommen des Vertrags</h2>
           <p>(1) Suche und Inserate lassen sich ohne Anmeldung ansehen. Ein Konto braucht, wer Inserate

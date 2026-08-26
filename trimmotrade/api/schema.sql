@@ -211,6 +211,8 @@ CREATE TABLE IF NOT EXISTS tt_stand (
   wert VARCHAR(190) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+ALTER TABLE tt_inserat ADD COLUMN wg_gruendung TINYINT(1) NOT NULL DEFAULT 0;
+
 CREATE INDEX IF NOT EXISTS ix_fremd_konto ON tt_fremd (konto_id);
 
 CREATE INDEX IF NOT EXISTS ix_passkey_konto ON tt_passkey (konto_id);

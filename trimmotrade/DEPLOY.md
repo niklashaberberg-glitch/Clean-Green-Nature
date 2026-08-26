@@ -375,6 +375,23 @@ Betrieb lebt, spätestens bei der ersten Anfrage ins Leere.
 
 ---
 
+## Aktualisieren auf eine neue Fassung
+
+Dateien hochladen, fertig. Die Anwendung erkennt beim ersten Aufruf, dass das
+Datenmodell neuer ist als das in der Datenbank vermerkte, und legt fehlende
+Tabellen **und fehlende Spalten** selbst an. Nichts von Hand in phpMyAdmin.
+
+Zwei Dinge dabei beachten:
+
+- **Versteckte Dateien mit hochladen.** `.htaccess` und `.user.ini` beginnen mit
+  einem Punkt und werden von manchen FTP-Programmen ausgeblendet.
+- **`api/config.php` nicht überschreiben.** Sie liegt nicht im
+  Versionsverzeichnis und bleibt auf dem Server, wie sie ist. Kommen neue
+  Einstellungen dazu, stehen sie in `api/config.example.php`; vergleichen Sie die
+  beiden Dateien nach jedem Aktualisieren.
+
+---
+
 ## Wenn etwas klemmt
 
 | Was du siehst | Was los ist |

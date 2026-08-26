@@ -270,7 +270,7 @@
      mitschleppen und würde bei der siebten Art vergessen. */
   const ARTEN = [
     { id: 'miete', kind: 'miete', type: 'wohnung', icon: 'schluessel', label: 'Wohnung vermieten',
-      gruppen: ['wohnung', 'miete'] },
+      gruppen: ['wohnung', 'miete', 'wggruendung'] },
     { id: 'wg', kind: 'wg', type: 'zimmer', icon: 'wg', label: 'WG-Zimmer',
       gruppen: ['wohnung', 'miete'] },
     { id: 'tausch', kind: 'tausch', type: 'wohnung', icon: 'tausch', label: 'Wohnung tauschen',
@@ -379,6 +379,18 @@
       const ring = U.$('[name="ringOk"]', U.$('#inserat-form'));
       if (ring) ring.checked = !!e.tausch.dreiecktauschOk;
     }
+    if (e.wgGruendung && e.wgGruendung.moeglich) {
+      const schalter = U.$('[name="wgGruendung"]', U.$('#inserat-form'));
+      if (schalter) {
+        schalter.checked = true;
+        const kasten = U.$('#wg-felder');
+        if (kasten) kasten.hidden = false;
+      }
+      setz('wgMax', e.wgGruendung.maxPersonen);
+      setz('wgVertrag', e.wgGruendung.vertrag);
+      setz('wgHinweis', e.wgGruendung.hinweis);
+    }
+
     /* Vorhandene Bilder übernehmen, damit sie beim Ändern nicht wegfallen. */
     if (Array.isArray(e.bilder) && e.bilder.length && !neueBilder.length) {
       neueBilder = e.bilder.slice();
@@ -651,6 +663,34 @@
             <label class="feld"><span>Frei ab</span>
               <input type="date" name="freiAb" value="${U.isoDate(U.addDays(TT.now(), 30))}"></label>
           </div>
+
+          <fieldset class="filter__gruppe wg-frei" data-gruppe="wggruendung">
+            <legend>An eine WG vermieten?</legend>
+            <p class="fein">Eine Wohnung ab drei Zimmern ist für eine Person zu groß und für viele
+              Familien zu teuer. Drei Leute, die sich hier finden, zahlen sie zusammen ohne Mühe –
+              und sie bewerben sich als ein Haushalt, nicht als drei Einzelne.</p>
+            <label class="schalter">
+              <input type="checkbox" name="wgGruendung" data-tu-change="inserat-wg">
+              <span>Für eine WG-Gründung freigeben<i>Mehrere Fremde können sich hier zusammentun und
+                sich gemeinsam bewerben. Du entscheidest wie immer, wer die Wohnung bekommt.</i></span>
+            </label>
+            <div class="formraster" id="wg-felder" hidden>
+              <label class="feld"><span>Höchstens wie viele Personen?</span>
+                <input type="number" name="wgMax" min="2" max="12" step="any" value="3"></label>
+              <label class="feld"><span>Vertragsform</span>
+                <select name="wgVertrag">
+                  <option value="gemeinsam">ein gemeinsamer Vertrag (üblich)</option>
+                  <option value="einzeln">ein Vertrag je Zimmer</option>
+                  <option value="offen">noch offen</option>
+                </select></label>
+              <label class="feld feld--breit"><span>Hinweis an die Gruppe (freiwillig)</span>
+                <input type="text" name="wgHinweis" maxlength="200"
+                  placeholder="etwa: Ich hätte gern einen gemeinsamen Vertrag und eine Kaution von drei Kaltmieten insgesamt."></label>
+            </div>
+            <p class="fein">Bei einem gemeinsamen Vertrag haften alle als Gesamtschuldner (§ 421 BGB) –
+              für dich die sicherere Form. Die Kaution bleibt in jedem Fall auf drei Nettokaltmieten
+              für die ganze Wohnung begrenzt, nicht je Person (§ 551 Abs. 1 BGB).</p>
+          </fieldset>
 
           <div class="formraster" data-gruppe="kauf">
             <label class="feld"><span>Kaufpreis</span>
@@ -1037,6 +1077,11 @@
 
   A_('inserat-art', (el) => { gruppenZeigen(el.value); });
 
+  A_('inserat-wg', (el) => {
+    const kasten = U.$('#wg-felder');
+    if (kasten) kasten.hidden = !el.checked;
+  });
+
   A_('inserat-bilder', (el) => {
     const dateien = Array.from(el.files || []);
     el.value = '';
@@ -1233,6 +1278,18 @@
     };
 
     if (typ === 'haus') daten.bauweise = f.get('bauweise') || 'freistehend';
+
+    /* Die Freigabe für eine WG-Gründung. Der Server prüft noch einmal,
+       ob sie zur Art und zur Zimmerzahl passt – hier steht nur, was die
+       anbietende Seite gewählt hat. */
+    if (kind === 'miete' && f.get('wgGruendung')) {
+      daten.wgGruendung = {
+        moeglich: true,
+        maxPersonen: zahl('wgMax', 3),
+        vertrag: f.get('wgVertrag') || 'gemeinsam',
+        hinweis: f.get('wgHinweis') || ''
+      };
+    }
 
     if (istGrund) {
       daten.grund = {

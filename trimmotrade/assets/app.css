@@ -2316,3 +2316,104 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 /* Die Ratgeberzeile im Fuß. Etwas kleiner als die Rechtszeile darüber:
    Sie ist Angebot, nicht Pflicht. */
 .fuss__links--ratgeber { font-size: .82rem; opacity: .9; }
+
+/* =====================================================================
+   WG-Gründung
+
+   Der Bereich, in dem sich Menschen begegnen, die sich nicht kennen.
+   Er ist deshalb bewusst ruhiger gehalten als der Rest: keine
+   Akzentflächen, keine Rahmen in Signalfarbe. Was hier Aufmerksamkeit
+   bekommt, sind die Personen und die Zahl, die jede zahlen würde.
+   ===================================================================== */
+.wg-liste { display: grid; gap: 14px; }
+
+.wg-karte {
+  border: 1px solid var(--rand); border-radius: var(--r-mittel);
+  padding: 1em 1.1em; background: var(--flaeche);
+  display: grid; gap: .7em;
+}
+.wg-karte.is-drin { border-color: var(--akzent); }
+
+.wg-karte__kopf { display: flex; align-items: flex-start; gap: 1em; justify-content: space-between; }
+.wg-karte__kopf h3 { margin: 0; font-size: 1.05rem; }
+.wg-karte__wohnung { margin: .25em 0 0; font-size: .85rem; display: flex; align-items: center; gap: .35em; }
+
+/* Die Besetzung als Bruch: „2/3“ ist auf einen Blick lesbar, „zwei von
+   drei Plätzen belegt“ nicht. */
+.wg-karte__zahl { text-align: right; flex: none; line-height: 1.1; }
+.wg-karte__zahl b { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.wg-karte__zahl b i { font-size: .95rem; font-style: normal; color: var(--text2); }
+.wg-karte__zahl span { display: block; font-size: .75rem; color: var(--text2); }
+
+/* Der Anteil je Person. Die erste Zahl, nach der gefragt wird – deshalb
+   steht sie groß und nicht in einer Aufzählung. */
+.wg-karte__geld {
+  display: flex; align-items: baseline; gap: .45em; margin: 0;
+  padding: .5em .75em; background: var(--flaeche2); border-radius: var(--r-klein);
+}
+.wg-karte__geld b { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.wg-karte__geld span { font-size: .85rem; color: var(--text2); }
+.wg-karte__geld > .ico { align-self: center; color: var(--text2); }
+
+.wg-karte__text { margin: 0; white-space: pre-wrap; }
+.wg-karte__passung { display: flex; align-items: center; gap: .5em; margin: 0; font-size: .88rem; }
+.wg-karte__passung.is-gut > .ico { color: var(--gut); }
+.wg-karte__passung.is-warn > .ico { color: var(--warn); }
+.wg-karte__passung.is-schlecht > .ico { color: var(--schlecht); }
+.wg-karte__passung span { color: var(--text2); }
+
+.wg-karte__fuss {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .6em 1em;
+  padding-top: .6em; border-top: 1px solid var(--rand);
+}
+.wg-karte__fuss .fein { display: inline-flex; align-items: center; gap: .35em; }
+
+.wg-personen { list-style: none; margin: 0; padding: 0; display: grid; gap: .6em; }
+.wg-person { display: flex; gap: .7em; align-items: flex-start; }
+.wg-person.is-ich { opacity: .85; }
+.wg-person > svg { flex: none; border-radius: 50%; }
+.wg-person b { display: flex; flex-wrap: wrap; align-items: center; gap: .4em; }
+.wg-person__eck { display: flex; flex-wrap: wrap; gap: .25em .7em; font-size: .82rem; color: var(--text2); }
+.wg-person__eck i { font-style: normal; }
+.wg-person__text { margin: .3em 0 0; font-size: .88rem; white-space: pre-wrap; }
+.wg-person__mail {
+  display: inline-flex; align-items: center; gap: .3em;
+  margin-top: .3em; font-size: .82rem;
+}
+.wg-person__tun { display: flex; flex-wrap: wrap; gap: .4em; margin-left: auto; }
+
+.wg-anfragen {
+  padding: .8em .9em; background: var(--flaeche2); border-radius: var(--r-klein);
+  display: grid; gap: .6em;
+}
+.wg-anfragen h4 { margin: 0; font-size: .9rem; display: flex; align-items: center; gap: .4em; }
+
+/* Der Rechtsteil steht zugeklappt da. Aufgeklappt ist er lang – das ist
+   Absicht: Wer einen gemeinsamen Mietvertrag unterschreibt, sollte
+   diese vier Absätze gelesen haben, und ein Zweizeiler würde ihnen
+   nicht gerecht. */
+.wg-recht {
+  border: 1px solid var(--rand); border-radius: var(--r-klein);
+  padding: .7em .9em; background: var(--flaeche2);
+}
+.wg-recht > summary {
+  display: flex; align-items: center; gap: .5em;
+  cursor: pointer; font-size: .9rem;
+}
+.wg-recht > summary::-webkit-details-marker { display: none; }
+.wg-recht h4 {
+  margin: 1em 0 .4em; font-size: .88rem;
+  display: flex; align-items: center; gap: .35em;
+}
+.wg-recht .spalten2 { margin-top: .6em; }
+
+.wg-block__hinweis {
+  display: flex; gap: .5em; margin: 0;
+  padding: .6em .8em; background: var(--flaeche2);
+  border-left: 3px solid var(--rand); border-radius: var(--r-klein);
+  font-size: .9rem; font-style: italic;
+}
+.wg-block__hinweis > .ico { flex: none; color: var(--text2); font-style: normal; }
+
+.wg-frei .formraster { margin-top: .7em; }
+.feld--breit { grid-column: 1 / -1; }

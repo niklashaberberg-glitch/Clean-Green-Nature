@@ -22,9 +22,9 @@ const SKRIPTE = [
   'i18n.js', 'sprache-en.js',
   'util.js', 'geo.js', 'images.js', 'ring-bild.js', 'data.js',
   'analyse.js', 'match.js', 'werkzeuge.js', 'store.js', 'plan.js', 'tresor.js', 'recht.js', 'hilfe.js', 'api.js', 'konto.js',
-  'hilfe-en.js', 'markt.js', 'karte.js', 'ui.js',
+  'hilfe-en.js', 'markt.js', 'wg.js', 'karte.js', 'ui.js',
   'view-start.js', 'view-suche.js', 'view-objekt.js',
-  'view-tausch.js', 'view-tools.js', 'view-profil.js',
+  'view-tausch.js', 'view-wg.js', 'view-tools.js', 'view-profil.js',
   'view-werkzeuge.js', 'view-werkzeuge2.js', 'view-markt.js', 'view-plus.js',
   'view-tresor.js', 'view-recht.js', 'view-hilfe.js', 'view-anmeldung.js',
   'app.js'

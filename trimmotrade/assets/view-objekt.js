@@ -734,6 +734,7 @@
             ${spiegelBlock(l, b.mietCheck, b.kaufCheck, b.bodenCheck)}
             ${klauselBlock(l)}
             ${chancenBlock(l)}
+            ${TT.viewWg ? TT.viewWg.objektBlock(l) : ''}
             ${kostenBlock(l, k)}
             ${finanzBlock(l, k)}
             ${wgBlock(l, b)}
@@ -763,6 +764,17 @@
         </div>
       </div>`,
       danach() {
+        /* Die Gruppen zu dieser Wohnung nachholen. Die Seite steht
+           sofort; kommt die Antwort, wird nur dieser Block ersetzt –
+           ein Neuzeichnen würde die Karte darunter neu aufbauen und
+           den Kartenausschnitt zurücksetzen. */
+        if (l.wgGruendungMoeglich && TT.viewWg) {
+          TT.viewWg.objektLaden(l.id, () => {
+            if (ui.aktuell !== 'objekt' || ui.params.arg !== l.id) return;
+            const kasten = U.$('#wg-block');
+            if (kasten) kasten.outerHTML = String(TT.viewWg.objektBlock(l));
+          });
+        }
         const flaeche = U.$('#objekt-karte');
         if (flaeche) {
           const umgebung = TT.data.listings.filter((x) => x.stadt === l.stadt && U.distKm(x, l) < 3.2);

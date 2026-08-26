@@ -3129,6 +3129,290 @@
       "of one side to the other; the notifying email merely says that an enquiry has arrived. Which details accompany an enquiry is decided by the enquiring person before sending.",
   });
 
+
+  /* -------------------------------------------------------------------
+     WG-Gründung
+     ------------------------------------------------------------------- */
+  e({
+    "für WG-Gründung freigegeben":
+      "released for founding a flatshare",
+    "Wohnungen, die an mehrere Fremde zusammen vermietet werden":
+      "Flats let to several strangers together",
+    "An eine WG vermieten?":
+      "Let to a flatshare?",
+    "Eine Wohnung ab drei Zimmern ist für eine Person zu groß und für viele Familien zu teuer. Drei Leute, die sich hier finden, zahlen sie zusammen ohne Mühe – und sie bewerben sich als ein Haushalt, nicht als drei Einzelne.":
+      "A flat with three or more rooms is too big for one person and too expensive for many families. Three people who find each other here pay it together without effort – and they apply as one household, not as three individuals.",
+    "Für eine WG-Gründung freigeben":
+      "Release for founding a flatshare",
+    "Mehrere Fremde können sich hier zusammentun und sich gemeinsam bewerben. Du entscheidest wie immer, wer die Wohnung bekommt.":
+      "Several strangers can team up here and apply together. You still decide who gets the flat, as always.",
+    "Bei einem gemeinsamen Vertrag haften alle als Gesamtschuldner (§ 421 BGB) – für dich die sicherere Form. Die Kaution bleibt in jedem Fall auf drei Nettokaltmieten für die ganze Wohnung begrenzt, nicht je Person (§ 551 Abs. 1 BGB).":
+      "With a joint agreement everybody is jointly and severally liable (§ 421 BGB) – the safer form for you. The deposit stays capped at three months’ net rent for the whole flat in any case, not per person (§ 551 Abs. 1 BGB).",
+    "Eine Wohnung, die für eine Person zu groß und für eine Familie zu teuer ist, wird bezahlbar, sobald sich drei Leute finden. Hier findet man sie – vor der Wohnung, nicht danach.":
+      "A flat that is too big for one person and too expensive for a family becomes affordable as soon as three people find each other. Here is where they do – before the flat, not after.",
+    "Eine WG zu gründen heißt, dass sich Menschen finden, die sich nicht kennen. Das geht nur dort, wo mehr als ein Browser beteiligt ist – auf":
+      "Founding a flatshare means people find each other who do not know each other. That only works where more than one browser is involved – on",
+    ". Diese Kopie läuft ohne Verbindung und zeigt nur, wie es aussieht.":
+      ". This copy runs without a connection and only shows what it looks like.",
+    "Was ihr rechtlich unterschreibt:":
+      "What you are signing, legally:",
+    "Ein gemeinsamer Vertrag":
+      "One joint agreement",
+    "Alle stehen zusammen im Vertrag.":
+      "Everybody is on the same contract.",
+    "Die anbietende Seite bevorzugt das fast immer.":
+      "Landlords almost always prefer this.",
+    "Wer auszieht, kann ersetzt werden – wenn alle zustimmen.":
+      "Whoever moves out can be replaced – if everybody agrees.",
+    "Solltet ihr wissen":
+      "You should know",
+    "Ihr haftet als Gesamtschuldner (§ 421 BGB): Zahlt einer nicht, kann die Vermieterseite die volle Miete von jedem Einzelnen verlangen.":
+      "You are jointly and severally liable (§ 421 BGB): if one does not pay, the landlord can demand the full rent from any single one of you.",
+    "Ein Auszug allein geht nicht. Der Wechsel einer Person ist eine Vertragsänderung und braucht die Zustimmung aller Mitmietenden und der Vermieterseite.":
+      "Moving out alone does not work. Replacing one person is a change to the contract and needs the agreement of all co-tenants and of the landlord.",
+    "Vier Dinge, die fast alle falsch machen":
+      "Four things almost everybody gets wrong",
+    "Die Kaution gilt für die Wohnung, nicht je Person.":
+      "The deposit applies to the flat, not per person.",
+    "Höchstens drei Nettokaltmieten insgesamt (§ 551 Abs. 1 BGB). Wer von jedem drei Monatsmieten verlangt, verlangt zu viel – und ihr dürft in drei Raten zahlen.":
+      "Three months’ net rent in total at most (§ 551 Abs. 1 BGB). Demanding three months from each is too much – and you may pay in three instalments.",
+    "Ein Auszug beim gemeinsamen Vertrag ist keine Kündigung.":
+      "Moving out under a joint agreement is not a notice.",
+    "Man kündigt nur gemeinsam. Wer allein gehen will, braucht eine Vertragsänderung – und damit das Ja aller anderen und der Vermieterseite.":
+      "Notice is given jointly only. Whoever wants to leave alone needs a change to the contract – and with it the yes of everybody else and of the landlord.",
+    "Jede Person muss sich anmelden":
+      "Every person has to register",
+    ", innerhalb von zwei Wochen. Die Vermieterseite ist verpflichtet, dafür eine Wohnungsgeberbestätigung auszustellen (§ 19 BMG).":
+      ", within two weeks. The landlord is obliged to issue a landlord’s confirmation for that (§ 19 BMG).",
+    "Der Rundfunkbeitrag fällt einmal je Wohnung an":
+      "The broadcasting fee is charged once per flat",
+    ", nicht je Person. Eine WG zahlt zusammen einen Beitrag – klärt gleich, wer ihn anmeldet und wie ihr teilt.":
+      ", not per person. A flatshare pays one fee together – settle right away who registers it and how you split it.",
+    "Allgemeine Hinweise, keine Rechtsberatung. Bei einem gemeinsamen Vertrag über mehrere Jahre lohnt der Blick eines Mietervereins, bevor unterschrieben wird.":
+      "General information, not legal advice. For a joint agreement running several years, a tenants’ association is worth consulting before anybody signs.",
+    ", damit die Mail auch dann herausgeht, wenn du gerade nicht hier bist (Abschnitt 7). Dazu kommt, was du einer":
+      ", so that the email goes out even when you are not here (section 7). Added to that is what you tell a",
+    "über dich erzählst, wenn du eine gründest oder ihr beitrittst (Abschnitt 8).":
+      "about yourself when you found one or join one (section 8).",
+    "Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten gebildet und keine Werbung nach deinen Interessen ausgespielt. Gezählt wird nur, wie oft eine Ansicht an einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse, ohne Verlauf (Abschnitt 10). Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.":
+      "No audience-measurement tools are used, no profiles of your behaviour are built and no interest-based advertising is shown. All that is counted is how often a view was opened in total on a given day – with no identifier, no address, no history (section 10). That is why no window appears asking for consent: there is nothing consent would be needed for.",
+    "8. Gruppen zur WG-Gründung":
+      "8. Groups for founding a flatshare",
+    "Wer eine Gruppe eröffnet oder ihr beitritt, gibt anderen Menschen etwas über sich preis – das ist der Zweck der Sache und nicht ihr Nebeneffekt. Deshalb steht hier genau, wer was zu sehen bekommt.":
+      "Whoever opens a group or joins one reveals something about themselves to other people – that is the point of the thing, not a side effect. So here is exactly who gets to see what.",
+    "Gespeichert werden dein Vorstellungstext und die Eckdaten, die du im Formular":
+      "What is stored is your introduction text and the key facts you",
+    ": Alter, Beruf, eine Einkommens":
+      "in the form: age, occupation, an income",
+    ", Rauchen, Haustiere, gewünschter Einzugstermin und deine sechs Antworten zum Alltag, aus denen sich die Passung rechnet. Diese Angaben werden als Kopie gespeichert und ändern sich nicht mehr, wenn du später dein Profil bearbeitest.":
+      ", smoking, pets, desired move-in date and your six answers about everyday life, from which the match is calculated. These details are stored as a copy and do not change later if you edit your profile.",
+    "Ohne Konto sichtbar":
+      "Visible without an account",
+    "nur Zahlen und der Text der Gruppe – keine Person":
+      "numbers and the group’s text only – no person",
+    "Rufname und erster Buchstabe des Nachnamens („Cem Y.“), Alter, Beruf, Einzugstermin, Vorstellungstext, Lebensrhythmus":
+      "First name and initial of the surname (“Cem Y.”), age, occupation, move-in date, introduction text, everyday rhythm",
+    "Für Mitglieder sichtbar":
+      "Visible to members",
+    "zusätzlich die E-Mail-Adressen – erst dann, wenn beide Seiten einander angenommen haben":
+      "in addition the email addresses – only once both sides have accepted each other",
+    "Für die gründende Person":
+      "For the founding person",
+    "Die anbietende Seite der Wohnung ist von Gruppen zu ihrem eigenen Inserat ausgeschlossen – weder gründen noch beitreten. Was Bewerbende einander erzählen, erzählen sie einander. Was die Vermieterseite erfährt, steht in der gemeinsamen Bewerbung, und das sind Haushaltsgröße und Berufe, nicht die einzelnen Vorstellungstexte.":
+      "The advertiser of the flat is excluded from groups for their own listing – neither founding nor joining. What applicants tell each other, they tell each other. What the landlord learns is in the joint application, and that is household size and occupations, not the individual introduction texts.",
+    "Zusammenfinden von Menschen, die gemeinsam eine Wohnung mieten wollen":
+      "Bringing together people who want to rent a flat jointly",
+    "Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags und vorvertragliche Maßnahme auf deine eigene Anfrage hin":
+      "Art. 6(1)(b) GDPR – performance of the user agreement and pre-contractual measure at your own request",
+    "bis die Gruppe aufgelöst wird oder abläuft, spätestens mit der Löschung deines Kontos. Eine Gruppe läuft 45 Tage nach der letzten Änderung ab.":
+      "until the group is dissolved or expires, at the latest when your account is deleted. A group expires 45 days after the last change.",
+    "die übrigen Mitglieder der Gruppe im oben beschriebenen Umfang":
+      "the other members of the group, to the extent described above",
+    "Nicht übermittelt werden Angaben zu Herkunft, Religion, Gesundheit, Familienplanung oder sexueller Orientierung (Art. 9 DSGVO) – sie kommen im Formular gar nicht erst vor. Eine Auswahl nach Alter oder Geschlecht nimmt TrimmoTrade nicht vor; dass eine WG das für sich tun darf (§ 19 Abs. 5 AGG nimmt das gemeinsame Wohnen aus), ist eine Entscheidung der Menschen, nicht dieser Anwendung.":
+      "Data on origin, religion, health, family planning or sexual orientation (Art. 9 GDPR) is not transmitted – it does not appear in the form in the first place. TrimmoTrade makes no selection by age or gender; that a flatshare may do so for itself (§ 19 Abs. 5 AGG exempts shared living) is a decision of the people, not of this application.",
+    "Was ausdrücklich nicht stattfindet:":
+      "What explicitly does not happen:",
+    "eine Prüfung von Personen. TrimmoTrade stellt niemanden fest, bewertet niemanden und steht für niemanden ein. Wer sich hier zusammentut, entscheidet selbst – alles andere zu behaupten wäre ein Versprechen, das niemand halten kann.":
+      "any vetting of people. TrimmoTrade identifies nobody, rates nobody and vouches for nobody. Whoever teams up here decides for themselves – claiming anything else would be a promise nobody can keep.",
+    "10. Reichweitenmessung ohne Personenbezug":
+      "10. Audience measurement without personal data",
+    "14. Kontaktaufnahme und Hilfe":
+      "14. Getting in touch and help",
+    "15. Bezahlung von TrimmoTrade Plus":
+      "15. Paying for TrimmoTrade Plus",
+    "16. Keine automatisierte Entscheidung über Personen":
+      "16. No automated decisions about people",
+    "18. Deine Rechte":
+      "18. Your rights",
+    "20. Pflicht zur Bereitstellung":
+      "20. Obligation to provide data",
+    "(7) Der Dienst ermöglicht es Nutzenden, sich zu Gruppen zusammenzuschließen, um eine Wohnung gemeinsam zu mieten. Der Anbieter":
+      "(7) The service lets users team up in groups in order to rent a flat jointly. The provider",
+    "prüft die Beteiligten nicht":
+      "does not vet the people involved",
+    ", stellt ihre Identität nicht fest und steht für sie nicht ein. Er wird weder Partei eines Mietvertrags noch einer Vereinbarung zwischen den Mitgliedern einer Gruppe. Die Entscheidung, mit wem jemand zusammenzieht, treffen ausschließlich die Beteiligten.":
+      ", does not establish their identity and does not vouch for them. It becomes party neither to a tenancy agreement nor to any arrangement between the members of a group. Who moves in with whom is decided solely by those involved.",
+    /* Gruppenkarten und Dialoge – sie erscheinen erst, wenn es Gruppen
+       gibt, und wurden deshalb im Durchlauf nicht gezeichnet. */
+    'WG gründen': 'Start a flatshare',
+    'WG gründen – zu mehreren eine Wohnung nehmen': 'Start a flatshare – take a flat with others',
+    'Eine WG gründen': 'Founding a flatshare',
+    'Für eine WG-Gründung freigegeben': 'Released for founding a flatshare',
+    'Die anbietende Seite vermietet diese Wohnung ausdrücklich auch an mehrere Personen, die sich nicht kennen.':
+      'The advertiser explicitly lets this flat to several people who do not know each other.',
+    ' Bei {0} Personen zahlt jede etwa {1} warm.': ' With {0} people each pays about {1} incl. bills.',
+    'bis {0} Personen': 'up to {0} people',
+    'Gruppen werden geladen …': 'Loading groups …',
+    'Zu dieser Wohnung gibt es noch keine Gruppe.': 'There is no group for this flat yet.',
+    'Gruppe gründen': 'Open a group',
+    'Beitreten': 'Join',
+    'Deine Gruppen': 'Your groups',
+    'Gruppen, die noch jemanden suchen': 'Groups still looking for someone',
+    'Gerade sucht keine Gruppe': 'No group is looking right now',
+    'Gruppen entstehen an einer konkreten Wohnung. Such dir eine, die für eine WG-Gründung freigegeben ist, und eröffne die erste.':
+      'Groups form around a specific flat. Find one released for founding a flatshare and open the first group.',
+    'Wohnungen für WG-Gründung': 'Flats for founding a flatshare',
+    'Dafür braucht es die Website': 'This needs the website',
+    'Ansehen geht ohne Konto, mitmachen nicht': 'Looking works without an account, joining does not',
+    'Wer einer Gruppe beitritt, erzählt Fremden etwas über sich. Das setzt voraus, dass man weiß, mit wem man es zu tun hat – deshalb geht es nur mit bestätigter Adresse.':
+      'Whoever joins a group tells strangers something about themselves. That presupposes knowing who you are dealing with – which is why it needs a confirmed address.',
+    '{0} % Passung': '{0} % match',
+    '{0} frei': '{0} free',
+    'voll': 'full',
+    '{0} Jahre': '{0} years old',
+    'jemand': 'somebody',
+    'gegründet': 'founded it',
+    'du': 'you',
+    'Wohnung weg': 'Flat gone',
+    'je Person warm, bei {0} Personen': 'per person incl. bills, with {0} people',
+    'Diese Gruppe hat sich gemeinsam beworben.': 'This group has applied together.',
+    'Vollzählig – die Gruppe kann sich bewerben.': 'Complete – the group can apply.',
+    'Noch niemand hat sich vorgestellt.': 'Nobody has introduced themselves yet.',
+    'Wer dabei ist, siehst du nach der Anmeldung. Ohne Konto zeigen wir keine Personen.':
+      'You see who is in it after signing in. Without an account we show no people.',
+    '{0} möchten dazukommen': '{0} would like to join',
+    'Du entscheidest. Bis dahin sehen die übrigen Mitglieder diese Anfragen nicht.':
+      'You decide. Until then the other members do not see these requests.',
+    'Aufnehmen': 'Accept',
+    'Absagen': 'Decline',
+    'Deine Anfrage liegt bei der Gruppe.': 'Your request is with the group.',
+    'zurückziehen': 'withdraw',
+    'Gemeinsam bewerben': 'Apply together',
+    'Gruppe auflösen': 'Dissolve group',
+    'Gruppe verlassen': 'Leave group',
+    'Diese Gruppe nimmt gerade niemanden auf.': 'This group is not taking anyone right now.',
+    'Für eine Einschätzung fehlt dein Alltagsprofil.': 'Your everyday profile is missing for an assessment.',
+    'Sechs Fragen im Profil': 'Six questions in your profile',
+    ' genügen.': ' are enough.',
+
+    /* Gründen */
+    'Du eröffnest eine Gruppe für': 'You are opening a group for',
+    '. Andere sehen sie, stellen sich vor, und du entscheidest, wer dazukommt.':
+      '. Others see it, introduce themselves, and you decide who joins.',
+    'Name der Gruppe': 'Name of the group',
+    'WG in {0}': 'Flatshare in {0}',
+    'Zu wie vielt?': 'How many of you?',
+    ' je Person': ' per person',
+    'Was für eine WG soll das werden?': 'What kind of flatshare should it be?',
+    'Zweck-WG oder gemeinsam kochen? Ruhig oder offen für Besuch? Je klarer, desto passender melden sich Leute.':
+      'Just sharing costs, or cooking together? Quiet, or open to visitors? The clearer you are, the better the people who get in touch.',
+    'Gruppe eröffnen': 'Open the group',
+    'Wird eröffnet …': 'Opening …',
+    'Gruppe eröffnet. Jetzt kann sich jemand melden.': 'Group opened. Now somebody can get in touch.',
+    'Schreib ein paar Sätze über dich – ohne das meldet sich niemand.':
+      'Write a few sentences about yourself – without it nobody will get in touch.',
+
+    /* Vorstellung */
+    'Ein paar Sätze über dich': 'A few sentences about yourself',
+    'Wer du bist, was du arbeitest, wie du wohnst – und warum diese Wohnung.':
+      'Who you are, what you do, how you live – and why this flat.',
+    'Das geht aus deinem Profil mit': 'This goes along from your profile',
+    'Dazu deine sechs Antworten zum Alltag – daraus rechnet sich die Passung. Ohne sie sieht die Gruppe keine Einschätzung.':
+      'Plus your six answers about everyday life – the match is calculated from them. Without them the group sees no assessment.',
+    'Dein Profil ist leer': 'Your profile is empty',
+    'Alter, Beruf und die sechs Fragen zum Alltag entscheiden darüber, ob jemand dich aufnimmt.':
+      'Age, occupation and the six everyday questions decide whether somebody takes you in.',
+    ' – es dauert zwei Minuten.': ' – it takes two minutes.',
+    'Deine E-Mail-Adresse sehen die anderen erst, wenn ihr euch gegenseitig angenommen habt. Vorher steht dort nur dein Rufname.':
+      'The others only see your email address once you have accepted each other. Before that only your first name is shown.',
+    'Alter': 'Age', 'Beruf': 'Occupation',
+
+    /* Beitreten */
+    'Der Gruppe beitreten': 'Join the group',
+    'Du stellst dich': 'You are introducing yourself to',
+    'vor. Die gründende Person entscheidet, ob du dazukommst; die übrigen Mitglieder sehen deine Anfrage bis dahin nicht.':
+      '. The founding person decides whether you join; until then the other members do not see your request.',
+    'Bevor du zusagst': 'Before you commit',
+    'Bei einem gemeinsamen Mietvertrag haftet ihr als Gesamtschuldner: Zahlt eine Person nicht, kann die Vermieterseite die volle Miete von jeder Einzelnen verlangen (§ 421 BGB). Trefft euch, bevor ihr unterschreibt.':
+      'With a joint tenancy agreement you are jointly and severally liable: if one person does not pay, the landlord can demand the full rent from any single one of you (§ 421 BGB). Meet up before you sign.',
+    'Anfrage schicken': 'Send request',
+    'Wird geschickt …': 'Sending …',
+    'Anfrage geschickt. Die Gruppe bekommt eine Mail.': 'Request sent. The group gets an email.',
+    'Schreib ein paar Sätze über dich – sonst kann niemand entscheiden.':
+      'Write a few sentences about yourself – otherwise nobody can decide.',
+
+    /* Entscheiden und verlassen */
+    'Aufgenommen. Ihr seht jetzt eure Adressen.': 'Accepted. You can now see each other’s addresses.',
+    'Abgesagt.': 'Declined.',
+    'Die Gruppe auflösen? Alle Mitglieder werden benachrichtigt.':
+      'Dissolve the group? All members will be notified.',
+    'Diese Gruppe wirklich verlassen?': 'Really leave this group?',
+    'Gruppe aufgelöst.': 'Group dissolved.',
+    'Du bist raus.': 'You are out.',
+
+    /* Bewerben */
+    'Eure Bewerbung geht als': 'Your application goes out as',
+    'eine': 'one',
+    'Anfrage hinaus – nicht als': 'enquiry – not as',
+    'einzelne. Für die anbietende Seite ist das der Unterschied zwischen':
+      'separate ones. For the advertiser that is the difference between',
+    'Leuten, die allein nicht zahlen können, und einem vollständigen Haushalt.':
+      'people who cannot pay on their own and one complete household.',
+    'Eure Nachricht': 'Your message',
+    'Das steht automatisch dabei': 'This is included automatically',
+    'Personen als WG': 'people as a flatshare',
+    'Namen und Adressen der Einzelnen gehen nicht mit. Wer antwortet, entscheidet selbst, wem er sie gibt.':
+      'Names and addresses of the individuals do not go along. Whoever answers decides for themselves who gets them.',
+    'Bewerbung abschicken': 'Send application',
+    'Bewerbung abgeschickt. Die anbietende Seite bekommt eine Mail.':
+      'Application sent. The advertiser gets an email.',
+    'zu zweit': 'two of us', 'zu dritt': 'three of us', 'zu viert': 'four of us',
+    'zu fünft': 'five of us', 'zu sechst': 'six of us',
+    'mit {0} Personen': 'a group of {0}',
+    'Guten Tag,\n\nwir sind {0} und würden die Wohnung gern gemeinsam nehmen. Wir haben uns über TrimmoTrade gefunden und stellen uns gern persönlich vor.\n\nÜber einen Besichtigungstermin würden wir uns freuen.':
+      'Hello,\n\nwe are {0} and would like to take the flat together. We found each other through TrimmoTrade and would be glad to introduce ourselves in person.\n\nWe would appreciate a viewing appointment.',
+
+    /* Formular */
+    'Höchstens wie viele Personen?': 'At most how many people?',
+    'Vertragsform': 'Form of contract',
+    'ein gemeinsamer Vertrag (üblich)': 'one joint agreement (usual)',
+    'ein Vertrag je Zimmer': 'one agreement per room',
+    'noch offen': 'still open',
+    'Hinweis an die Gruppe (freiwillig)': 'Note to the group (optional)',
+    'etwa: Ich hätte gern einen gemeinsamen Vertrag und eine Kaution von drei Kaltmieten insgesamt.':
+      'e.g.: I would prefer one joint agreement and a deposit of three months’ net rent in total.',
+    'Ein Vertrag je Zimmer': 'One agreement per room',
+    'Jede Person hat einen eigenen Vertrag.': 'Every person has their own agreement.',
+    'Keine Haftung für die anderen.': 'No liability for the others.',
+    'Jede Person kann für sich kündigen, ohne die anderen zu fragen.':
+      'Every person can give notice for themselves without asking the others.',
+    'Deutlich seltener – für die Vermieterseite ist es mehr Verwaltung.':
+      'Much rarer – it means more administration for the landlord.',
+    'Die Gemeinschaftsräume gehören dann niemandem allein; das gehört geregelt.':
+      'The shared rooms then belong to nobody alone; that needs to be settled.',
+    'Noch offen': 'Still open',
+    'Die Vertragsform ist noch nicht entschieden.': 'The form of contract has not been decided yet.',
+    'Ihr könnt danach fragen, bevor ihr euch festlegt.': 'You can ask about it before committing.',
+    'Fragt früh. Nach der Zusage ist die Verhandlungsposition schlechter.':
+      'Ask early. After the acceptance your bargaining position is weaker.',
+    'Spricht dafür': 'In favour',
+
+    /* Kontohinweis */
+    'Eine WG gründen': 'Founding a flatshare',
+    'Einer WG-Gründung beitreten': 'Joining a flatshare being founded'
+
+  });
+
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
 })(window.TT = window.TT || {});

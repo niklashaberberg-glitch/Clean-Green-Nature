@@ -60,12 +60,43 @@ final class Gruppe
         'raucher'    => 20,
         'haustiere'  => 40,
         'einzug'     => 20,
+        'geschlecht' => 10,   // nur w/m/d – § 19 Abs. 5 AGG, siehe unten
     ];
 
     /* Die sechs Dimensionen aus match.js. Sie werden hier nur
        durchgereicht und auf 0 bis 10 begrenzt – gerechnet wird im
        Browser, wo auch das eigene Profil liegt. */
     private const LIFESTYLE = ['sauber', 'ruhe', 'gaeste', 'gemeinsam', 'chrono', 'kochen'];
+
+    /* Die vier weiteren Regler aus passung.js. Ebenfalls nur 0 bis 10,
+       ebenfalls nur durchgereicht. */
+    private const MEHR = ['homeoffice', 'ordnung', 'party', 'teilen'];
+
+    /* Der WG-Teil des Profils. Auch das ist eine feste Liste und keine
+       durchgereichte Struktur, und sie ist doppelt begrenzt: erst auf
+       diese Felder, dann auf diese Werte.
+
+       Was hier fehlt, fehlt mit Absicht. Herkunft, Religion, Gesundheit,
+       Familienplanung und sexuelle Orientierung stehen nicht im Profil
+       und kommen deshalb hier gar nicht erst an. Was steht, sind
+       Alltagsfragen – bis auf zwei:
+
+       Geschlecht und Altersspanne. Eine WG darf danach auswählen, § 19
+       Abs. 5 AGG nimmt das gemeinsame Bewohnen einer Wohnung vom
+       Benachteiligungsverbot aus. Der Weg über Anfrage::ECKDATEN, also
+       die Bewerbung um eine Wohnung, führt beides nicht – dort gilt die
+       Ausnahme nicht. */
+    private const WG_WORTE = [
+        'rauchen'            => ['nein', 'balkon', 'drinnen'],
+        'rauchenAndere'      => ['egal', 'balkon', 'nicht'],
+        'haustiere'          => ['keine', 'katze', 'hund', 'klein'],
+        'haustiereAndere'    => ['egal', 'keine', 'allergie'],
+        'ernaehrung'         => ['egal', 'vegetarisch', 'vegan', 'halal', 'koscher'],
+        'kueche'             => ['egal', 'kein_fleisch', 'getrennt'],
+        'beschaeftigungsart' => ['vollzeit', 'teilzeit', 'studium', 'ausbildung', 'schicht',
+                                 'selbststaendig', 'rente', 'suchend'],
+        'geschlechterWunsch' => ['egal', 'gemischt', 'frauen', 'maenner'],
+    ];
 
     /* ------------------------------------------------------------------
        Hereinkommende Angaben
@@ -80,6 +111,15 @@ final class Gruppe
                 $raus[$feld] = $w;
             }
         }
+        if (isset($raus['geschlecht'])) {
+            $g = Inserat::geschlecht($raus['geschlecht']);
+            if ($g === 'egal') {
+                unset($raus['geschlecht']);
+            } else {
+                $raus['geschlecht'] = $g;
+            }
+        }
+
         $ls = [];
         $quelle = is_array($roh['lifestyle'] ?? null) ? $roh['lifestyle'] : [];
         foreach (self::LIFESTYLE as $k) {
@@ -89,6 +129,62 @@ final class Gruppe
         }
         if ($ls) {
             $raus['lifestyle'] = $ls;
+        }
+
+        $wg = self::wgSaeubern(is_array($roh['wg'] ?? null) ? $roh['wg'] : []);
+        if ($wg) {
+            $raus['wg'] = $wg;
+        }
+        return $raus;
+    }
+
+    /** Der WG-Teil: feste Felder, feste Werte, harte Grenzen. */
+    private static function wgSaeubern(array $roh): array
+    {
+        $raus = [];
+
+        $mehr = [];
+        $quelle = is_array($roh['mehr'] ?? null) ? $roh['mehr'] : [];
+        foreach (self::MEHR as $k) {
+            if (isset($quelle[$k]) && is_numeric($quelle[$k])) {
+                $mehr[$k] = (int) Inserat::zahl($quelle[$k], 0, 10, 5);
+            }
+        }
+        if ($mehr) {
+            $raus['mehr'] = $mehr;
+        }
+
+        foreach (self::WG_WORTE as $feld => $erlaubt) {
+            $w = is_string($roh[$feld] ?? null) ? trim($roh[$feld]) : '';
+            if ($w !== '' && in_array($w, $erlaubt, true)) {
+                $raus[$feld] = $w;
+            }
+        }
+
+        $sprachen = Inserat::textListe($roh['sprachen'] ?? null, 30, 8);
+        if ($sprachen) {
+            $raus['sprachen'] = $sprachen;
+        }
+        $art = Inserat::textListe($roh['art'] ?? null, 40, 6);
+        if ($art) {
+            $raus['art'] = $art;
+        }
+
+        foreach (['alterVon' => [16, 99], 'alterBis' => [16, 99], 'mindestdauer' => [1, 120]] as $feld => $spanne) {
+            if (isset($roh[$feld]) && is_numeric($roh[$feld]) && (int) $roh[$feld] > 0) {
+                $raus[$feld] = Inserat::ganz($roh[$feld], $spanne[0], $spanne[1], $spanne[0]);
+            }
+        }
+        /* Eine Spanne, die keine ist, wird hier fallen gelassen statt
+           gespeichert: „ab 40 bis 25“ schlösse jeden aus, und niemand
+           würde je erfahren, warum keine Vorschläge kommen. */
+        if (isset($raus['alterVon'], $raus['alterBis']) && $raus['alterVon'] > $raus['alterBis']) {
+            unset($raus['alterVon'], $raus['alterBis']);
+        }
+
+        $ueber = Inserat::text($roh['ueberMich'] ?? '', 1200);
+        if ($ueber !== '') {
+            $raus['ueberMich'] = $ueber;
         }
         return $raus;
     }

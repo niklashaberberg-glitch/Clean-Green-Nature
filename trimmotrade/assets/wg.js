@@ -123,13 +123,78 @@
     if (p.haustiere) e.haustiere = p.haustiere;
     if (p.einzugAb) e.einzug = U.dateDE(p.einzugAb);
     if (p.lifestyle) e.lifestyle = Object.assign({}, p.lifestyle);
+
+    /* Was die Passung braucht, um mehr als eine Ahnung zu sein.
+
+       Das Geschlecht geht nur mit, weil eine WG danach auswählen darf
+       (§ 19 Abs. 5 AGG) und weil sonst der Wunsch der anderen Seite ins
+       Leere liefe – wer eine reine Frauen-WG sucht, bekäme sonst
+       Vorschläge, die er ohnehin ablehnt. In der Bewerbung um eine
+       Wohnung taucht es an keiner Stelle auf, auch nicht hier: Diese
+       Funktion füllt Gruppen, nicht Anfragen. */
+    const w = p.wg || {};
+    const wg = {};
+    const mehr = {};
+    Object.keys(w.mehr || {}).forEach((k) => {
+      if (Number.isFinite(Number(w.mehr[k])) && w.mehr[k] !== null) mehr[k] = Number(w.mehr[k]);
+    });
+    if (Object.keys(mehr).length) wg.mehr = mehr;
+    ['rauchen', 'rauchenAndere', 'haustiere', 'haustiereAndere', 'ernaehrung', 'kueche',
+      'beschaeftigungsart', 'geschlechterWunsch'].forEach((k) => { if (w[k]) wg[k] = w[k]; });
+    if ((w.sprachen || []).length) wg.sprachen = w.sprachen.slice(0, 8);
+    if ((w.art || []).length) wg.art = w.art.slice(0, 6);
+    if (w.alterVon) wg.alterVon = Number(w.alterVon);
+    if (w.alterBis) wg.alterBis = Number(w.alterBis);
+    if (w.mindestdauer) wg.mindestdauer = Number(w.mindestdauer);
+    if (w.ueberMich) wg.ueberMich = w.ueberMich;
+    if (Object.keys(wg).length) e.wg = wg;
+    if (p.geschlecht && p.geschlecht !== 'egal') e.geschlecht = p.geschlecht;
     return e;
   }
 
   const ECK_WORT = {
     alter: 'Alter', beruf: 'Beruf', einkommen: 'Einkommen',
-    raucher: 'Rauchen', haustiere: 'Haustiere', einzug: 'Einzug ab'
+    raucher: 'Rauchen', haustiere: 'Haustiere', einzug: 'Einzug ab',
+    geschlecht: 'Geschlecht'
   };
+
+  /* Was aus dem WG-Teil in Worten dasteht, bevor jemand absendet. Eine
+     Angabe, die mitgeht, aber niemand liest, ist keine Einwilligung –
+     sie ist ein Versehen. */
+  const GESCHLECHT_WORT = { w: 'weiblich', m: 'männlich', d: 'nichtbinär', egal: 'keine Angabe' };
+  const WG_WORT = {
+    rauchen: 'Rauchen', rauchenAndere: 'Rauch der anderen', haustiere: 'Eigene Tiere',
+    haustiereAndere: 'Tiere der anderen', ernaehrung: 'Ernährung', kueche: 'Gemeinsame Küche',
+    beschaeftigungsart: 'Beschäftigung', sprachen: 'Sprachen', art: 'Art der WG',
+    alterVon: 'Alter ab', alterBis: 'Alter bis', geschlechterWunsch: 'Zusammensetzung',
+    mindestdauer: 'Bleiben möchte ich', ueberMich: 'Über mich', mehr: 'Vier weitere Regler'
+  };
+
+  /* Aus den Eckdaten wieder lesbare Zeilen. Dieselbe Tabelle für die
+     eigene Vorschau und für das, was andere sehen – sonst weicht das
+     eine vom anderen ab, sobald ein Feld dazukommt. */
+  function eckdatenZeilen(e) {
+    const raus = [];
+    Object.keys(ECK_WORT).forEach((k) => {
+      if (!e[k]) return;
+      raus.push([ECK_WORT[k], k === 'geschlecht' ? (GESCHLECHT_WORT[e[k]] || e[k]) : e[k]]);
+    });
+    const w = e.wg || {};
+    Object.keys(WG_WORT).forEach((k) => {
+      const v = w[k];
+      if (v === undefined || v === null || v === '' || v === 'egal') return;
+      if (k === 'mehr') {
+        const n = Object.keys(v).length;
+        if (n) raus.push([WG_WORT[k], n + ' ' + U.t(U.plural(n, 'Antwort', 'Antworten'))]);
+        return;
+      }
+      if (Array.isArray(v)) { if (v.length) raus.push([WG_WORT[k], v.join(', ')]); return; }
+      if (k === 'ueberMich') { raus.push([WG_WORT[k], U.truncate(String(v), 60)]); return; }
+      if (k === 'mindestdauer') { raus.push([WG_WORT[k], Math.round(v / 12 * 10) / 10 + ' ' + U.t('Jahre')]); return; }
+      raus.push([WG_WORT[k], String(v)]);
+    });
+    return raus;
+  }
 
   /* Wie viel jede Person zahlen würde. Steht überall, wo eine Gruppe
      auftaucht – es ist die Zahl, nach der als Erstes gefragt wird. */
@@ -140,7 +205,7 @@
 
   TT.wg = {
     meineHolen, fuerInserat, offeneHolen, vergessen,
-    passung, alsWg, eckdatenAus, anteil, ECK_WORT,
+    passung, alsWg, eckdatenAus, eckdatenZeilen, anteil, ECK_WORT, WG_WORT, GESCHLECHT_WORT,
     get meine() { return meine || []; },
     amServer, angemeldet
   };

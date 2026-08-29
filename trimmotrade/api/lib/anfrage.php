@@ -45,7 +45,74 @@ final class Anfrage
         'raucher'    => 20,
         'wbs'        => 40,
         'buergschaft' => 40,
+        /* Das Folgende darf eine Vermieterseite fragen und fragt sie
+           ohnehin – es steht hier nur früher da. Alter und Geschlecht
+           stehen bewusst nicht dabei: § 19 Abs. 5 AGG erlaubt die
+           Auswahl danach unter Mitbewohnenden, nicht bei der Vermietung.
+           Deshalb führt dieser Weg sie nicht, der Weg über Gruppe schon. */
+        'einkommenArt' => 60,
+        'kaution'      => 40,
+        'mietdauer'    => 40,
+        'flexibel'     => 40,
+        'besichtigung' => 90,
     ];
+
+    /* Dieselben Angaben noch einmal, in der Form, in der ein Programm
+       damit rechnen kann.
+
+       Kein Wort davon geht über das hinaus, was in der Liste oben
+       ohnehin lesbar mitgeht – „2000 bis 2200 €“ und 2000 sagen
+       dasselbe. Der Unterschied ist, dass sich aus der zweiten Form eine
+       Reihenfolge rechnen lässt, und zwar im Browser der anbietenden
+       Seite, nicht auf diesem Server: Eine Rangfolge, die hier entsteht,
+       könnte niemand mehr nachvollziehen.
+
+       Alter und Geschlecht stehen nicht in dieser Liste, und deshalb
+       kann keine Formel sie gewichten. Das ist die ganze Absicherung –
+       eine Zusage, dass man etwas nicht benutzt, ist keine. */
+    private const BEWERBUNG_WORTE = [
+        'einkommenArt'   => ['unbefristet', 'befristet', 'probezeit', 'selbststaendig',
+                             'studium', 'ausbildung', 'rente', 'sonst'],
+        'buergschaft'    => ['keine', 'eltern', 'sonstige'],
+        'wbsStufe'       => ['a', 'b', 'c', 'unklar'],
+        'einzugFlexibel' => ['genau', 'zwei_wochen', 'flexibel'],
+    ];
+
+    private static function bewerbungSaeubern(array $roh): array
+    {
+        $raus = [];
+        foreach (self::BEWERBUNG_WORTE as $feld => $erlaubt) {
+            $w = is_string($roh[$feld] ?? null) ? trim($roh[$feld]) : '';
+            if ($w !== '' && in_array($w, $erlaubt, true)) {
+                $raus[$feld] = $w;
+            }
+        }
+        foreach (['mietdauer' => [1, 120], 'haushalt' => [1, 12], 'einkommenVon' => [0, 100000]] as $feld => $spanne) {
+            if (isset($roh[$feld]) && is_numeric($roh[$feld]) && (int) $roh[$feld] > 0) {
+                $raus[$feld] = Inserat::ganz($roh[$feld], $spanne[0], $spanne[1], $spanne[0]);
+            }
+        }
+        if (!empty($roh['kautionBereit'])) {
+            $raus['kautionBereit'] = true;
+        }
+        /* Der Einzugstermin als Datum, nicht als deutscher Text: Aus
+           „1.11.2026“ rechnet niemand einen Abstand in Tagen. */
+        $d = Inserat::text($roh['einzugAb'] ?? '', 10);
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $d)) {
+            $raus['einzugAb'] = $d;
+        }
+        $u = is_array($roh['unterlagen'] ?? null) ? $roh['unterlagen'] : [];
+        $mappe = [];
+        foreach (['schufa', 'gehaltsnachweise', 'ausweis', 'mietschuldenfrei', 'selbstauskunft', 'wbs'] as $k) {
+            if (!empty($u[$k])) {
+                $mappe[$k] = true;
+            }
+        }
+        if ($mappe) {
+            $raus['unterlagen'] = $mappe;
+        }
+        return $raus;
+    }
 
     public static function senden(array $konto, array $inserat, array $roh, string $basis): array
     {
@@ -83,6 +150,14 @@ final class Anfrage
             $w = Inserat::text($roh['eckdaten'][$feld] ?? '', $max);
             if ($w !== '') {
                 $eck[$feld] = $w;
+            }
+        }
+        /* Nur, wenn die Eckdaten überhaupt mitgehen. Wer den Haken
+           entfernt, schickt auch die rechenbare Fassung nicht mit. */
+        if ($eck) {
+            $b = self::bewerbungSaeubern(is_array($roh['bewerbung'] ?? null) ? $roh['bewerbung'] : []);
+            if ($b) {
+                $eck['bewerbung'] = $b;
             }
         }
 
@@ -124,8 +199,14 @@ final class Anfrage
         if (!is_string($an) || $an === '') {
             return;
         }
+        /* Nur die lesbaren Zeilen. Die rechenbare Fassung derselben
+           Angaben gehört in das Postfach, nicht in eine Mail – sie sagt
+           nichts, was hier nicht schon steht. */
         $zeilen = [];
         foreach ($eck as $k => $v) {
+            if (!is_string($v)) {
+                continue;
+            }
             $zeilen[] = '  ' . self::eckLabel($k) . ': ' . $v;
         }
         $text = "Für dein Inserat ist eine Anfrage eingegangen.\n\n"
@@ -150,6 +231,11 @@ final class Anfrage
             'raucher' => 'Rauchen',
             'wbs' => 'Wohnberechtigungsschein',
             'buergschaft' => 'Bürgschaft',
+            'einkommenArt' => 'Art des Einkommens',
+            'kaution' => 'Kaution',
+            'mietdauer' => 'Gewünschte Mietdauer',
+            'flexibel' => 'Einzugstermin',
+            'besichtigung' => 'Besichtigung möglich',
         ][$k] ?? $k;
     }
 
@@ -159,8 +245,14 @@ final class Anfrage
 
     public static function eingang(int $kontoId, int $ab = 0): array
     {
+        /* Warmmiete, Zimmerzahl und Termin des eigenen Inserats gehen
+           mit: Ohne sie könnte der Browser keine Vorauswahl rechnen, und
+           mit ihnen bleibt die Rechnung dort, wo die Entscheidung fällt.
+           Es sind die eigenen Inserate der anbietenden Seite – hier wird
+           nichts offengelegt, was sie nicht selbst geschrieben hat. */
         return Db::zeilen(
-            'SELECT a.*, i.kennung AS inserat_kennung, i.titel AS inserat_titel
+            'SELECT a.*, i.kennung AS inserat_kennung, i.titel AS inserat_titel,
+                    i.warm AS inserat_warm, i.zimmer AS inserat_zimmer, i.frei_ab AS inserat_frei
                FROM tt_anfrage a JOIN tt_inserat i ON i.id = a.inserat_id
               WHERE a.an_konto_id = ? ORDER BY a.angelegt DESC LIMIT 100 OFFSET ' . max(0, min(1000, $ab)),
             [$kontoId]
@@ -197,6 +289,13 @@ final class Anfrage
             $d['name'] = $z['name'];
             $d['mail'] = $z['mail'];
             $d['telefon'] = $z['telefon'];
+            if (isset($z['inserat_warm'])) {
+                $d['inseratDaten'] = [
+                    'warm' => (int) $z['inserat_warm'],
+                    'zimmer' => (float) $z['inserat_zimmer'],
+                    'freiAb' => (string) $z['inserat_frei'],
+                ];
+            }
         }
         return $d;
     }

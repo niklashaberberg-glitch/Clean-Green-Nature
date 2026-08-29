@@ -130,6 +130,27 @@ final class Inserat
         return $raus;
     }
 
+    /** Geschlecht auf die Kürzel bringen, mit denen der Browser rechnet:
+        w, m, d, egal. Die ausgeschriebenen Formen werden mit angenommen –
+        sie standen vorher allein in dieser Prüfung, und ein Datensatz,
+        der sie noch trägt, soll nicht stillschweigend auf „egal“
+        zurückfallen. Alles andere wird zu „egal“: Eine WG darf sich nach
+        § 19 Abs. 5 AGG etwas wünschen, aber nur aus dieser Liste.
+
+        Ohne diese Umsetzung ging jede Angabe verloren – der Browser
+        schickt seit jeher die Kürzel, die Prüfung kannte nur die
+        Langformen, und was sie nicht kannte, wurde „egal“. */
+    public static function geschlecht(mixed $w): string
+    {
+        $karte = [
+            'w' => 'w', 'm' => 'm', 'd' => 'd', 'egal' => 'egal',
+            'weiblich' => 'w', 'männlich' => 'm', 'maennlich' => 'm',
+            'divers' => 'd', 'nichtbinär' => 'd', 'nichtbinaer' => 'd',
+        ];
+        $t = is_string($w) ? mb_strtolower(trim($w)) : '';
+        return $karte[$t] ?? 'egal';
+    }
+
     /* ------------------------------------------------------------------
        Prüfung auf typische Betrugsmuster
 
@@ -347,8 +368,7 @@ final class Inserat
                 $bewohner[] = [
                     'name' => self::text($b['name'] ?? '', 40),
                     'alter' => self::ganz($b['alter'] ?? null, 16, 99, 30),
-                    'geschlecht' => in_array($b['geschlecht'] ?? '', ['weiblich', 'männlich', 'divers', 'egal'], true)
-                        ? $b['geschlecht'] : 'egal',
+                    'geschlecht' => self::geschlecht($b['geschlecht'] ?? ''),
                     'beruf' => self::text($b['beruf'] ?? '', 40),
                 ];
             }
@@ -357,8 +377,7 @@ final class Inserat
                 'bewohner' => $bewohner,
                 'durchschnittsalter' => self::ganz($wg['durchschnittsalter'] ?? null, 16, 99, 30),
                 'sucht' => [
-                    'geschlecht' => in_array($wg['sucht']['geschlecht'] ?? '', ['weiblich', 'männlich', 'divers', 'egal'], true)
-                        ? $wg['sucht']['geschlecht'] : 'egal',
+                    'geschlecht' => self::geschlecht($wg['sucht']['geschlecht'] ?? ''),
                     'alterVon' => self::ganz($wg['sucht']['alterVon'] ?? null, 16, 99, 18),
                     'alterBis' => self::ganz($wg['sucht']['alterBis'] ?? null, 16, 99, 99),
                 ],

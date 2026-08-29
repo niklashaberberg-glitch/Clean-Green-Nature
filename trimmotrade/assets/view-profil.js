@@ -7,6 +7,7 @@
   'use strict';
 
   const U = TT.util, ui = TT.ui, A = TT.analyse, S = TT.store, M = TT.match, P = TT.plan;
+  const PA = TT.passung;
   const h = U.html, raw = U.raw, ico = U.svg;
 
   /* ================================================================
@@ -43,8 +44,36 @@
     </div>`;
   }
 
+  /* Die vier weiteren Regler kennen einen Zustand, den die sechs alten
+     nicht haben: unbeantwortet. Ein Schieber steht immer irgendwo, und
+     „irgendwo“ sähe aus wie eine Antwort. Deshalb steht bei null ein
+     Strich statt einer Zahl, und die Passung lässt den Regler weg, bis
+     jemand ihn wirklich bewegt hat. */
+  function wgReglerZeile(d, wert) {
+    const offen = wert === null || wert === undefined;
+    return h`<div class="reglerzeile ${offen ? 'is-offen' : ''}">
+      <label for="r-wgmehr-${d.key}">${d.label}${d.warum ? h`<i>${d.warum}</i>` : ''}</label>
+      <span class="reglerzeile__enden"><i>${d.links}</i><i>${d.rechts}</i></span>
+      <input type="range" id="r-wgmehr-${d.key}" min="0" max="10" step="1" value="${offen ? 5 : wert}"
+        aria-describedby="${offen ? 'r-wgmehr-' + d.key + '-offen' : ''}"
+        data-tu-input="profil-wg-regler" data-feld="${d.key}">
+      <output>${offen ? '–' : wert}</output>
+      ${offen ? h`<i class="reglerzeile__offen" id="r-wgmehr-${d.key}-offen">noch nicht beantwortet</i>` : ''}
+    </div>`;
+  }
+
+  /* Wann jemand zu einer Besichtigung kann. Kein Kalender – die
+     anbietende Seite vergibt Blöcke, und mehr als der Block muss hier
+     nicht stehen. */
+  const BESICHTIGUNG = [
+    ['werktags', 'werktags tagsüber'], ['abends', 'abends'], ['wochenende', 'am Wochenende'],
+    ['kurzfristig', 'auch kurzfristig']
+  ];
+
   function profil() {
     const s = S.get(), p = s.profil;
+    const w = p.wg, bw = p.bewerbung;
+    const SPRACHEN = TT.data.SPRACHEN, WG_ARTEN = TT.data.WG_ART;
     const alleViertel = TT.geo.DISTRICTS;
 
     return {
@@ -177,11 +206,211 @@
 
         <section class="block">
           <h2>${ico('wg')}Dein WG-Profil</h2>
-          <p class="block__unter">Sechs Fragen, aus denen sich die Passung zu jeder WG errechnet.
-            Es gibt kein Richtig – ehrlich ist besser als sympathisch.</p>
+          <p class="block__unter">Alles hier ist freiwillig. Was du nicht beantwortest, zählt nicht mit –
+            es rechnet dann nur weniger, nicht schlechter. Es gibt kein Richtig; ehrlich ist besser
+            als sympathisch, denn eine Passung, die auf einer geschönten Angabe steht, hält bis zum
+            Einzug.</p>
+
+          <h3 class="block__zwischen">Die sechs Alltagsfragen</h3>
           <div class="regler">
             ${M.DIMENSIONEN.map((d) => reglerZeile(d.key, 'lifestyle', d.label, d.links2 || d.links, d.rechts, p.lifestyle[d.key], 10))}
           </div>
+
+          <h3 class="block__zwischen">Vier weitere, an denen es meistens hängt</h3>
+          <p class="fein">Diese vier sind noch nicht beantwortet, solange du den Regler nicht bewegt
+            hast – ein Wert in der Mitte wäre eine Antwort, die du nicht gegeben hast.</p>
+          <div class="regler">
+            ${PA.MEHR.map((d) => wgReglerZeile(d, w.mehr[d.key]))}
+          </div>
+
+          <h3 class="block__zwischen">Womit du leben kannst, und womit nicht</h3>
+          <div class="formraster">
+            <label class="feld"><span>Rauchst du?</span>
+              <select data-tu-change="profil-wg-text" data-feld="rauchen">
+                ${[['nein', 'nein'], ['balkon', 'nur auf Balkon oder draußen'], ['drinnen', 'auch in der Wohnung']].map((o) =>
+        h`<option value="${o[0]}" ${w.rauchen === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+            <label class="feld"><span>Und bei den anderen?</span>
+              <select data-tu-change="profil-wg-text" data-feld="rauchenAndere">
+                ${[['egal', 'ist mir egal'], ['balkon', 'draußen ja, drinnen nicht'], ['nicht', 'gar kein Rauch']].map((o) =>
+        h`<option value="${o[0]}" ${w.rauchenAndere === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+            <label class="feld"><span>Bringst du ein Tier mit?</span>
+              <select data-tu-change="profil-wg-text" data-feld="haustiere">
+                ${[['keine', 'nein'], ['katze', 'Katze'], ['hund', 'Hund'], ['klein', 'Kleintier']].map((o) =>
+        h`<option value="${o[0]}" ${w.haustiere === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+            <label class="feld"><span>Tiere der anderen</span>
+              <select data-tu-change="profil-wg-text" data-feld="haustiereAndere">
+                ${[['egal', 'gern'], ['keine', 'lieber ohne'], ['allergie', 'geht nicht – Allergie']].map((o) =>
+        h`<option value="${o[0]}" ${w.haustiereAndere === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+            <label class="feld"><span>Wie du isst</span>
+              <select data-tu-change="profil-wg-text" data-feld="ernaehrung">
+                ${[['egal', 'alles'], ['vegetarisch', 'vegetarisch'], ['vegan', 'vegan'], ['halal', 'halal'], ['koscher', 'koscher']].map((o) =>
+        h`<option value="${o[0]}" ${w.ernaehrung === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+            <label class="feld"><span>Und in der gemeinsamen Küche?</span>
+              <select data-tu-change="profil-wg-text" data-feld="kueche">
+                ${[['egal', 'jeder wie er mag'], ['kein_fleisch', 'kein Fleisch zubereiten'], ['getrennt', 'getrennte Regale und Pfannen']].map((o) =>
+        h`<option value="${o[0]}" ${w.kueche === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+          </div>
+          ${w.haustiereAndere === 'allergie' || w.rauchenAndere === 'nicht' || w.kueche === 'kein_fleisch' ? h`<p class="fein">
+            Diese Angabe ist ein Ausschlusskriterium: Sie senkt keine Passung um ein paar Prozent,
+            sondern sagt Nein. Das ist auch der Grund, warum sie oben steht und nicht im Kleingedruckten.</p>` : ''}
+          <p class="fein">Wie du isst, geht ausschließlich in die Passung zu anderen Suchenden ein –
+            in die Vorauswahl einer Vermieterseite fließt es nicht, dort hat es nichts zu suchen.</p>
+
+          <h3 class="block__zwischen">Dein Alltag</h3>
+          <div class="formraster">
+            <label class="feld"><span>Beschäftigung</span>
+              <select data-tu-change="profil-wg-text" data-feld="beschaeftigungsart">
+                <option value="" ${!w.beschaeftigungsart ? 'selected' : ''}>keine Angabe</option>
+                ${Object.keys(PA.BESCHAEFTIGUNG_WORT).map((k) =>
+        h`<option value="${k}" ${w.beschaeftigungsart === k ? 'selected' : ''}>${PA.BESCHAEFTIGUNG_WORT[k]}</option>`)}
+              </select></label>
+            <label class="feld"><span>So lange möchtest du bleiben</span>
+              <select data-tu-change="profil-wg-zahl" data-feld="mindestdauer">
+                ${[['', 'keine Angabe'], ['6', 'ein halbes Jahr'], ['12', 'etwa ein Jahr'], ['24', 'zwei Jahre'],
+          ['36', 'drei Jahre'], ['60', 'länger']].map((o) =>
+        h`<option value="${o[0]}" ${String(w.mindestdauer || '') === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+          </div>
+          <fieldset class="filter__gruppe"><legend>Sprachen, die du sprichst</legend>
+            <div class="chips">
+              ${SPRACHEN.map((s) => h`<button type="button" class="chip ${w.sprachen.indexOf(s) >= 0 ? 'is-an' : ''}"
+                aria-pressed="${w.sprachen.indexOf(s) >= 0 ? 'true' : 'false'}"
+                data-tu="profil-wg-chip" data-feld="sprachen" data-wert="${s}">${s}</button>`)}
+              ${w.sprachen.filter((s) => SPRACHEN.indexOf(s) < 0).map((s) => h`<button type="button" class="chip is-an"
+                aria-pressed="true" data-tu="profil-wg-chip" data-feld="sprachen" data-wert="${s}">${s}</button>`)}
+            </div>
+            <div class="formraster formraster--drei">
+              <label class="feld"><span>weitere Sprache</span>
+                <input type="text" id="sprache-neu" maxlength="30" placeholder="z. B. Polnisch"></label>
+              <div class="feld feld--knopf">
+                <button type="button" class="knopf knopf--still" data-tu="sprache-neu">${ico('plus')}Hinzufügen</button>
+              </div>
+            </div>
+            <p class="fein">Gefragt wird danach, weil eine gemeinsame Sprache den Alltag einfacher macht –
+              nicht nach Herkunft. In der Vorauswahl einer Vermieterseite kommt diese Angabe nicht vor.</p>
+          </fieldset>
+
+          <h3 class="block__zwischen">Mit wem du wohnen möchtest</h3>
+          <div class="hinweisbox">${ico('waage')}
+            <div><b>Warum eine WG das darf</b>
+            <p>§ 19 Abs. 5 AGG nimmt das gemeinsame Bewohnen einer Wohnung vom Benachteiligungsverbot
+              aus: Wer eine Wohnung mit anderen teilt, darf sich aussuchen, mit wem. Für die Vermietung
+              selbst gilt das nicht – Alter und Geschlecht kommen deshalb in der Vorauswahl, die eine
+              Vermieterseite sieht, an keiner Stelle vor.</p></div>
+          </div>
+          <div class="formraster">
+            <label class="feld"><span>Alter ab</span>
+              <input type="number" min="16" max="99" data-tu-change="profil-wg-zahl" data-feld="alterVon"
+                value="${w.alterVon || ''}" placeholder="egal"></label>
+            <label class="feld"><span>Alter bis</span>
+              <input type="number" min="16" max="99" data-tu-change="profil-wg-zahl" data-feld="alterBis"
+                value="${w.alterBis || ''}" placeholder="egal"></label>
+            <label class="feld"><span>Zusammensetzung</span>
+              <select data-tu-change="profil-wg-text" data-feld="geschlechterWunsch">
+                ${[['egal', 'egal'], ['gemischt', 'lieber gemischt'], ['frauen', 'reine Frauen-WG'], ['maenner', 'reine Männer-WG']].map((o) =>
+        h`<option value="${o[0]}" ${w.geschlechterWunsch === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+          </div>
+          ${(w.alterVon && w.alterBis && w.alterVon > w.alterBis)
+        ? h`<p class="filter__hinweis">${ico('warnung')}${U.t('„ab {0}“ und „bis {1}“ schließen einander '
+          + 'aus – so gefiltert bliebe niemand übrig.').replace('{0}', w.alterVon).replace('{1}', w.alterBis)}</p>` : ''}
+          <fieldset class="filter__gruppe"><legend>Was für eine WG es werden soll</legend>
+            <div class="chips">
+              ${WG_ARTEN.map((s) => h`<button type="button" class="chip ${w.art.indexOf(s) >= 0 ? 'is-an' : ''}"
+                aria-pressed="${w.art.indexOf(s) >= 0 ? 'true' : 'false'}"
+                data-tu="profil-wg-chip" data-feld="art" data-wert="${s}">${s}</button>`)}
+            </div>
+          </fieldset>
+
+          <h3 class="block__zwischen">Über dich</h3>
+          <p class="fein">Die drei Sätze, die jemand liest, bevor er sich für ein Kennenlernen
+            entscheidet. Konkret schlägt sympathisch: „Ich koche fast jeden Abend und freue mich, wenn
+            jemand mitisst“ sagt mehr als „unkompliziert und offen“.</p>
+          <label class="feld"><span class="nur-sr">Über dich</span>
+            <textarea rows="5" maxlength="1200" data-tu-change="profil-wg-text" data-feld="ueberMich"
+              placeholder="Zum Beispiel: Ich bin 29, arbeite in der Pflege im Schichtdienst und bin deshalb auch mal werktags zu Hause. Ich koche gern und viel, räume dabei aber erst hinterher auf.">${w.ueberMich}</textarea></label>
+          <p class="fein">${U.t('{0} von 1200 Zeichen').replace('{0}', w.ueberMich.length)}${w.ueberMich.length > 0
+        && w.ueberMich.length <= 40 ? U.t(' – ab 40 Zeichen zählt der Text als ausgefüllt.') : ''}</p>
+        </section>
+
+        <section class="block">
+          <h2>${ico('schluessel')}Für die Bewerbung um eine Wohnung</h2>
+          <p class="block__unter">Genau das, wonach eine Vermieterseite fragen darf – und nicht mehr.
+            Aus diesen Angaben entsteht die Reihenfolge, in der deine Anfrage neben den anderen steht.
+            Sie sortiert; sie sortiert niemanden aus.</p>
+          <div class="formraster">
+            <label class="feld"><span>Woher dein Einkommen kommt</span>
+              <select data-tu-change="profil-bew-text" data-feld="einkommenArt">
+                <option value="" ${!bw.einkommenArt ? 'selected' : ''}>keine Angabe</option>
+                ${[['unbefristet', 'unbefristetes Arbeitsverhältnis'], ['befristet', 'befristeter Vertrag'],
+          ['probezeit', 'noch in der Probezeit'], ['selbststaendig', 'selbstständig'],
+          ['studium', 'Studium'], ['ausbildung', 'Ausbildung'], ['rente', 'Rente'], ['sonst', 'anderes']].map((o) =>
+        h`<option value="${o[0]}" ${bw.einkommenArt === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+            <label class="feld"><span>Bürgschaft</span>
+              <select data-tu-change="profil-bew-text" data-feld="buergschaft">
+                ${[['keine', 'keine'], ['eltern', 'Elternbürgschaft'], ['sonstige', 'andere Bürgschaft']].map((o) =>
+        h`<option value="${o[0]}" ${bw.buergschaft === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+            <label class="feld"><span>Wohnberechtigungsschein</span>
+              <select data-tu-change="profil-bew-text" data-feld="wbsStufe">
+                ${[['', 'keiner'], ['a', 'WBS Stufe A'], ['b', 'WBS Stufe B'], ['c', 'WBS Stufe C'], ['unklar', 'beantragt']].map((o) =>
+        h`<option value="${o[0]}" ${bw.wbsStufe === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+            <label class="feld"><span>So lange willst du mieten</span>
+              <select data-tu-change="profil-bew-zahl" data-feld="mietdauer">
+                ${[['', 'keine Angabe'], ['6', 'unter einem Jahr'], ['12', 'etwa ein Jahr'], ['24', 'zwei Jahre'],
+          ['36', 'drei Jahre und mehr'], ['60', 'so lange wie möglich']].map((o) =>
+        h`<option value="${o[0]}" ${String(bw.mietdauer || '') === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+            <label class="feld"><span>Beim Einzugstermin bist du</span>
+              <select data-tu-change="profil-bew-text" data-feld="einzugFlexibel">
+                ${[['genau', 'auf den Termin festgelegt'], ['zwei_wochen', 'zwei Wochen flexibel'], ['flexibel', 'ganz flexibel']].map((o) =>
+        h`<option value="${o[0]}" ${bw.einzugFlexibel === o[0] ? 'selected' : ''}>${o[1]}</option>`)}
+              </select></label>
+            <label class="feld"><span>Bisherige Mietverhältnisse</span>
+              <input type="number" min="0" max="20" data-tu-change="profil-bew-zahl" data-feld="vormieter"
+                value="${bw.vormieter === null ? '' : bw.vormieter}" placeholder="keine Angabe"></label>
+          </div>
+          <label class="schalter"><input type="checkbox" data-tu-change="profil-bew-schalter" data-feld="kautionBereit"
+            ${bw.kautionBereit ? 'checked' : ''}>
+            <span>Die Kaution liegt bereit<i>Höchstens drei Nettokaltmieten, und sie darf in drei Raten gezahlt
+              werden – § 551 BGB. Wer mehr verlangt, verlangt zu viel.</i></span></label>
+
+          <fieldset class="filter__gruppe"><legend>Wann du zur Besichtigung kannst</legend>
+            <div class="chips">
+              ${BESICHTIGUNG.map((s) => h`<button type="button" class="chip ${bw.besichtigung.indexOf(s[0]) >= 0 ? 'is-an' : ''}"
+                aria-pressed="${bw.besichtigung.indexOf(s[0]) >= 0 ? 'true' : 'false'}"
+                data-tu="profil-bew-chip" data-feld="besichtigung" data-wert="${s[0]}">${s[1]}</button>`)}
+            </div>
+            <p class="fein">Eine anbietende Seite vergibt Termine in Blöcken. Wer sagt, wann er kann,
+              bekommt einen – wer es nicht sagt, wird zurückgestellt.</p>
+          </fieldset>
+
+          ${(() => {
+        const bsp = { warm: p.budgetWarm || 0, kalt: Math.round((p.budgetWarm || 0) * 0.78), zimmer: p.zimmerMin || 2,
+          freiAb: p.einzugAb || '', ausstattung: [] };
+        const bew = PA.bewerber(bsp, p);
+        if (!p.budgetWarm || bew.score === null) return '';
+        return h`<div class="hinweisbox">${ico('pruefen')}
+            <div><b>So läse sich deine Bewerbung heute</b>
+            <p>${U.t('Gerechnet gegen eine gedachte Wohnung zu deinem Budget von {0} warm:')
+          .replace('{0}', U.eur(p.budgetWarm))}
+              <b>${bew.score} %</b> – ${U.t(bew.kurz)}.${bew.belastbar ? '' : ' '
+          + U.t('Für eine belastbare Einschätzung fehlen noch Angaben.')}</p>
+            <ul class="eckdaten__liste">
+              ${bew.gruende.map((g) => h`<li class="ist-${g.wirkung}"><span>${g.label}</span><b>${g.text}</b></li>`)}
+            </ul>
+            ${bew.harte.map((x) => h`<p class="filter__hinweis">${ico('warnung')}${x.text}</p>`)}
+            </div>
+          </div>`;
+      })()}
         </section>
 
         ${TT.konto && TT.konto.angemeldet() ? (() => {
@@ -236,6 +465,8 @@
 
         <section class="block block--betont">
           <h2>${ico('pruefen')}Wie vollständig ist dein Profil?</h2>
+          <p class="block__unter">Kein Druck und keine Punktejagd: Die Liste sagt nur, wonach TrimmoTrade
+            noch nicht rechnen kann. Ein halb ausgefülltes Profil sucht trotzdem – es sucht nur gröber.</p>
           ${(() => {
         const punkte = [
           ['Name', !!p.name], ['Alter', !!p.alter], ['Beruf', !!p.beruf],
@@ -244,13 +475,30 @@
           ['Unterlagen', Object.keys(p.unterlagen).filter((k) => p.unterlagen[k]).length >= 3]
         ];
         const da = punkte.filter((x) => x[1]).length;
-        return h`<div class="fortschritt">
+        return h`<h3 class="block__zwischen">Für die Suche</h3>
+            <div class="fortschritt">
               <div class="fortschritt__spur"><i style="width:${Math.round(da / punkte.length * 100)}%"></i></div>
               <b>${da} von ${punkte.length}</b>
             </div>
             <ul class="mappe">
               ${punkte.map((x) => h`<li class="${x[1] ? 'is-da' : ''}">${ico(x[1] ? 'check' : 'x')}${x[0]}</li>`)}
             </ul>`;
+      })()}
+          ${(() => {
+        /* Und dasselbe für die Passung: Diese Liste kommt aus derselben
+           Funktion, mit der gerechnet wird. Zwei getrennte Listen wären
+           zwei Wahrheiten, und eine davon wäre irgendwann falsch. */
+        const v = PA.vollstaendigkeit(p);
+        return h`<h3 class="block__zwischen">Für die Passung zu Menschen und Wohnungen</h3>
+            <div class="fortschritt">
+              <div class="fortschritt__spur"><i style="width:${v.anteil}%"></i></div>
+              <b>${v.da} von ${v.gesamt}</b>
+            </div>
+            ${v.fehlt.length ? h`<p class="fein">${U.t('Es fehlt noch: {0}.')
+          .replace('{0}', v.fehlt.map((x) => U.t(x)).join(', '))}</p>`
+          : h`<p class="fein">${ico('check')}Vollständig. Mehr braucht die Rechnung nicht.</p>`}
+            ${v.anteil < 50 ? h`<p class="filter__hinweis">${ico('info')}Unter der Hälfte ist eine Passung
+              eher ein Eindruck als eine Aussage – sie steht dann auch so da und nicht als runde Zahl.</p>` : ''}`;
       })()}
         </section>
       </div>`
@@ -1016,6 +1264,67 @@
     profilSpeichern((p) => { p[el.dataset.gruppe][el.dataset.feld] = Number(el.value); });
     const out = el.parentNode.querySelector('output');
     if (out) out.textContent = el.value;
+  });
+
+  /* Das WG-Profil und die Bewerbung liegen eine Ebene tiefer. Eine
+     gemeinsame Fabrik statt sechs fast gleicher Funktionen – sonst
+     unterscheiden sie sich nach dem dritten Umbau in einer Kleinigkeit,
+     die niemand mehr sucht. */
+  function unterProfil(zweig) {
+    A_('profil-' + zweig[0] + '-text', (el) => {
+      profilSpeichern((pr) => { pr[zweig[1]][el.dataset.feld] = el.value; });
+      if (EL_ZEICHNET.indexOf(el.dataset.feld) >= 0) ui.neuZeichnen();
+    });
+    A_('profil-' + zweig[0] + '-zahl', (el) => {
+      profilSpeichern((pr) => { pr[zweig[1]][el.dataset.feld] = el.value === '' ? null : Number(el.value); });
+      if (EL_ZEICHNET.indexOf(el.dataset.feld) >= 0) ui.neuZeichnen();
+    });
+    A_('profil-' + zweig[0] + '-schalter', (el) => {
+      profilSpeichern((pr) => { pr[zweig[1]][el.dataset.feld] = el.checked; });
+    });
+    A_('profil-' + zweig[0] + '-chip', (el) => {
+      const feld = el.dataset.feld, wert = el.dataset.wert;
+      profilSpeichern((pr) => {
+        const liste = pr[zweig[1]][feld] || [];
+        const i = liste.indexOf(wert);
+        if (i >= 0) liste.splice(i, 1); else liste.push(wert);
+        pr[zweig[1]][feld] = liste;
+      });
+      el.classList.toggle('is-an');
+      el.setAttribute('aria-pressed', el.classList.contains('is-an') ? 'true' : 'false');
+    });
+  }
+  /* Felder, deren Änderung sichtbar etwas anderes nach sich zieht – ein
+     Hinweis, eine Warnung, die Vorschau der Bewerbung. Alle übrigen
+     speichern still; wer beim Tippen neu zeichnet, wirft den Fokus weg. */
+  const EL_ZEICHNET = ['haustiereAndere', 'rauchenAndere', 'kueche', 'alterVon', 'alterBis',
+    'einkommenArt', 'buergschaft', 'mietdauer', 'einzugFlexibel'];
+  unterProfil(['wg', 'wg']);
+  unterProfil(['bew', 'bewerbung']);
+
+  A_('profil-wg-regler', (el) => {
+    profilSpeichern((pr) => { pr.wg.mehr[el.dataset.feld] = Number(el.value); });
+    const zeile = el.closest('.reglerzeile');
+    const out = zeile && zeile.querySelector('output');
+    if (out) out.textContent = el.value;
+    if (zeile && zeile.classList.contains('is-offen')) {
+      zeile.classList.remove('is-offen');
+      el.removeAttribute('aria-describedby');
+      const offen = zeile.querySelector('.reglerzeile__offen');
+      if (offen) offen.remove();
+    }
+  });
+
+  A_('sprache-neu', () => {
+    const el = U.$('#sprache-neu');
+    const wert = (el ? el.value : '').trim().slice(0, 30);
+    if (!wert) return;
+    const schon = S.get().profil.wg.sprachen.some((x) => x.toLowerCase() === wert.toLowerCase());
+    if (schon) { ui.toast('Steht schon in der Liste.'); return; }
+    if (S.get().profil.wg.sprachen.length >= 8) { ui.toast('Acht Sprachen sind genug.'); return; }
+    profilSpeichern((pr) => { pr.wg.sprachen.push(wert); });
+    el.value = '';
+    ui.neuZeichnen();
   });
 
   A_('profil-chip', (el) => {

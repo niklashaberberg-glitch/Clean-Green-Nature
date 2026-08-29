@@ -717,8 +717,87 @@
     /* Anker für Pendelzeiten */
     anker: [],
     verkehrsmittel: 'oepnv',
-    /* WG-Selbstbild */
+    /* WG-Selbstbild – die sechs Regler, die es seit jeher gibt. Sie
+       bleiben unverändert, weil der Beispielbestand sie kennt. */
     lifestyle: { sauber: 7, ruhe: 6, gaeste: 5, gemeinsam: 6, chrono: 6, kochen: 5 },
+
+    /* ------------------------------------------------------------------
+       Das ausführliche WG-Profil
+
+       Es gibt zwei Fragen, die ein Wohnungsportal beantworten könnte und
+       fast nie beantwortet:
+
+         1. Wer von den Bewerbenden passt zu dieser Wohnung? (für die
+            anbietende Seite)
+         2. Wer passt zu wem? (für Menschen, die zusammenziehen wollen,
+            ohne sich zu kennen)
+
+       Beide brauchen dieselbe Grundlage: Angaben, die jemand freiwillig
+       über sich macht, in einer Form, mit der sich rechnen lässt. Ein
+       Freitextfeld „erzähl was über dich“ ist für einen Menschen schön
+       und für einen Abgleich wertlos.
+
+       Was hier bewusst NICHT steht: alles, wonach niemand fragen darf.
+       Herkunft, Religion, Gesundheit, Familienplanung, sexuelle
+       Orientierung – besondere Kategorien nach Art. 9 DSGVO, und bei der
+       Vermietung zusätzlich von § 19 AGG erfasst. Sie kommen im Formular
+       nicht vor, gehen nicht über die Schnittstelle und tauchen in keiner
+       Berechnung auf. Ein Feld, das es nicht gibt, kann auch nicht
+       missbraucht werden.
+       ------------------------------------------------------------------ */
+    wg: {
+      /* Vier weitere Alltagsregler. Sie stehen getrennt von `lifestyle`,
+         weil der erzeugte Beispielbestand sie nicht kennt – verglichen
+         wird nur, was beide Seiten angegeben haben. */
+      mehr: {
+        homeoffice: null,   /* 0 = kaum zu Hause … 10 = fast immer da */
+        ordnung: null,      /* Gemeinschaftsräume: 0 gelassen … 10 sofort aufgeräumt */
+        party: null,        /* 0 nie … 10 gern und oft */
+        teilen: null        /* 0 jeder für sich … 10 Haushaltskasse und gemeinsam einkaufen */
+      },
+      /* Harte Merkmale. Sie entscheiden nicht über Sympathie, sondern
+         darüber, ob ein Zusammenleben überhaupt geht. */
+      rauchen: 'nein',            /* nein | balkon | drinnen */
+      rauchenAndere: 'egal',      /* egal | balkon | nicht */
+      haustiere: 'keine',         /* keine | katze | hund | klein */
+      haustiereAndere: 'egal',    /* egal | keine | allergie */
+      ernaehrung: 'egal',         /* egal | vegetarisch | vegan */
+      kueche: 'egal',             /* egal | kein_fleisch */
+      /* Der Rhythmus, den der Beruf vorgibt – der häufigste Grund, warum
+         zwei Menschen mit gleichem Geschmack doch nicht zusammenpassen. */
+      beschaeftigungsart: '',     /* vollzeit | teilzeit | studium | ausbildung |
+                                     schicht | selbststaendig | rente | suchend */
+      sprachen: [],
+      /* Mit wem jemand wohnen möchte. Eine WG darf das für sich
+         entscheiden – § 19 Abs. 5 AGG nimmt das gemeinsame Wohnen von
+         der Benachteiligungsverbot aus. TrimmoTrade entscheidet es
+         nicht, es fragt nur. */
+      alterVon: null,
+      alterBis: null,
+      geschlechterWunsch: 'egal', /* egal | gemischt | frauen | maenner */
+      art: [],                    /* Zweck-WG, Studierende, Berufstätige, … */
+      mindestdauer: null,         /* in Monaten – wie lange jemand bleiben will */
+      ueberMich: ''
+    },
+
+    /* ------------------------------------------------------------------
+       Die Bewerbung
+
+       Was eine anbietende Seite tatsächlich wissen will und auch wissen
+       darf. Jede Angabe hier ist freiwillig; ohne sie rechnet nichts
+       schlechter, es rechnet nur weniger.
+       ------------------------------------------------------------------ */
+    bewerbung: {
+      einkommenArt: '',       /* unbefristet | befristet | probezeit | studium |
+                                 ausbildung | selbststaendig | rente | sonst */
+      buergschaft: 'keine',   /* keine | eltern | sonstige */
+      wbsStufe: '',
+      kautionBereit: false,
+      mietdauer: null,        /* in Monaten – wie lange jemand bleiben will */
+      einzugFlexibel: 'zwei_wochen',  /* genau | zwei_wochen | flexibel */
+      vormieter: null,        /* Zahl bisheriger Mietverhältnisse */
+      besichtigung: []        /* wann jemand kann: werktags, abends, wochenende */
+    },
     /* Unterlagen für die Bewerbermappe */
     unterlagen: {
       schufa: false, gehaltsnachweise: false, ausweis: false,

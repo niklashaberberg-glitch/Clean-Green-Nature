@@ -485,9 +485,80 @@
 
   const ECK_WORT = {
     haushalt: 'Haushalt', einzug: 'Einzug ab', beschaeftigung: 'Beschäftigung',
-    einkommen: 'Einkommen', haustiere: 'Haustiere', raucher: 'Rauchen',
-    wbs: 'Wohnberechtigungsschein', buergschaft: 'Bürgschaft'
+    einkommen: 'Einkommen', einkommenArt: 'Art des Einkommens', haustiere: 'Haustiere',
+    raucher: 'Rauchen', wbs: 'Wohnberechtigungsschein', buergschaft: 'Bürgschaft',
+    kaution: 'Kaution', mietdauer: 'Gewünschte Mietdauer', flexibel: 'Einzugstermin',
+    besichtigung: 'Besichtigung möglich'
   };
+
+  /* ----------------------- Die Vorauswahl -----------------------
+
+     Achtzig Anfragen, und gelesen werden die ersten zehn. Welche zehn
+     das sind, entscheidet sonst die Uhrzeit des Eingangs.
+
+     Hier entscheidet es die Eignung – und jede Zahl bringt ihre Gründe
+     mit, damit man ihr widersprechen kann. Zwei Regeln, die diese
+     Ansicht von einem Ranking unterscheiden:
+
+     Es wird sortiert, nie ausgeblendet. Wer hinten steht, steht
+     trotzdem da, mit demselben Text und denselben Knöpfen.
+
+     Und es zählt nur, wonach man fragen darf. Alter und Geschlecht
+     stehen gar nicht erst in einer Anfrage; was nicht ankommt, kann
+     keine Formel gewichten. */
+  function profilAusAnfrage(a) {
+    const b = (a.eckdaten || {}).bewerbung || {};
+    return {
+      nettoEinkommen: b.einkommenVon || 0,
+      haushalt: b.haushalt || 0,
+      einzugAb: b.einzugAb || '',
+      unterlagen: b.unterlagen || {},
+      bewerbung: b,
+      wg: {}
+    };
+  }
+
+  /* Nach Inserat gebündelt: Eine Reihenfolge über mehrere Wohnungen
+     hinweg wäre keine – die Mietbelastung bezieht sich immer auf eine
+     bestimmte Miete. */
+  function nachInserat(ein) {
+    const gruppen = [];
+    const nach = {};
+    ein.forEach((a) => {
+      const key = a.inserat || '—';
+      if (!nach[key]) {
+        nach[key] = { key, titel: a.titel, inserat: a.inserat, daten: a.inseratDaten || null, liste: [] };
+        gruppen.push(nach[key]);
+      }
+      nach[key].liste.push(a);
+    });
+    gruppen.forEach((g) => {
+      /* Ohne die Eckdaten des Inserats – etwa nach dem Löschen – bleibt
+         es bei der zeitlichen Reihenfolge. Eine erfundene Rangfolge wäre
+         schlechter als gar keine. */
+      if (!g.daten) { g.gereiht = g.liste.map((a) => ({ anfrage: a, bewertung: null })); return; }
+      g.gereiht = TT.passung.reihen(g.daten, g.liste.map((a) => ({ anfrage: a, profil: profilAusAnfrage(a) })));
+      g.rechnet = g.gereiht.some((x) => x.bewertung && x.bewertung.belastbar);
+    });
+    return gruppen;
+  }
+
+  function rangZeile(bew) {
+    if (!bew || (bew.score === null && !bew.harte.length)) return '';
+    return h`<div class="anfragen__rang">
+      ${bew.harte.length
+        ? h`<span class="anfragen__wert is-schlecht">${ico('warnung')}${U.t('Ausschluss')}</span>`
+        : h`<span class="anfragen__wert is-${bew.score >= 80 ? 'gut' : bew.score >= 50 ? 'warn' : 'schlecht'}">
+            ${bew.score} %</span>`}
+      <span class="anfragen__kurz">${U.t(bew.kurz)}${bew.belastbar ? '' : ' · ' + U.t('wenige Angaben')}</span>
+      <details class="anfragen__warum"><summary>${U.t('Warum')}</summary>
+        <ul class="eckdaten__liste">
+          ${bew.harte.map((x) => h`<li class="ist-minus"><span>${U.t('Ausschluss')}</span><b>${U.t(x.text)}</b></li>`)}
+          ${bew.gruende.map((g) => h`<li class="ist-${g.wirkung}"><span>${U.t(g.label)}</span><b>${U.t(g.text)}</b></li>`)}
+        </ul>
+      </details>
+    </div>`;
+  }
 
   function echtesPostfach() {
     if (!amServer() || !postfach) return '';
@@ -502,18 +573,26 @@
           ${aus.length} ${U.plural(aus.length, 'geschrieben', 'geschrieben')}</span>
       </div>
 
-      ${ein.length ? h`<h3 class="anfragen__ueber">An deine Inserate</h3>
+      ${ein.length ? nachInserat(ein).map((g) => h`
+        <h3 class="anfragen__ueber">${g.inserat ? h`<a href="#/objekt/${g.inserat}">${U.truncate(g.titel || '', 52)}</a>`
+        : U.t('Inserat entfernt')}
+          <i>${g.liste.length} ${U.t(U.plural(g.liste.length, 'Anfrage', 'Anfragen'))}</i></h3>
+        ${g.rechnet ? h`<p class="fein">${ico('waage')}Sortiert nach Eignung, nicht nach Eingang – und
+          nichts ist ausgeblendet: Wer hinten steht, steht trotzdem da. Gerechnet wird ausschließlich mit
+          dem, wonach gefragt werden darf; Alter und Geschlecht stehen in keiner Anfrage.</p>` : ''}
         <ol class="anfragen__liste anfragen__liste--echt">
-          ${ein.map((a) => h`<li class="stand-${a.stand}">
+          ${g.gereiht.map((x) => { const a = x.anfrage; return h`<li class="stand-${a.stand}">
             ${raw(TT.img.avatar(a.name || '?', 34))}
             <div>
               <b>${a.name || 'ohne Namen'}
                 ${a.stand === 'neu' ? ui.badge('neu', 'gut') : ''}
                 ${a.stand === 'weg' ? ui.badge('Inserat gelöscht', 'neutral') : ''}</b>
-              <span class="anfragen__zu"><a href="#/objekt/${a.inserat}">${U.truncate(a.titel || '', 44)}</a>
-                · ${U.since(new Date(a.angelegt * 1000).toISOString().slice(0, 10))}</span>
-              ${Object.keys(a.eckdaten || {}).length ? h`<ul class="anfragen__eck">
-                ${Object.keys(a.eckdaten).map((k) => h`<li><span>${ECK_WORT[k] || k}</span> ${a.eckdaten[k]}</li>`)}
+              <span class="anfragen__zu">${U.since(new Date(a.angelegt * 1000).toISOString().slice(0, 10))}</span>
+              ${rangZeile(x.bewertung)}
+              ${Object.keys(a.eckdaten || {}).filter((k) => typeof a.eckdaten[k] === 'string').length
+        ? h`<ul class="anfragen__eck">
+                ${Object.keys(a.eckdaten).filter((k) => typeof a.eckdaten[k] === 'string')
+          .map((k) => h`<li><span>${U.t(ECK_WORT[k] || k)}</span> ${a.eckdaten[k]}</li>`)}
               </ul>` : ''}
               <p class="anfragen__text">${a.text}</p>
               <p class="anfragen__weg">
@@ -525,10 +604,9 @@
                   ${ANFRAGE_STAND.map((st) => h`<option value="${st[0]}" ${a.stand === st[0] ? 'selected' : ''}>${st[1]}</option>`)}
                 </select></label>
             </div>
-          </li>`)}
-        </ol>
-        <p class="fein">Die Adresse steht hier und in keiner Mail. Wer antwortet, gibt seine eigene frei –
-          niemand sonst.</p>` : ''}
+          </li>`; })}
+        </ol>`).concat([h`<p class="fein">Die Adresse steht hier und in keiner Mail. Wer antwortet, gibt
+          seine eigene frei – niemand sonst.</p>`]) : ''}
 
       ${aus.length ? h`<h3 class="anfragen__ueber">Von dir geschrieben</h3>
         <ol class="anfragen__liste anfragen__liste--echt">

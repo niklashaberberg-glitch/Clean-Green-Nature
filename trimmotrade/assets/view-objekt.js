@@ -1030,13 +1030,79 @@
     e.raucher = p.raucher ? U.t('ja') : U.t('nein');
     if (p.unterlagen && p.unterlagen.wbs) e.wbs = U.t('liegt vor');
     if (p.unterlagen && p.unterlagen.buergschaft) e.buergschaft = U.t('möglich');
+
+    /* Was aus dem Bewerbungsteil des Profils dazukommt. Jedes dieser
+       Felder ist eines, nach dem eine Vermieterseite fragen darf und
+       ohnehin fragen wird – es steht hier nur früher da und muss nicht
+       in drei Rückfragen zusammengetragen werden.
+
+       Was nicht mitgeht: Alter, Geschlecht, alles aus dem WG-Teil des
+       Profils. § 19 Abs. 5 AGG erlaubt die Auswahl danach unter
+       Mitbewohnenden, nicht bei der Vermietung – und was nicht
+       hinausgeht, kann auch nicht gewichtet werden. */
+    const b = p.bewerbung || {};
+    if (b.einkommenArt && EINKOMMEN_WORT[b.einkommenArt]) e.einkommenArt = U.t(EINKOMMEN_WORT[b.einkommenArt]);
+    if (b.buergschaft && b.buergschaft !== 'keine') {
+      e.buergschaft = U.t(b.buergschaft === 'eltern' ? 'Elternbürgschaft' : 'Bürgschaft vorhanden');
+    }
+    if (b.wbsStufe) e.wbs = b.wbsStufe === 'unklar' ? U.t('beantragt') : U.t('Stufe') + ' ' + b.wbsStufe.toUpperCase();
+    if (b.kautionBereit) e.kaution = U.t('liegt bereit');
+    if (b.mietdauer > 0) {
+      e.mietdauer = b.mietdauer >= 36 ? U.t('mindestens drei Jahre')
+        : b.mietdauer >= 24 ? U.t('etwa zwei Jahre')
+          : b.mietdauer >= 12 ? U.t('etwa ein Jahr') : U.t('unter einem Jahr');
+    }
+    if (b.einzugFlexibel && b.einzugFlexibel !== 'genau') {
+      e.flexibel = U.t(b.einzugFlexibel === 'flexibel' ? 'ganz flexibel' : 'zwei Wochen flexibel');
+    }
+    if ((b.besichtigung || []).length) {
+      e.besichtigung = b.besichtigung.map((k) => U.t(BESICHTIGUNG_WORT[k] || k)).join(', ');
+    }
     return e;
   }
 
+  /* Die rechenbare Fassung. Genau so viel, wie TT.passung.bewerber
+     braucht, und keine Angabe, die nicht schon in der sichtbaren Liste
+     steht: das Einkommen als untere Stufe der Spanne, nicht auf den
+     Euro. Alter und Geschlecht führt diese Funktion nicht – bei der
+     Vermietung dürfen sie nicht zählen, und was nicht hinausgeht, kann
+     auch niemand gewichten. */
+  function bewerbungAus(p) {
+    const b = p.bewerbung || {};
+    const d = {};
+    if (b.einkommenArt) d.einkommenArt = b.einkommenArt;
+    if (b.buergschaft && b.buergschaft !== 'keine') d.buergschaft = b.buergschaft;
+    if (b.wbsStufe) d.wbsStufe = b.wbsStufe;
+    if (b.kautionBereit) d.kautionBereit = true;
+    if (b.mietdauer > 0) d.mietdauer = Number(b.mietdauer);
+    if (b.einzugFlexibel) d.einzugFlexibel = b.einzugFlexibel;
+    if (p.haushalt > 0) d.haushalt = Number(p.haushalt);
+    if (p.nettoEinkommen > 0) d.einkommenVon = Math.floor(p.nettoEinkommen / 200) * 200;
+    if (p.einzugAb) d.einzugAb = p.einzugAb;
+    const u = p.unterlagen || {};
+    const mappe = {};
+    ['schufa', 'gehaltsnachweise', 'ausweis', 'mietschuldenfrei', 'selbstauskunft', 'wbs']
+      .forEach((k) => { if (u[k]) mappe[k] = true; });
+    if (Object.keys(mappe).length) d.unterlagen = mappe;
+    return d;
+  }
+
+  const EINKOMMEN_WORT = {
+    unbefristet: 'unbefristetes Arbeitsverhältnis', befristet: 'befristeter Vertrag',
+    probezeit: 'noch in der Probezeit', selbststaendig: 'selbstständig', studium: 'Studium',
+    ausbildung: 'Ausbildung', rente: 'Rente', sonst: 'anderes'
+  };
+  const BESICHTIGUNG_WORT = {
+    werktags: 'werktags tagsüber', abends: 'abends', wochenende: 'am Wochenende',
+    kurzfristig: 'auch kurzfristig'
+  };
+
   const ECK_WORT = {
     haushalt: 'Haushalt', einzug: 'Einzug ab', beschaeftigung: 'Beschäftigung',
-    einkommen: 'Einkommen', haustiere: 'Haustiere', raucher: 'Rauchen',
-    wbs: 'Wohnberechtigungsschein', buergschaft: 'Bürgschaft'
+    einkommen: 'Einkommen', einkommenArt: 'Art des Einkommens', haustiere: 'Haustiere',
+    raucher: 'Rauchen', wbs: 'Wohnberechtigungsschein', buergschaft: 'Bürgschaft',
+    kaution: 'Kaution', mietdauer: 'Gewünschte Mietdauer', flexibel: 'Einzugstermin',
+    besichtigung: 'Besichtigung möglich'
   };
 
   /* Beim Kauf geht davon nichts mit: Wer beim ersten Kontakt sein
@@ -1304,8 +1370,13 @@
     const p = S.get().profil;
     const mit = U.$('#eckdaten-mit');
     const eckdaten = mit && mit.checked ? eckdatenAus(p) : {};
+    /* Dieselben Angaben noch einmal in Zahlen und Kürzeln, damit die
+       anbietende Seite in ihrem Browser eine Reihenfolge rechnen kann.
+       Sie sagt nichts, was in der Liste oben nicht schon lesbar steht –
+       und sie geht nur mit, wenn die Liste mitgeht. */
+    const bewerbung = mit && mit.checked ? bewerbungAus(p) : null;
     ui.knopfArbeit(el, TT.api.ruf('anfrage/neu', {
-      id: l.id, text, name: p.name || '', telefon: p.telefon || '', eckdaten
+      id: l.id, text, name: p.name || '', telefon: p.telefon || '', eckdaten, bewerbung
     }).then(() => {
       /* Auch im Browser vermerken: Die Bewerbungstafel, die Merkliste
          und der Nachfass-Hinweis hängen daran, und die kennt nur der

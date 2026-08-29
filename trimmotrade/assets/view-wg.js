@@ -99,17 +99,34 @@
      Bausteine
      ================================================================== */
 
+  /* Die Passung zu einer Gruppe. Gerechnet wird gegen jedes Mitglied
+     einzeln, nicht gegen einen Durchschnitt aus allen – „im Mittel
+     passt es“ ist genau die Aussage, die niemandem hilft, der mit einer
+     bestimmten Person eine Küche teilen wird.
+
+     Ausschlussgründe stehen im Klartext und ohne Zahl daneben: Eine
+     Allergie ist keine Prozentzahl. */
   function passungsZeile(gruppe) {
     const p = S.get().profil;
-    const b = W.passung(gruppe, p);
-    if (!b) {
+    const b = TT.passung.inGruppe(gruppe, p);
+    if (!b || (b.score === null && !b.harte.length)) {
       return h`<p class="fein wg-karte__passung">${ico('info')}Für eine Einschätzung fehlt dein
-        Alltagsprofil. <a href="#/profil">Sechs Fragen im Profil</a> genügen.</p>`;
+        Alltagsprofil. <a href="#/profil">Die Fragen im Profil</a> genügen.</p>`;
+    }
+    if (b.harte.length) {
+      return h`<p class="wg-karte__passung is-schlecht">${ico('warnung')}
+        <b>${U.t(b.harte.length === 1 ? 'Ein Ausschlusskriterium' : 'Ausschlusskriterien')}</b>
+        <span>${b.harte.map((x) => (x.wer ? x.wer + ': ' : '') + U.t(x.text)).join(' ')}</span></p>`;
     }
     const ton = b.score >= 75 ? 'gut' : b.score >= 55 ? 'warn' : 'schlecht';
+    const schwach = b.schwaechste && b.einzeln.length > 1 && b.schwaechste.score < b.score - 8
+      ? b.schwaechste : null;
     return h`<p class="wg-karte__passung is-${ton}">${ico('wg')}
       <b>${U.t('{0} % Passung').replace('{0}', b.score)}</b>
-      <span>${U.t(b.kurz)}</span></p>`;
+      <span>${U.t(b.kurz)}${schwach ? ' · ' + U.t('am wenigsten mit {0} ({1} %)')
+        .replace('{0}', schwach.name).replace('{1}', schwach.score) : ''}${schwach && schwach.reibung
+        ? ' – ' + U.t(schwach.reibung.label) : b.einzeln[0] && b.einzeln[0].reibung
+          ? ' – ' + U.t(b.einzeln[0].reibung.label) : ''}</span></p>`;
   }
 
   function person(m, gruppe) {
@@ -332,16 +349,18 @@
   function vorstellungsFelder(vorgabe) {
     const p = S.get().profil;
     const e = W.eckdatenAus(p);
-    const felder = Object.keys(e).filter((k) => k !== 'lifestyle');
+    const felder = W.eckdatenZeilen(e);
     return h`<label class="feld"><span>Ein paar Sätze über dich</span>
         <textarea rows="5" id="wg-vorstellung" placeholder="Wer du bist, was du arbeitest, wie du wohnst – und warum diese Wohnung.">${vorgabe || p.vorstellung || ''}</textarea></label>
       ${felder.length ? h`<fieldset class="filter__gruppe eckdaten">
         <legend>Das geht aus deinem Profil mit</legend>
         <ul class="eckdaten__liste">
-          ${felder.map((k) => h`<li><span>${W.ECK_WORT[k] || k}</span><b>${e[k]}</b></li>`)}
+          ${felder.map((z) => h`<li><span>${U.t(z[0])}</span><b>${z[1]}</b></li>`)}
         </ul>
-        ${p.lifestyle ? h`<p class="fein">${ico('wg')}Dazu deine sechs Antworten zum Alltag – daraus
-          rechnet sich die Passung. Ohne sie sieht die Gruppe keine Einschätzung.</p>` : ''}
+        ${p.lifestyle ? h`<p class="fein">${ico('wg')}Dazu deine Antworten zum Alltag – daraus rechnet
+          sich die Passung. Ohne sie sieht die Gruppe keine Einschätzung.</p>` : ''}
+        <p class="fein">Mehr als diese Liste geht nicht mit. Weder deine Adresse noch dein Einkommen
+          auf den Euro, und nichts, wonach niemand fragen darf.</p>
       </fieldset>` : h`<div class="hinweisbox">${ico('info')}
         <div><b>Dein Profil ist leer</b>
         <p>Alter, Beruf und die sechs Fragen zum Alltag entscheiden darüber, ob jemand dich aufnimmt.

@@ -114,6 +114,16 @@
       state.profil.gewichtung = Object.assign({}, TT.data.profilVorlage.gewichtung, objekt(state.profil.gewichtung, {}));
       state.profil.lifestyle = Object.assign({}, TT.data.profilVorlage.lifestyle, objekt(state.profil.lifestyle, {}));
       state.profil.unterlagen = Object.assign({}, TT.data.profilVorlage.unterlagen, objekt(state.profil.unterlagen, {}));
+      /* Das ausführliche WG-Profil und die Bewerbung kamen später dazu.
+         Wer die Anwendung vorher benutzt hat, hat sie nicht im Speicher –
+         ohne dieses Auffüllen liefe jeder Zugriff darauf ins Leere. */
+      state.profil.wg = Object.assign({}, TT.data.profilVorlage.wg, objekt(state.profil.wg, {}));
+      state.profil.wg.mehr = Object.assign({}, TT.data.profilVorlage.wg.mehr, objekt(state.profil.wg.mehr, {}));
+      ['sprachen', 'art'].forEach((k) => {
+        if (!Array.isArray(state.profil.wg[k])) state.profil.wg[k] = [];
+      });
+      state.profil.bewerbung = Object.assign({}, TT.data.profilVorlage.bewerbung, objekt(state.profil.bewerbung, {}));
+      if (!Array.isArray(state.profil.bewerbung.besichtigung)) state.profil.bewerbung.besichtigung = [];
       state.filter = Object.assign(TT.analyse.leerFilter(), objekt(state.filter, {}));
       state.gruender = Object.assign({ nummer: 0, seit: '', bis: '' }, objekt(state.gruender, {}));
       state.betreiber = objekt(state.betreiber, {});

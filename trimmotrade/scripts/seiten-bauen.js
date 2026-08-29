@@ -72,12 +72,13 @@ function kopf(seite) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(seite.titel)}</title>
 <meta name="description" content="${esc(seite.beschreibung)}">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="robots" content="${seite.nichtIndexieren
+  ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'}">
 <meta name="author" content="TrimmoTrade – Niklas Haberberg">
 <meta name="theme-color" content="#1a5c37" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0f120f" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
-<link rel="canonical" href="${url}">
+${seite.nichtIndexieren ? '' : `<link rel="canonical" href="${url}">
 <meta property="og:site_name" content="TrimmoTrade">
 <meta property="og:title" content="${esc(seite.titel)}">
 <meta property="og:description" content="${esc(seite.beschreibung)}">
@@ -89,12 +90,12 @@ function kopf(seite) {
 <meta name="twitter:title" content="${esc(seite.titel)}">
 <meta name="twitter:description" content="${esc(seite.beschreibung)}">
 <meta name="twitter:image" content="${BASIS}/vorschau.png">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+`}<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="/assets/app.css">
-<script type="application/ld+json">${JSON.stringify(daten)}</script>
-</head>
+${seite.nichtIndexieren ? '' : `<script type="application/ld+json">${JSON.stringify(daten)}</script>
+`}</head>
 <body class="ist-angemeldet">
 <a class="sprung" href="#inhalt">Zum Inhalt springen</a>
 
@@ -338,7 +339,7 @@ const SEITEN = [
     datei: 'wohnberechtigungsschein.html',
     rang: '0.7',
     kurz: 'Wohnberechtigungsschein',
-    titel: 'Wohnberechtigungsschein: Einkommensgrenzen und Antrag – TrimmoTrade',
+    titel: 'Wohnberechtigungsschein: Grenzen und Antrag – TrimmoTrade',
     h1: 'Wohnberechtigungsschein (WBS)',
     beschreibung: 'Geförderte Wohnungen sind oft deutlich günstiger. Wer bekommt einen WBS, wie wird das maßgebliche Einkommen gerechnet, und wie läuft der Antrag?',
     vorspann: 'Die Hürde ist niedriger, als viele denken – und das maßgebliche Einkommen ist nicht dasselbe wie das, was auf der Gehaltsabrechnung steht.',
@@ -903,12 +904,17 @@ SEITEN.forEach((seite) => {
    abgeschalteter Dienst. */
 const vierNullVier = kopf({
   datei: '404.html', kurz: 'Nicht gefunden', stand: STAND,
+  /* Kein canonical, kein og:, kein Datenblatt: Eine Seite, die auf
+     noindex steht, darf sich nicht zugleich als indexierbarer Artikel
+     ausgeben. Google nennt das widersprüchliche Signale und entscheidet
+     dann selbst, welches gilt – das ist genau das, was man hier nicht
+     will. */
+  nichtIndexieren: true,
   titel: 'Seite nicht gefunden – TrimmoTrade',
   h1: 'Diese Seite gibt es nicht',
   beschreibung: 'Die angeforderte Seite wurde nicht gefunden.',
   vorspann: 'Vielleicht ist der Verweis alt, oder es hat sich ein Tippfehler eingeschlichen.'
-}).replace('<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">',
-  '<meta name="robots" content="noindex, follow">')
+})
   + `
   <section class="block">
     <h2>Weiter geht es hier</h2>

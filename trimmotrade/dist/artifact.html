@@ -2420,6 +2420,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .wg-frei .formraster { margin-top: .7em; }
 .feld--breit { grid-column: 1 / -1; }
 
+/* Der Zustandshinweis am eigenen Inserat steht über allem anderen –
+   auch über dem Titel. Wer nicht weiß, dass sein Inserat gesperrt ist,
+   sucht den Fehler wochenlang bei sich. */
+.objekt__zustand { margin: 0 0 14px; }
+
 </style>
 <noscript>
   <div style="max-width:640px;margin:12vh auto;padding:24px;font-family:system-ui,sans-serif;line-height:1.6">
@@ -5974,6 +5979,24 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     'Eine WG gründen': 'Founding a flatshare',
     'Einer WG-Gründung beitreten': 'Joining a flatshare being founded'
 
+  });
+
+
+  /* Die Zustandshinweise am eigenen Inserat – gesperrt, vom Netz,
+     abgelaufen, läuft bald aus. */
+  e({
+    'Dieses Inserat ist gesperrt.': 'This listing is blocked.',
+    'Es erscheint weder in der Suche noch über einen Verweis. Die Begründung steht in der Mail dazu – zusammen mit dem Weg, dagegen vorzugehen. Ein Widerspruch ist sechs Monate lang formlos möglich; eine Antwort auf diese Mail genügt.':
+      'It appears neither in the search nor via a link. The reasons are in the email about it – together with how to challenge the decision. An objection is possible informally for six months; a reply to that email is enough.',
+    'Dieses Inserat ist vom Netz.': 'This listing is offline.',
+    'Nur du siehst es.': 'Only you can see it.',
+    'Wieder aufnehmen': 'Put it back online',
+    'Dieses Inserat ist abgelaufen.': 'This listing has expired.',
+    'Nach 60 Tagen ohne Bestätigung verschwindet ein Angebot aus der Suche – so bleibt der Bestand aktuell.':
+      'After 60 days without confirmation an offer disappears from the search – that is what keeps the listings current.',
+    '„Steht noch“ nimmt es wieder auf': '“Still available” brings it back',
+    'Dein Inserat läuft in {1} Tagen aus.': 'Your listing expires in {1} days.',
+    '„Steht noch“ verlängert es um 60 Tage': '“Still available” extends it by 60 days'
   });
 
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
@@ -16732,6 +16755,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           ${ico('chevron')}<span>${l.viertel}</span>
         </nav>
 
+        ${zustandsHinweis(l)}
+
         <div class="objekt__kopf">
           <div class="objekt__titel">
             <div class="karte-inserat__marken">${ui.kartenMarken(l, b)}</div>
@@ -17137,6 +17162,46 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         und nichts, wonach niemand fragen darf: keine Herkunft, keine Religion, keine Gesundheit,
         keine Familienplanung (Art. 9 DSGVO, § 19 AGG).</p>
     </fieldset>`;
+  }
+
+  /* ------------------------------------------------------------------
+     Wenn das eigene Inserat nicht mehr steht
+
+     Ein gesperrtes oder pausiertes Inserat sieht für die anbietende
+     Seite genauso aus wie vorher – nur dass niemand mehr anfragt. Ohne
+     diesen Hinweis sucht sie den Fehler wochenlang bei sich.
+
+     Bei einer Sperre gehört die Begründung dazu und der Weg dagegen:
+     Art. 17 der Verordnung (EU) 2022/2065 verlangt beides, und eine
+     Sperre ohne nachvollziehbaren Grund ist auch ohne Verordnung eine
+     Zumutung.
+     ------------------------------------------------------------------ */
+  function zustandsHinweis(l) {
+    if (!l.echt || !l.eigen) return '';
+    if (l.stand === 'gesperrt') {
+      return h`<div class="warn-meldung objekt__zustand">${ico('warnung')}<span>
+        <b>Dieses Inserat ist gesperrt.</b> Es erscheint weder in der Suche noch über einen
+        Verweis. Die Begründung steht in der Mail dazu – zusammen mit dem Weg, dagegen
+        vorzugehen. Ein Widerspruch ist sechs Monate lang formlos möglich; eine Antwort auf
+        diese Mail genügt.</span></div>`;
+    }
+    if (l.stand === 'pausiert') {
+      return h`<div class="info-meldung objekt__zustand">${ico('info')}<span>
+        <b>Dieses Inserat ist vom Netz.</b> Nur du siehst es.
+        <a href="#/inserieren">Wieder aufnehmen</a></span></div>`;
+    }
+    if (l.laeuftAb && U.daysUntil(l.laeuftAb) <= 0) {
+      return h`<div class="warn-meldung objekt__zustand">${ico('kalender')}<span>
+        <b>Dieses Inserat ist abgelaufen.</b> Nach 60 Tagen ohne Bestätigung verschwindet ein
+        Angebot aus der Suche – so bleibt der Bestand aktuell.
+        <a href="#/inserieren">„Steht noch“ nimmt es wieder auf</a></span></div>`;
+    }
+    if (l.laeuftAb && U.daysUntil(l.laeuftAb) <= 7) {
+      return h`<div class="info-meldung objekt__zustand">${ico('kalender')}<span>
+        Dein Inserat läuft in ${U.daysUntil(l.laeuftAb)} Tagen aus.
+        <a href="#/inserieren">„Steht noch“ verlängert es um 60 Tage</a></span></div>`;
+    }
+    return '';
   }
 
   A_('anschreiben', (el) => {

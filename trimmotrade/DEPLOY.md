@@ -321,12 +321,21 @@ Der zweite Auftrag ist der gegen Karteileichen. Ein Inserat läuft nach
 60 Tagen aus; sieben Tage vorher fragt diese Mail nach, ob das Angebot
 noch steht. Ein Klick auf *Steht noch* verlängert es.
 
-Ein vierter Aufruf ist für die Kommandozeile gedacht, nicht für Cron:
+Weitere Aufrufe sind für die Kommandozeile gedacht, nicht für Cron:
 
 ```
+php api/index.php pruefen       # prüft die ganze Einrichtung und sagt, was fehlt
 php api/index.php zahlen        # der Trichter der letzten 14 Tage
 php api/index.php zahlen 60     # oder über 60 Tage
+php api/index.php meldungen     # offene Meldungen zu Inseraten
 ```
+
+**`pruefen` ist der Befehl, mit dem man anfängt, wenn etwas nicht geht.** Er
+sieht nach, ob die Einstellungen stimmen, ob die Datenbank erreichbar ist, ob
+die versteckten Dateien mit hochgeladen wurden, ob Bilder abgelegt werden können,
+ob der Mailversand eingerichtet ist – und wann die Cron-Aufträge zuletzt
+gelaufen sind. Die letzte Zeile ist die nützlichste: Ein Auftrag, der nie
+eingerichtet wurde, fällt sonst wochenlang nicht auf.
 
 ---
 

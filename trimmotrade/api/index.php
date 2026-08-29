@@ -62,6 +62,8 @@ require_once __DIR__ . '/lib/bild.php';
 require_once __DIR__ . '/lib/anfrage.php';
 require_once __DIR__ . '/lib/auftrag.php';
 require_once __DIR__ . '/lib/gruppe.php';
+require_once __DIR__ . '/lib/moderation.php';
+require_once __DIR__ . '/lib/selbsttest.php';
 
 Db::start($cfg);
 Sitzung::start($cfg);
@@ -82,28 +84,62 @@ $RP_ID  = (string) ($cfg['rp_id'] ?? parse_url($BASIS, PHP_URL_HOST) ?: 'localho
    ab und macht das Aufräumen vorhersagbar. */
 if (PHP_SAPI === 'cli') {
     $befehl = $argv[1] ?? '';
-    $bekannt = ['aufraeumen', 'melden', 'erinnern', 'zahlen'];
+    $bekannt = ['aufraeumen', 'melden', 'erinnern', 'zahlen', 'pruefen', 'meldungen', 'meldung', 'freigeben'];
     if (!in_array($befehl, $bekannt, true)) {
-        fwrite(STDERR, "Aufruf: php api/index.php <" . implode('|', $bekannt) . ">\n\n"
-            . "  aufraeumen  abgelaufene Sitzungen, Vorgänge und Inserate wegräumen\n"
-            . "  melden      Suchaufträge abarbeiten und neue Treffer verschicken\n"
-            . "  erinnern    anbietende Seite fragen, ob ein Inserat noch steht\n"
-            . "  zahlen      den Trichter der letzten 14 Tage ausgeben\n");
+        fwrite(STDERR, "Aufruf: php api/index.php <befehl>\n\n"
+            . "Für den Cron-Auftrag\n"
+            . "  melden        Suchaufträge abarbeiten und neue Treffer verschicken (stündlich)\n"
+            . "  erinnern      anbietende Seite fragen, ob ein Inserat noch steht (täglich)\n"
+            . "  aufraeumen    abgelaufene Sitzungen, Vorgänge und Gruppen wegräumen (nachts)\n\n"
+            . "Zum Nachsehen\n"
+            . "  pruefen       prüft Einrichtung und Betrieb und sagt, was fehlt\n"
+            . "  zahlen [tage] den Trichter der letzten 14 Tage ausgeben\n\n"
+            . "Meldungen (Art. 16 und 17 der Verordnung (EU) 2022/2065)\n"
+            . "  meldungen                              offene Meldungen auflisten\n"
+            . "  meldung <kennung>                      einen Vorgang ansehen\n"
+            . "  meldung <kennung> sperren \"Grund\"      Inserat sperren, beide Seiten begründet benachrichtigen\n"
+            . "  meldung <kennung> loeschen \"Grund\"     Inserat entfernen\n"
+            . "  meldung <kennung> frei \"Grund\"         keine Maßnahme, Melder benachrichtigen\n"
+            . "  freigeben <inserat> \"Grund\"           eine Sperre nach Widerspruch aufheben\n");
         exit(1);
     }
     try {
         Db::pdo();
         if ($befehl === 'aufraeumen') {
             Db::aufraeumen(true);
+            Selbsttest::laufMerken('aufraeumen');
             echo "Aufgeräumt.\n";
         } elseif ($befehl === 'melden') {
             $n = Auftrag::lauf($BASIS, true);
+            Selbsttest::laufMerken('melden');
             echo $n === 1 ? "1 Mail verschickt.\n" : $n . " Mails verschickt.\n";
         } elseif ($befehl === 'erinnern') {
             $n = Auftrag::erinnern($BASIS, true);
+            Selbsttest::laufMerken('erinnern');
             echo $n === 1 ? "1 Erinnerung verschickt.\n" : $n . " Erinnerungen verschickt.\n";
-        } else {
+        } elseif ($befehl === 'zahlen') {
             echo Zaehler::bericht((int) ($argv[2] ?? 14));
+        } elseif ($befehl === 'pruefen') {
+            echo (new Selbsttest($cfg, dirname(__DIR__)))->lauf();
+        } elseif ($befehl === 'meldungen') {
+            echo Moderation::liste();
+        } elseif ($befehl === 'freigeben') {
+            [$ok, $text] = Moderation::entsperren((string) ($argv[2] ?? ''), (string) ($argv[3] ?? ''));
+            echo $text;
+            exit($ok ? 0 : 1);
+        } else {
+            $kennung = (string) ($argv[2] ?? '');
+            if ($kennung === '') {
+                fwrite(STDERR, "Welcher Vorgang? php api/index.php meldungen zeigt die offenen.\n");
+                exit(1);
+            }
+            if (!isset($argv[3])) {
+                echo Moderation::einzeln($kennung);
+                exit(0);
+            }
+            [$ok, $text] = Moderation::entscheiden($kennung, (string) $argv[3], (string) ($argv[4] ?? ''));
+            echo $text;
+            exit($ok ? 0 : 1);
         }
         exit(0);
     } catch (Throwable $e) {

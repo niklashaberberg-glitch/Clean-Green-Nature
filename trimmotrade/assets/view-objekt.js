@@ -656,6 +656,8 @@
           ${ico('chevron')}<span>${l.viertel}</span>
         </nav>
 
+        ${zustandsHinweis(l)}
+
         <div class="objekt__kopf">
           <div class="objekt__titel">
             <div class="karte-inserat__marken">${ui.kartenMarken(l, b)}</div>
@@ -1061,6 +1063,46 @@
         und nichts, wonach niemand fragen darf: keine Herkunft, keine Religion, keine Gesundheit,
         keine Familienplanung (Art. 9 DSGVO, § 19 AGG).</p>
     </fieldset>`;
+  }
+
+  /* ------------------------------------------------------------------
+     Wenn das eigene Inserat nicht mehr steht
+
+     Ein gesperrtes oder pausiertes Inserat sieht für die anbietende
+     Seite genauso aus wie vorher – nur dass niemand mehr anfragt. Ohne
+     diesen Hinweis sucht sie den Fehler wochenlang bei sich.
+
+     Bei einer Sperre gehört die Begründung dazu und der Weg dagegen:
+     Art. 17 der Verordnung (EU) 2022/2065 verlangt beides, und eine
+     Sperre ohne nachvollziehbaren Grund ist auch ohne Verordnung eine
+     Zumutung.
+     ------------------------------------------------------------------ */
+  function zustandsHinweis(l) {
+    if (!l.echt || !l.eigen) return '';
+    if (l.stand === 'gesperrt') {
+      return h`<div class="warn-meldung objekt__zustand">${ico('warnung')}<span>
+        <b>Dieses Inserat ist gesperrt.</b> Es erscheint weder in der Suche noch über einen
+        Verweis. Die Begründung steht in der Mail dazu – zusammen mit dem Weg, dagegen
+        vorzugehen. Ein Widerspruch ist sechs Monate lang formlos möglich; eine Antwort auf
+        diese Mail genügt.</span></div>`;
+    }
+    if (l.stand === 'pausiert') {
+      return h`<div class="info-meldung objekt__zustand">${ico('info')}<span>
+        <b>Dieses Inserat ist vom Netz.</b> Nur du siehst es.
+        <a href="#/inserieren">Wieder aufnehmen</a></span></div>`;
+    }
+    if (l.laeuftAb && U.daysUntil(l.laeuftAb) <= 0) {
+      return h`<div class="warn-meldung objekt__zustand">${ico('kalender')}<span>
+        <b>Dieses Inserat ist abgelaufen.</b> Nach 60 Tagen ohne Bestätigung verschwindet ein
+        Angebot aus der Suche – so bleibt der Bestand aktuell.
+        <a href="#/inserieren">„Steht noch“ nimmt es wieder auf</a></span></div>`;
+    }
+    if (l.laeuftAb && U.daysUntil(l.laeuftAb) <= 7) {
+      return h`<div class="info-meldung objekt__zustand">${ico('kalender')}<span>
+        Dein Inserat läuft in ${U.daysUntil(l.laeuftAb)} Tagen aus.
+        <a href="#/inserieren">„Steht noch“ verlängert es um 60 Tage</a></span></div>`;
+    }
+    return '';
   }
 
   A_('anschreiben', (el) => {

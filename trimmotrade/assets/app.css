@@ -2417,3 +2417,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
 .wg-frei .formraster { margin-top: .7em; }
 .feld--breit { grid-column: 1 / -1; }
+
+/* Der Zustandshinweis am eigenen Inserat steht über allem anderen –
+   auch über dem Titel. Wer nicht weiß, dass sein Inserat gesperrt ist,
+   sucht den Fehler wochenlang bei sich. */
+.objekt__zustand { margin: 0 0 14px; }

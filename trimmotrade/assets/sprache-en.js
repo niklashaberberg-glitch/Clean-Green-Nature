@@ -3413,6 +3413,24 @@
 
   });
 
+
+  /* Die Zustandshinweise am eigenen Inserat – gesperrt, vom Netz,
+     abgelaufen, läuft bald aus. */
+  e({
+    'Dieses Inserat ist gesperrt.': 'This listing is blocked.',
+    'Es erscheint weder in der Suche noch über einen Verweis. Die Begründung steht in der Mail dazu – zusammen mit dem Weg, dagegen vorzugehen. Ein Widerspruch ist sechs Monate lang formlos möglich; eine Antwort auf diese Mail genügt.':
+      'It appears neither in the search nor via a link. The reasons are in the email about it – together with how to challenge the decision. An objection is possible informally for six months; a reply to that email is enough.',
+    'Dieses Inserat ist vom Netz.': 'This listing is offline.',
+    'Nur du siehst es.': 'Only you can see it.',
+    'Wieder aufnehmen': 'Put it back online',
+    'Dieses Inserat ist abgelaufen.': 'This listing has expired.',
+    'Nach 60 Tagen ohne Bestätigung verschwindet ein Angebot aus der Suche – so bleibt der Bestand aktuell.':
+      'After 60 days without confirmation an offer disappears from the search – that is what keeps the listings current.',
+    '„Steht noch“ nimmt es wieder auf': '“Still available” brings it back',
+    'Dein Inserat läuft in {1} Tagen aus.': 'Your listing expires in {1} days.',
+    '„Steht noch“ verlängert es um 60 Tage': '“Still available” extends it by 60 days'
+  });
+
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
 })(window.TT = window.TT || {});

@@ -677,11 +677,36 @@ Einwilligung.
 Auf der Kommandozeile:
 
 ```
+php api/index.php pruefen       # was an der Einrichtung fehlt
 php api/index.php zahlen        # der Trichter der letzten 14 Tage
 php api/index.php melden        # Suchaufträge abarbeiten (stündlich per Cron)
 php api/index.php erinnern      # „Steht dein Inserat noch?“ (täglich)
-php api/index.php aufraeumen    # abgelaufene Sitzungen und Vorgänge
+php api/index.php aufraeumen    # abgelaufene Sitzungen, Vorgänge, Gruppen
+php api/index.php meldungen     # offene Meldungen
+php api/index.php meldung <k> sperren "Begründung"
 ```
+
+### Entscheiden, was gemeldet wurde
+
+Ein Meldeweg, an dessen Ende niemand entscheidet, ist keiner. Er ist rechtlich
+schlechter als gar keiner, weil er ein Versprechen abgibt.
+
+Deshalb gibt es die Moderation auf der Kommandozeile. Der Vorgang zeigt, was
+gemeldet wurde, den Text des Inserats, ob die eigene Betrugsprüfung angeschlagen
+hat, wie oft dasselbe Inserat schon gemeldet wurde und wie viele Meldungen es
+gegen dieses Konto gibt. Danach: sperren, löschen oder nichts tun – **immer mit
+Begründung**.
+
+Die Begründung geht wörtlich in die Mail an die betroffene Seite, zusammen mit
+den fünf Bestandteilen aus Art. 17 Abs. 1 DSA: was geschieht, worauf es sich
+stützt, ob automatisiert entschieden wurde, auf welcher Grundlage und wie man
+sich wehren kann. Eine Begründung unter zwanzig Zeichen lehnt das Programm ab.
+„Verstößt gegen unsere Richtlinien“ ist keine – dagegen kann sich niemand
+wehren, und genau deshalb steht die Liste in der Verordnung.
+
+Eine Weboberfläche dafür gibt es bewusst nicht: Sie wäre eine zweite Anmeldung,
+eine zweite Rechteverwaltung und eine zweite Angriffsfläche. Für einen Betrieb
+mit einer Person ist das der schlechtere Tausch.
 
 ## Anmeldung
 
@@ -956,6 +981,8 @@ trimmotrade/
       anfrage.php       Anfragen und Meldungen nach Art. 16 DSA
       auftrag.php       Suchaufträge, Meldelauf, Ablauferinnerung
       gruppe.php        WG-Gründung: wer wen sehen darf, gemeinsam bewerben
+      moderation.php    Meldungen entscheiden und begründen (Art. 16/17 DSA)
+      selbsttest.php    „was fehlt hier?“ für die Kommandozeile
       zaehler.php       Tagessummen ohne Kennung
       konto.php         Konten und Vertrauensstufen
       sitzung.php       Sitzungen, Schutzmerkmal, Herkunftsprüfung

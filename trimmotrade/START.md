@@ -109,7 +109,7 @@ Verordnung (EU) 2022/2065:
 | Art. 11/12 – Kontaktstelle für Behörden und Nutzende, veröffentlicht | **im Impressum ergänzen** |
 | Art. 14 – verständliche AGB mit Angaben zur Moderation | vorhanden |
 | Art. 16 – Meldeverfahren ohne Kontozwang, Empfangsbestätigung | eingebaut |
-| Art. 17 – begründete Entscheidung an Betroffene | Vorgang liegt in `tt_meldung`, **Begründung wird von Hand geschrieben** |
+| Art. 17 – begründete Entscheidung an Betroffene | eingebaut, siehe unten |
 
 **Erleichterung, die hier greift:** Nach **Art. 19 DSA** sind
 Kleinst- und Kleinunternehmen von den Pflichten des Abschnitts 3
@@ -182,13 +182,77 @@ her.
 Einmal im Monat eine eigene Kopie ziehen (Datenbankexport plus
 Bilderordner) und außerhalb des Servers ablegen.
 
-### 2.5 Was regelmäßig anzusehen ist
+### 2.5 Eine Meldung bearbeiten
+
+Das ist keine Fleißaufgabe, sondern eine Pflicht mit Frist. Art. 16 der
+Verordnung (EU) 2022/2065 verlangt eine **zeitnahe** Bearbeitung, Art. 17 eine
+**begründete** Entscheidung an die betroffene Seite.
+
+```
+php api/index.php meldungen                 was offen ist
+php api/index.php meldung <kennung>         den Vorgang ansehen
+```
+
+Der Vorgang zeigt, was gemeldet wurde, den Text des Inserats, ob die eigene
+Betrugsprüfung angeschlagen hat, wie oft dasselbe Inserat schon gemeldet wurde
+und wie viele Meldungen es insgesamt gegen dieses Konto gibt. Danach eine von
+drei Entscheidungen:
+
+```
+php api/index.php meldung <kennung> sperren  "Begründung"
+php api/index.php meldung <kennung> loeschen "Begründung"
+php api/index.php meldung <kennung> frei     "Begründung"
+```
+
+Die Begründung ist keine Formalie. Sie geht wörtlich in die Mail an die
+betroffene Seite ein, zusammen mit den fünf Bestandteilen, die Art. 17 Abs. 1
+verlangt: was geschieht, worauf es sich stützt, ob automatisiert entschieden
+wurde, auf welcher Grundlage und wie man sich wehren kann. Eine Begründung unter
+zwanzig Zeichen lehnt das Programm ab – „verstößt gegen unsere Richtlinien“ ist
+keine, weil sich dagegen niemand wehren kann.
+
+Alle offenen Meldungen zu demselben Inserat werden mit entschieden, und jeder
+Melder, der eine Adresse hinterlassen hat, bekommt die Entscheidung nach
+Art. 16 Abs. 5.
+
+Wird einem Widerspruch stattgegeben:
+
+```
+php api/index.php freigeben <inserat-kennung> "Begründung"
+```
+
+**Faustregeln für die Entscheidung:**
+
+| Fall | Regel |
+|---|---|
+| Vorkasse, Schlüssel per Post, Anbieter „im Ausland“ | sperren, sofort |
+| Fremde Bilder, nachweislich | löschen |
+| „Wohnung ist längst weg“ | keine Sperre – anschreiben, dann läuft es ohnehin nach 60 Tagen aus |
+| Streit über den Preis | keine Maßnahme; das ist keine Rechtswidrigkeit |
+| Diskriminierende Formulierung | sperren, mit Hinweis auf § 19 AGG und der Möglichkeit, es umzuformulieren |
+
+### 2.6 Was regelmäßig anzusehen ist
+
+Der wichtigste Befehl zuerst:
+
+```
+php api/index.php pruefen
+```
+
+Er sagt in einer Liste, was fehlt: Einstellungen, Datenbank, Tabellen,
+Mailversand, Bildbibliothek, Schreibrechte, **wann die Cron-Aufträge zuletzt
+gelaufen sind**, ob der Beispielmarkt noch passt und ob Meldungen liegen
+geblieben sind.
+
+Die Cron-Zeile ist der Grund, warum es diesen Befehl gibt: Dass ein Auftrag seit
+drei Wochen nicht läuft, merkt ein Einzelbetrieb sonst erst daran, dass niemand
+mehr wiederkommt – und sucht den Fehler dann in der Anwendung.
 
 | Wie oft | Was | Womit |
 |---|---|---|
-| täglich | offene Meldungen | `SELECT * FROM tt_meldung WHERE stand = 'offen'` |
+| täglich | offene Meldungen | `php api/index.php meldungen` |
+| wöchentlich | Selbstprüfung | `php api/index.php pruefen` |
 | wöchentlich | der Trichter | `php api/index.php zahlen` |
-| wöchentlich | Inserate mit Verdacht | Feld `verdachtsgruende` im Inserat |
 | monatlich | Sicherung ziehen | siehe 2.4 |
 
 ---
@@ -295,6 +359,7 @@ Rechtlich
   [ ] Verzeichnis der Verarbeitungstätigkeiten angelegt
 
 Technisch
+  [ ] php api/index.php pruefen läuft ohne „FEHLT“ durch
   [ ] api/config.php gefüllt, Rechte 600
   [ ] rp_id = trimmotrade.de (ohne www – sonst brechen alle Passkeys)
   [ ] TLS für www und ohne www, Weiterleitung auf eine Fassung
@@ -309,5 +374,6 @@ Inhaltlich
   [ ] eine Anfrage von einem fremden Gerät verschickt und angekommen
   [ ] eine Meldung abgesetzt und beantwortet
   [ ] Suchauftrag angelegt, Mail kam an, Abmeldelink geht
+  [ ] eine Meldung einmal bis zur Entscheidung durchgespielt
   [ ] Sitemap bei Google Search Console und Bing eingereicht
 ```

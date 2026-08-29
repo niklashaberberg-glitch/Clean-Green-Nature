@@ -1092,12 +1092,15 @@ Datum: __________________
         ${kopf('Angaben zum Anbieter',
         'Von hier speisen sich Impressum, Datenschutzerklärung, AGB und Widerrufsbelehrung – jede Angabe steht nur einmal.')}
 
-        <div class="hinweisbox">${ico('info')}
-          <div><b>Diese Angaben bleiben auf diesem Gerät</b>
-          <p>Sie liegen im Speicher dieses Browsers, wie alles andere auch. Für den echten Betrieb gehören sie
-            fest in den Quelltext – in <code>assets/recht.js</code> unter <code>VORGABE</code>. Dann stehen sie
-            für alle Aufrufe bereit und nicht nur für deinen.</p></div>
-        </div>
+        ${R.vomServer() ? h`<div class="gut-meldung">${ico('pruefen')}<span><b>Diese Angaben kommen vom
+          Server</b> – aus <code>api/config.php</code>, Abschnitt <code>betreiber</code>. Damit sehen sie
+          alle Besucher, und genau so muss es sein. Ändern lassen sie sich nur dort; was du unten einträgst,
+          wirkt nur in diesem Browser und wird von den Serverangaben überschrieben.</span></div>`
+        : h`<div class="warn-meldung">${ico('warnung')}<span><b>Diese Angaben liegen nur in diesem
+          Browser.</b> Auf einer Website reicht das nicht: Jeder andere Besucher sähe an ihrer Stelle eine
+          Lücke, und die Impressumspflicht nach § 5 DDG wäre nicht erfüllt. Auf dem Server gehören sie in
+          <code>api/config.php</code> unter <code>betreiber</code>. <code>php api/index.php pruefen</code>
+          sagt, was dort noch fehlt.</span></div>`}
 
         <form class="block" data-tu-submit="betreiber-speichern">
           <h2>${ico('stift')}Angaben</h2>

@@ -983,6 +983,15 @@ trimmotrade/
       gruppe.php        WG-Gründung: wer wen sehen darf, gemeinsam bewerben
       moderation.php    Meldungen entscheiden und begründen (Art. 16/17 DSA)
       selbsttest.php    „was fehlt hier?“ für die Kommandozeile
+
+Die Betreiberangaben für Impressum, Datenschutz und AGB stehen in
+`api/config.php` unter `betreiber` und gehen über `/api/status` an jeden
+Browser. Sie gehören dorthin und nicht in die Oberfläche: Was jemand in der
+Anwendung einträgt, liegt im Speicher **seines** Browsers – auf einer Website
+sähe jeder andere Besucher an dieser Stelle eine Lücke, und die
+Impressumspflicht nach § 5 DDG wäre nicht erfüllt. In der Einzeldatei ohne
+Server bleibt die Eingabe in der Oberfläche der richtige Weg: Dort ist jeder
+sein eigener Betreiber.
       zaehler.php       Tagessummen ohne Kennung
       konto.php         Konten und Vertrauensstufen
       sitzung.php       Sitzungen, Schutzmerkmal, Herkunftsprüfung

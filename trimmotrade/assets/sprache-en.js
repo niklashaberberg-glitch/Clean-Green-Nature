@@ -3464,6 +3464,21 @@
       'From three rooms on this is often the fastest route: several searchers team up and apply as one household. You still decide who gets the flat.'
   });
 
+
+  /* Woher die Betreiberangaben kommen. */
+  e({
+    'Diese Angaben liegen nur in diesem Browser.': 'These details are only in this browser.',
+    'Auf einer Website reicht das nicht: Jeder andere Besucher sähe an ihrer Stelle eine Lücke, und die Impressumspflicht nach § 5 DDG wäre nicht erfüllt. Auf dem Server gehören sie in':
+      'On a website that is not enough: every other visitor would see a gap in their place, and the imprint obligation under § 5 DDG would not be met. On the server they belong in',
+    'unter': 'under',
+    'sagt, was dort noch fehlt.': 'says what is still missing there.',
+    'Diese Angaben kommen vom Server': 'These details come from the server',
+    '– aus': '– from',
+    ', Abschnitt': ', section',
+    '. Damit sehen sie alle Besucher, und genau so muss es sein. Ändern lassen sie sich nur dort; was du unten einträgst, wirkt nur in diesem Browser und wird von den Serverangaben überschrieben.':
+      '. That way every visitor sees them, which is exactly how it has to be. They can only be changed there; what you enter below applies to this browser alone and is overridden by the server’s values.'
+  });
+
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
 })(window.TT = window.TT || {});

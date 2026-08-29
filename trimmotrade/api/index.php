@@ -261,6 +261,12 @@ try {
                    sagen, wäre nach § 5 UWG irreführend – und wäre nach
                    der ersten Anfrage an eine erfundene Adresse ohnehin
                    erledigt. */
+                /* Wer diese Seite betreibt. Das sind ausschließlich
+                   Angaben, die ohnehin öffentlich sein müssen – ein
+                   Impressum ist zur Veröffentlichung bestimmt. Ohne
+                   diesen Weg stünde es nur im Browser des Betreibers,
+                   und jeder Besucher sähe eine Lücke. */
+                'betreiber' => betreiberAngaben($cfg),
                 'markt' => [
                     'inserate' => $echte,
                     'gruppen' => (int) Db::wert(
@@ -1166,4 +1172,29 @@ function abmeldeSeite(bool $ok, string $basis): string
         . '<h1>' . $h($titel) . '</h1><p>' . $h($text) . '</p>'
         . '<p><a href="' . $h($basis !== '' ? $basis . '/' : '/') . '">Zurück zu TrimmoTrade</a></p>'
         . '</main></body></html>';
+}
+
+/** Die Betreiberangaben, wie sie an den Browser gehen.
+
+    Eine feste Liste, obwohl die Werte aus der eigenen Konfiguration
+    stammen und niemand sie unterschieben kann: Sie sorgt dafür, dass ein
+    versehentlich danebengeschriebener Schlüssel – ein Passwort im
+    falschen Block etwa – nicht mit hinausgeht. Was nicht auf der Liste
+    steht, geht nicht raus. */
+function betreiberAngaben(array $cfg): array
+{
+    $quelle = is_array($cfg['betreiber'] ?? null) ? $cfg['betreiber'] : [];
+    $raus = [];
+    foreach (['name', 'rechtsform', 'zusatz', 'strasse', 'plz', 'ort', 'land', 'email',
+              'telefon', 'service', 'ustId', 'handelsregister', 'gewerbeamt',
+              'aufsichtsbehoerde', 'verantwortlichMStV', 'stand'] as $feld) {
+        $w = $quelle[$feld] ?? null;
+        if (is_string($w) && trim($w) !== '') {
+            $raus[$feld] = mb_substr(trim($w), 0, 200, 'UTF-8');
+        }
+    }
+    if (isset($quelle['kleinunternehmer'])) {
+        $raus['kleinunternehmer'] = (bool) $quelle['kleinunternehmer'];
+    }
+    return $raus;
 }

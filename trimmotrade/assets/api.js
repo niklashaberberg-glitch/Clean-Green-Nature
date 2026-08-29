@@ -41,7 +41,11 @@
     /* Wie viele echte Inserate es gibt und ob daneben Beispiele gezeigt
        werden dürfen. Beides kommt vom Server, weil beides eine
        Entscheidung des Betriebs ist und keine des Browsers. */
-    markt: { inserate: 0, beispiele: true, bilder: false }
+    markt: { inserate: 0, beispiele: true, bilder: false },
+    /* Impressum, Datenschutz und AGB greifen darauf zu. Kommt vom
+       Server, weil es für alle gelten muss und nicht nur für den
+       Browser dessen, der es eingetragen hat. */
+    betreiber: null
   };
 
   const eigenerServer = () => location.protocol === 'http:' || location.protocol === 'https:';
@@ -138,6 +142,7 @@
           zustand.rpId = d.rpId || '';
           zustand.konto = d.konto || null;
           if (d.markt) zustand.markt = d.markt;
+          if (d.betreiber && Object.keys(d.betreiber).length) zustand.betreiber = d.betreiber;
         } else {
           /* Ein Server, der zwar da ist, aber keine Anmeldung anbietet –
              etwa weil config.php fehlt. Für die Anwendung ist das
@@ -164,6 +169,7 @@
     get verfahren() { return zustand.verfahren; },
     get konto() { return zustand.konto; },
     get markt() { return zustand.markt; },
+    get betreiber() { return zustand.betreiber; },
     marktMerken: (m) => { if (m) zustand.markt = m; },
     get grund() { return zustand.grund; },
     kann: (v) => zustand.da && zustand.verfahren.indexOf(v) >= 0,

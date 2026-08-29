@@ -17,9 +17,14 @@ angreifbar, und zwar von der ersten Stunde an.
 
 ### 1.1 Impressum vollständig ausfüllen ⚠️ **offen**
 
-In der Anwendung unter **Rechtliches → Angaben zum Anbieter**. Die
-Felder liegen dort und sind heute leer; jede Lücke erscheint im Text
-sichtbar als `[… eintragen]`.
+In **`api/config.php`**, Abschnitt `betreiber`. Nicht in der Anwendung:
+Was dort eingetragen wird, liegt im Speicher des eigenen Browsers – jeder
+andere Besucher sähe an dieser Stelle eine Lücke, und genau daran
+scheitert die Impressumspflicht.
+
+`php api/index.php pruefen` sagt, welche Pflichtangabe noch fehlt. Jede
+Lücke erscheint außerdem im Text sichtbar als `[… eintragen]` statt still
+zu verschwinden.
 
 | Feld | Warum | Grundlage |
 |---|---|---|
@@ -350,9 +355,10 @@ geht keinen davon zu Ende.
 
 ```
 Rechtlich
-  [ ] Impressum vollständig (Name, Anschrift, Mail, Telefon)
+  [ ] Impressum in api/config.php vollständig (Name, Anschrift, Mail, Telefon)
+  [ ] Impressum im Browser eines Fremden geprüft – nicht im eigenen
   [ ] Aufsichtsbehörde Datenschutz eingetragen
-  [ ] DSA-Kontaktstelle im Impressum genannt
+  [ ] DSA-Kontaktstelle eingetragen ('service')
   [ ] Gewerbe angemeldet
   [ ] § 34c GewO geklärt und schriftlich festgehalten
   [ ] AV-Vertrag mit netcup abgeschlossen

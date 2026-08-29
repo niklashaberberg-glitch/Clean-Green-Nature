@@ -6053,6 +6053,21 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       'From three rooms on this is often the fastest route: several searchers team up and apply as one household. You still decide who gets the flat.'
   });
 
+
+  /* Woher die Betreiberangaben kommen. */
+  e({
+    'Diese Angaben liegen nur in diesem Browser.': 'These details are only in this browser.',
+    'Auf einer Website reicht das nicht: Jeder andere Besucher sähe an ihrer Stelle eine Lücke, und die Impressumspflicht nach § 5 DDG wäre nicht erfüllt. Auf dem Server gehören sie in':
+      'On a website that is not enough: every other visitor would see a gap in their place, and the imprint obligation under § 5 DDG would not be met. On the server they belong in',
+    'unter': 'under',
+    'sagt, was dort noch fehlt.': 'says what is still missing there.',
+    'Diese Angaben kommen vom Server': 'These details come from the server',
+    '– aus': '– from',
+    ', Abschnitt': ', section',
+    '. Damit sehen sie alle Besucher, und genau so muss es sein. Ändern lassen sie sich nur dort; was du unten einträgst, wirkt nur in diesem Browser und wird von den Serverangaben überschrieben.':
+      '. That way every visitor sees them, which is exactly how it has to be. They can only be changed there; what you enter below applies to this browser alone and is overridden by the server’s values.'
+  });
+
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
 })(window.TT = window.TT || {});
@@ -11029,10 +11044,34 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       grund: 'Art. 13 Abs. 2 lit. d DSGVO – Hinweis auf das Beschwerderecht' }
   ];
 
+  /* Drei Quellen, in dieser Reihenfolge:
+
+       1. VORGABE – was im Quelltext steht.
+       2. der eigene Browser – was jemand in der Anwendung eingetragen
+          hat. Gilt für die Einzeldatei und für Kopien ohne Server; dort
+          ist jeder sein eigener Betreiber.
+       3. der Server – api/config.php. Gilt, sobald es ihn gibt.
+
+     Punkt 3 schlägt Punkt 2, und zwar aus einem harten Grund: Auf einer
+     Website ist der Betreiber einer, und was er einträgt, muss jeder
+     Besucher sehen. Läge das Impressum im Browser dessen, der es
+     eingetragen hat, sähen alle anderen eine Lücke – und § 5 DDG wäre
+     nicht erfüllt. */
   function angaben() {
     const eigene = (TT.store.get().betreiber) || {};
-    return Object.assign({}, VORGABE, eigene);
+    const vomServer = (TT.api && TT.api.betreiber) || null;
+    const gefuellt = {};
+    if (vomServer) {
+      Object.keys(vomServer).forEach((k) => {
+        const w = vomServer[k];
+        if (w !== '' && w !== null && w !== undefined) gefuellt[k] = w;
+      });
+    }
+    return Object.assign({}, VORGABE, eigene, gefuellt);
   }
+
+  /* Woher die Angaben kommen – für den Hinweis in der Pflegemaske. */
+  const vomServer = () => !!(TT.api && TT.api.betreiber);
 
   function fehlt(feld) {
     const a = angaben();
@@ -11137,6 +11176,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   ];
 
   TT.recht = {
+    vomServer,
     VORGABE, PFLICHT, OFFEN,
     angaben, fehlt, fehlendeAngaben, wert, anschrift, anschriftZeile,
     preisHinweis, stand
@@ -11798,7 +11838,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     /* Wie viele echte Inserate es gibt und ob daneben Beispiele gezeigt
        werden dürfen. Beides kommt vom Server, weil beides eine
        Entscheidung des Betriebs ist und keine des Browsers. */
-    markt: { inserate: 0, beispiele: true, bilder: false }
+    markt: { inserate: 0, beispiele: true, bilder: false },
+    /* Impressum, Datenschutz und AGB greifen darauf zu. Kommt vom
+       Server, weil es für alle gelten muss und nicht nur für den
+       Browser dessen, der es eingetragen hat. */
+    betreiber: null
   };
 
   const eigenerServer = () => location.protocol === 'http:' || location.protocol === 'https:';
@@ -11895,6 +11939,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           zustand.rpId = d.rpId || '';
           zustand.konto = d.konto || null;
           if (d.markt) zustand.markt = d.markt;
+          if (d.betreiber && Object.keys(d.betreiber).length) zustand.betreiber = d.betreiber;
         } else {
           /* Ein Server, der zwar da ist, aber keine Anmeldung anbietet –
              etwa weil config.php fehlt. Für die Anwendung ist das
@@ -11921,6 +11966,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     get verfahren() { return zustand.verfahren; },
     get konto() { return zustand.konto; },
     get markt() { return zustand.markt; },
+    get betreiber() { return zustand.betreiber; },
     marktMerken: (m) => { if (m) zustand.markt = m; },
     get grund() { return zustand.grund; },
     kann: (v) => zustand.da && zustand.verfahren.indexOf(v) >= 0,
@@ -24238,12 +24284,15 @@ Datum: __________________
         ${kopf('Angaben zum Anbieter',
         'Von hier speisen sich Impressum, Datenschutzerklärung, AGB und Widerrufsbelehrung – jede Angabe steht nur einmal.')}
 
-        <div class="hinweisbox">${ico('info')}
-          <div><b>Diese Angaben bleiben auf diesem Gerät</b>
-          <p>Sie liegen im Speicher dieses Browsers, wie alles andere auch. Für den echten Betrieb gehören sie
-            fest in den Quelltext – in <code>assets/recht.js</code> unter <code>VORGABE</code>. Dann stehen sie
-            für alle Aufrufe bereit und nicht nur für deinen.</p></div>
-        </div>
+        ${R.vomServer() ? h`<div class="gut-meldung">${ico('pruefen')}<span><b>Diese Angaben kommen vom
+          Server</b> – aus <code>api/config.php</code>, Abschnitt <code>betreiber</code>. Damit sehen sie
+          alle Besucher, und genau so muss es sein. Ändern lassen sie sich nur dort; was du unten einträgst,
+          wirkt nur in diesem Browser und wird von den Serverangaben überschrieben.</span></div>`
+        : h`<div class="warn-meldung">${ico('warnung')}<span><b>Diese Angaben liegen nur in diesem
+          Browser.</b> Auf einer Website reicht das nicht: Jeder andere Besucher sähe an ihrer Stelle eine
+          Lücke, und die Impressumspflicht nach § 5 DDG wäre nicht erfüllt. Auf dem Server gehören sie in
+          <code>api/config.php</code> unter <code>betreiber</code>. <code>php api/index.php pruefen</code>
+          sagt, was dort noch fehlt.</span></div>`}
 
         <form class="block" data-tu-submit="betreiber-speichern">
           <h2>${ico('stift')}Angaben</h2>

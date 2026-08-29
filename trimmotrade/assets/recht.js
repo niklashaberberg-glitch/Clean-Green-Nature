@@ -63,10 +63,34 @@
       grund: 'Art. 13 Abs. 2 lit. d DSGVO – Hinweis auf das Beschwerderecht' }
   ];
 
+  /* Drei Quellen, in dieser Reihenfolge:
+
+       1. VORGABE – was im Quelltext steht.
+       2. der eigene Browser – was jemand in der Anwendung eingetragen
+          hat. Gilt für die Einzeldatei und für Kopien ohne Server; dort
+          ist jeder sein eigener Betreiber.
+       3. der Server – api/config.php. Gilt, sobald es ihn gibt.
+
+     Punkt 3 schlägt Punkt 2, und zwar aus einem harten Grund: Auf einer
+     Website ist der Betreiber einer, und was er einträgt, muss jeder
+     Besucher sehen. Läge das Impressum im Browser dessen, der es
+     eingetragen hat, sähen alle anderen eine Lücke – und § 5 DDG wäre
+     nicht erfüllt. */
   function angaben() {
     const eigene = (TT.store.get().betreiber) || {};
-    return Object.assign({}, VORGABE, eigene);
+    const vomServer = (TT.api && TT.api.betreiber) || null;
+    const gefuellt = {};
+    if (vomServer) {
+      Object.keys(vomServer).forEach((k) => {
+        const w = vomServer[k];
+        if (w !== '' && w !== null && w !== undefined) gefuellt[k] = w;
+      });
+    }
+    return Object.assign({}, VORGABE, eigene, gefuellt);
   }
+
+  /* Woher die Angaben kommen – für den Hinweis in der Pflegemaske. */
+  const vomServer = () => !!(TT.api && TT.api.betreiber);
 
   function fehlt(feld) {
     const a = angaben();
@@ -171,6 +195,7 @@
   ];
 
   TT.recht = {
+    vomServer,
     VORGABE, PFLICHT, OFFEN,
     angaben, fehlt, fehlendeAngaben, wert, anschrift, anschriftZeile,
     preisHinweis, stand

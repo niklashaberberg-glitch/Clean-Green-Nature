@@ -112,6 +112,46 @@ return [
     'gruppe'         => ['kennung' => [30, 1440], 'ip' => [60, 1440]],
   ],
 
+  /* --- Wer diese Seite betreibt ---------------------------------------
+     Impressum, Datenschutzerklärung und AGB greifen ausschließlich auf
+     diese Werte zu. Sie gehören hierher und nicht in die Oberfläche:
+
+     Was jemand in der Anwendung einträgt, liegt im Speicher **seines**
+     Browsers. Für eine Einzeldatei auf einem Stick ist das richtig – da
+     ist jeder sein eigener Betreiber. Auf einer Website ist es falsch:
+     Dann sähe jeder Besucher „[Straße eintragen]“, egal was der
+     Betreiber bei sich eingetragen hat. Die Impressumspflicht nach
+     § 5 DDG wäre nicht erfüllt, und das ist der am häufigsten
+     abgemahnte Fehler im deutschen Internet.
+
+     Was hier steht, gilt für alle. Leere Felder erscheinen in den Texten
+     sichtbar als Lücke – nicht still verschwunden.
+
+     `php api/index.php pruefen` sagt, was noch fehlt. */
+  'betreiber' => [
+    'name'       => '',        // Pflicht: § 5 Abs. 1 Nr. 1 DDG
+    'rechtsform' => 'Einzelunternehmen (Kleingewerbe)',
+    'zusatz'     => '',        // Geschäftsbezeichnung, etwa „TrimmoTrade“
+    'strasse'    => '',        // Pflicht: ladungsfähige Anschrift, kein Postfach
+    'plz'        => '',        // Pflicht
+    'ort'        => '',        // Pflicht
+    'land'       => 'Deutschland',
+    'email'      => '',        // Pflicht: § 5 Abs. 1 Nr. 2 DDG
+    'telefon'    => '',        // Pflicht: oder ein ebenso schnelles Mittel
+    /* Postfach für Anfragen. Getrennt von der Impressumsadresse: Die
+       eine ist Pflichtangabe, die andere ein Arbeitsweg – wer beides
+       vermischt, kann später keine davon ändern. Diese Adresse ist
+       zugleich die Kontaktstelle nach Art. 11 und 12 DSA. */
+    'service'    => 'info@trimmotrade.de',
+    'ustId'            => '',  // § 27a UStG – bei Kleinunternehmern meist keine
+    'kleinunternehmer' => true, // § 19 UStG: kein Ausweis von Umsatzsteuer
+    'handelsregister'  => '',  // Kleingewerbe: keins
+    'gewerbeamt'       => '',  // zuständige Stelle der Gewerbeanmeldung
+    'aufsichtsbehoerde' => '', // Datenschutz: Aufsichtsbehörde am Sitz
+    'verantwortlichMStV' => '', // § 18 Abs. 2 MStV – Name und Anschrift
+    'stand'      => '2026-08-26',
+  ],
+
   /* --- Der Markt ------------------------------------------------------
      Solange noch keine echten Inserate da sind, zeigt die Anwendung
      einen Beispielmarkt – erkennbar gekennzeichnet, mit einem Hinweis

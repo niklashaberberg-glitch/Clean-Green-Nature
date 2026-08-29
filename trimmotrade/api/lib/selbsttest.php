@@ -51,6 +51,7 @@ final class Selbsttest
     {
         $this->php();
         $this->einstellungen();
+        $this->impressum();
         $this->datenbank();
         $this->dateien();
         $this->post();
@@ -106,6 +107,48 @@ final class Selbsttest
                 'Dann stehen interne Fehlermeldungen in den Antworten. Im Betrieb gehört dort false hin.');
         } else {
             $this->gut('entwicklung steht auf false');
+        }
+    }
+
+    /* Das konnte diese Prüfung früher nicht: Die Angaben lagen im
+       Browser des Betreibers und waren dem Server unbekannt. Jetzt
+       stehen sie in der Konfiguration – und damit lässt sich sagen, ob
+       das Impressum vollständig ist. */
+    private function impressum(): void
+    {
+        $b = is_array($this->cfg['betreiber'] ?? null) ? $this->cfg['betreiber'] : [];
+        $pflicht = [
+            'name' => 'Name des Anbieters (§ 5 Abs. 1 Nr. 1 DDG)',
+            'strasse' => 'Straße und Hausnummer – ladungsfähig, kein Postfach',
+            'plz' => 'Postleitzahl',
+            'ort' => 'Ort',
+            'email' => 'E-Mail-Adresse (§ 5 Abs. 1 Nr. 2 DDG)',
+            'telefon' => 'Telefonnummer (§ 5 Abs. 1 Nr. 2 DDG)',
+        ];
+        $fehlen = [];
+        foreach ($pflicht as $feld => $was) {
+            if (trim((string) ($b[$feld] ?? '')) === '') {
+                $fehlen[] = $was;
+            }
+        }
+        if ($fehlen) {
+            $this->fehlt(count($fehlen) . ' Pflichtangaben im Impressum fehlen',
+                implode(' · ', $fehlen) . ' — einzutragen unter \'betreiber\' in api/config.php. '
+                . 'Ein unvollständiges Impressum ist der am häufigsten abgemahnte Fehler im '
+                . 'deutschen Internet.');
+        } else {
+            $this->gut('Impressum vollständig', trim((string) ($b['name'] ?? '')) . ', '
+                . trim((string) ($b['ort'] ?? '')));
+        }
+
+        if (trim((string) ($b['aufsichtsbehoerde'] ?? '')) === '') {
+            $this->hinweis('Datenschutz-Aufsichtsbehörde nicht eingetragen',
+                'Art. 13 Abs. 2 lit. d DSGVO – der Hinweis auf das Beschwerderecht gehört in die '
+                . 'Datenschutzerklärung.');
+        }
+        if (trim((string) ($b['service'] ?? '')) === '') {
+            $this->hinweis('Keine Kontaktstelle eingetragen',
+                'Art. 11 und 12 DSA verlangen eine benannte Stelle für Behörden und Nutzende.');
         }
     }
 
@@ -313,9 +356,6 @@ final class Selbsttest
         } else {
             $raus .= $this->schlimm . ' zu beheben, ' . $this->warn . " zum Ansehen.\n";
         }
-        $raus .= "\nWas diese Prüfung nicht sehen kann: ob das Impressum vollständig ist.\n"
-            . "Die Angaben stehen im Browser des Betreibers, nicht auf dem Server.\n"
-            . "Nachsehen unter Rechtliches → Angaben zum Anbieter.\n";
         return $raus;
     }
 

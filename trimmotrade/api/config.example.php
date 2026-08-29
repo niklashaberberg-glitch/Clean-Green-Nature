@@ -129,20 +129,25 @@ return [
 
      `php api/index.php pruefen` sagt, was noch fehlt. */
   'betreiber' => [
-    'name'       => '',        // Pflicht: § 5 Abs. 1 Nr. 1 DDG
+    'name'       => 'Niklas Haberberg',   // Pflicht: § 5 Abs. 1 Nr. 1 DDG
     'rechtsform' => 'Einzelunternehmen (Kleingewerbe)',
-    'zusatz'     => '',        // Geschäftsbezeichnung, etwa „TrimmoTrade“
-    'strasse'    => '',        // Pflicht: ladungsfähige Anschrift, kein Postfach
-    'plz'        => '',        // Pflicht
-    'ort'        => '',        // Pflicht
+    'zusatz'     => 'TrimmoTrade',       // Geschäftsbezeichnung
+    'strasse'    => 'Plankgasse 34',     // Pflicht: ladungsfähige Anschrift, kein Postfach
+    'plz'        => '50668',
+    'ort'        => 'Köln',
     'land'       => 'Deutschland',
-    'email'      => '',        // Pflicht: § 5 Abs. 1 Nr. 2 DDG
-    'telefon'    => '',        // Pflicht: oder ein ebenso schnelles Mittel
+    'email'      => 'info@trimmotrade.de',   // Pflicht: § 5 Abs. 1 Nr. 2 DDG
+    /* Noch einzutragen. § 5 Abs. 1 Nr. 2 DDG verlangt eine Angabe, die
+       eine „unmittelbare Kommunikation“ erlaubt; die Rechtsprechung
+       lässt dafür in der Regel die Telefonnummer verlangen. Ein
+       Kontaktformular allein genügt nach der Rechtsprechung nicht
+       zuverlässig. */
+    'telefon'    => '',
     /* Postfach für Anfragen. Getrennt von der Impressumsadresse: Die
        eine ist Pflichtangabe, die andere ein Arbeitsweg – wer beides
        vermischt, kann später keine davon ändern. Diese Adresse ist
        zugleich die Kontaktstelle nach Art. 11 und 12 DSA. */
-    'service'    => 'info@trimmotrade.de',
+    'service'    => 'service@trimmotrade.de',
     'ustId'            => '',  // § 27a UStG – bei Kleinunternehmern meist keine
     'kleinunternehmer' => true, // § 19 UStG: kein Ausweis von Umsatzsteuer
     'handelsregister'  => '',  // Kleingewerbe: keins

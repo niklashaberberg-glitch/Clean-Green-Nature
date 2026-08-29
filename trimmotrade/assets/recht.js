@@ -24,17 +24,22 @@
   const VORGABE = {
     name: 'Niklas Haberberg',
     rechtsform: 'Einzelunternehmen (Kleingewerbe)',
-    zusatz: '',                 /* etwa „TrimmoTrade“ als Geschäftsbezeichnung */
-    strasse: '',
-    plz: '',
-    ort: '',
+    zusatz: 'TrimmoTrade',
+    strasse: 'Plankgasse 34',
+    plz: '50668',
+    ort: 'Köln',
     land: 'Deutschland',
-    email: '',
+    email: 'info@trimmotrade.de',
+    /* Fehlt noch. § 5 Abs. 1 Nr. 2 DDG verlangt neben der Adresse eine
+       Angabe, die unmittelbare Kommunikation erlaubt – nach der
+       Rechtsprechung in aller Regel die Telefonnummer. Solange sie
+       leer ist, erscheint an ihrer Stelle im Text eine sichtbare Lücke
+       statt einer stillen Auslassung. */
     telefon: '',
     /* Postfach des Service-Teams. Getrennt von der Impressumsadresse:
        Die eine ist Pflichtangabe, die andere ein Arbeitsweg – und wer
        beides vermischt, kann später keine davon ändern. */
-    service: 'info@trimmotrade.de',
+    service: 'service@trimmotrade.de',
     ustId: '',                  /* § 27a UStG – bei Kleinunternehmern meist keine */
     kleinunternehmer: true,     /* § 19 UStG: kein Ausweis von Umsatzsteuer */
     handelsregister: '',        /* Kleingewerbe: keins */
@@ -153,7 +158,8 @@
     },
     {
       titel: 'Domain und Postfach müssen dir gehören',
-      text: 'Die Hilfe leitet Anfragen an info@trimmotrade.de weiter. Bevor das erste Mal jemand darauf antwortet, '
+      text: 'Die Hilfe leitet Anfragen an das Servicepostfach weiter (service@trimmotrade.de), das '
+        + 'Impressum nennt die Geschäftsadresse (info@trimmotrade.de). Bevor das erste Mal jemand darauf antwortet, '
         + 'muss die Domain registriert und das Postfach eingerichtet sein – und jemand muss es lesen. Ein '
         + 'Kontaktweg, der ins Leere geht, ist schlimmer als keiner: Nach § 5 DDG muss die Kontaktaufnahme '
         + 'tatsächlich möglich sein, und wer binnen weniger Tage nicht antwortet, verliert mehr als eine '

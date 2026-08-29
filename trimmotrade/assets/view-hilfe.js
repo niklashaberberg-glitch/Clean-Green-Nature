@@ -416,7 +416,7 @@
     const w = formularWerte();
     const text = vorschauZeigen();
     const a = R.angaben();
-    const ziel = a.service || 'info@trimmotrade.de';
+    const ziel = a.service || 'service@trimmotrade.de';
     const betreff = 'Support-Anfrage ' + vorgang;
     const kurz = text.length > MAX_MAILTO
       ? text.slice(0, MAX_MAILTO) + '\n\n[gekürzt – die vollständige Fassung liegt in der Zwischenablage]'

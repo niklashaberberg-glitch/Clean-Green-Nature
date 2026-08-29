@@ -3431,6 +3431,39 @@
     '„Steht noch“ verlängert es um 60 Tage': '“Still available” extends it by 60 days'
   });
 
+
+  /* Was einem eigenen Inserat noch fehlt. */
+  e({
+    'Eine Sache würde dieses Inserat besser machen': 'One thing would make this listing better',
+    '{0} Dinge würden dieses Inserat besser machen': '{0} things would make this listing better',
+    'Dein Inserat ist vollständig. Mehr lässt sich hier nicht verbessern.':
+      'Your listing is complete. There is nothing more to improve here.',
+    'Inserat ändern': 'Edit listing',
+    'Nur du siehst diese Liste. Sie beruht darauf, was Suchende erfahrungsgemäß anklicken und beantworten – nicht auf einer Bewertung deiner Wohnung.':
+      'Only you see this list. It is based on what searchers tend to click and answer – not on any rating of your flat.',
+    'Kein Foto': 'No photo',
+    'Inserate ohne Bild werden selten geöffnet. Ein einziges Foto vom hellsten Raum reicht für den Anfang.':
+      'Listings without a picture are rarely opened. A single photo of the brightest room is enough to start with.',
+    'Nur {0} Fotos': 'Only {0} photos',
+    'Wohnbereich, Küche, Bad – drei Bilder beantworten die meisten Rückfragen von selbst.':
+      'Living area, kitchen, bathroom – three pictures answer most questions by themselves.',
+    'Sehr kurze Beschreibung': 'Very short description',
+    'Wer wenig schreibt, bekommt Rückfragen statt Bewerbungen. Lage, Zuschnitt, Nachbarschaft, ab wann – vier Sätze genügen.':
+      'Write little and you get questions instead of applications. Location, layout, neighbourhood, from when – four sentences are enough.',
+    'Keine Ausstattung angegeben': 'No features listed',
+    'Balkon, Einbauküche, Keller, Aufzug: Danach wird gefiltert. Was nicht angehakt ist, taucht in diesen Suchen nicht auf.':
+      'Balcony, fitted kitchen, cellar, lift: people filter by these. What is not ticked does not appear in those searches.',
+    'Keine Nebenkosten': 'No service charges',
+    'Ohne sie lässt sich die Warmmiete nicht rechnen – und danach sucht fast jeder.':
+      'Without them the total rent cannot be calculated – and that is what almost everybody searches by.',
+    'Der Einzugstermin liegt in der Vergangenheit': 'The move-in date is in the past',
+    'Das wirkt wie ein vergessenes Inserat. Ein aktuelles Datum hilft.':
+      'That looks like a forgotten listing. A current date helps.',
+    'Nicht für eine WG-Gründung freigegeben': 'Not released for founding a flatshare',
+    'Ab drei Zimmern ist das oft der schnellste Weg: Mehrere Suchende tun sich zusammen und bewerben sich als ein Haushalt. Du entscheidest weiterhin, wer die Wohnung bekommt.':
+      'From three rooms on this is often the fastest route: several searchers team up and apply as one household. You still decide who gets the flat.'
+  });
+
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
 })(window.TT = window.TT || {});

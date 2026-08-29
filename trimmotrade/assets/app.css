@@ -2422,3 +2422,24 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
    auch über dem Titel. Wer nicht weiß, dass sein Inserat gesperrt ist,
    sucht den Fehler wochenlang bei sich. */
 .objekt__zustand { margin: 0 0 14px; }
+
+/* Was einem Inserat noch fehlt. Zugeklappt, solange es Kleinigkeiten
+   sind; offen, sobald etwas dabei ist, das wirklich Anfragen kostet.
+   Der Ton ist der eines Hinweises, nicht der einer Rüge – es ist das
+   Inserat eines Menschen, der es freiwillig hier eingestellt hat. */
+.qualitaet {
+  margin: 0 0 14px; padding: .7em .9em;
+  border: 1px solid var(--rand); border-radius: var(--r-klein);
+  background: var(--flaeche2);
+}
+.qualitaet.is-wichtig {
+  background: var(--warn-hell); color: var(--warn);
+  border-color: color-mix(in srgb, var(--warn) 35%, transparent);
+}
+.qualitaet > summary {
+  display: flex; align-items: center; gap: .5em;
+  cursor: pointer; font-size: .92rem; font-weight: 550;
+}
+.qualitaet > summary::-webkit-details-marker { display: none; }
+.qualitaet .pruef { margin: .7em 0 0; }
+.qualitaet.is-wichtig a { color: inherit; }

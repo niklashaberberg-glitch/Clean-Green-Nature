@@ -657,6 +657,7 @@
         </nav>
 
         ${zustandsHinweis(l)}
+        ${qualitaetsHinweis(l)}
 
         <div class="objekt__kopf">
           <div class="objekt__titel">
@@ -1063,6 +1064,79 @@
         und nichts, wonach niemand fragen darf: keine Herkunft, keine Religion, keine Gesundheit,
         keine Familienplanung (Art. 9 DSGVO, § 19 AGG).</p>
     </fieldset>`;
+  }
+
+  /* ------------------------------------------------------------------
+     Was einem Inserat noch fehlt
+
+     Das ist der wirksamste Hebel, den ein Portal auf seiner eigenen
+     Seite hat: Nicht die Zahl der Inserate entscheidet darüber, ob eine
+     Wohnung vermietet wird, sondern ob jemand auf sie klickt und
+     schreibt. Ein Inserat ohne Foto wird kaum geöffnet; eines mit drei
+     Zeilen Text bekommt Rückfragen statt Bewerbungen.
+
+     Deshalb steht die Liste am eigenen Inserat und nicht im Formular:
+     Im Formular ist sie eine Hürde vor dem Veröffentlichen, hier ist
+     sie ein Angebot danach. Wer nichts ändern will, ändert nichts – das
+     Inserat steht trotzdem.
+     ------------------------------------------------------------------ */
+  function fehlendes(l) {
+    const fehlt = [];
+    /* Jeder Text geht einzeln durchs Wörterbuch: Er kommt als Wert in
+       die Vorlage und nicht als Teil von ihr – zusammengesetzt fände
+       ihn dort niemand wieder. */
+    const t = U.t;
+    if (!l.bilder || !l.bilder.length) {
+      fehlt.push({ was: t('Kein Foto'), schwer: true,
+        warum: t('Inserate ohne Bild werden selten geöffnet. Ein einziges Foto vom hellsten Raum reicht für den Anfang.') });
+    } else if (l.bilder.length < 3) {
+      fehlt.push({ was: t('Nur {0} Fotos').replace('{0}', l.bilder.length),
+        warum: t('Wohnbereich, Küche, Bad – drei Bilder beantworten die meisten Rückfragen von selbst.') });
+    }
+    const b = String(l.beschreibung || '');
+    if (b.length < 180) {
+      fehlt.push({ was: t('Sehr kurze Beschreibung'), schwer: b.length < 80,
+        warum: t('Wer wenig schreibt, bekommt Rückfragen statt Bewerbungen. Lage, Zuschnitt, Nachbarschaft, ab wann – vier Sätze genügen.') });
+    }
+    if (!l.ausstattung || !l.ausstattung.length) {
+      fehlt.push({ was: t('Keine Ausstattung angegeben'),
+        warum: t('Balkon, Einbauküche, Keller, Aufzug: Danach wird gefiltert. Was nicht angehakt ist, taucht in diesen Suchen nicht auf.') });
+    }
+    if (l.kind !== 'kauf' && !l.nebenkosten) {
+      fehlt.push({ was: t('Keine Nebenkosten'), schwer: true,
+        warum: t('Ohne sie lässt sich die Warmmiete nicht rechnen – und danach sucht fast jeder.') });
+    }
+    if (l.freiAb && U.daysUntil(l.freiAb) < -30) {
+      fehlt.push({ was: t('Der Einzugstermin liegt in der Vergangenheit'),
+        warum: t('Das wirkt wie ein vergessenes Inserat. Ein aktuelles Datum hilft.') });
+    }
+    if (l.kind === 'miete' && l.zimmer >= 3 && !l.wgGruendungMoeglich) {
+      fehlt.push({ was: t('Nicht für eine WG-Gründung freigegeben'),
+        warum: t('Ab drei Zimmern ist das oft der schnellste Weg: Mehrere Suchende tun sich zusammen und bewerben sich als ein Haushalt. Du entscheidest weiterhin, wer die Wohnung bekommt.') });
+    }
+    return fehlt;
+  }
+
+  function qualitaetsHinweis(l) {
+    if (!l.echt || !l.eigen || l.stand === 'gesperrt') return '';
+    const fehlt = fehlendes(l);
+    if (!fehlt.length) {
+      return h`<div class="gut-meldung objekt__zustand">${ico('pruefen')}<span>Dein Inserat ist
+        vollständig. Mehr lässt sich hier nicht verbessern.</span></div>`;
+    }
+    const schwer = fehlt.filter((f) => f.schwer).length;
+    return h`<details class="qualitaet ${schwer ? 'is-wichtig' : ''}" ${schwer ? 'open' : ''}>
+      <summary>${ico(schwer ? 'warnung' : 'info')}<span>${fehlt.length === 1
+        ? U.t('Eine Sache würde dieses Inserat besser machen')
+        : U.t('{0} Dinge würden dieses Inserat besser machen').replace('{0}', fehlt.length)}</span></summary>
+      <ul class="pruef">
+        ${fehlt.map((f) => h`<li><span><b>${f.was}.</b> ${f.warum}</span></li>`)}
+      </ul>
+      <p class="werkzeug__weiter">
+        <a class="knopf knopf--klein" href="#/inserieren?bearbeiten=${l.id}">${ico('stift')}Inserat ändern</a></p>
+      <p class="fein">Nur du siehst diese Liste. Sie beruht darauf, was Suchende erfahrungsgemäß
+        anklicken und beantworten – nicht auf einer Bewertung deiner Wohnung.</p>
+    </details>`;
   }
 
   /* ------------------------------------------------------------------

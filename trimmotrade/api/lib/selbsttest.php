@@ -263,11 +263,12 @@ final class Selbsttest
             $this->hinweis('Der Beispielmarkt läuft neben ' . $echte . ' echten Inseraten',
                 "In api/config.php gehört jetzt 'beispielmarkt' => false.");
         } elseif ($echte < 20 && !$beispiele) {
-            $this->hinweis('Beispielmarkt aus, aber nur ' . $echte . ' echte Inserate',
+            $this->hinweis('Beispielmarkt aus, aber nur ' . $echte
+                . ($echte === 1 ? ' echtes Inserat' : ' echte Inserate'),
                 'Eine fast leere Suche überzeugt niemanden.');
         } else {
-            $this->gut('Bestand', $echte . ' echte Inserate · Beispiele '
-                . ($beispiele ? 'an' : 'aus'));
+            $this->gut('Bestand', $echte . ($echte === 1 ? ' echtes Inserat' : ' echte Inserate')
+                . ' · Beispiele ' . ($beispiele ? 'an' : 'aus'));
         }
 
         $abgelaufen = (int) Db::wert("SELECT COUNT(*) FROM tt_inserat WHERE stand = 'aktiv' AND laeuft_ab < ?",

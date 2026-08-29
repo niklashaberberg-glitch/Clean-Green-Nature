@@ -88,10 +88,9 @@
     /* Datei sichern, wenn der Browser nichts ablegen darf */
     'In dieser Umgebung darf die Seite keine Datei ablegen. Der vollständige Inhalt steht hier zum Kopieren – speichere ihn als':
       'This environment does not let the page save a file. The full content is here to copy – save it as',
-    '{0}Kopieren': '{0}Copy',
-
+    'Kopieren': 'Copy',
     /* Gründerjahr */
-    'Dein Gründerjahr endet {1}': 'Your founder year ends {1}',
+    'Dein Gründerjahr endet': 'Your founder year ends',
     ', am {2}. Danach läuft nichts weiter und es wird nichts abgebucht – der freie Tarif steht dir offen, Plus nur, wenn du dich aktiv dafür entscheidest.':
       ', on {2}. Nothing continues after that and nothing is charged – the free plan stays open to you, and Plus only if you actively choose it.',
     'Tarife ansehen': 'See plans',
@@ -112,8 +111,7 @@
     'Keine bessere Platzierung, keinen Vorrang bei Vermietern und keinen Frühzugang zu Inseraten. Alle sehen jedes Inserat in derselben Sekunde.':
       'No better placement, no priority with landlords and no early access to listings. Everyone sees every listing in the same second.',
     'Alle Unterschiede ansehen': 'See all differences',
-    '{0}Plus in dieser Vorführung aktivieren': '{0}Activate Plus in this demo',
-
+    'Plus in dieser Vorführung aktivieren': 'Activate Plus in this demo',
     /* Bezahlte Plätze */
     'Diese Inserate stehen dort, weil die anbietende Seite für den Platz bezahlt hat. TrimmoTrade zeigt bezahlte Plätze':
       'These listings appear there because the advertiser paid for the placement. TrimmoTrade shows paid placements',
@@ -157,29 +155,28 @@
     /* Meine Daten */
     'TrimmoTrade speichert alles ausschließlich im Speicher dieses Browsers. Es gibt keinen Server, kein Konto und keine Übertragung an Dritte.':
       'TrimmoTrade stores everything solely in this browser’s storage. There is no server, no account and no transfer to third parties.',
-    '{0} Merkungen': '{0} saved items',
+    'Merkungen': 'saved items',
     '{1} Suchaufträge': '{1} saved searches',
-    '{2} Nachrichtenverläufe': '{2} message threads',
-    '{3} eigene Inserate': '{3} of your own listings',
+    'Nachrichtenverläufe': 'message threads',
+    'eigene Inserate': 'of your own listings',
     'Belegter Speicher: rund {4} kB': 'Storage used: about {4} kB',
     'Beim Leeren der Browserdaten verschwindet auch dieser Stand.':
       'Clearing your browser data also removes this state.',
-    '{0}Als Datei sichern': '{0}Save as a file',
-    '{1}Alles zurücksetzen': '{1}Reset everything'
+    'Als Datei sichern': 'Save as a file',
+    'Alles zurücksetzen': 'Reset everything'
   });
 
   /* ------------------------- Startseite ------------------------- */
 
   e({
-    '{0}Deine Bewerbungen': '{0}Your applications',
+    'Deine Bewerbungen': 'Your applications',
     'alle ansehen': 'see all',
     'Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil, eine Bewerbermappe.':
       'Rentals, property to buy, flatshare rooms and apartment swaps – one search, one profile, one application folder.',
     'Stadt, Viertel oder Stichwort suchen': 'Search city, neighbourhood or keyword',
-    '{7}Neu und passend': '{7}New and matching',
+    'Neu und passend': 'New and matching',
     'zur vollen Suche': 'to the full search',
-    '{9}Was TrimmoTrade anders macht': '{9}What TrimmoTrade does differently',
-
+    'Was TrimmoTrade anders macht': 'What TrimmoTrade does differently',
     'Ringtausch statt Sackgasse': 'Swap chains instead of dead ends',
     'Der direkte Wohnungstausch scheitert am doppelten Zufall. TrimmoTrade sucht Ketten über mehrere Haushalte – gerade sind {11} Dreierketten offen.':
       'A direct apartment swap fails on a double coincidence. TrimmoTrade looks for chains across several households – {11} three-way chains are open right now.',
@@ -214,7 +211,6 @@
     'Übergabeprotokoll, Umzugsplan und die Prüfung der Nebenkostenabrechnung – die Werkzeuge hören nicht auf, wenn der Vertrag unterschrieben ist.':
       'Handover report, moving plan and a check of the service-charge statement – the tools do not stop once the contract is signed.',
 
-    '{19}Werkzeuge': '{19}Tools',
     'Rechnen und prüfen – von der ersten Frage „was kann ich mir leisten“ bis zur Nebenkostenabrechnung zwei Jahre später.':
       'Calculate and check – from the first question, “what can I afford”, to the service-charge statement two years later.'
   });
@@ -232,7 +228,6 @@
     'Nur Liste': 'List only',
     'Liste und Karte': 'List and map',
     'Nur Karte': 'Map only',
-    '{12}Filter': '{12}Filters',
     'Filter': 'Filters',
     'Suchergebnisse': 'Search results',
     'Zuschnitt': 'Layout',
@@ -242,21 +237,20 @@
     'Einzug': 'Move-in',
     'frei spätestens am': 'available no later than',
     'Nur zeigen, wenn': 'Only show if',
-    '{21}Als Suchauftrag merken': '{21}Save as a search',
+    'Als Suchauftrag merken': 'Save as a search',
     'neu in 7 Tagen': 'new in 7 days',
     'Keine Treffer': 'No results',
     '&nbsp;Treffer zeigen': '&nbsp;show results',
     'TrimmoTrade merkt sich diese Filter und zeigt dir beim nächsten Besuch, was seither neu hinzugekommen ist.':
       'TrimmoTrade remembers these filters and shows you what has been added since, next time you visit.',
-    '{1} Objekte passen aktuell.': '{1} listings match right now.',
-    '{0}Anlegen': '{0}Create',
-
+    'Objekte passen aktuell.': 'listings match right now.',
+    'Anlegen': 'Create',
     'Bezahlte Platzierungen': 'Paid placements',
-    '{0}Top-Anzeigen': '{0}Top ads',
+    'Top-Anzeigen': 'Top ads',
     'Warum steht das hier?': 'Why is this here?',
     'Bezahlte Platzierung der anbietenden Seite. Sie ändert nichts an der Reihenfolge darunter – die folgt weiter deinem Profil.':
       'A paid placement by the advertiser. It changes nothing about the order below – that still follows your profile.',
-    '{0}Warum steht „{1}“ ganz oben?': '{0}Why is “{1}” at the top?',
+    'Warum steht „{1}“ ganz oben?': 'Why is “{1}” at the top?',
     'TrimmoTrade sortiert nach deinem Profil, nicht nach bezahlter Platzierung. Für dieses Inserat zählen vor allem {2}. Insgesamt ergibt das {3} von 100 Punkten.':
       'TrimmoTrade sorts by your profile, not by paid placement. For this listing what counts most is {2}. Altogether that comes to {3} out of 100 points.',
     'Bezahlte Plätze gibt es getrennt davon: Sie stehen über der Liste, tragen die Überschrift „Top-Anzeigen“ und verschieben in der Liste darunter nichts.':
@@ -268,36 +262,34 @@
   /* ------------------------- Ringtausch ------------------------- */
 
   e({
-    '{0}Ringtausch': '{0}Swap chains',
     'Beim direkten Tausch müssen zwei Menschen exakt das Gegenteil voneinander wollen – das passiert fast nie. In einer Kette reicht es, wenn jeder die Wohnung des Nächsten möchte. TrimmoTrade durchsucht alle Angebote nach solchen geschlossenen Ketten.':
       'A direct swap needs two people to want exactly the opposite of each other – which almost never happens. In a chain it is enough that each person wants the next one’s apartment. TrimmoTrade searches every offer for such closed chains.',
-    '{1}In vier Bildern erklärt': '{1}Explained in four pictures',
-    '{3} {4} gefunden': '{3} {4} found',
-    '{5} direkt · {6} Dreier · {7} Vierer': '{5} direct · {6} three-way · {7} four-way',
+    'In vier Bildern erklärt': 'Explained in four pictures',
+    'gefunden': 'found',
+    'direkt · {6} Dreier · {7} Vierer': 'direct · {6} three-way · {7} four-way',
     'nur Ketten mit meinem Angebot': 'only chains including my offer',
     'höchstens': 'at most',
     'Güte ab {10} %': 'quality from {10} %',
     'Güte': 'Quality',
     'schwächstes Glied: {6} %': 'weakest link: {6} %',
-    '{7} von {8} Vermieterzustimmungen liegen vor': '{7} of {8} landlord approvals are in',
-    '{10}Kette anstoßen': '{10}Start the chain',
+    'von {8} Vermieterzustimmungen liegen vor': 'of {8} landlord approvals are in',
+    'Kette anstoßen': 'Start the chain',
     'direkte Tausche': 'direct swaps',
     'Ketten insgesamt': 'chains in total',
     'würden deine Wohnung nehmen': 'would take your apartment',
     'Wohnungen passen dir': 'apartments suit you',
 
-    '{0}Dein Tauschangebot fehlt noch': '{0}Your swap offer is still missing',
+    'Dein Tauschangebot fehlt noch': 'Your swap offer is still missing',
     'Ohne eigene Wohnung im Topf kann TrimmoTrade dich in keine Kette einbauen. Das Anlegen dauert zwei Minuten.':
       'Without your own apartment in the pool, TrimmoTrade cannot fit you into any chain. Adding it takes two minutes.',
-    '{1}Angebot anlegen': '{1}Create an offer',
-    '{0}Dein Angebot': '{0}Your offer',
-    '{1} Zi. · {2} m² · {3} warm': '{1} rooms · {2} m² · {3} incl. bills',
-    'gesucht: {6}': 'looking for: {6}',
-    'ab {7} Zi., {8} m², bis {9}': 'from {7} rooms, {8} m², up to {9}',
-    '{10}Ändern': '{10}Edit',
-    '{11}Entfernen': '{11}Remove',
-
-    '{14}Wie ein Tausch praktisch abläuft': '{14}How a swap works in practice',
+    'Angebot anlegen': 'Create an offer',
+    'Dein Angebot': 'Your offer',
+    'Zi. · {2} m² · {3} warm': 'rooms · {2} m² · {3} incl. bills',
+    'gesucht:': 'looking for:',
+    'ab {7} Zi., {8} m², bis': 'from {7} rooms, {8} m², up to',
+    'Ändern': 'Edit',
+    'Entfernen': 'Remove',
+    'Wie ein Tausch praktisch abläuft': 'How a swap works in practice',
     'Kette bestätigen': 'Confirm the chain',
     'Alle Beteiligten sagen zu. Ein Wackelkandidat reißt die ganze Kette.':
       'Everyone involved says yes. One waverer breaks the whole chain.',
@@ -315,29 +307,28 @@
       'Meter readings, defects, number of keys – each apartment separately.',
     'Ein Anspruch auf Zustimmung besteht nicht. Manche Vermieter verlangen dieselben Unterlagen wie bei jeder Neuvermietung – die Bewerbermappe im Profil hilft auch hier.':
       'There is no legal right to approval. Some landlords ask for the same documents as for any new letting – the application folder in your profile helps here too.',
-    '{15}Das Ganze als Bild': '{15}The whole thing as a picture',
-    '{16}Alle Tauschangebote': '{16}All swap offers',
+    'Das Ganze als Bild': 'The whole thing as a picture',
+    'Alle Tauschangebote': 'All swap offers',
     'Alle in der Suche ansehen': 'See them all in the search',
     'TrimmoTrade hat eine Nachricht vorbereitet, die an alle Beteiligten geht. In dieser Vorführung wird nichts wirklich verschickt – kopier den Text und nutze ihn, wie du magst.':
       'TrimmoTrade has prepared a message to go to everyone involved. Nothing is actually sent in this demo – copy the text and use it however you like.',
-    '{2}Zurück': '{2}Back',
-    'Schritt {3} von {4}': 'Step {3} of {4}'
+    'Zurück': 'Back',
+    'Schritt {3} von': 'Step {3} of'
   });
 
   /* ------------------------- Marktdaten ------------------------- */
 
   e({
-    '{0}Marktdaten und Preisverlauf': '{0}Market data and price history',
+    'Marktdaten und Preisverlauf': 'Market data and price history',
     'Wie sich die Mieten je Viertel über drei Jahre entwickelt haben – und welche Viertel gerade am schnellsten teurer werden.':
       'How rents per neighbourhood have moved over three years – and which neighbourhoods are getting more expensive fastest right now.',
     'Mietentwicklung je Quadratmeter, alle drei Monate': 'Rent trend per square metre, every three months',
     'Monat': 'Month',
-    '{1} im Mittel': '{1} on average',
-    '{15} im Mittel': '{15} on average',
-    'Heute in {1}': 'Today in {1}',
+    'im Mittel': 'on average',
+    'Heute in': 'Today in',
     'Das aktuelle Preisniveau je Viertel siehst du auch im freien Tarif – hier und als Wärmefläche auf der Karte.':
       'You can see the current price level per neighbourhood on the free plan too – here and as a heat layer on the map.',
-    '{3}Der Verlauf gehört zu Plus': '{3}The history is part of Plus',
+    'Der Verlauf gehört zu Plus': 'The history is part of Plus',
     'Was der freie Tarif nicht zeigt: die 36-Monats-Reihe je Viertel, der Vergleich mehrerer Viertel nebeneinander, die Veränderung im letzten Jahr und der Stadtdurchschnitt als Bezugslinie.':
       'What the free plan does not show: the 36-month series per neighbourhood, several neighbourhoods side by side, the change over the past year, and the city average as a reference line.',
     'Das ist eine der wenigen Funktionen hinter der Schranke, weil man sie beim Eingrenzen der Suche immer wieder aufruft – anders als etwa das Übergabeprotokoll, das man einmal braucht und das deshalb frei bleibt.':
@@ -346,11 +337,11 @@
       'Asking rents per square metre, month by month over three years. Pick a neighbourhood below and set up to two more beside it.',
     'Stadt': 'City',
     'Viertel': 'Neighbourhood',
-    'Angebotsmiete in {4}': 'Asking rent in {4}',
+    'Angebotsmiete in': 'Asking rent in',
     'in zwölf Monaten': 'over twelve months',
     'in drei Jahren': 'over three years',
-    '{10}. von {11}': '{10} of {11}',
-    'teuerstes Viertel in {12}': 'most expensive neighbourhood in {12}',
+    '. von': 'of',
+    'teuerstes Viertel in': 'most expensive neighbourhood in',
     'Verlauf': 'History',
     'Bis zu zwei Viertel danebenstellen': 'Add up to two neighbourhoods alongside',
     'Mehr als drei Linien lassen sich nicht mehr sicher unterscheiden – deshalb ist bei zwei Vergleichsvierteln Schluss.':
@@ -358,7 +349,7 @@
     'Alle Viertel in {18} heute': 'All neighbourhoods in {18} today',
     'Klick auf ein Viertel, um es oben in den Verlauf zu holen.':
       'Click a neighbourhood to pull it into the chart above.',
-    '{20}Was daraus folgt': '{20}What follows from this',
+    'Was daraus folgt': 'What follows from this',
     'In {21} liegt die Angebotsmiete bei {22} €/m² und ist binnen zwölf Monaten um {23} % {24}. Am schnellsten zieht gerade {25} an ({26} % im Jahr) – solche Viertel sind oft noch bezahlbar, aber nicht mehr lange.':
       'In {21} the asking rent stands at {22} €/m² and has {24} by {23} % within twelve months. The fastest riser right now is {25} ({26} % a year) – neighbourhoods like that are often still affordable, but not for much longer.',
     'Für die Praxis heißt das zweierlei. Erstens: Eine Wohnung, die heute {27} €/m² kostet, wird bei gleichbleibendem Tempo in fünf Jahren {28} €/m² kosten – für dich als Bestandsmieter nicht, denn deine Miete steigt nur nach den Regeln des Mietvertrags. Wer bleibt, spart. Zweitens: Weicht ein Inserat stark vom Verlauf ab, lohnt der Blick in die Vergleichsmiete auf der Objektseite.':
@@ -370,19 +361,18 @@
   /* ------------------------- Hilfe ------------------------- */
 
   e({
-    '{0}Hilfe': '{0}Help',
     'Alle Themen auf einen Blick. Für eine einzelne Frage genügt das Hilfefenster unten rechts – es ist auf jeder Seite erreichbar.':
       'Every topic at a glance. For a single question the help window at the bottom right is enough – it is available on every page.',
     'Das hier ist kein Sprachmodell': 'This is not a language model',
     'Die Hilfe rechnet im Browser und ordnet deine Frage einer von {2} hinterlegten Antworten zu. Sie erfindet nichts, und wo sie unsicher ist, sagt sie es und fragt nach. Führt das nicht weiter, geht die Zusammenfassung auf deinen Klick an {3} – dort schaut ein Mensch darauf.':
       'The help runs in your browser and matches your question to one of {2} stored answers. It invents nothing, and where it is unsure it says so and asks. If that leads nowhere, one click sends the summary to {3} – where a person looks at it.',
-    '{4}Frage stellen': '{4}Ask a question',
+    'Frage stellen': 'Ask a question',
     'Direkt ans Service-Team': 'Straight to the service team',
     'Deine Frage': 'Your question',
     'Frage eingeben…': 'Type your question…',
     'Frage senden': 'Send question',
     'alle Themen': 'all topics',
-    '{0}Ans Service-Team weitergeben': '{0}Pass on to the service team',
+    'Ans Service-Team weitergeben': 'Pass on to the service team',
     'Die Zusammenfassung dieses Gesprächs geht an': 'The summary of this conversation goes to',
     '. Sie wird gleich vollständig angezeigt – abgeschickt wird sie erst, wenn du es auslöst.':
       '. It will be shown in full in a moment – it is only sent once you trigger it.',
@@ -391,7 +381,7 @@
     'ohne Adresse kann niemand antworten': 'without an address nobody can reply',
     'Worum geht es? Was fehlt dir noch?': 'What is it about? What is still missing?',
     'Je konkreter, desto schneller die Antwort.': 'The more specific, the faster the answer.',
-    '{1}Nachricht anzeigen': '{1}Show message',
+    'Nachricht anzeigen': 'Show message',
     'Was übertragen wird – und was nicht': 'What is transmitted – and what is not',
     'Übertragen wird ausschließlich der Text, der dir gleich angezeigt wird: deine Fragen, die Titel der gezeigten Antworten, dein Anliegen und die Kontaktangaben, die du selbst einträgst.':
       'The only thing transmitted is the text you are about to see: your questions, the titles of the answers shown, your request and the contact details you enter yourself.',
@@ -400,9 +390,9 @@
       'your profile, your saved list, your saved searches and the documents in the vault.',
     'Es gibt keinen Server, der das verschicken könnte. Die Nachricht wird an das E-Mail-Programm dieses Geräts übergeben – dort kannst du sie vor dem Senden noch ändern. Wo kein Programm eingerichtet ist, kopier den Text oder sichere ihn als Datei.':
       'There is no server that could send it. The message is handed to this device’s email program – you can still change it there before sending. Where no program is set up, copy the text or save it as a file.',
-    '{0}Text kopieren': '{0}Copy text',
-    '{1}Als Datei': '{1}As a file',
-    '{2}E-Mail öffnen': '{2}Open email',
+    'Text kopieren': 'Copy text',
+    'Als Datei': 'As a file',
+    'E-Mail öffnen': 'Open email',
     'Diese Nachricht wird übergeben': 'This message will be handed over'
   });
 
@@ -411,31 +401,28 @@
   e({
     'Pfad': 'Breadcrumb',
     'Suche': 'Search',
-    '{1} · {2} von {3}': '{1} · {2} of {3}',
+    '· {2} von': '· {2} of',
     'Vorheriges Bild': 'Previous image',
     'Nächstes Bild': 'Next image',
     'Bildauswahl': 'Image selection',
-    '{25}Vergleichen': '{25}Compare',
-    '{27}Teilen': '{27}Share',
-    '{29}Eckdaten': '{29}Key facts',
+    'Teilen': 'Share',
+    'Eckdaten': 'Key facts',
     'Provision': 'Commission',
     'Online seit': 'Online since',
     'Interessenten': 'Interested parties',
-    '{35} bei {36} Aufrufen': '{35} from {36} views',
-    '{37}Ausstattung': '{37}Features',
-    '{39}Beschreibung': '{39}Description',
-    '{58}{59} echte Monatskosten': '{58}{59} real monthly costs',
-    '{62}Exposé als Datei{63}': '{62}Listing sheet as a file{63}',
-    '{0}Ähnliche Angebote': '{0}Similar offers',
-
-    '{0}Nicht gefunden': '{0}Not found',
+    'bei {36} Aufrufen': 'from {36} views',
+    'Ausstattung': 'Features',
+    'Beschreibung': 'Description',
+    'echte Monatskosten': 'real monthly costs',
+    'Exposé als Datei': 'Listing sheet as a file',
+    'Ähnliche Angebote': 'Similar offers',
+    'Nicht gefunden': 'Not found',
     'Dieses Inserat gibt es nicht (mehr)': 'This listing does not exist (any more)',
     'Vielleicht ist der Verweis alt, oder das Inserat wurde zurückgezogen.':
       'Perhaps the link is old, or the listing has been withdrawn.',
-    '{2}Zur Suche': '{2}To the search',
-
+    'Zur Suche': 'To the search',
     /* Kosten */
-    '{0}Was es wirklich kostet': '{0}What it really costs',
+    'Was es wirklich kostet': 'What it really costs',
     'Nicht nur die Warmmiete – auch Strom, Internet, Rundfunkbeitrag und der Einzug selbst.':
       'Not just the rent including bills – electricity, internet, the broadcasting fee and moving in itself.',
     'Jeden Monat': 'Every month',
@@ -451,11 +438,11 @@
     'Übernehmen': 'Apply',
 
     /* Preisvergleich */
-    '{0}Preis im Vergleich': '{0}Price in comparison',
+    'Preis im Vergleich': 'Price in comparison',
     'je m² Grundstück': 'per m² of land',
-    'abgeleiteter Bodenwert {3}': 'derived land value {3}',
-    'überbaubar bei GRZ {9}': 'buildable area at a GRZ of {9}',
-    'Geschossfläche bei GFZ {11}': 'floor area at a GFZ of {11}',
+    'abgeleiteter Bodenwert': 'derived land value',
+    'überbaubar bei GRZ': 'buildable area at a GRZ of',
+    'Geschossfläche bei GFZ': 'floor area at a GFZ of',
     'Der Bodenwert ist hier aus dem örtlichen Kaufpreisniveau abgeleitet, kein amtlicher Bodenrichtwert. Den führt der Gutachterausschuss der Gemeinde; die Auskunft ist meist kostenlos und in den meisten Bundesländern online abrufbar.':
       'The land value here is derived from local purchase prices, not an official standard land value (Bodenrichtwert). That is kept by the municipality’s valuation committee; the information is usually free and available online in most federal states.',
     'günstig': 'cheap',
@@ -466,50 +453,48 @@
     'Der Vergleichswert ist eine Rechengröße dieser Vorführung, kein amtlicher Mietspiegel.':
       'The benchmark is a computed figure in this demo, not an official rent index (Mietspiegel).',
     'je m² Kaufpreis': 'per m² purchase price',
-    'Vergleichswert {3}': 'benchmark {3}',
+    'Vergleichswert': 'benchmark',
     'Jahresmieten (Kaufpreisfaktor)': 'annual rents (price-to-rent multiple)',
     'Bruttomietrendite': 'Gross rental yield',
     'Ein Faktor unter 25 gilt als günstig, über 35 als ambitioniert. Er sagt, wie viele Jahre Nettokaltmiete den Kaufpreis decken – ohne Nebenkosten und Instandhaltung.':
       'A multiple below 25 counts as cheap, above 35 as ambitious. It says how many years of base rent cover the purchase price – excluding running costs and maintenance.',
 
     /* Vertragslupe */
-    '{0}Vertragslupe': '{0}Contract magnifier',
-    '{1}Im Inseratstext stehen keine der typischen Klauseln, die später Ärger machen.':
-      '{1}The listing text contains none of the usual clauses that cause trouble later.',
+    'Im Inseratstext stehen keine der typischen Klauseln, die später Ärger machen.':
+      'The listing text contains none of the usual clauses that cause trouble later.',
     'TrimmoTrade liest den Inseratstext auf Formulierungen, die im Mietvertrag Geld oder Rechte kosten können. {1} {2} in diesem Inserat.':
       'TrimmoTrade reads the listing text for wording that can cost you money or rights in the tenancy agreement. {1} {2} in this listing.',
     'Allgemeine Hinweise zur Einordnung, keine Rechtsberatung. Im Zweifel hilft ein Mieterverein oder eine Anwältin für Mietrecht.':
       'General notes for orientation, not legal advice. If in doubt, a tenants’ association or a tenancy-law solicitor can help.',
-    '{1}Prüfhinweis': '{1}Check notice',
-
+    'Prüfhinweis': 'Check notice',
     /* Chancen */
-    '{0}Wie stehen deine Chancen?': '{0}What are your chances?',
+    'Wie stehen deine Chancen?': 'What are your chances?',
     'Zwei Dinge entscheiden, und nur eines davon hast du in der Hand. Deshalb stehen sie hier getrennt.':
       'Two things decide it, and only one of them is in your hands. That is why they are shown separately.',
-    'Andrang: {7}': 'Demand: {7}',
+    'Andrang:': 'Demand:',
     'Darauf hast du keinen Einfluss{8}.': 'You have no influence over this{8}.',
     'Die Schätzung geht von der Zahl der Interessenten aus und gewichtet dein Profil dagegen. Sie kennt nicht, wen die Vermieterseite tatsächlich sympathisch findet – das entscheidet oft mehr als jede Zahl. Und sie ist kein Grund, es nicht zu versuchen: Auch eine Wohnung mit hundert Interessenten wird an genau eine Person vergeben.':
       'The estimate starts from the number of interested parties and weighs your profile against it. It does not know who the landlord actually warms to – which often decides more than any number. And it is no reason not to try: even an apartment with a hundred interested parties goes to exactly one person.',
 
     /* Doppelte Inserate */
-    '{0}Diese Wohnung steht möglicherweise mehrfach im Angebot':
-      '{0}This apartment may be listed more than once',
+    'Diese Wohnung steht möglicherweise mehrfach im Angebot':
+      'This apartment may be listed more than once',
     'Gleiche Fläche, gleicher Zuschnitt, fast gleicher Preis im selben Viertel. Bevor du dich zweimal auf dieselbe Wohnung bewirbst, vergleich die Angaben.':
       'Same floor area, same layout, almost the same price in the same neighbourhood. Before you apply twice for the same apartment, compare the details.',
     'Zwei Anfragen zum selben Objekt wirken bei der Vermieterseite unentschlossen. Such dir den Weg aus, der dir mehr Auskunft gibt – meist der direkte Eigentümer.':
       'Two enquiries about the same property look indecisive to the landlord. Pick the route that gives you more information – usually the owner directly.',
 
     /* Passung */
-    '{0}Passung zu deinem Profil': '{0}Match with your profile',
+    'Passung zu deinem Profil': 'Match with your profile',
     'Die Reihenfolge deiner Suche entsteht ausschließlich aus diesen Werten.':
       'The order of your search results comes solely from these values.',
     'Gewichtung ändern': 'Change the weighting',
     '– niemand kann sich hier nach oben kaufen.': '– nobody can buy their way up here.',
 
     /* WG */
-    '{0}Die WG': '{0}The flatshare',
+    'Die WG': 'The flatshare',
     'Freies Zimmer': 'Available room',
-    '{2} m² · {3} warm': '{2} m² · {3} incl. bills',
+    'm² · {3} warm': 'm² · {3} incl. bills',
     'WG-Art': 'Flatshare type',
     'Gesucht': 'Looking for',
     '{6}, {7}–{8} Jahre': '{6}, aged {7}–{8}',
@@ -519,10 +504,10 @@
     'Bad': 'Bathroom',
 
     /* Tausch */
-    '{0}Tauschwunsch': '{0}Swap request',
+    'Tauschwunsch': 'Swap request',
     'Wunschorte': 'Preferred locations',
     'Mindestens': 'At least',
-    '{3} Zimmer, {4} m²': '{3} rooms, {4} m²',
+    'Zimmer, {4} m²': 'rooms, {4} m²',
     'Warmmiete bis': 'Rent incl. bills up to',
     'Wunschausstattung': 'Desired features',
     'Vermieterzustimmung': 'Landlord approval',
@@ -531,31 +516,30 @@
       'Legally a swap is not a transfer of the tenancy but two terminations and two new contracts. Both landlords have to play along. Many housing co-operatives and municipal companies actively support it; private owners rarely do. Ask early – not once the chain is already in place.',
 
     /* Lage und Anbieter */
-    '{0}Lage': '{0}Location',
-    '{0}Anbieter': '{0}Provider',
-    '{4} · aktiv seit {5} · {6} {7}': '{4} · active since {5} · {6} {7}',
+    'Lage': 'Location',
+    'Anbieter': 'Provider',
+    '· aktiv seit {5} ·': '· active since {5} ·',
     'antwortet': 'replies',
     'im Schnitt': 'on average',
     'Antwortquote und Reaktionszeit stammen aus dem bisherigen Verhalten auf der Plattform. Unter 50 % lohnt sich eine zweite Option.':
       'Reply rate and response time come from past behaviour on the platform. Below 50 % it is worth having a second option.',
 
     /* Besichtigung */
-    '{0}Besichtigung': '{0}Viewing',
-    '{1}Für dieses Objekt sind keine Termine hinterlegt. Frag beim Anschreiben direkt nach zwei konkreten Zeitfenstern – das spart eine Runde.':
-      '{1}No appointments are stored for this property. When you write, ask straight away for two specific time slots – it saves a round trip.',
-    '{0}Besichtigung buchen': '{0}Book a viewing',
+    'Besichtigung': 'Viewing',
+    'Für dieses Objekt sind keine Termine hinterlegt. Frag beim Anschreiben direkt nach zwei konkreten Zeitfenstern – das spart eine Runde.':
+      'No appointments are stored for this property. When you write, ask straight away for two specific time slots – it saves a round trip.',
+    'Besichtigung buchen': 'Book a viewing',
     'Feste Zeitfenster statt Massenandrang. Ein Platz gehört dir, sobald du ihn nimmst.':
       'Fixed time slots instead of a crowd. A slot is yours as soon as you take it.',
-    '{4}Besichtigungs-Checkliste öffnen': '{4}Open the viewing checklist',
+    'Besichtigungs-Checkliste öffnen': 'Open the viewing checklist',
     'Abhaken, was du geprüft hast. Alles bleibt bei diesem Objekt gespeichert und lässt sich am Ende als Text kopieren.':
       'Tick off what you have checked. Everything stays saved with this property and can be copied as text at the end.',
-    '{1}Als Text kopieren': '{1}Copy as text',
+    'Als Text kopieren': 'Copy as text',
     'Fertig': 'Done',
     'Nachricht': 'Message',
-    '{2}Absenden': '{2}Send',
-
+    'Absenden': 'Send',
     /* Finanzierung */
-    '{0}Finanzierung überschlagen': '{0}Rough financing estimate',
+    'Finanzierung überschlagen': 'Rough financing estimate',
     'Eigenkapital': 'Equity',
     'Sollzins': 'Interest rate',
     'Anfangstilgung': 'Initial repayment rate',
@@ -574,15 +558,13 @@
 
   e({
     'Status': 'Status',
-    'Entfernen': 'Remove',
     'Merkmal': 'Feature',
     'Verläufe': 'Threads',
 
-    '{0}Merkliste': '{0}Saved',
     'Noch nichts gemerkt': 'Nothing saved yet',
     'Klick bei einem Inserat auf das Herz. Hier entsteht daraus eine Tafel, die deine Bewerbungen von „gemerkt“ bis „Zusage“ begleitet.':
       'Click the heart on a listing. That builds a board here which follows your applications from “saved” to “accepted”.',
-    '{0}Merkliste und Bewerbungen': '{0}Saved listings and applications',
+    'Merkliste und Bewerbungen': 'Saved listings and applications',
     'Alles, was du im Blick hast – vom ersten Merken bis zur Zusage.':
       'Everything you are keeping an eye on – from first saving it to the acceptance.',
     'Objekte insgesamt': 'listings in total',
@@ -596,47 +578,40 @@
     'Fahrzeiten mit öffentlichen Verkehrsmitteln geschätzt, 30 Minuten je Besichtigung eingerechnet.':
       'Travel times estimated by public transport, with 30 minutes allowed per viewing.',
 
-    '{0}Vergleich': '{0}Compare',
     'Noch nichts im Vergleich': 'Nothing to compare yet',
     'Bis zu {2} Objekte lassen sich nebeneinanderstellen – mit echten Monatskosten, Vergleichsmiete und Passung in einer Tabelle.':
       'You can set up to {2} listings side by side – with real monthly costs, benchmark rent and match in one table.',
-    '{3}Objekte suchen': '{3}Search listings',
-    '{1} von {2} Plätzen belegt. Der jeweils beste Wert je Zeile ist hervorgehoben. {3}':
-      '{1} of {2} slots used. The best value in each row is highlighted. {3}',
-    '{8}Vergleich als Text kopieren': '{8}Copy comparison as text',
-
+    'Objekte suchen': 'Search listings',
+    'von {2} Plätzen belegt. Der jeweils beste Wert je Zeile ist hervorgehoben.':
+      'of {2} slots used. The best value in each row is highlighted.',
+    'Vergleich als Text kopieren': 'Copy comparison as text',
     '{0}Suchaufträge': '{0}Saved searches',
     'Kein Suchauftrag angelegt': 'No saved search yet',
     'Stell in der Suche deine Filter ein und speichere sie. TrimmoTrade zeigt dir dann bei jedem Besuch, was seither neu dazugekommen ist – über alle vier Angebotsarten hinweg.':
       'Set your filters in the search and save them. TrimmoTrade then shows you on every visit what has been added since – across all four offer types.',
-    '{2}Filter einstellen': '{2}Set filters',
-    'Gespeicherte Filter. Was seit dem letzten Öffnen dazugekommen ist, steht oben. {1}':
-      'Saved filters. Whatever has arrived since you last opened them is at the top. {1}',
-
-    '{6}Warum stehen manche Anfragen oben?': '{6}Why are some enquiries at the top?',
+    'Filter einstellen': 'Set filters',
+    'Gespeicherte Filter. Was seit dem letzten Öffnen dazugekommen ist, steht oben.':
+      'Saved filters. Whatever has arrived since you last opened them is at the top.',
+    'Warum stehen manche Anfragen oben?': 'Why are some enquiries at the top?',
     'Anfragen von Nutzenden mit': 'Enquiries from users with',
     'TrimmoTrade Plus': 'TrimmoTrade Plus',
     'werden zuerst gezeigt und sind mit „Plus“ gekennzeichnet. Das ist bezahlte Sichtbarkeit, kein Urteil über die Person: TrimmoTrade sagt damit nichts darüber, wer besser zu deiner Wohnung passt. Darunter folgen alle weiteren in der Reihenfolge des Eingangs – gelöscht oder versteckt wird keine.':
       'are shown first and are marked “Plus”. That is paid visibility, not a judgement about the person: TrimmoTrade is saying nothing about who suits your apartment better. Below them all the others follow in order of arrival – none is deleted or hidden.',
     'Du kannst die Reihenfolge ignorieren; die Liste zeigt alle Anfragen vollständig.':
       'You can ignore the order; the list shows every enquiry in full.',
-    '{7}Beispielanfragen dieser Vorführung. Es gibt keinen Server, also auch niemanden, der wirklich geschrieben hätte – die Namen und Texte entstehen aus der Kennung des Inserats und bleiben deshalb gleich.':
-      '{7}Sample enquiries for this demo. There is no server, so nobody actually wrote them – the names and texts are derived from the listing’s identifier and therefore stay the same.',
-
-    '{0}Nachrichten': '{0}Messages',
+    'Beispielanfragen dieser Vorführung. Es gibt keinen Server, also auch niemanden, der wirklich geschrieben hätte – die Namen und Texte entstehen aus der Kennung des Inserats und bleiben deshalb gleich.':
+      'Sample enquiries for this demo. There is no server, so nobody actually wrote them – the names and texts are derived from the listing’s identifier and therefore stay the same.',
     'Noch kein eigener Verlauf': 'No thread of your own yet',
     'Sobald du ein Inserat anschreibst, erscheint der Verlauf hier.':
       'As soon as you write to a listing, the thread appears here.',
-    '{3}Zur Suche': '{3}To the search',
     'Antwort schreiben…': 'Write a reply…',
-    '{7}Senden': '{7}Send',
-
-    '{0}Umzugsplan': '{0}Moving plan',
+    'Senden': 'Send',
+    'Umzugsplan': 'Moving plan',
     'Zwanzig Aufgaben mit Fristen, die sich aus deinem Einzugstermin ergeben. Zwei davon haben harte gesetzliche Grenzen – die sind markiert.':
       'Twenty tasks with deadlines derived from your move-in date. Two of them have hard legal limits – those are marked.',
     'Geplanter Einzug': 'Planned move-in',
-    '{4} von {5} erledigt': '{4} of {5} done',
-    '{7}Plan als Text kopieren': '{7}Copy plan as text',
+    'von {5} erledigt': 'of {5} done',
+    'Plan als Text kopieren': 'Copy plan as text',
     'Nur als erledigt merken': 'Just mark as done',
 
     'Kurz, freundlich, mit einem einfachen Ausweg für die Gegenseite – so bekommt man am ehesten überhaupt eine Antwort.':
@@ -646,16 +621,16 @@
     'Zusatz für alle Anschreiben (freiwillig)': 'Addition to every covering letter (optional)',
     'Etwas, das für alle gilt – etwa der frühestmögliche Einzugstermin.':
       'Something that applies to all of them – the earliest possible move-in date, for instance.',
-    '{0}Alle ausgewählten absenden': '{0}Send all selected'
+    'Alle ausgewählten absenden': 'Send all selected'
   });
 
   /* ------------------------- Profil und Inserieren ------------------------- */
 
   e({
-    '{0}Dein Profil': '{0}Your profile',
+    'Dein Profil': 'Your profile',
     'TrimmoTrade sortiert und rechnet ausschließlich mit diesen Angaben. Sie liegen im Speicher dieses Browsers – es gibt keinen Server und kein Konto.':
       'TrimmoTrade sorts and calculates using these details only. They live in this browser’s storage – there is no server and no account.',
-    '{1}Änderungen werden sofort übernommen': '{1}Changes are applied immediately',
+    'Änderungen werden sofort übernommen': 'Changes are applied immediately',
     'Über dich': 'About you',
     'Vorname Nachname': 'First name Last name',
     'Alter': 'Age',
@@ -678,31 +653,324 @@
       'If a must-have is missing, the listing drops well down the list – but it does not disappear.',
     'Wäre schön': 'Nice to have',
 
-    '{19}Ankerpunkte für den Arbeitsweg': '{19}Anchor points for your commute',
+    'Ankerpunkte für den Arbeitsweg': 'Anchor points for your commute',
     'Statt Luftlinie rechnet TrimmoTrade die Fahrzeit zu den Orten, an denen du regelmäßig sein musst – Arbeit, Uni, Kita, Familie.':
       'Instead of straight-line distance, TrimmoTrade works out the travel time to the places you have to be regularly – work, university, nursery, family.',
     'Bezeichnung': 'Label',
     'Arbeit, Uni, Kita…': 'Work, university, nursery…',
     'Ort': 'Place',
-    '{22}Hinzufügen': '{22}Add',
+    'Hinzufügen': 'Add',
     'Verkehrsmittel für die Rechnung': 'Mode of transport for the calculation',
 
-    '{25}Was dir wichtig ist': '{25}What matters to you',
+    'Was dir wichtig ist': 'What matters to you',
     'Diese Regler bestimmen die Reihenfolge deiner Suchergebnisse. Kein Anbieter kann sich hier nach oben kaufen.':
       'These sliders determine the order of your search results. No provider can buy their way up here.',
     'auf Standard zurücksetzen': 'reset to default',
 
-    '{27}Dein WG-Profil': '{27}Your flatshare profile',
+    'Dein WG-Profil': 'Your flatshare profile',
     'Sechs Fragen, aus denen sich die Passung zu jeder WG errechnet. Es gibt kein Richtig – ehrlich ist besser als sympathisch.':
       'Six questions from which the match with every flatshare is calculated. There is no right answer – honest beats likeable.',
+    'Alles hier ist freiwillig. Was du nicht beantwortest, zählt nicht mit – es rechnet dann nur weniger, nicht schlechter. Es gibt kein Richtig; ehrlich ist besser als sympathisch, denn eine Passung, die auf einer geschönten Angabe steht, hält bis zum Einzug.':
+      'Everything here is optional. What you leave unanswered simply does not count – less is calculated, not worse. There is no right answer; honest beats likeable, because a match built on a flattering answer lasts until move-in day.',
+    'Die sechs Alltagsfragen': 'The six everyday questions',
+    '– ab 40 Zeichen zählt der Text als ausgefüllt.': '– from 40 characters the text counts as filled in.',
+    /* Die sechs Regler aus match.js. Sie standen bisher nur als Teil
+       längerer Sätze in der Tabelle. */
+    'Ordnung': 'Tidiness',
+    'entspannt': 'relaxed',
+    'sehr ordentlich': 'very tidy',
+    'Lautstärke': 'Noise',
+    'ruhig': 'quiet',
+    'lebhaft': 'lively',
+    'Besuch': 'Visitors',
+    'selten': 'rarely',
+    'ständig offen': 'always welcome',
+    'Nähe': 'Closeness',
+    'echte Wohngemeinschaft': 'a real shared home',
+    'Rhythmus': 'Rhythm',
+    'Frühaufsteher': 'early riser',
+    'Nachtmensch': 'night owl',
+    'Küche': 'Kitchen',
+    'oft zusammen': 'often together',
+    'Schufa-Bonitätsauskunft': 'Schufa credit report',
+    'Nach der 30-Prozent-Faustregel liegt deine Obergrenze bei rund':
+      'By the 30-per-cent rule of thumb your upper limit is around',
+    'Warmmiete. Viele Vermieter rechnen zusätzlich mit dem Dreifachen der Kaltmiete als Mindesteinkommen.':
+      'rent including bills. Many landlords also expect a minimum income of three times the cold rent.',
 
-    '{30}Bewerbermappe': '{30}Application folder',
+    'Vier weitere, an denen es meistens hängt': 'Four more, where it usually comes apart',
+    'Diese vier sind noch nicht beantwortet, solange du den Regler nicht bewegt hast – ein Wert in der Mitte wäre eine Antwort, die du nicht gegeben hast.':
+      'These four count as unanswered until you move the slider – a value in the middle would be an answer you never gave.',
+    'noch nicht beantwortet': 'not answered yet',
+    'Zu Hause': 'At home',
+    'kaum da': 'rarely there',
+    'fast immer da': 'almost always there',
+    'Wer den ganzen Tag in der Wohnung arbeitet, teilt sie anders als jemand, der nur zum Schlafen kommt. Das ist der häufigste unausgesprochene Konflikt.':
+      'Someone who works in the flat all day shares it differently from someone who only comes home to sleep. This is the most common unspoken conflict.',
+    'Gemeinschaftsräume': 'Shared rooms',
+    'gelassen': 'relaxed',
+    'sofort aufgeräumt': 'tidied straight away',
+    'Nicht das eigene Zimmer entscheidet, sondern die Küche. Zwei Menschen mit derselben Vorstellung davon streiten fast nie.':
+      'It is not your own room that decides it, it is the kitchen. Two people who see it the same way almost never argue.',
+    'Feiern': 'Parties',
+    'nie in der Wohnung': 'never in the flat',
+    'gern und oft': 'gladly and often',
+    'Haushalt': 'Household',
+    'jeder für sich': 'each on their own',
+    'Haushaltskasse und gemeinsam einkaufen': 'a kitty and shopping together',
+
+    'Womit du leben kannst, und womit nicht': 'What you can live with, and what you cannot',
+    'Rauchst du?': 'Do you smoke?',
+    'nur auf Balkon oder draußen': 'only on the balcony or outside',
+    'auch in der Wohnung': 'indoors as well',
+    'Und bei den anderen?': 'And the others?',
+    'ist mir egal': 'does not bother me',
+    'draußen ja, drinnen nicht': 'outside yes, indoors no',
+    'gar kein Rauch': 'no smoke at all',
+    'Bringst du ein Tier mit?': 'Are you bringing an animal?',
+    'Tiere der anderen': 'Other people’s animals',
+    'gern': 'happily',
+    'lieber ohne': 'rather not',
+    'geht nicht – Allergie': 'not possible – allergy',
+    'Wie du isst': 'How you eat',
+    'alles': 'everything',
+    'vegetarisch': 'vegetarian',
+    'vegan': 'vegan',
+    'halal': 'halal',
+    'koscher': 'kosher',
+    'Und in der gemeinsamen Küche?': 'And in the shared kitchen?',
+    'jeder wie er mag': 'everyone as they please',
+    'kein Fleisch zubereiten': 'no meat prepared here',
+    'getrennte Regale und Pfannen': 'separate shelves and pans',
+    'Diese Angabe ist ein Ausschlusskriterium: Sie senkt keine Passung um ein paar Prozent, sondern sagt Nein. Das ist auch der Grund, warum sie oben steht und nicht im Kleingedruckten.':
+      'This answer is a dealbreaker: it does not shave a few per cent off a match, it says no. That is also why it sits at the top and not in the small print.',
+    'Wie du isst, geht ausschließlich in die Passung zu anderen Suchenden ein – in die Vorauswahl einer Vermieterseite fließt es nicht, dort hat es nichts zu suchen.':
+      'How you eat feeds only into the match with other flat-hunters – it plays no part in a landlord’s shortlist, where it has no business being.',
+
+    'Dein Alltag': 'Your everyday life',
+    'Beschäftigung': 'Employment',
+    'Vollzeit': 'Full-time',
+    'Teilzeit': 'Part-time',
+    'Schichtdienst': 'Shift work',
+    'selbstständig': 'self-employed',
+    'Rente': 'Retired',
+    'auf Suche': 'looking for work',
+    'So lange möchtest du bleiben': 'How long you would like to stay',
+    'ein halbes Jahr': 'six months',
+    'etwa ein Jahr': 'about a year',
+    'zwei Jahre': 'two years',
+    'drei Jahre': 'three years',
+    'länger': 'longer',
+    'Sprachen, die du sprichst': 'Languages you speak',
+    'weitere Sprache': 'another language',
+    'z. B. Polnisch': 'e.g. Polish',
+    'Gefragt wird danach, weil eine gemeinsame Sprache den Alltag einfacher macht – nicht nach Herkunft. In der Vorauswahl einer Vermieterseite kommt diese Angabe nicht vor.':
+      'This is asked because a shared language makes everyday life easier – not to ask about origin. It plays no part in a landlord’s shortlist.',
+    'Steht schon in der Liste.': 'Already on the list.',
+    'Acht Sprachen sind genug.': 'Eight languages are enough.',
+
+    'Mit wem du wohnen möchtest': 'Who you want to live with',
+    'Warum eine WG das darf': 'Why a flatshare is allowed to choose',
+    '§ 19 Abs. 5 AGG nimmt das gemeinsame Bewohnen einer Wohnung vom Benachteiligungsverbot aus: Wer eine Wohnung mit anderen teilt, darf sich aussuchen, mit wem. Für die Vermietung selbst gilt das nicht – Alter und Geschlecht kommen deshalb in der Vorauswahl, die eine Vermieterseite sieht, an keiner Stelle vor.':
+      '§ 19 (5) AGG exempts sharing a home from the prohibition of discrimination: whoever shares a flat with others may choose whom. That does not apply to letting itself – which is why age and gender appear nowhere in the shortlist a landlord sees.',
+    'Alter ab': 'Age from',
+    'Alter bis': 'Age up to',
+    'Zusammensetzung': 'Composition',
+    'lieber gemischt': 'mixed, preferably',
+    'reine Frauen-WG': 'women only',
+    'reine Männer-WG': 'men only',
+    '„ab {0}“ und „bis {1}“ schließen einander aus – so gefiltert bliebe niemand übrig.':
+      '“from {0}” and “up to {1}” rule each other out – filtered like that, nobody would be left.',
+    'Was für eine WG es werden soll': 'What kind of flatshare it should be',
+    'Die drei Sätze, die jemand liest, bevor er sich für ein Kennenlernen entscheidet. Konkret schlägt sympathisch: „Ich koche fast jeden Abend und freue mich, wenn jemand mitisst“ sagt mehr als „unkompliziert und offen“.':
+      'The three sentences someone reads before deciding to meet you. Concrete beats likeable: “I cook almost every evening and I am glad when someone joins me” says more than “easy-going and open”.',
+    'Zum Beispiel: Ich bin 29, arbeite in der Pflege im Schichtdienst und bin deshalb auch mal werktags zu Hause. Ich koche gern und viel, räume dabei aber erst hinterher auf.':
+      'For example: I am 29, I work shifts in care and so I am sometimes home on weekdays. I cook a lot and enjoy it, but I only tidy up afterwards.',
+    '{0} von 1200 Zeichen': '{0} of 1200 characters',
+
+    'Für die Bewerbung um eine Wohnung': 'For applying for a flat',
+    'Genau das, wonach eine Vermieterseite fragen darf – und nicht mehr. Aus diesen Angaben entsteht die Reihenfolge, in der deine Anfrage neben den anderen steht. Sie sortiert; sie sortiert niemanden aus.':
+      'Exactly what a landlord may ask about – and nothing more. These answers produce the order in which your enquiry stands beside the others. It sorts; it sorts nobody out.',
+    'Woher dein Einkommen kommt': 'Where your income comes from',
+    'unbefristetes Arbeitsverhältnis': 'permanent employment',
+    'befristeter Vertrag': 'fixed-term contract',
+    'noch in der Probezeit': 'still in the probation period',
+    'Studium': 'Studying',
+    'Ausbildung': 'Apprenticeship',
+    'anderes': 'something else',
+    'keine': 'none',
+    'Elternbürgschaft': 'parental guarantee',
+    'andere Bürgschaft': 'another guarantee',
+    'Bürgschaft vorhanden': 'guarantee available',
+    'keiner': 'none',
+    'WBS Stufe A': 'WBS level A',
+    'WBS Stufe B': 'WBS level B',
+    'WBS Stufe C': 'WBS level C',
+    'beantragt': 'applied for',
+    'Stufe': 'Level',
+    'So lange willst du mieten': 'How long you want to rent',
+    'unter einem Jahr': 'under a year',
+    'drei Jahre und mehr': 'three years or more',
+    'so lange wie möglich': 'as long as possible',
+    'mindestens drei Jahre': 'at least three years',
+    'etwa zwei Jahre': 'about two years',
+    'Beim Einzugstermin bist du': 'On the move-in date you are',
+    'auf den Termin festgelegt': 'tied to the date',
+    'zwei Wochen flexibel': 'flexible by two weeks',
+    'ganz flexibel': 'fully flexible',
+    'Bisherige Mietverhältnisse': 'Previous tenancies',
+    'Die Kaution liegt bereit': 'The deposit is ready',
+    'Höchstens drei Nettokaltmieten, und sie darf in drei Raten gezahlt werden – § 551 BGB. Wer mehr verlangt, verlangt zu viel.':
+      'At most three months’ net cold rent, and it may be paid in three instalments – § 551 BGB. Anyone asking for more is asking for too much.',
+    'liegt bereit': 'ready',
+    'Wann du zur Besichtigung kannst': 'When you can make a viewing',
+    'werktags tagsüber': 'weekdays during the day',
+    'abends': 'evenings',
+    'am Wochenende': 'at weekends',
+    'auch kurzfristig': 'at short notice too',
+    'Eine anbietende Seite vergibt Termine in Blöcken. Wer sagt, wann er kann, bekommt einen – wer es nicht sagt, wird zurückgestellt.':
+      'A landlord hands out viewing slots in blocks. Say when you can come and you get one; say nothing and you are set aside.',
+    'So läse sich deine Bewerbung heute': 'How your application would read today',
+    'Gerechnet gegen eine gedachte Wohnung zu deinem Budget von {0} warm:':
+      'Calculated against an imagined flat at your budget of {0} including bills:',
+
+    'Kein Druck und keine Punktejagd: Die Liste sagt nur, wonach TrimmoTrade noch nicht rechnen kann. Ein halb ausgefülltes Profil sucht trotzdem – es sucht nur gröber.':
+      'No pressure and no points to chase: the list only says what TrimmoTrade cannot calculate with yet. A half-filled profile still searches – it just searches more coarsely.',
+    'Für die Suche': 'For the search',
+    'Für die Passung zu Menschen und Wohnungen': 'For matching with people and flats',
+    'Es fehlt noch: {0}.': 'Still missing: {0}.',
+    'Vollständig. Mehr braucht die Rechnung nicht.': 'Complete. The calculation needs no more.',
+    'Unter der Hälfte ist eine Passung eher ein Eindruck als eine Aussage – sie steht dann auch so da und nicht als runde Zahl.':
+      'Below half, a match is more of an impression than a statement – and it is shown as such, not as a round number.',
+    'Die vier weiteren Regler': 'The four further sliders',
+    'Beschäftigungsart': 'Type of employment',
+    'Gewünschte Mietdauer': 'Desired tenancy length',
+    'Einkommensart': 'Type of income',
+    'Über mich': 'About me',
+
+    /* Die Vorauswahl im Postfach der anbietenden Seite */
+    'Sortiert nach Eignung, nicht nach Eingang – und nichts ist ausgeblendet: Wer hinten steht, steht trotzdem da. Gerechnet wird ausschließlich mit dem, wonach gefragt werden darf; Alter und Geschlecht stehen in keiner Anfrage.':
+      'Sorted by suitability, not by arrival – and nothing is hidden: whoever is at the bottom is still there. Only what may lawfully be asked is used; age and gender appear in no enquiry.',
+    'Ausschluss': 'Dealbreaker',
+    'Warum': 'Why',
+    'wenige Angaben': 'few answers',
+    'Inserat entfernt': 'Listing removed',
+    'Anfrage': 'enquiry',
+    'Anfragen': 'enquiries',
+    'Art des Einkommens': 'Type of income',
+    'Kaution': 'Deposit',
+    'Einzugstermin': 'Move-in date',
+    'Besichtigung möglich': 'Viewing possible',
+    'Die Warmmiete ist {0} % des Nettoeinkommens – sehr komfortabel.':
+      'The rent including bills is {0} % of net income – very comfortable.',
+    '{0} % des Nettoeinkommens – im üblichen Rahmen.': '{0} % of net income – within the usual range.',
+    '{0} % des Nettoeinkommens – für viele Vermietende die Obergrenze.':
+      '{0} % of net income – the upper limit for many landlords.',
+    '{0} % des Nettoeinkommens – darüber wird selten zugesagt.':
+      '{0} % of net income – above that, few applications succeed.',
+    '{0} von {1} Unterlagen liegen bereit.': '{0} of {1} documents are ready.',
+    'Mindestens {0} Jahre geplant.': 'At least {0} years planned.',
+    'Rund zwei Jahre geplant.': 'About two years planned.',
+    'Etwa ein Jahr geplant.': 'About a year planned.',
+    'Unter einem Jahr – für viele Vermietende zu kurz.': 'Under a year – too short for many landlords.',
+    'Liegt rund {0} Monate daneben.': 'About {0} months off.',
+    'Eine Person auf {0} Zimmer.': 'One person for {0} rooms.',
+    '{0} Personen auf {1} Zimmer.': '{0} people for {1} rooms.',
+    '{0} Personen auf {1} Zimmer – eng, aber üblich.': '{0} people for {1} rooms – tight, but common.',
+    '{0} Personen auf {1} Zimmer. Das überschreitet, was in vielen Bundesländern als Überbelegung gilt.':
+      '{0} people for {1} rooms. That exceeds what many federal states treat as overcrowding.',
+    'Ähnlicher Alltag: {0}': 'Similar daily rhythm: {0}',
+    'Gemeinsame Sprache: {0}': 'Shared language: {0}',
+    'Sehr unterschiedliche Vorstellungen davon, wie lange das halten soll ({0} gegen {1} Jahre).':
+      'Very different ideas about how long this should last ({0} versus {1} years).',
+    'Du möchtest ohne Tiere wohnen ({0}).': 'You want to live without animals ({0}).',
+    'Schichtdienst trifft auf einen anderen Rhythmus – das lässt sich regeln, aber es gehört besprochen.':
+      'Shift work meets a different rhythm – that can be arranged, but it needs discussing.',
+    'In der Küche soll kein Fleisch zubereitet werden – die andere Seite isst welches.':
+      'No meat is to be prepared in the kitchen – the other person eats it.',
+    'Die andere Seite möchte eine fleischfreie Küche.': 'The other person wants a meat-free kitchen.',
+    'Gleiche Ernährung – das macht die Küche einfacher.': 'The same diet – that makes the kitchen easier.',
+    'Keine gemeinsame Sprache angegeben.': 'No shared language given.',
+    'Tier': 'animal',
+    'raucht nicht': 'does not smoke',
+    'raucht auf dem Balkon': 'smokes on the balcony',
+    'raucht in der Wohnung': 'smokes indoors',
+    'keine Tiere': 'no animals',
+    'Für eine belastbare Einschätzung fehlen noch Angaben.':
+      'Some answers are still missing for a reliable estimate.',
+    'Sehr gut geeignet': 'Very well suited',
+    'Gut geeignet': 'Well suited',
+    'Kommt in Frage': 'Worth considering',
+    'Eher schwierig': 'Rather difficult',
+    'Zu wenig Angaben': 'Too few answers',
+    'Ein Ausschlusskriterium steht dagegen': 'A dealbreaker stands in the way',
+    'Mietbelastung': 'Rent burden',
+    'Unterlagen': 'Documents',
+    'Mietdauer': 'Tenancy length',
+    'Die Mappe ist vollständig.': 'The folder is complete.',
+    'Liegt vor.': 'Available.',
+    'Flexibel.': 'Flexible.',
+    'Passt fast auf den Tag.': 'Almost to the day.',
+    'Liegt um ein paar Wochen daneben.': 'A few weeks off.',
+    'Rente – planbar und dauerhaft': 'pension – predictable and lasting',
+    'selbstständig – üblich sind die letzten zwei Steuerbescheide':
+      'self-employed – the last two tax assessments are customary',
+    'befristetes Arbeitsverhältnis': 'fixed-term employment',
+    'Elternbürgschaft vorhanden': 'parental guarantee available',
+    'Im Inserat ausdrücklich erlaubt.': 'Expressly permitted in the listing.',
+    'Das Inserat sagt nichts dazu – frag früh, bevor beide Seiten Zeit investieren.':
+      'The listing says nothing about it – ask early, before both sides invest time.',
+    'Bei dieser Mietbelastung wäre eine Bürgschaft das wirksamste Mittel.':
+      'At this rent burden, a guarantee would be the most effective step.',
+    'Diese Wohnung ist an einen Wohnberechtigungsschein gebunden. Ohne ihn ist eine Vermietung nicht zulässig.':
+      'This flat requires a housing entitlement certificate (WBS). Without one, letting it is not permitted.',
+
+    /* Die Passung zwischen Menschen */
+    'Sehr ähnliche Vorstellungen vom Alltag': 'Very similar ideas about everyday life',
+    'Passt gut zusammen': 'A good fit',
+    'Geht, mit ein paar Absprachen': 'Workable, with a few agreements',
+    'Deutliche Unterschiede – vorher reden': 'Clear differences – talk first',
+    'Sehr unterschiedliche Vorstellungen': 'Very different ideas',
+    'Zu wenig Angaben für eine Einschätzung': 'Too few answers for an assessment',
+    'Erste Einschätzung – dafür fehlen noch Angaben': 'A first impression – answers are still missing',
+    'Ein Ausschlusskriterium': 'One dealbreaker',
+    'Ausschlusskriterien': 'Dealbreakers',
+    'am wenigsten mit {0} ({1} %)': 'least of all with {0} ({1} %)',
+    'Du möchtest ohne Rauch wohnen, die andere Seite raucht.':
+      'You want to live smoke-free; the other person smokes.',
+    'In der Wohnung soll nicht geraucht werden.': 'There is to be no smoking in the flat.',
+    'Eine Allergie schließt ein Tier in der Wohnung aus.': 'An allergy rules out an animal in the flat.',
+    'Außerhalb der Altersspanne, die du dir wünschst.': 'Outside the age range you are looking for.',
+    'Du möchtest in einer reinen Frauen-WG wohnen.': 'You want to live in a women-only flatshare.',
+    'Du möchtest in einer reinen Männer-WG wohnen.': 'You want to live in a men-only flatshare.',
+    'Dazu deine Antworten zum Alltag – daraus rechnet sich die Passung. Ohne sie sieht die Gruppe keine Einschätzung.':
+      'Plus your everyday answers – the match is calculated from them. Without them the group sees no assessment.',
+    'Mehr als diese Liste geht nicht mit. Weder deine Adresse noch dein Einkommen auf den Euro, und nichts, wonach niemand fragen darf.':
+      'Nothing beyond this list goes out. Neither your address nor your income to the euro, and nothing nobody is allowed to ask about.',
+    'Die Fragen im Profil': 'The questions in your profile',
+    'Geschlecht': 'Gender',
+    'Rauch der anderen': 'Other people’s smoke',
+    'Eigene Tiere': 'Your own animals',
+    'Ernährung': 'Diet',
+    'Gemeinsame Küche': 'Shared kitchen',
+    'Art der WG': 'Kind of flatshare',
+    'Bleiben möchte ich': 'I would like to stay',
+    'Vier weitere Regler': 'Four further sliders',
+    'Antwort': 'answer',
+    'Antworten': 'answers',
+    'weiblich': 'female',
+    'männlich': 'male',
+    'nichtbinär': 'non-binary',
+    'keine Angabe': 'not stated',
+
+
+    'Bewerbermappe': 'Application folder',
     'Wer die Unterlagen parat hat, bewirbt sich in Minuten statt in Tagen. Hak ab, was bei dir bereitliegt.':
       'With your documents ready, you apply in minutes instead of days. Tick off what you have to hand.',
     'Datensparsam bewerben': 'Applying without oversharing',
     'Vor der Besichtigung darf niemand Schufa, Kontoauszüge, Ausweiskopie oder Angaben zu Familienplanung, Religion oder Vorstrafen verlangen. Solche Fragen dürfen im Zweifel falsch beantwortet werden, ohne dass der Vertrag angreifbar wird. Erst wenn die Wohnung ernsthaft in Betracht kommt, sind Einkommensnachweise und Schufa üblich.':
       'Before the viewing, nobody may demand a Schufa credit report, bank statements, a copy of your ID, or details about family planning, religion or criminal record. If in doubt, such questions may be answered untruthfully without making the contract challengeable. Only once the apartment is seriously in play are proof of income and a Schufa report customary.',
-    '{33}Unterlagen verschlüsselt ablegen': '{33}Store documents encrypted',
+    'Unterlagen verschlüsselt ablegen': 'Store documents encrypted',
     'Im Dokumententresor liegen die Dateien verschlüsselt. Beim Bewerben verschickst du dann keinen Anhang, sondern einen Verweis, der nach gesetzter Frist erlischt und sich widerrufen lässt. Was dort liegt, wird hier automatisch abgehakt.':
       'In the document vault your files are encrypted. When you apply you then send not an attachment but a link that expires after a set period and can be revoked. Whatever is in there is ticked off here automatically.',
     'Kurze Vorstellung': 'Short introduction',
@@ -711,10 +979,9 @@
     'Vorstellung': 'Introduction',
     'Zum Beispiel: Ich arbeite seit vier Jahren fest bei …, bin ruhig, nicht rauchend und suche etwas Langfristiges.':
       'For example: I have had a permanent job at … for four years, I am quiet, a non-smoker, and looking for something long-term.',
-    '{35}Wie vollständig ist dein Profil?': '{35}How complete is your profile?',
-
+    'Wie vollständig ist dein Profil?': 'How complete is your profile?',
     /* Inserieren */
-    '{0}Inserat aufgeben': '{0}Post a listing',
+    'Inserat aufgeben': 'Post a listing',
     'Vermieten, verkaufen, ein Zimmer anbieten oder tauschen – ein Formular für alles. Das Inserat bleibt auf diesem Gerät und taucht in deiner Suche, in der Karte und im Ringtausch auf.':
       'Let, sell, offer a room or swap – one form for all of it. The listing stays on this device and shows up in your search, on the map and in the swap chains.',
     'Art des Angebots': 'Type of offer',
@@ -746,25 +1013,22 @@
     'Provision und Kosten beim Kauf': 'Commission and costs when buying',
     'Seit dem 23. Dezember 2020 gilt bei Wohnungen und Einfamilienhäusern an Verbraucher: Die Maklerprovision wird geteilt, und die Käuferseite zahlt höchstens so viel wie die Verkäuferseite (§§ 656c, 656d BGB). Für Grundstücke und Mehrfamilienhäuser gilt das nicht. TrimmoTrade rechnet die Nebenkosten des Erwerbs – Grunderwerbsteuer nach Bundesland, Notar und Grundbuch – bei jedem Angebot durch und zeigt sie neben dem Kaufpreis.':
       'Since 23 December 2020, for apartments and single-family houses sold to consumers: the agent’s commission is split, and the buyer pays no more than the seller (§§ 656c, 656d BGB). This does not apply to plots of land or apartment blocks. TrimmoTrade works out the purchase costs – land transfer tax by federal state, notary and land registry – for every offer and shows them next to the price.',
-    'Ausstattung': 'Features',
     'Grund für den Tausch': 'Reason for the swap',
     'z. B. neuer Job in Leipzig': 'e.g. new job in Leipzig',
     'Fläche mindestens': 'Floor area at least',
     'Warmmiete höchstens': 'Rent incl. bills at most',
     'auch Ringtausch über mehrere Haushalte': 'swap chains across several households too',
-    'Beschreibung': 'Description',
     'Was sollte man über die Wohnung und die Nachbarschaft wissen?':
       'What should people know about the apartment and the neighbourhood?',
     'Was du nicht schreiben darfst': 'What you may not write',
     'Formulierungen, die nach Herkunft, Religion, Geschlecht, Behinderung oder Alter aussortieren, sind nach dem Allgemeinen Gleichbehandlungsgesetz unzulässig. Bei WG-Zimmern in der eigenen Wohnung ist die Auswahl freier – trotzdem gilt: Beschreibe die WG, nicht wen du ausschließt.':
       'Wording that filters by origin, religion, gender, disability or age is unlawful under the German Equal Treatment Act (AGG). For a room in your own flatshare you have more freedom to choose – even so: describe the flatshare, not who you are excluding.',
-    '{19}Inserat anlegen': '{19}Create listing',
-
+    'Inserat anlegen': 'Create listing',
     /* Fotos */
     'Fotos': 'Photos',
     'Inserate mit Fotos werden deutlich häufiger geöffnet. Bis zu {0} Bilder, JPG, PNG, WEBP oder HEIC. Das erste ist das Titelbild.':
       'Listings with photos get opened far more often. Up to {0} images, JPG, PNG, WEBP or HEIC. The first one is the cover image.',
-    '{1}Bilder hochladen': '{1}Upload images',
+    'Bilder hochladen': 'Upload images',
     'Die Bilder werden beim Ablegen auf {4} Pixel Kantenlänge verkleinert und bleiben im Speicher dieses Geräts. Sie werden nirgendwohin übertragen – es gibt keinen Server.':
       'Images are scaled down to {4} pixels along the longer edge when stored and stay in this device’s storage. They are not transmitted anywhere – there is no server.',
     'Was auf ein Inseratsfoto nicht gehört': 'What does not belong in a listing photo',
@@ -786,7 +1050,7 @@
       'Nothing is charged in this demo. In production the payment would run through the payment provider, with an invoice and a withdrawal notice.',
 
     /* Mieten oder kaufen */
-    '{0}Mieten oder kaufen': '{0}Rent or buy',
+    'Mieten oder kaufen': 'Rent or buy',
     'Der Vergleich rechnet ehrlich: Der Mietende legt das Eigenkapital an und investiert jeden Monat die Differenz zur Kaufrate. Verglichen wird am Ende das Vermögen, nicht das Gefühl.':
       'The comparison plays fair: the renter invests the equity and puts the monthly difference from the mortgage payment into the market. What gets compared in the end is wealth, not gut feeling.',
     'Die Immobilie': 'The property',
@@ -797,7 +1061,7 @@
       'Excluding taxes, extra repayments, deferred modernisation and moving costs. The calculation is sensitive to appreciation and investment return – move both sliders deliberately, not optimistically.',
     'Werte zurücksetzen': 'Reset values',
     'Vermögen nach {2} Jahren mit Kauf': 'Wealth after {2} years if you buy',
-    'Immobilienwert {3} minus Restschuld {4}': 'Property value {3} minus remaining debt {4}',
+    'Immobilienwert {3} minus Restschuld': 'Property value {3} minus remaining debt',
     'Vermögen nach {7} Jahren mit Miete': 'Wealth after {7} years if you rent',
     'angelegtes Eigenkapital plus monatliche Differenz bei {8} % Rendite':
       'invested equity plus the monthly difference at a {8} % return',
@@ -817,7 +1081,6 @@
   /* ------------------------- Tarife ------------------------- */
 
   e({
-    '{0}Tarife': '{0}Plans',
     'Ein Satz erklärt das ganze Modell:': 'One sentence explains the whole model:',
     'Plus bezahlt Zeitersparnis und Sichtbarkeit – nie, was du über eine Wohnung erfährst.':
       'Plus pays for saved time and visibility – never for what you learn about an apartment.',
@@ -826,7 +1089,7 @@
     'Zahlungsweise': 'Billing',
     'monatlich': 'monthly',
     'jährlich': 'yearly',
-    '{4} % günstiger': '{4} % cheaper',
+    '% günstiger': '% cheaper',
     'dauerhaft': 'permanently',
     'im Monat, {1} im Jahr': 'per month, {1} per year',
     'im Monat, monatlich kündbar': 'per month, cancellable monthly',
@@ -837,21 +1100,21 @@
     'Werkzeuge ansehen': 'See the tools',
     "Los geht's": 'Let’s go',
 
-    '{7}Was Plus ausdrücklich nicht kauft': '{7}What Plus explicitly does not buy',
+    'Was Plus ausdrücklich nicht kauft': 'What Plus explicitly does not buy',
     'Die meisten Wohnungsportale verkaufen genau das. TrimmoTrade nicht – und das ist keine Marketingzeile, sondern der Grund, warum die Reihenfolge deiner Treffer nachvollziehbar bleibt.':
       'Most property portals sell exactly that. TrimmoTrade does not – and that is not a marketing line but the reason the order of your results stays explainable.',
-    '{9}Alles im Vergleich': '{9}Everything compared',
+    'Alles im Vergleich': 'Everything compared',
     '{11}Eigenes Inserat hervorheben': '{11}Promote your own listing',
     'Für die anbietende Seite, unabhängig vom Tarif einzeln buchbar. Mit Plus {12} % günstiger.':
       'For advertisers, bookable separately regardless of plan. {12} % cheaper with Plus.',
     'Bezahlte Plätze stehen getrennt': 'Paid placements are kept separate',
     'Hervorgehobene Inserate erscheinen in einem eigenen Block über den Treffern, beschriftet als Top-Anzeigen, höchstens {15} auf einmal. Sie werden nicht zwischen die Ergebnisse gemischt und verschieben in der Liste darunter nichts. Wer sucht, sieht damit weiterhin eine Reihenfolge, die sich aus seinem Profil erklärt – und erkennt auf den ersten Blick, was bezahlt ist. Untergemischte Werbeplätze wären nach § 5b UWG ohnehin kennzeichnungspflichtig.':
       'Promoted listings appear in their own block above the results, labelled as top ads, at most {15} at a time. They are not mixed in among the results and move nothing in the list below. Anyone searching still sees an order that follows from their profile – and can tell at a glance what is paid for. Ads mixed in among results would require labelling under § 5b UWG anyway.',
-    '{16} Buchen lässt sich das unter': '{16} You can book it under',
+    'Buchen lässt sich das unter': 'You can book it under',
     'bei deinen eigenen Inseraten.': 'with your own listings.',
 
-    '{1}Gründerplatz {2} von {3}': '{1}Founder place {2} of {3}',
-    '{0}Gründerplätze': '{0}Founder places',
+    'Gründerplatz {2} von': 'Founder place {2} of',
+    'Gründerplätze': 'Founder places',
     'Alle {1} Plätze sind vergeben': 'All {1} places have been taken',
     'Das Kontingent ist erschöpft. Der freie Tarif bleibt vollständig nutzbar – alles, was schützt und gerechnet werden muss, war nie hinter der Bezahlschranke.':
       'The allocation is used up. The free plan remains fully usable – everything that protects you or has to be calculated was never behind the paywall.',
@@ -861,16 +1124,16 @@
     'Kein Abo:': 'Not a subscription:',
     'keine Zahlungsdaten, keine stille Verlängerung, keine Kündigung nötig. Nach {2} Monaten endet der Platz von selbst, und du entscheidest neu.':
       'no payment details, no silent renewal, no cancellation needed. After {2} months the place ends by itself and you decide again.',
-    '{3} von {4} Plätzen vergeben': '{3} of {4} places taken',
-    '{7} noch frei': '{7} still free',
+    'von {4} Plätzen vergeben': 'of {4} places taken',
+    'noch frei': 'still free',
     '· {8} vergeben': '· {8} taken',
-    '{9}Platz sichern – {10} Monate Plus, 0 €': '{9}Claim a place – {10} months of Plus, €0',
+    'Platz sichern – {10} Monate Plus, 0 €': 'Claim a place – {10} months of Plus, €0',
     'Mit dem Sichern gelten die': 'By claiming one you accept the',
     'Geschäftsbedingungen': 'terms and conditions',
     ', insbesondere § 6. Ein Widerrufsrecht besteht nicht, weil keine Zahlungspflicht entsteht – beenden lässt sich der Platz trotzdem jederzeit.':
       ', in particular § 6. There is no right of withdrawal because no payment obligation arises – you can still end the place at any time.',
-    '{11}In dieser Vorführung gibt es keinen Server, der die Plätze zentral zählt. Der Zähler oben ist deshalb eine Hochrechnung aus der Zeit seit dem Start, keine Messung. Im Betrieb vergibt der Server jede Nummer genau einmal.':
-      '{11}In this demo there is no server counting the places centrally. The counter above is therefore an extrapolation from the time since launch, not a measurement. In production the server issues each number exactly once.',
+    'In dieser Vorführung gibt es keinen Server, der die Plätze zentral zählt. Der Zähler oben ist deshalb eine Hochrechnung aus der Zeit seit dem Start, keine Messung. Im Betrieb vergibt der Server jede Nummer genau einmal.':
+      'In this demo there is no server counting the places centrally. The counter above is therefore an extrapolation from the time since launch, not a measurement. In production the server issues each number exactly once.',
     'Plus läuft ab sofort für {0} Monate': 'Plus now runs for {0} months',
     ', bis zum {1}.': ', until {1}.',
     'Keine Zahlungsdaten hinterlegt und keine nötig.': 'No payment details stored, and none needed.',
@@ -883,7 +1146,7 @@
     'Hier wird nichts abgebucht und nichts abgeschlossen. Der Schalter oben ändert nur, welche Funktionen diese Anwendung dir freigibt – damit du siehst, worin der Unterschied besteht.':
       'Nothing is charged here and nothing is signed up for. The switch above only changes which features this app unlocks for you – so you can see what the difference is.',
 
-    '{17}Häufige Fragen': '{17}Frequently asked questions',
+    'Häufige Fragen': 'Frequently asked questions',
     'Wie kündige ich?': 'How do I cancel?',
     'Im Monatstarif zum Ende des laufenden Monats, mit einem Klick in diesem Bereich. Es gibt keine Mindestlaufzeit, keine Kündigungsfrist und keine Rückfrage, warum du gehst. Im Jahrestarif läuft das Abo zum Ende des bezahlten Jahres aus und verlängert sich nur, wenn du zustimmst.':
       'On the monthly plan, at the end of the current month, with one click in this section. There is no minimum term, no notice period and no question about why you are leaving. On the yearly plan the subscription runs out at the end of the paid year and only renews if you agree.',
@@ -925,7 +1188,7 @@
 
   e({
     'Willkommen bei TrimmoTrade': 'Welcome to TrimmoTrade',
-    '{3}Warum steht der Passkey oben?': '{3}Why is the passkey at the top?',
+    'Warum steht der Passkey oben?': 'Why is the passkey at the top?',
     'Weil er als Einziges gegen die häufigste Masche schützt: eine nachgebaute Anmeldeseite. Ein Passkey ist an die Adresse gebunden, unter der er angelegt wurde. Wer auf eine gefälschte Seite hereinfällt, gibt dort nichts preis – es gibt nichts einzugeben. Der Schlüssel entsteht im Sicherheitschip deines Geräts und verlässt ihn nie.':
       'Because it is the only one that protects against the commonest trick: a fake sign-in page. A passkey is bound to the address it was created under. Anyone falling for a forged page gives nothing away – there is nothing to type. The key is created in your device’s security chip and never leaves it.',
     'Bei Google, Microsoft und Apple bekommt TrimmoTrade Name und E-Mail-Adresse, dein Passwort dort aber nie zu sehen. Beim Weg über die E-Mail-Adresse gibt es gar kein Passwort, sondern einen Code, der zehn Minuten gilt.':
@@ -934,12 +1197,12 @@
     'name@beispiel.de': 'name@example.com',
     'Name (freiwillig)': 'Name (optional)',
     'wie du in Anfragen erscheinst': 'how you appear in enquiries',
-    '{3}Code anfordern': '{3}Request code',
+    'Code anfordern': 'Request code',
     'anderes Verfahren wählen': 'choose a different method',
     'Wir haben einen sechsstelligen Code an': 'We have sent a six-digit code to',
     'geschickt. Er gilt {1} Minuten.': '. It is valid for {1} minutes.',
     'Code': 'Code',
-    '{0}Anmelden': '{0}Sign in',
+    'Anmelden': 'Sign in',
     'neuen Code anfordern': 'request a new code',
     'Adresse ändern': 'change address',
     'Nachgebildeter Ablauf': 'Simulated flow',
@@ -953,9 +1216,9 @@
     'Dein Passwort bekommt TrimmoTrade nie zu sehen': 'TrimmoTrade never gets to see your password',
     'Welches Konto?': 'Which account?',
     'Name': 'Name',
-    '{13}Zulassen und anmelden': '{13}Allow and sign in',
+    'Zulassen und anmelden': 'Allow and sign in',
     'Abbrechen': 'Cancel',
-    '{14}Was im Betrieb einzurichten ist': '{14}What has to be set up in production',
+    'Was im Betrieb einzurichten ist': 'What has to be set up in production',
     'Ich habe die': 'I have read the',
     'Allgemeinen Geschäftsbedingungen': 'terms and conditions',
     'und die': 'and the',
@@ -968,7 +1231,6 @@
     ', welche Stufe das Gegenüber hat. TrimmoTrade zeigt das an jedem Inserat.':
       'which level the other party has. TrimmoTrade shows this on every listing.',
 
-    '{0}Konto': '{0}Account',
     'Wie du angemeldet bist, was davon bestätigt ist und wie du beides änderst.':
       'How you are signed in, what of that is verified, and how to change either.',
     'E-Mail': 'Email',
@@ -976,13 +1238,12 @@
     'Konto seit': 'Account since',
     'Zuletzt angemeldet': 'Last signed in',
     'Passkey': 'Passkey',
-    '{10}Abmelden': '{10}Sign out',
-    '{12}Konto löschen': '{12}Delete account',
-    '{13}Vertrauensstufe': '{13}Trust level',
+    'Abmelden': 'Sign out',
+    'Konto löschen': 'Delete account',
+    'Vertrauensstufe': 'Trust level',
     'Was über ein Konto bekannt ist, entscheidet, wie viel es darf – und was andere über es sehen. Genau hier, nicht bei der Anmeldung selbst, sitzt der Schutz vor Betrug.':
       'What is known about an account decides how much it may do – and what others see about it. This, not the sign-in itself, is where protection from fraud sits.',
-    '{21}Angaben ändern': '{21}Change details',
-    '{21}Übernehmen': '{21}Apply',
+    'Angaben ändern': 'Change details',
     'Wird die Adresse geändert, gilt sie erst nach einer neuen Bestätigung – sonst könnte man ein Konto auf eine fremde Adresse umschreiben.':
       'If the address is changed it only takes effect after fresh verification – otherwise an account could be rewritten to someone else’s address.',
     'Was von deinem Konto gespeichert wird': 'What is stored about your account',
@@ -997,7 +1258,7 @@
     'Nachgebildet': 'Simulated',
     'Es gibt keinen Server, der eine SMS verschicken könnte. Im Betrieb käme jetzt ein Code auf das Telefon – über einen Versanddienst, der pro Nachricht abrechnet.':
       'There is no server that could send an SMS. In production a code would arrive on your phone now – via a delivery service billing per message.',
-    '{0}Als bestätigt eintragen': '{0}Mark as verified',
+    'Als bestätigt eintragen': 'Mark as verified',
     'Für Inserierende ist das der Maßstab. Geprüft wird über einen Dienst – POSTIDENT in der Filiale oder per Video, oder die eID-Funktion des Personalausweises.':
       'For advertisers this is the benchmark. Verification runs through a service – POSTIDENT in a branch or by video, or the eID function of the German ID card.',
     'Der Ausweis selbst wird nicht gespeichert.': 'The ID document itself is not stored.',
@@ -1015,10 +1276,9 @@
   /* ------------------------- Dokumententresor ------------------------- */
 
   e({
-    '{0}Dokumententresor': '{0}Document vault',
     'Wer sich auf zwanzig Wohnungen bewirbt, verschickt zwanzig Mal Gehaltsnachweise, Ausweiskopie und Schufa – an Fremde, ohne Ablaufdatum. Danach liegen die Unterlagen in zwanzig Postfächern und bleiben dort. Hier legst du sie einmal verschlüsselt ab und verschickst nur noch einen Verweis, der abläuft und sich widerrufen lässt.':
       'Apply for twenty apartments and you send payslips, a copy of your ID and a Schufa report twenty times – to strangers, with no expiry date. After that your documents sit in twenty mailboxes and stay there. Here you store them once, encrypted, and only send a link that expires and can be revoked.',
-    '{0}Was hier tatsächlich passiert': '{0}What actually happens here',
+    'Was hier tatsächlich passiert': 'What actually happens here',
     'Deine Dateien werden im Browser mit': 'Your files are encrypted in the browser with',
     'AES-GCM und 256 Bit': 'AES-GCM and 256 bits',
     'verschlüsselt, bevor sie gespeichert werden. Der Schlüssel entsteht aus deinem Kennwort über':
@@ -1038,7 +1298,7 @@
     'In dieser Vorführung liegt das Chiffrat in diesem Browser, der Verweis funktioniert deshalb nur auf diesem Gerät. Im Betrieb läge dort das Chiffrat und sonst nichts: kein Schlüssel, keine Datei im Klartext, nichts, was ein Einbruch verwertbar machen würde. Ablauf und Abrufzähler würde der Server durchsetzen – hier tut es die Anwendung selbst.':
       'In this demo the ciphertext lives in this browser, so the link only works on this device. In production the server would hold the ciphertext and nothing else: no key, no file in the clear, nothing a break-in could make use of. Expiry and the access counter would be enforced by the server – here the app does it itself.',
 
-    '{0}Dieser Browser kann das nicht': '{0}This browser cannot do it',
+    'Dieser Browser kann das nicht': 'This browser cannot do it',
     'Für den Tresor braucht es die Verschlüsselungsfunktionen des Browsers und einen lokalen Datenspeicher. Beides fehlt hier – meist, weil die Seite ohne gesicherte Verbindung geöffnet wurde oder der private Modus den Speicher sperrt.':
       'The vault needs the browser’s cryptography functions and local storage. Both are missing here – usually because the page was opened without a secure connection, or private mode is blocking storage.',
     /* „Profil“ steht in der Navigation und mitten in diesem Satz – ein
@@ -1048,7 +1308,7 @@
     'funktioniert weiterhin; du verschickst deine Unterlagen dann wie gewohnt selbst.':
       'still works; you then send your documents yourself as usual.',
 
-    '{0}Tresor einrichten': '{0}Set up the vault',
+    'Tresor einrichten': 'Set up the vault',
     'Ein Kennwort, das nur du kennst. Daraus entsteht der Schlüssel – gespeichert wird er nirgends.':
       'A password only you know. The key is derived from it – and stored nowhere.',
     'Kennwort': 'Password',
@@ -1057,26 +1317,26 @@
     'Dieses Kennwort lässt sich nicht zurücksetzen': 'This password cannot be reset',
     'Es gibt keinen Server, der es kennt, und keine Wiederherstellung per E-Mail. Genau das ist der Punkt: Wer den Speicher dieses Geräts in die Hände bekommt, kommt ohne das Kennwort nicht an deine Unterlagen. Vergisst du es, sind sie auch für dich verloren – dann bleibt nur, den Tresor zu leeren und neu zu füllen.':
       'There is no server that knows it and no recovery by email. That is precisely the point: anyone who gets hold of this device’s storage cannot reach your documents without the password. If you forget it, they are lost to you as well – all that remains is to empty the vault and fill it again.',
-    '{2}Tresor anlegen': '{2}Create vault',
-    '{0}Tresor gesperrt': '{0}Vault locked',
-    '{2}Öffnen': '{2}Open',
+    'Tresor anlegen': 'Create vault',
+    'Tresor gesperrt': 'Vault locked',
+    'Öffnen': 'Open',
     'Kennwort vergessen – Tresor leeren': 'Password forgotten – empty the vault',
 
-    '{0}Deine Unterlagen': '{0}Your documents',
-    '{1}Tresor schließen': '{1}Close vault',
+    'Deine Unterlagen': 'Your documents',
+    'Tresor schließen': 'Close vault',
     'Art der Unterlage': 'Type of document',
     'Datei': 'File',
-    '{4}Datei wählen': '{4}Choose file',
+    'Datei wählen': 'Choose file',
     'noch keine gewählt': 'none chosen yet',
-    '{5}Verschlüsselt ablegen': '{5}Store encrypted',
+    'Verschlüsselt ablegen': 'Store encrypted',
     'PDF, JPG, PNG, WEBP oder HEIC, je bis 8 MB. Die Datei wird verschlüsselt, bevor sie den Arbeitsspeicher verlässt – unverschlüsselt liegt sie zu keinem Zeitpunkt im Speicher des Geräts.':
       'PDF, JPG, PNG, WEBP or HEIC, up to 8 MB each. The file is encrypted before it leaves memory – at no point does it sit unencrypted in the device’s storage.',
-    '{8}Freigaben': '{8}Shares',
-    '{9} von {10} noch gültig': '{9} of {10} still valid',
+    'Freigaben': 'Shares',
+    'von {10} noch gültig': 'of {10} still valid',
     'Ein Widerruf wirkt sofort: Der Verweis führt danach ins Leere, auch wenn ihn jemand gespeichert hat. Bei Dateien im E-Mail-Postfach gibt es das nicht.':
       'Revoking takes effect immediately: the link then leads nowhere, even if someone saved it. Files in an email inbox offer nothing of the sort.',
 
-    '{3}Was du ohnehin nie mitschicken solltest': '{3}What you should never send anyway',
+    'Was du ohnehin nie mitschicken solltest': 'What you should never send anyway',
     'Auch der beste Tresor hilft nicht gegen die falsche Reihenfolge.':
       'Even the best vault does not help against the wrong order of events.',
     'Schufa und Ausweiskopie gehören nicht in die erste Anfrage.':
@@ -1094,26 +1354,25 @@
     'sind unzulässig. Sie dürfen falsch beantwortet werden, ohne dass der Vertrag deshalb angreifbar wird.':
       'are not permitted. They may be answered untruthfully without making the contract challengeable.',
 
-    '{0}Freigegebene Unterlagen': '{0}Shared documents',
-    '{1}Wird entschlüsselt…': '{1}Decrypting…',
+    'Freigegebene Unterlagen': 'Shared documents',
+    'Wird entschlüsselt…': 'Decrypting…',
     'So funktioniert dieser Verweis': 'How this link works',
     'Die Unterlagen wurden verschlüsselt abgelegt. Der Schlüssel steckt im Teil dieses Verweises hinter dem Rautezeichen – Browser senden ihn nie an einen Server. Wer den Verweis nicht hat, kann die Dateien nicht lesen, auch nicht der Betreiber.':
       'The documents were stored encrypted. The key sits in the part of this link after the hash sign – browsers never send it to a server. Anyone without the link cannot read the files, the operator included.',
-    '{0}Dieser Verweis ist unvollständig.': '{0}This link is incomplete.',
+    'Dieser Verweis ist unvollständig.': 'This link is incomplete.',
     'gültig bis': 'valid until',
     'Abrufe': 'accesses',
     'freigegeben': 'shared',
-    '{7}{8}. Nach Ablauf oder Widerruf führt dieser Verweis ins Leere – die Dateien lassen sich dann nicht mehr öffnen.':
-      '{7}{8}. Once expired or revoked this link leads nowhere – the files can no longer be opened.',
-    '{0}Kein Zugriff': '{0}No access',
+    '. Nach Ablauf oder Widerruf führt dieser Verweis ins Leere – die Dateien lassen sich dann nicht mehr öffnen.':
+      '. Once expired or revoked this link leads nowhere – the files can no longer be opened.',
+    'Kein Zugriff': 'No access',
     'Das ist der Sinn der Sache: Ein Verweis, der abgelaufen oder widerrufen wurde, lässt sich nicht wiederbeleben – auch nicht von der Person, die ihn erstellt hat.':
       'That is the whole point: a link that has expired or been revoked cannot be brought back – not even by the person who created it.',
     'Vorschau für diesen Dateityp gibt es hier nicht. Du kannst die Datei entschlüsselt sichern.':
       'There is no preview for this file type here. You can save the file decrypted.',
     'Für diesen Dateityp gibt es hier keine Vorschau. Sichere die Datei, um sie zu öffnen.':
       'There is no preview for this file type here. Save the file to open it.',
-    '{1}Entschlüsselt sichern': '{1}Save decrypted',
-
+    'Entschlüsselt sichern': 'Save decrypted',
     'Verschickt wird kein Anhang, sondern ein Verweis, der von selbst erlischt. Wähl nur aus, was in diesem Schritt wirklich gebraucht wird.':
       'What gets sent is not an attachment but a link that expires by itself. Select only what is genuinely needed at this step.',
     'Dokumente': 'Documents',
@@ -1130,15 +1389,15 @@
     'zehnmal': 'ten times',
     'Kürzer und seltener ist besser. Für eine Besichtigung reicht meist ein Abruf über drei Tage.':
       'Shorter and fewer is better. For a viewing, one access over three days is usually enough.',
-    '{1}Verweis erzeugen': '{1}Create link',
+    'Verweis erzeugen': 'Create link',
     'Unterlagen sicher mitschicken': 'Send documents securely',
-    '{0}Verweis erzeugt und unten in den Text eingefügt: {1} {2}, gültig {3} {4}, {5} {6}.':
-      '{0}Link created and inserted into the text below: {1} {2}, valid {3} {4}, {5} {6}.',
+    'Verweis erzeugt und unten in den Text eingefügt: {1} {2}, gültig {3} {4}, {5} {6}.':
+      'Link created and inserted into the text below: {1} {2}, valid {3} {4}, {5} {6}.',
     'Widerrufen kannst du ihn jederzeit im': 'You can revoke it at any time in the',
     'Dieser Verweis gilt': 'This link is valid for',
-    '{0} Tage': '{0} days',
+    'Tage': 'days',
     'und lässt sich': 'and can be opened',
-    '{1} Mal': '{1} times',
+    'Mal': 'times',
     'öffnen. Danach ist er wertlos. Im Tresor kannst du ihn jederzeit vorher widerrufen.':
       '. After that it is worthless. You can revoke it in the vault at any time before then.',
     'Verweis': 'Link',
@@ -1147,17 +1406,16 @@
       'Everything after the hash sign is the key. Whoever passes on the link passes on the documents. Send it individually, not to a mailing list.',
     'In dieser Vorführung liegen die verschlüsselten Dateien in diesem Browser – der Verweis funktioniert deshalb nur auf diesem Gerät.':
       'In this demo the encrypted files live in this browser – so the link only works on this device.',
-    '{0}Verweis kopieren': '{0}Copy link'
+    'Verweis kopieren': 'Copy link'
   });
 
   /* ------------------------- Werkzeuge ------------------------- */
 
   e({
-    '{0}Werkzeuge': '{0}Tools',
     'Rechnen, prüfen, protokollieren. Das meiste davon braucht man genau einmal – und genau dann ist es viel wert. Deshalb ist bis auf die Marktdaten alles im freien Tarif enthalten.':
       'Calculate, check, record. Most of this you need exactly once – and precisely then it is worth a lot. Which is why everything except the market data is included in the free plan.',
 
-    '{0}Was kann ich mir leisten?': '{0}What can I afford?',
+    'Was kann ich mir leisten?': 'What can I afford?',
     'Die meisten scheitern nicht am eigenen Budget, sondern an einer Regel, die Vermieter anwenden: das Dreifache der Kaltmiete als Nettoeinkommen. Beide Grenzen stehen hier nebeneinander.':
       'Most people fail not on their own budget but on a rule landlords apply: net income of three times the base rent. Both limits are shown side by side here.',
     'Deine Zahlen': 'Your figures',
@@ -1165,16 +1423,16 @@
     'Andere feste Raten im Monat': 'Other fixed monthly payments',
     'Kredit, Leasing, Unterhalt': 'Loan, leasing, maintenance',
     'Eigenkapital für einen Kauf': 'Equity for a purchase',
-    '{0}Dein Suchbudget von {1} liegt innerhalb dessen, was dein Haushalt trägt. Damit suchst du realistisch.':
-      '{0}Your search budget of {1} is within what your household can carry. That makes your search realistic.',
+    'Dein Suchbudget von {1} liegt innerhalb dessen, was dein Haushalt trägt. Damit suchst du realistisch.':
+      'Your search budget of {1} is within what your household can carry. That makes your search realistic.',
     'Dein Suchbudget liegt über dieser Rechnung': 'Your search budget is above this calculation',
     'Im Profil suchst du bis': 'In your profile you are searching up to',
     'warm. Bequem wären {2}, die Schmerzgrenze liegt bei {3} – du bist also {4} darüber. Das kann eine bewusste Entscheidung sein; oft ist es aber schlicht nie nachgerechnet worden.':
       'incl. bills. Comfortable would be {2}, the pain threshold is {3} – so you are {4} above it. That can be a deliberate decision; often it simply has never been worked out.',
     'Suchbudget auf {6} setzen': 'Set search budget to {6}',
     'auf {8} setzen': 'set to {8}',
-    '{0}Trag dein Nettoeinkommen ein, dann rechnet TrimmoTrade.':
-      '{0}Enter your net income and TrimmoTrade will do the maths.',
+    'Trag dein Nettoeinkommen ein, dann rechnet TrimmoTrade.':
+      'Enter your net income and TrimmoTrade will do the maths.',
     'Warmmiete, die bequem passt (30 % vom Verfügbaren)':
       'Rent incl. bills that fits comfortably (30 % of what is available)',
     'noch machbar, aber ohne Puffer (35 %)': 'still doable, but with no buffer (35 %)',
@@ -1197,10 +1455,9 @@
       'The 30 per cent rule is a rule of thumb, not a limit',
     'Wer wenig verdient, gibt fast zwangsläufig mehr als 30 % fürs Wohnen aus – in vielen Städten sind 40 % und mehr Alltag. Die Zahl taugt nicht als Vorwurf, sondern als Warnsignal: Über 40 % bleibt für unerwartete Ausgaben nichts übrig. Dann lohnt der Blick auf Wohngeld und den Wohnberechtigungsschein.':
       'Anyone on a low income almost inevitably spends more than 30 % on housing – in many cities 40 % and more is everyday reality. The figure is not a reproach but a warning sign: above 40 % nothing is left for unexpected expenses. That is when it is worth looking at housing benefit (Wohngeld) and the social housing entitlement certificate (WBS).',
-    '{7}Wohngeld prüfen': '{7}Check housing benefit',
-    '{8}Wohnberechtigungsschein prüfen': '{8}Check housing entitlement certificate',
-
-    '{0}Wohnberechtigungsschein': '{0}Housing entitlement certificate (WBS)',
+    'Wohngeld prüfen': 'Check housing benefit',
+    'Wohnberechtigungsschein prüfen': 'Check housing entitlement certificate',
+    'Wohnberechtigungsschein': 'Housing entitlement certificate (WBS)',
     'Geförderte Wohnungen sind oft deutlich günstiger und ihre Mieten steigen langsamer. Der Schein ist der Schlüssel dazu – und die Hürde ist niedriger, als viele denken.':
       'Subsidised apartments are often considerably cheaper and their rents rise more slowly. The certificate is the key to them – and the bar is lower than many people think.',
     'Die Einkommensgrenze setzt dein Bundesland': 'Your federal state sets the income limit',
@@ -1224,7 +1481,7 @@
     'Bruttojahreseinkommen': 'Gross annual income',
     'maßgebliches Jahreseinkommen': 'relevant annual income',
     'eingestellte Einkommensgrenze': 'income limit set',
-    '{14}Wenn es passt: so geht es weiter': '{14}If it fits: what happens next',
+    'Wenn es passt: so geht es weiter': 'If it fits: what happens next',
     'Antrag beim Wohnungsamt': 'Apply at the housing office',
     'Formular der Stadt, meist auch online. Kostet je nach Kommune nichts bis rund 25 €.':
       'Your city’s form, usually available online too. Costs anywhere from nothing to about €25 depending on the municipality.',
@@ -1237,9 +1494,7 @@
     'Gültigkeit beachten': 'Mind the validity',
     'Der Schein gilt in der Regel ein Jahr. Läuft er ab, während du suchst, verlängere rechtzeitig.':
       'The certificate is usually valid for a year. If it expires while you are searching, renew it in good time.',
-    '{15}Inserate mit WBS-Bedarf ansehen': '{15}See listings requiring a WBS',
-
-    '{0}Wohngeld prüfen': '{0}Check housing benefit',
+    'Inserate mit WBS-Bedarf ansehen': 'See listings requiring a WBS',
     'Wohngeld bleibt millionenfach unbeantragt, weil viele annehmen, es stehe ihnen nicht zu. Diese Vorprüfung klärt in einer Minute, ob sich der Antrag lohnt.':
       'Housing benefit goes unclaimed millions of times over because many assume they are not entitled. This pre-check settles in a minute whether applying is worth it.',
     'Deine Situation': 'Your situation',
@@ -1254,12 +1509,12 @@
   /* ------------------------- Nebenkosten und Protokoll ------------------------- */
 
   e({
-    '{0}Nebenkostenabrechnung prüfen': '{0}Check the service-charge statement',
+    'Nebenkostenabrechnung prüfen': 'Check the service-charge statement',
     'Schätzungen zufolge ist etwa jede zweite Betriebskostenabrechnung fehlerhaft. Am häufigsten stehen Posten darin, die gar nicht umgelegt werden dürfen – oder die Abrechnung kommt zu spät und die Nachzahlung ist damit hinfällig.':
       'By some estimates about half of all service-charge statements contain errors. Most often they include items that may not be passed on at all – or the statement arrives too late, which voids the additional payment.',
-    '{0}Trag die Posten aus deiner Abrechnung ein. Du musst nicht alle erfassen – die auffälligen genügen.':
-      '{0}Enter the items from your statement. You do not have to capture them all – the conspicuous ones are enough.',
-    'Betrag für {5}': 'Amount for {5}',
+    'Trag die Posten aus deiner Abrechnung ein. Du musst nicht alle erfassen – die auffälligen genügen.':
+      'Enter the items from your statement. You do not have to capture them all – the conspicuous ones are enough.',
+    'Betrag für': 'Amount for',
     'Rahmendaten': 'Basic details',
     'Ende des Abrechnungszeitraums': 'End of the billing period',
     'Abrechnung bei dir eingegangen am': 'Statement received by you on',
@@ -1269,10 +1524,10 @@
     'Heizkosten wurden allein nach Wohnfläche verteilt': 'Heating costs were split by floor area alone',
     'ohne Verbrauchserfassung': 'without metering consumption',
     'Einsicht in die Belege wurde mir verweigert': 'I was refused access to the receipts',
-    '{8}Diese Posten dürfen umgelegt werden': '{8}These items may be passed on',
+    'Diese Posten dürfen umgelegt werden': 'These items may be passed on',
     'Der Katalog der Betriebskostenverordnung ist abschließend. Trag ein, was in deiner Abrechnung steht – die Summen erscheinen oben.':
       'The catalogue in the Operating Costs Ordinance (BetrKV) is exhaustive. Enter what is on your statement – the totals appear above.',
-    '{10}Diese Posten dürfen nicht umgelegt werden': '{10}These items may not be passed on',
+    'Diese Posten dürfen nicht umgelegt werden': 'These items may not be passed on',
     'Auch dann nicht, wenn im Mietvertrag etwas anderes steht – solche Klauseln sind unwirksam.':
       'Not even if the tenancy agreement says otherwise – such clauses are void.',
     'Die wichtigste Frist': 'The most important deadline',
@@ -1286,7 +1541,7 @@
     'Vorlage zur Orientierung, keine Rechtsberatung. Bei hohen Beträgen lohnt der Gang zum Mieterverein.':
       'A template for orientation, not legal advice. For large amounts it is worth going to a tenants’ association.',
 
-    '{0}Übergabeprotokoll': '{0}Handover report',
+    'Übergabeprotokoll': 'Handover report',
     'Der wichtigste Zettel des ganzen Umzugs. Was hier nicht steht, gilt später als nicht vorhanden – und wird beim Auszug von deiner Kaution abgezogen.':
       'The most important piece of paper in the whole move. Whatever is not on it counts later as not having existed – and gets deducted from your deposit when you move out.',
     'Drei Regeln für die Übergabe': 'Three rules for the handover',
@@ -1304,20 +1559,19 @@
     'Übernehmende Person': 'Person taking over',
     'Weitere Anwesende': 'Others present',
     'Zeugen sind bei Streit Gold wert': 'Witnesses are worth their weight in gold in a dispute',
-    '{10}Zählerstände': '{10}Meter readings',
+    'Zählerstände': 'Meter readings',
     'Mit Foto festhalten. Ohne abgelesenen Stand zahlst du unter Umständen den Verbrauch der Vormieter mit.':
       'Record them with a photo. Without a reading you may end up paying for the previous tenants’ consumption.',
-    '{12}Schlüssel': '{12}Keys',
+    'Schlüssel': 'Keys',
     'Jeder fehlende Schlüssel kann beim Auszug eine ganze Schließanlage kosten. Zähl sie jetzt.':
       'Every missing key can cost an entire locking system when you move out. Count them now.',
-    '{14}Räume': '{14}Rooms',
-    '{16}Raum hinzufügen': '{16}Add room',
+    'Räume': 'Rooms',
+    'Raum hinzufügen': 'Add room',
     'Bemerkungen': 'Remarks',
     'Vereinbarungen, offene Punkte, Termine für Nacharbeiten':
       'Agreements, open points, dates for remedial work',
-    '{18}Fertiges Protokoll': '{18}Finished report',
-    '{20}Text kopieren': '{20}Copy text',
-    '{21}Drucken': '{21}Print',
+    'Fertiges Protokoll': 'Finished report',
+    'Drucken': 'Print',
     'Zweimal ausdrucken, beide Seiten unterschreiben, jede Seite behält ein Exemplar. Fotos gehören dazu – am besten als Anlage benannt und mit dem Datum im Dateinamen.':
       'Print two copies, both parties sign, each side keeps one. Photos belong with it – ideally named as an annex and with the date in the file name.'
   });
@@ -1551,13 +1805,11 @@
     'Zimmer ab': 'Rooms from', 'Zimmer bis': 'Rooms to',
     'Fläche ab': 'Area from', 'Fläche bis': 'Area to',
     'Baujahr ab': 'Built from',
-    'Warmmiete im Monat': 'Monthly rent incl. bills',
     'Trag im': 'Enter a work or university address in your',
     'einen Arbeits- oder Uniort ein, dann filtert TrimmoTrade nach echter Fahrzeit statt nach Luftlinie.':
       ', then TrimmoTrade filters by real travel time instead of straight-line distance.',
     'deine Arbeits- oder Studienadresse ein, dann zeigt TrimmoTrade hier die Fahrzeiten.':
       ', then TrimmoTrade shows the travel times here.',
-    'Anbieter': 'Provider',
     'provisionsfrei': 'no commission',
     'keine Zweck-WG': 'not just a practical arrangement',
     'nur rauchfreie WGs': 'non-smoking flatshares only',
@@ -1579,7 +1831,6 @@
     'Inserat': 'listing', 'Inserate': 'listings',
     'Anfrage': 'enquiry', 'Anfragen': 'enquiries',
     'mit Plus': 'with Plus',
-    'keine': 'none',
     'Beste Passung': 'Best match', 'Neueste': 'Newest',
     'Preis aufsteigend': 'Price ascending', 'Preis absteigend': 'Price descending',
     'Fläche absteigend': 'Area descending', 'Kürzester Weg': 'Shortest commute',
@@ -1599,7 +1850,6 @@
     'WG-Passung {0} % – passt sehr gut': 'Flatshare match {0} % – a very good fit',
 
     /* Werkzeugliste */
-    'Was kann ich mir leisten?': 'What can I afford?',
     'Zwei Grenzen, die ständig verwechselt werden: was dein Haushalt trägt und was Vermieter sehen wollen. Dazu, wie groß die Wohnung dafür sein darf.':
       'Two limits that are constantly confused: what your household can carry and what landlords want to see. Plus how big the apartment can be for that.',
     'vor der ersten Suche': 'before your first search',
@@ -1612,7 +1862,6 @@
     'Vermögensvergleich über frei wählbare Jahre. Der Mietende legt sein Eigenkapital an und investiert die monatliche Differenz.':
       'A wealth comparison over as many years as you like. The renter invests their equity and the monthly difference.',
     'wenn Kaufen im Raum steht': 'if buying is on the table',
-    'Marktdaten und Preisverlauf': 'Market data and price history',
     'Wie sich die Mieten je Viertel über drei Jahre entwickelt haben, und welche Viertel gerade am schnellsten teurer werden.':
       'How rents per neighbourhood have moved over three years, and which neighbourhoods are getting more expensive fastest.',
     'beim Eingrenzen der Suche': 'while narrowing your search',
@@ -1843,16 +2092,16 @@
      und eine Übersetzung des Namens hilft dabei niemandem. */
 
   e({
-    '{0}Rechtliches': '{0}Legal',
-    'Fassung vom {3}': 'Version of {3}',
+    'Rechtliches': 'Legal',
+    'Fassung vom': 'Version of',
     'Anbieter, Datenschutz, Geschäftsbedingungen und Widerruf – die Angaben, die eine Seite in Deutschland führen muss, und die, die man führen sollte.':
       'Provider, privacy, terms and withdrawal – the information a website in Germany must carry, and the information it ought to carry.',
-    '{0}{1} {2} noch': '{0}{1} {2} still',
+    'noch': 'still',
     'Pflichtangabe fehlt': 'mandatory detail missing',
     'Pflichtangaben fehlen': 'mandatory details missing',
     'Solange sie fehlen, ist dieses Dokument nicht vollständig. Im Text stehen die Lücken markiert.':
       'While they are missing this document is incomplete. The gaps are marked in the text.',
-    '{4}Angaben ergänzen': '{4}Complete the details',
+    'Angaben ergänzen': 'Complete the details',
     'Diese Texte sind ein Entwurf, keine Rechtsberatung':
       'These texts are a draft, not legal advice',
     'Sie sind nach den geltenden Vorschriften geschrieben – Digitale-Dienste-Gesetz, DSGVO, BGB, Verordnung über digitale Dienste – und decken ab, was ein Kleingewerbe mit einer solchen Seite braucht. Aber sie ersetzen nicht den Blick von jemandem mit Zulassung. Vor dem ersten echten Nutzer gehören vor allem die Geschäftsbedingungen, die Haftung und die Frage nach einer Erlaubnis gemäß § 34c GewO geprüft.':
@@ -1860,13 +2109,12 @@
     'Angaben zum Anbieter': 'Provider details',
     'Name, Anschrift, Kontakt und Steuerstatus – von hier speisen sich alle Dokumente.':
       'Name, address, contact and tax status – every document draws on this.',
-    '{5}Was vor dem Start noch zu klären ist': '{5}What still needs settling before launch',
+    'Was vor dem Start noch zu klären ist': 'What still needs settling before launch',
     'Punkte, die kein Textbaustein löst, sondern eine Entscheidung.':
       'Points no template solves – only a decision does.',
 
     /* Impressum */
-    'Anbieter': 'Provider',
-    'Rechtsform: {3}. {4}': 'Legal form: {3}. {4}',
+    'Rechtsform: {3}.': 'Legal form: {3}.',
     'Kontakt': 'Contact',
     'Telefon': 'Phone',
     '§ 5 Abs. 1 Nr. 2 DDG verlangt Angaben, die eine schnelle elektronische Kontaktaufnahme und unmittelbare Kommunikation ermöglichen. Die E-Mail-Adresse ist dafür Pflicht; die Nummer ist der übliche zweite Weg.':
@@ -1875,8 +2123,8 @@
     'Die Steuernummer ist keine Pflichtangabe im Impressum und wird hier bewusst nicht veröffentlicht.':
       'The tax number is not a mandatory item in the legal notice and is deliberately not published here.',
     'Verantwortlich für redaktionelle Inhalte': 'Responsible for editorial content',
-    'Gemäß § 18 Abs. 2 des Medienstaatsvertrags: {8}':
-      'Pursuant to § 18(2) of the German Interstate Media Treaty: {8}',
+    'Gemäß § 18 Abs. 2 des Medienstaatsvertrags:':
+      'Pursuant to § 18(2) of the German Interstate Media Treaty:',
     'Verbraucherstreitbeilegung': 'Consumer dispute resolution',
     'Der Anbieter ist weder bereit noch verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen (§ 36 Verbraucherstreitbeilegungsgesetz).':
       'The provider is neither willing nor obliged to take part in dispute resolution proceedings before a consumer arbitration board (§ 36 VSBG).',
@@ -1896,7 +2144,7 @@
       'The structure, texts, graphics and source code of this application are protected by copyright. Reproduction, modification and distribution require the provider’s consent unless the German Copyright Act permits otherwise.',
 
     /* Datenschutz */
-    '{2}Das Wichtigste zuerst': '{2}The most important part first',
+    'Das Wichtigste zuerst': 'The most important part first',
     'TrimmoTrade rechnet vollständig im Browser. Suche, Bewertung, Karte, Ringtausch, Merkliste und Profil entstehen auf deinem Gerät und bleiben dort. Es gibt kein Nutzerkonto, keine Übertragung deiner Eingaben an den Anbieter und keine Weitergabe an Dritte.':
       'TrimmoTrade computes entirely in the browser. The search, scoring, map, swap chains, saved list and profile all happen on your device and stay there. There is no user account, no transfer of what you enter to the provider, and no disclosure to third parties.',
     'Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten gebildet und keine Werbung nach deinen Interessen ausgespielt. Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.':
@@ -1904,7 +2152,7 @@
     '1. Verantwortlicher': '1. Controller',
     'Verantwortlich im Sinne von Art. 4 Nr. 7 DSGVO ist:':
       'The controller within the meaning of Art. 4(7) GDPR is:',
-    'E-Mail: {4} · Telefon: {5}': 'Email: {4} · Phone: {5}',
+    'E-Mail: {4} · Telefon:': 'Email: {4} · Phone:',
     '2. Datenschutzbeauftragter': '2. Data protection officer',
     'Ein Datenschutzbeauftragter ist nicht bestellt. Nach § 38 Abs. 1 BDSG besteht dazu keine Pflicht, weil in der Regel weniger als zwanzig Personen ständig mit der automatisierten Verarbeitung personenbezogener Daten beschäftigt sind und keine Verarbeitung stattfindet, die eine Datenschutz-Folgenabschätzung erfordert.':
       'No data protection officer has been appointed. Under § 38(1) BDSG there is no obligation to do so, because as a rule fewer than twenty people are permanently engaged in the automated processing of personal data and no processing takes place that would require a data protection impact assessment.',
@@ -2092,8 +2340,8 @@
     'keinen früheren Zugang': 'no earlier access',
     'zu neuen Angeboten. Zur vorrangigen Anzeige von Anfragen bei der anbietenden Seite siehe § 6.':
       'to new offers. On the priority display of enquiries in the advertiser’s inbox, see § 6.',
-    '(2) Der Preis beträgt {4} im Monat oder {5} im Jahr. {6}':
-      '(2) The price is {4} per month or {5} per year. {6}',
+    '(2) Der Preis beträgt {4} im Monat oder {5} im Jahr.':
+      '(2) The price is {4} per month or {5} per year.',
     '(3) Die Laufzeit beträgt je nach Wahl einen Monat oder ein Jahr und verlängert sich jeweils um denselben Zeitraum, wenn nicht bis zum Ablauf gekündigt wird. Die Kündigung ist jederzeit zum Ende der laufenden Laufzeit möglich, für Verbraucherinnen und Verbraucher nach Ablauf der Erstlaufzeit jederzeit mit einer Frist von einem Monat (§ 309 Nr. 9 BGB).':
       '(3) The term is one month or one year, as chosen, and renews for the same period unless cancelled before it ends. Cancellation is possible at any time with effect from the end of the current term; for consumers, after the initial term has expired, at any time with one month’s notice (§ 309 no. 9 BGB).',
     '(4) Die Kündigung ist ohne Anmeldung und ohne Umweg über den Kundendienst möglich, über die Schaltfläche':
@@ -2127,9 +2375,9 @@
 
     '§ 7 Gründerplätze': '§ 7 Founder places',
     '(1) Der Anbieter vergibt die ersten': '(1) The provider grants the first',
-    '{10} Plätze': '{10} places',
+    'Plätze': 'places',
     'mit den Leistungen von TrimmoTrade Plus für': 'with the services of TrimmoTrade Plus for',
-    '{11} Monate ohne Entgelt': '{11} months free of charge',
+    'Monate ohne Entgelt': 'months free of charge',
     '(Gründerplatz).': '(founder place).',
     '(2) Der Gründerplatz ist': '(2) A founder place is',
     'kein Abonnement': 'not a subscription',
@@ -2227,7 +2475,7 @@
     'Fassung vom {15}.': 'Version of {15}.',
 
     /* Widerruf */
-    '{2}Gilt der Widerruf für dich?': '{2}Does the right of withdrawal apply to you?',
+    'Gilt der Widerruf für dich?': 'Does the right of withdrawal apply to you?',
     'Das Widerrufsrecht besteht bei Verträgen, die': 'The right of withdrawal exists for contracts concluded',
     'gegen Entgelt': 'for payment',
     'im Fernabsatz geschlossen werden – also bei TrimmoTrade Plus. Für den freien Tarif und für einen':
@@ -2262,9 +2510,8 @@
       'If you wish to withdraw from the contract, fill in this form and send it back. It is not mandatory.',
     'An {10} {11} {12} Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über die Erbringung der folgenden Dienstleistung: TrimmoTrade Plus Bestellt am (*) / erhalten am (*): ______________________ Name des/der Verbraucher(s): ____________________________ Anschrift des/der Verbraucher(s): _______________________ ________________________________________________________ Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier) Datum: __________________ (*) Unzutreffendes streichen.':
       'To {10} {11} {12} I/We (*) hereby give notice that I/We (*) withdraw from my/our (*) contract for the supply of the following service: TrimmoTrade Plus Ordered on (*) / received on (*): ______________________ Name of consumer(s): ____________________________________ Address of consumer(s): _________________________________ ________________________________________________________ Signature of consumer(s) (only if this form is notified on paper) Date: __________________ (*) Delete as appropriate.',
-    '{13}Formular kopieren': '{13}Copy form',
-    '{14}Als Textdatei sichern': '{14}Save as a text file',
-
+    'Formular kopieren': 'Copy form',
+    'Als Textdatei sichern': 'Save as a text file',
     /* Meldeweg */
     'Wofür dieser Weg gedacht ist': 'What this route is for',
     'Für Inhalte in TrimmoTrade, die gegen Recht verstoßen: erfundene Inserate, Zahlungsaufforderungen vor der Besichtigung, Angebote ohne Verfügungsbefugnis, benachteiligende Formulierungen im Sinne des Allgemeinen Gleichbehandlungsgesetzes oder Verletzungen von Rechten Dritter.':
@@ -2349,12 +2596,12 @@
     'VORGABE': 'VORGABE',
     '. Dann stehen sie für alle Aufrufe bereit und nicht nur für deinen.':
       '. Then they are available for every visitor, not just for you.',
-    '{2}Angaben': '{2}Details',
+    'Angaben': 'Details',
     'Kleinunternehmerregelung nach § 19 UStG': 'Small-business rule under § 19 UStG',
     'Dann wird keine Umsatzsteuer ausgewiesen, und die Preisangaben sagen das dazu.':
       'No VAT is then shown, and the price statements say so.',
-    '{5}Angaben übernehmen': '{5}Apply details',
-    '{6}So sehen sie im Impressum aus': '{6}This is how they look in the legal notice',
+    'Angaben übernehmen': 'Apply details',
+    'So sehen sie im Impressum aus': 'This is how they look in the legal notice',
     'Impressum ansehen': 'View legal notice'
   });
 
@@ -2365,7 +2612,6 @@
     'ohne {0}': 'no {0}',
     ' – rechnerisch {0} von 100': ' – {0} out of 100 on the numbers',
     '{0} Jahre': 'aged {0}',
-    'Tauschkette mit {0} Beteiligten': 'Swap chain with {0} participants',
     'Seit {0} Tagen online, noch früh genug.': 'Online for {0} days, still early enough.',
     'Seit {0} Tagen online – die ersten Besichtigungen laufen wahrscheinlich schon.':
       'Online for {0} days – the first viewings are probably already under way.',
@@ -2379,15 +2625,14 @@
     'WG: {0} von 10': 'Flatshare: {0} out of 10',
     'Du: {0} von 10': 'You: {0} out of 10',
     'Zeitpunkt': 'Timing',
-    'Ausstattung': 'Features',
     'Deine Bewerbung': 'Your application',
     'Andrang': 'Demand',
     'Miete + WG-Zimmer': 'Rent + flatshare room',
     'Mit Plus kannst du beliebig viele anlegen.': 'With Plus you can create as many as you like.',
     '2 Objekte stehen auf „gemerkt“. TrimmoTrade schreibt für jedes ein eigenes Anschreiben aus deinem Profil – angepasst an Titel, Lage und Preis, nicht als Rundmail.':
       '2 listings are marked “saved”. TrimmoTrade writes a separate covering letter for each from your profile – tailored to the title, location and price, not a mass mailing.',
-    '{0} Objekte stehen auf „gemerkt“. TrimmoTrade schreibt für jedes ein eigenes Anschreiben aus deinem Profil – angepasst an Titel, Lage und Preis, nicht als Rundmail.':
-      '{0} listings are marked “saved”. TrimmoTrade writes a separate covering letter for each from your profile – tailored to the title, location and price, not a mass mailing.',
+    'Objekte stehen auf „gemerkt“. TrimmoTrade schreibt für jedes ein eigenes Anschreiben aus deinem Profil – angepasst an Titel, Lage und Preis, nicht als Rundmail.':
+      'listings are marked “saved”. TrimmoTrade writes a separate covering letter for each from your profile – tailored to the title, location and price, not a mass mailing.',
     'Hervorgehobene Inserate stehen in einem eigenen, als bezahlt gekennzeichneten Block über den Treffern – nie zwischen ihnen. Die Reihenfolge der Suche bleibt unberührt.':
       'Promoted listings sit in their own block above the results, labelled as paid – never among them. The search order is unaffected.',
     'nur mit geschwärzter Nummer und erst bei ernsthaftem Interesse':
@@ -2406,8 +2651,6 @@
       'Works out your relevant annual income with all the flat-rate deductions and sets it against the income limit – which you can set yourself, because every state has a different one.',
     'Vermögensvergleich über frei wählbare Jahre. Der Mietende legt sein Eigenkapital an und investiert die monatliche Differenz – anders ist der Vergleich unehrlich.':
       'A wealth comparison over as many years as you like. The renter invests their equity and the monthly difference – any other comparison is dishonest.',
-    'Über deine Bewerbung weiß TrimmoTrade noch nichts – ohne Einkommen und Unterlagen im Profil lässt sich nichts einschätzen. Was feststeht: Es haben sich bereits {0} andere gemeldet.':
-      'TrimmoTrade knows nothing about your application yet – without income and documents in your profile there is nothing to assess. What is certain: {0} others have already been in touch.',
 
     /* Rechtsübersicht und Betreiberangaben */
     'Angaben gemäß § 5 des Digitale-Dienste-Gesetzes (DDG).':
@@ -2508,17 +2751,8 @@
 
   e({
     'EG': 'GF', 'DG': 'top',
-    '{0} von {1} Treffern geladen': '{0} of {1} results loaded',
-    'wird bei Auszug zurückgezahlt': 'refunded when you move out',
-    'Karte der Suchergebnisse': 'Map of the search results',
-    'Konto und Vertrauensstufe': 'Account and trust level',
-    'In der Suche öffnen': 'Open in the search',
-    'Aus meinem Profil füllen': 'Fill from my profile',
-    'Mieten oder kaufen': 'Rent or buy',
-    'WG-Passung {0} % – passt sehr gut': 'Flatshare match {0} % – a very good fit',
     'WG-Passung {0} % – passt gut': 'Flatshare match {0} % – a good fit',
     'WG-Passung {0} % – passt eher nicht': 'Flatshare match {0} % – probably not a fit',
-    'Anfragen zu deinen Inseraten': 'Enquiries about your listings',
     'Noch {0} Plätze frei. Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.':
       '{0} places still free. No subscription, no payment details, no renewal – after twelve months the place ends by itself.',
     'Plätze frei. Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.':
@@ -2547,13 +2781,9 @@
 
   e({
     'WG': 'Share',
-    'Vertrag jetzt kündigen': 'Cancel contract now',
-    'Noch {0} Angaben fehlen': '{0} details are still missing',
     'Noch {0} Angabe fehlt': '{0} detail is still missing',
     'Anschrift wie oben': 'address as above',
-    'Läuft seit kurzem, Abrechnung {0}.': 'Running since recently, billed {0}.',
-    '{0} Objekte stehen auf „gemerkt“.': '{0} listings are marked “saved”.',
-    '{0} mit Plus': '{0} with Plus',
+    'Objekte stehen auf „gemerkt“.': 'listings are marked “saved”.',
     'seit {0}': 'since {0}',
     'Die Vertrauensstufe zählt vor allem, wenn du selbst inserierst – andere sehen sie an deinem Angebot.':
       'The trust level counts above all when you advertise yourself – others see it on your offer.'
@@ -2573,14 +2803,11 @@
     'Bisher hat sich niemand sonst gemeldet.': 'Nobody else has been in touch so far.',
     'Bisher hat sich eine weitere Person gemeldet.': 'One other person has been in touch so far.',
     'Es haben sich bereits {0} andere gemeldet.': '{0} others have already been in touch.',
-    '{0} Objekte stehen auf „gemerkt“. TrimmoTrade schreibt für jedes ein eigenes Anschreiben aus deinem Profil – angepasst an Titel, Lage und Preis, nicht als Rundmail.':
-      '{0} listings are marked “saved”. TrimmoTrade writes a separate covering letter for each from your profile – tailored to the title, location and price, not a mass mailing.',
     'Serienbewerbung': 'Batch application',
     'Anschreiben vorbereiten': 'Prepare covering letters'
   });
 
   e({
-    'Noch': 'Still',
     'Platz frei.': 'place free.', 'Plätze frei.': 'places free.',
     'Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.':
       'No subscription, no payment details, no renewal – after twelve months the place ends by itself.',
@@ -2641,7 +2868,6 @@
     'Damit du dich auch von deinem anderen Gerät anmelden kannst':
       'So you can sign in from your other device too',
     'Passkeys': 'Passkeys',
-    'keine': 'none',
     'entfernen': 'remove',
     'Geräte': 'devices',
     'Dein Passkey': 'Your passkey',
@@ -2703,7 +2929,6 @@
     /* Meine Daten */
     'Alles, was du hier eingibst, liegt im Speicher dieses Browsers – Merkliste, Suchaufträge, Nachrichten, eigene Inserate, Profil und Notizen. Nichts davon geht an einen Server, nichts an Dritte. Übertragen wird allein die Anmeldung; was dabei gespeichert wird, steht in der':
       'Everything you enter here lives in this browser’s storage – shortlist, saved searches, messages, your own listings, profile and notes. None of it goes to a server, none to third parties. Only the sign-in is transmitted; what is stored in the process is set out in the',
-    'Datenschutzerklärung': 'privacy policy',
     'TrimmoTrade verschickt die Nachricht nicht selbst, sondern übergibt sie dem E-Mail-Programm dieses Geräts – dort kannst du sie vor dem Senden noch ändern. Wo kein Programm eingerichtet ist, kopier den Text oder sichere ihn als Datei.':
       'TrimmoTrade does not send the message itself but hands it to this device’s email program – there you can still change it before sending. Where no program is set up, copy the text or save it as a file.',
 
@@ -2850,14 +3075,12 @@
       'TrimmoTrade shows a generated example market while there are still few real listings. Every example is labelled',
     '. Dahinter steht niemand: Eine Anfrage erreicht keinen Menschen, und die Preise sind gerechnet, nicht verlangt.':
       ' in the top left corner. There is nobody behind them: an enquiry reaches no one, and the prices are calculated, not asked for.',
-    'Echte Inserate sind daran zu erkennen, dass die Marke fehlt. {2}':
-      'Real listings are the ones without that label. {2}',
     'Echte Inserate sind daran zu erkennen, dass die Marke fehlt.':
       'Real listings are the ones without that label.',
     'Selbst inserieren': 'Post your own listing',
     ' dauert zwei Minuten und ist kostenlos.': ' takes two minutes and is free.',
     'Der Bestand ließ sich gerade nicht laden.': 'The listings could not be loaded just now.',
-    ' Was du hier siehst, sind Beispiele. {1}': ' What you see here are examples. {1}',
+    ' Was du hier siehst, sind Beispiele.': ' What you see here are examples.',
     'Der Bestand ließ sich nicht laden.': 'The listings could not be loaded.',
 
     /* Fußzeile */
@@ -2902,7 +3125,6 @@
     'Sag uns in einem Satz, was nicht stimmt. Wir sehen es uns an und antworten mit einer Entscheidung und ihrer Begründung.':
       'Tell us in one sentence what is wrong. We will look into it and reply with a decision and its reasons.',
     'Was ist los?': 'What is wrong?',
-    'Beschreibung': 'Description',
     'Zum Beispiel: Der Anbieter verlangt die Kaution vorab per Überweisung, eine Besichtigung sei nicht möglich.':
       'For example: the advertiser wants the deposit up front by bank transfer and says a viewing is not possible.',
     'Deine E-Mail-Adresse (freiwillig)': 'Your email address (optional)',
@@ -2929,12 +3151,10 @@
       'Let, sell, offer a room or swap – one form for everything. Without a connection the listing stays on this device and only appears in your own search.',
     'Dieses Inserat sieht sonst niemand': 'Nobody else sees this listing',
     'Zum Veröffentlichen brauchst du ein Konto.': 'You need an account to publish.',
-    'Anmelden': 'Sign in',
     ' dauert eine halbe Minute – der Entwurf bleibt dabei stehen.':
       ' takes half a minute – your draft stays where it is.',
     'Diese Kopie läuft ohne Verbindung zum Server. Das Inserat bleibt im Speicher dieses Browsers und ist eine Vorführung, kein Angebot.':
       'This copy runs without a connection to the server. The listing stays in this browser’s storage and is a demonstration, not an offer.',
-    'Inserat anlegen': 'Create listing',
     'Inserat veröffentlichen': 'Publish listing',
     'Änderung speichern': 'Save change',
     'Wird veröffentlicht …': 'Publishing …',
@@ -2981,10 +3201,8 @@
     'per Mail melden': 'notify by email',
     'Mail-Benachrichtigung braucht ein Konto auf trimmotrade.de.':
       'Email notification needs an account on trimmotrade.de.',
-    '{0}Mail-Benachrichtigung braucht ein Konto auf trimmotrade.de.':
-      '{0}Email notification needs an account on trimmotrade.de.',
     'stündlich': 'hourly', 'täglich': 'daily', 'wöchentlich': 'weekly',
-    'Die Mail kann nicht alles: {0}': 'The email cannot do everything: {0}',
+    'Die Mail kann nicht alles:': 'The email cannot do everything:',
     'Eingerichtet. Du bekommst eine Mail, sobald etwas Passendes dazukommt.':
       'Set up. You get an email as soon as something matching appears.',
     'Keine Mails mehr für diesen Suchauftrag.': 'No more emails for this saved search.',
@@ -2992,15 +3210,12 @@
     'mehrere Angebotsarten': 'several offer types',
     'mehrere Städte': 'several cities',
     'einzelne Viertel': 'individual districts',
-    'Ausstattung': 'Features',
     'Pendelzeit': 'commuting time',
     'Energieklasse': 'energy class',
     'Baujahr': 'year built',
     'WG-Merkmale': 'flatshare criteria',
 
     /* Sonstiges, das ohne Eintrag deutsch geblieben war */
-    '{4}Zur Suche': '{4}To the search',
-    'Zur Suche': 'To the search'
   });
 
 
@@ -3310,7 +3525,7 @@
     '. Andere sehen sie, stellen sich vor, und du entscheidest, wer dazukommt.':
       '. Others see it, introduce themselves, and you decide who joins.',
     'Name der Gruppe': 'Name of the group',
-    'WG in {0}': 'Flatshare in {0}',
+    'WG in': 'Flatshare in',
     'Zu wie vielt?': 'How many of you?',
     ' je Person': ' per person',
     'Was für eine WG soll das werden?': 'What kind of flatshare should it be?',
@@ -3387,7 +3602,6 @@
     'Vertragsform': 'Form of contract',
     'ein gemeinsamer Vertrag (üblich)': 'one joint agreement (usual)',
     'ein Vertrag je Zimmer': 'one agreement per room',
-    'noch offen': 'still open',
     'Hinweis an die Gruppe (freiwillig)': 'Note to the group (optional)',
     'etwa: Ich hätte gern einen gemeinsamen Vertrag und eine Kaution von drei Kaltmieten insgesamt.':
       'e.g.: I would prefer one joint agreement and a deposit of three months’ net rent in total.',
@@ -3408,7 +3622,6 @@
     'Spricht dafür': 'In favour',
 
     /* Kontohinweis */
-    'Eine WG gründen': 'Founding a flatshare',
     'Einer WG-Gründung beitreten': 'Joining a flatshare being founded'
 
   });
@@ -3470,7 +3683,6 @@
     'Diese Angaben liegen nur in diesem Browser.': 'These details are only in this browser.',
     'Auf einer Website reicht das nicht: Jeder andere Besucher sähe an ihrer Stelle eine Lücke, und die Impressumspflicht nach § 5 DDG wäre nicht erfüllt. Auf dem Server gehören sie in':
       'On a website that is not enough: every other visitor would see a gap in their place, and the imprint obligation under § 5 DDG would not be met. On the server they belong in',
-    'unter': 'under',
     'sagt, was dort noch fehlt.': 'says what is still missing there.',
     'Diese Angaben kommen vom Server': 'These details come from the server',
     '– aus': '– from',

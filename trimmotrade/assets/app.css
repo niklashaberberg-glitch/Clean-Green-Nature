@@ -440,6 +440,25 @@ input[type="range"] {
 .reglerzeile input[type="range"] { grid-column: 1 / -1; }
 .reglerzeile__enden { grid-column: 1 / -1; display: flex; justify-content: space-between; font-size: .74rem; color: var(--text-still); }
 .reglerzeile__enden i { font-style: normal; }
+/* Ein Regler, den noch niemand bewegt hat. Er steht in der Mitte, weil
+   er irgendwo stehen muss – aber er behauptet nichts: Der Strich statt
+   der Zahl und die Zeile darunter sagen, dass hier keine Antwort steht.
+   Blass genug, um nicht zu drängen, kräftig genug, um lesbar zu sein. */
+.reglerzeile__offen {
+  grid-column: 1 / -1; font-style: normal; font-size: .74rem; color: var(--text-still);
+}
+.reglerzeile.is-offen input[type="range"] { opacity: .62; }
+.reglerzeile.is-offen output { color: var(--text-still); }
+
+/* Zwischenüberschriften in einem langen Block. Das Profil ist zu lang
+   für eine einzige Ebene – ohne sie liest sich alles wie ein Formular
+   ohne Anfang. */
+.block__zwischen {
+  margin: 1.6em 0 .5em; font-size: .96rem; letter-spacing: .01em;
+  padding-top: .9em; border-top: 1px solid var(--rand);
+}
+.block__zwischen:first-of-type { border-top: 0; padding-top: 0; margin-top: 1em; }
+
 .feld--regler { gap: .1em; }
 
 /* ---------------------------- Seiten und Blöcke ---------------------------- */
@@ -1198,7 +1217,14 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .kopf__tun .ikon-btn { width: 34px; height: 34px; }
   .sprachknopf { min-width: 30px; padding: 0 .35em; }
 }
-@media (min-width: 901px) and (max-width: 1023px) {
+/* Der Schriftzug weicht dem Zeichen, solange die Zeile sonst über den
+   Rand liefe. Gemessen, nicht geschätzt: Bei 1024 Pixeln stehen der
+   Marke 147, der Navigation 574 und der rechten Gruppe 330 Pixel
+   gegenüber 983 verfügbaren – 88 zu viel, und die rechten Schaltflächen
+   werden abgeschnitten. Bei 1200 wächst die rechte Gruppe auf 439 und
+   es fehlen wieder 27. Ohne den Schriftzug bleiben in beiden Fällen
+   dreißig Pixel Luft. Ab 1280 passt alles, dort steht er wieder. */
+@media (min-width: 901px) and (max-width: 1279px) {
   .marke__text { display: none; }
 }
 
@@ -2257,6 +2283,20 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   font-size: .9rem;
 }
 .eckdaten__liste li:last-child { border-bottom: 0; }
+
+/* Eine Bewertung, die ihre Gründe zeigt: Was zählt, wird nicht nur
+   gefärbt, sondern beschriftet – wer Farben nicht unterscheidet, liest
+   sonst eine Liste ohne Aussage. Das Zeichen davor trägt die Bedeutung,
+   die Farbe bekräftigt sie nur. */
+.eckdaten__liste li[class^="ist-"] span::before,
+.eckdaten__liste li[class*=" ist-"] span::before {
+  display: inline-block; width: 1.2em; font-weight: 700;
+}
+.eckdaten__liste li.ist-plus span::before { content: "+"; color: var(--gut); }
+.eckdaten__liste li.ist-minus span::before { content: "−"; color: var(--warn); }
+.eckdaten__liste li.ist-neutral span::before { content: "·"; color: var(--text-still); }
+.eckdaten__liste li.ist-plus b { color: var(--text); }
+
 .eckdaten__liste span { color: var(--text2); }
 .eckdaten__liste b { text-align: right; }
 
@@ -2301,6 +2341,31 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .anfragen__weg { display: flex; flex-wrap: wrap; gap: .3em 1em; margin: .4em 0; font-size: .85rem; }
 .anfragen__weg a { display: inline-flex; align-items: center; gap: .35em; }
 .anfragen__liste--echt .feld--flach { max-width: 12rem; margin-top: .4em; }
+.anfragen__ueber { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5em; }
+.anfragen__ueber i { font-style: normal; font-size: .8rem; font-weight: 400; color: var(--text-still); }
+
+/* Die Vorauswahl. Die Zahl steht neben ihrem Satz und über ihren
+   Gründen – eine Prozentzahl allein wäre ein Urteil ohne Begründung,
+   und dagegen kann man nicht argumentieren. Deshalb ist „Warum“ kein
+   Extra, sondern immer eine Zeile weiter unten. */
+.anfragen__rang { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4em .7em; margin: .45em 0; }
+.anfragen__wert {
+  display: inline-flex; align-items: center; gap: .25em; min-height: 24px;
+  padding: .1em .55em; border-radius: var(--r-klein);
+  font-weight: 650; font-size: .82rem; font-variant-numeric: tabular-nums;
+}
+.anfragen__wert.is-gut { background: var(--gut-hell); color: var(--gut); }
+.anfragen__wert.is-warn { background: var(--warn-hell); color: var(--warn); }
+.anfragen__wert.is-schlecht { background: var(--schlecht-hell); color: var(--schlecht); }
+.anfragen__wert .ico { width: 1em; height: 1em; }
+.anfragen__kurz { font-size: .82rem; color: var(--text2); }
+.anfragen__warum { font-size: .82rem; }
+.anfragen__warum > summary {
+  cursor: pointer; color: var(--text2); min-height: 24px; display: inline-flex; align-items: center;
+}
+.anfragen__warum > summary:hover { color: var(--text); }
+.anfragen__warum .eckdaten__liste { margin: .4em 0 .2em; }
+
 
 /* Zwei Spalten auf den Ratgeberseiten – etwa „zulässig“ neben
    „unzulässig“. Nebeneinander ist hier keine Zierde: Der Vergleich ist

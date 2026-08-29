@@ -152,7 +152,13 @@ return [
     'kleinunternehmer' => true, // § 19 UStG: kein Ausweis von Umsatzsteuer
     'handelsregister'  => '',  // Kleingewerbe: keins
     'gewerbeamt'       => '',  // zuständige Stelle der Gewerbeanmeldung
-    'aufsichtsbehoerde' => '', // Datenschutz: Aufsichtsbehörde am Sitz
+    /* Die zuständige Aufsichtsbehörde folgt aus dem Sitz, nicht aus einer
+       Wahl: Für nicht-öffentliche Stellen in Nordrhein-Westfalen ist es
+       die Landesbeauftragte für Datenschutz und Informationsfreiheit.
+       Art. 13 Abs. 2 lit. d DSGVO verlangt den Hinweis auf das
+       Beschwerderecht – ohne Namen der Behörde läuft er ins Leere. */
+    'aufsichtsbehoerde' => 'Landesbeauftragte für Datenschutz und Informationsfreiheit '
+        . 'Nordrhein-Westfalen, Kavalleriestraße 2–4, 40213 Düsseldorf',
     'verantwortlichMStV' => '', // § 18 Abs. 2 MStV – Name und Anschrift
     'stand'      => '2026-08-26',
   ],

@@ -15,30 +15,45 @@ wird. In der Reihenfolge, in der es getan werden sollte.
 Diese fünf Punkte sind keine Empfehlung. Ohne sie ist der Betrieb
 angreifbar, und zwar von der ersten Stunde an.
 
-### 1.1 Impressum vollständig ausfüllen ⚠️ **offen**
+### 1.1 Impressum vollständig ausfüllen ⚠️ **fast fertig – Telefonnummer fehlt**
 
 In **`api/config.php`**, Abschnitt `betreiber`. Nicht in der Anwendung:
 Was dort eingetragen wird, liegt im Speicher des eigenen Browsers – jeder
 andere Besucher sähe an dieser Stelle eine Lücke, und genau daran
 scheitert die Impressumspflicht.
 
+Eingetragen sind Name, Anschrift (Plankgasse 34, 50668 Köln) und beide
+E-Mail-Adressen. **Es fehlt die Telefonnummer.** Sie ist keine Kür:
+§ 5 Abs. 1 Nr. 2 DDG verlangt Angaben, die eine schnelle elektronische
+Kontaktaufnahme **und** unmittelbare Kommunikation ermöglichen – eine
+E-Mail-Adresse allein genügt dafür nach der Rechtsprechung nicht
+zuverlässig. Eine erfundene Nummer wäre schlechter als keine.
+
 `php api/index.php pruefen` sagt, welche Pflichtangabe noch fehlt. Jede
 Lücke erscheint außerdem im Text sichtbar als `[… eintragen]` statt still
 zu verschwinden.
 
-| Feld | Warum | Grundlage |
-|---|---|---|
-| Name | Anbieterkennzeichnung | § 5 Abs. 1 Nr. 1 DDG |
-| Straße und Hausnummer | **ladungsfähige Anschrift**, kein Postfach | § 5 Abs. 1 Nr. 1 DDG |
-| PLZ und Ort | dito | § 5 Abs. 1 Nr. 1 DDG |
-| E-Mail-Adresse | Pflichtangabe | § 5 Abs. 1 Nr. 2 DDG |
-| Telefonnummer | schnelle Kontaktaufnahme | § 5 Abs. 1 Nr. 2 DDG |
-| Aufsichtsbehörde Datenschutz | Beschwerderecht | Art. 13 Abs. 2 lit. d DSGVO |
-| Verantwortlich nach § 18 Abs. 2 MStV | bei journalistisch-redaktionellen Inhalten | § 18 Abs. 2 MStV |
+| Feld | Warum | Grundlage | Stand |
+|---|---|---|---|
+| Name | Anbieterkennzeichnung | § 5 Abs. 1 Nr. 1 DDG | steht |
+| Straße und Hausnummer | **ladungsfähige Anschrift**, kein Postfach | § 5 Abs. 1 Nr. 1 DDG | steht |
+| PLZ und Ort | dito | § 5 Abs. 1 Nr. 1 DDG | steht |
+| E-Mail-Adresse | Pflichtangabe | § 5 Abs. 1 Nr. 2 DDG | steht |
+| Telefonnummer | schnelle Kontaktaufnahme | § 5 Abs. 1 Nr. 2 DDG | **fehlt** |
+| Aufsichtsbehörde Datenschutz | Beschwerderecht | Art. 13 Abs. 2 lit. d DSGVO | steht (LDI NRW – folgt aus dem Sitz in Köln) |
+| Verantwortlich nach § 18 Abs. 2 MStV | bei journalistisch-redaktionellen Inhalten | § 18 Abs. 2 MStV | **zu entscheiden** – siehe unten |
 
 Ein fehlendes Impressum ist der am einfachsten abzumahnende Fehler im
 deutschen Internet. Er kostet mehrere hundert Euro und ist in zehn
 Minuten vermieden.
+
+**Zu § 18 Abs. 2 MStV:** Die Pflicht trifft, wer journalistisch-redaktionell
+gestaltete Angebote bereithält. Die fünf Ratgeberseiten – Nebenkosten,
+Mietpreisbremse, WBS, Wohngeld, Übergabe – kommen dem nahe genug, dass die
+Angabe die sicherere Wahl ist. Verantwortlich wäre der Betreiber selbst, mit
+derselben Anschrift. Das Feld `verantwortlichMStV` in `api/config.php` nimmt
+Name und Anschrift auf; leer bleiben sollte es nur, wenn bewusst entschieden
+wurde, dass die Seiten nicht darunter fallen.
 
 **Zur Anschrift:** Wer nicht die Privatadresse veröffentlichen will,
 braucht eine echte Geschäftsadresse, an der Post zugestellt werden kann.

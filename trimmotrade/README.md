@@ -255,6 +255,41 @@ werden zwischen deinem Profil und der WG verglichen und als Doppelskala
 gezeigt. Harte Grenzen der WG (Alter, gesuchtes Geschlecht, Rauchen,
 Haustiere) erscheinen als Ausschlusskriterium statt als stiller Abzug.
 
+Vier weitere Regler kommen dazu, an denen es im Alltag meistens hängt:
+Zeit zu Hause, Gemeinschaftsräume, Feiern, gemeinsamer Haushalt. Sie
+bleiben unbeantwortet, bis jemand sie bewegt – ein Wert in der Mitte wäre
+eine Antwort, die niemand gegeben hat, und würde als solche gewichtet.
+
+Der schwerste Reibungspunkt zählt doppelt. Ein Durchschnitt verzeiht zu
+viel: Neun Übereinstimmungen decken eine Ordnungsfrage zu, die sechs von
+zehn Punkten auseinanderliegt, und heraus käme „passt gut zusammen“ über
+genau den Punkt, an dem Wohngemeinschaften zerbrechen. Bei einer Gruppe
+gilt dasselbe für den schlechtesten Einzelwert: Wer mit zwei von drei
+Menschen gut auskommt und mit dem dritten gar nicht, zieht nicht ein.
+
+### Vorauswahl im Posteingang
+
+Achtzig Anfragen, gelesen werden die ersten zehn – welche zehn das sind,
+entscheidet sonst die Uhrzeit des Eingangs. Im Posteingang stehen die
+Anfragen deshalb nach Eignung sortiert, je Inserat getrennt, weil sich
+die Mietbelastung immer auf eine bestimmte Miete bezieht.
+
+Zwei Regeln unterscheiden das von einem Ranking. **Es wird sortiert, nie
+ausgeblendet**: Wer hinten steht, steht mit demselben Text und denselben
+Schaltflächen da. Und **jede Zahl bringt ihre Gründe mit**, aufklappbar
+neben der Anfrage – eine Reihenfolge ohne Grund ist eine Behauptung, und
+wer sie nicht prüfen kann, kann ihr auch nicht widersprechen.
+
+Gerechnet wird ausschließlich mit dem, wonach eine Vermieterseite fragen
+darf: Mietbelastung, Einkommensart, Bürgschaft, Unterlagen, gewünschte
+Mietdauer, Einzugstermin, Haushaltsgröße, Wohnberechtigungsschein.
+Alter und Geschlecht stehen in keiner Anfrage – was nicht ankommt, kann
+keine Formel gewichten. Das ist der Unterschied zwischen einer Zusage und
+einer Absicherung.
+
+Gerechnet wird im Browser der anbietenden Seite, nicht auf dem Server.
+Eine Rangfolge, die dort entstünde, könnte niemand mehr nachvollziehen.
+
 ### Bewerbermappe und Anschreiben
 
 Aus dem Profil entsteht ein vorformuliertes Anschreiben, das sich vor dem
@@ -576,12 +611,19 @@ bewirbt, bekommt sonst eine Absage per Telefon um 22 Uhr. Die Adresse gibt frei,
 wer antwortet – und dann auch nur die eigene.
 
 Mitgehen dürfen Eckdaten aus dem Profil: Haushaltsgröße, Einzugstermin,
-Beschäftigung, Einkommen **als Spanne**, Haustiere, Rauchen, WBS, Bürgschaft.
+Beschäftigung, Einkommen **als Spanne**, Haustiere, Rauchen, WBS, Bürgschaft,
+Einkommensart, Kaution, gewünschte Mietdauer und mögliche Besichtigungszeiten.
 Was mitgeht, steht vor dem Absenden im Dialog – Feld für Feld. Profildaten
 still mitzuschicken wäre genau die Sorte Bequemlichkeit, gegen die diese
 Anwendung sonst überall antritt. Und was niemand fragen darf, kommt gar nicht
 erst durch: keine Herkunft, keine Religion, keine Gesundheit, keine
 Familienplanung (Art. 9 DSGVO, § 19 AGG).
+
+Dieselben Angaben gehen ein zweites Mal in Zahlen und Kürzeln mit, damit die
+anbietende Seite in ihrem Browser eine Reihenfolge rechnen kann. Kein Wort davon
+geht über die sichtbare Liste hinaus – „3000 bis 3200 €“ und 3000 sagen
+dasselbe. Alter und Geschlecht stehen in beiden Fassungen nicht, und ohne den
+Haken geht auch die rechenbare Fassung nicht mit.
 
 ### WG gründen
 
@@ -600,10 +642,17 @@ sucht.
   mehr Personen als Zimmer.
 * Wer sucht, eröffnet eine Gruppe zu dieser Wohnung oder tritt einer bei. Der
   Anteil je Person steht dabei – die erste Zahl, nach der gefragt wird.
-* Die Passung rechnet über dieselben sechs Alltagsfragen wie bei einer
-  bestehenden WG. Was sie **nicht** tut: nach Alter oder Geschlecht ausschließen.
-  Eine WG darf danach auswählen (§ 19 Abs. 5 AGG nimmt das gemeinsame Wohnen
-  aus) – eine Gruppe, die es noch gar nicht gibt, hat darüber nichts entschieden.
+* Die Passung rechnet über dieselben zehn Alltagsfragen wie bei einer
+  bestehenden WG, gegen jedes Mitglied einzeln – nicht gegen einen Durchschnitt
+  aus allen. „Im Mittel passt es“ hilft niemandem, der mit einer bestimmten
+  Person eine Küche teilen wird.
+  Nach Alter und Zusammensetzung darf hier gefiltert werden – § 19 Abs. 5 AGG
+  nimmt das gemeinsame Bewohnen einer Wohnung vom Benachteiligungsverbot aus.
+  Entschieden wird das aber von den Menschen, nicht von der Gruppe: Beide
+  Seiten tragen im Profil ein, was sie sich wünschen, und geprüft wird nur das
+  eine gegen das andere. Für die Vermietung selbst gilt die Ausnahme nicht –
+  auf dem Weg über eine Anfrage gehen Alter und Geschlecht deshalb gar nicht
+  erst mit.
 * Ist die Gruppe voll, geht **eine** Bewerbung hinaus. Für die Vermieterseite ist
   das der ganze Unterschied: drei einzelne Anfragen sind drei Leute, die allein
   nicht zahlen können; eine gemeinsame Bewerbung ist ein vollständiger Haushalt.
@@ -954,6 +1003,7 @@ trimmotrade/
     data.js             erzeugt den Beispielbestand
     analyse.js          Vergleichsmiete, Risiko, Klauseln, Kosten, Passung
     match.js            WG-Passung und Ringsuche
+    passung.js          wer passt zu wem, und wer passt zu dieser Wohnung
     werkzeuge.js        Chancen, Doppel-Erkennung, Preisreihen, Leistbarkeit,
                         WBS, Wohngeld, Betriebskosten, Routenplanung
     store.js            Zustand und Speicherung
@@ -1022,6 +1072,10 @@ hängt sich an ein einziges globales `TT` und benutzt nur, was vorher da war.
 | Anzeigen im freien Tarif | `assets/plan.js`, `ANZEIGEN` |
 | Katalog der Betriebskosten | `assets/werkzeuge.js`, `BETRIEBSKOSTEN` |
 | Einkommensgrenze für den WBS | `assets/werkzeuge.js`, `WBS_BUND` |
+| Gewichte der zehn Alltagsregler | `assets/match.js`, `DIMENSIONEN`, und `assets/passung.js`, `MEHR` |
+| Gewichte der Vorauswahl für Vermietende | `assets/passung.js`, Funktion `bewerber` |
+| Was aus dem Profil in eine Anfrage darf | `assets/view-objekt.js`, `eckdatenAus`, und `api/lib/anfrage.php`, `ECKDATEN` |
+| Was aus dem Profil in eine Gruppe darf | `assets/wg.js`, `eckdatenAus`, und `api/lib/gruppe.php`, `ECKDATEN` und `WG_WORTE` |
 | Farben, Abstände, Rundungen | `assets/app.css`, ganz oben unter „Token“ |
 | Diagrammfarben | `assets/app.css`, Abschnitt „Diagramme“ – nach Änderung mit dem Palettenprüfer nachrechnen |
 

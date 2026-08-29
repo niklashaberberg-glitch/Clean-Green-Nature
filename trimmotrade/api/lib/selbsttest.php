@@ -114,6 +114,32 @@ final class Selbsttest
        Browser des Betreibers und waren dem Server unbekannt. Jetzt
        stehen sie in der Konfiguration – und damit lässt sich sagen, ob
        das Impressum vollständig ist. */
+    /** Sieht der Wert aus wie eine Angabe oder wie ein Platzhalter? */
+    private static function istPlatzhalter(string $wert): bool
+    {
+        $t = mb_strtolower($wert, 'UTF-8');
+        foreach (['muster', 'beispiel', 'example.', 'test@', 'eintragen', 'xxx', 'todo',
+                  'max mustermann', 'ihre ', 'irgendwo'] as $wort) {
+            if (str_contains($t, $wort)) {
+                return true;
+            }
+        }
+        /* Aufsteigende oder gleiche Ziffernfolgen: 1234567, 1111111.
+           Erst ab sechs Stellen, damit eine echte Durchwahl bleibt. */
+        $ziffern = preg_replace('/\D+/', '', $t);
+        if (is_string($ziffern) && strlen($ziffern) >= 6) {
+            foreach (['0123456789', '1234567890'] as $reihe) {
+                if (str_contains($reihe, substr($ziffern, -6))) {
+                    return true;
+                }
+            }
+            if (preg_match('/(\d)\1{5,}/', $ziffern)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private function impressum(): void
     {
         $b = is_array($this->cfg['betreiber'] ?? null) ? $this->cfg['betreiber'] : [];
@@ -126,17 +152,30 @@ final class Selbsttest
             'telefon' => 'Telefonnummer (§ 5 Abs. 1 Nr. 2 DDG)',
         ];
         $fehlen = [];
+        $erfunden = [];
         foreach ($pflicht as $feld => $was) {
-            if (trim((string) ($b[$feld] ?? '')) === '') {
+            $wert = trim((string) ($b[$feld] ?? ''));
+            if ($wert === '') {
                 $fehlen[] = $was;
+            } elseif (self::istPlatzhalter($wert)) {
+                $erfunden[] = $was . ' → „' . $wert . '“';
             }
+        }
+        /* Ein Platzhalter ist schlimmer als eine Lücke: Die Lücke sieht
+           man, den Platzhalter hält man für eine Angabe. „0221 1234567“
+           erfüllt § 5 DDG nicht, und wer unter der Nummer niemanden
+           erreicht, schreibt statt einer Mail eine Abmahnung. */
+        if ($erfunden) {
+            $this->fehlt(count($erfunden) . ' Angaben im Impressum sehen erfunden aus',
+                implode(' · ', $erfunden) . ' — das ist keine Angabe, sondern eine, die so aussieht. '
+                . 'Zu ändern unter \'betreiber\' in api/config.php.');
         }
         if ($fehlen) {
             $this->fehlt(count($fehlen) . ' Pflichtangaben im Impressum fehlen',
                 implode(' · ', $fehlen) . ' — einzutragen unter \'betreiber\' in api/config.php. '
                 . 'Ein unvollständiges Impressum ist der am häufigsten abgemahnte Fehler im '
                 . 'deutschen Internet.');
-        } else {
+        } elseif (!$erfunden) {
             $this->gut('Impressum vollständig', trim((string) ($b['name'] ?? '')) . ', '
                 . trim((string) ($b['ort'] ?? '')));
         }

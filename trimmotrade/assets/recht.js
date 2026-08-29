@@ -44,7 +44,11 @@
     kleinunternehmer: true,     /* § 19 UStG: kein Ausweis von Umsatzsteuer */
     handelsregister: '',        /* Kleingewerbe: keins */
     gewerbeamt: '',             /* zuständige Stelle der Gewerbeanmeldung */
-    aufsichtsbehoerde: '',      /* Datenschutz: Aufsichtsbehörde am Sitz */
+    /* Folgt aus dem Sitz, nicht aus einer Wahl: nicht-öffentliche Stellen
+       in Nordrhein-Westfalen. Steht auch in api/config.php – hier für
+       den Fall, dass gar kein Server antwortet. */
+    aufsichtsbehoerde: 'Landesbeauftragte für Datenschutz und Informationsfreiheit '
+      + 'Nordrhein-Westfalen, Kavalleriestraße 2–4, 40213 Düsseldorf',
     verantwortlichMStV: '',     /* § 18 Abs. 2 MStV – Name und Anschrift */
     stand: '2026-08-23'
   };

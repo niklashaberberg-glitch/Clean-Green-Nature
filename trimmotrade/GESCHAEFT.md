@@ -120,6 +120,19 @@ Was das geschäftlich wert ist:
 alle, für die eine ganze Wohnung nicht in Frage kommt und ein WG-Zimmer nicht
 frei wird.
 
+**Was die Gruppe zusammenhält, ist die Passung.** Drei Fremde, die eine Wohnung
+nehmen, haben ein Problem, das eine bestehende WG nicht hat: Niemand kennt
+niemanden. Zehn Alltagsfragen – Ordnung, Lärm, Besuch, Nähe, Rhythmus, Küche,
+Zeit zu Hause, Gemeinschaftsräume, Feiern, gemeinsamer Haushalt – plus die
+harten Punkte (Rauch, Tiere, Küche) beantworten vorher, worüber sonst erst nach
+dem Einzug geredet wird. Gerechnet wird gegen jedes Mitglied einzeln, und der
+schlechteste Einzelwert zählt doppelt: Wer mit zwei von drei Menschen gut
+auskommt und mit dem dritten gar nicht, zieht nicht ein.
+
+Das ist kein Beiwerk, sondern der Grund, warum die Gruppe hält. Eine Gruppe, die
+nach vier Wochen wieder auseinanderfällt, kostet die anbietende Seite mehr Zeit
+als eine Absage.
+
 ### Keil 4: Die Werkzeuge
 
 Nebenkostenabrechnung prüfen, Mietpreisbremse rechnen,
@@ -180,6 +193,21 @@ Warum das geschäftlich besser ist als der Verbrauchermarkt:
 Das ist die realistischste Antwort auf die Frage, wie aus dieser
 Anwendung ein tragfähiges Geschäft wird. Der Verbrauchermarkt bleibt
 daneben bestehen – er kostet fast nichts und wächst langsam mit.
+
+**Die Vorauswahl gehört in dasselbe Gespräch.** Wer eine Wohnung
+inseriert, bekommt achtzig Anfragen und liest zehn. Welche zehn das
+sind, entscheidet heute die Uhrzeit des Eingangs. TrimmoTrade sortiert
+sie nach Eignung – Mietbelastung, Einkommensart, Bürgschaft,
+Unterlagen, Mietdauer, Termin, Haushaltsgröße – und legt jede Zahl mit
+ihrer Begründung offen. Nichts wird ausgeblendet, und Alter und
+Geschlecht kommen nicht vor: Sie stehen in keiner Anfrage, also kann
+keine Formel sie gewichten.
+
+Für eine Hausverwaltung ist das die Stunde Arbeit je Wohnung, die
+sonst niemand bezahlt. Für eine Genossenschaft ist es zusätzlich die
+Antwort auf eine Frage, die dort tatsächlich gestellt wird: ob eine
+Vorauswahl dem AGG standhält. Eine, deren Gründe jeder nachlesen kann,
+hält ihm eher stand als die stille Reihenfolge im Posteingang.
 
 ### Die Verbindung zu Clean Green Nature
 
@@ -273,7 +301,7 @@ einzige, was es zu verkaufen hat.
 | Betrugsinserate | Rufschaden, sofort | Serverseitige Musterprüfung, Meldeweg nach Art. 16 DSA, Vertrauensstufen |
 | Karteileichen | Nutzer bleiben weg | Inserate laufen nach 60 Tagen aus, Erinnerung vorher |
 | Beispielmarkt wirkt echt | Irreführung nach § 5 UWG | Marke an jedem Beispiel, Hinweis über der Liste, abschaltbar |
-| Abmahnung Impressum | Kosten, vermeidbar | Prüfliste in der Anwendung – **die Felder sind noch leer** |
+| Abmahnung Impressum | Kosten, vermeidbar | Anschrift und beide E-Mail-Adressen stehen in `api/config.php` und gehen an jeden Browser – **die Telefonnummer fehlt noch** (§ 5 Abs. 1 Nr. 2 DDG) |
 | Datenpanne | Meldepflicht Art. 33 DSGVO | Wenig Daten auf dem Server, Tresor Ende-zu-Ende verschlüsselt |
 | Zeit reicht nicht | Wahrscheinlichster Fall | Eine Stadt, ein Keil, nichts parallel |
 
@@ -292,8 +320,10 @@ geprüft. Was jetzt fehlt, ist kein Code.
 
 **In dieser Reihenfolge:**
 
-1. Impressum vollständig ausfüllen. Ohne das darf die Seite nicht
-   öffentlich sein. Siehe `START.md`, Abschnitt 1.
+1. Die Telefonnummer ins Impressum eintragen. Anschrift und beide
+   E-Mail-Adressen stehen; § 5 Abs. 1 Nr. 2 DDG verlangt zusätzlich
+   eine Nummer, unter der man den Betreiber erreicht. Ein Feld in
+   `api/config.php`. Siehe `START.md`, Abschnitt 1.
 2. Die Cron-Aufträge einrichten (`melden`, `erinnern`, `aufraeumen`).
    Ohne sie verschickt der Suchauftrag nichts.
 3. Fünf eigene oder erfragte Inserate einstellen – aus dem eigenen

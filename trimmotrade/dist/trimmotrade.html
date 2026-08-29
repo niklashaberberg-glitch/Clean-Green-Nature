@@ -511,15 +511,20 @@ input[type="range"] {
 .block--info { border-color: var(--info); }
 
 .hinweisbox {
-/* Ein Hinweis, der etwas empfiehlt statt etwas zu erklären, bekommt die
-   Akzentfarbe – sonst geht er zwischen den Rechtshinweisen unter. */
-.hinweisbox--tipp { background: var(--akzent-hell); border-color: var(--akzent); }
-.hinweisbox--tipp > .ico { color: var(--akzent); }
-.hinweisbox--tipp a { font-weight: 550; }
   display: flex; gap: .7em; padding: .85em 1em; margin: 12px 0;
   background: var(--flaeche2); border-left: 3px solid var(--akzent); border-radius: var(--r-klein);
   font-size: .88rem;
 }
+/* Ein Hinweis, der etwas empfiehlt statt etwas zu erklären, bekommt die
+   Akzentfarbe – sonst geht er zwischen den Rechtshinweisen unter.
+
+   Diese drei Zeilen standen versehentlich innerhalb des Blocks darüber.
+   Verschachtelte Regeln sind heute erlaubt, bedeuten aber etwas anderes:
+   `.hinweisbox .hinweisbox--tipp` trifft ein Kind, nicht die Abwandlung
+   selbst. Der Tipp-Kasten blieb deshalb grau. */
+.hinweisbox--tipp { background: var(--akzent-hell); border-color: var(--akzent); }
+.hinweisbox--tipp > .ico { color: var(--akzent); }
+.hinweisbox--tipp a { font-weight: 550; }
 .hinweisbox > .ico { color: var(--akzent); margin-top: .15em; }
 /* Nur die Überschrift der Box steht allein – nicht jede Hervorhebung
    mitten im Satz. Sonst zerreißt es Sätze wie „bis 900 € warm“. */
@@ -2312,12 +2317,12 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .eckdaten__liste li.ist-neutral span::before { content: "·"; color: var(--text-still); }
 .eckdaten__liste li.ist-plus b { color: var(--text); }
 
-.eckdaten__liste span { color: var(--text2); }
+.eckdaten__liste span { color: var(--text-leise); }
 .eckdaten__liste b { text-align: right; }
 
 /* Ein Knopf, der da sein muss, aber nichts anpreist: der Meldeweg.
    Er soll findbar sein und nicht werben. */
-.knopf--leise { color: var(--text2); }
+.knopf--leise { color: var(--text-leise); }
 .knopf--leise:hover { color: var(--text); }
 
 /* Eigene Inserate: was der Server über sie weiß. */
@@ -2337,13 +2342,13 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   border-radius: 0 0 var(--r-klein) var(--r-klein);
 }
 .agent__mail p { flex: 1 1 100%; margin: 0; }
-.agent__mail--aus { display: block; padding: .6em .9em; color: var(--text2); }
+.agent__mail--aus { display: block; padding: .6em .9em; color: var(--text-leise); }
 
 /* Echte Anfragen im Postfach: mehr Zeilen je Eintrag als bei den
    Beispielen, weil hier Adresse, Eckdaten und Zustand dazukommen. */
 .anfragen__ueber { font-size: .95rem; margin: 1.1em 0 .5em; }
 .anfragen__liste--echt > li { align-items: flex-start; padding: .8em 0; }
-.anfragen__zu { display: block; font-size: .82rem; color: var(--text2); }
+.anfragen__zu { display: block; font-size: .82rem; color: var(--text-leise); }
 .anfragen__eck {
   list-style: none; margin: .5em 0; padding: 0;
   display: flex; flex-wrap: wrap; gap: .3em .8em; font-size: .82rem;
@@ -2351,7 +2356,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .anfragen__eck li {
   background: var(--flaeche2); border-radius: var(--r-klein); padding: .18em .55em;
 }
-.anfragen__eck span { color: var(--text2); }
+.anfragen__eck span { color: var(--text-leise); }
 .anfragen__text { margin: .5em 0; white-space: pre-wrap; }
 .anfragen__weg { display: flex; flex-wrap: wrap; gap: .3em 1em; margin: .4em 0; font-size: .85rem; }
 .anfragen__weg a { display: inline-flex; align-items: center; gap: .35em; }
@@ -2373,10 +2378,10 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .anfragen__wert.is-warn { background: var(--warn-hell); color: var(--warn); }
 .anfragen__wert.is-schlecht { background: var(--schlecht-hell); color: var(--schlecht); }
 .anfragen__wert .ico { width: 1em; height: 1em; }
-.anfragen__kurz { font-size: .82rem; color: var(--text2); }
+.anfragen__kurz { font-size: .82rem; color: var(--text-leise); }
 .anfragen__warum { font-size: .82rem; }
 .anfragen__warum > summary {
-  cursor: pointer; color: var(--text2); min-height: 24px; display: inline-flex; align-items: center;
+  cursor: pointer; color: var(--text-leise); min-height: 24px; display: inline-flex; align-items: center;
 }
 .anfragen__warum > summary:hover { color: var(--text); }
 .anfragen__warum .eckdaten__liste { margin: .4em 0 .2em; }
@@ -2408,7 +2413,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .wg-liste { display: grid; gap: 14px; }
 
 .wg-karte {
-  border: 1px solid var(--rand); border-radius: var(--r-mittel);
+  border: 1px solid var(--rand); border-radius: var(--r);
   padding: 1em 1.1em; background: var(--flaeche);
   display: grid; gap: .7em;
 }
@@ -2422,8 +2427,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
    drei Plätzen belegt“ nicht. */
 .wg-karte__zahl { text-align: right; flex: none; line-height: 1.1; }
 .wg-karte__zahl b { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
-.wg-karte__zahl b i { font-size: .95rem; font-style: normal; color: var(--text2); }
-.wg-karte__zahl span { display: block; font-size: .75rem; color: var(--text2); }
+.wg-karte__zahl b i { font-size: .95rem; font-style: normal; color: var(--text-leise); }
+.wg-karte__zahl span { display: block; font-size: .75rem; color: var(--text-leise); }
 
 /* Der Anteil je Person. Die erste Zahl, nach der gefragt wird – deshalb
    steht sie groß und nicht in einer Aufzählung. */
@@ -2432,15 +2437,15 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   padding: .5em .75em; background: var(--flaeche2); border-radius: var(--r-klein);
 }
 .wg-karte__geld b { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
-.wg-karte__geld span { font-size: .85rem; color: var(--text2); }
-.wg-karte__geld > .ico { align-self: center; color: var(--text2); }
+.wg-karte__geld span { font-size: .85rem; color: var(--text-leise); }
+.wg-karte__geld > .ico { align-self: center; color: var(--text-leise); }
 
 .wg-karte__text { margin: 0; white-space: pre-wrap; }
 .wg-karte__passung { display: flex; align-items: center; gap: .5em; margin: 0; font-size: .88rem; }
 .wg-karte__passung.is-gut > .ico { color: var(--gut); }
 .wg-karte__passung.is-warn > .ico { color: var(--warn); }
 .wg-karte__passung.is-schlecht > .ico { color: var(--schlecht); }
-.wg-karte__passung span { color: var(--text2); }
+.wg-karte__passung span { color: var(--text-leise); }
 
 .wg-karte__fuss {
   display: flex; flex-wrap: wrap; align-items: center; gap: .6em 1em;
@@ -2453,7 +2458,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .wg-person.is-ich { opacity: .85; }
 .wg-person > svg { flex: none; border-radius: 50%; }
 .wg-person b { display: flex; flex-wrap: wrap; align-items: center; gap: .4em; }
-.wg-person__eck { display: flex; flex-wrap: wrap; gap: .25em .7em; font-size: .82rem; color: var(--text2); }
+.wg-person__eck { display: flex; flex-wrap: wrap; gap: .25em .7em; font-size: .82rem; color: var(--text-leise); }
 .wg-person__eck i { font-style: normal; }
 .wg-person__text { margin: .3em 0 0; font-size: .88rem; white-space: pre-wrap; }
 .wg-person__mail {
@@ -2493,7 +2498,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   border-left: 3px solid var(--rand); border-radius: var(--r-klein);
   font-size: .9rem; font-style: italic;
 }
-.wg-block__hinweis > .ico { flex: none; color: var(--text2); font-style: normal; }
+.wg-block__hinweis > .ico { flex: none; color: var(--text-leise); font-style: normal; }
 
 .wg-frei .formraster { margin-top: .7em; }
 .feld--breit { grid-column: 1 / -1; }
@@ -5967,8 +5972,10 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       "A listing can be reported without an account being needed – Art. 16(1) of Regulation (EU) 2022/2065 on digital services requires that. What is stored is the reason, your text and, if you give it, your email address. The address is optional; without it the decision cannot be communicated to you.",
     "Prüfung des gemeldeten Inhalts, Empfangsbestätigung und Mitteilung der Entscheidung":
       "Examining the reported content, acknowledging receipt and communicating the decision",
-    "so lange, wie die Nachvollziehbarkeit der Entscheidung es erfordert; danach Löschung":
+    "Art. 6 Abs. 1 lit. c DSGVO in Verbindung mit Art. 16 der Verordnung (EU) 2022/2065 – rechtliche Verpflichtung":
       "Art. 6(1)(c) GDPR in conjunction with Art. 16 of Regulation (EU) 2022/2065 – legal obligation",
+    "so lange, wie die Nachvollziehbarkeit der Entscheidung es erfordert; danach Löschung":
+      "for as long as the traceability of the decision requires; deleted thereafter",
     "9. Reichweitenmessung ohne Personenbezug":
       "9. Audience measurement without personal data",
     "Um zu erkennen, welche Teile der Anwendung benutzt werden, wird eine einzige Tabelle geführt. Sie hat drei Spalten:":

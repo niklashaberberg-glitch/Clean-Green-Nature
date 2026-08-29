@@ -3300,8 +3300,10 @@
       "A listing can be reported without an account being needed – Art. 16(1) of Regulation (EU) 2022/2065 on digital services requires that. What is stored is the reason, your text and, if you give it, your email address. The address is optional; without it the decision cannot be communicated to you.",
     "Prüfung des gemeldeten Inhalts, Empfangsbestätigung und Mitteilung der Entscheidung":
       "Examining the reported content, acknowledging receipt and communicating the decision",
-    "so lange, wie die Nachvollziehbarkeit der Entscheidung es erfordert; danach Löschung":
+    "Art. 6 Abs. 1 lit. c DSGVO in Verbindung mit Art. 16 der Verordnung (EU) 2022/2065 – rechtliche Verpflichtung":
       "Art. 6(1)(c) GDPR in conjunction with Art. 16 of Regulation (EU) 2022/2065 – legal obligation",
+    "so lange, wie die Nachvollziehbarkeit der Entscheidung es erfordert; danach Löschung":
+      "for as long as the traceability of the decision requires; deleted thereafter",
     "9. Reichweitenmessung ohne Personenbezug":
       "9. Audience measurement without personal data",
     "Um zu erkennen, welche Teile der Anwendung benutzt werden, wird eine einzige Tabelle geführt. Sie hat drei Spalten:":

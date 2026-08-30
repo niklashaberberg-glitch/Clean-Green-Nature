@@ -141,16 +141,21 @@
     },
     {
       id: 'werbung',
-      titel: 'Warum sehe ich Anzeigen?',
+      titel: 'Gibt es hier Werbung?',
       gruppe: 'Tarif',
-      fragen: ['warum werbung', 'anzeigen ausschalten', 'werbung nervt', 'bekommt ihr meine daten'],
-      schlag: ['werbung', 'anzeig', 'reklam', 'banner', 'tracking'],
-      antwort: 'Anzeigen sind der Preis des freien Tarifs. Wer eine Wohnung sucht, hat oft gerade wenig Geld – '
-        + 'ausgerechnet dann eine Bezahlschranke vor die Suche zu stellen, wäre verkehrt.\n\n'
-        + 'Was dabei nicht passiert: Es werden keine Daten über dich an Werbetreibende gegeben. Welche Anzeige '
-        + 'erscheint, entscheidet die Stelle auf der Seite, nicht dein Profil oder dein Verhalten. Deshalb gibt '
-        + 'es auch kein Einwilligungsfenster – es gibt nichts einzuwilligen.\n\n'
-        + 'Mit Plus verschwinden die Anzeigen.',
+      fragen: ['gibt es werbung', 'anzeigen ausschalten', 'werbung nervt', 'bekommt ihr meine daten',
+        'wie finanziert sich das'],
+      schlag: ['werbung', 'anzeig', 'reklam', 'banner', 'tracking', 'finanzier', 'kostenlos'],
+      antwort: '<b>Nein.</b> Es erscheinen keine Anzeigen – weder eigene noch fremde. Es ist kein '
+        + 'Werbenetzwerk eingebunden, und es gibt auch nichts, was sich zuschalten ließe: Die Anwendung '
+        + 'enthält keinen Programmteil, der Werbung ausspielen könnte.\n\n'
+        + 'Getragen wird der freie Tarif von denen, die Plus nehmen oder ein Inserat hervorheben. Wer eine '
+        + 'Wohnung sucht, hat oft gerade wenig Geld – ausgerechnet dann eine Bezahlschranke vor die Suche zu '
+        + 'stellen, wäre verkehrt. Deshalb bleibt alles frei, was vor Schaden bewahrt oder gerechnet werden '
+        + 'muss.\n\n'
+        + 'Es werden auch keine Daten über dich weitergegeben. Gezählt wird nur, wie oft eine Ansicht an '
+        + 'einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse. Deshalb gibt es kein '
+        + 'Einwilligungsfenster: Es gibt nichts einzuwilligen.',
       ziele: [['Tarife ansehen', 'plus'], ['Datenschutzerklärung', 'recht/datenschutz']]
     },
     {
@@ -330,7 +335,8 @@
       antwort: 'Unter „Inserieren“, mit sechs Angebotsarten: Wohnung vermieten, WG-Zimmer, Wohnung tauschen, '
         + 'Wohnung verkaufen, Haus verkaufen, Grundstück verkaufen. Welche Felder erscheinen, richtet sich '
         + 'nach der Art.\n\nFotos lassen sich direkt im Formular hochladen, bis zu zehn Stück. Sie werden im '
-        + 'Browser verkleinert und bleiben auf deinem Gerät. Das erste Bild ist das Titelbild.\n\n'
+        + 'Browser verkleinert und dann zum Server übertragen – ohne das könnte sie niemand sehen. '
+        + 'Das erste Bild ist das Titelbild.\n\n'
         + 'Was nicht auf ein Inseratsfoto gehört: Personen ohne deren Einwilligung, Kennzeichen, Namensschilder '
         + 'an Klingel oder Briefkasten. Innenräume einer bewohnten Wohnung nur mit Zustimmung der Mietpartei.',
       ziele: [['Inserat aufgeben', 'inserieren']]
@@ -366,7 +372,8 @@
         + 'der ortsüblichen Vergleichsmiete liegen. TrimmoTrade zeigt, wo das greifen könnte und wie viel dann '
         + 'zulässig wäre. Ausnahmen gelten unter anderem für Neubauten ab 2014 und umfassend modernisierte '
         + 'Wohnungen; darüber muss die Vermieterseite vor Vertragsschluss informieren.\n\n'
-        + 'Der Vergleichswert in dieser Vorführung ist eine Rechengröße, kein amtlicher Mietspiegel.',
+        + 'Der Vergleichswert ist eine Rechengröße aus Lage, Baujahr, Größe und Ausstattung – kein '
+        + 'amtlicher Mietspiegel. Für ein Verfahren zählt der Mietspiegel der Gemeinde.',
       ziele: [['Zur Suche', 'suche'], ['Nebenkosten prüfen', 'nebenkosten']]
     },
     {
@@ -375,12 +382,17 @@
       gruppe: 'Datenschutz',
       fragen: ['datenschutz', 'werden meine daten gespeichert', 'dsgvo', 'daten loeschen'],
       schlag: ['datenschutz', 'daten', 'dsgvo', 'speicher', 'loesch', 'privat', 'cookie'],
-      antwort: 'TrimmoTrade rechnet vollständig in deinem Browser. Profil, Merkliste, Suchaufträge, Nachrichten '
-        + 'und eigene Inserate liegen im Speicher dieses Geräts und verlassen es nicht. Es gibt kein '
-        + 'Nutzerkonto und keine Übertragung an Dritte.\n\n'
-        + 'Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt und keine Profile über dein Verhalten '
-        + 'gebildet. Deshalb erscheint auch kein Einwilligungsfenster.\n\n'
-        + 'Unter „Meine Daten“ im Fußbereich kannst du alles als Datei sichern oder vollständig löschen.',
+      antwort: 'Gerechnet wird auf deinem Gerät: Suche, Bewertung, Karte und jede Schätzung entstehen im '
+        + 'Browser. Ohne Anmeldung verlässt davon nichts dein Gerät – Anzeigen ansehen geht ohne Konto.\n\n'
+        + 'Mit einem Konto liegt dein Stand zusätzlich auf dem Server: Profil, Merkliste, Suchaufträge, '
+        + 'Nachrichten und eigene Inserate. Nur so findest du sie auf dem Telefon wieder. Der Server '
+        + 'verwahrt sie und wertet sie nicht aus; an Dritte geht nichts.\n\n'
+        + 'Unterlagen im Dokumententresor werden verschlüsselt, bevor sie den Browser verlassen. Der '
+        + 'Anbieter kann sie nicht lesen – auch die Dateinamen nicht.\n\n'
+        + 'Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten '
+        + 'gebildet und keine Werbung ausgespielt. Deshalb erscheint auch kein Einwilligungsfenster.\n\n'
+        + 'Unter „Meine Daten“ im Fußbereich kannst du alles als Datei sichern oder vollständig löschen; '
+        + 'das Konto löschst du in den Einstellungen, und dann geht alles mit.',
       ziele: [['Datenschutzerklärung', 'recht/datenschutz'], ['Impressum', 'recht/impressum']]
     },
     {
@@ -466,13 +478,17 @@
       gruppe: 'Anwendung',
       fragen: ['daten weg', 'merkliste leer', 'alles verschwunden', 'anderes geraet'],
       schlag: ['weg', 'verschwund', 'verlor', 'leer', 'geraet', 'wiederherstell', 'sicherung'],
-      antwort: 'Alles liegt im Speicher dieses Browsers – auch die Anmeldung. Es verschwindet, wenn die '
-        + 'Browserdaten gelöscht werden, im privaten Modus beim Schließen des Fensters – und es ist auf einem '
-        + 'anderen Gerät oder in einem anderen Browser von vornherein nicht da. Dort meldest du dich neu an; '
-        + 'Merkliste und Profil wandern deshalb nicht mit.\n\n'
-        + 'Vorbeugen lässt sich das unter „Meine Daten“ im Fußbereich: Dort sicherst du den Stand als Datei.\n\n'
-        + 'Der Dokumententresor liegt getrennt davon und wird dabei bewusst nicht mitgesichert – '
-        + 'verschlüsselte Dateien in eine Klartextdatei zu exportieren wäre das Gegenteil dessen, wofür er da ist.',
+      antwort: 'Der schnellste Weg: anmelden. Wer ein Konto hat, bekommt bei der Anmeldung seinen Stand '
+        + 'zurück – Profil, Merkliste, Suchaufträge, Nachrichten und eigene Inserate. Genau dafür liegt er '
+        + 'auf dem Server, und genau deshalb ist ein neues Gerät kein Neuanfang mehr.\n\n'
+        + 'Ohne Anmeldung liegt alles nur im Speicher dieses Browsers. Es verschwindet, wenn die Browserdaten '
+        + 'gelöscht werden, im privaten Modus beim Schließen des Fensters – und auf einem anderen Gerät war '
+        + 'es nie da.\n\n'
+        + 'Der Dokumententresor kommt ebenfalls mit, muss aber mit dem Tresorkennwort geöffnet werden: Das '
+        + 'kennst nur du, es liegt nirgends.\n\n'
+        + 'Zusätzlich sichern lässt sich der Stand unter „Meine Daten“ im Fußbereich – als Datei. Der Tresor '
+        + 'bleibt dabei bewusst außen vor: verschlüsselte Unterlagen in eine Klartextdatei zu exportieren '
+        + 'wäre das Gegenteil dessen, wofür er da ist.',
       ziele: [['Datenschutzerklärung', 'recht/datenschutz']]
     },
     {

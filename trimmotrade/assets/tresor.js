@@ -18,10 +18,14 @@
    öffnen. Der Freigabeschlüssel steht im Fragment des Verweises, dem Teil
    hinter dem Rautezeichen, den Browser niemals an einen Server senden.
 
-   Was hier fehlt: der Server. In dieser Vorführung liegt das Chiffrat im
-   Browser, der Verweis funktioniert deshalb nur auf diesem Gerät. Im
-   Betrieb läge dort das Chiffrat und sonst nichts – kein Schlüssel, keine
-   Datei im Klartext, nichts, was ein Einbruch verwertbar machen würde.
+   Wo das Chiffrat liegt, hängt daran, ob ein Server antwortet. Tut er es,
+   liegt es dort – und dort liegt genau das und sonst nichts: kein
+   Schlüssel, keine Datei im Klartext, nichts, was ein Einbruch verwertbar
+   machen würde. Das ist keine Bequemlichkeit, sondern die Bedingung dafür,
+   dass eine Freigabe überhaupt etwas taugt: Ein Verweis auf ein Chiffrat
+   im eigenen Browser geht bei niemand anderem auf, und einen Abrufzähler,
+   den der Empfänger selbst führt, gibt es nicht. Ohne Server – als Datei
+   geöffnet – fällt alles auf IndexedDB zurück und bleibt auf dem Gerät.
    ===================================================================== */
 (function (TT) {
   'use strict';
@@ -52,6 +56,29 @@
   const HEIKEL = ['schufa', 'ausweis'];
 
   const verfuegbar = () => !!(window.crypto && window.crypto.subtle && window.indexedDB && window.TextEncoder);
+
+  /* ------------------------------------------------------------------
+     Wo das Chiffrat liegt
+
+     Bis hierher: in diesem Browser. Die Verschlüsselung lief echt, nur
+     lag das Ergebnis auf dem Gerät – und damit ging ein Freigabeverweis
+     ausschließlich auf demselben Gerät auf. Die Vermieterseite, für die
+     er gedacht war, sah nichts. Der Tresor war als Vorführung richtig
+     und als Werkzeug wertlos: Man verschickt einen Verweis, damit ihn
+     jemand anderes öffnet.
+
+     Jetzt liegt das Chiffrat auf dem Server, sobald ein Server da ist
+     und jemand angemeldet ist. Was sich dadurch NICHT ändert: wer lesen
+     kann. Der Schlüssel entsteht aus dem Kennwort, bleibt im
+     Arbeitsspeicher und wandert beim Freigeben in den Fragmentteil des
+     Verweises – den Teil hinter dem Rautezeichen, den Browser
+     grundsätzlich nicht an Server senden. Der Server sieht Chiffrat und
+     sonst nichts.
+
+     Ohne Server – die Einzeldatei, eine Kopie auf dem Stick – bleibt
+     alles beim Alten, und die Oberfläche sagt, dass der Verweis dann
+     nur hier aufgeht. */
+  const amServer = () => !!(TT.api && TT.api.da && TT.konto && TT.konto.angemeldet());
 
   /* ------------------------- Kleinkram ------------------------- */
 
@@ -103,12 +130,120 @@
     }));
   }
 
+  /* ------------------------------------------------------------------
+     Ein Satz, zwei Orte
+
+     Ein Dokument besteht aus vier Teilen: dem verschlüsselten Inhalt,
+     dem verschlüsselten Dateinamen, dem umschlossenen Dokumentschlüssel
+     und drei Zufallswerten (iv). Im Browser liegen sie als Rohbytes; für
+     den Server werden sie zu Base64.
+
+     Der Server bekommt zwei Spalten: `chiffrat` für den Inhalt – das
+     Große – und `huelle` für den Rest, der klein ist. Der Dateityp geht
+     bewusst NICHT als eigene Spalte mit: Er steckt schon im
+     verschlüsselten Kopf, und „application/pdf“ neben „Schufa“ verrät
+     mehr, als nötig ist.
+     ------------------------------------------------------------------ */
+
+  function zumServer(satz) {
+    return {
+      art: satz.art,
+      groesse: satz.groesse,
+      huelle: zuBase64(enc.encode(JSON.stringify({
+        inhaltIv: satz.inhaltIv,
+        kopfIv: satz.kopfIv, kopf: zuBase64(satz.kopf),
+        huelleIv: satz.huelleIv, huelle: zuBase64(satz.huelle)
+      }))),
+      chiffrat: zuBase64(satz.inhalt)
+    };
+  }
+
+  function vomServer(d) {
+    let h;
+    try { h = JSON.parse(dec.decode(ausBase64(d.huelle))); } catch (e) { return null; }
+    return {
+      id: d.id, art: d.art, groesse: d.groesse,
+      hinzu: new Date((d.hinzu || 0) * 1000).toISOString(),
+      inhaltIv: h.inhaltIv,
+      inhalt: d.chiffrat ? ausBase64(d.chiffrat).buffer : null,
+      kopfIv: h.kopfIv, kopf: ausBase64(h.kopf).buffer,
+      huelleIv: h.huelleIv, huelle: ausBase64(h.huelle).buffer
+    };
+  }
+
+  /* Alle Sätze – ohne den Inhalt, denn die Liste braucht ihn nicht und
+     er ist der große Teil. */
+  function alleSaetze() {
+    if (!amServer()) {
+      return tun('readonly', (s) => s.getAll())
+        .then((a) => a.slice().sort((x, y) => String(x.hinzu).localeCompare(String(y.hinzu))));
+    }
+    return TT.api.ruf('tresor/liste').then((d) => {
+      if (d && d.freigaben) freigabenVomServer = d.freigaben;
+      return (d.dokumente || []).map(vomServer).filter(Boolean)
+        .sort((x, y) => String(x.hinzu).localeCompare(String(y.hinzu)));
+    });
+  }
+
+  /* Ein Satz samt Inhalt. */
+  function einSatz(id) {
+    if (!amServer()) return tun('readonly', (s) => s.get(id));
+    return TT.api.ruf('tresor/holen', { id }).then((d) => vomServer(d.dokument));
+  }
+
+  function satzAblegen(satz) {
+    if (!amServer()) return tun('readwrite', (s) => s.put(satz)).then(() => satz.id);
+    return TT.api.ruf('tresor/neu', zumServer(satz)).then((d) => d.id);
+  }
+
+  function satzLoeschen(id) {
+    if (!amServer()) return tun('readwrite', (s) => s.delete(id));
+    return TT.api.ruf('tresor/loeschen', { id });
+  }
+
+  /* Die Freigaben. Ohne Server stehen sie im Kopf des Tresors; mit
+     Server kommen sie mit der Liste und werden hier gehalten, damit
+     `freigaben()` sie ohne Warten ausgeben kann. */
+  let freigabenVomServer = null;
+
+  /* Der Kopf des Tresors: Salz, Rundenzahl und die Probe, an der sich
+     erkennen lässt, ob das Kennwort stimmt. Nichts davon ist geheim –
+     das Salz ist bei PBKDF2 öffentlich, die Probe ist Chiffrat. Auf dem
+     Server liegt er trotzdem, denn ohne ihn ließe sich der Tresor auf
+     einem zweiten Gerät gar nicht erst öffnen.
+
+     Der Zwischenspeicher hier ist nötig, weil `eingerichtet()` und
+     `freigabeStatus()` aus der Zeichnung heraus aufgerufen werden und
+     dort nicht auf den Server warten können. */
+  let metaZwischen = null;
+
   function meta() {
+    if (metaZwischen) return metaZwischen;
     try { return JSON.parse(localStorage.getItem(META) || 'null'); } catch (e) { return null; }
   }
 
   function metaSetzen(m) {
+    metaZwischen = m;
+    /* Auch ohne Server behalten: Wer sich abmeldet, soll den Tresor auf
+       diesem Gerät weiter öffnen können. */
     try { localStorage.setItem(META, JSON.stringify(m)); } catch (e) { /* Speicher voll */ }
+    if (amServer()) {
+      TT.api.ruf('ablage/setzen', { felder: { tresorMeta: m } }).catch(() => { });
+    }
+  }
+
+  /* Beim Start einmal vom Server holen – sonst steht auf einem neuen
+     Gerät „noch kein Tresor eingerichtet“, obwohl einer da ist. */
+  function metaHolen() {
+    if (!amServer()) return Promise.resolve(meta());
+    return TT.api.ruf('ablage').then((d) => {
+      const m = d && d.ablage && d.ablage.tresorMeta;
+      if (m && m.salz) {
+        metaZwischen = m;
+        try { localStorage.setItem(META, JSON.stringify(m)); } catch (e) { /* egal */ }
+      }
+      return meta();
+    }, () => meta());
   }
 
   /* ------------------------- Schlüssel ------------------------- */
@@ -191,14 +326,14 @@
           return verschluesseln(dokSchluessel, enc.encode(JSON.stringify({ name: datei.name, typ: datei.type })))
             .then((kopf) => crypto.subtle.exportKey('raw', dokSchluessel)
               .then((rohSchluessel) => verschluesseln(tresorSchluessel, rohSchluessel)
-                .then((umschlossen) => tun('readwrite', (s) => s.put({
+                .then((umschlossen) => satzAblegen({
                   id, art: art || 'sonstiges',
                   groesse: datei.size,
                   hinzu: new Date().toISOString(),
                   inhaltIv: inhalt.iv, inhalt: inhalt.chiffrat,
                   kopfIv: kopf.iv, kopf: kopf.chiffrat,
                   huelleIv: umschlossen.iv, huelle: umschlossen.chiffrat
-                })).then(() => id))));
+                }))));
         }));
   }
 
@@ -209,8 +344,7 @@
   }
 
   function liste() {
-    return tun('readonly', (s) => s.getAll()).then((saetze) => {
-      saetze.sort((a, b) => a.hinzu.localeCompare(b.hinzu));
+    return alleSaetze().then((saetze) => {
       if (!istOffen()) {
         /* Gesperrt: Nur was ohnehin unverschlüsselt liegt – Art, Größe,
            Datum. Der Dateiname bleibt verborgen. */
@@ -227,7 +361,10 @@
   }
 
   function loeschen(id) {
-    return tun('readwrite', (s) => s.delete(id)).then(() => {
+    return satzLoeschen(id).then(() => {
+      /* Mit Server räumt der Server die Freigaben mit auf – er kennt
+         sie und weiß, welche dadurch leer werden. */
+      if (amServer()) { freigabenVomServer = null; return; }
       /* Aus allen Freigaben entfernen; eine leere Freigabe wird widerrufen. */
       const m = meta();
       if (!m) return;
@@ -243,7 +380,7 @@
   /* Entschlüsselt ein Dokument für die eigene Ansicht. */
   function oeffnen(id) {
     if (!istOffen()) return Promise.reject(new Error('Der Tresor ist gesperrt.'));
-    return tun('readonly', (s) => s.get(id)).then((satz) => {
+    return einSatz(id).then((satz) => {
       if (!satz) throw new Error('Dokument nicht gefunden.');
       return dokSchluessel(satz).then((k) => Promise.all([
         entschluesseln(k, satz.inhaltIv, satz.inhalt),
@@ -258,6 +395,21 @@
   /* ------------------------- Freigaben ------------------------- */
 
   function freigaben() {
+    if (amServer()) {
+      /* Der Server rechnet Ablauf und Zähler selbst und schickt sie
+         mit; hier wird nur noch umbenannt, was die Oberfläche erwartet. */
+      return (freigabenVomServer || []).map((f) => ({
+        id: f.id,
+        dokumente: f.dokumente || [],
+        empfaenger: f.empfaenger || '',
+        objektId: f.objekt || null,
+        erstellt: new Date((f.erstellt || 0) * 1000).toISOString(),
+        ablauf: new Date((f.ablauf || 0) * 1000).toISOString(),
+        maxAbrufe: f.maxAbrufe,
+        abrufe: (f.abrufe || []).map((a) => ({ zeit: new Date((a.zeit || 0) * 1000).toISOString() })),
+        widerrufen: f.widerrufen ? new Date((f.erstellt || 0) * 1000).toISOString() : null
+      }));
+    }
     const m = meta();
     return (m && m.freigaben) ? m.freigaben.slice().reverse() : [];
   }
@@ -282,12 +434,32 @@
     const tage = U.clamp(Number(optionen.tage) || 7, 1, 90);
     const maxAbrufe = U.clamp(Number(optionen.maxAbrufe) || 3, 1, 20);
 
-    return tun('readonly', (s) => s.getAll()).then((alle) => {
-      const gewaehlt = alle.filter((s) => ids.indexOf(s.id) >= 0);
+    return alleSaetze().then((alle) => {
+      const gewaehlt = alle.filter((x) => ids.indexOf(x.id) >= 0);
       return Promise.all(gewaehlt.map((satz) => dokSchluessel(satz)
         .then((k) => crypto.subtle.exportKey('raw', k))
         .then((roh) => ({ id: satz.id, k: zuBase64(roh) }))));
     }).then((schluessel) => {
+      const geheim = zuBase64(enc.encode(JSON.stringify(schluessel)));
+
+      /* Mit Server vergibt der Server die Kennung und setzt Ablauf,
+         Zähler und Widerruf durch. Das ist der Unterschied, der den
+         Verweis überhaupt brauchbar macht: Vorher hätte der Empfänger
+         nur den Zähler in seinem eigenen Browser hochgezählt – also
+         gar keinen. */
+      if (amServer()) {
+        return TT.api.ruf('freigabe/neu', {
+          dokumente: ids,
+          empfaenger: (optionen.empfaenger || '').slice(0, 120),
+          objektId: optionen.objektId || '',
+          tage, maxAbrufe
+        }).then((d) => {
+          freigabenVomServer = null;
+          const id = d.freigabe.id;
+          return { id, geheim, link: linkFuer(id, geheim), tage: d.freigabe.tage, maxAbrufe: d.freigabe.maxAbrufe };
+        });
+      }
+
       const id = 'fg-' + zuBase64(zufall(9));
       const m = meta();
       m.freigaben = m.freigaben || [];
@@ -300,7 +472,6 @@
         maxAbrufe, abrufe: [], widerrufen: null
       });
       metaSetzen(m);
-      const geheim = zuBase64(enc.encode(JSON.stringify(schluessel)));
       return { id, geheim, link: linkFuer(id, geheim), tage, maxAbrufe };
     });
   }
@@ -311,59 +482,96 @@
   }
 
   function widerrufen(id) {
+    if (amServer()) {
+      return TT.api.ruf('freigabe/widerrufen', { id })
+        .then((d) => { freigabenVomServer = d.freigaben || null; });
+    }
     const m = meta();
-    if (!m) return;
+    if (!m) return Promise.resolve();
     (m.freigaben || []).forEach((f) => { if (f.id === id) f.widerrufen = new Date().toISOString(); });
     metaSetzen(m);
+    return Promise.resolve();
   }
 
   function freigabeLoeschen(id) {
+    if (amServer()) {
+      return TT.api.ruf('freigabe/loeschen', { id })
+        .then((d) => { freigabenVomServer = d.freigaben || null; });
+    }
     const m = meta();
-    if (!m) return;
+    if (!m) return Promise.resolve();
     m.freigaben = (m.freigaben || []).filter((f) => f.id !== id);
     metaSetzen(m);
+    return Promise.resolve();
   }
 
   /* Abruf durch die empfangende Seite. Braucht keinen Tresorschlüssel –
      die Dokumentschlüssel stehen im Verweis. */
+  /* Abruf durch die empfangende Seite. Braucht keinen Tresorschlüssel
+     und kein Konto – die Dokumentschlüssel stehen im Verweis, hinter dem
+     Rautezeichen. Genau das ist der Punkt: Der Server gibt Chiffrat
+     heraus und kann es selbst nicht lesen.
+
+     Die Sätze zu entschlüsseln ist beide Male dieselbe Arbeit; woher sie
+     kommen, ist der Unterschied. */
   function freigabeAbrufen(id, geheim, protokollieren) {
+    let schluessel;
+    try { schluessel = JSON.parse(dec.decode(ausBase64(geheim))); }
+    catch (e) { return Promise.reject(new Error('Der Verweis ist unvollständig.')); }
+
+    const entpacken = (saetze, stand) => Promise.all(schluessel.map((eintrag) => {
+      const satz = saetze.find((x) => x.id === eintrag.id);
+      if (!satz || !satz.inhalt) return null;
+      return crypto.subtle.importKey('raw', ausBase64(eintrag.k), 'AES-GCM', false, ['decrypt'])
+        .then((k) => Promise.all([
+          entschluesseln(k, satz.inhaltIv, satz.inhalt),
+          entschluesseln(k, satz.kopfIv, satz.kopf)
+        ]))
+        .then(([inhalt, kopf]) => {
+          const kk = JSON.parse(dec.decode(kopf));
+          return { id: satz.id, art: satz.art, name: kk.name, typ: kk.typ, bytes: inhalt, groesse: satz.groesse };
+        })
+        .catch(() => null);
+    })).then((dokumente) => {
+      const gueltige = dokumente.filter(Boolean);
+      if (!gueltige.length) throw new Error('Die Unterlagen lassen sich mit diesem Verweis nicht entschlüsseln.');
+      return { freigabe: stand, dokumente: gueltige };
+    });
+
+    /* Mit Server: Ablauf, Zähler und Widerruf setzt der Server durch,
+       nicht dieser Browser. Ein Empfänger, der den Zähler in seinem
+       eigenen Speicher hochzählt, zählt gar nichts. */
+    if (TT.api && TT.api.da) {
+      return TT.api.ruf('freigabe/abruf', { id }).then((d) => {
+        const saetze = (d.dokumente || []).map(vomServer).filter(Boolean);
+        const f = d.freigabe || {};
+        return entpacken(saetze, {
+          id: f.id,
+          dokumente: f.dokumente || [],
+          erstellt: new Date((f.erstellt || 0) * 1000).toISOString(),
+          ablauf: new Date((f.ablauf || 0) * 1000).toISOString(),
+          maxAbrufe: f.maxAbrufe,
+          abrufe: (f.abrufe || []).map((a) => ({ zeit: new Date((a.zeit || 0) * 1000).toISOString() })),
+          widerrufen: null
+        });
+      });
+    }
+
+    /* Ohne Server: alles wie bisher, auf diesem Gerät. */
     const m = meta();
     const f = (m && m.freigaben || []).find((x) => x.id === id);
     if (!f) return Promise.reject(new Error('Diesen Verweis gibt es nicht mehr.'));
     const status = freigabeStatus(f);
     if (!status.gueltig) return Promise.reject(new Error('Der Verweis ist ' + status.text + '.'));
 
-    let schluessel;
-    try { schluessel = JSON.parse(dec.decode(ausBase64(geheim))); }
-    catch (e) { return Promise.reject(new Error('Der Verweis ist unvollständig.')); }
-
     return tun('readonly', (s) => s.getAll()).then((alle) => {
-      return Promise.all(schluessel.map((eintrag) => {
-        const satz = alle.find((s) => s.id === eintrag.id);
-        if (!satz) return null;
-        return crypto.subtle.importKey('raw', ausBase64(eintrag.k), 'AES-GCM', false, ['decrypt'])
-          .then((k) => Promise.all([
-            entschluesseln(k, satz.inhaltIv, satz.inhalt),
-            entschluesseln(k, satz.kopfIv, satz.kopf)
-          ]))
-          .then(([inhalt, kopf]) => {
-            const meta2 = JSON.parse(dec.decode(kopf));
-            return { id: satz.id, art: satz.art, name: meta2.name, typ: meta2.typ, bytes: inhalt, groesse: satz.groesse };
-          })
-          .catch(() => null);
-      }));
-    }).then((dokumente) => {
-      const gueltige = dokumente.filter(Boolean);
-      if (!gueltige.length) throw new Error('Die Unterlagen lassen sich mit diesem Verweis nicht entschlüsseln.');
       let stand = f;
       if (protokollieren !== false) {
         const m2 = meta();
         const f2 = (m2.freigaben || []).find((x) => x.id === id);
         if (f2) { f2.abrufe.push({ zeit: new Date().toISOString() }); metaSetzen(m2); stand = f2; }
       }
-      /* Der eigene Abruf zählt mit: Wer die Unterlagen gerade geöffnet hat,
-         soll „1 von 3“ sehen und nicht „0 von 3“. */
-      return { freigabe: stand, dokumente: gueltige };
+      return entpacken(alle, stand);
     });
   }
 
@@ -371,13 +579,20 @@
 
   function allesLoeschen() {
     tresorSchluessel = null;
+    metaZwischen = null;
+    freigabenVomServer = null;
     try { localStorage.removeItem(META); } catch (e) { /* egal */ }
-    return tun('readwrite', (s) => s.clear()).catch(() => { });
+    const hier = tun('readwrite', (s) => s.clear()).catch(() => { });
+    if (!amServer()) return hier;
+    return hier
+      .then(() => TT.api.ruf('tresor/leeren', {}))
+      .then(() => TT.api.ruf('ablage/setzen', { felder: { tresorMeta: null } }))
+      .catch(() => { });
   }
 
   TT.tresor = {
     ARTEN, HEIKEL, MAX_BYTES, OK_TYPEN, RUNDEN,
-    verfuegbar, eingerichtet, istOffen, einrichten, entsperren, sperren,
+    verfuegbar, amServer, eingerichtet, istOffen, einrichten, entsperren, sperren, metaHolen,
     hinzufuegen, liste, loeschen, oeffnen,
     freigaben, freigabeStatus, freigabeErstellen, freigabeAbrufen,
     widerrufen, freigabeLoeschen, linkFuer, allesLoeschen

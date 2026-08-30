@@ -1,5 +1,5 @@
 /* =====================================================================
-   TrimmoTrade – Tarife und Werbung
+   TrimmoTrade – Tarife
 
    Leitgedanke, an dem sich jede Entscheidung hier messen lassen muss:
 
@@ -41,11 +41,11 @@
   const TARIFE = {
     frei: {
       id: 'frei', name: 'TrimmoTrade frei', preisMonat: 0, preisJahr: 0,
-      zeile: 'Vollständige Suche, dauerhaft kostenlos – finanziert über Anzeigen.'
+      zeile: 'Vollständige Suche, dauerhaft kostenlos. Getragen von denen, die Plus nehmen.'
     },
     plus: {
       id: 'plus', name: 'TrimmoTrade Plus', preisMonat: 7.90, preisJahr: 69,
-      zeile: 'Für alle, die täglich suchen: keine Anzeigen, keine Limits, weniger Handarbeit.'
+      zeile: 'Für alle, die täglich suchen: keine Limits, weniger Handarbeit.'
     }
   };
 
@@ -58,7 +58,6 @@
       anker: 1,
       lupeFunde: 1,
       ringLaenge: 2,
-      werbung: true,
       stellschrauben: false,
       serienbewerbung: false,
       marktdaten: false,
@@ -73,7 +72,6 @@
       anker: Infinity,
       lupeFunde: Infinity,
       ringLaenge: 4,
-      werbung: false,
       stellschrauben: true,
       serienbewerbung: true,
       marktdaten: true,
@@ -119,7 +117,6 @@
     { id: 'freigaben', gruppe: 'Schutz', name: 'Befristete Verweise statt Anhänge, jederzeit widerrufbar',
       frei: 'unbegrenzt', plus: 'unbegrenzt', gleich: true },
 
-    { id: 'werbung', gruppe: 'Täglich', name: 'Anzeigenfrei', frei: 'mit Anzeigen', plus: 'ohne Anzeigen' },
     { id: 'suchauftraege', gruppe: 'Täglich', name: 'Suchaufträge mit sofortiger Meldung',
       frei: '1 Auftrag', plus: 'unbegrenzt' },
     { id: 'anker', gruppe: 'Täglich', name: 'Ankerpunkte für Fahrzeiten',
@@ -158,7 +155,7 @@
     'Kein Frühzugang zu neuen Inseraten. Alle sehen jedes Inserat in derselben Sekunde.',
     'Keine Daten anderer Nutzerinnen und Nutzer.',
     'Kein besserer Datenschutz gegen Aufpreis – der Dokumententresor und die widerrufbaren Verweise sind im freien Tarif vollständig enthalten.',
-    'Keine Werbung, die sich als Inserat ausgibt – Anzeigen sind immer als solche gekennzeichnet.'
+    'Keine Werbung. Es gibt hier keine Anzeigen – weder eigene noch fremde, weder gekennzeichnet noch getarnt.'
   ];
 
   /* ------------------------- Inserate hervorheben -------------------------
@@ -243,25 +240,57 @@
      Nach dem Jahr endet der Platz von selbst und die Anwendung fällt in
      den freien Tarif zurück. Wer dann bezahlen will, entscheidet sich neu.
 
-     Was in dieser Vorführung fehlt, ist die zentrale Stelle, die zählt.
-     Ohne Server kann kein Browser wissen, wie viele Plätze anderswo schon
-     vergeben sind. Der Zähler unten ist deshalb ausdrücklich eine
-     Hochrechnung aus der Zeit seit dem Start – und die Anwendung sagt das
-     an jeder Stelle dazu, an der sie ihn zeigt. Im Betrieb vergibt der
-     Server die Nummer, und zwar genau einmal. */
+     WER ZÄHLT. Lange stand der Platz im Speicher des Browsers und die
+     Zahl der vergebenen war eine Hochrechnung aus der Zeit seit dem
+     Start – also geraten. Wer die Browserdaten löschte, bekam einen
+     zweiten; auf dem Telefon hatte man gar keinen. § 7 der
+     Geschäftsbedingungen sagt aber „die ersten N, je Person einmal“,
+     und das lässt sich nur zentral einhalten.
+
+     Jetzt vergibt der Server die Nummer und zählt sie. Was hier steht,
+     ist nur noch die Anzeige – und ohne Server (Einzeldatei, Kopie auf
+     dem Stick) der alte Weg über den Browserspeicher, damit sich die
+     Vorführung weiterhin durchspielen lässt. */
 
   const GRUENDER = {
     plaetze: 10000,
-    monate: 12,
-    start: '2026-08-01',
-    /* Für die Hochrechnung: So viele Plätze gehen im Schnitt am Tag weg.
-       Eine Annahme, keine Messung. */
-    proTag: 140
+    monate: 12
   };
 
-  const gruender = () => TT.store.get().gruender || { nummer: 0, seit: '', bis: '' };
+  /* ------------------------- Was der Server sagt -------------------------
+
+     Ein Stand aus /api/tarif. Er kommt beim Start mit und nach jeder
+     Änderung neu. Solange keiner da ist, gilt der Browserspeicher. */
+
+  let vomServer = null;
+
+  const amServer = () => !!(TT.api && TT.api.da);
+
+  function standMerken(t) {
+    vomServer = t && typeof t === 'object' ? t : null;
+    return vomServer;
+  }
+
+  /** Holt den Tarifstand. Schlägt nie fehl – ohne Antwort bleibt es
+      beim freien Tarif, und das ist die richtige Vorgabe. */
+  function standHolen() {
+    if (!amServer()) return Promise.resolve(null);
+    return TT.api.ruf('tarif').then((d) => standMerken(d && d.tarif), () => null);
+  }
+
+  /* ------------------------- Gründerplatz ------------------------- */
+
+  function gruender() {
+    if (amServer()) {
+      const g = vomServer && vomServer.gruender;
+      if (!g || !g.nummer) return { nummer: 0, seit: '', bis: '' };
+      return { nummer: g.nummer, seit: '', bis: U.isoDate(new Date(g.bis * 1000)) };
+    }
+    return TT.store.get().gruender || { nummer: 0, seit: '', bis: '' };
+  }
 
   function gruenderAktiv() {
+    if (amServer()) return !!(vomServer && vomServer.gruender && vomServer.gruender.aktiv);
     const g = gruender();
     return !!(g.nummer && g.bis && new Date(g.bis) > TT.now());
   }
@@ -272,33 +301,55 @@
     return Math.max(0, Math.ceil((new Date(g.bis) - TT.now()) / 86400000));
   }
 
-  /* Hochgerechnet, nicht gezählt – siehe oben. */
+  /* Gezählt, nicht geschätzt – sobald ein Server da ist. */
   function gruenderVergeben() {
-    const tage = Math.max(0, Math.floor((TT.now() - new Date(GRUENDER.start)) / 86400000));
-    const geschaetzt = Math.min(GRUENDER.plaetze - 1, Math.round(tage * GRUENDER.proTag));
-    return gruender().nummer ? Math.max(geschaetzt, gruender().nummer) : geschaetzt;
+    if (amServer() && vomServer) return Math.max(0, (vomServer.plaetze || GRUENDER.plaetze) - (vomServer.frei || 0));
+    return gruender().nummer ? gruender().nummer : 0;
   }
 
-  const gruenderFrei = () => Math.max(0, GRUENDER.plaetze - gruenderVergeben());
+  function gruenderFrei() {
+    if (amServer() && vomServer) return Math.max(0, vomServer.frei || 0);
+    return Math.max(0, GRUENDER.plaetze - gruenderVergeben());
+  }
 
-  /* Vergibt den eigenen Platz. Gibt die Nummer zurück oder 0, wenn nichts
-     mehr frei ist oder schon einer vergeben wurde. */
+  /**
+   * Den eigenen Platz nehmen.
+   *
+   * Mit Server ein Versprechen auf die Nummer, ohne Server der alte
+   * Weg. Beide Male gilt: 0 heißt „hat nicht geklappt“.
+   */
   function gruenderSichern() {
-    if (gruender().nummer) return 0;
-    if (!gruenderFrei()) return 0;
+    if (amServer()) {
+      return TT.api.ruf('tarif/gruender', {}).then((d) => {
+        standMerken(d && d.tarif);
+        return (d && d.gruender && d.gruender.nummer) || 0;
+      });
+    }
+    if (gruender().nummer) return Promise.resolve(0);
+    if (!gruenderFrei()) return Promise.resolve(0);
     const nummer = gruenderVergeben() + 1;
     const bis = U.addMonate(TT.now(), GRUENDER.monate);
     TT.store.set({ gruender: { nummer, seit: U.isoDate(TT.now()), bis: U.isoDate(bis) } }, 'tarif');
-    return nummer;
+    return Promise.resolve(nummer);
   }
 
   function gruenderAufgeben() {
+    if (amServer()) {
+      return TT.api.ruf('tarif/aufgeben', {}).then((d) => { standMerken(d && d.tarif); });
+    }
     TT.store.set({ gruender: { nummer: 0, seit: '', bis: '' } }, 'tarif');
+    return Promise.resolve();
   }
+
+  /** Ob überhaupt ein Zahlungsweg eingerichtet ist. Solange nicht,
+      zeigt die Preisseite keinen Kaufknopf – ein Knopf, hinter dem
+      nichts liegt, ist schlimmer als keiner. */
+  const zahlbar = () => !amServer() || !!(vomServer && vomServer.zahlbar);
 
   /* ------------------------- Zustand ------------------------- */
 
   function aktuell() {
+    if (amServer()) return (vomServer && vomServer.plus) ? 'plus' : 'frei';
     const s = TT.store.get();
     if (s.tarif === 'plus') return 'plus';
     return gruenderAktiv() ? 'plus' : 'frei';
@@ -308,6 +359,7 @@
      können, sonst bietet sie einem Gründer ein Abo an, das er nicht
      braucht, oder verschweigt ihm, dass sein Jahr ausläuft. */
   function plusQuelle() {
+    if (amServer()) return (vomServer && vomServer.quelle) || null;
     const s = TT.store.get();
     if (s.tarif === 'plus') return 'bezahlt';
     return gruenderAktiv() ? 'gruender' : null;
@@ -321,80 +373,32 @@
     return LEISTUNGEN.find((l) => l.id === id);
   }
 
+  /**
+   * Den Tarif umstellen – nur ohne Server.
+   *
+   * In der Einzeldatei ist das der Schalter, mit dem sich beide Welten
+   * vergleichen lassen. Mit Server gibt es ihn nicht: Plus entsteht
+   * dort durch einen Gründerplatz oder durch Bezahlung, und ein Knopf,
+   * der so täte, als hätte er etwas abgebucht, wäre nach § 312j BGB
+   * nicht einmal zulässig.
+   */
   function wechseln(tarif, intervall) {
+    if (amServer()) return false;
     TT.store.set({
       tarif: tarif === 'plus' ? 'plus' : 'frei',
       tarifIntervall: intervall || 'monat',
       tarifSeit: U.isoDate(TT.now())
     }, 'tarif');
+    return true;
   }
-
-  /* ------------------------- Anzeigen ------------------------- */
-
-  /* Erfundene Beispielanzeigen. Keine echten Marken, keine echten
-     Angebote – sie zeigen nur, wie Werbung im freien Tarif aussieht:
-     immer gekennzeichnet, nie im Gewand eines Inserats. */
-  const ANZEIGEN = [
-    {
-      id: 'umzug', art: 'Umzug', icon: 'umzug',
-      titel: 'Umzugshelfer im Umkreis vergleichen',
-      text: 'Drei Angebote für den Umzugstag, Halteverbot inklusive.',
-      absender: 'Beispiel-Umzugsdienst', ruf: 'Angebote ansehen'
-    },
-    {
-      id: 'kaution', art: 'Finanzen', icon: 'euro',
-      titel: 'Kautionsbürgschaft statt Barkaution',
-      text: 'Drei Monatsmieten nicht auf einmal binden – gegen Jahresbeitrag.',
-      absender: 'Beispiel-Bürgschaft', ruf: 'Bedingungen lesen'
-    },
-    {
-      id: 'hausrat', art: 'Versicherung', icon: 'schluessel',
-      titel: 'Hausrat zum Einzug versichern',
-      text: 'Schutz ab dem Tag der Schlüsselübergabe.',
-      absender: 'Beispiel-Versicherung', ruf: 'Tarif berechnen'
-    },
-    {
-      id: 'internet', art: 'Anschluss', icon: 'blitz',
-      titel: 'Internet an der neuen Adresse prüfen',
-      text: 'Verfügbarkeit und Schaltdauer vor dem Einzug klären.',
-      absender: 'Beispiel-Anbieter', ruf: 'Adresse prüfen'
-    },
-    {
-      id: 'moebel', art: 'Einrichtung', icon: 'haus',
-      titel: 'Küche nach Maß für kleine Grundrisse',
-      text: 'Planung vor Ort, Aufbau am Einzugstag.',
-      absender: 'Beispiel-Küchenstudio', ruf: 'Termin anfragen'
-    },
-    {
-      id: 'strom', art: 'Energie', icon: 'blitz',
-      titel: 'Stromtarif zum Einzug wechseln',
-      text: 'Anmeldung an der neuen Adresse in wenigen Minuten.',
-      absender: 'Beispiel-Energieversorger', ruf: 'Tarife vergleichen'
-    },
-    {
-      id: 'handwerk', art: 'Handwerk', icon: 'stift',
-      titel: 'Malerarbeiten vor dem Einzug',
-      text: 'Wände streichen, bevor die Möbel kommen.',
-      absender: 'Beispiel-Malerbetrieb', ruf: 'Angebot einholen'
-    }
-  ];
-
-  /* Wählt eine Anzeige stabil zur Position – beim Blättern springt
-     dadurch nichts herum. */
-  function anzeige(schluessel) {
-    if (!GRENZEN[aktuell()].werbung) return null;
-    return ANZEIGEN[U.hash(String(schluessel)) % ANZEIGEN.length];
-  }
-
-  /* Nach wie vielen Treffern eine Anzeige eingeschoben wird. */
-  const ANZEIGE_ABSTAND = 6;
 
   TT.plan = {
-    TARIFE, GRENZEN, LEISTUNGEN, NICHT_KAEUFLICH, ANZEIGEN, ANZEIGE_ABSTAND, GRUENDER,
+    TARIFE, GRENZEN, LEISTUNGEN, NICHT_KAEUFLICH, GRUENDER,
     HERVORHEBUNG, TOP_MAX, PLUS_RABATT,
     hervorhebung, hervorhebungPreis, boostAktiv, istTop, istHervorgehoben,
     anfrageRang, anfragenSortieren,
-    aktuell, istPlus, plusQuelle, grenze, darf, leistung, wechseln, anzeige,
+    aktuell, istPlus, plusQuelle, grenze, darf, leistung, wechseln,
+    amServer, zahlbar, standHolen, standMerken,
     gruender, gruenderAktiv, gruenderTageRest, gruenderVergeben, gruenderFrei,
     gruenderSichern, gruenderAufgeben
   };

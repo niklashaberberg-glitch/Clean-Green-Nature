@@ -819,11 +819,24 @@ selbst an.
 | `api/lib/schema.php` | das Datenmodell an einer Stelle, für MariaDB und SQLite |
 
 **Was der Server speichert:** Kontonummer, E-Mail-Adresse, Name,
-Anmeldeverfahren, Vertrauensstufe, die öffentlichen Teile der Passkeys und
-die offenen Sitzungen. **Was er nicht speichert:** Inserate, Merklisten,
-Suchaufträge, Nachrichten, Notizen, Profile, Bilder, den Dokumententresor.
-Das alles bleibt im Browser. Ein Anmeldeserver, der nichts weiter speichert,
-ist ein kleines Ziel — und ein kleines Ziel ist die beste Vorsorge.
+Anmeldeverfahren, Vertrauensstufe, die öffentlichen Teile der Passkeys, die
+offenen Sitzungen — dazu die Inserate mit ihren Bildern, die Anfragen darauf,
+die Suchaufträge, die Besichtigungstermine, die WG-Gruppen und den
+Arbeitsstand jedes Kontos (Profil, Merkliste, Bewerbungstafel, Notizen),
+damit ein Gerätewechsel keinen Neuanfang bedeutet. Der Dokumententresor liegt
+ebenfalls dort, aber **ausschließlich als Chiffrat**: Der Schlüssel entsteht
+im Browser aus einem Kennwort, das nirgends gespeichert wird.
+
+**Was er nicht speichert:** jede Berechnung — Passung, Chancenschätzung,
+Kostenrechnung, Vergleichsmiete, Ringtausch. Die entstehen bei jedem Aufruf
+neu auf dem Gerät. Wer nicht angemeldet ist, hinterlässt gar nichts: Suche und
+Inserate lassen sich ohne Konto ansehen.
+
+Die Grenze liegt dort, wo eine Sache ohne Server aufhört zu funktionieren.
+Ein Inserat muss andere erreichen. Eine Merkliste muss den Gerätewechsel
+überleben. Eine Freigabe muss bei jemand anderem aufgehen. Was keinen Server
+braucht, bekommt auch keinen — und was doch dorthin muss, aber niemanden
+angeht, liegt verschlüsselt.
 
 Wie das bei netcup einzurichten ist, steht Schritt für Schritt in
 [DEPLOY.md](DEPLOY.md).
@@ -1100,25 +1113,41 @@ keine doppelten IDs, kein waagerechter Überlauf von 320 px bis 1920 px,
 
 ## Datenschutz
 
-Zum Server geht genau eine Sache: die Anmeldung. Er beantwortet die Frage,
-wer jemand ist, und speichert dafür Kontonummer, E-Mail-Adresse, Name,
-Verfahren, Vertrauensstufe, die öffentlichen Teile der Passkeys und die
-offenen Sitzungen. Mehr kennt er nicht.
+**Ohne Anmeldung** geht nichts hinaus. Suche und Inserate lassen sich
+ansehen, ohne dass ein Konto entsteht; was dabei anfällt — Merkliste, Profil,
+Notizen — liegt im `localStorage` unter `trimmotrade.v1` und verlässt das
+Gerät nicht.
 
-Alles Übrige bleibt im Browser: Merkliste, Profil, Suchaufträge, Nachrichten
-und eigene Inserate im `localStorage` unter dem Schlüssel
-`trimmotrade.v1`, das Konto getrennt davon unter `trimmotrade.konto.v1` — wer sich
+**Mit Konto** liegt derselbe Arbeitsstand zusätzlich auf dem Server, ein Feld
+je Zeile in `tt_ablage`. Das ist der Unterschied zwischen einer Vorführung und
+einem Dienst: Wer die Suche am Rechner beginnt und abends im Bus weitersucht,
+fände sonst nichts wieder. Der Server nimmt diese Felder als Text entgegen und
+gibt sie zurück; er wertet nichts davon aus — keine Suche über Profile, keine
+Auswertung, keine Statistik. Der Browser bleibt die Wahrheit für den laufenden
+Besuch, der Server ist die Kopie, die den Gerätewechsel überlebt.
+
+Das Konto steht getrennt davon unter `trimmotrade.konto.v1` — wer sich
 abmeldet, soll seine Merkliste behalten, und wer seine Daten löscht, nicht
-ungewollt ausgesperrt werden. Unter „Meine Daten“ im Fußbereich lässt sich der Stand als
-Datei sichern oder vollständig löschen. Beim Leeren der Browserdaten
-verschwindet er ebenfalls.
+ungewollt ausgesperrt werden. Unter „Meine Daten“ im Fußbereich lässt sich der
+Stand als Datei sichern oder vollständig löschen; wer dabei angemeldet ist,
+löscht ihn an beiden Stellen.
 
-Die Dokumente des Tresors liegen davon getrennt: das Chiffrat in der
-IndexedDB `trimmotrade-tresor`, die Kopfdaten der Freigaben unter
-`trimmotrade.tresor.v1`. Beides ist ohne Kennwort wertlos – der Schlüssel wird
-nirgends abgelegt. „Meine Daten“ sichert den Tresor deshalb ausdrücklich
-nicht mit; verschlüsselte Dateien in einer Klartextdatei zu exportieren wäre
-das Gegenteil dessen, wofür er da ist.
+**Der Dokumententresor** liegt in `tt_tresor`, und dort liegt Chiffrat und
+sonst nichts. Verschlüsselt wird im Browser mit AES-GCM 256, der Schlüssel
+entsteht über PBKDF2 aus einem Kennwort, das nirgends abgelegt wird — auch der
+Dateiname ist verschlüsselt. Im Klartext stehen drei Dinge, ohne die sich der
+Tresor nicht bedienen ließe: die Art der Unterlage, ihre Größe und der
+Zeitpunkt. Ohne Server — als Einzeldatei geöffnet — fällt alles auf die
+IndexedDB `trimmotrade-tresor` zurück.
+
+Dass das Chiffrat auf dem Server liegt, ist keine Bequemlichkeit, sondern die
+Bedingung dafür, dass eine Freigabe etwas taugt: Ein Verweis auf ein Chiffrat
+im eigenen Browser geht bei niemand anderem auf, und einen Abrufzähler, den
+der Empfänger selbst führt, gibt es nicht. Der Schlüssel reist im Fragment des
+Verweises — hinter dem Rautezeichen, das Browser nie an einen Server senden.
+„Meine Daten“ sichert den Tresor ausdrücklich nicht mit; verschlüsselte
+Dateien in einer Klartextdatei zu exportieren wäre das Gegenteil dessen, wofür
+er da ist.
 
 ## Hinweis zum Bestand
 

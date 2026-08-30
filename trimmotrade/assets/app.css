@@ -23,10 +23,6 @@
   --flaeche: #ffffff;
   --flaeche2: #f0efea;
   --flaeche3: #e5e3dc;
-  /* Werbung bekommt eine kühle Grundfarbe gegen die warme Umgebung. Ein
-     Auge erkennt den Temperaturwechsel sofort, ohne dass die Fläche
-     lauter würde. */
-  --werbung: #f1f3f6;
   --rand: #e0ded6;
   --rand-stark: #c3c0b5;
   /* Der Rand eines Bedienelements muss es erkennbar machen – 3 zu 1 nach
@@ -96,7 +92,6 @@
     --flaeche: #171c17;
     --flaeche2: #1f251f;
     --flaeche3: #2a312a;
-    --werbung: #191d22;
     --rand: #2e372e;
     --rand-stark: #414c40;
     --rand-feld: #868f83;
@@ -138,7 +133,6 @@
   --flaeche: #171c17;
   --flaeche2: #1f251f;
   --flaeche3: #2a312a;
-  --werbung: #191d22;
   --rand: #2e372e;
   --rand-stark: #414c40;
   --rand-feld: #868f83;
@@ -877,6 +871,10 @@ input[type="range"] {
 .termine { list-style: none; margin: 12px 0; padding: 0; display: grid; gap: 6px; }
 .termine li { display: flex; align-items: center; gap: 12px; padding: .6em .8em; background: var(--flaeche2); border-radius: var(--r-klein); flex-wrap: wrap; }
 .termine li.is-gebucht { background: var(--gut-hell); }
+/* Ein ausgebuchtes Fenster bleibt stehen und wird leiser – es
+   verschwinden zu lassen sähe aus, als hätte es nie eines gegeben. */
+.termine li.is-voll { opacity: .68; }
+.termine li.is-voll .termine__frei { font-weight: 600; }
 .termine li > div { flex: 1; min-width: 140px; }
 .termine li span { display: block; font-size: .8rem; color: var(--text-leise); }
 .termine__frei { font-size: .8rem; color: var(--text-leise); }
@@ -1345,47 +1343,6 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .sperre__gross .ico { width: 40px; height: 40px; margin: 0 auto; color: var(--text-still); }
 .sperre__preis { padding: .6em .9em; background: var(--akzent-hell); border-radius: var(--r-klein); }
 .sperre__preis b { font-size: 1.2rem; color: var(--akzent); }
-
-/* Werbung: leise, aber unverwechselbar.
-
-   Zwei Anforderungen, die sich widersprechen – und beide gelten. Leise
-   heißt: kein Kasten, der lauter ist als ein Inserat, keine gefüllte
-   Fläche, kein Knopf in Akzentfarbe. Unverwechselbar heißt: Man darf
-   keine Sekunde im Zweifel sein, dass es Werbung ist. Gelöst über eine
-   eigene Grundfarbe, einen Streifen an der Kante und das Wort „Anzeige“
-   in Versalien darüber – nicht über Lautstärke. */
-.anzeige {
-  margin: 4px 0; padding: .55em .9em .7em 1em;
-  border: 1px solid var(--rand); border-left: 3px solid var(--rand-stark);
-  border-radius: var(--r-klein); background: var(--werbung);
-}
-.anzeige--schmal { margin-top: 14px; }
-.anzeige__kopf { display: flex; align-items: center; gap: .6em; margin: 0 0 .2em; }
-.anzeige__marke { font-size: .64rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase;
-  color: var(--text-still); }
-.anzeige__art { font-size: .7rem; color: var(--text-still); }
-.anzeige__art::before { content: '·'; margin-right: .5em; }
-/* 24 Pixel sind die Untergrenze für ein Bedienelement (WCAG 2.2, 2.5.8) –
-   auch für eines, das bewusst leise sein soll. */
-.anzeige__warum { width: 24px; height: 24px; padding: 0; margin-left: auto; flex: none;
-  border: 1px solid var(--rand-feld); border-radius: 50%; background: none;
-  color: var(--text-still); font-size: .72rem; cursor: pointer; line-height: 1; }
-.anzeige__warum:hover { border-color: var(--akzent); color: var(--akzent); }
-.anzeige__inhalt { display: flex; gap: .7em; width: 100%; padding: 0; border: 0; background: none;
-  font: inherit; color: inherit; text-align: left; cursor: pointer; }
-.anzeige__zeichen { display: grid; place-items: center; width: 30px; height: 30px; flex: none;
-  border-radius: var(--r-klein); background: var(--flaeche); color: var(--text-leise); }
-.anzeige__wort { min-width: 0; }
-.anzeige__wort b { display: block; font-size: .88rem; font-weight: 600; }
-.anzeige__wort i { display: block; margin-top: .1em; font-style: normal; font-size: .81rem; color: var(--text-leise); }
-.anzeige__wort em { display: inline-flex; align-items: center; gap: .15em; margin-top: .3em;
-  font-style: normal; font-size: .75rem; color: var(--text-still); }
-.anzeige__wort em .ico { width: 13px; height: 13px; }
-.anzeige__inhalt:hover .anzeige__wort b { text-decoration: underline; }
-.anzeige__inhalt:hover .anzeige__wort em { color: var(--akzent); }
-.anzeige__ohne { display: inline-flex; align-items: center; min-height: 24px; margin-top: .25em;
-  font-size: .74rem; color: var(--text-still); }
-.anzeige__ohne:hover { color: var(--akzent); }
 
 /* ---------------------------- Preisseite ---------------------------- */
 
@@ -1913,7 +1870,11 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .topanzeigen__marke { display: inline-flex; align-items: center; gap: .35em; font-size: .7rem;
   font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--info); }
 .topanzeigen__marke .ico { width: 15px; height: 15px; }
-.topanzeigen__kopf .anzeige__warum { margin-left: auto; }
+/* 24 Pixel sind die Untergrenze für ein Bedienelement (WCAG 2.2, 2.5.8). */
+.topanzeigen__warum { width: 24px; height: 24px; padding: 0; margin-left: auto; flex: none;
+  border: 1px solid var(--rand-stark); border-radius: 50%; background: none;
+  color: var(--text-still); font-size: .74rem; line-height: 1; cursor: pointer; }
+.topanzeigen__warum:hover { border-color: var(--akzent); color: var(--akzent); }
 .topanzeigen__fuss { margin: 8px 0 0; font-size: .76rem; color: var(--text-still); line-height: 1.5; }
 
 .karte-inserat.is-hervor { border-color: var(--info); box-shadow: 0 0 0 1px var(--info); }

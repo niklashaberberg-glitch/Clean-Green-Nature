@@ -9,3 +9,9 @@ api/config.php
 api/daten/*
 !api/daten/.gitkeep
 !api/daten/.htaccess
+
+# Das Paket für den Server. Es entsteht aus dem Verzeichnis selbst
+# (node scripts/paket-bauen.js) und wäre im Versionsverzeichnis eine
+# zweite Kopie, die sofort veraltet.
+paket/
+trimmotrade-*.zip

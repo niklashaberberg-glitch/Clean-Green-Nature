@@ -3693,6 +3693,272 @@
       '. That way every visitor sees them, which is exactly how it has to be. They can only be changed there; what you enter below applies to this browser alone and is overridden by the server’s values.'
   });
 
+  /* ---------------------------------------------------------------
+     Was mit dem Echt-Betrieb dazukam: die Ablage für den
+     Gerätewechsel, der Tresor auf dem Server, Besichtigungstermine –
+     und die Rechtstexte, die das beschreiben. */
+  e({
+    'TrimmoTrade rechnet im Browser. Suche, Bewertung, Karte, Ringtausch, Passung und jede Schätzung entstehen auf deinem Gerät.':
+      'TrimmoTrade computes in the browser. Search, assessment, map, chain swap, match and every estimate are produced on your device.',
+    'Ohne Anmeldung verlässt davon nichts deinen Browser':
+      'Without an account none of it leaves your browser',
+    '– Suche und Inserate lassen sich ansehen, ohne dass ein Konto entsteht und ohne dass etwas über dich gespeichert wird.':
+      '– search and listings can be viewed without creating an account and without anything about you being stored.',
+    'Mit einem Konto kommt eines hinzu: Dein Arbeitsstand liegt zusätzlich auf dem Server, damit du ihn auf jedem deiner Geräte wiederfindest und nicht verlierst, wenn du die Browserdaten löschst. Der Server verwahrt ihn und wertet ihn nicht aus – keine Suche über Profile, keine Auswertung, keine Statistik (Abschnitt 11).':
+      'With an account one thing is added: your working state is also held on the server, so that you find it again on every one of your devices and do not lose it when you clear your browser data. The server keeps it and does not evaluate it – no searching across profiles, no analysis, no statistics (section 11).',
+    'Zum Server geht damit: die': 'What therefore goes to the server: the',
+    '(Abschnitt 4), die': '(section 4), the',
+    '(Abschnitt 6), deine': '(section 6), your',
+    ', damit die Mail auch dann herausgeht, wenn du gerade nicht hier bist (Abschnitt 7), was du einer':
+      ', so that the mail goes out even while you are not here (section 7), what you tell a',
+    'über dich erzählst (Abschnitt 8), dein': 'about yourself (section 8), your',
+    'für den Gerätewechsel (Abschnitt 11) und der': 'for switching devices (section 11) and the',
+    '– der allerdings verschlüsselt wird, bevor er den Browser verlässt, und für den Anbieter nicht lesbar ist (Abschnitt 12).':
+      '– which, however, is encrypted before it leaves the browser and cannot be read by the provider (section 12).',
+    'Die Trennlinie verläuft nicht willkürlich: Was andere erreichen muss, gehört auf den Server. Was nur dich angeht, liegt dort so, dass der Anbieter nichts damit anfängt – und die Unterlagen, bei denen das nicht genügt, liegen verschlüsselt.':
+      'The dividing line is not arbitrary: whatever has to reach other people belongs on the server. Whatever concerns only you is held there in a way the provider can do nothing with – and the documents for which that is not enough are held encrypted.',
+    'Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten gebildet und keine Werbung ausgespielt – es gibt hier keine. Gezählt wird nur, wie oft eine Ansicht an einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse, ohne Verlauf (Abschnitt 10). Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.':
+      'No reach-measurement tools are used, no profiles of your behaviour are built and no advertising is served – there is none here. All that is counted is how often a view was opened in total on a given day – without an identifier, without an address, without a history (section 10). That is also why no window appears asking for consent: there is nothing consent would be needed for.',
+
+    /* Abschnitt 4 */
+    'Nicht im Konto stehen:': 'Not held in your account:',
+    'das Farbschema, die gewählte Ansichtsart und jede Berechnung der Rechner – die entsteht bei jedem Aufruf neu auf deinem Gerät. Was du an Profil, Merkliste, Vergleich, Bewerbungstafel und Suchaufträgen anlegst, wird dagegen deinem Konto zugeordnet gespeichert, damit es auf jedem deiner Geräte da ist; Abschnitt 11 beschreibt das im Einzelnen, Abschnitt 12 den Dokumententresor.':
+      'the colour scheme, the chosen view mode and every calculation the tools make – that is produced afresh on your device each time. What you create as profile, saved list, comparison, application board and saved searches, by contrast, is stored against your account so that it is there on every one of your devices; section 11 describes this in detail, section 12 the document vault.',
+
+    /* Abschnitt 6: Besichtigungstermine */
+    'Wer inseriert, kann Termine zur Besichtigung eintragen. Buchst du einen davon, wird gespeichert, welches Konto welchen Termin belegt – mehr nicht. Die anbietende Seite erfährt, dass ein Platz genommen wurde, und sieht, wie viele Plätze belegt sind; deinen Namen bekommt sie an dieser Stelle nicht. Auch die übrigen Teilnehmer siehst du nicht, und sie sehen dich nicht: Wer zu einer Besichtigung geht, hat nicht eingewilligt, den Mitbewerbern namentlich bekannt zu werden.':
+      'Anyone who lists a property can enter viewing appointments. If you book one, what is stored is which account holds which appointment – nothing more. The offering side learns that a slot has been taken and sees how many slots are filled; it does not get your name at this point. You do not see the other attendees either, and they do not see you: going to a viewing is not consent to become known by name to your fellow applicants.',
+    'Eine Mail geht an dich, wenn die anbietende Seite den Termin absagt. Sagst du selbst ab, verschwindet deine Buchung sofort und der Platz wird wieder frei.':
+      'You receive an email if the offering side cancels the appointment. If you cancel yourself, your booking disappears immediately and the slot is free again.',
+    'Vereinbarung und Verwaltung von Besichtigungsterminen':
+      'arranging and managing viewing appointments',
+    'Art. 6 Abs. 1 lit. b DSGVO – vorvertragliche Maßnahme auf deine Buchung hin':
+      'Art. 6(1)(b) GDPR – pre-contractual step taken at your booking',
+    'bis du absagst; im Übrigen 90 Tage nach dem Termin, mit dem Inserat oder mit deinem Konto auch früher':
+      'until you cancel; otherwise 90 days after the appointment, or sooner together with the listing or your account',
+
+    /* Abschnitt 11: Ablage */
+    '11. Dein Arbeitsstand: Browser und Gerätewechsel':
+      '11. Your working state: browser and switching devices',
+    'TrimmoTrade legt deine Eingaben zuerst im lokalen Speicher deines Browsers ab – Profil, Merkliste, Vergleich, Bewerbungstafel, Notizen, gespeicherte Filter und die Einstellungen zur Darstellung.':
+      'TrimmoTrade first stores what you enter in your browser’s local storage – profile, saved list, comparison, application board, notes, saved filters and the display settings.',
+    'Ohne Konto bleibt es dabei:': 'Without an account it stays that way:',
+    'Diese Daten verlassen dein Gerät nicht, und der Anbieter hat keinen Zugriff darauf.':
+      'This data does not leave your device, and the provider has no access to it.',
+    'Bist du angemeldet, wird derselbe Stand zusätzlich zu deinem Konto auf dem Server abgelegt. Das ist der Grund, warum du die Suche am Rechner beginnen und unterwegs auf dem Telefon fortsetzen kannst – und warum gelöschte Browserdaten nicht mehr alles mitnehmen.':
+      'If you are signed in, the same state is additionally stored against your account on the server. That is why you can start searching on the computer and carry on from your phone – and why clearing your browser data no longer takes everything with it.',
+    'Was mitgeht:': 'What travels with you:',
+    'Profil, Merkliste samt deiner Notizen, Vergleich, Bewerbungstafel, Suchaufträge, zuletzt gesehene Inserate, gespeicherte Filter, Umzugsplan, Übergabeprotokoll, die zuletzt eingegebenen Werte der Rechner und welche Hinweise du weggeklickt hast':
+      'profile, saved list including your notes, comparison, application board, saved searches, recently viewed listings, saved filters, moving plan, handover record, the values last entered into the calculators, and which notices you have dismissed',
+    'Was nicht mitgeht:': 'What does not:',
+    'Farbschema und Ansichtsart – die gehören zum Gerät und nicht zu dir':
+      'colour scheme and view mode – those belong to the device, not to you',
+    'Was der Server damit tut:': 'What the server does with it:',
+    'nichts. Er nimmt die Angaben als Text entgegen, gibt sie unverändert zurück und liest sie nicht aus. Es findet keine Suche über Profile statt, keine Auswertung, keine Statistik, keine Weitergabe.':
+      'nothing. It takes the entries as text, hands them back unchanged and does not read them. There is no searching across profiles, no analysis, no statistics, no passing on.',
+    'Fortsetzen der Nutzung auf einem anderen Gerät und Schutz deiner Eingaben vor Verlust':
+      'continuing use on another device and protecting your entries against loss',
+    'Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags über ein Konto, dessen Zweck genau das ist':
+      'Art. 6(1)(b) GDPR – performance of the usage contract for an account whose purpose is precisely this',
+    'bis du die Angaben in der Anwendung löschst, längstens bis zur Löschung deines Kontos':
+      'until you delete the entries in the application, at the latest when your account is deleted',
+    'der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO. An Dritte geht nichts.':
+      'the hosting provider as a processor under Art. 28 GDPR. Nothing goes to third parties.',
+    'Der Browser bleibt die Wahrheit für den laufenden Besuch, der Server ist die Kopie, die den Gerätewechsel überlebt. Fällt der Server aus, arbeitet die Anwendung weiter – nur eben ohne Abgleich.':
+      'The browser remains the truth for the current visit; the server is the copy that survives a change of device. If the server fails, the application carries on – simply without syncing.',
+    'Für den Zugriff auf den Speicher deines Browsers ist keine Einwilligung erforderlich: Er ist unbedingt erforderlich, damit der von dir ausdrücklich gewünschte Dienst überhaupt funktioniert (§ 25 Abs. 2 Nr. 2 des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes).':
+      'No consent is required for access to your browser’s storage: it is strictly necessary for the service you expressly requested to work at all (§ 25(2) no. 2 TDDDG, the German Telecommunications Digital Services Data Protection Act).',
+    'Du kannst diese Daten jederzeit im Fußbereich unter „Meine Daten“ als Datei sichern oder vollständig löschen. Löschst du sie dort, während du angemeldet bist, verschwinden sie auch auf dem Server.':
+      'You can save this data as a file or delete it entirely at any time via “My data” in the footer. If you delete it there while signed in, it disappears from the server as well.',
+
+    /* Abschnitt 12: Tresor */
+    'in deinem Browser verschlüsselt, bevor sie ihn verlassen':
+      'encrypted in your browser before they leave it',
+    '– mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem Kennwort und wird nirgends gespeichert; verschlüsselt wird auch der Dateiname.':
+      '– with AES-GCM and 256 bits. The key is derived from your passphrase and is stored nowhere; the file name is encrypted too.',
+    'Erst danach geht das Chiffrat zum Server. Es liegt dort, damit du deine Unterlagen auf einem zweiten Gerät wiederfindest und damit ein Verweis, den du verschickst, auch dann aufgeht, wenn dein Browser geschlossen ist. Ohne das wäre eine Freigabe wertlos.':
+      'Only then does the ciphertext go to the server. It is held there so that you find your documents again on a second device, and so that a link you send opens even while your browser is closed. Without that, sharing would be worthless.',
+    'Der Anbieter kann diese Dateien nicht lesen.': 'The provider cannot read these files.',
+    'Er hat weder dein Kennwort noch den Schlüssel; im Speicher liegt für ihn Rauschen. Unverschlüsselt liegen genau drei Angaben, ohne die sich der Tresor nicht bedienen ließe: die Art der Unterlage, die du beim Ablegen gewählt hast (etwa „Gehaltsnachweis“), die Größe in Byte und der Zeitpunkt des Ablegens.':
+      'It has neither your passphrase nor the key; what sits in storage is noise as far as it is concerned. Exactly three details are held unencrypted, without which the vault could not be operated: the kind of document you chose when filing it (“proof of income”, say), the size in bytes and the time of filing.',
+    'Gibst du Unterlagen frei, wird kein Anhang verschickt, sondern ein Verweis. Der Schlüssel dazu steht im Fragmentteil dieses Verweises – dem Teil hinter dem Rautezeichen, den Browser grundsätzlich nicht an Server übertragen. Zur Freigabe selbst wird gespeichert, welche Dokumente sie umfasst, für wen du sie gedacht hast, wann sie abläuft, wie oft sie noch abgerufen werden darf und der Zeitpunkt jedes Abrufs – damit du siehst, ob deine Unterlagen angesehen wurden. Wer abgerufen hat, wird nicht festgehalten.':
+      'When you share documents, no attachment is sent – a link is. Its key sits in the fragment part of that link, the part after the hash sign, which browsers as a rule never transmit to a server. For the share itself, what is stored is which documents it covers, whom you intended it for, when it expires, how many retrievals are left and the time of each retrieval – so that you can see whether your documents were looked at. Who retrieved them is not recorded.',
+    'Erfüllung des Vertrags über die Nutzung von TrimmoTrade; bei einer Freigabe die Übermittlung an die Stelle, der du sie zugedacht hast':
+      'performance of the contract for using TrimmoTrade; in the case of a share, transmission to the party you intended it for',
+    'bis du das Dokument löschst, den Tresor leerst oder dein Konto beendest. Eine Freigabe verliert ihre Wirkung mit dem Ablauf, den du gesetzt hast – längstens nach 30 Tagen; widerrufen kannst du sie jederzeit vorher, und der Verweis führt danach sofort ins Leere. Der Eintrag selbst bleibt noch 14 Tage stehen, damit du nachsehen kannst, was du wann freigegeben hast, und wird dann gelöscht.':
+      'until you delete the document, empty the vault or close your account. A share stops working at the expiry you set – 30 days at the most; you can revoke it at any time before that, and the link then leads nowhere immediately. The entry itself remains for a further 14 days so that you can look up what you shared and when, and is then deleted.',
+    'der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO; darüber hinaus nur, wem du selbst einen Verweis gibst':
+      'the hosting provider as a processor under Art. 28 GDPR; beyond that, only whoever you give a link to yourself',
+    'Warum das hier so ausführlich steht: „Ende-zu-Ende-verschlüsselt“ schreiben viele. Prüfbar wird es erst, wenn danebensteht, was':
+      'Why this is set out at such length: plenty of people write “end-to-end encrypted”. It only becomes checkable once it says alongside what is',
+    'verschlüsselt ist.': 'encrypted.',
+
+    /* Abschnitt 18: Rechte */
+    'Auskunft, Übertragbarkeit und Löschung kannst du unmittelbar selbst ausüben, ohne jemanden zu fragen: im Fußbereich unter „Meine Daten“. Was dort als Datei herauskommt, ist derselbe Stand, der zu deinem Konto abgelegt ist; was du dort löschst, verschwindet auch auf dem Server. Für das Konto selbst genügt ein Klick in den Einstellungen – die Löschung wirkt sofort und nimmt Inserate, Ablage und Tresor mit.':
+      'Access, portability and erasure you can exercise directly yourself, without asking anyone: via “My data” in the footer. What comes out there as a file is the same state that is stored against your account; what you delete there disappears from the server too. For the account itself a single click in the settings is enough – deletion takes effect immediately and takes listings, stored state and vault with it.',
+
+    /* AGB */
+    '(6) Ein entgeltlicher Vertrag kommt erst zustande, wenn in der Anwendung ein Zahlungsweg angeboten wird. Solange das nicht der Fall ist, gibt es keine Schaltfläche, mit der sich Plus kaufen ließe, es werden keine Zahlungsdaten erhoben und es entsteht keine Zahlungspflicht; die Absätze 1 bis 5 beschreiben dann die Bedingungen, zu denen ein Vertrag geschlossen würde. Zugänglich sind die Leistungen von Plus in dieser Zeit über einen Gründerplatz nach § 7.':
+      '(6) A paid contract only comes into being once a payment method is offered in the application. For as long as that is not the case there is no button with which Plus could be bought, no payment data is collected and no payment obligation arises; paragraphs 1 to 5 then describe the terms on which a contract would be concluded. During that time the Plus features are available through a founder place under § 7.',
+    '(6) § 5 Abs. 6 gilt entsprechend: Ohne angebotenen Zahlungsweg lässt sich bezahlte Sichtbarkeit nicht buchen. Die Reihenfolge der Treffer entsteht dann ausschließlich aus den Angaben der suchenden Person.':
+      '(6) § 5(6) applies accordingly: without a payment method on offer, paid visibility cannot be booked. The order of results then arises exclusively from the details given by the person searching.',
+
+    /* Der Datendialog im Fußbereich */
+    'Alles, was du hier eingibst, liegt zuerst im Speicher dieses Browsers – Merkliste, Suchaufträge, Nachrichten, eigene Inserate, Profil und Notizen. Ohne Anmeldung bleibt es dort und geht an niemanden. Bist du angemeldet, liegt derselbe Stand zusätzlich in deinem Konto, damit du ihn auf jedem deiner Geräte wiederfindest; ausgewertet wird er nicht, und an Dritte geht nichts. Das Einzelne steht in der':
+      'Everything you enter here is held first in this browser’s storage – saved list, saved searches, messages, your own listings, profile and notes. Without an account it stays there and goes to nobody. If you are signed in, the same state is also held in your account so that you find it again on every one of your devices; it is not evaluated, and nothing goes to third parties. The details are in the',
+    'Beim Leeren der Browserdaten verschwindet dieser Stand hier. Bist du angemeldet, holt ihn die nächste Anmeldung aus deinem Konto zurück – „Alles zurücksetzen“ löscht ihn dagegen an beiden Stellen.':
+      'Clearing your browser data makes this state disappear here. If you are signed in, the next sign-in fetches it back from your account – “Reset everything”, by contrast, deletes it in both places.',
+
+    /* Fußzeile und Profil */
+    'Rechtliche Erläuterungen sind allgemeine Hinweise und ersetzen keine Beratung. Unterlagen im Dokumententresor werden verschlüsselt, bevor sie den Browser verlassen.':
+      'Legal explanations are general information and are no substitute for advice. Documents in the vault are encrypted before they leave the browser.',
+    'TrimmoTrade sortiert und rechnet ausschließlich mit diesen Angaben. Gerechnet wird auf deinem Gerät. Bist du angemeldet, liegen sie zusätzlich in deinem Konto, damit du sie auf jedem Gerät hast; an eine anbietende Seite geht davon nur, was du in einer Anfrage ausdrücklich freigibst.':
+      'TrimmoTrade sorts and calculates using these details alone. The calculating happens on your device. If you are signed in, they are also held in your account so that you have them on every device; the only part that reaches an offering side is what you expressly release in an enquiry.',
+    'Die Bilder werden schon in deinem Browser auf {4} Pixel Kantenlänge verkleinert und erst dann übertragen – ein Inserat, dessen Fotos niemand sieht, wäre keins. Beim Löschen des Inserats verschwinden sie mit.':
+      'The photos are scaled down to {4} pixels on the longest edge in your browser and only then uploaded – a listing whose photos nobody can see would not be one. When the listing is deleted they go with it.',
+
+    /* Tresor-Ansicht ohne Server */
+    'Diese Kopie läuft ohne Verbindung; das Chiffrat liegt in diesem Browser, und der Verweis geht deshalb nur auf diesem Gerät auf. Auf':
+      'This copy runs without a connection; the ciphertext sits in this browser, so the link only opens on this device. On',
+    'liegt es auf dem Server – auch dort nur das Chiffrat –, und der Verweis funktioniert überall.':
+      'it sits on the server – there too only the ciphertext – and the link works anywhere.'
+  });
+
+  /* ---------------------------------------------------------------
+     Was nach dem Wegfall der Werbung übrig blieb, dazu die Tariffragen,
+     die Tauschgründe und die Objektbeschreibungen. */
+  e({
+    /* Werbefreiheit */
+    'Werbung gibt es hier nicht': 'There is no advertising here',
+    'Werbung wird nicht ausgespielt.': 'No advertising is served.',
+    'Ohne Werbung – die gibt es hier nirgends': 'Ad-free – there is none anywhere here',
+    'Keine Werbung. Es gibt hier keine Anzeigen – weder eigene noch fremde, weder gekennzeichnet noch getarnt.':
+      'No advertising. There are no ads here – neither our own nor anyone else’s, neither labelled nor disguised.',
+    '– keine Banner, kein Werbenetzwerk, keine Anzeigen im Gewand eines Inserats. Das ist keine Einstellung, die sich umlegen ließe: Es ist nichts eingebaut, was Werbung ausspielen könnte.':
+      '– no banners, no ad network, no ads dressed up as listings. This is not a setting that could be flipped: nothing is built in that could serve advertising.',
+    'Auf TrimmoTrade erscheint keine Werbung – weder eigene noch fremde. Es ist kein Werbenetzwerk eingebunden, es werden keine Werbekennungen gesetzt, und es gehen keine Daten an Werbetreibende. Es gibt auch nichts, was sich zuschalten ließe: Die Anwendung enthält keinen Programmteil, der Anzeigen ausspielen könnte.':
+      'No advertising appears on TrimmoTrade – neither our own nor anyone else’s. No ad network is embedded, no advertising identifiers are set, and no data goes to advertisers. There is also nothing that could be switched on: the application contains no component capable of serving ads.',
+    'Nein. Es gibt kein Werbenetzwerk, keine Kennung für Dritte und nichts, was über dein Verhalten übertragen würde. Gezählt wird nur, wie oft eine Ansicht an einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse, ohne Reihenfolge.':
+      'No. There is no ad network, no identifier for third parties and nothing that would be transmitted about your behaviour. All that is counted is how often a view was opened in total on a given day – without an identifier, without an address, without an order of events.',
+
+    /* Tarif */
+    'Wie kann der freie Tarif kostenlos sein?': 'How can the free plan be free?',
+    'Weil ihn diejenigen tragen, die Plus nehmen oder ein Inserat hervorheben. Wer eine Wohnung sucht, hat oft gerade wenig Geld – ausgerechnet dann eine Bezahlschranke vor die Suche zu stellen, wäre verkehrt. Deshalb ist alles, was vor Schaden bewahrt oder gerechnet werden muss, dauerhaft frei.':
+      'Because it is carried by those who take Plus or promote a listing. People looking for a home often have little money at that very moment – putting a paywall in front of the search precisely then would be wrong. That is why everything that protects you from harm or has to be calculated is free for good.',
+    'Getragen wird der freie Tarif von den entgeltlichen Leistungen – TrimmoTrade Plus und die Hervorhebung eigener Inserate. Beide sind dort, wo sie wirken, als bezahlt gekennzeichnet (§ 5b Abs. 1 Nr. 6 des Gesetzes gegen den unlauteren Wettbewerb).':
+      'The free plan is carried by the paid services – TrimmoTrade Plus and promoting your own listings. Both are marked as paid wherever they take effect (§ 5b(1) no. 6 of the German Act against Unfair Competition).',
+    'Vollständige Suche, dauerhaft kostenlos. Getragen von denen, die Plus nehmen.':
+      'The full search, free for good. Carried by those who take Plus.',
+    'Für alle, die täglich suchen: keine Limits, weniger Handarbeit.':
+      'For everyone searching daily: no limits, less manual work.',
+    '(1) Der freie Tarif ist dauerhaft ohne Entgelt nutzbar. Er umfasst die vollständige Suche, die Karte, die Bewertung nach dem eigenen Profil, den Prüfhinweis auf Betrugsmerkmale, den Abgleich mit der ortsüblichen Vergleichsmiete und sämtliche Rechner.':
+      '(1) The free plan can be used without payment indefinitely. It comprises the full search, the map, the assessment against your own profile, the fraud-indicator warning, the comparison with the local reference rent (ortsübliche Vergleichsmiete) and all calculators.',
+    'Der freie Tarif wird durch die entgeltlichen Leistungen nach den §§ 5 und 6 getragen.':
+      'The free plan is carried by the paid services under §§ 5 and 6.',
+    '(3) Der Anbieter behält sich vor, den Umfang des freien Tarifs zu ändern. Leistungen, die dem Schutz der Nutzenden dienen – insbesondere Prüfhinweis, Vergleichsmiete und Meldeweg –, bleiben entgeltfrei.':
+      '(3) The provider reserves the right to change the scope of the free plan. Services that protect users – in particular the fraud-indicator warning, the reference rent and the reporting channel – remain free of charge.',
+
+    /* Datenschutz: Reste */
+    'Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in dem Mitgliedstaat deines Aufenthaltsorts, deines Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes. Für den Anbieter zuständig ist {28}.':
+      'You can lodge a complaint with a data protection supervisory authority (Art. 77 GDPR), in particular in the Member State of your residence, your place of work or the place of the alleged infringement. The authority responsible for the provider is {28}.',
+    'Für die Ausübung genügt eine formlose Nachricht an {27}.':
+      'An informal message to {27} is enough to exercise them.',
+    'Diese Erklärung gilt in der Fassung vom {29}. Ändert sich die Anwendung, wird sie angepasst.':
+      'This statement applies in the version of {29}. If the application changes, it will be updated.',
+    '13. Keine Werbung': '13. No advertising',
+    'in der Erklärung steht.': 'in the statement.',
+
+    /* Anfragen und Bewerbungen */
+    '{0} Objekte stehen auf „gemerkt“. TrimmoTrade schreibt für jedes ein eigenes Anschreiben aus deinem Profil – angepasst an Titel, Lage und Preis, nicht als Rundmail.':
+      '{0} properties are marked “saved”. TrimmoTrade writes a separate cover message for each one from your profile – tailored to title, location and price, not a circular.',
+    '; dabei wird nichts übertragen. Führt sie nicht weiter, kannst du die Zusammenfassung an {19} weitergeben. Das geschieht nur auf deinen ausdrücklichen Klick, über dein eigenes E-Mail-Programm – und':
+      '; nothing is transmitted in the process. If it leads nowhere, you can pass the summary on to {19}. That only happens on your explicit click, through your own email program – and',
+    'zusätzlich die offenen Beitrittsanfragen': 'plus the pending requests to join',
+    'bei {39} Aufrufen': 'across {39} views',
+
+    /* Graffiti-Hinweis und Verkaufspreis */
+    'Vor den Fotos: der erste Eindruck von außen': 'Before the photos: the first impression from outside',
+    'Was den Verkaufspreis sonst noch bewegt': 'What else moves the sale price',
+    'Eine besprühte Fassade drückt den Preis und lässt Kaufinteressenten auf Vernachlässigung schließen – auch bei einer sanierten Wohnung. Entfernen lohnt sich deshalb vor dem ersten Termin. Sandstrahlen und Chemie greifen Putz und Klinker an; Laserreinigung arbeitet chemiefrei und ist auch bei Denkmalschutz zulässig.':
+      'A sprayed façade pushes the price down and makes buyers infer neglect – even for a renovated apartment. Removing it therefore pays off before the first viewing. Sandblasting and chemicals attack render and brickwork; laser cleaning works without chemicals and is permitted even on listed buildings.',
+    'Laser-Graffitientfernung bei Clean Green Nature': 'Laser graffiti removal at Clean Green Nature',
+    'Eigenständiges Unternehmen desselben Inhabers. Für TrimmoTrade entsteht daraus kein Vermittlungsentgelt.':
+      'A separate company with the same owner. No referral fee accrues to TrimmoTrade from this.',
+
+    /* Tauschgründe */
+    'Beziehung beendet – die Wohnung allein ist zu teuer.':
+      'Relationship over – the apartment is too expensive on my own.',
+    'Die Kinder sind aus dem Haus – die Wohnung ist zu groß geworden.':
+      'The children have moved out – the apartment has become too big.',
+    'Die Treppen werden beschwerlich, gesucht wird etwas Barrierefreies.':
+      'The stairs are getting hard; looking for something step-free.',
+    'Pendeln frisst zu viel Zeit, ich möchte näher an die Arbeit.':
+      'Commuting eats too much time; I want to be closer to work.',
+    'Studienortwechsel zum kommenden Semester.': 'Moving university for the coming semester.',
+    'Wir bekommen Nachwuchs und brauchen ein Zimmer mehr.':
+      'We are expecting a baby and need one more room.',
+    'Wir wollen näher zur Familie ziehen.': 'We want to move closer to family.',
+
+    /* Objektangaben */
+    'Doppelhaushälfte mit Süd-Garten und ausgebautem Dachgeschoss.':
+      'Semi-detached house with a south-facing garden and converted loft.',
+    'Wohnbaugrundstück mit Altbestand': 'Residential building plot with existing structure',
+    'kein Bebauungsplan – § 34 BauGB': 'no development plan – § 34 BauGB',
+    'auf dem Balkon': 'on the balcony',
+    'nicht erwünscht': 'not wanted',
+
+    /* Angaben zum Anbieter */
+    'Die Hilfe leitet Anfragen an das Servicepostfach weiter (service@trimmotrade.de), das Impressum nennt die Geschäftsadresse (info@trimmotrade.de). Bevor das erste Mal jemand darauf antwortet, muss die Domain registriert und das Postfach eingerichtet sein – und jemand muss es lesen. Ein Kontaktweg, der ins Leere geht, ist schlimmer als keiner: Nach § 5 DDG muss die Kontaktaufnahme tatsächlich möglich sein, und wer binnen weniger Tage nicht antwortet, verliert mehr als eine Anfrage.':
+      'The help section forwards enquiries to the service mailbox (service@trimmotrade.de); the imprint names the business address (info@trimmotrade.de). Before anyone replies to them for the first time, the domain has to be registered and the mailbox set up – and somebody has to read it. A contact route that leads nowhere is worse than none: under § 5 DDG contact must actually be possible, and anyone who fails to answer within a few days loses more than one enquiry.',
+    'etwa „TrimmoTrade“': 'e.g. “TrimmoTrade”',
+    '{0} Unterlage fehlt – wer sie parat hat, ist schneller.':
+      '{0} document is missing – having it ready makes you faster.',
+    '{0} Unterlagen fehlen – wer sie parat hat, ist schneller.':
+      '{0} documents are missing – having them ready makes you faster.'
+  });
+
+  /* Besichtigungstermine – die Oberfläche dazu. */
+  e({
+    'Besichtigungstermine': 'Viewing appointments',
+    'Feste Zeitfenster statt Massenandrang. Wer einen Platz nimmt, bekommt ihn – und du bekommst eine Mail. Wie viele dabei sind, entscheidest du je Fenster.':
+      'Fixed time slots instead of a crowd at the door. Whoever takes a slot gets it – and you get an email. How many people attend is up to you, slot by slot.',
+    'Noch kein Termin angelegt. Zwei feste Fenster ersparen erfahrungsgemäß ein Dutzend Nachrichten.':
+      'No appointment created yet. Two fixed slots typically save you a dozen messages.',
+    'Zum Buchen brauchst du ein Konto – sonst wüsste niemand, wer kommt.':
+      'You need an account to book – otherwise nobody would know who is coming.',
+    'Wer gebucht hat, bekommt eine Absage per Mail, wenn du ein Fenster entfernst. Die Namen der Buchenden stehen hier nicht – sie stehen in deinem Posteingang, sobald jemand dir schreibt.':
+      'Anyone who has booked receives a cancellation by email if you remove a slot. The names of those who booked are not shown here – they appear in your inbox as soon as somebody writes to you.',
+    'Fenster anlegen': 'Create slot',
+    'Termin entfernen': 'Remove appointment',
+    'Einzeltermin': 'Individual viewing',
+    'Sammeltermin': 'Group viewing',
+    'Videobesichtigung': 'Video viewing',
+    'Offene Besichtigung': 'Open house',
+    'ausgebucht': 'fully booked',
+    'nehmen': 'take',
+    'Du hast den {0} um {1} Uhr.': 'You have {0} at {1}.',
+    'Die anbietende Seite weiß Bescheid.': 'The offering side has been told.',
+    'Dieser Termin ist voll.': 'This appointment is full.',
+    'Termin gebucht. Die anbietende Seite ist benachrichtigt.':
+      'Appointment booked. The offering side has been notified.',
+    'Termin abgesagt.': 'Appointment cancelled.',
+    'Fenster angelegt.': 'Slot created.',
+    'Fenster entfernt.': 'Slot removed.'
+  });
+
+  /* Rückmeldungen beim Buchen und Anlegen von Terminen. */
+  e({
+    'Termin am {0} um {1} Uhr gebucht.': 'Appointment booked for {0} at {1}.',
+    'Termin gebucht.': 'Appointment booked.',
+    'Termin abgesagt. Der Platz ist wieder frei.': 'Appointment cancelled. The slot is free again.',
+    'Zeitfenster angelegt.': 'Time slot created.',
+    'Dieses Zeitfenster entfernen? Wer gebucht hat, bekommt eine Absage.':
+      'Remove this time slot? Anyone who booked will get a cancellation.',
+    'Entfernt. {0} Buchung abgesagt.': 'Removed. {0} booking cancelled.',
+    'Entfernt.': 'Removed.',
+    'Wird angelegt …': 'Creating …'
+  });
+
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
 })(window.TT = window.TT || {});

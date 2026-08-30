@@ -35,7 +35,7 @@ sitemap.xml     Seitenverzeichnis für Google & Co.
 Web-Wurzelverzeichnis des Hosters kopieren. Fertig.
 
 Sobald die endgültige Domain feststeht: In `index.html`, `robots.txt` und
-`sitemap.xml` nach `clean-green-nature.de` suchen und ersetzen. Die Adresse
+`sitemap.xml` nach `cleangreennature.de` suchen und ersetzen. Die Adresse
 steht dort in `canonical`, den Open-Graph-Angaben und den Strukturdaten.
 
 ## Was von außen geladen wird

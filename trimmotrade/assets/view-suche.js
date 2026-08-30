@@ -438,7 +438,7 @@
     return h`<section class="topanzeigen" aria-label="Bezahlte Platzierungen">
       <p class="topanzeigen__kopf">
         <span class="topanzeigen__marke">${ico('blitz')}Top-Anzeigen</span>
-        <button type="button" class="anzeige__warum" data-tu="warum-top"
+        <button type="button" class="topanzeigen__warum" data-tu="warum-top"
           title="Warum steht das hier?" aria-label="Warum steht das hier?">?</button>
       </p>
       <div class="ergebnisse__liste">
@@ -462,13 +462,9 @@
     /* Zwei Treffer sind fast so wenig wie keiner – die Hilfe darf nicht
        erst bei null erscheinen. */
     const knapp = bewertet.length < WENIG ? lockerungsKnoepfe(f) : '';
-    /* Anzeigen sitzen zwischen den Treffern, nie in der Reihenfolge:
-       sie haben eine eigene Gestalt und tragen immer ihre Kennzeichnung. */
-    const abstand = TT.plan.ANZEIGE_ABSTAND;
     return h`${topBlock(bewertet)}
     <div class="ergebnisse__liste">
-      ${teil.map((x, i) => h`${ui.inseratsKarte(x.l, x.b)}${(i + 1) % abstand === 0 && i + 1 < teil.length
-        ? ui.anzeige('treffer-' + Math.floor(i / abstand), 'breit') : ''}`)}
+      ${teil.map((x) => ui.inseratsKarte(x.l, x.b))}
     </div>
     ${knapp ? h`<div class="wenig">
       ${ico('lupe')}

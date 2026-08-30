@@ -15,19 +15,23 @@ wird. In der Reihenfolge, in der es getan werden sollte.
 Diese fünf Punkte sind keine Empfehlung. Ohne sie ist der Betrieb
 angreifbar, und zwar von der ersten Stunde an.
 
-### 1.1 Impressum vollständig ausfüllen ⚠️ **fast fertig – Telefonnummer fehlt**
+### 1.1 Impressum vollständig ausfüllen ✅ **vollständig**
 
 In **`api/config.php`**, Abschnitt `betreiber`. Nicht in der Anwendung:
 Was dort eingetragen wird, liegt im Speicher des eigenen Browsers – jeder
 andere Besucher sähe an dieser Stelle eine Lücke, und genau daran
 scheitert die Impressumspflicht.
 
-Eingetragen sind Name, Anschrift (Plankgasse 34, 50668 Köln) und beide
-E-Mail-Adressen. **Es fehlt die Telefonnummer.** Sie ist keine Kür:
-§ 5 Abs. 1 Nr. 2 DDG verlangt Angaben, die eine schnelle elektronische
-Kontaktaufnahme **und** unmittelbare Kommunikation ermöglichen – eine
-E-Mail-Adresse allein genügt dafür nach der Rechtsprechung nicht
-zuverlässig. Eine erfundene Nummer wäre schlechter als keine.
+Eingetragen sind Name, Anschrift (Plankgasse 34, 50668 Köln), beide
+E-Mail-Adressen und die Telefonnummer (+49 163 502 1968). Damit ist
+§ 5 Abs. 1 Nr. 2 DDG erfüllt: Verlangt werden Angaben, die eine schnelle
+elektronische Kontaktaufnahme **und** unmittelbare Kommunikation
+ermöglichen – eine E-Mail-Adresse allein genügt dafür nach der
+Rechtsprechung nicht zuverlässig.
+
+Was bleibt: Unter dieser Nummer muss auch jemand erreichbar sein. Eine
+Nummer, die nie abgenommen wird, ist rechtlich fast so schlecht wie
+keine.
 
 `php api/index.php pruefen` sagt, welche Pflichtangabe noch fehlt. Jede
 Lücke erscheint außerdem im Text sichtbar als `[… eintragen]` statt still
@@ -39,7 +43,7 @@ zu verschwinden.
 | Straße und Hausnummer | **ladungsfähige Anschrift**, kein Postfach | § 5 Abs. 1 Nr. 1 DDG | steht |
 | PLZ und Ort | dito | § 5 Abs. 1 Nr. 1 DDG | steht |
 | E-Mail-Adresse | Pflichtangabe | § 5 Abs. 1 Nr. 2 DDG | steht |
-| Telefonnummer | schnelle Kontaktaufnahme | § 5 Abs. 1 Nr. 2 DDG | **fehlt** |
+| Telefonnummer | schnelle Kontaktaufnahme | § 5 Abs. 1 Nr. 2 DDG | steht |
 | Aufsichtsbehörde Datenschutz | Beschwerderecht | Art. 13 Abs. 2 lit. d DSGVO | steht (LDI NRW – folgt aus dem Sitz in Köln) |
 | Verantwortlich nach § 18 Abs. 2 MStV | bei journalistisch-redaktionellen Inhalten | § 18 Abs. 2 MStV | **zu entscheiden** – siehe unten |
 
@@ -179,17 +183,25 @@ aktiv; sonst über den Kundenbereich einschalten.
 In `api/config.php`:
 
 ```php
-'beispielmarkt' => true,   // solange es zu wenige echte Inserate gibt
+'beispielmarkt' => false,   // so gehört es im Betrieb
 ```
 
-Solange das auf `true` steht, zeigt die Suche neben echten Inseraten den
-erzeugten Beispielbestand – jedes Beispiel mit Marke, dazu ein Hinweis
-über der Trefferliste, der sich nicht wegklicken lässt.
+**Und dabei sollte es bleiben.** Erfundene Wohnungen neben echten zu
+zeigen ist irreführend im Sinne des § 5 UWG, und spätestens die erste
+Anfrage an eine erfundene Adresse zerstört genau das Vertrauen, von dem
+der ganze Betrieb lebt. Fehlt der Schlüssel ganz, gilt ebenfalls `false`.
 
-**Ab etwa 300 echten Inseraten in einer Stadt gehört hier `false` hin.**
-Erfundene Wohnungen neben echten zu zeigen ist irreführend im Sinne des
-§ 5 UWG, und spätestens die erste Anfrage an eine erfundene Adresse
-zerstört genau das Vertrauen, von dem der ganze Betrieb lebt.
+Auf `true` gesetzt zeigt die Suche einen erzeugten Bestand – jedes
+Beispiel mit Marke, dazu ein Hinweis über der Trefferliste, der sich
+nicht wegklicken lässt, und eine Anfrage darauf erreicht niemanden. Das
+ist zum **Vorführen** gedacht: ein Termin bei einer Genossenschaft, ein
+Screenshot, eine Messe. Nicht für den öffentlichen Betrieb.
+
+Der leere Markt am Anfang ist unangenehm. Er ist trotzdem der richtige
+Zustand: Was die Anwendung ohne einen einzigen Treffer schon kann –
+Vergleichsmiete, Prüfhinweis, Kostenrechnung, Umzugsplan, Tresor –, ist
+mehr als das, was die großen Portale mit Treffern anbieten. Abschnitt 4
+sagt, wie die ersten Inserate hereinkommen.
 
 ### 2.4 Sicherung
 

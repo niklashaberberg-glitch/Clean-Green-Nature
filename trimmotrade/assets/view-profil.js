@@ -82,7 +82,9 @@
         <header class="seite__kopf">
           <h1>${ico('person')}Dein Profil</h1>
           <p class="seite__unter">TrimmoTrade sortiert und rechnet ausschließlich mit diesen Angaben.
-            Sie liegen im Speicher dieses Browsers und werden nirgendwohin übertragen.</p>
+            Gerechnet wird auf deinem Gerät. Bist du angemeldet, liegen sie zusätzlich in deinem Konto,
+            damit du sie auf jedem Gerät hast; an eine anbietende Seite geht davon nur, was du in einer
+            Anfrage ausdrücklich freigibst.</p>
           <p class="gespeichert" id="profil-gespeichert" aria-live="polite">${ico('speichern')}Änderungen werden sofort übernommen</p>
         </header>
 
@@ -659,8 +661,9 @@
       : 'noch keine gewählt'}</i>
       </div>
       <ul class="bilder__liste" id="inserat-bilder-liste">${bilderListe()}</ul>
-      <p class="fein">Die Bilder werden beim Ablegen auf ${U.num(BILD_KANTE)} Pixel Kantenlänge verkleinert und
-        bleiben im Speicher dieses Geräts. Übertragen wird keines davon.</p>
+      <p class="fein">Die Bilder werden schon in deinem Browser auf ${U.num(BILD_KANTE)} Pixel Kantenlänge
+        verkleinert und erst dann übertragen – ein Inserat, dessen Fotos niemand sieht, wäre keins. Beim
+        Löschen des Inserats verschwinden sie mit.</p>
       <div class="hinweisbox">${ico('warnung')}
         <div><b>Was auf ein Inseratsfoto nicht gehört</b>
         <p>Keine Personen ohne deren Einwilligung, keine Kennzeichen, keine Namensschilder an Klingel oder

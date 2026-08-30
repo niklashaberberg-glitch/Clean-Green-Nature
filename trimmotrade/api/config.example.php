@@ -137,12 +137,11 @@ return [
     'ort'        => 'Köln',
     'land'       => 'Deutschland',
     'email'      => 'info@trimmotrade.de',   // Pflicht: § 5 Abs. 1 Nr. 2 DDG
-    /* Noch einzutragen. § 5 Abs. 1 Nr. 2 DDG verlangt eine Angabe, die
-       eine „unmittelbare Kommunikation“ erlaubt; die Rechtsprechung
-       lässt dafür in der Regel die Telefonnummer verlangen. Ein
-       Kontaktformular allein genügt nach der Rechtsprechung nicht
-       zuverlässig. */
-    'telefon'    => '',
+    /* Pflicht: § 5 Abs. 1 Nr. 2 DDG verlangt eine Angabe, die eine
+       „unmittelbare Kommunikation“ erlaubt; die Rechtsprechung lässt
+       dafür in der Regel die Telefonnummer verlangen. Ein
+       Kontaktformular allein genügt nicht zuverlässig. */
+    'telefon'    => '+49 163 502 1968',
     /* Postfach für Anfragen. Getrennt von der Impressumsadresse: Die
        eine ist Pflichtangabe, die andere ein Arbeitsweg – wer beides
        vermischt, kann später keine davon ändern. Diese Adresse ist
@@ -164,18 +163,21 @@ return [
   ],
 
   /* --- Der Markt ------------------------------------------------------
-     Solange noch keine echten Inserate da sind, zeigt die Anwendung
-     einen Beispielmarkt – erkennbar gekennzeichnet, mit einem Hinweis
-     über der Trefferliste. Sobald genug echte Inserate stehen, gehört
-     hier false hin: Erfundene Wohnungen neben echten zu zeigen, ist
-     nach § 5 UWG irreführend, und spätestens die erste Anfrage an eine
-     erfundene Adresse zerstört das Vertrauen, das der ganze Betrieb
-     braucht.
+     Ob neben den echten Inseraten ein erzeugter Beispielbestand laufen
+     darf. Im Betrieb gehört hier **false** hin, und deshalb steht es
+     hier so:
 
-     Der Hinweis über der Liste verschwindet nicht dadurch, dass man
-     ihn hier abschaltet – er verschwindet dadurch, dass keine
-     Beispiele mehr gezeigt werden. */
-  'beispielmarkt' => true,
+     Erfundene Wohnungen neben echten zu zeigen, ist nach § 5 UWG
+     irreführend. Vor allem aber zerstört die erste Anfrage an eine
+     erfundene Adresse genau das Vertrauen, von dem ein Wohnungsportal
+     als einzigem lebt. Ein leerer Markt ist unangenehm; ein Markt mit
+     Wohnungen, die es nicht gibt, ist das Ende.
+
+     Auf true zu stellen ist nur für eine Vorführung sinnvoll – etwa,
+     um jemandem zu zeigen, wie die Suche mit Inhalt aussieht. Jedes
+     Beispiel trägt dann sichtbar das Wort „Beispiel“, und über der
+     Trefferliste steht ein Hinweis, der sich nicht wegklicken lässt. */
+  'beispielmarkt' => false,
 
   /* Wo die Bilder der Inserate liegen. Der Ordner ist für den Browser
      gesperrt; ausgeliefert wird über /api/bild/… */

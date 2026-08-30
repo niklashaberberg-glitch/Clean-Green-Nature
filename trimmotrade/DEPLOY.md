@@ -36,6 +36,28 @@ Der Ordner `dist/` und die Dateien `build.js`, `scripts/`, `README.md`,
 `DEPLOY.md` und `api/schema-ausgeben.php` gehören **nicht** auf den
 Server. Sie schaden dort nicht, aber sie haben nichts verloren.
 
+### Das Paket – der bequeme Weg
+
+Statt von Hand auszusortieren:
+
+```
+node scripts/paket-bauen.js
+```
+
+Das legt den Ordner **`paket/`** an, in dem genau das steht, was
+hochgehört – versteckte Dateien eingeschlossen – und daneben ein Archiv
+`trimmotrade-JJJJ-MM-TT.zip`. In `paket/PAKET.txt` steht die vollständige
+Liste mit Größen, damit sich nach dem Hochladen nachsehen lässt, ob alles
+ankam.
+
+Wenn dein Hoster einen Datei-Manager hat, der entpacken kann, lade das
+Archiv hoch und entpacke es im Dokumentenstamm. Das ist um
+Größenordnungen schneller als knapp hundert Einzelübertragungen per FTP.
+
+`api/config.php` ist im Paket **nicht** enthalten – sie enthält deine
+Kennwörter und entsteht auf dem Server. Beim Aktualisieren wird sie
+deshalb auch nicht überschrieben.
+
 ---
 
 ## Schritt 1 · Domain und TLS
@@ -82,12 +104,15 @@ bei netcup standardmäßig an.
 
 ## Schritt 3 · Dateien hochladen und einstellen
 
-1. Alles aus dem Ordner `trimmotrade/` in den Dokumentenstamm laden –
-   ohne `dist/`, `scripts/`, `build.js`, `README.md`, `DEPLOY.md`.
+1. Den Inhalt von **`paket/`** in den Dokumentenstamm laden (oder das
+   Archiv dort entpacken). Wer von Hand kopiert: alles aus
+   `trimmotrade/` **ohne** `dist/`, `scripts/`, `build.js`, `paket/`,
+   `README.md`, `DEPLOY.md`, `START.md`, `GESCHAEFT.md` und
+   `api/schema-ausgeben.php`.
    Achte darauf, dass auch die versteckten Dateien mitkommen:
-   `.htaccess` und der Ordner `.well-known/`. Viele FTP-Programme
-   blenden sie aus; bei FileZilla: *Server → Versteckte Dateien
-   anzeigen*.
+   `.htaccess`, `.user.ini` und der Ordner `.well-known/`. Viele
+   FTP-Programme blenden sie aus; bei FileZilla: *Server → Versteckte
+   Dateien anzeigen*.
 2. `api/config.example.php` auf dem Server nach **`api/config.php`**
    kopieren und öffnen.
 3. Ausfüllen:
@@ -321,6 +346,14 @@ Der zweite Auftrag ist der gegen Karteileichen. Ein Inserat läuft nach
 60 Tagen aus; sieben Tage vorher fragt diese Mail nach, ob das Angebot
 noch steht. Ein Klick auf *Steht noch* verlängert es.
 
+Der dritte räumt weg, was seine Zeit hinter sich hat: abgelaufene
+Sitzungen und Anmeldevorgänge, geschlossene WG-Gruppen, abgelaufene
+Freigaben aus dem Dokumententresor und Besichtigungstermine, die
+90 Tage zurückliegen. Er ist der einzige der drei, der nicht zwingend
+ist – die Anwendung räumt bei etwa jedem fünfzigsten Aufruf auch von
+selbst auf. Ein Cron macht es nur vorhersagbar und nimmt es dem
+Besucher ab.
+
 Weitere Aufrufe sind für die Kommandozeile gedacht, nicht für Cron:
 
 ```
@@ -366,21 +399,27 @@ nur „Nähe Ehrenfeld“ sagt.
 
 ## Schritt 11 · Der Beispielmarkt
 
-In `api/config.php`:
+In `api/config.example.php` steht:
 
 ```php
-'beispielmarkt' => true,
+'beispielmarkt' => false,
 ```
 
-Solange das auf `true` steht, füllt ein erzeugter Beispielbestand die
-Suche. Jedes Beispiel trägt die Marke **Beispiel**, über der Trefferliste
-steht ein Hinweis, der sich nicht wegklicken lässt, und eine Anfrage
-darauf erreicht niemanden.
+Und dabei sollte es bleiben. Erfundene Wohnungen neben echten zu zeigen,
+ist nach § 5 UWG irreführend – und zerstört das Vertrauen, von dem der
+ganze Betrieb lebt, spätestens bei der ersten Anfrage ins Leere. Fehlt
+der Schlüssel ganz, gilt ebenfalls `false`; ein Server, dem man vergisst
+zu sagen, dass er nicht lügen soll, lügt sonst.
 
-**Sobald in einer Stadt etwa 300 echte Inserate stehen, gehört hier
-`false` hin.** Erfundene Wohnungen neben echten zu zeigen, ist nach
-§ 5 UWG irreführend – und zerstört das Vertrauen, von dem der ganze
-Betrieb lebt, spätestens bei der ersten Anfrage ins Leere.
+Auf `true` gesetzt füllt ein erzeugter Bestand die Suche. Jedes Beispiel
+trägt dann die Marke **Beispiel**, über der Trefferliste steht ein
+Hinweis, der sich nicht wegklicken lässt, und eine Anfrage darauf
+erreicht niemanden. Das ist zum Vorführen gedacht – für eine Messe, einen
+Termin bei einer Genossenschaft, einen Screenshot –, nicht für den
+öffentlichen Betrieb.
+
+**Ein leerer Markt ist unangenehm, aber ehrlich.** Wie er sich füllt,
+steht in `START.md`, Abschnitt 4.
 
 ---
 
@@ -389,6 +428,14 @@ Betrieb lebt, spätestens bei der ersten Anfrage ins Leere.
 Dateien hochladen, fertig. Die Anwendung erkennt beim ersten Aufruf, dass das
 Datenmodell neuer ist als das in der Datenbank vermerkte, und legt fehlende
 Tabellen **und fehlende Spalten** selbst an. Nichts von Hand in phpMyAdmin.
+
+Der aktuelle Stand des Datenmodells ist **Version 4**. Dazugekommen sind
+fünf Tabellen (`tt_ablage`, `tt_tresor`, `tt_freigabe`, `tt_termin`,
+`tt_buchung`) und drei Spalten an `tt_konto` (`plus_bis`, `gruender_nr`,
+`gruender_bis`). Auch das legt der erste Aufruf selbst an; `php
+api/index.php pruefen` sagt danach `Datenmodell auf Stand · Version 4`.
+Steht dort eine kleinere Zahl, ist die Seite seit dem Hochladen noch nie
+über den Browser aufgerufen worden.
 
 Zwei Dinge dabei beachten:
 
@@ -423,6 +470,34 @@ Zwei Dinge dabei beachten:
 
 ---
 
+## Platz auf der Platte
+
+Bis zum Dokumententresor war der Platzbedarf eine Nebensache: Ein Inserat
+sind ein paar Kilobyte, ein Bild ein paar hundert. Der Tresor ändert das,
+weil dort Dateien liegen, die Menschen hochladen – Gehaltsabrechnungen,
+Schufa-Auskünfte, Mietschuldenfreiheitsbescheinigungen.
+
+Die Grenzen stehen fest im Programm und lassen sich nicht überschreiten:
+
+| | Grenze |
+|---|---|
+| ein Dokument | 12 MB Chiffrat |
+| ein Konto, Tresor gesamt | 40 MB |
+| Dokumente je Konto | 40 |
+| ein Konto, Arbeitsstand | 1 MB |
+| Bilder je Inserat | 12 |
+
+Im ungünstigsten Fall belegt ein Konto also gut 41 MB. Das ist die
+theoretische Obergrenze, nicht der Erfahrungswert: Wer sechs Unterlagen
+ablegt, liegt bei zwei bis fünf Megabyte. Bei tausend Konten sind das
+einige Gigabyte – ein Webhosting-Paket sollte das haben.
+
+`php api/index.php pruefen` zeigt unter *Dokumententresor* und *Ablage
+für den Gerätewechsel*, wie viel tatsächlich belegt ist. Wird es eng,
+ist das die Zeile, die es vorher sagt.
+
+---
+
 ## Was regelmäßig zu tun ist
 
 - **Microsoft-Geheimnis erneuern**, bevor es abläuft (Datum notieren).
@@ -440,10 +515,16 @@ Zwei Dinge dabei beachten:
      zurück.
 
   Was in der Datenbank steht, ist inzwischen mehr als nur die Anmeldung:
-  Inserate, Anfragen, Suchaufträge und Meldungen. Ist sie weg, ist der
-  Markt weg. Merkliste, Profil und Dokumententresor der Nutzenden liegen
-  weiterhin nur in deren Browsern und sind von einer Sicherung weder
-  erfasst noch betroffen.
+  Inserate, Anfragen, Suchaufträge, Meldungen, Besichtigungstermine, der
+  Arbeitsstand der Nutzenden (Profil, Merkliste, Bewerbungstafel) und das
+  Chiffrat des Dokumententresors. Ist sie weg, ist nicht nur der Markt
+  weg, sondern auch das, was jede einzelne Person mühsam eingetragen hat.
+  **Diese Sicherung ist deshalb keine Kür mehr.**
+
+  Der Tresor ist dabei ein Sonderfall: Was dort liegt, kann niemand
+  lesen – auch der Betreiber nicht. Eine Sicherung sichert Chiffrat, und
+  das ist richtig so. Ohne das Kennwort der jeweiligen Person ist es
+  wertlos, mit dem Kennwort ist es wieder da.
 
 ---
 
@@ -461,17 +542,45 @@ Damit klar ist, was hier verantwortet wird.
   freigegeben hat.
 - Suchaufträge, damit die Mail auch dann herausgeht, wenn niemand die
   Seite geöffnet hat.
+- Besichtigungstermine und wer darauf gebucht ist. Wer sonst gebucht hat,
+  bekommt niemand zu sehen – die Anwendung gibt nur die Zahl der freien
+  Plätze heraus.
+- WG-Gruppen mit dem, was die Beteiligten über sich hineingeschrieben
+  haben.
+- Der **Arbeitsstand** jedes Kontos: Profil, Merkliste samt Notizen,
+  Vergleich, Bewerbungstafel, Suchaufträge, Umzugsplan,
+  Übergabeprotokoll, die Werte in den Rechnern. Der Server nimmt das als
+  Text entgegen und gibt es zurück; er wertet nichts davon aus. Ohne
+  diese Tabelle fände niemand auf dem Telefon wieder, was er am Rechner
+  eingetragen hat – und das ist der häufigste Grund, einen Dienst nicht
+  mehr zu benutzen.
+- Der **Dokumententresor**, aber ausschließlich als Chiffrat. Der
+  Schlüssel entsteht im Browser aus einem Kennwort, das nirgends
+  gespeichert wird. Im Klartext liegen dort drei Dinge: die Art der
+  Unterlage, ihre Größe und der Zeitpunkt. Mehr sieht der Betreiber
+  nicht, und mehr kann er auch bei vollem Zugriff auf die Datenbank
+  nicht sehen.
 - Meldungen nach Art. 16 DSA mit ihrem Bearbeitungsstand.
+- Gründerplätze: die Nummer und bis wann sie gilt. Zentral gezählt,
+  damit „die ersten zehntausend, einer je Person“ eine Aussage ist und
+  keine Schätzung.
 - Tagessummen für den Trichter – ohne Kennung, ohne IP-Adresse, ohne
   Cookie und ohne Personenbezug.
 
 **Im Browser bleibt:**
 
-Merkliste, Vergleich, Bewerbungstafel, Notizen, Profil, jede Berechnung
-und der Dokumententresor mit seinen Ende-zu-Ende verschlüsselten
-Unterlagen. Nichts davon erreicht den Server jemals.
+Das Farbschema, die gewählte Ansichtsart und jede Berechnung – Passung,
+Chancenschätzung, Kostenrechnung, Vergleichsmiete, Ringtausch. Die
+entstehen bei jedem Aufruf neu auf dem Gerät und werden nie übertragen.
+Wer nicht angemeldet ist, hat den vollen Zustand ausschließlich im
+eigenen Browser: Suche und Inserate lassen sich ohne Konto ansehen, und
+dabei entsteht nichts.
 
-Die Grenze verläuft nicht willkürlich: Ein Inserat ist eine
-Veröffentlichung. Eine Merkliste ist eine Notiz und geht niemanden etwas
-an. Je weniger auf dem Server liegt, desto kleiner ist das Ziel – und ein
-kleines Ziel ist die beste Vorsorge.
+Die Grenze verläuft nicht willkürlich. Sie liegt dort, wo eine Sache
+ohne Server aufhört zu funktionieren: Ein Inserat muss andere erreichen.
+Eine Merkliste muss den Gerätewechsel überleben. Eine Freigabe muss bei
+jemand anderem aufgehen. Was keinen Server braucht, bekommt auch keinen.
+
+Und was doch dorthin muss, aber niemanden angeht, liegt verschlüsselt –
+der Tresor ist die Antwort auf die Frage, was passiert, wenn diese
+Datenbank eines Tages doch in falsche Hände gerät.

@@ -238,7 +238,7 @@
   }
 
   /* ================================================================
-     Tarifsperren und Anzeigen
+     Tarifsperren
      ================================================================ */
 
   /* Eine Sperre zeigt immer, was dahinterliegt – nie nur ein Schloss.
@@ -253,29 +253,6 @@
       </div>
       <button type="button" class="knopf knopf--klein" data-tu="sperre" data-leistung="${leistungId}">Ansehen</button>
     </div>`;
-  }
-
-  /* Anzeigen sind immer gekennzeichnet und sehen nie aus wie ein Inserat. */
-  function anzeige(schluessel, variante) {
-    const a = TT.plan.anzeige(schluessel);
-    if (!a) return '';
-    return h`<aside class="anzeige anzeige--${variante || 'breit'}" aria-label="Anzeige">
-      <p class="anzeige__kopf">
-        <span class="anzeige__marke">Anzeige</span>
-        <span class="anzeige__art">${a.art}</span>
-        <button type="button" class="anzeige__warum" data-tu="warum-werbung"
-          title="Warum sehe ich das?" aria-label="Warum sehe ich das?">?</button>
-      </p>
-      <button type="button" class="anzeige__inhalt" data-tu="anzeige-klick">
-        <span class="anzeige__zeichen">${ico(a.icon)}</span>
-        <span class="anzeige__wort">
-          <b>${a.titel}</b>
-          <i>${a.text}</i>
-          <em>${a.absender} · ${a.ruf}${ico('chevron')}</em>
-        </span>
-      </button>
-      <a class="anzeige__ohne" href="#/plus">ohne Anzeigen lesen</a>
-    </aside>`;
   }
 
   /* ================================================================
@@ -605,7 +582,7 @@
     const beispiele = TT.markt ? TT.markt.zeigtBeispiele() : true;
     const echte = TT.markt ? TT.markt.echte : 0;
     const rechtlich = 'Rechtliche Erläuterungen sind allgemeine Hinweise und ersetzen keine Beratung. '
-      + 'Merkliste, Profil und Unterlagen bleiben im Browser dieses Geräts.';
+      + 'Unterlagen im Dokumententresor werden verschlüsselt, bevor sie den Browser verlassen.';
     if (!beispiele) {
       return U.t('Alle Inserate stammen von den Menschen, die sie eingestellt haben.') + ' ' + U.t(rechtlich);
     }
@@ -962,10 +939,8 @@
        DSGVO) – es an ein Konto zu binden wäre absurd: Die Daten liegen
        auf dem Gerät des Besuchers, nicht bei uns. */
     'daten', 'daten-export', 'daten-loeschen',
-    /* Erklärungen, keine Funktionen: die Tastaturhilfe, die Auskunft
-       darüber, warum eine Anzeige erscheint, und die Anzeige selbst.
-       Gerade die Werbetransparenz darf hinter keiner Anmeldung liegen. */
-    'hilfe', 'warum-werbung', 'anzeige-klick'
+    /* Eine Erklärung, keine Funktion: die Tastaturhilfe. */
+    'hilfe'
   ]);
 
   /* Ganze Familien statt einzelner Namen: Die Hilfe ist ohne Anmeldung
@@ -1093,13 +1068,22 @@
             <p>Keine bessere Platzierung, keinen Vorrang bei Vermietern und keinen Frühzugang zu Inseraten.
               Alle sehen jedes Inserat in derselben Sekunde.</p></div>
           </div>`,
-        fuss: h`<a class="knopf knopf--still" href="#/plus" data-tu="dialog-zu">Alle Unterschiede ansehen</a>
-          <button type="button" class="knopf" data-tu="plus-testen">${ico('plus5')}Plus in dieser Vorführung aktivieren</button>`
+        /* Mit Server führt der Weg zur Preisseite. Ein Knopf „Plus
+           aktivieren“ direkt hier wäre eine Zusage, die niemand
+           einlösen kann, solange kein Zahlungsweg eingerichtet ist –
+           und eine Zahlungspflicht ohne Bestellstrecke wäre nach
+           § 312j BGB ohnehin unzulässig. Ohne Server bleibt der
+           Schalter, mit dem sich die Vorführung durchspielen lässt. */
+        fuss: TT.plan.amServer()
+          ? h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Verstanden</button>
+            <a class="knopf" href="#/plus" data-tu="dialog-zu">${ico('plus5')}Tarife ansehen</a>`
+          : h`<a class="knopf knopf--still" href="#/plus" data-tu="dialog-zu">Alle Unterschiede ansehen</a>
+            <button type="button" class="knopf" data-tu="plus-testen">${ico('plus5')}Plus in dieser Vorführung aktivieren</button>`
       });
     },
 
     'plus-testen'() {
-      TT.plan.wechseln('plus', 'monat');
+      if (!TT.plan.wechseln('plus', 'monat')) { dialogZu(); gehe('plus'); return; }
       dialogZu();
       toast('Plus ist aktiv. In der Vorführung kostenlos und jederzeit umschaltbar.', 'gut');
       neuZeichnen();
@@ -1141,26 +1125,7 @@
       });
     },
 
-    'warum-werbung'() {
-      dialog({
-        titel: 'Warum sehe ich Anzeigen?',
-        inhalt: h`<p>TrimmoTrade ist im freien Tarif vollständig nutzbar – die Suche, die Karte, der Prüfhinweis,
-            die Vergleichsmiete und alle Rechner. Bezahlt wird das über Anzeigen.</p>
-          <p><b>Was wir dabei nicht tun:</b></p>
-          <ul class="liste-schlicht">
-            <li>Anzeigen sehen nie aus wie ein Inserat und stehen nie in der Trefferreihenfolge.</li>
-            <li>Kein Werbetreibender bekommt Einfluss darauf, welche Wohnungen dir angezeigt werden.</li>
-            <li>Es werden keine Daten über dich an Werbetreibende gegeben – die Auswahl entsteht im Browser.</li>
-          </ul>
-          <p class="fein">In dieser Vorführung sind alle Anzeigen erfunden und führen nirgendwohin.</p>`,
-        fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Verstanden</button>
-          <a class="knopf" href="#/plus" data-tu="dialog-zu">Ohne Anzeigen lesen</a>`
-      });
-    },
 
-    'anzeige-klick'() {
-      toast('Beispielanzeige – sie führt in dieser Vorführung nirgendwohin.');
-    },
     palette() { paletteOeffnen(); },
     'palette-zu'() { paletteZu(); },
     'dialog-zu'() { dialogZu(); },
@@ -1183,10 +1148,11 @@
       const groesse = new Blob([JSON.stringify(s)]).size;
       dialog({
         titel: 'Meine Daten',
-        inhalt: h`<p>Alles, was du hier eingibst, liegt im Speicher dieses Browsers – Merkliste,
-          Suchaufträge, Nachrichten, eigene Inserate, Profil und Notizen. Nichts davon geht an einen Server,
-          nichts an Dritte. Übertragen wird allein die Anmeldung; was dabei gespeichert wird, steht in der
-          <a href="#/recht/datenschutz">Datenschutzerklärung</a>.</p>
+        inhalt: h`<p>Alles, was du hier eingibst, liegt zuerst im Speicher dieses Browsers – Merkliste,
+          Suchaufträge, Nachrichten, eigene Inserate, Profil und Notizen. Ohne Anmeldung bleibt es dort und
+          geht an niemanden. Bist du angemeldet, liegt derselbe Stand zusätzlich in deinem Konto, damit du
+          ihn auf jedem deiner Geräte wiederfindest; ausgewertet wird er nicht, und an Dritte geht nichts.
+          Das Einzelne steht in der <a href="#/recht/datenschutz">Datenschutzerklärung</a>.</p>
         <ul class="liste-schlicht">
           <li>${Object.keys(s.merkliste).length} Merkungen</li>
           <li>${s.agenten.length} Suchaufträge</li>
@@ -1194,7 +1160,9 @@
           <li>${s.eigeneInserate.length} eigene Inserate</li>
           <li>Belegter Speicher: rund ${U.num(Math.ceil(groesse / 1024))} kB</li>
         </ul>
-        <p>Beim Leeren der Browserdaten verschwindet auch dieser Stand.</p>
+        <p>Beim Leeren der Browserdaten verschwindet dieser Stand hier. Bist du angemeldet, holt ihn die
+          nächste Anmeldung aus deinem Konto zurück – „Alles zurücksetzen“ löscht ihn dagegen an beiden
+          Stellen.</p>
         ${TT.tresor && TT.tresor.eingerichtet() ? h`<div class="hinweisbox">${ico('schloss')}
           <div><b>Der Dokumententresor liegt getrennt davon</b>
           <p>Er wird hier weder gesichert noch gelöscht: Verschlüsselte Unterlagen in eine Klartextdatei zu
@@ -1210,8 +1178,9 @@
     },
 
     'daten-loeschen'() {
-      if (!confirm('Merkliste, Profil, Suchaufträge und Nachrichten werden gelöscht. '
-        + 'Der Dokumententresor bleibt bestehen – ihn leerst du dort. Fortfahren?')) return;
+      if (!confirm('Merkliste, Profil, Suchaufträge und Nachrichten werden gelöscht – in diesem Browser '
+        + 'und, wenn du angemeldet bist, auch in deinem Konto. Der Dokumententresor bleibt bestehen; '
+        + 'ihn leerst du dort. Fortfahren?')) return;
       TT.store.zuruecksetzen();
       dialogZu();
       toast('Alles zurückgesetzt.', 'info');
@@ -1271,8 +1240,7 @@
          Vorher wurde die Vorgabe hier ausnahmslos unterdrückt – damit
          schloss „Anmelden“ im Kontohinweis brav den Dialog und blieb
          dann stehen, ebenso „Alle Unterschiede ansehen“ in der
-         Tarifsperre und „Ohne Anzeigen lesen“ unter einer Anzeige. Fünf
-         Knöpfe, die aussahen wie Verweise und keine waren.
+         Tarifsperre. Knöpfe, die aussahen wie Verweise und keine waren.
 
          Deshalb: Bei einem echten Ziel läuft erst die Aktion (sie
          schließt den Dialog), dann folgt der Browser dem Verweis. */
@@ -1342,10 +1310,27 @@
     if (TT.konto) {
       TT.konto.on((k, grund) => {
         if (grund !== 'abmeldung' && grund !== 'anmeldung') return;
-        /* Nicht nur den Inhalt: Die Kopfzeile trägt im Gastzustand einen
-           anderen Verweis auf der Marke und einen Anmeldeknopf. */
-        schaleZeichnen();
-        neuZeichnen();
+        /* Beim Anmelden den eigenen Stand holen – erst danach zeichnen,
+           sonst sieht man eine halbe Sekunde lang die leere Merkliste
+           des Gastzustands. Beim Abmelden das Gegenteil: Es darf nichts
+           mehr hinausgehen, und der nächste Mensch an diesem Gerät soll
+           seinen eigenen Stand holen. */
+        const fertig = () => { schaleZeichnen(); neuZeichnen(); };
+        if (grund === 'abmeldung') {
+          if (TT.abgleich) TT.abgleich.zuruecksetzen();
+          if (TT.tresor) TT.tresor.sperren();
+          fertig();
+          return;
+        }
+        /* Beim Anmelden zwei Dinge holen: den eigenen Stand und den Kopf
+           des Tresors. Ohne den zweiten stünde auf einem neuen Gerät
+           „noch kein Tresor eingerichtet“, obwohl einer da ist – und wer
+           das liest, richtet einen zweiten ein und verliert den ersten. */
+        Promise.all([
+          TT.abgleich ? TT.abgleich.holen() : null,
+          TT.tresor ? TT.tresor.metaHolen() : null,
+          TT.plan ? TT.plan.standHolen() : null
+        ]).then(fertig, fertig);
       });
       window.addEventListener('storage', (e) => {
         if (e.key !== 'trimmotrade.konto.v1' && e.key !== 'trimmotrade.sitzung.v1') return;
@@ -1388,7 +1373,7 @@
     zielMerken, zielHolen,
     badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
     ART_LABEL, ART_ICON, artLabel, artIcon, ico, aktionRegistrieren, AKTIONEN,
-    sperrHinweis, anzeige, NAV, dateiSichern,
+    sperrHinweis, NAV, dateiSichern,
     aktualisiereZaehler, themeSetzen, paletteOeffnen, kartenMarken, preisZeile
   });
 })(window.TT = window.TT || {});

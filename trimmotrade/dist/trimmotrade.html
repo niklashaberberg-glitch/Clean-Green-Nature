@@ -38,10 +38,6 @@
   --flaeche: #ffffff;
   --flaeche2: #f0efea;
   --flaeche3: #e5e3dc;
-  /* Werbung bekommt eine kühle Grundfarbe gegen die warme Umgebung. Ein
-     Auge erkennt den Temperaturwechsel sofort, ohne dass die Fläche
-     lauter würde. */
-  --werbung: #f1f3f6;
   --rand: #e0ded6;
   --rand-stark: #c3c0b5;
   /* Der Rand eines Bedienelements muss es erkennbar machen – 3 zu 1 nach
@@ -111,7 +107,6 @@
     --flaeche: #171c17;
     --flaeche2: #1f251f;
     --flaeche3: #2a312a;
-    --werbung: #191d22;
     --rand: #2e372e;
     --rand-stark: #414c40;
     --rand-feld: #868f83;
@@ -153,7 +148,6 @@
   --flaeche: #171c17;
   --flaeche2: #1f251f;
   --flaeche3: #2a312a;
-  --werbung: #191d22;
   --rand: #2e372e;
   --rand-stark: #414c40;
   --rand-feld: #868f83;
@@ -892,6 +886,10 @@ input[type="range"] {
 .termine { list-style: none; margin: 12px 0; padding: 0; display: grid; gap: 6px; }
 .termine li { display: flex; align-items: center; gap: 12px; padding: .6em .8em; background: var(--flaeche2); border-radius: var(--r-klein); flex-wrap: wrap; }
 .termine li.is-gebucht { background: var(--gut-hell); }
+/* Ein ausgebuchtes Fenster bleibt stehen und wird leiser – es
+   verschwinden zu lassen sähe aus, als hätte es nie eines gegeben. */
+.termine li.is-voll { opacity: .68; }
+.termine li.is-voll .termine__frei { font-weight: 600; }
 .termine li > div { flex: 1; min-width: 140px; }
 .termine li span { display: block; font-size: .8rem; color: var(--text-leise); }
 .termine__frei { font-size: .8rem; color: var(--text-leise); }
@@ -1360,47 +1358,6 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .sperre__gross .ico { width: 40px; height: 40px; margin: 0 auto; color: var(--text-still); }
 .sperre__preis { padding: .6em .9em; background: var(--akzent-hell); border-radius: var(--r-klein); }
 .sperre__preis b { font-size: 1.2rem; color: var(--akzent); }
-
-/* Werbung: leise, aber unverwechselbar.
-
-   Zwei Anforderungen, die sich widersprechen – und beide gelten. Leise
-   heißt: kein Kasten, der lauter ist als ein Inserat, keine gefüllte
-   Fläche, kein Knopf in Akzentfarbe. Unverwechselbar heißt: Man darf
-   keine Sekunde im Zweifel sein, dass es Werbung ist. Gelöst über eine
-   eigene Grundfarbe, einen Streifen an der Kante und das Wort „Anzeige“
-   in Versalien darüber – nicht über Lautstärke. */
-.anzeige {
-  margin: 4px 0; padding: .55em .9em .7em 1em;
-  border: 1px solid var(--rand); border-left: 3px solid var(--rand-stark);
-  border-radius: var(--r-klein); background: var(--werbung);
-}
-.anzeige--schmal { margin-top: 14px; }
-.anzeige__kopf { display: flex; align-items: center; gap: .6em; margin: 0 0 .2em; }
-.anzeige__marke { font-size: .64rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase;
-  color: var(--text-still); }
-.anzeige__art { font-size: .7rem; color: var(--text-still); }
-.anzeige__art::before { content: '·'; margin-right: .5em; }
-/* 24 Pixel sind die Untergrenze für ein Bedienelement (WCAG 2.2, 2.5.8) –
-   auch für eines, das bewusst leise sein soll. */
-.anzeige__warum { width: 24px; height: 24px; padding: 0; margin-left: auto; flex: none;
-  border: 1px solid var(--rand-feld); border-radius: 50%; background: none;
-  color: var(--text-still); font-size: .72rem; cursor: pointer; line-height: 1; }
-.anzeige__warum:hover { border-color: var(--akzent); color: var(--akzent); }
-.anzeige__inhalt { display: flex; gap: .7em; width: 100%; padding: 0; border: 0; background: none;
-  font: inherit; color: inherit; text-align: left; cursor: pointer; }
-.anzeige__zeichen { display: grid; place-items: center; width: 30px; height: 30px; flex: none;
-  border-radius: var(--r-klein); background: var(--flaeche); color: var(--text-leise); }
-.anzeige__wort { min-width: 0; }
-.anzeige__wort b { display: block; font-size: .88rem; font-weight: 600; }
-.anzeige__wort i { display: block; margin-top: .1em; font-style: normal; font-size: .81rem; color: var(--text-leise); }
-.anzeige__wort em { display: inline-flex; align-items: center; gap: .15em; margin-top: .3em;
-  font-style: normal; font-size: .75rem; color: var(--text-still); }
-.anzeige__wort em .ico { width: 13px; height: 13px; }
-.anzeige__inhalt:hover .anzeige__wort b { text-decoration: underline; }
-.anzeige__inhalt:hover .anzeige__wort em { color: var(--akzent); }
-.anzeige__ohne { display: inline-flex; align-items: center; min-height: 24px; margin-top: .25em;
-  font-size: .74rem; color: var(--text-still); }
-.anzeige__ohne:hover { color: var(--akzent); }
 
 /* ---------------------------- Preisseite ---------------------------- */
 
@@ -1928,7 +1885,11 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .topanzeigen__marke { display: inline-flex; align-items: center; gap: .35em; font-size: .7rem;
   font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--info); }
 .topanzeigen__marke .ico { width: 15px; height: 15px; }
-.topanzeigen__kopf .anzeige__warum { margin-left: auto; }
+/* 24 Pixel sind die Untergrenze für ein Bedienelement (WCAG 2.2, 2.5.8). */
+.topanzeigen__warum { width: 24px; height: 24px; padding: 0; margin-left: auto; flex: none;
+  border: 1px solid var(--rand-stark); border-radius: 50%; background: none;
+  color: var(--text-still); font-size: .74rem; line-height: 1; cursor: pointer; }
+.topanzeigen__warum:hover { border-color: var(--akzent); color: var(--akzent); }
 .topanzeigen__fuss { margin: 8px 0 0; font-size: .76rem; color: var(--text-still); line-height: 1.5; }
 
 .karte-inserat.is-hervor { border-color: var(--info); box-shadow: 0 0 0 1px var(--info); }
@@ -6365,6 +6326,272 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       '. That way every visitor sees them, which is exactly how it has to be. They can only be changed there; what you enter below applies to this browser alone and is overridden by the server’s values.'
   });
 
+  /* ---------------------------------------------------------------
+     Was mit dem Echt-Betrieb dazukam: die Ablage für den
+     Gerätewechsel, der Tresor auf dem Server, Besichtigungstermine –
+     und die Rechtstexte, die das beschreiben. */
+  e({
+    'TrimmoTrade rechnet im Browser. Suche, Bewertung, Karte, Ringtausch, Passung und jede Schätzung entstehen auf deinem Gerät.':
+      'TrimmoTrade computes in the browser. Search, assessment, map, chain swap, match and every estimate are produced on your device.',
+    'Ohne Anmeldung verlässt davon nichts deinen Browser':
+      'Without an account none of it leaves your browser',
+    '– Suche und Inserate lassen sich ansehen, ohne dass ein Konto entsteht und ohne dass etwas über dich gespeichert wird.':
+      '– search and listings can be viewed without creating an account and without anything about you being stored.',
+    'Mit einem Konto kommt eines hinzu: Dein Arbeitsstand liegt zusätzlich auf dem Server, damit du ihn auf jedem deiner Geräte wiederfindest und nicht verlierst, wenn du die Browserdaten löschst. Der Server verwahrt ihn und wertet ihn nicht aus – keine Suche über Profile, keine Auswertung, keine Statistik (Abschnitt 11).':
+      'With an account one thing is added: your working state is also held on the server, so that you find it again on every one of your devices and do not lose it when you clear your browser data. The server keeps it and does not evaluate it – no searching across profiles, no analysis, no statistics (section 11).',
+    'Zum Server geht damit: die': 'What therefore goes to the server: the',
+    '(Abschnitt 4), die': '(section 4), the',
+    '(Abschnitt 6), deine': '(section 6), your',
+    ', damit die Mail auch dann herausgeht, wenn du gerade nicht hier bist (Abschnitt 7), was du einer':
+      ', so that the mail goes out even while you are not here (section 7), what you tell a',
+    'über dich erzählst (Abschnitt 8), dein': 'about yourself (section 8), your',
+    'für den Gerätewechsel (Abschnitt 11) und der': 'for switching devices (section 11) and the',
+    '– der allerdings verschlüsselt wird, bevor er den Browser verlässt, und für den Anbieter nicht lesbar ist (Abschnitt 12).':
+      '– which, however, is encrypted before it leaves the browser and cannot be read by the provider (section 12).',
+    'Die Trennlinie verläuft nicht willkürlich: Was andere erreichen muss, gehört auf den Server. Was nur dich angeht, liegt dort so, dass der Anbieter nichts damit anfängt – und die Unterlagen, bei denen das nicht genügt, liegen verschlüsselt.':
+      'The dividing line is not arbitrary: whatever has to reach other people belongs on the server. Whatever concerns only you is held there in a way the provider can do nothing with – and the documents for which that is not enough are held encrypted.',
+    'Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten gebildet und keine Werbung ausgespielt – es gibt hier keine. Gezählt wird nur, wie oft eine Ansicht an einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse, ohne Verlauf (Abschnitt 10). Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts, wozu eine Einwilligung nötig wäre.':
+      'No reach-measurement tools are used, no profiles of your behaviour are built and no advertising is served – there is none here. All that is counted is how often a view was opened in total on a given day – without an identifier, without an address, without a history (section 10). That is also why no window appears asking for consent: there is nothing consent would be needed for.',
+
+    /* Abschnitt 4 */
+    'Nicht im Konto stehen:': 'Not held in your account:',
+    'das Farbschema, die gewählte Ansichtsart und jede Berechnung der Rechner – die entsteht bei jedem Aufruf neu auf deinem Gerät. Was du an Profil, Merkliste, Vergleich, Bewerbungstafel und Suchaufträgen anlegst, wird dagegen deinem Konto zugeordnet gespeichert, damit es auf jedem deiner Geräte da ist; Abschnitt 11 beschreibt das im Einzelnen, Abschnitt 12 den Dokumententresor.':
+      'the colour scheme, the chosen view mode and every calculation the tools make – that is produced afresh on your device each time. What you create as profile, saved list, comparison, application board and saved searches, by contrast, is stored against your account so that it is there on every one of your devices; section 11 describes this in detail, section 12 the document vault.',
+
+    /* Abschnitt 6: Besichtigungstermine */
+    'Wer inseriert, kann Termine zur Besichtigung eintragen. Buchst du einen davon, wird gespeichert, welches Konto welchen Termin belegt – mehr nicht. Die anbietende Seite erfährt, dass ein Platz genommen wurde, und sieht, wie viele Plätze belegt sind; deinen Namen bekommt sie an dieser Stelle nicht. Auch die übrigen Teilnehmer siehst du nicht, und sie sehen dich nicht: Wer zu einer Besichtigung geht, hat nicht eingewilligt, den Mitbewerbern namentlich bekannt zu werden.':
+      'Anyone who lists a property can enter viewing appointments. If you book one, what is stored is which account holds which appointment – nothing more. The offering side learns that a slot has been taken and sees how many slots are filled; it does not get your name at this point. You do not see the other attendees either, and they do not see you: going to a viewing is not consent to become known by name to your fellow applicants.',
+    'Eine Mail geht an dich, wenn die anbietende Seite den Termin absagt. Sagst du selbst ab, verschwindet deine Buchung sofort und der Platz wird wieder frei.':
+      'You receive an email if the offering side cancels the appointment. If you cancel yourself, your booking disappears immediately and the slot is free again.',
+    'Vereinbarung und Verwaltung von Besichtigungsterminen':
+      'arranging and managing viewing appointments',
+    'Art. 6 Abs. 1 lit. b DSGVO – vorvertragliche Maßnahme auf deine Buchung hin':
+      'Art. 6(1)(b) GDPR – pre-contractual step taken at your booking',
+    'bis du absagst; im Übrigen 90 Tage nach dem Termin, mit dem Inserat oder mit deinem Konto auch früher':
+      'until you cancel; otherwise 90 days after the appointment, or sooner together with the listing or your account',
+
+    /* Abschnitt 11: Ablage */
+    '11. Dein Arbeitsstand: Browser und Gerätewechsel':
+      '11. Your working state: browser and switching devices',
+    'TrimmoTrade legt deine Eingaben zuerst im lokalen Speicher deines Browsers ab – Profil, Merkliste, Vergleich, Bewerbungstafel, Notizen, gespeicherte Filter und die Einstellungen zur Darstellung.':
+      'TrimmoTrade first stores what you enter in your browser’s local storage – profile, saved list, comparison, application board, notes, saved filters and the display settings.',
+    'Ohne Konto bleibt es dabei:': 'Without an account it stays that way:',
+    'Diese Daten verlassen dein Gerät nicht, und der Anbieter hat keinen Zugriff darauf.':
+      'This data does not leave your device, and the provider has no access to it.',
+    'Bist du angemeldet, wird derselbe Stand zusätzlich zu deinem Konto auf dem Server abgelegt. Das ist der Grund, warum du die Suche am Rechner beginnen und unterwegs auf dem Telefon fortsetzen kannst – und warum gelöschte Browserdaten nicht mehr alles mitnehmen.':
+      'If you are signed in, the same state is additionally stored against your account on the server. That is why you can start searching on the computer and carry on from your phone – and why clearing your browser data no longer takes everything with it.',
+    'Was mitgeht:': 'What travels with you:',
+    'Profil, Merkliste samt deiner Notizen, Vergleich, Bewerbungstafel, Suchaufträge, zuletzt gesehene Inserate, gespeicherte Filter, Umzugsplan, Übergabeprotokoll, die zuletzt eingegebenen Werte der Rechner und welche Hinweise du weggeklickt hast':
+      'profile, saved list including your notes, comparison, application board, saved searches, recently viewed listings, saved filters, moving plan, handover record, the values last entered into the calculators, and which notices you have dismissed',
+    'Was nicht mitgeht:': 'What does not:',
+    'Farbschema und Ansichtsart – die gehören zum Gerät und nicht zu dir':
+      'colour scheme and view mode – those belong to the device, not to you',
+    'Was der Server damit tut:': 'What the server does with it:',
+    'nichts. Er nimmt die Angaben als Text entgegen, gibt sie unverändert zurück und liest sie nicht aus. Es findet keine Suche über Profile statt, keine Auswertung, keine Statistik, keine Weitergabe.':
+      'nothing. It takes the entries as text, hands them back unchanged and does not read them. There is no searching across profiles, no analysis, no statistics, no passing on.',
+    'Fortsetzen der Nutzung auf einem anderen Gerät und Schutz deiner Eingaben vor Verlust':
+      'continuing use on another device and protecting your entries against loss',
+    'Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags über ein Konto, dessen Zweck genau das ist':
+      'Art. 6(1)(b) GDPR – performance of the usage contract for an account whose purpose is precisely this',
+    'bis du die Angaben in der Anwendung löschst, längstens bis zur Löschung deines Kontos':
+      'until you delete the entries in the application, at the latest when your account is deleted',
+    'der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO. An Dritte geht nichts.':
+      'the hosting provider as a processor under Art. 28 GDPR. Nothing goes to third parties.',
+    'Der Browser bleibt die Wahrheit für den laufenden Besuch, der Server ist die Kopie, die den Gerätewechsel überlebt. Fällt der Server aus, arbeitet die Anwendung weiter – nur eben ohne Abgleich.':
+      'The browser remains the truth for the current visit; the server is the copy that survives a change of device. If the server fails, the application carries on – simply without syncing.',
+    'Für den Zugriff auf den Speicher deines Browsers ist keine Einwilligung erforderlich: Er ist unbedingt erforderlich, damit der von dir ausdrücklich gewünschte Dienst überhaupt funktioniert (§ 25 Abs. 2 Nr. 2 des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes).':
+      'No consent is required for access to your browser’s storage: it is strictly necessary for the service you expressly requested to work at all (§ 25(2) no. 2 TDDDG, the German Telecommunications Digital Services Data Protection Act).',
+    'Du kannst diese Daten jederzeit im Fußbereich unter „Meine Daten“ als Datei sichern oder vollständig löschen. Löschst du sie dort, während du angemeldet bist, verschwinden sie auch auf dem Server.':
+      'You can save this data as a file or delete it entirely at any time via “My data” in the footer. If you delete it there while signed in, it disappears from the server as well.',
+
+    /* Abschnitt 12: Tresor */
+    'in deinem Browser verschlüsselt, bevor sie ihn verlassen':
+      'encrypted in your browser before they leave it',
+    '– mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem Kennwort und wird nirgends gespeichert; verschlüsselt wird auch der Dateiname.':
+      '– with AES-GCM and 256 bits. The key is derived from your passphrase and is stored nowhere; the file name is encrypted too.',
+    'Erst danach geht das Chiffrat zum Server. Es liegt dort, damit du deine Unterlagen auf einem zweiten Gerät wiederfindest und damit ein Verweis, den du verschickst, auch dann aufgeht, wenn dein Browser geschlossen ist. Ohne das wäre eine Freigabe wertlos.':
+      'Only then does the ciphertext go to the server. It is held there so that you find your documents again on a second device, and so that a link you send opens even while your browser is closed. Without that, sharing would be worthless.',
+    'Der Anbieter kann diese Dateien nicht lesen.': 'The provider cannot read these files.',
+    'Er hat weder dein Kennwort noch den Schlüssel; im Speicher liegt für ihn Rauschen. Unverschlüsselt liegen genau drei Angaben, ohne die sich der Tresor nicht bedienen ließe: die Art der Unterlage, die du beim Ablegen gewählt hast (etwa „Gehaltsnachweis“), die Größe in Byte und der Zeitpunkt des Ablegens.':
+      'It has neither your passphrase nor the key; what sits in storage is noise as far as it is concerned. Exactly three details are held unencrypted, without which the vault could not be operated: the kind of document you chose when filing it (“proof of income”, say), the size in bytes and the time of filing.',
+    'Gibst du Unterlagen frei, wird kein Anhang verschickt, sondern ein Verweis. Der Schlüssel dazu steht im Fragmentteil dieses Verweises – dem Teil hinter dem Rautezeichen, den Browser grundsätzlich nicht an Server übertragen. Zur Freigabe selbst wird gespeichert, welche Dokumente sie umfasst, für wen du sie gedacht hast, wann sie abläuft, wie oft sie noch abgerufen werden darf und der Zeitpunkt jedes Abrufs – damit du siehst, ob deine Unterlagen angesehen wurden. Wer abgerufen hat, wird nicht festgehalten.':
+      'When you share documents, no attachment is sent – a link is. Its key sits in the fragment part of that link, the part after the hash sign, which browsers as a rule never transmit to a server. For the share itself, what is stored is which documents it covers, whom you intended it for, when it expires, how many retrievals are left and the time of each retrieval – so that you can see whether your documents were looked at. Who retrieved them is not recorded.',
+    'Erfüllung des Vertrags über die Nutzung von TrimmoTrade; bei einer Freigabe die Übermittlung an die Stelle, der du sie zugedacht hast':
+      'performance of the contract for using TrimmoTrade; in the case of a share, transmission to the party you intended it for',
+    'bis du das Dokument löschst, den Tresor leerst oder dein Konto beendest. Eine Freigabe verliert ihre Wirkung mit dem Ablauf, den du gesetzt hast – längstens nach 30 Tagen; widerrufen kannst du sie jederzeit vorher, und der Verweis führt danach sofort ins Leere. Der Eintrag selbst bleibt noch 14 Tage stehen, damit du nachsehen kannst, was du wann freigegeben hast, und wird dann gelöscht.':
+      'until you delete the document, empty the vault or close your account. A share stops working at the expiry you set – 30 days at the most; you can revoke it at any time before that, and the link then leads nowhere immediately. The entry itself remains for a further 14 days so that you can look up what you shared and when, and is then deleted.',
+    'der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO; darüber hinaus nur, wem du selbst einen Verweis gibst':
+      'the hosting provider as a processor under Art. 28 GDPR; beyond that, only whoever you give a link to yourself',
+    'Warum das hier so ausführlich steht: „Ende-zu-Ende-verschlüsselt“ schreiben viele. Prüfbar wird es erst, wenn danebensteht, was':
+      'Why this is set out at such length: plenty of people write “end-to-end encrypted”. It only becomes checkable once it says alongside what is',
+    'verschlüsselt ist.': 'encrypted.',
+
+    /* Abschnitt 18: Rechte */
+    'Auskunft, Übertragbarkeit und Löschung kannst du unmittelbar selbst ausüben, ohne jemanden zu fragen: im Fußbereich unter „Meine Daten“. Was dort als Datei herauskommt, ist derselbe Stand, der zu deinem Konto abgelegt ist; was du dort löschst, verschwindet auch auf dem Server. Für das Konto selbst genügt ein Klick in den Einstellungen – die Löschung wirkt sofort und nimmt Inserate, Ablage und Tresor mit.':
+      'Access, portability and erasure you can exercise directly yourself, without asking anyone: via “My data” in the footer. What comes out there as a file is the same state that is stored against your account; what you delete there disappears from the server too. For the account itself a single click in the settings is enough – deletion takes effect immediately and takes listings, stored state and vault with it.',
+
+    /* AGB */
+    '(6) Ein entgeltlicher Vertrag kommt erst zustande, wenn in der Anwendung ein Zahlungsweg angeboten wird. Solange das nicht der Fall ist, gibt es keine Schaltfläche, mit der sich Plus kaufen ließe, es werden keine Zahlungsdaten erhoben und es entsteht keine Zahlungspflicht; die Absätze 1 bis 5 beschreiben dann die Bedingungen, zu denen ein Vertrag geschlossen würde. Zugänglich sind die Leistungen von Plus in dieser Zeit über einen Gründerplatz nach § 7.':
+      '(6) A paid contract only comes into being once a payment method is offered in the application. For as long as that is not the case there is no button with which Plus could be bought, no payment data is collected and no payment obligation arises; paragraphs 1 to 5 then describe the terms on which a contract would be concluded. During that time the Plus features are available through a founder place under § 7.',
+    '(6) § 5 Abs. 6 gilt entsprechend: Ohne angebotenen Zahlungsweg lässt sich bezahlte Sichtbarkeit nicht buchen. Die Reihenfolge der Treffer entsteht dann ausschließlich aus den Angaben der suchenden Person.':
+      '(6) § 5(6) applies accordingly: without a payment method on offer, paid visibility cannot be booked. The order of results then arises exclusively from the details given by the person searching.',
+
+    /* Der Datendialog im Fußbereich */
+    'Alles, was du hier eingibst, liegt zuerst im Speicher dieses Browsers – Merkliste, Suchaufträge, Nachrichten, eigene Inserate, Profil und Notizen. Ohne Anmeldung bleibt es dort und geht an niemanden. Bist du angemeldet, liegt derselbe Stand zusätzlich in deinem Konto, damit du ihn auf jedem deiner Geräte wiederfindest; ausgewertet wird er nicht, und an Dritte geht nichts. Das Einzelne steht in der':
+      'Everything you enter here is held first in this browser’s storage – saved list, saved searches, messages, your own listings, profile and notes. Without an account it stays there and goes to nobody. If you are signed in, the same state is also held in your account so that you find it again on every one of your devices; it is not evaluated, and nothing goes to third parties. The details are in the',
+    'Beim Leeren der Browserdaten verschwindet dieser Stand hier. Bist du angemeldet, holt ihn die nächste Anmeldung aus deinem Konto zurück – „Alles zurücksetzen“ löscht ihn dagegen an beiden Stellen.':
+      'Clearing your browser data makes this state disappear here. If you are signed in, the next sign-in fetches it back from your account – “Reset everything”, by contrast, deletes it in both places.',
+
+    /* Fußzeile und Profil */
+    'Rechtliche Erläuterungen sind allgemeine Hinweise und ersetzen keine Beratung. Unterlagen im Dokumententresor werden verschlüsselt, bevor sie den Browser verlassen.':
+      'Legal explanations are general information and are no substitute for advice. Documents in the vault are encrypted before they leave the browser.',
+    'TrimmoTrade sortiert und rechnet ausschließlich mit diesen Angaben. Gerechnet wird auf deinem Gerät. Bist du angemeldet, liegen sie zusätzlich in deinem Konto, damit du sie auf jedem Gerät hast; an eine anbietende Seite geht davon nur, was du in einer Anfrage ausdrücklich freigibst.':
+      'TrimmoTrade sorts and calculates using these details alone. The calculating happens on your device. If you are signed in, they are also held in your account so that you have them on every device; the only part that reaches an offering side is what you expressly release in an enquiry.',
+    'Die Bilder werden schon in deinem Browser auf {4} Pixel Kantenlänge verkleinert und erst dann übertragen – ein Inserat, dessen Fotos niemand sieht, wäre keins. Beim Löschen des Inserats verschwinden sie mit.':
+      'The photos are scaled down to {4} pixels on the longest edge in your browser and only then uploaded – a listing whose photos nobody can see would not be one. When the listing is deleted they go with it.',
+
+    /* Tresor-Ansicht ohne Server */
+    'Diese Kopie läuft ohne Verbindung; das Chiffrat liegt in diesem Browser, und der Verweis geht deshalb nur auf diesem Gerät auf. Auf':
+      'This copy runs without a connection; the ciphertext sits in this browser, so the link only opens on this device. On',
+    'liegt es auf dem Server – auch dort nur das Chiffrat –, und der Verweis funktioniert überall.':
+      'it sits on the server – there too only the ciphertext – and the link works anywhere.'
+  });
+
+  /* ---------------------------------------------------------------
+     Was nach dem Wegfall der Werbung übrig blieb, dazu die Tariffragen,
+     die Tauschgründe und die Objektbeschreibungen. */
+  e({
+    /* Werbefreiheit */
+    'Werbung gibt es hier nicht': 'There is no advertising here',
+    'Werbung wird nicht ausgespielt.': 'No advertising is served.',
+    'Ohne Werbung – die gibt es hier nirgends': 'Ad-free – there is none anywhere here',
+    'Keine Werbung. Es gibt hier keine Anzeigen – weder eigene noch fremde, weder gekennzeichnet noch getarnt.':
+      'No advertising. There are no ads here – neither our own nor anyone else’s, neither labelled nor disguised.',
+    '– keine Banner, kein Werbenetzwerk, keine Anzeigen im Gewand eines Inserats. Das ist keine Einstellung, die sich umlegen ließe: Es ist nichts eingebaut, was Werbung ausspielen könnte.':
+      '– no banners, no ad network, no ads dressed up as listings. This is not a setting that could be flipped: nothing is built in that could serve advertising.',
+    'Auf TrimmoTrade erscheint keine Werbung – weder eigene noch fremde. Es ist kein Werbenetzwerk eingebunden, es werden keine Werbekennungen gesetzt, und es gehen keine Daten an Werbetreibende. Es gibt auch nichts, was sich zuschalten ließe: Die Anwendung enthält keinen Programmteil, der Anzeigen ausspielen könnte.':
+      'No advertising appears on TrimmoTrade – neither our own nor anyone else’s. No ad network is embedded, no advertising identifiers are set, and no data goes to advertisers. There is also nothing that could be switched on: the application contains no component capable of serving ads.',
+    'Nein. Es gibt kein Werbenetzwerk, keine Kennung für Dritte und nichts, was über dein Verhalten übertragen würde. Gezählt wird nur, wie oft eine Ansicht an einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse, ohne Reihenfolge.':
+      'No. There is no ad network, no identifier for third parties and nothing that would be transmitted about your behaviour. All that is counted is how often a view was opened in total on a given day – without an identifier, without an address, without an order of events.',
+
+    /* Tarif */
+    'Wie kann der freie Tarif kostenlos sein?': 'How can the free plan be free?',
+    'Weil ihn diejenigen tragen, die Plus nehmen oder ein Inserat hervorheben. Wer eine Wohnung sucht, hat oft gerade wenig Geld – ausgerechnet dann eine Bezahlschranke vor die Suche zu stellen, wäre verkehrt. Deshalb ist alles, was vor Schaden bewahrt oder gerechnet werden muss, dauerhaft frei.':
+      'Because it is carried by those who take Plus or promote a listing. People looking for a home often have little money at that very moment – putting a paywall in front of the search precisely then would be wrong. That is why everything that protects you from harm or has to be calculated is free for good.',
+    'Getragen wird der freie Tarif von den entgeltlichen Leistungen – TrimmoTrade Plus und die Hervorhebung eigener Inserate. Beide sind dort, wo sie wirken, als bezahlt gekennzeichnet (§ 5b Abs. 1 Nr. 6 des Gesetzes gegen den unlauteren Wettbewerb).':
+      'The free plan is carried by the paid services – TrimmoTrade Plus and promoting your own listings. Both are marked as paid wherever they take effect (§ 5b(1) no. 6 of the German Act against Unfair Competition).',
+    'Vollständige Suche, dauerhaft kostenlos. Getragen von denen, die Plus nehmen.':
+      'The full search, free for good. Carried by those who take Plus.',
+    'Für alle, die täglich suchen: keine Limits, weniger Handarbeit.':
+      'For everyone searching daily: no limits, less manual work.',
+    '(1) Der freie Tarif ist dauerhaft ohne Entgelt nutzbar. Er umfasst die vollständige Suche, die Karte, die Bewertung nach dem eigenen Profil, den Prüfhinweis auf Betrugsmerkmale, den Abgleich mit der ortsüblichen Vergleichsmiete und sämtliche Rechner.':
+      '(1) The free plan can be used without payment indefinitely. It comprises the full search, the map, the assessment against your own profile, the fraud-indicator warning, the comparison with the local reference rent (ortsübliche Vergleichsmiete) and all calculators.',
+    'Der freie Tarif wird durch die entgeltlichen Leistungen nach den §§ 5 und 6 getragen.':
+      'The free plan is carried by the paid services under §§ 5 and 6.',
+    '(3) Der Anbieter behält sich vor, den Umfang des freien Tarifs zu ändern. Leistungen, die dem Schutz der Nutzenden dienen – insbesondere Prüfhinweis, Vergleichsmiete und Meldeweg –, bleiben entgeltfrei.':
+      '(3) The provider reserves the right to change the scope of the free plan. Services that protect users – in particular the fraud-indicator warning, the reference rent and the reporting channel – remain free of charge.',
+
+    /* Datenschutz: Reste */
+    'Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in dem Mitgliedstaat deines Aufenthaltsorts, deines Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes. Für den Anbieter zuständig ist {28}.':
+      'You can lodge a complaint with a data protection supervisory authority (Art. 77 GDPR), in particular in the Member State of your residence, your place of work or the place of the alleged infringement. The authority responsible for the provider is {28}.',
+    'Für die Ausübung genügt eine formlose Nachricht an {27}.':
+      'An informal message to {27} is enough to exercise them.',
+    'Diese Erklärung gilt in der Fassung vom {29}. Ändert sich die Anwendung, wird sie angepasst.':
+      'This statement applies in the version of {29}. If the application changes, it will be updated.',
+    '13. Keine Werbung': '13. No advertising',
+    'in der Erklärung steht.': 'in the statement.',
+
+    /* Anfragen und Bewerbungen */
+    '{0} Objekte stehen auf „gemerkt“. TrimmoTrade schreibt für jedes ein eigenes Anschreiben aus deinem Profil – angepasst an Titel, Lage und Preis, nicht als Rundmail.':
+      '{0} properties are marked “saved”. TrimmoTrade writes a separate cover message for each one from your profile – tailored to title, location and price, not a circular.',
+    '; dabei wird nichts übertragen. Führt sie nicht weiter, kannst du die Zusammenfassung an {19} weitergeben. Das geschieht nur auf deinen ausdrücklichen Klick, über dein eigenes E-Mail-Programm – und':
+      '; nothing is transmitted in the process. If it leads nowhere, you can pass the summary on to {19}. That only happens on your explicit click, through your own email program – and',
+    'zusätzlich die offenen Beitrittsanfragen': 'plus the pending requests to join',
+    'bei {39} Aufrufen': 'across {39} views',
+
+    /* Graffiti-Hinweis und Verkaufspreis */
+    'Vor den Fotos: der erste Eindruck von außen': 'Before the photos: the first impression from outside',
+    'Was den Verkaufspreis sonst noch bewegt': 'What else moves the sale price',
+    'Eine besprühte Fassade drückt den Preis und lässt Kaufinteressenten auf Vernachlässigung schließen – auch bei einer sanierten Wohnung. Entfernen lohnt sich deshalb vor dem ersten Termin. Sandstrahlen und Chemie greifen Putz und Klinker an; Laserreinigung arbeitet chemiefrei und ist auch bei Denkmalschutz zulässig.':
+      'A sprayed façade pushes the price down and makes buyers infer neglect – even for a renovated apartment. Removing it therefore pays off before the first viewing. Sandblasting and chemicals attack render and brickwork; laser cleaning works without chemicals and is permitted even on listed buildings.',
+    'Laser-Graffitientfernung bei Clean Green Nature': 'Laser graffiti removal at Clean Green Nature',
+    'Eigenständiges Unternehmen desselben Inhabers. Für TrimmoTrade entsteht daraus kein Vermittlungsentgelt.':
+      'A separate company with the same owner. No referral fee accrues to TrimmoTrade from this.',
+
+    /* Tauschgründe */
+    'Beziehung beendet – die Wohnung allein ist zu teuer.':
+      'Relationship over – the apartment is too expensive on my own.',
+    'Die Kinder sind aus dem Haus – die Wohnung ist zu groß geworden.':
+      'The children have moved out – the apartment has become too big.',
+    'Die Treppen werden beschwerlich, gesucht wird etwas Barrierefreies.':
+      'The stairs are getting hard; looking for something step-free.',
+    'Pendeln frisst zu viel Zeit, ich möchte näher an die Arbeit.':
+      'Commuting eats too much time; I want to be closer to work.',
+    'Studienortwechsel zum kommenden Semester.': 'Moving university for the coming semester.',
+    'Wir bekommen Nachwuchs und brauchen ein Zimmer mehr.':
+      'We are expecting a baby and need one more room.',
+    'Wir wollen näher zur Familie ziehen.': 'We want to move closer to family.',
+
+    /* Objektangaben */
+    'Doppelhaushälfte mit Süd-Garten und ausgebautem Dachgeschoss.':
+      'Semi-detached house with a south-facing garden and converted loft.',
+    'Wohnbaugrundstück mit Altbestand': 'Residential building plot with existing structure',
+    'kein Bebauungsplan – § 34 BauGB': 'no development plan – § 34 BauGB',
+    'auf dem Balkon': 'on the balcony',
+    'nicht erwünscht': 'not wanted',
+
+    /* Angaben zum Anbieter */
+    'Die Hilfe leitet Anfragen an das Servicepostfach weiter (service@trimmotrade.de), das Impressum nennt die Geschäftsadresse (info@trimmotrade.de). Bevor das erste Mal jemand darauf antwortet, muss die Domain registriert und das Postfach eingerichtet sein – und jemand muss es lesen. Ein Kontaktweg, der ins Leere geht, ist schlimmer als keiner: Nach § 5 DDG muss die Kontaktaufnahme tatsächlich möglich sein, und wer binnen weniger Tage nicht antwortet, verliert mehr als eine Anfrage.':
+      'The help section forwards enquiries to the service mailbox (service@trimmotrade.de); the imprint names the business address (info@trimmotrade.de). Before anyone replies to them for the first time, the domain has to be registered and the mailbox set up – and somebody has to read it. A contact route that leads nowhere is worse than none: under § 5 DDG contact must actually be possible, and anyone who fails to answer within a few days loses more than one enquiry.',
+    'etwa „TrimmoTrade“': 'e.g. “TrimmoTrade”',
+    '{0} Unterlage fehlt – wer sie parat hat, ist schneller.':
+      '{0} document is missing – having it ready makes you faster.',
+    '{0} Unterlagen fehlen – wer sie parat hat, ist schneller.':
+      '{0} documents are missing – having them ready makes you faster.'
+  });
+
+  /* Besichtigungstermine – die Oberfläche dazu. */
+  e({
+    'Besichtigungstermine': 'Viewing appointments',
+    'Feste Zeitfenster statt Massenandrang. Wer einen Platz nimmt, bekommt ihn – und du bekommst eine Mail. Wie viele dabei sind, entscheidest du je Fenster.':
+      'Fixed time slots instead of a crowd at the door. Whoever takes a slot gets it – and you get an email. How many people attend is up to you, slot by slot.',
+    'Noch kein Termin angelegt. Zwei feste Fenster ersparen erfahrungsgemäß ein Dutzend Nachrichten.':
+      'No appointment created yet. Two fixed slots typically save you a dozen messages.',
+    'Zum Buchen brauchst du ein Konto – sonst wüsste niemand, wer kommt.':
+      'You need an account to book – otherwise nobody would know who is coming.',
+    'Wer gebucht hat, bekommt eine Absage per Mail, wenn du ein Fenster entfernst. Die Namen der Buchenden stehen hier nicht – sie stehen in deinem Posteingang, sobald jemand dir schreibt.':
+      'Anyone who has booked receives a cancellation by email if you remove a slot. The names of those who booked are not shown here – they appear in your inbox as soon as somebody writes to you.',
+    'Fenster anlegen': 'Create slot',
+    'Termin entfernen': 'Remove appointment',
+    'Einzeltermin': 'Individual viewing',
+    'Sammeltermin': 'Group viewing',
+    'Videobesichtigung': 'Video viewing',
+    'Offene Besichtigung': 'Open house',
+    'ausgebucht': 'fully booked',
+    'nehmen': 'take',
+    'Du hast den {0} um {1} Uhr.': 'You have {0} at {1}.',
+    'Die anbietende Seite weiß Bescheid.': 'The offering side has been told.',
+    'Dieser Termin ist voll.': 'This appointment is full.',
+    'Termin gebucht. Die anbietende Seite ist benachrichtigt.':
+      'Appointment booked. The offering side has been notified.',
+    'Termin abgesagt.': 'Appointment cancelled.',
+    'Fenster angelegt.': 'Slot created.',
+    'Fenster entfernt.': 'Slot removed.'
+  });
+
+  /* Rückmeldungen beim Buchen und Anlegen von Terminen. */
+  e({
+    'Termin am {0} um {1} Uhr gebucht.': 'Appointment booked for {0} at {1}.',
+    'Termin gebucht.': 'Appointment booked.',
+    'Termin abgesagt. Der Platz ist wieder frei.': 'Appointment cancelled. The slot is free again.',
+    'Zeitfenster angelegt.': 'Time slot created.',
+    'Dieses Zeitfenster entfernen? Wer gebucht hat, bekommt eine Absage.':
+      'Remove this time slot? Anyone who booked will get a cancellation.',
+    'Entfernt. {0} Buchung abgesagt.': 'Removed. {0} booking cancelled.',
+    'Entfernt.': 'Removed.',
+    'Wird angelegt …': 'Creating …'
+  });
+
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
 })(window.TT = window.TT || {});
@@ -10643,7 +10870,14 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 /* =====================================================================
    TrimmoTrade – Zustand
    Ein einziger Zustand, ein einziger Speicherplatz, ein Ereignis für
-   alle Ansichten. Bleibt im Browser; nichts verlässt das Gerät.
+   alle Ansichten.
+
+   Der Speicherplatz ist der Browser: Hier wird geschrieben, hier wird
+   gelesen, und ohne Netz läuft alles weiter. Wer angemeldet ist,
+   bekommt zusätzlich einen Abgleich mit dem Server – damit der Stand
+   den Gerätewechsel überlebt. Wie das zusammengeht, steht in
+   assets/abgleich.js; hier ist davon nur die eine Zeile in
+   `speichern()` zu sehen.
    ===================================================================== */
 (function (TT) {
   'use strict';
@@ -10788,7 +11022,13 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   const get = () => state || laden();
 
-  function speichern() { U.saveStore(state); }
+  function speichern() {
+    U.saveStore(state);
+    /* Und, sofern angemeldet und ein Server da ist, gebündelt hinaus.
+       Der Browser bleibt der Maßstab: Er hat schon geschrieben, bevor
+       der Server überhaupt gefragt wurde. */
+    if (TT.abgleich) TT.abgleich.angestossen();
+  }
 
   function melden(grund) {
     hoerer.forEach((fn) => fn(state, grund));
@@ -11163,7 +11403,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
 /* ===== plan.js ===== */
 /* =====================================================================
-   TrimmoTrade – Tarife und Werbung
+   TrimmoTrade – Tarife
 
    Leitgedanke, an dem sich jede Entscheidung hier messen lassen muss:
 
@@ -11205,11 +11445,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   const TARIFE = {
     frei: {
       id: 'frei', name: 'TrimmoTrade frei', preisMonat: 0, preisJahr: 0,
-      zeile: 'Vollständige Suche, dauerhaft kostenlos – finanziert über Anzeigen.'
+      zeile: 'Vollständige Suche, dauerhaft kostenlos. Getragen von denen, die Plus nehmen.'
     },
     plus: {
       id: 'plus', name: 'TrimmoTrade Plus', preisMonat: 7.90, preisJahr: 69,
-      zeile: 'Für alle, die täglich suchen: keine Anzeigen, keine Limits, weniger Handarbeit.'
+      zeile: 'Für alle, die täglich suchen: keine Limits, weniger Handarbeit.'
     }
   };
 
@@ -11222,7 +11462,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       anker: 1,
       lupeFunde: 1,
       ringLaenge: 2,
-      werbung: true,
       stellschrauben: false,
       serienbewerbung: false,
       marktdaten: false,
@@ -11237,7 +11476,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       anker: Infinity,
       lupeFunde: Infinity,
       ringLaenge: 4,
-      werbung: false,
       stellschrauben: true,
       serienbewerbung: true,
       marktdaten: true,
@@ -11283,7 +11521,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     { id: 'freigaben', gruppe: 'Schutz', name: 'Befristete Verweise statt Anhänge, jederzeit widerrufbar',
       frei: 'unbegrenzt', plus: 'unbegrenzt', gleich: true },
 
-    { id: 'werbung', gruppe: 'Täglich', name: 'Anzeigenfrei', frei: 'mit Anzeigen', plus: 'ohne Anzeigen' },
     { id: 'suchauftraege', gruppe: 'Täglich', name: 'Suchaufträge mit sofortiger Meldung',
       frei: '1 Auftrag', plus: 'unbegrenzt' },
     { id: 'anker', gruppe: 'Täglich', name: 'Ankerpunkte für Fahrzeiten',
@@ -11322,7 +11559,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     'Kein Frühzugang zu neuen Inseraten. Alle sehen jedes Inserat in derselben Sekunde.',
     'Keine Daten anderer Nutzerinnen und Nutzer.',
     'Kein besserer Datenschutz gegen Aufpreis – der Dokumententresor und die widerrufbaren Verweise sind im freien Tarif vollständig enthalten.',
-    'Keine Werbung, die sich als Inserat ausgibt – Anzeigen sind immer als solche gekennzeichnet.'
+    'Keine Werbung. Es gibt hier keine Anzeigen – weder eigene noch fremde, weder gekennzeichnet noch getarnt.'
   ];
 
   /* ------------------------- Inserate hervorheben -------------------------
@@ -11407,25 +11644,57 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
      Nach dem Jahr endet der Platz von selbst und die Anwendung fällt in
      den freien Tarif zurück. Wer dann bezahlen will, entscheidet sich neu.
 
-     Was in dieser Vorführung fehlt, ist die zentrale Stelle, die zählt.
-     Ohne Server kann kein Browser wissen, wie viele Plätze anderswo schon
-     vergeben sind. Der Zähler unten ist deshalb ausdrücklich eine
-     Hochrechnung aus der Zeit seit dem Start – und die Anwendung sagt das
-     an jeder Stelle dazu, an der sie ihn zeigt. Im Betrieb vergibt der
-     Server die Nummer, und zwar genau einmal. */
+     WER ZÄHLT. Lange stand der Platz im Speicher des Browsers und die
+     Zahl der vergebenen war eine Hochrechnung aus der Zeit seit dem
+     Start – also geraten. Wer die Browserdaten löschte, bekam einen
+     zweiten; auf dem Telefon hatte man gar keinen. § 7 der
+     Geschäftsbedingungen sagt aber „die ersten N, je Person einmal“,
+     und das lässt sich nur zentral einhalten.
+
+     Jetzt vergibt der Server die Nummer und zählt sie. Was hier steht,
+     ist nur noch die Anzeige – und ohne Server (Einzeldatei, Kopie auf
+     dem Stick) der alte Weg über den Browserspeicher, damit sich die
+     Vorführung weiterhin durchspielen lässt. */
 
   const GRUENDER = {
     plaetze: 10000,
-    monate: 12,
-    start: '2026-08-01',
-    /* Für die Hochrechnung: So viele Plätze gehen im Schnitt am Tag weg.
-       Eine Annahme, keine Messung. */
-    proTag: 140
+    monate: 12
   };
 
-  const gruender = () => TT.store.get().gruender || { nummer: 0, seit: '', bis: '' };
+  /* ------------------------- Was der Server sagt -------------------------
+
+     Ein Stand aus /api/tarif. Er kommt beim Start mit und nach jeder
+     Änderung neu. Solange keiner da ist, gilt der Browserspeicher. */
+
+  let vomServer = null;
+
+  const amServer = () => !!(TT.api && TT.api.da);
+
+  function standMerken(t) {
+    vomServer = t && typeof t === 'object' ? t : null;
+    return vomServer;
+  }
+
+  /** Holt den Tarifstand. Schlägt nie fehl – ohne Antwort bleibt es
+      beim freien Tarif, und das ist die richtige Vorgabe. */
+  function standHolen() {
+    if (!amServer()) return Promise.resolve(null);
+    return TT.api.ruf('tarif').then((d) => standMerken(d && d.tarif), () => null);
+  }
+
+  /* ------------------------- Gründerplatz ------------------------- */
+
+  function gruender() {
+    if (amServer()) {
+      const g = vomServer && vomServer.gruender;
+      if (!g || !g.nummer) return { nummer: 0, seit: '', bis: '' };
+      return { nummer: g.nummer, seit: '', bis: U.isoDate(new Date(g.bis * 1000)) };
+    }
+    return TT.store.get().gruender || { nummer: 0, seit: '', bis: '' };
+  }
 
   function gruenderAktiv() {
+    if (amServer()) return !!(vomServer && vomServer.gruender && vomServer.gruender.aktiv);
     const g = gruender();
     return !!(g.nummer && g.bis && new Date(g.bis) > TT.now());
   }
@@ -11436,33 +11705,55 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     return Math.max(0, Math.ceil((new Date(g.bis) - TT.now()) / 86400000));
   }
 
-  /* Hochgerechnet, nicht gezählt – siehe oben. */
+  /* Gezählt, nicht geschätzt – sobald ein Server da ist. */
   function gruenderVergeben() {
-    const tage = Math.max(0, Math.floor((TT.now() - new Date(GRUENDER.start)) / 86400000));
-    const geschaetzt = Math.min(GRUENDER.plaetze - 1, Math.round(tage * GRUENDER.proTag));
-    return gruender().nummer ? Math.max(geschaetzt, gruender().nummer) : geschaetzt;
+    if (amServer() && vomServer) return Math.max(0, (vomServer.plaetze || GRUENDER.plaetze) - (vomServer.frei || 0));
+    return gruender().nummer ? gruender().nummer : 0;
   }
 
-  const gruenderFrei = () => Math.max(0, GRUENDER.plaetze - gruenderVergeben());
+  function gruenderFrei() {
+    if (amServer() && vomServer) return Math.max(0, vomServer.frei || 0);
+    return Math.max(0, GRUENDER.plaetze - gruenderVergeben());
+  }
 
-  /* Vergibt den eigenen Platz. Gibt die Nummer zurück oder 0, wenn nichts
-     mehr frei ist oder schon einer vergeben wurde. */
+  /**
+   * Den eigenen Platz nehmen.
+   *
+   * Mit Server ein Versprechen auf die Nummer, ohne Server der alte
+   * Weg. Beide Male gilt: 0 heißt „hat nicht geklappt“.
+   */
   function gruenderSichern() {
-    if (gruender().nummer) return 0;
-    if (!gruenderFrei()) return 0;
+    if (amServer()) {
+      return TT.api.ruf('tarif/gruender', {}).then((d) => {
+        standMerken(d && d.tarif);
+        return (d && d.gruender && d.gruender.nummer) || 0;
+      });
+    }
+    if (gruender().nummer) return Promise.resolve(0);
+    if (!gruenderFrei()) return Promise.resolve(0);
     const nummer = gruenderVergeben() + 1;
     const bis = U.addMonate(TT.now(), GRUENDER.monate);
     TT.store.set({ gruender: { nummer, seit: U.isoDate(TT.now()), bis: U.isoDate(bis) } }, 'tarif');
-    return nummer;
+    return Promise.resolve(nummer);
   }
 
   function gruenderAufgeben() {
+    if (amServer()) {
+      return TT.api.ruf('tarif/aufgeben', {}).then((d) => { standMerken(d && d.tarif); });
+    }
     TT.store.set({ gruender: { nummer: 0, seit: '', bis: '' } }, 'tarif');
+    return Promise.resolve();
   }
+
+  /** Ob überhaupt ein Zahlungsweg eingerichtet ist. Solange nicht,
+      zeigt die Preisseite keinen Kaufknopf – ein Knopf, hinter dem
+      nichts liegt, ist schlimmer als keiner. */
+  const zahlbar = () => !amServer() || !!(vomServer && vomServer.zahlbar);
 
   /* ------------------------- Zustand ------------------------- */
 
   function aktuell() {
+    if (amServer()) return (vomServer && vomServer.plus) ? 'plus' : 'frei';
     const s = TT.store.get();
     if (s.tarif === 'plus') return 'plus';
     return gruenderAktiv() ? 'plus' : 'frei';
@@ -11472,6 +11763,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
      können, sonst bietet sie einem Gründer ein Abo an, das er nicht
      braucht, oder verschweigt ihm, dass sein Jahr ausläuft. */
   function plusQuelle() {
+    if (amServer()) return (vomServer && vomServer.quelle) || null;
     const s = TT.store.get();
     if (s.tarif === 'plus') return 'bezahlt';
     return gruenderAktiv() ? 'gruender' : null;
@@ -11485,80 +11777,32 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     return LEISTUNGEN.find((l) => l.id === id);
   }
 
+  /**
+   * Den Tarif umstellen – nur ohne Server.
+   *
+   * In der Einzeldatei ist das der Schalter, mit dem sich beide Welten
+   * vergleichen lassen. Mit Server gibt es ihn nicht: Plus entsteht
+   * dort durch einen Gründerplatz oder durch Bezahlung, und ein Knopf,
+   * der so täte, als hätte er etwas abgebucht, wäre nach § 312j BGB
+   * nicht einmal zulässig.
+   */
   function wechseln(tarif, intervall) {
+    if (amServer()) return false;
     TT.store.set({
       tarif: tarif === 'plus' ? 'plus' : 'frei',
       tarifIntervall: intervall || 'monat',
       tarifSeit: U.isoDate(TT.now())
     }, 'tarif');
+    return true;
   }
-
-  /* ------------------------- Anzeigen ------------------------- */
-
-  /* Erfundene Beispielanzeigen. Keine echten Marken, keine echten
-     Angebote – sie zeigen nur, wie Werbung im freien Tarif aussieht:
-     immer gekennzeichnet, nie im Gewand eines Inserats. */
-  const ANZEIGEN = [
-    {
-      id: 'umzug', art: 'Umzug', icon: 'umzug',
-      titel: 'Umzugshelfer im Umkreis vergleichen',
-      text: 'Drei Angebote für den Umzugstag, Halteverbot inklusive.',
-      absender: 'Beispiel-Umzugsdienst', ruf: 'Angebote ansehen'
-    },
-    {
-      id: 'kaution', art: 'Finanzen', icon: 'euro',
-      titel: 'Kautionsbürgschaft statt Barkaution',
-      text: 'Drei Monatsmieten nicht auf einmal binden – gegen Jahresbeitrag.',
-      absender: 'Beispiel-Bürgschaft', ruf: 'Bedingungen lesen'
-    },
-    {
-      id: 'hausrat', art: 'Versicherung', icon: 'schluessel',
-      titel: 'Hausrat zum Einzug versichern',
-      text: 'Schutz ab dem Tag der Schlüsselübergabe.',
-      absender: 'Beispiel-Versicherung', ruf: 'Tarif berechnen'
-    },
-    {
-      id: 'internet', art: 'Anschluss', icon: 'blitz',
-      titel: 'Internet an der neuen Adresse prüfen',
-      text: 'Verfügbarkeit und Schaltdauer vor dem Einzug klären.',
-      absender: 'Beispiel-Anbieter', ruf: 'Adresse prüfen'
-    },
-    {
-      id: 'moebel', art: 'Einrichtung', icon: 'haus',
-      titel: 'Küche nach Maß für kleine Grundrisse',
-      text: 'Planung vor Ort, Aufbau am Einzugstag.',
-      absender: 'Beispiel-Küchenstudio', ruf: 'Termin anfragen'
-    },
-    {
-      id: 'strom', art: 'Energie', icon: 'blitz',
-      titel: 'Stromtarif zum Einzug wechseln',
-      text: 'Anmeldung an der neuen Adresse in wenigen Minuten.',
-      absender: 'Beispiel-Energieversorger', ruf: 'Tarife vergleichen'
-    },
-    {
-      id: 'handwerk', art: 'Handwerk', icon: 'stift',
-      titel: 'Malerarbeiten vor dem Einzug',
-      text: 'Wände streichen, bevor die Möbel kommen.',
-      absender: 'Beispiel-Malerbetrieb', ruf: 'Angebot einholen'
-    }
-  ];
-
-  /* Wählt eine Anzeige stabil zur Position – beim Blättern springt
-     dadurch nichts herum. */
-  function anzeige(schluessel) {
-    if (!GRENZEN[aktuell()].werbung) return null;
-    return ANZEIGEN[U.hash(String(schluessel)) % ANZEIGEN.length];
-  }
-
-  /* Nach wie vielen Treffern eine Anzeige eingeschoben wird. */
-  const ANZEIGE_ABSTAND = 6;
 
   TT.plan = {
-    TARIFE, GRENZEN, LEISTUNGEN, NICHT_KAEUFLICH, ANZEIGEN, ANZEIGE_ABSTAND, GRUENDER,
+    TARIFE, GRENZEN, LEISTUNGEN, NICHT_KAEUFLICH, GRUENDER,
     HERVORHEBUNG, TOP_MAX, PLUS_RABATT,
     hervorhebung, hervorhebungPreis, boostAktiv, istTop, istHervorgehoben,
     anfrageRang, anfragenSortieren,
-    aktuell, istPlus, plusQuelle, grenze, darf, leistung, wechseln, anzeige,
+    aktuell, istPlus, plusQuelle, grenze, darf, leistung, wechseln,
+    amServer, zahlbar, standHolen, standMerken,
     gruender, gruenderAktiv, gruenderTageRest, gruenderVergeben, gruenderFrei,
     gruenderSichern, gruenderAufgeben
   };
@@ -11585,10 +11829,14 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
    öffnen. Der Freigabeschlüssel steht im Fragment des Verweises, dem Teil
    hinter dem Rautezeichen, den Browser niemals an einen Server senden.
 
-   Was hier fehlt: der Server. In dieser Vorführung liegt das Chiffrat im
-   Browser, der Verweis funktioniert deshalb nur auf diesem Gerät. Im
-   Betrieb läge dort das Chiffrat und sonst nichts – kein Schlüssel, keine
-   Datei im Klartext, nichts, was ein Einbruch verwertbar machen würde.
+   Wo das Chiffrat liegt, hängt daran, ob ein Server antwortet. Tut er es,
+   liegt es dort – und dort liegt genau das und sonst nichts: kein
+   Schlüssel, keine Datei im Klartext, nichts, was ein Einbruch verwertbar
+   machen würde. Das ist keine Bequemlichkeit, sondern die Bedingung dafür,
+   dass eine Freigabe überhaupt etwas taugt: Ein Verweis auf ein Chiffrat
+   im eigenen Browser geht bei niemand anderem auf, und einen Abrufzähler,
+   den der Empfänger selbst führt, gibt es nicht. Ohne Server – als Datei
+   geöffnet – fällt alles auf IndexedDB zurück und bleibt auf dem Gerät.
    ===================================================================== */
 (function (TT) {
   'use strict';
@@ -11619,6 +11867,29 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   const HEIKEL = ['schufa', 'ausweis'];
 
   const verfuegbar = () => !!(window.crypto && window.crypto.subtle && window.indexedDB && window.TextEncoder);
+
+  /* ------------------------------------------------------------------
+     Wo das Chiffrat liegt
+
+     Bis hierher: in diesem Browser. Die Verschlüsselung lief echt, nur
+     lag das Ergebnis auf dem Gerät – und damit ging ein Freigabeverweis
+     ausschließlich auf demselben Gerät auf. Die Vermieterseite, für die
+     er gedacht war, sah nichts. Der Tresor war als Vorführung richtig
+     und als Werkzeug wertlos: Man verschickt einen Verweis, damit ihn
+     jemand anderes öffnet.
+
+     Jetzt liegt das Chiffrat auf dem Server, sobald ein Server da ist
+     und jemand angemeldet ist. Was sich dadurch NICHT ändert: wer lesen
+     kann. Der Schlüssel entsteht aus dem Kennwort, bleibt im
+     Arbeitsspeicher und wandert beim Freigeben in den Fragmentteil des
+     Verweises – den Teil hinter dem Rautezeichen, den Browser
+     grundsätzlich nicht an Server senden. Der Server sieht Chiffrat und
+     sonst nichts.
+
+     Ohne Server – die Einzeldatei, eine Kopie auf dem Stick – bleibt
+     alles beim Alten, und die Oberfläche sagt, dass der Verweis dann
+     nur hier aufgeht. */
+  const amServer = () => !!(TT.api && TT.api.da && TT.konto && TT.konto.angemeldet());
 
   /* ------------------------- Kleinkram ------------------------- */
 
@@ -11670,12 +11941,120 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     }));
   }
 
+  /* ------------------------------------------------------------------
+     Ein Satz, zwei Orte
+
+     Ein Dokument besteht aus vier Teilen: dem verschlüsselten Inhalt,
+     dem verschlüsselten Dateinamen, dem umschlossenen Dokumentschlüssel
+     und drei Zufallswerten (iv). Im Browser liegen sie als Rohbytes; für
+     den Server werden sie zu Base64.
+
+     Der Server bekommt zwei Spalten: `chiffrat` für den Inhalt – das
+     Große – und `huelle` für den Rest, der klein ist. Der Dateityp geht
+     bewusst NICHT als eigene Spalte mit: Er steckt schon im
+     verschlüsselten Kopf, und „application/pdf“ neben „Schufa“ verrät
+     mehr, als nötig ist.
+     ------------------------------------------------------------------ */
+
+  function zumServer(satz) {
+    return {
+      art: satz.art,
+      groesse: satz.groesse,
+      huelle: zuBase64(enc.encode(JSON.stringify({
+        inhaltIv: satz.inhaltIv,
+        kopfIv: satz.kopfIv, kopf: zuBase64(satz.kopf),
+        huelleIv: satz.huelleIv, huelle: zuBase64(satz.huelle)
+      }))),
+      chiffrat: zuBase64(satz.inhalt)
+    };
+  }
+
+  function vomServer(d) {
+    let h;
+    try { h = JSON.parse(dec.decode(ausBase64(d.huelle))); } catch (e) { return null; }
+    return {
+      id: d.id, art: d.art, groesse: d.groesse,
+      hinzu: new Date((d.hinzu || 0) * 1000).toISOString(),
+      inhaltIv: h.inhaltIv,
+      inhalt: d.chiffrat ? ausBase64(d.chiffrat).buffer : null,
+      kopfIv: h.kopfIv, kopf: ausBase64(h.kopf).buffer,
+      huelleIv: h.huelleIv, huelle: ausBase64(h.huelle).buffer
+    };
+  }
+
+  /* Alle Sätze – ohne den Inhalt, denn die Liste braucht ihn nicht und
+     er ist der große Teil. */
+  function alleSaetze() {
+    if (!amServer()) {
+      return tun('readonly', (s) => s.getAll())
+        .then((a) => a.slice().sort((x, y) => String(x.hinzu).localeCompare(String(y.hinzu))));
+    }
+    return TT.api.ruf('tresor/liste').then((d) => {
+      if (d && d.freigaben) freigabenVomServer = d.freigaben;
+      return (d.dokumente || []).map(vomServer).filter(Boolean)
+        .sort((x, y) => String(x.hinzu).localeCompare(String(y.hinzu)));
+    });
+  }
+
+  /* Ein Satz samt Inhalt. */
+  function einSatz(id) {
+    if (!amServer()) return tun('readonly', (s) => s.get(id));
+    return TT.api.ruf('tresor/holen', { id }).then((d) => vomServer(d.dokument));
+  }
+
+  function satzAblegen(satz) {
+    if (!amServer()) return tun('readwrite', (s) => s.put(satz)).then(() => satz.id);
+    return TT.api.ruf('tresor/neu', zumServer(satz)).then((d) => d.id);
+  }
+
+  function satzLoeschen(id) {
+    if (!amServer()) return tun('readwrite', (s) => s.delete(id));
+    return TT.api.ruf('tresor/loeschen', { id });
+  }
+
+  /* Die Freigaben. Ohne Server stehen sie im Kopf des Tresors; mit
+     Server kommen sie mit der Liste und werden hier gehalten, damit
+     `freigaben()` sie ohne Warten ausgeben kann. */
+  let freigabenVomServer = null;
+
+  /* Der Kopf des Tresors: Salz, Rundenzahl und die Probe, an der sich
+     erkennen lässt, ob das Kennwort stimmt. Nichts davon ist geheim –
+     das Salz ist bei PBKDF2 öffentlich, die Probe ist Chiffrat. Auf dem
+     Server liegt er trotzdem, denn ohne ihn ließe sich der Tresor auf
+     einem zweiten Gerät gar nicht erst öffnen.
+
+     Der Zwischenspeicher hier ist nötig, weil `eingerichtet()` und
+     `freigabeStatus()` aus der Zeichnung heraus aufgerufen werden und
+     dort nicht auf den Server warten können. */
+  let metaZwischen = null;
+
   function meta() {
+    if (metaZwischen) return metaZwischen;
     try { return JSON.parse(localStorage.getItem(META) || 'null'); } catch (e) { return null; }
   }
 
   function metaSetzen(m) {
+    metaZwischen = m;
+    /* Auch ohne Server behalten: Wer sich abmeldet, soll den Tresor auf
+       diesem Gerät weiter öffnen können. */
     try { localStorage.setItem(META, JSON.stringify(m)); } catch (e) { /* Speicher voll */ }
+    if (amServer()) {
+      TT.api.ruf('ablage/setzen', { felder: { tresorMeta: m } }).catch(() => { });
+    }
+  }
+
+  /* Beim Start einmal vom Server holen – sonst steht auf einem neuen
+     Gerät „noch kein Tresor eingerichtet“, obwohl einer da ist. */
+  function metaHolen() {
+    if (!amServer()) return Promise.resolve(meta());
+    return TT.api.ruf('ablage').then((d) => {
+      const m = d && d.ablage && d.ablage.tresorMeta;
+      if (m && m.salz) {
+        metaZwischen = m;
+        try { localStorage.setItem(META, JSON.stringify(m)); } catch (e) { /* egal */ }
+      }
+      return meta();
+    }, () => meta());
   }
 
   /* ------------------------- Schlüssel ------------------------- */
@@ -11758,14 +12137,14 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           return verschluesseln(dokSchluessel, enc.encode(JSON.stringify({ name: datei.name, typ: datei.type })))
             .then((kopf) => crypto.subtle.exportKey('raw', dokSchluessel)
               .then((rohSchluessel) => verschluesseln(tresorSchluessel, rohSchluessel)
-                .then((umschlossen) => tun('readwrite', (s) => s.put({
+                .then((umschlossen) => satzAblegen({
                   id, art: art || 'sonstiges',
                   groesse: datei.size,
                   hinzu: new Date().toISOString(),
                   inhaltIv: inhalt.iv, inhalt: inhalt.chiffrat,
                   kopfIv: kopf.iv, kopf: kopf.chiffrat,
                   huelleIv: umschlossen.iv, huelle: umschlossen.chiffrat
-                })).then(() => id))));
+                }))));
         }));
   }
 
@@ -11776,8 +12155,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   }
 
   function liste() {
-    return tun('readonly', (s) => s.getAll()).then((saetze) => {
-      saetze.sort((a, b) => a.hinzu.localeCompare(b.hinzu));
+    return alleSaetze().then((saetze) => {
       if (!istOffen()) {
         /* Gesperrt: Nur was ohnehin unverschlüsselt liegt – Art, Größe,
            Datum. Der Dateiname bleibt verborgen. */
@@ -11794,7 +12172,10 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   }
 
   function loeschen(id) {
-    return tun('readwrite', (s) => s.delete(id)).then(() => {
+    return satzLoeschen(id).then(() => {
+      /* Mit Server räumt der Server die Freigaben mit auf – er kennt
+         sie und weiß, welche dadurch leer werden. */
+      if (amServer()) { freigabenVomServer = null; return; }
       /* Aus allen Freigaben entfernen; eine leere Freigabe wird widerrufen. */
       const m = meta();
       if (!m) return;
@@ -11810,7 +12191,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   /* Entschlüsselt ein Dokument für die eigene Ansicht. */
   function oeffnen(id) {
     if (!istOffen()) return Promise.reject(new Error('Der Tresor ist gesperrt.'));
-    return tun('readonly', (s) => s.get(id)).then((satz) => {
+    return einSatz(id).then((satz) => {
       if (!satz) throw new Error('Dokument nicht gefunden.');
       return dokSchluessel(satz).then((k) => Promise.all([
         entschluesseln(k, satz.inhaltIv, satz.inhalt),
@@ -11825,6 +12206,21 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   /* ------------------------- Freigaben ------------------------- */
 
   function freigaben() {
+    if (amServer()) {
+      /* Der Server rechnet Ablauf und Zähler selbst und schickt sie
+         mit; hier wird nur noch umbenannt, was die Oberfläche erwartet. */
+      return (freigabenVomServer || []).map((f) => ({
+        id: f.id,
+        dokumente: f.dokumente || [],
+        empfaenger: f.empfaenger || '',
+        objektId: f.objekt || null,
+        erstellt: new Date((f.erstellt || 0) * 1000).toISOString(),
+        ablauf: new Date((f.ablauf || 0) * 1000).toISOString(),
+        maxAbrufe: f.maxAbrufe,
+        abrufe: (f.abrufe || []).map((a) => ({ zeit: new Date((a.zeit || 0) * 1000).toISOString() })),
+        widerrufen: f.widerrufen ? new Date((f.erstellt || 0) * 1000).toISOString() : null
+      }));
+    }
     const m = meta();
     return (m && m.freigaben) ? m.freigaben.slice().reverse() : [];
   }
@@ -11849,12 +12245,32 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     const tage = U.clamp(Number(optionen.tage) || 7, 1, 90);
     const maxAbrufe = U.clamp(Number(optionen.maxAbrufe) || 3, 1, 20);
 
-    return tun('readonly', (s) => s.getAll()).then((alle) => {
-      const gewaehlt = alle.filter((s) => ids.indexOf(s.id) >= 0);
+    return alleSaetze().then((alle) => {
+      const gewaehlt = alle.filter((x) => ids.indexOf(x.id) >= 0);
       return Promise.all(gewaehlt.map((satz) => dokSchluessel(satz)
         .then((k) => crypto.subtle.exportKey('raw', k))
         .then((roh) => ({ id: satz.id, k: zuBase64(roh) }))));
     }).then((schluessel) => {
+      const geheim = zuBase64(enc.encode(JSON.stringify(schluessel)));
+
+      /* Mit Server vergibt der Server die Kennung und setzt Ablauf,
+         Zähler und Widerruf durch. Das ist der Unterschied, der den
+         Verweis überhaupt brauchbar macht: Vorher hätte der Empfänger
+         nur den Zähler in seinem eigenen Browser hochgezählt – also
+         gar keinen. */
+      if (amServer()) {
+        return TT.api.ruf('freigabe/neu', {
+          dokumente: ids,
+          empfaenger: (optionen.empfaenger || '').slice(0, 120),
+          objektId: optionen.objektId || '',
+          tage, maxAbrufe
+        }).then((d) => {
+          freigabenVomServer = null;
+          const id = d.freigabe.id;
+          return { id, geheim, link: linkFuer(id, geheim), tage: d.freigabe.tage, maxAbrufe: d.freigabe.maxAbrufe };
+        });
+      }
+
       const id = 'fg-' + zuBase64(zufall(9));
       const m = meta();
       m.freigaben = m.freigaben || [];
@@ -11867,7 +12283,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         maxAbrufe, abrufe: [], widerrufen: null
       });
       metaSetzen(m);
-      const geheim = zuBase64(enc.encode(JSON.stringify(schluessel)));
       return { id, geheim, link: linkFuer(id, geheim), tage, maxAbrufe };
     });
   }
@@ -11878,59 +12293,96 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   }
 
   function widerrufen(id) {
+    if (amServer()) {
+      return TT.api.ruf('freigabe/widerrufen', { id })
+        .then((d) => { freigabenVomServer = d.freigaben || null; });
+    }
     const m = meta();
-    if (!m) return;
+    if (!m) return Promise.resolve();
     (m.freigaben || []).forEach((f) => { if (f.id === id) f.widerrufen = new Date().toISOString(); });
     metaSetzen(m);
+    return Promise.resolve();
   }
 
   function freigabeLoeschen(id) {
+    if (amServer()) {
+      return TT.api.ruf('freigabe/loeschen', { id })
+        .then((d) => { freigabenVomServer = d.freigaben || null; });
+    }
     const m = meta();
-    if (!m) return;
+    if (!m) return Promise.resolve();
     m.freigaben = (m.freigaben || []).filter((f) => f.id !== id);
     metaSetzen(m);
+    return Promise.resolve();
   }
 
   /* Abruf durch die empfangende Seite. Braucht keinen Tresorschlüssel –
      die Dokumentschlüssel stehen im Verweis. */
+  /* Abruf durch die empfangende Seite. Braucht keinen Tresorschlüssel
+     und kein Konto – die Dokumentschlüssel stehen im Verweis, hinter dem
+     Rautezeichen. Genau das ist der Punkt: Der Server gibt Chiffrat
+     heraus und kann es selbst nicht lesen.
+
+     Die Sätze zu entschlüsseln ist beide Male dieselbe Arbeit; woher sie
+     kommen, ist der Unterschied. */
   function freigabeAbrufen(id, geheim, protokollieren) {
+    let schluessel;
+    try { schluessel = JSON.parse(dec.decode(ausBase64(geheim))); }
+    catch (e) { return Promise.reject(new Error('Der Verweis ist unvollständig.')); }
+
+    const entpacken = (saetze, stand) => Promise.all(schluessel.map((eintrag) => {
+      const satz = saetze.find((x) => x.id === eintrag.id);
+      if (!satz || !satz.inhalt) return null;
+      return crypto.subtle.importKey('raw', ausBase64(eintrag.k), 'AES-GCM', false, ['decrypt'])
+        .then((k) => Promise.all([
+          entschluesseln(k, satz.inhaltIv, satz.inhalt),
+          entschluesseln(k, satz.kopfIv, satz.kopf)
+        ]))
+        .then(([inhalt, kopf]) => {
+          const kk = JSON.parse(dec.decode(kopf));
+          return { id: satz.id, art: satz.art, name: kk.name, typ: kk.typ, bytes: inhalt, groesse: satz.groesse };
+        })
+        .catch(() => null);
+    })).then((dokumente) => {
+      const gueltige = dokumente.filter(Boolean);
+      if (!gueltige.length) throw new Error('Die Unterlagen lassen sich mit diesem Verweis nicht entschlüsseln.');
+      return { freigabe: stand, dokumente: gueltige };
+    });
+
+    /* Mit Server: Ablauf, Zähler und Widerruf setzt der Server durch,
+       nicht dieser Browser. Ein Empfänger, der den Zähler in seinem
+       eigenen Speicher hochzählt, zählt gar nichts. */
+    if (TT.api && TT.api.da) {
+      return TT.api.ruf('freigabe/abruf', { id }).then((d) => {
+        const saetze = (d.dokumente || []).map(vomServer).filter(Boolean);
+        const f = d.freigabe || {};
+        return entpacken(saetze, {
+          id: f.id,
+          dokumente: f.dokumente || [],
+          erstellt: new Date((f.erstellt || 0) * 1000).toISOString(),
+          ablauf: new Date((f.ablauf || 0) * 1000).toISOString(),
+          maxAbrufe: f.maxAbrufe,
+          abrufe: (f.abrufe || []).map((a) => ({ zeit: new Date((a.zeit || 0) * 1000).toISOString() })),
+          widerrufen: null
+        });
+      });
+    }
+
+    /* Ohne Server: alles wie bisher, auf diesem Gerät. */
     const m = meta();
     const f = (m && m.freigaben || []).find((x) => x.id === id);
     if (!f) return Promise.reject(new Error('Diesen Verweis gibt es nicht mehr.'));
     const status = freigabeStatus(f);
     if (!status.gueltig) return Promise.reject(new Error('Der Verweis ist ' + status.text + '.'));
 
-    let schluessel;
-    try { schluessel = JSON.parse(dec.decode(ausBase64(geheim))); }
-    catch (e) { return Promise.reject(new Error('Der Verweis ist unvollständig.')); }
-
     return tun('readonly', (s) => s.getAll()).then((alle) => {
-      return Promise.all(schluessel.map((eintrag) => {
-        const satz = alle.find((s) => s.id === eintrag.id);
-        if (!satz) return null;
-        return crypto.subtle.importKey('raw', ausBase64(eintrag.k), 'AES-GCM', false, ['decrypt'])
-          .then((k) => Promise.all([
-            entschluesseln(k, satz.inhaltIv, satz.inhalt),
-            entschluesseln(k, satz.kopfIv, satz.kopf)
-          ]))
-          .then(([inhalt, kopf]) => {
-            const meta2 = JSON.parse(dec.decode(kopf));
-            return { id: satz.id, art: satz.art, name: meta2.name, typ: meta2.typ, bytes: inhalt, groesse: satz.groesse };
-          })
-          .catch(() => null);
-      }));
-    }).then((dokumente) => {
-      const gueltige = dokumente.filter(Boolean);
-      if (!gueltige.length) throw new Error('Die Unterlagen lassen sich mit diesem Verweis nicht entschlüsseln.');
       let stand = f;
       if (protokollieren !== false) {
         const m2 = meta();
         const f2 = (m2.freigaben || []).find((x) => x.id === id);
         if (f2) { f2.abrufe.push({ zeit: new Date().toISOString() }); metaSetzen(m2); stand = f2; }
       }
-      /* Der eigene Abruf zählt mit: Wer die Unterlagen gerade geöffnet hat,
-         soll „1 von 3“ sehen und nicht „0 von 3“. */
-      return { freigabe: stand, dokumente: gueltige };
+      return entpacken(alle, stand);
     });
   }
 
@@ -11938,13 +12390,20 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   function allesLoeschen() {
     tresorSchluessel = null;
+    metaZwischen = null;
+    freigabenVomServer = null;
     try { localStorage.removeItem(META); } catch (e) { /* egal */ }
-    return tun('readwrite', (s) => s.clear()).catch(() => { });
+    const hier = tun('readwrite', (s) => s.clear()).catch(() => { });
+    if (!amServer()) return hier;
+    return hier
+      .then(() => TT.api.ruf('tresor/leeren', {}))
+      .then(() => TT.api.ruf('ablage/setzen', { felder: { tresorMeta: null } }))
+      .catch(() => { });
   }
 
   TT.tresor = {
     ARTEN, HEIKEL, MAX_BYTES, OK_TYPEN, RUNDEN,
-    verfuegbar, eingerichtet, istOffen, einrichten, entsperren, sperren,
+    verfuegbar, amServer, eingerichtet, istOffen, einrichten, entsperren, sperren, metaHolen,
     hinzufuegen, liste, loeschen, oeffnen,
     freigaben, freigabeStatus, freigabeErstellen, freigabeAbrufen,
     widerrufen, freigabeLoeschen, linkFuer, allesLoeschen
@@ -12310,16 +12769,21 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     },
     {
       id: 'werbung',
-      titel: 'Warum sehe ich Anzeigen?',
+      titel: 'Gibt es hier Werbung?',
       gruppe: 'Tarif',
-      fragen: ['warum werbung', 'anzeigen ausschalten', 'werbung nervt', 'bekommt ihr meine daten'],
-      schlag: ['werbung', 'anzeig', 'reklam', 'banner', 'tracking'],
-      antwort: 'Anzeigen sind der Preis des freien Tarifs. Wer eine Wohnung sucht, hat oft gerade wenig Geld – '
-        + 'ausgerechnet dann eine Bezahlschranke vor die Suche zu stellen, wäre verkehrt.\n\n'
-        + 'Was dabei nicht passiert: Es werden keine Daten über dich an Werbetreibende gegeben. Welche Anzeige '
-        + 'erscheint, entscheidet die Stelle auf der Seite, nicht dein Profil oder dein Verhalten. Deshalb gibt '
-        + 'es auch kein Einwilligungsfenster – es gibt nichts einzuwilligen.\n\n'
-        + 'Mit Plus verschwinden die Anzeigen.',
+      fragen: ['gibt es werbung', 'anzeigen ausschalten', 'werbung nervt', 'bekommt ihr meine daten',
+        'wie finanziert sich das'],
+      schlag: ['werbung', 'anzeig', 'reklam', 'banner', 'tracking', 'finanzier', 'kostenlos'],
+      antwort: '<b>Nein.</b> Es erscheinen keine Anzeigen – weder eigene noch fremde. Es ist kein '
+        + 'Werbenetzwerk eingebunden, und es gibt auch nichts, was sich zuschalten ließe: Die Anwendung '
+        + 'enthält keinen Programmteil, der Werbung ausspielen könnte.\n\n'
+        + 'Getragen wird der freie Tarif von denen, die Plus nehmen oder ein Inserat hervorheben. Wer eine '
+        + 'Wohnung sucht, hat oft gerade wenig Geld – ausgerechnet dann eine Bezahlschranke vor die Suche zu '
+        + 'stellen, wäre verkehrt. Deshalb bleibt alles frei, was vor Schaden bewahrt oder gerechnet werden '
+        + 'muss.\n\n'
+        + 'Es werden auch keine Daten über dich weitergegeben. Gezählt wird nur, wie oft eine Ansicht an '
+        + 'einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse. Deshalb gibt es kein '
+        + 'Einwilligungsfenster: Es gibt nichts einzuwilligen.',
       ziele: [['Tarife ansehen', 'plus'], ['Datenschutzerklärung', 'recht/datenschutz']]
     },
     {
@@ -12499,7 +12963,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       antwort: 'Unter „Inserieren“, mit sechs Angebotsarten: Wohnung vermieten, WG-Zimmer, Wohnung tauschen, '
         + 'Wohnung verkaufen, Haus verkaufen, Grundstück verkaufen. Welche Felder erscheinen, richtet sich '
         + 'nach der Art.\n\nFotos lassen sich direkt im Formular hochladen, bis zu zehn Stück. Sie werden im '
-        + 'Browser verkleinert und bleiben auf deinem Gerät. Das erste Bild ist das Titelbild.\n\n'
+        + 'Browser verkleinert und dann zum Server übertragen – ohne das könnte sie niemand sehen. '
+        + 'Das erste Bild ist das Titelbild.\n\n'
         + 'Was nicht auf ein Inseratsfoto gehört: Personen ohne deren Einwilligung, Kennzeichen, Namensschilder '
         + 'an Klingel oder Briefkasten. Innenräume einer bewohnten Wohnung nur mit Zustimmung der Mietpartei.',
       ziele: [['Inserat aufgeben', 'inserieren']]
@@ -12535,7 +13000,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         + 'der ortsüblichen Vergleichsmiete liegen. TrimmoTrade zeigt, wo das greifen könnte und wie viel dann '
         + 'zulässig wäre. Ausnahmen gelten unter anderem für Neubauten ab 2014 und umfassend modernisierte '
         + 'Wohnungen; darüber muss die Vermieterseite vor Vertragsschluss informieren.\n\n'
-        + 'Der Vergleichswert in dieser Vorführung ist eine Rechengröße, kein amtlicher Mietspiegel.',
+        + 'Der Vergleichswert ist eine Rechengröße aus Lage, Baujahr, Größe und Ausstattung – kein '
+        + 'amtlicher Mietspiegel. Für ein Verfahren zählt der Mietspiegel der Gemeinde.',
       ziele: [['Zur Suche', 'suche'], ['Nebenkosten prüfen', 'nebenkosten']]
     },
     {
@@ -12544,12 +13010,17 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       gruppe: 'Datenschutz',
       fragen: ['datenschutz', 'werden meine daten gespeichert', 'dsgvo', 'daten loeschen'],
       schlag: ['datenschutz', 'daten', 'dsgvo', 'speicher', 'loesch', 'privat', 'cookie'],
-      antwort: 'TrimmoTrade rechnet vollständig in deinem Browser. Profil, Merkliste, Suchaufträge, Nachrichten '
-        + 'und eigene Inserate liegen im Speicher dieses Geräts und verlassen es nicht. Es gibt kein '
-        + 'Nutzerkonto und keine Übertragung an Dritte.\n\n'
-        + 'Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt und keine Profile über dein Verhalten '
-        + 'gebildet. Deshalb erscheint auch kein Einwilligungsfenster.\n\n'
-        + 'Unter „Meine Daten“ im Fußbereich kannst du alles als Datei sichern oder vollständig löschen.',
+      antwort: 'Gerechnet wird auf deinem Gerät: Suche, Bewertung, Karte und jede Schätzung entstehen im '
+        + 'Browser. Ohne Anmeldung verlässt davon nichts dein Gerät – Anzeigen ansehen geht ohne Konto.\n\n'
+        + 'Mit einem Konto liegt dein Stand zusätzlich auf dem Server: Profil, Merkliste, Suchaufträge, '
+        + 'Nachrichten und eigene Inserate. Nur so findest du sie auf dem Telefon wieder. Der Server '
+        + 'verwahrt sie und wertet sie nicht aus; an Dritte geht nichts.\n\n'
+        + 'Unterlagen im Dokumententresor werden verschlüsselt, bevor sie den Browser verlassen. Der '
+        + 'Anbieter kann sie nicht lesen – auch die Dateinamen nicht.\n\n'
+        + 'Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten '
+        + 'gebildet und keine Werbung ausgespielt. Deshalb erscheint auch kein Einwilligungsfenster.\n\n'
+        + 'Unter „Meine Daten“ im Fußbereich kannst du alles als Datei sichern oder vollständig löschen; '
+        + 'das Konto löschst du in den Einstellungen, und dann geht alles mit.',
       ziele: [['Datenschutzerklärung', 'recht/datenschutz'], ['Impressum', 'recht/impressum']]
     },
     {
@@ -12635,13 +13106,17 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       gruppe: 'Anwendung',
       fragen: ['daten weg', 'merkliste leer', 'alles verschwunden', 'anderes geraet'],
       schlag: ['weg', 'verschwund', 'verlor', 'leer', 'geraet', 'wiederherstell', 'sicherung'],
-      antwort: 'Alles liegt im Speicher dieses Browsers – auch die Anmeldung. Es verschwindet, wenn die '
-        + 'Browserdaten gelöscht werden, im privaten Modus beim Schließen des Fensters – und es ist auf einem '
-        + 'anderen Gerät oder in einem anderen Browser von vornherein nicht da. Dort meldest du dich neu an; '
-        + 'Merkliste und Profil wandern deshalb nicht mit.\n\n'
-        + 'Vorbeugen lässt sich das unter „Meine Daten“ im Fußbereich: Dort sicherst du den Stand als Datei.\n\n'
-        + 'Der Dokumententresor liegt getrennt davon und wird dabei bewusst nicht mitgesichert – '
-        + 'verschlüsselte Dateien in eine Klartextdatei zu exportieren wäre das Gegenteil dessen, wofür er da ist.',
+      antwort: 'Der schnellste Weg: anmelden. Wer ein Konto hat, bekommt bei der Anmeldung seinen Stand '
+        + 'zurück – Profil, Merkliste, Suchaufträge, Nachrichten und eigene Inserate. Genau dafür liegt er '
+        + 'auf dem Server, und genau deshalb ist ein neues Gerät kein Neuanfang mehr.\n\n'
+        + 'Ohne Anmeldung liegt alles nur im Speicher dieses Browsers. Es verschwindet, wenn die Browserdaten '
+        + 'gelöscht werden, im privaten Modus beim Schließen des Fensters – und auf einem anderen Gerät war '
+        + 'es nie da.\n\n'
+        + 'Der Dokumententresor kommt ebenfalls mit, muss aber mit dem Tresorkennwort geöffnet werden: Das '
+        + 'kennst nur du, es liegt nirgends.\n\n'
+        + 'Zusätzlich sichern lässt sich der Stand unter „Meine Daten“ im Fußbereich – als Datei. Der Tresor '
+        + 'bleibt dabei bewusst außen vor: verschlüsselte Unterlagen in eine Klartextdatei zu exportieren '
+        + 'wäre das Gegenteil dessen, wofür er da ist.',
       ziele: [['Datenschutzerklärung', 'recht/datenschutz']]
     },
     {
@@ -13628,17 +14103,20 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     },
     {
       id: 'werbung',
-      titel: 'Why am I seeing ads?',
+      titel: 'Are there ads on TrimmoTrade?',
       gruppe: 'Plans',
-      fragen: ['why ads', 'turn off ads', 'ads are annoying', 'do you get my data'],
-      schlag: ['ad', 'ads', 'advert', 'banner', 'tracking', 'marketing'],
-      antwort: 'Ads are the price of the free plan. People looking for an apartment often have little '
-        + 'money right then – putting a paywall in front of the search at exactly that moment would be '
-        + 'wrong.\n\n'
-        + 'What does not happen: no data about you is passed to advertisers. Which ad appears is decided '
-        + 'by the position on the page, not by your profile or your behaviour. That is also why there is '
-        + 'no consent banner – there is nothing to consent to.\n\n'
-        + 'With Plus the ads disappear.',
+      fragen: ['are there ads', 'turn off ads', 'ads are annoying', 'do you get my data',
+        'how is this financed'],
+      schlag: ['ad', 'ads', 'advert', 'banner', 'tracking', 'marketing', 'free', 'financed'],
+      antwort: '<b>No.</b> No advertising is shown – neither our own nor anyone else\'s. No ad network is '
+        + 'embedded, and there is nothing that could be switched on: the application contains no code that '
+        + 'could serve ads at all.\n\n'
+        + 'The free plan is carried by the people who take Plus or promote a listing. Someone looking for an '
+        + 'apartment often has little money right then – putting a paywall in front of the search at exactly '
+        + 'that moment would be wrong. So everything that protects you or has to be calculated stays free.\n\n'
+        + 'No data about you is passed on either. All that is counted is how often a view was opened on a '
+        + 'given day in total – no identifier, no address. That is why there is no consent banner: there is '
+        + 'nothing to consent to.',
       ziele: [['See plans', 'plus'], ['Privacy policy', 'recht/datenschutz']]
     },
     {
@@ -13983,6 +14461,315 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   TT.hilfe.themenEintragen('en', THEMEN_EN);
 })(window.TT = window.TT || {});
 
+/* ===== abgleich.js ===== */
+/* =====================================================================
+   TrimmoTrade – Abgleich mit dem Server
+
+   Was jemand für sich festhält – Profil, Merkliste, Bewerbungstafel,
+   Notizen, Suchaufträge, Umzugsplan, Übergabeprotokoll – lag bisher
+   ausschließlich im Speicher des Browsers. Der Grund dafür war gut: Es
+   geht niemanden etwas an.
+
+   Der Grund trägt nur nicht weit genug. Wer die Wohnungssuche am
+   Rechner beginnt und abends im Bus weitersucht, fand auf dem Telefon
+   nichts wieder. Wer die Browserdaten löschte, verlor alles. Und weil
+   Wohnungssuche aus Wochen des Wartens besteht, ist beides kein
+   Randfall, sondern der Normalfall.
+
+   Diese Datei hält beides zusammen, ohne die Trennlinie aufzugeben:
+
+     · Der Browser bleibt der Ort, an dem gerechnet wird. Er schreibt
+       weiter zuerst in seinen eigenen Speicher und arbeitet vollständig
+       weiter, wenn der Server schweigt.
+     · Der Server ist die Kopie, die den Gerätewechsel überlebt. Er
+       bekommt JSON, gibt JSON zurück und wertet nichts davon aus.
+     · Ohne Anmeldung geschieht hier gar nichts. Wer nur sucht,
+       hinterlässt nach wie vor keine Spur.
+
+   ZUM ZUSAMMENFÜHREN. Zwei Geräte, die dasselbe Feld verändern, sind
+   ein Problem ohne schöne Lösung. Gewählt ist die Regel, die sich in
+   einem Satz erklären lässt: Beim Start gewinnt der Server für jedes
+   Feld, das hier seit dem letzten Abgleich nicht angefasst wurde – und
+   der Browser für jedes, das er angefasst hat. Damit verliert niemand,
+   was er gerade eingetragen hat, und das Telefon bekommt beim Öffnen
+   den Stand vom Rechner.
+
+   Was diese Regel nicht auflöst: zwei Geräte, die dasselbe Feld
+   gleichzeitig ändern. Dann gewinnt, was zuletzt schreibt. Ein
+   Abgleich Zeile für Zeile wäre möglich, würde die Anwendung aber
+   ungleich komplizierter machen, als der Fall häufig ist – eine Person
+   sucht selten von zwei Geräten gleichzeitig eine Wohnung.
+   ===================================================================== */
+(function (TT) {
+  'use strict';
+
+  /* Welche Felder mitgehen. Die Liste muss zu der in api/lib/ablage.php
+     passen; was hier steht und dort nicht, weist der Server ab.
+
+     Nicht dabei und mit Absicht: `theme` und `ansicht` – die gehören
+     zum Gerät, nicht zur Person. Wer am Telefon dunkel liest, will das
+     am Rechner nicht zwingend auch. Ebenso wenig der Tarif: Der kommt
+     vom Server selbst und wäre hier eine zweite Wahrheit. */
+  const FELDER = [
+    'profil', 'merkliste', 'vergleich', 'agenten', 'threads', 'gesehen',
+    'filter', 'einstellungen', 'umzug', 'protokoll', 'werkzeuge',
+    'meinTausch', 'hinweise', 'eigeneInserate'
+  ];
+
+  /* Ein paar Schalter gehören sachlich zum Profil, stehen im Zustand
+     aber daneben. Sie gehen unter `einstellungen` mit, damit nicht für
+     jeden einzelnen ein eigenes Feld nötig ist. */
+  const EINSTELLUNGEN = ['profilAngelegt', 'filterBeruehrt', 'einzugsdatum', 'betreiber'];
+
+  /* `hinweise` heißt im Browser seit jeher `hinweiseGelesen`. Zwei
+     Namen für dieselbe Sache sind unschön; die Alternative wäre, im
+     Browser umzubenennen und damit jeden vorhandenen Stand zu
+     verlieren. */
+  const ANDERS = { hinweise: 'hinweiseGelesen' };
+  const imBrowser = (feld) => ANDERS[feld] || feld;
+
+  const WARTEN_MS = 1500;    // so lange nach der letzten Änderung sammeln
+
+  let letzterStand = null;   // was zuletzt hinausging, je Feld als Text
+  let uhr = null;
+  let laeuft = false;        // gerade unterwegs
+  let nochmal = false;       // während des Sendens kam etwas Neues
+  let bereit = false;        // erst nach dem ersten Holen wird geschickt
+  const zustand = { an: false, fehler: '', zuletzt: 0, belegt: 0 };
+
+  const amServer = () => !!(TT.api && TT.api.da && TT.konto && TT.konto.angemeldet());
+
+  /* ------------------------------------------------------------------
+     Ein Feld aus dem Zustand lesen und hineinschreiben
+     ------------------------------------------------------------------ */
+
+  function holeFeld(s, feld) {
+    if (feld === 'einstellungen') {
+      const raus = {};
+      EINSTELLUNGEN.forEach((k) => { raus[k] = s[k]; });
+      return raus;
+    }
+    return s[imBrowser(feld)];
+  }
+
+  function setzeFeld(s, feld, wert) {
+    if (feld === 'einstellungen') {
+      if (!wert || typeof wert !== 'object') return;
+      EINSTELLUNGEN.forEach((k) => { if (wert[k] !== undefined) s[k] = wert[k]; });
+      return;
+    }
+    const name = imBrowser(feld);
+    /* Die Art muss stimmen. Käme für die Merkliste eine Liste an,
+       stürzte der erste Zugriff darauf ab – und ein weißer Bildschirm
+       ist schlimmer als ein verlorenes Feld. */
+    const istListe = Array.isArray(s[name]);
+    if (istListe !== Array.isArray(wert)) return;
+    if (wert !== null && typeof wert !== 'object' && typeof s[name] === 'object') return;
+    s[name] = wert;
+  }
+
+  const alsText = (w) => {
+    try { return JSON.stringify(w === undefined ? null : w); } catch (e) { return null; }
+  };
+
+  function standAufnehmen(s) {
+    const raus = {};
+    FELDER.forEach((f) => { raus[f] = alsText(holeFeld(s, f)); });
+    return raus;
+  }
+
+  /* ------------------------------------------------------------------
+     Holen
+
+     Läuft einmal beim Start und nach jeder Anmeldung. Danach schreibt
+     nur noch der Browser.
+     ------------------------------------------------------------------ */
+
+  function holen() {
+    if (!amServer()) {
+      bereit = false;
+      zustand.an = false;
+      return Promise.resolve(null);
+    }
+
+    const s = TT.store.get();
+    /* Was hier seit dem letzten Abgleich verändert wurde, behält den
+       Vorrang. Beim allerersten Holen gibt es keinen letzten Abgleich –
+       dann gilt alles als unberührt und der Server gewinnt überall, wo
+       er etwas hat. */
+    const angefasst = {};
+    if (letzterStand) {
+      FELDER.forEach((f) => {
+        angefasst[f] = alsText(holeFeld(s, f)) !== letzterStand[f];
+      });
+    }
+
+    return TT.api.ruf('ablage').then((d) => {
+      const vomServer = (d && d.ablage) || {};
+      let uebernommen = 0;
+
+      TT.store.update((st) => {
+        FELDER.forEach((f) => {
+          if (!Object.prototype.hasOwnProperty.call(vomServer, f)) return;
+          if (angefasst[f]) return;
+          setzeFeld(st, f, vomServer[f]);
+          uebernommen++;
+        });
+      }, 'abgleich');
+
+      /* Nach dem Übernehmen ist der Zustand hier der Maßstab. Alles,
+         was der Server nicht hatte oder was hier neuer ist, geht beim
+         nächsten Schreiben hinaus. */
+      letzterStand = {};
+      const jetzt = TT.store.get();
+      FELDER.forEach((f) => {
+        letzterStand[f] = Object.prototype.hasOwnProperty.call(vomServer, f) && !angefasst[f]
+          ? alsText(holeFeld(jetzt, f))
+          : null;   // null heißt: der Server kennt es noch nicht
+      });
+
+      bereit = true;
+      zustand.an = true;
+      zustand.fehler = '';
+      zustand.zuletzt = Date.now();
+      zustand.belegt = Number(d && d.belegt) || 0;
+
+      /* Was der Server noch nicht hat, gleich nachreichen. */
+      planen();
+      return { uebernommen };
+    }, (e) => {
+      /* Ein Server, der schweigt, darf die Anwendung nicht anhalten.
+         Sie läuft mit dem Stand aus diesem Browser weiter. */
+      bereit = false;
+      zustand.an = false;
+      zustand.fehler = (e && e.text) || 'Der Abgleich ist gerade nicht möglich.';
+      return null;
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     Schreiben
+
+     `store.speichern()` ruft `angestossen()` bei jeder Änderung. Was
+     sich wirklich geändert hat, ergibt der Vergleich mit dem letzten
+     Stand – so muss keine Aufrufstelle wissen, welches Feld sie
+     angefasst hat.
+     ------------------------------------------------------------------ */
+
+  function angestossen() {
+    if (!bereit || !amServer()) return;
+    if (uhr) clearTimeout(uhr);
+    uhr = setTimeout(schicken, WARTEN_MS);
+  }
+
+  function offeneFelder() {
+    const s = TT.store.get();
+    const raus = {};
+    let etwas = false;
+    FELDER.forEach((f) => {
+      const jetzt = alsText(holeFeld(s, f));
+      if (jetzt === null) return;
+      if (letzterStand && jetzt === letzterStand[f]) return;
+      raus[f] = JSON.parse(jetzt);
+      etwas = true;
+    });
+    return etwas ? raus : null;
+  }
+
+  function schicken() {
+    clearTimeout(uhr);
+    uhr = null;
+    if (!bereit || !amServer()) return Promise.resolve(null);
+    if (laeuft) { nochmal = true; return Promise.resolve(null); }
+
+    const felder = offeneFelder();
+    if (!felder) return Promise.resolve(null);
+
+    /* Der Stand wird vor dem Senden festgehalten, nicht danach: Wer
+       während des Sendens weitertippt, soll beim nächsten Lauf genau
+       diese Änderung noch einmal mitschicken. */
+    const gesendet = {};
+    Object.keys(felder).forEach((f) => { gesendet[f] = alsText(felder[f]); });
+
+    laeuft = true;
+    return TT.api.ruf('ablage/setzen', { felder }).then((d) => {
+      laeuft = false;
+      letzterStand = Object.assign({}, letzterStand, gesendet);
+      zustand.an = true;
+      zustand.fehler = '';
+      zustand.zuletzt = Date.now();
+      zustand.belegt = Number(d && d.belegt) || zustand.belegt;
+      if (nochmal) { nochmal = false; planen(); }
+      return d;
+    }, (e) => {
+      laeuft = false;
+      zustand.an = false;
+      zustand.fehler = (e && e.text) || 'Der Abgleich ist gerade nicht möglich.';
+      /* Nicht als gesendet vermerken – beim nächsten Anlauf geht es
+         noch einmal hinaus. Bei einer vollen Ablage (413) hilft
+         Wiederholen allerdings nicht; dann bleibt es beim Hinweis. */
+      if (e && e.status === 413) {
+        letzterStand = Object.assign({}, letzterStand, gesendet);
+      }
+      return null;
+    });
+  }
+
+  function planen() {
+    if (uhr) clearTimeout(uhr);
+    uhr = setTimeout(schicken, 120);
+  }
+
+  /* Beim Verlassen der Seite noch einmal – sonst ginge verloren, was in
+     den letzten anderthalb Sekunden eingetragen wurde. `keepalive`
+     sorgt dafür, dass die Anfrage den Seitenwechsel überlebt. */
+  function beimVerlassen() {
+    if (!bereit || !amServer() || laeuft) return;
+    const felder = offeneFelder();
+    if (!felder) return;
+    try {
+      const keks = document.cookie.match(/(?:^|;\s*)tt_schutz=([^;]*)/);
+      fetch('/api/ablage/setzen', {
+        method: 'POST',
+        credentials: 'same-origin',
+        keepalive: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-TT-Schutz': keks ? decodeURIComponent(keks[1]) : ''
+        },
+        body: JSON.stringify({ felder })
+      });
+    } catch (e) { /* Beim Schließen ist ein Fehler nicht mehr zu melden */ }
+  }
+
+  if (typeof window !== 'undefined' && window.addEventListener) {
+    window.addEventListener('pagehide', beimVerlassen);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') beimVerlassen();
+    });
+  }
+
+  /* Nach dem Abmelden darf nichts mehr hinausgehen – und der nächste
+     angemeldete Mensch an diesem Gerät soll seinen eigenen Stand holen,
+     nicht den vorigen weiterschreiben. */
+  function zuruecksetzen() {
+    if (uhr) clearTimeout(uhr);
+    uhr = null;
+    letzterStand = null;
+    bereit = false;
+    laeuft = false;
+    nochmal = false;
+    zustand.an = false;
+  }
+
+  TT.abgleich = {
+    FELDER, EINSTELLUNGEN,
+    holen, angestossen, schicken, zuruecksetzen,
+    get zustand() { return zustand; },
+    get bereit() { return bereit; }
+  };
+})(window.TT = window.TT || {});
+
 /* ===== markt.js ===== */
 /* =====================================================================
    TrimmoTrade – der echte Markt
@@ -14164,10 +14951,17 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   /* Ein einzelnes echtes Inserat nachholen – für einen geteilten
      Verweis auf etwas, das nicht in den ersten 120 lag. */
-  function objekt(id) {
-    if (TT.data.byId[id]) return Promise.resolve(TT.data.byId[id]);
+  /**
+   * Ein einzelnes echtes Inserat holen.
+   *
+   * Mit `neu` auch dann, wenn es schon im Bestand liegt – nach einer
+   * Buchung oder einem neuen Zeitfenster hat sich daran etwas geändert,
+   * und die Zahl der freien Plätze hängt an den Buchungen aller.
+   */
+  function objekt(id, neu) {
+    if (TT.data.byId[id] && !neu) return Promise.resolve(TT.data.byId[id]);
     if (!TT.api || !TT.api.da || !/^tt[0-9a-f]{16}$/.test(String(id))) {
-      return Promise.resolve(null);
+      return Promise.resolve(TT.data.byId[id] || null);
     }
     return TT.api.ruf('objekt/' + encodeURIComponent(id))
       .then((d) => {
@@ -15024,7 +15818,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   }
 
   /* ================================================================
-     Tarifsperren und Anzeigen
+     Tarifsperren
      ================================================================ */
 
   /* Eine Sperre zeigt immer, was dahinterliegt – nie nur ein Schloss.
@@ -15039,29 +15833,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       </div>
       <button type="button" class="knopf knopf--klein" data-tu="sperre" data-leistung="${leistungId}">Ansehen</button>
     </div>`;
-  }
-
-  /* Anzeigen sind immer gekennzeichnet und sehen nie aus wie ein Inserat. */
-  function anzeige(schluessel, variante) {
-    const a = TT.plan.anzeige(schluessel);
-    if (!a) return '';
-    return h`<aside class="anzeige anzeige--${variante || 'breit'}" aria-label="Anzeige">
-      <p class="anzeige__kopf">
-        <span class="anzeige__marke">Anzeige</span>
-        <span class="anzeige__art">${a.art}</span>
-        <button type="button" class="anzeige__warum" data-tu="warum-werbung"
-          title="Warum sehe ich das?" aria-label="Warum sehe ich das?">?</button>
-      </p>
-      <button type="button" class="anzeige__inhalt" data-tu="anzeige-klick">
-        <span class="anzeige__zeichen">${ico(a.icon)}</span>
-        <span class="anzeige__wort">
-          <b>${a.titel}</b>
-          <i>${a.text}</i>
-          <em>${a.absender} · ${a.ruf}${ico('chevron')}</em>
-        </span>
-      </button>
-      <a class="anzeige__ohne" href="#/plus">ohne Anzeigen lesen</a>
-    </aside>`;
   }
 
   /* ================================================================
@@ -15391,7 +16162,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     const beispiele = TT.markt ? TT.markt.zeigtBeispiele() : true;
     const echte = TT.markt ? TT.markt.echte : 0;
     const rechtlich = 'Rechtliche Erläuterungen sind allgemeine Hinweise und ersetzen keine Beratung. '
-      + 'Merkliste, Profil und Unterlagen bleiben im Browser dieses Geräts.';
+      + 'Unterlagen im Dokumententresor werden verschlüsselt, bevor sie den Browser verlassen.';
     if (!beispiele) {
       return U.t('Alle Inserate stammen von den Menschen, die sie eingestellt haben.') + ' ' + U.t(rechtlich);
     }
@@ -15748,10 +16519,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
        DSGVO) – es an ein Konto zu binden wäre absurd: Die Daten liegen
        auf dem Gerät des Besuchers, nicht bei uns. */
     'daten', 'daten-export', 'daten-loeschen',
-    /* Erklärungen, keine Funktionen: die Tastaturhilfe, die Auskunft
-       darüber, warum eine Anzeige erscheint, und die Anzeige selbst.
-       Gerade die Werbetransparenz darf hinter keiner Anmeldung liegen. */
-    'hilfe', 'warum-werbung', 'anzeige-klick'
+    /* Eine Erklärung, keine Funktion: die Tastaturhilfe. */
+    'hilfe'
   ]);
 
   /* Ganze Familien statt einzelner Namen: Die Hilfe ist ohne Anmeldung
@@ -15879,13 +16648,22 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <p>Keine bessere Platzierung, keinen Vorrang bei Vermietern und keinen Frühzugang zu Inseraten.
               Alle sehen jedes Inserat in derselben Sekunde.</p></div>
           </div>`,
-        fuss: h`<a class="knopf knopf--still" href="#/plus" data-tu="dialog-zu">Alle Unterschiede ansehen</a>
-          <button type="button" class="knopf" data-tu="plus-testen">${ico('plus5')}Plus in dieser Vorführung aktivieren</button>`
+        /* Mit Server führt der Weg zur Preisseite. Ein Knopf „Plus
+           aktivieren“ direkt hier wäre eine Zusage, die niemand
+           einlösen kann, solange kein Zahlungsweg eingerichtet ist –
+           und eine Zahlungspflicht ohne Bestellstrecke wäre nach
+           § 312j BGB ohnehin unzulässig. Ohne Server bleibt der
+           Schalter, mit dem sich die Vorführung durchspielen lässt. */
+        fuss: TT.plan.amServer()
+          ? h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Verstanden</button>
+            <a class="knopf" href="#/plus" data-tu="dialog-zu">${ico('plus5')}Tarife ansehen</a>`
+          : h`<a class="knopf knopf--still" href="#/plus" data-tu="dialog-zu">Alle Unterschiede ansehen</a>
+            <button type="button" class="knopf" data-tu="plus-testen">${ico('plus5')}Plus in dieser Vorführung aktivieren</button>`
       });
     },
 
     'plus-testen'() {
-      TT.plan.wechseln('plus', 'monat');
+      if (!TT.plan.wechseln('plus', 'monat')) { dialogZu(); gehe('plus'); return; }
       dialogZu();
       toast('Plus ist aktiv. In der Vorführung kostenlos und jederzeit umschaltbar.', 'gut');
       neuZeichnen();
@@ -15927,26 +16705,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       });
     },
 
-    'warum-werbung'() {
-      dialog({
-        titel: 'Warum sehe ich Anzeigen?',
-        inhalt: h`<p>TrimmoTrade ist im freien Tarif vollständig nutzbar – die Suche, die Karte, der Prüfhinweis,
-            die Vergleichsmiete und alle Rechner. Bezahlt wird das über Anzeigen.</p>
-          <p><b>Was wir dabei nicht tun:</b></p>
-          <ul class="liste-schlicht">
-            <li>Anzeigen sehen nie aus wie ein Inserat und stehen nie in der Trefferreihenfolge.</li>
-            <li>Kein Werbetreibender bekommt Einfluss darauf, welche Wohnungen dir angezeigt werden.</li>
-            <li>Es werden keine Daten über dich an Werbetreibende gegeben – die Auswahl entsteht im Browser.</li>
-          </ul>
-          <p class="fein">In dieser Vorführung sind alle Anzeigen erfunden und führen nirgendwohin.</p>`,
-        fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Verstanden</button>
-          <a class="knopf" href="#/plus" data-tu="dialog-zu">Ohne Anzeigen lesen</a>`
-      });
-    },
 
-    'anzeige-klick'() {
-      toast('Beispielanzeige – sie führt in dieser Vorführung nirgendwohin.');
-    },
     palette() { paletteOeffnen(); },
     'palette-zu'() { paletteZu(); },
     'dialog-zu'() { dialogZu(); },
@@ -15969,10 +16728,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       const groesse = new Blob([JSON.stringify(s)]).size;
       dialog({
         titel: 'Meine Daten',
-        inhalt: h`<p>Alles, was du hier eingibst, liegt im Speicher dieses Browsers – Merkliste,
-          Suchaufträge, Nachrichten, eigene Inserate, Profil und Notizen. Nichts davon geht an einen Server,
-          nichts an Dritte. Übertragen wird allein die Anmeldung; was dabei gespeichert wird, steht in der
-          <a href="#/recht/datenschutz">Datenschutzerklärung</a>.</p>
+        inhalt: h`<p>Alles, was du hier eingibst, liegt zuerst im Speicher dieses Browsers – Merkliste,
+          Suchaufträge, Nachrichten, eigene Inserate, Profil und Notizen. Ohne Anmeldung bleibt es dort und
+          geht an niemanden. Bist du angemeldet, liegt derselbe Stand zusätzlich in deinem Konto, damit du
+          ihn auf jedem deiner Geräte wiederfindest; ausgewertet wird er nicht, und an Dritte geht nichts.
+          Das Einzelne steht in der <a href="#/recht/datenschutz">Datenschutzerklärung</a>.</p>
         <ul class="liste-schlicht">
           <li>${Object.keys(s.merkliste).length} Merkungen</li>
           <li>${s.agenten.length} Suchaufträge</li>
@@ -15980,7 +16740,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <li>${s.eigeneInserate.length} eigene Inserate</li>
           <li>Belegter Speicher: rund ${U.num(Math.ceil(groesse / 1024))} kB</li>
         </ul>
-        <p>Beim Leeren der Browserdaten verschwindet auch dieser Stand.</p>
+        <p>Beim Leeren der Browserdaten verschwindet dieser Stand hier. Bist du angemeldet, holt ihn die
+          nächste Anmeldung aus deinem Konto zurück – „Alles zurücksetzen“ löscht ihn dagegen an beiden
+          Stellen.</p>
         ${TT.tresor && TT.tresor.eingerichtet() ? h`<div class="hinweisbox">${ico('schloss')}
           <div><b>Der Dokumententresor liegt getrennt davon</b>
           <p>Er wird hier weder gesichert noch gelöscht: Verschlüsselte Unterlagen in eine Klartextdatei zu
@@ -15996,8 +16758,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     },
 
     'daten-loeschen'() {
-      if (!confirm('Merkliste, Profil, Suchaufträge und Nachrichten werden gelöscht. '
-        + 'Der Dokumententresor bleibt bestehen – ihn leerst du dort. Fortfahren?')) return;
+      if (!confirm('Merkliste, Profil, Suchaufträge und Nachrichten werden gelöscht – in diesem Browser '
+        + 'und, wenn du angemeldet bist, auch in deinem Konto. Der Dokumententresor bleibt bestehen; '
+        + 'ihn leerst du dort. Fortfahren?')) return;
       TT.store.zuruecksetzen();
       dialogZu();
       toast('Alles zurückgesetzt.', 'info');
@@ -16057,8 +16820,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
          Vorher wurde die Vorgabe hier ausnahmslos unterdrückt – damit
          schloss „Anmelden“ im Kontohinweis brav den Dialog und blieb
          dann stehen, ebenso „Alle Unterschiede ansehen“ in der
-         Tarifsperre und „Ohne Anzeigen lesen“ unter einer Anzeige. Fünf
-         Knöpfe, die aussahen wie Verweise und keine waren.
+         Tarifsperre. Knöpfe, die aussahen wie Verweise und keine waren.
 
          Deshalb: Bei einem echten Ziel läuft erst die Aktion (sie
          schließt den Dialog), dann folgt der Browser dem Verweis. */
@@ -16128,10 +16890,27 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     if (TT.konto) {
       TT.konto.on((k, grund) => {
         if (grund !== 'abmeldung' && grund !== 'anmeldung') return;
-        /* Nicht nur den Inhalt: Die Kopfzeile trägt im Gastzustand einen
-           anderen Verweis auf der Marke und einen Anmeldeknopf. */
-        schaleZeichnen();
-        neuZeichnen();
+        /* Beim Anmelden den eigenen Stand holen – erst danach zeichnen,
+           sonst sieht man eine halbe Sekunde lang die leere Merkliste
+           des Gastzustands. Beim Abmelden das Gegenteil: Es darf nichts
+           mehr hinausgehen, und der nächste Mensch an diesem Gerät soll
+           seinen eigenen Stand holen. */
+        const fertig = () => { schaleZeichnen(); neuZeichnen(); };
+        if (grund === 'abmeldung') {
+          if (TT.abgleich) TT.abgleich.zuruecksetzen();
+          if (TT.tresor) TT.tresor.sperren();
+          fertig();
+          return;
+        }
+        /* Beim Anmelden zwei Dinge holen: den eigenen Stand und den Kopf
+           des Tresors. Ohne den zweiten stünde auf einem neuen Gerät
+           „noch kein Tresor eingerichtet“, obwohl einer da ist – und wer
+           das liest, richtet einen zweiten ein und verliert den ersten. */
+        Promise.all([
+          TT.abgleich ? TT.abgleich.holen() : null,
+          TT.tresor ? TT.tresor.metaHolen() : null,
+          TT.plan ? TT.plan.standHolen() : null
+        ]).then(fertig, fertig);
       });
       window.addEventListener('storage', (e) => {
         if (e.key !== 'trimmotrade.konto.v1' && e.key !== 'trimmotrade.sitzung.v1') return;
@@ -16174,7 +16953,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     zielMerken, zielHolen,
     badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
     ART_LABEL, ART_ICON, artLabel, artIcon, ico, aktionRegistrieren, AKTIONEN,
-    sperrHinweis, anzeige, NAV, dateiSichern,
+    sperrHinweis, NAV, dateiSichern,
     aktualisiereZaehler, themeSetzen, paletteOeffnen, kartenMarken, preisZeile
   });
 })(window.TT = window.TT || {});
@@ -16244,7 +17023,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     const fehlend = Object.keys(s.profil.unterlagen).filter((k) => !s.profil.unterlagen[k] && k !== 'wbs' && k !== 'buergschaft');
     if (s.profilAngelegt && fehlend.length) out.push({
       icon: 'blatt', dringend: false, titel: 'Bewerbermappe unvollständig',
-      text: fehlend.length + ' ' + U.plural(fehlend.length, 'Unterlage fehlt', 'Unterlagen fehlen') + ' – wer sie parat hat, ist schneller.',
+      text: U.t(U.plural(fehlend.length, '{0} Unterlage fehlt – wer sie parat hat, ist schneller.',
+        '{0} Unterlagen fehlen – wer sie parat hat, ist schneller.')).replace('{0}', fehlend.length),
       ziel: 'profil', knopf: 'Ergänzen'
     });
 
@@ -16418,8 +17198,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             </a>`)}
           </div>
         </section>
-
-        ${!P.istPlus() ? ui.anzeige('start', 'breit') : ''}
 
         ${gesehen.length ? h`<section class="block">
           <div class="block__kopfzeile"><h2>${ico('verlauf')}Zuletzt angesehen</h2></div>
@@ -16875,7 +17653,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     return h`<section class="topanzeigen" aria-label="Bezahlte Platzierungen">
       <p class="topanzeigen__kopf">
         <span class="topanzeigen__marke">${ico('blitz')}Top-Anzeigen</span>
-        <button type="button" class="anzeige__warum" data-tu="warum-top"
+        <button type="button" class="topanzeigen__warum" data-tu="warum-top"
           title="Warum steht das hier?" aria-label="Warum steht das hier?">?</button>
       </p>
       <div class="ergebnisse__liste">
@@ -16899,13 +17677,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     /* Zwei Treffer sind fast so wenig wie keiner – die Hilfe darf nicht
        erst bei null erscheinen. */
     const knapp = bewertet.length < WENIG ? lockerungsKnoepfe(f) : '';
-    /* Anzeigen sitzen zwischen den Treffern, nie in der Reihenfolge:
-       sie haben eine eigene Gestalt und tragen immer ihre Kennzeichnung. */
-    const abstand = TT.plan.ANZEIGE_ABSTAND;
     return h`${topBlock(bewertet)}
     <div class="ergebnisse__liste">
-      ${teil.map((x, i) => h`${ui.inseratsKarte(x.l, x.b)}${(i + 1) % abstand === 0 && i + 1 < teil.length
-        ? ui.anzeige('treffer-' + Math.floor(i / abstand), 'breit') : ''}`)}
+      ${teil.map((x) => ui.inseratsKarte(x.l, x.b))}
     </div>
     ${knapp ? h`<div class="wenig">
       ${ico('lupe')}
@@ -17771,10 +18545,83 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   /* ------------------------- Termine ------------------------- */
 
+  /* ------------------------------------------------------------------
+     Besichtigungstermine
+
+     Bis hierher kamen die Zeitfenster aus dem erzeugten Bestand und die
+     Buchung stand im Speicher dieses Browsers – die anbietende Seite
+     erfuhr davon nichts. Jetzt legt sie die Fenster selbst an, der
+     Server zählt die Plätze aus den Buchungen, und eine Buchung geht
+     als Mail hinaus.
+
+     Wer sonst gebucht hat, sieht niemand. Sichtbar ist die Zahl der
+     freien Plätze – wer zu einer Besichtigung geht, hat nicht
+     eingewilligt, den Mitbewerbern namentlich bekannt zu werden.
+     ------------------------------------------------------------------ */
+
+  /* Wem das Inserat gehört, sagt der Server mit `meins`. Ohne Server
+     bleibt `eigen` aus dem Browserspeicher. */
+  const eigenesInserat = (l) => !!(l && (l.meins || l.eigen));
+
+  function terminZeile(l, t, meins) {
+    const frei = Math.max(0, t.plaetze - t.belegt);
+    const voll = frei <= 0 && !t.meiner;
+    return h`<li class="${t.meiner ? 'is-gebucht' : ''} ${voll ? 'is-voll' : ''}">
+      <div><b>${U.dateDE(t.datum)}</b><span>${t.zeit} Uhr · ${U.t(t.art)}</span></div>
+      <span class="termine__frei">${voll ? U.t('ausgebucht')
+        : U.t('{0} frei').replace('{0}', frei + ' ' + U.t(U.plural(frei, 'Platz', 'Plätze')))}</span>
+      ${meins
+        ? h`<button type="button" class="ikon-btn" data-tu="termin-weg" data-termin="${t.id}"
+            aria-label="Termin entfernen">${ico('muell')}</button>`
+        : t.meiner
+          ? h`<button type="button" class="knopf knopf--klein knopf--still" data-tu="termin-ab"
+              data-termin="${t.id}">Absagen</button>`
+          : h`<button type="button" class="knopf knopf--klein" data-tu="termin-buchen"
+              data-termin="${t.id}" ${voll ? 'disabled' : ''}>${voll ? 'voll' : 'nehmen'}</button>`}
+    </li>`;
+  }
+
+  /* Die Seite der anbietenden Seite: Fenster anlegen und entfernen. */
+  function termineVerwalten(l) {
+    const termine = l.besichtigungen || [];
+    return h`<section class="block" id="termine">
+      <h2>${ico('kalender')}Besichtigungstermine</h2>
+      <p class="block__unter">Feste Zeitfenster statt Massenandrang. Wer einen Platz nimmt, bekommt ihn –
+        und du bekommst eine Mail. Wie viele dabei sind, entscheidest du je Fenster.</p>
+      ${termine.length ? h`<ul class="termine">${termine.map((t) => terminZeile(l, t, true))}</ul>`
+        : h`<p class="info-meldung">${ico('info')}Noch kein Termin angelegt. Zwei feste Fenster ersparen
+          erfahrungsgemäß ein Dutzend Nachrichten.</p>`}
+      <form class="formraster formraster--drei" data-tu-submit="termin-neu" data-id="${l.id}">
+        <label class="feld"><span>Datum</span>
+          <input type="date" name="datum" required min="${U.isoDate(TT.now())}"></label>
+        <label class="feld"><span>Uhrzeit</span>
+          <input type="time" name="zeit" required></label>
+        <label class="feld"><span>Plätze</span>
+          <input type="number" name="plaetze" min="1" max="50" value="1"></label>
+        <label class="feld"><span>Art</span>
+          <select name="art">
+            <option>Einzeltermin</option>
+            <option>Sammeltermin</option>
+            <option>Videobesichtigung</option>
+            <option>Offene Besichtigung</option>
+          </select></label>
+        <div class="feld feld--knopf">
+          <button type="submit" class="knopf knopf--still">${ico('plus')}Fenster anlegen</button>
+        </div>
+      </form>
+      <p class="fein">Wer gebucht hat, bekommt eine Absage per Mail, wenn du ein Fenster entfernst.
+        Die Namen der Buchenden stehen hier nicht – sie stehen in deinem Posteingang, sobald jemand
+        dir schreibt.</p>
+    </section>`;
+  }
+
   function termineBlock(l) {
-    const eintrag = S.get().merkliste[l.id];
-    const gebucht = eintrag && eintrag.termin;
-    if (!l.besichtigungen || !l.besichtigungen.length) {
+    if (eigenesInserat(l)) return termineVerwalten(l);
+
+    const termine = l.besichtigungen || [];
+    const meiner = termine.find((t) => t.meiner);
+
+    if (!termine.length) {
       return h`<section class="block" id="termine">
         <h2>${ico('kalender')}Besichtigung</h2>
         <p class="info-meldung">${ico('info')}Für dieses Objekt sind keine Termine hinterlegt.
@@ -17784,22 +18631,12 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     return h`<section class="block" id="termine">
       <h2>${ico('kalender')}Besichtigung buchen</h2>
       <p class="block__unter">Feste Zeitfenster statt Massenandrang. Ein Platz gehört dir, sobald du ihn nimmst.</p>
-      ${gebucht ? h`<div class="gut-meldung">${ico('pruefen')}
-        Du hast <b>${U.dateDE(gebucht.datum)} um ${gebucht.zeit}</b> gebucht (${gebucht.art}).
-        <button type="button" class="link" data-tu="termin-ab" data-id="${l.id}">Termin absagen</button></div>` : ''}
-      <ul class="termine">
-        ${l.besichtigungen.map((t) => {
-      const frei = t.plaetze - t.belegt;
-      const dieser = gebucht && gebucht.id === t.id;
-      return h`<li class="${dieser ? 'is-gebucht' : ''}">
-            <div><b>${U.dateDE(t.datum)}</b><span>${t.zeit} Uhr · ${t.art}</span></div>
-            <span class="termine__frei">${frei} ${U.plural(frei, 'Platz frei', 'Plätze frei')}</span>
-            <button type="button" class="knopf knopf--klein ${dieser ? 'knopf--still' : ''}"
-              data-tu="termin-buchen" data-id="${l.id}" data-termin="${t.id}" ${dieser ? 'disabled' : ''}>
-              ${dieser ? 'gebucht' : 'nehmen'}</button>
-          </li>`;
-    })}
-      </ul>
+      ${meiner ? h`<div class="gut-meldung">${ico('pruefen')}
+        ${U.t('Du hast den {0} um {1} Uhr.').replace('{0}', U.dateDE(meiner.datum)).replace('{1}', meiner.zeit)}
+        ${U.t('Die anbietende Seite weiß Bescheid.')}</div>` : ''}
+      <ul class="termine">${termine.map((t) => terminZeile(l, t, false))}</ul>
+      ${gast() ? h`<p class="info-meldung">${ico('info')}Zum Buchen brauchst du ein Konto –
+        sonst wüsste niemand, wer kommt. <a href="#/anmelden">Anmelden</a></p>` : ''}
       <p><button type="button" class="link" data-tu="checkliste" data-id="${l.id}">${ico('blatt')}Besichtigungs-Checkliste öffnen</button></p>
     </section>`;
   }
@@ -18009,7 +18846,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
                   ${ico('blatt')}Exposé als Datei${P.darf('exposeExport') ? '' : ' (Plus)'}</button>
               </p>
             </div>
-            ${ui.anzeige('objekt-' + l.id, 'schmal')}
           </aside>
         </div>
       </div>`,
@@ -18057,13 +18893,58 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   A_('notiz', U.debounce((el) => { S.setNotiz(el.dataset.id, el.value); }, 500));
 
+  /* Die Termine liegen beim Server, nicht im Browser: Ein Platz, den
+     nur dieses Gerät kennt, ist kein Platz. Nach jeder Änderung wird
+     das Inserat neu geholt – die Zahl der freien Plätze hängt an den
+     Buchungen aller. */
+  function terminFertig(id, meldung, ton) {
+    return TT.markt.objekt(id, true).then(() => {
+      ui.neuZeichnen();
+      if (meldung) ui.toast(meldung, ton || 'gut');
+    });
+  }
+
   A_('termin-buchen', (el) => {
-    const t = S.terminBuchen(el.dataset.id, el.dataset.termin);
-    if (t) ui.toast('Termin am ' + U.dateDE(t.datum) + ' um ' + t.zeit + ' gebucht.', 'gut');
-    ui.neuZeichnen();
+    const id = ui.params.arg;
+    ui.knopfArbeit(el, TT.api.ruf('termin/buchen', { id: el.dataset.termin })
+      .then((d) => {
+        const t = (d.termine || []).find((x) => x.meiner);
+        return terminFertig(id, t
+          ? U.t('Termin am {0} um {1} Uhr gebucht.').replace('{0}', U.dateDE(t.datum)).replace('{1}', t.zeit)
+          : 'Termin gebucht.');
+      }, (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')), 'Einen Moment …');
   });
 
-  A_('termin-ab', (el) => { S.terminAbsagen(el.dataset.id); ui.toast('Termin abgesagt.'); ui.neuZeichnen(); });
+  A_('termin-ab', (el) => {
+    const id = ui.params.arg;
+    ui.knopfArbeit(el, TT.api.ruf('termin/absagen', { id: el.dataset.termin })
+      .then(() => terminFertig(id, 'Termin abgesagt. Der Platz ist wieder frei.', 'info'),
+        (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')));
+  });
+
+  A_('termin-neu', (el) => {
+    const f = new FormData(el);
+    const id = el.dataset.id;
+    const knopf = U.$('button[type="submit"]', el) || el;
+    ui.knopfArbeit(knopf, TT.api.ruf('termin/neu', {
+      inserat: id,
+      datum: f.get('datum') || '',
+      zeit: f.get('zeit') || '',
+      plaetze: Number(f.get('plaetze')) || 1,
+      art: f.get('art') || 'Einzeltermin'
+    }).then(() => terminFertig(id, 'Zeitfenster angelegt.'),
+      (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')), 'Wird angelegt …');
+  });
+
+  A_('termin-weg', (el) => {
+    if (!confirm(U.t('Dieses Zeitfenster entfernen? Wer gebucht hat, bekommt eine Absage.'))) return;
+    const id = ui.params.arg;
+    ui.knopfArbeit(el, TT.api.ruf('termin/weg', { id: el.dataset.termin })
+      .then((d) => terminFertig(id, d.abgesagt
+        ? U.t('Entfernt. {0} Buchung abgesagt.').replace('{0}', d.abgesagt)
+        : 'Entfernt.', 'info'),
+        (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')));
+  });
 
   A_('objekt-teilen', (el) => {
     const l = TT.data.byId[el.dataset.id];
@@ -19749,8 +20630,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           </section>`)}
         </div>
 
-        ${!P.istPlus() ? ui.anzeige('merkliste', 'breit') : ''}
-
         <p class="fein">Der Status lässt sich in jeder Karte umstellen. TrimmoTrade zählt daraus deine Erfolgsquote –
           nützlich, um zu merken, ob die Suche zu eng oder das Anschreiben zu blass ist.</p>
       </div>`
@@ -20766,7 +21645,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         <header class="seite__kopf">
           <h1>${ico('person')}Dein Profil</h1>
           <p class="seite__unter">TrimmoTrade sortiert und rechnet ausschließlich mit diesen Angaben.
-            Sie liegen im Speicher dieses Browsers und werden nirgendwohin übertragen.</p>
+            Gerechnet wird auf deinem Gerät. Bist du angemeldet, liegen sie zusätzlich in deinem Konto,
+            damit du sie auf jedem Gerät hast; an eine anbietende Seite geht davon nur, was du in einer
+            Anfrage ausdrücklich freigibst.</p>
           <p class="gespeichert" id="profil-gespeichert" aria-live="polite">${ico('speichern')}Änderungen werden sofort übernommen</p>
         </header>
 
@@ -21343,8 +22224,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       : 'noch keine gewählt'}</i>
       </div>
       <ul class="bilder__liste" id="inserat-bilder-liste">${bilderListe()}</ul>
-      <p class="fein">Die Bilder werden beim Ablegen auf ${U.num(BILD_KANTE)} Pixel Kantenlänge verkleinert und
-        bleiben im Speicher dieses Geräts. Übertragen wird keines davon.</p>
+      <p class="fein">Die Bilder werden schon in deinem Browser auf ${U.num(BILD_KANTE)} Pixel Kantenlänge
+        verkleinert und erst dann übertragen – ein Inserat, dessen Fotos niemand sieht, wäre keins. Beim
+        Löschen des Inserats verschwinden sie mit.</p>
       <div class="hinweisbox">${ico('warnung')}
         <div><b>Was auf ein Inseratsfoto nicht gehört</b>
         <p>Keine Personen ohne deren Einwilligung, keine Kennzeichen, keine Namensschilder an Klingel oder
@@ -22558,7 +23440,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <i>${k.wann}</i>
           </a>`)}
         </div>
-        ${!P.istPlus() ? ui.anzeige('werkzeuge', 'breit') : ''}
       </div>`
     };
   }
@@ -23541,7 +24422,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             und das deshalb frei bleibt.</p>
           ${ui.sperrHinweis('marktdaten')}
         </section>
-        ${ui.anzeige('markt', 'breit')}
       </div>`
     };
   }
@@ -23757,9 +24637,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         '2 Objekte im Vergleich',
         'Vertragslupe: erster Fund',
         'Ringtausch: direkte Tausche',
-        'mit Anzeigen']
+        'Ohne Werbung – die gibt es hier nirgends']
       : ['Alles aus dem freien Tarif',
-        'Keine Anzeigen',
         'Unbegrenzt viele Suchaufträge',
         '6 Objekte im Vergleich',
         'Vertragslupe vollständig, mit Erläuterung zu jedem Fund',
@@ -23983,16 +24862,20 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
                 gelöscht, er wird nur nicht mehr geprüft, bis du wieder Platz schaffst.</p>
             </details>
             <details>
-              <summary>Warum gibt es überhaupt Anzeigen?</summary>
-              <p>Weil die Suche sonst nicht vollständig kostenlos bleiben könnte. Wer eine Wohnung sucht, hat oft
-                gerade wenig Geld – ausgerechnet dann eine Bezahlschranke vor die Suche zu stellen, wäre verkehrt.
-                Anzeigen sind deshalb der Preis des freien Tarifs, und sie sind immer als Anzeige gekennzeichnet.</p>
+              <summary>Wie kann der freie Tarif kostenlos sein?</summary>
+              <p>Weil ihn diejenigen tragen, die Plus nehmen oder ein Inserat hervorheben. Wer eine Wohnung
+                sucht, hat oft gerade wenig Geld – ausgerechnet dann eine Bezahlschranke vor die Suche zu
+                stellen, wäre verkehrt. Deshalb ist alles, was vor Schaden bewahrt oder gerechnet werden
+                muss, dauerhaft frei.</p>
+              <p><b>Werbung gibt es hier nicht</b> – keine Banner, kein Werbenetzwerk, keine Anzeigen im
+                Gewand eines Inserats. Das ist keine Einstellung, die sich umlegen ließe: Es ist nichts
+                eingebaut, was Werbung ausspielen könnte.</p>
             </details>
             <details>
-              <summary>Bekommen Werbetreibende meine Daten?</summary>
-              <p>Nein. Welche Anzeige erscheint, entscheidet sich im Browser anhand der Stelle auf der Seite –
-                nicht anhand deines Profils, deiner Suche oder deines Verhaltens. Es gibt kein Werbenetzwerk,
-                keine Kennung und nichts, was übertragen würde.</p>
+              <summary>Bekommt irgendjemand meine Daten?</summary>
+              <p>Nein. Es gibt kein Werbenetzwerk, keine Kennung für Dritte und nichts, was über dein
+                Verhalten übertragen würde. Gezählt wird nur, wie oft eine Ansicht an einem Tag insgesamt
+                geöffnet wurde – ohne Kennung, ohne Adresse, ohne Reihenfolge.</p>
             </details>
             <details>
               <summary>Bringt Plus mir eine Wohnung schneller?</summary>
@@ -24049,10 +24932,21 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   A_('tarif-intervall', (el) => { intervall = el.dataset.wert; ui.neuZeichnen(); });
 
-  A_('gruender-sichern', () => {
-    const nummer = P.gruenderSichern();
-    if (!nummer) { ui.toast('Es ist kein Platz mehr frei.', 'schlecht'); ui.neuZeichnen(); return; }
-    ui.neuZeichnen();
+  A_('gruender-sichern', (el) => {
+    /* Die Nummer vergibt der Server. Das Versprechen abzuwarten ist
+       kein Feinschliff: Wer zwei Sekunden früher zeichnet, zeigt eine
+       Nummer, die noch niemandem gehört. */
+    ui.knopfArbeit(el, Promise.resolve(P.gruenderSichern()).then((nummer) => {
+      if (!nummer) { ui.toast('Es ist kein Platz mehr frei.', 'schlecht'); ui.neuZeichnen(); return; }
+      ui.neuZeichnen();
+      gruenderDialog(nummer);
+    }, (e) => {
+      ui.toast((e && e.text) || 'Der Platz ließ sich nicht sichern.', 'schlecht');
+      ui.neuZeichnen();
+    }), 'Wird gesichert …');
+  });
+
+  function gruenderDialog(nummer) {
     ui.dialog({
       titel: 'Gründerplatz ' + U.num(nummer),
       inhalt: h`<p><b>Plus läuft ab sofort für ${P.GRUENDER.monate} Monate</b>, bis zum
@@ -24068,12 +24962,35 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       fuss: h`<a class="knopf knopf--still" href="#/werkzeuge" data-tu="dialog-zu">Werkzeuge ansehen</a>
         <button type="button" class="knopf" data-tu="dialog-zu">Los geht's</button>`
     });
-  });
+  }
 
   A_('plus-buchen', () => {
-    P.wechseln('plus', intervall);
-    ui.toast('Plus ist aktiv. In der Vorführung kostenlos und jederzeit umschaltbar.', 'gut');
-    ui.neuZeichnen();
+    if (P.wechseln('plus', intervall)) {
+      ui.toast('Plus ist aktiv. In der Vorführung kostenlos und jederzeit umschaltbar.', 'gut');
+      ui.neuZeichnen();
+      return;
+    }
+    /* Mit Server, aber ohne eingerichteten Zahlungsweg: Hier wird
+       nichts vorgetäuscht. Was jetzt geht, ist der Gründerplatz. */
+    ui.dialog({
+      titel: 'Plus buchen',
+      inhalt: h`<p>Für die Bezahlung fehlt noch der Zahlungsdienstleister. Solange der nicht
+          angeschlossen ist, gibt es hier keinen Kaufknopf – ein Knopf, der so täte, als hätte er
+          etwas abgebucht, wäre nach § 312j BGB nicht einmal zulässig.</p>
+        ${P.gruenderFrei() > 0 && !P.gruender().nummer
+          ? h`<p><b>Was heute geht:</b> ein Gründerplatz. Zwölf Monate mit allen Plus-Leistungen,
+            ohne Zahlungsdaten und ohne Verlängerung. Noch ${U.num(P.gruenderFrei())}
+            ${U.t(U.plural(P.gruenderFrei(), 'Platz', 'Plätze'))} frei.</p>`
+          : h`<p class="fein">Sobald die Bezahlung eingerichtet ist, steht sie hier.</p>`}`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Schließen</button>
+        ${P.gruenderFrei() > 0 && !P.gruender().nummer
+          ? h`<button type="button" class="knopf" data-tu="gruender-sichern-dialog">${ico('stern')}Platz sichern</button>` : ''}`
+    });
+  });
+
+  A_('gruender-sichern-dialog', (el) => {
+    ui.dialogZu();
+    ui.AKTIONEN['gruender-sichern'](el);
   });
 
   ui.ansichten.plus = ansicht;
@@ -24115,10 +25032,15 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       <p>Beim Freigeben wandern die Dokumentschlüssel in den <b>Fragmentteil</b> des Verweises, also hinter das
         Rautezeichen. Browser senden diesen Teil nie an einen Server. Ein Betreiber sähe also die Anfrage,
         aber nie den Schlüssel.</p>
-      <p><b>Was hier fehlt, ist der Server.</b> In dieser Vorführung liegt das Chiffrat in diesem Browser, der
-        Verweis funktioniert deshalb nur auf diesem Gerät. Im Betrieb läge dort das Chiffrat und sonst nichts:
-        kein Schlüssel, keine Datei im Klartext, nichts, was ein Einbruch verwertbar machen würde. Ablauf und
-        Abrufzähler würde der Server durchsetzen – hier tut es die Anwendung selbst.</p>
+      ${T.amServer()
+        ? h`<p><b>Wo das Chiffrat liegt.</b> Auf dem Server – und dort liegt genau das und sonst nichts: kein
+          Schlüssel, keine Datei im Klartext, nichts, was ein Einbruch verwertbar machen würde. Deshalb geht
+          dein Verweis auch bei der Person auf, der du ihn schickst, und deshalb setzt der Server Ablauf,
+          Abrufzähler und Widerruf durch. Täte das dein Browser, zählte der Empfänger in seinem eigenen
+          Speicher – also gar nicht.</p>`
+        : h`<p><b>Was hier fehlt, ist der Server.</b> Diese Kopie läuft ohne Verbindung; das Chiffrat liegt in
+          diesem Browser, und der Verweis geht deshalb nur auf diesem Gerät auf. Auf <b>trimmotrade.de</b>
+          liegt es auf dem Server – auch dort nur das Chiffrat –, und der Verweis funktioniert überall.</p>`}
     </details>`;
   }
 
@@ -24645,8 +25567,10 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <p>Alles hinter dem Rautezeichen ist der Schlüssel. Wer den Verweis weitergibt, gibt die Unterlagen
               weiter. Verschick ihn deshalb einzeln und nicht in Verteilern.</p></div>
           </div>
-          <p class="fein">In dieser Vorführung liegen die verschlüsselten Dateien in diesem Browser – der
-            Verweis funktioniert deshalb nur auf diesem Gerät.</p>`,
+          ${T.amServer() ? h`<p class="fein">Der Verweis geht auf jedem Gerät auf – die verschlüsselten
+            Dateien liegen auf dem Server, der Schlüssel steht nur in diesem Verweis.</p>`
+            : h`<p class="fein">Diese Kopie läuft ohne Verbindung: Die verschlüsselten Dateien liegen in
+            diesem Browser, der Verweis geht deshalb nur hier auf.</p>`}`,
         fuss: h`<button type="button" class="knopf knopf--still" data-tu="kopieren" data-quelle="#freigabe-link">${ico('kopieren')}Verweis kopieren</button>
           <button type="button" class="knopf" data-tu="dialog-zu">Fertig</button>`
       });
@@ -24659,14 +25583,20 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   });
 
   A_('freigabe-widerrufen', (el) => {
-    T.widerrufen(el.dataset.id);
-    ui.neuZeichnen();
-    ui.toast('Widerrufen. Der Verweis führt ab sofort ins Leere.', 'gut');
+    /* Mit Server wirkt der Widerruf dort – erst danach neu zeichnen,
+       sonst zeigt die Liste noch den alten Stand. */
+    Promise.resolve(T.widerrufen(el.dataset.id)).then(() => {
+      laden();
+      ui.neuZeichnen();
+      ui.toast('Widerrufen. Der Verweis führt ab sofort ins Leere.', 'gut');
+    }, (e) => ui.toast((e && (e.text || e.message)) || 'Das ging nicht.', 'schlecht'));
   });
 
   A_('freigabe-loeschen', (el) => {
-    T.freigabeLoeschen(el.dataset.id);
-    ui.neuZeichnen();
+    Promise.resolve(T.freigabeLoeschen(el.dataset.id)).then(() => {
+      laden();
+      ui.neuZeichnen();
+    }, () => ui.neuZeichnen());
   });
 
   A_('freigabe-ansehen', (el) => {
@@ -24937,21 +25867,26 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
         <div class="block block--betont">
           <h2>${ico('schloss')}Das Wichtigste zuerst</h2>
-          <p>TrimmoTrade rechnet im Browser. Suche, Bewertung, Karte, Ringtausch, Merkliste, Vergleich,
-            Notizen und Profil entstehen auf deinem Gerät und bleiben dort. Sie werden nicht an den
-            Anbieter übertragen und nicht an Dritte weitergegeben.</p>
-          <p>Zum Server geht, was andere erreichen muss – und sonst nichts. Das sind vier Dinge: die
-            <b>Anmeldung</b> (Abschnitt 4), die <b>Inserate</b>, die du veröffentlichst (Abschnitt 5), die
-            <b>Anfragen</b>, die du schreibst oder bekommst (Abschnitt 6), und deine <b>Suchaufträge</b>,
-            damit die Mail auch dann herausgeht, wenn du gerade nicht hier bist (Abschnitt 7). Dazu
-            kommt, was du einer <b>WG-Gruppe</b> über dich erzählst, wenn du eine gründest oder ihr
-            beitrittst (Abschnitt 8).</p>
-          <p>Die Trennlinie verläuft nicht willkürlich: Ein Inserat ist eine Veröffentlichung und muss
-            andere erreichen. Eine Merkliste ist eine Notiz und geht niemanden etwas an.</p>
-          <p>Ohne Anmeldung geht auch das nicht: Suche und Inserate lassen sich ansehen, ohne dass ein
-            Konto entsteht.</p>
+          <p>TrimmoTrade rechnet im Browser. Suche, Bewertung, Karte, Ringtausch, Passung und jede
+            Schätzung entstehen auf deinem Gerät. <b>Ohne Anmeldung verlässt davon nichts deinen Browser</b> –
+            Suche und Inserate lassen sich ansehen, ohne dass ein Konto entsteht und ohne dass etwas über
+            dich gespeichert wird.</p>
+          <p>Mit einem Konto kommt eines hinzu: Dein Arbeitsstand liegt zusätzlich auf dem Server, damit du
+            ihn auf jedem deiner Geräte wiederfindest und nicht verlierst, wenn du die Browserdaten löschst.
+            Der Server verwahrt ihn und wertet ihn nicht aus – keine Suche über Profile, keine Auswertung,
+            keine Statistik (Abschnitt 11).</p>
+          <p>Zum Server geht damit: die <b>Anmeldung</b> (Abschnitt 4), die <b>Inserate</b>, die du
+            veröffentlichst (Abschnitt 5), die <b>Anfragen</b> und <b>Besichtigungstermine</b>
+            (Abschnitt 6), deine <b>Suchaufträge</b>, damit die Mail auch dann herausgeht, wenn du gerade
+            nicht hier bist (Abschnitt 7), was du einer <b>WG-Gruppe</b> über dich erzählst (Abschnitt 8),
+            dein <b>Arbeitsstand</b> für den Gerätewechsel (Abschnitt 11) und der <b>Dokumententresor</b> –
+            der allerdings verschlüsselt wird, bevor er den Browser verlässt, und für den Anbieter nicht
+            lesbar ist (Abschnitt 12).</p>
+          <p>Die Trennlinie verläuft nicht willkürlich: Was andere erreichen muss, gehört auf den Server.
+            Was nur dich angeht, liegt dort so, dass der Anbieter nichts damit anfängt – und die Unterlagen,
+            bei denen das nicht genügt, liegen verschlüsselt.</p>
           <p>Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten
-            gebildet und keine Werbung nach deinen Interessen ausgespielt. Gezählt wird nur, wie oft eine
+            gebildet und keine Werbung ausgespielt – es gibt hier keine. Gezählt wird nur, wie oft eine
             Ansicht an einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse, ohne Verlauf
             (Abschnitt 10). Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts,
             wozu eine Einwilligung nötig wäre.</p>
@@ -24997,9 +25932,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <li>${ico('pruefen')}<span>deine offenen Sitzungen: Zeitpunkt, IP-Adresse und Browserangabe des
               Geräts, damit du sie beenden kannst</span></li>
           </ul>
-          <p><b>Nicht auf dem Server liegen:</b> Merkliste, Vergleich, Bewerbungstafel, Notizen, Profil,
-            Suchverlauf, jede Berechnung und der Dokumententresor. Diese Daten verlassen deinen Browser
-            nicht.</p>
+          <p><b>Nicht im Konto stehen:</b> das Farbschema, die gewählte Ansichtsart und jede Berechnung
+            der Rechner – die entsteht bei jedem Aufruf neu auf deinem Gerät. Was du an Profil, Merkliste,
+            Vergleich, Bewerbungstafel und Suchaufträgen anlegst, wird dagegen deinem Konto zugeordnet
+            gespeichert, damit es auf jedem deiner Geräte da ist; Abschnitt 11 beschreibt das im Einzelnen,
+            Abschnitt 12 den Dokumententresor.</p>
           <dl class="rechtsliste">
             <dt>Zweck</dt><dd>Bereitstellung des Zugangs, Zuordnung von Inseraten und Anfragen, Schutz vor
               missbräuchlicher Mehrfachanlage</dd>
@@ -25099,6 +26036,24 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <dt>Empfänger</dt><dd>die anbietende Seite des jeweiligen Inserats</dd>
           </dl>
 
+          <h3>Besichtigungstermine</h3>
+          <p>Wer inseriert, kann Termine zur Besichtigung eintragen. Buchst du einen davon, wird
+            gespeichert, welches Konto welchen Termin belegt – mehr nicht. Die anbietende Seite erfährt,
+            dass ein Platz genommen wurde, und sieht, wie viele Plätze belegt sind; deinen Namen bekommt sie
+            an dieser Stelle nicht. Auch die übrigen Teilnehmer siehst du nicht, und sie sehen dich nicht:
+            Wer zu einer Besichtigung geht, hat nicht eingewilligt, den Mitbewerbern namentlich bekannt zu
+            werden.</p>
+          <p>Eine Mail geht an dich, wenn die anbietende Seite den Termin absagt. Sagst du selbst ab,
+            verschwindet deine Buchung sofort und der Platz wird wieder frei.</p>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Vereinbarung und Verwaltung von Besichtigungsterminen</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – vorvertragliche Maßnahme auf deine
+              Buchung hin</dd>
+            <dt>Speicherdauer</dt><dd>bis du absagst; im Übrigen 90 Tage nach dem Termin, mit dem Inserat
+              oder mit deinem Konto auch früher</dd>
+            <dt>Empfänger</dt><dd>die anbietende Seite des jeweiligen Inserats</dd>
+          </dl>
+
           <h2>7. Suchaufträge und Erinnerungen</h2>
           <p>Ein Suchauftrag speichert deine Filter und deine E-Mail-Adresse auf dem Server. Kommt ein
             passendes Inserat dazu, geht eine Mail an dich hinaus. Ohne Speicherung auf dem Server ginge das
@@ -25179,45 +26134,86 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p class="fein">Warum das hier trotzdem steht: Wer wissen will, was mit ihm passiert, soll nicht
             erst herausfinden müssen, was <em>nicht</em> in der Erklärung steht.</p>
 
-          <h2>11. Speicher deines Browsers</h2>
-          <p>TrimmoTrade legt deine Eingaben im lokalen Speicher deines Browsers ab – Profil, Merkliste,
-            Vergleich, Bewerbungstafel, Notizen, gespeicherte Filter und die Einstellungen zur Darstellung.
-            Diese Daten verlassen dein Gerät nicht. Der Anbieter hat keinen Zugriff darauf.</p>
-          <p class="fein">Zwei Dinge liegen dabei an beiden Stellen, und das hat einen Grund: Ein Inserat,
-            das du veröffentlichst, steht auf dem Server (Abschnitt 5) – sonst könnte es niemand sehen.
-            Ein Suchauftrag, der dir Mails schickt, steht ebenfalls dort (Abschnitt 7) – sonst käme keine
-            Mail, während dein Browser geschlossen ist. Was ohne Server auskommt, bleibt hier.</p>
-          <p>Für den Zugriff auf diesen Speicher ist keine Einwilligung erforderlich: Er ist unbedingt
-            erforderlich, damit der von dir ausdrücklich gewünschte Dienst überhaupt funktioniert
+          <h2>11. Dein Arbeitsstand: Browser und Gerätewechsel</h2>
+          <p>TrimmoTrade legt deine Eingaben zuerst im lokalen Speicher deines Browsers ab – Profil,
+            Merkliste, Vergleich, Bewerbungstafel, Notizen, gespeicherte Filter und die Einstellungen zur
+            Darstellung. <b>Ohne Konto bleibt es dabei:</b> Diese Daten verlassen dein Gerät nicht, und der
+            Anbieter hat keinen Zugriff darauf.</p>
+          <p>Bist du angemeldet, wird derselbe Stand zusätzlich zu deinem Konto auf dem Server abgelegt.
+            Das ist der Grund, warum du die Suche am Rechner beginnen und unterwegs auf dem Telefon
+            fortsetzen kannst – und warum gelöschte Browserdaten nicht mehr alles mitnehmen.</p>
+          <ul class="pruef">
+            <li>${ico('pruefen')}<span><b>Was mitgeht:</b> Profil, Merkliste samt deiner Notizen, Vergleich,
+              Bewerbungstafel, Suchaufträge, zuletzt gesehene Inserate, gespeicherte Filter, Umzugsplan,
+              Übergabeprotokoll, die zuletzt eingegebenen Werte der Rechner und welche Hinweise du
+              weggeklickt hast</span></li>
+            <li>${ico('pruefen')}<span><b>Was nicht mitgeht:</b> Farbschema und Ansichtsart – die gehören
+              zum Gerät und nicht zu dir</span></li>
+            <li>${ico('pruefen')}<span><b>Was der Server damit tut:</b> nichts. Er nimmt die Angaben als
+              Text entgegen, gibt sie unverändert zurück und liest sie nicht aus. Es findet keine Suche über
+              Profile statt, keine Auswertung, keine Statistik, keine Weitergabe.</span></li>
+          </ul>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Fortsetzen der Nutzung auf einem anderen Gerät und Schutz deiner Eingaben vor
+              Verlust</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags über
+              ein Konto, dessen Zweck genau das ist</dd>
+            <dt>Speicherdauer</dt><dd>bis du die Angaben in der Anwendung löschst, längstens bis zur
+              Löschung deines Kontos</dd>
+            <dt>Empfänger</dt><dd>der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO. An Dritte
+              geht nichts.</dd>
+          </dl>
+          <p class="fein">Der Browser bleibt die Wahrheit für den laufenden Besuch, der Server ist die
+            Kopie, die den Gerätewechsel überlebt. Fällt der Server aus, arbeitet die Anwendung weiter –
+            nur eben ohne Abgleich.</p>
+          <p>Für den Zugriff auf den Speicher deines Browsers ist keine Einwilligung erforderlich: Er ist
+            unbedingt erforderlich, damit der von dir ausdrücklich gewünschte Dienst überhaupt funktioniert
             (§ 25 Abs. 2 Nr. 2 des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes).</p>
           <p>Du kannst diese Daten jederzeit im Fußbereich unter „Meine Daten“ als Datei sichern oder
-            vollständig löschen. Sie verschwinden ebenfalls, wenn du die Browserdaten löschst.</p>
+            vollständig löschen. Löschst du sie dort, während du angemeldet bist, verschwinden sie auch auf
+            dem Server.</p>
 
           <h2>12. Dokumententresor</h2>
-          <p>Legst du Unterlagen im Dokumententresor ab, werden sie <b>vor dem Speichern</b> in deinem Browser
-            verschlüsselt – mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem Kennwort und wird
-            nirgends gespeichert. Verschlüsselt werden auch die Dateinamen.</p>
+          <p>Legst du Unterlagen im Dokumententresor ab, werden sie <b>in deinem Browser verschlüsselt,
+            bevor sie ihn verlassen</b> – mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem
+            Kennwort und wird nirgends gespeichert; verschlüsselt wird auch der Dateiname.</p>
+          <p>Erst danach geht das Chiffrat zum Server. Es liegt dort, damit du deine Unterlagen auf einem
+            zweiten Gerät wiederfindest und damit ein Verweis, den du verschickst, auch dann aufgeht, wenn
+            dein Browser geschlossen ist. Ohne das wäre eine Freigabe wertlos.</p>
+          <p><b>Der Anbieter kann diese Dateien nicht lesen.</b> Er hat weder dein Kennwort noch den
+            Schlüssel; im Speicher liegt für ihn Rauschen. Unverschlüsselt liegen genau drei Angaben, ohne
+            die sich der Tresor nicht bedienen ließe: die Art der Unterlage, die du beim Ablegen gewählt
+            hast (etwa „Gehaltsnachweis“), die Größe in Byte und der Zeitpunkt des Ablegens.</p>
           <p>Gibst du Unterlagen frei, wird kein Anhang verschickt, sondern ein Verweis. Der Schlüssel dazu
             steht im Fragmentteil dieses Verweises – dem Teil hinter dem Rautezeichen, den Browser
-            grundsätzlich nicht an Server übertragen. Der Anbieter kann die abgelegten Dateien deshalb auch
-            dann nicht lesen, wenn er Zugriff auf den Speicher hätte.</p>
+            grundsätzlich nicht an Server übertragen. Zur Freigabe selbst wird gespeichert, welche Dokumente
+            sie umfasst, für wen du sie gedacht hast, wann sie abläuft, wie oft sie noch abgerufen werden
+            darf und der Zeitpunkt jedes Abrufs – damit du siehst, ob deine Unterlagen angesehen wurden.
+            Wer abgerufen hat, wird nicht festgehalten.</p>
           <dl class="rechtsliste">
-            <dt>Zweck</dt><dd>Erfüllung des Vertrags über die Nutzung von TrimmoTrade</dd>
+            <dt>Zweck</dt><dd>Erfüllung des Vertrags über die Nutzung von TrimmoTrade; bei einer Freigabe
+              die Übermittlung an die Stelle, der du sie zugedacht hast</dd>
             <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO; für die Verschlüsselung zugleich
               Art. 32 DSGVO – Sicherheit der Verarbeitung</dd>
-            <dt>Speicherdauer</dt><dd>bis du das Dokument löschst oder den Tresor leerst</dd>
+            <dt>Speicherdauer</dt><dd>bis du das Dokument löschst, den Tresor leerst oder dein Konto
+              beendest. Eine Freigabe verliert ihre Wirkung mit dem Ablauf, den du gesetzt hast – längstens
+              nach 30 Tagen; widerrufen kannst du sie jederzeit vorher, und der Verweis führt danach sofort
+              ins Leere. Der Eintrag selbst bleibt noch 14 Tage stehen, damit du nachsehen kannst, was du
+              wann freigegeben hast, und wird dann gelöscht.</dd>
+            <dt>Empfänger</dt><dd>der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO; darüber
+              hinaus nur, wem du selbst einen Verweis gibst</dd>
           </dl>
-          <p class="fein">Auch die verschlüsselten Dateien liegen ausschließlich in deinem Browser. Der
-            Server der Anmeldung sieht sie nie – er kennt weder Dateien noch Kennwort noch Schlüssel.</p>
+          <p class="fein">Warum das hier so ausführlich steht: „Ende-zu-Ende-verschlüsselt“ schreiben viele.
+            Prüfbar wird es erst, wenn danebensteht, was <em>nicht</em> verschlüsselt ist.</p>
 
-          <h2>13. Werbung im freien Tarif</h2>
-          <p>Der freie Tarif wird über Anzeigen finanziert. Diese Anzeigen sind fest hinterlegt und werden
-            nach der Stelle ausgewählt, an der sie erscheinen – nicht nach deiner Person, deinem Verhalten
-            oder deinen Eingaben. Es findet kein Abgleich mit Werbenetzwerken statt, es werden keine Kennungen
-            gesetzt und es gehen keine Daten an Werbetreibende. Deshalb ist auch dafür keine Einwilligung
-            erforderlich.</p>
-          <p>Anzeigen sind stets als solche gekennzeichnet (§ 5a Abs. 4 des Gesetzes gegen den unlauteren
-            Wettbewerb) und werden nie im Erscheinungsbild eines Inserats dargestellt.</p>
+          <h2>13. Keine Werbung</h2>
+          <p>Auf TrimmoTrade erscheint keine Werbung – weder eigene noch fremde. Es ist kein Werbenetzwerk
+            eingebunden, es werden keine Werbekennungen gesetzt, und es gehen keine Daten an
+            Werbetreibende. Es gibt auch nichts, was sich zuschalten ließe: Die Anwendung enthält keinen
+            Programmteil, der Anzeigen ausspielen könnte.</p>
+          <p>Getragen wird der freie Tarif von den entgeltlichen Leistungen – TrimmoTrade Plus und die
+            Hervorhebung eigener Inserate. Beide sind dort, wo sie wirken, als bezahlt gekennzeichnet
+            (§ 5b Abs. 1 Nr. 6 des Gesetzes gegen den unlauteren Wettbewerb).</p>
 
           <h2>14. Kontaktaufnahme und Hilfe</h2>
           <p>Schreibst du per E-Mail, verarbeitet der Anbieter die Angaben aus deiner Nachricht, um sie zu
@@ -25270,8 +26266,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
               (Art. 7 Abs. 3 DSGVO)</span></li>
           </ul>
           <p>Für die Ausübung genügt eine formlose Nachricht an ${rw('email', 'E-Mail-Adresse')}.</p>
-          <p class="fein">Weil deine Eingaben ausschließlich in deinem Browser liegen, kannst du Auskunft,
-            Übertragbarkeit und Löschung dort unmittelbar selbst ausüben: im Fußbereich unter „Meine Daten“.</p>
+          <p class="fein">Auskunft, Übertragbarkeit und Löschung kannst du unmittelbar selbst ausüben, ohne
+            jemanden zu fragen: im Fußbereich unter „Meine Daten“. Was dort als Datei herauskommt, ist
+            derselbe Stand, der zu deinem Konto abgelegt ist; was du dort löschst, verschwindet auch auf dem
+            Server. Für das Konto selbst genügt ein Klick in den Einstellungen – die Löschung wirkt sofort
+            und nimmt Inserate, Ablage und Tresor mit.</p>
 
           <h2>19. Beschwerderecht</h2>
           <p>Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in
@@ -25368,12 +26367,15 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p>(8) Der Vertragstext wird nach Abschluss auf einem dauerhaften Datenträger bestätigt
             (§ 312f BGB). Vertragssprache ist Deutsch.</p>
 
-          <h2>§ 4 Freier Tarif und Werbung</h2>
-          <p>(1) Der freie Tarif ist dauerhaft ohne Entgelt nutzbar und über Anzeigen finanziert.</p>
-          <p>(2) Anzeigen sind stets als solche gekennzeichnet und vom übrigen Inhalt deutlich abgesetzt. Sie
-            werden nicht nach dem Verhalten oder den Eingaben der Nutzenden ausgewählt.</p>
-          <p>(3) Der Anbieter behält sich vor, Umfang und Platzierung von Anzeigen zu ändern. Die Funktionen
-            des freien Tarifs bleiben davon unberührt.</p>
+          <h2>§ 4 Freier Tarif</h2>
+          <p>(1) Der freie Tarif ist dauerhaft ohne Entgelt nutzbar. Er umfasst die vollständige Suche, die
+            Karte, die Bewertung nach dem eigenen Profil, den Prüfhinweis auf Betrugsmerkmale, den Abgleich
+            mit der ortsüblichen Vergleichsmiete und sämtliche Rechner.</p>
+          <p>(2) <b>Werbung wird nicht ausgespielt.</b> Der freie Tarif wird durch die entgeltlichen
+            Leistungen nach den §§ 5 und 6 getragen.</p>
+          <p>(3) Der Anbieter behält sich vor, den Umfang des freien Tarifs zu ändern. Leistungen, die dem
+            Schutz der Nutzenden dienen – insbesondere Prüfhinweis, Vergleichsmiete und Meldeweg –, bleiben
+            entgeltfrei.</p>
 
           <h2>§ 5 TrimmoTrade Plus</h2>
           <p>(1) TrimmoTrade Plus umfasst die auf der <a href="#/plus">Tarifseite</a> beschriebenen Leistungen.
@@ -25392,6 +26394,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p>(5) Erhöht der Anbieter den Preis, teilt er dies mindestens sechs Wochen vor Wirksamwerden in
             Textform mit. Die Nutzenden können den Vertrag bis zum Wirksamwerden zum Zeitpunkt der Erhöhung
             kündigen; darauf wird in der Mitteilung hingewiesen.</p>
+          <p>(6) Ein entgeltlicher Vertrag kommt erst zustande, wenn in der Anwendung ein Zahlungsweg
+            angeboten wird. Solange das nicht der Fall ist, gibt es keine Schaltfläche, mit der sich Plus
+            kaufen ließe, es werden keine Zahlungsdaten erhoben und es entsteht keine Zahlungspflicht;
+            die Absätze 1 bis 5 beschreiben dann die Bedingungen, zu denen ein Vertrag geschlossen würde.
+            Zugänglich sind die Leistungen von Plus in dieser Zeit über einen Gründerplatz nach § 7.</p>
 
           <h2>§ 6 Bezahlte Sichtbarkeit</h2>
           <p>(1) Der Anbieter stellt zwei Formen bezahlter Sichtbarkeit bereit:</p>
@@ -25415,6 +26422,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <p>(5) Hervorhebungen sind digitale Dienstleistungen. Für Verbraucherinnen und Verbraucher gilt das
             <a href="#/recht/widerruf">Widerrufsrecht</a>; beginnt die Leistung auf ausdrücklichen Wunsch
             sofort, erlischt es nach § 356 Abs. 5 BGB.</p>
+          <p>(6) § 5 Abs. 6 gilt entsprechend: Ohne angebotenen Zahlungsweg lässt sich bezahlte Sichtbarkeit
+            nicht buchen. Die Reihenfolge der Treffer entsteht dann ausschließlich aus den Angaben der
+            suchenden Person.</p>
 
           <h2>§ 7 Gründerplätze</h2>
           <p>(1) Der Anbieter vergibt die ersten <b>${U.num(g.plaetze)} Plätze</b> mit den Leistungen von
@@ -25905,11 +26915,12 @@ Datum: __________________
     ui.toast('Gekündigt. Die Bestätigung würde im Betrieb in Textform zugehen.', 'gut');
   });
 
-  A_('gruender-zurueck', () => {
-    if (!confirm('Gründerplatz zurückgeben? Der Platz geht an die nächste Person, und Plus endet sofort.')) return;
-    P.gruenderAufgeben();
-    ui.neuZeichnen();
-    ui.toast('Gründerplatz zurückgegeben.');
+  A_('gruender-zurueck', (el) => {
+    if (!confirm(U.t('Gründerplatz zurückgeben? Der Platz geht an die nächste Person, und Plus endet sofort.'))) return;
+    ui.knopfArbeit(el, Promise.resolve(P.gruenderAufgeben()).then(() => {
+      ui.neuZeichnen();
+      ui.toast('Gründerplatz zurückgegeben.');
+    }, (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')));
   });
 
   TT.viewRecht = { SEITEN };
@@ -27111,6 +28122,13 @@ Datum: __________________
          darauf springen. Beides hat eine kurze Frist und schlägt nie
          fehl – ohne Antwort läuft die Anwendung als Vorführung weiter. */
       TT.api.pruefen()
+        /* Erst der eigene Stand, dann der Bestand. Andersherum blitzte
+           die Startseite kurz mit leerem Profil auf und sprang gleich
+           darauf um, sobald die Merkliste ankam. */
+        .then(() => (TT.store.laden(), Promise.all([
+          TT.abgleich ? TT.abgleich.holen() : null,
+          TT.plan ? TT.plan.standHolen() : null
+        ])))
         .then(() => (TT.markt ? TT.markt.laden() : null))
         .then(weiter, weiter);
     } else {
@@ -27144,7 +28162,11 @@ Datum: __________________
     /* Der Tresor liegt in einer eigenen Datenbank und antwortet erst kurz
        nach dem Start. Vorladen, damit die Freigabe im Anschreiben sofort
        zur Verfügung steht und nicht erst nach einem Besuch der Seite. */
-    if (TT.viewTresor) TT.viewTresor.laden();
+    /* Erst den Kopf des Tresors holen – sonst stünde auf einem neuen
+       Gerät „noch kein Tresor eingerichtet“, obwohl einer da ist. */
+    if (TT.tresor && TT.viewTresor) {
+      TT.tresor.metaHolen().then(() => TT.viewTresor.laden(), () => TT.viewTresor.laden());
+    }
 
     /* Tastenkürzel auf einer Objektseite. */
     document.addEventListener('keydown', (e) => {

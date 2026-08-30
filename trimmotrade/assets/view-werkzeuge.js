@@ -77,7 +77,6 @@
             <i>${k.wann}</i>
           </a>`)}
         </div>
-        ${!P.istPlus() ? ui.anzeige('werkzeuge', 'breit') : ''}
       </div>`
     };
   }

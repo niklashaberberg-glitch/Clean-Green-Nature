@@ -62,7 +62,8 @@
     const fehlend = Object.keys(s.profil.unterlagen).filter((k) => !s.profil.unterlagen[k] && k !== 'wbs' && k !== 'buergschaft');
     if (s.profilAngelegt && fehlend.length) out.push({
       icon: 'blatt', dringend: false, titel: 'Bewerbermappe unvollständig',
-      text: fehlend.length + ' ' + U.plural(fehlend.length, 'Unterlage fehlt', 'Unterlagen fehlen') + ' – wer sie parat hat, ist schneller.',
+      text: U.t(U.plural(fehlend.length, '{0} Unterlage fehlt – wer sie parat hat, ist schneller.',
+        '{0} Unterlagen fehlen – wer sie parat hat, ist schneller.')).replace('{0}', fehlend.length),
       ziel: 'profil', knopf: 'Ergänzen'
     });
 
@@ -236,8 +237,6 @@
             </a>`)}
           </div>
         </section>
-
-        ${!P.istPlus() ? ui.anzeige('start', 'breit') : ''}
 
         ${gesehen.length ? h`<section class="block">
           <div class="block__kopfzeile"><h2>${ico('verlauf')}Zuletzt angesehen</h2></div>

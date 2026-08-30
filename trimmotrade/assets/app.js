@@ -22,6 +22,13 @@
          darauf springen. Beides hat eine kurze Frist und schlägt nie
          fehl – ohne Antwort läuft die Anwendung als Vorführung weiter. */
       TT.api.pruefen()
+        /* Erst der eigene Stand, dann der Bestand. Andersherum blitzte
+           die Startseite kurz mit leerem Profil auf und sprang gleich
+           darauf um, sobald die Merkliste ankam. */
+        .then(() => (TT.store.laden(), Promise.all([
+          TT.abgleich ? TT.abgleich.holen() : null,
+          TT.plan ? TT.plan.standHolen() : null
+        ])))
         .then(() => (TT.markt ? TT.markt.laden() : null))
         .then(weiter, weiter);
     } else {
@@ -55,7 +62,11 @@
     /* Der Tresor liegt in einer eigenen Datenbank und antwortet erst kurz
        nach dem Start. Vorladen, damit die Freigabe im Anschreiben sofort
        zur Verfügung steht und nicht erst nach einem Besuch der Seite. */
-    if (TT.viewTresor) TT.viewTresor.laden();
+    /* Erst den Kopf des Tresors holen – sonst stünde auf einem neuen
+       Gerät „noch kein Tresor eingerichtet“, obwohl einer da ist. */
+    if (TT.tresor && TT.viewTresor) {
+      TT.tresor.metaHolen().then(() => TT.viewTresor.laden(), () => TT.viewTresor.laden());
+    }
 
     /* Tastenkürzel auf einer Objektseite. */
     document.addEventListener('keydown', (e) => {

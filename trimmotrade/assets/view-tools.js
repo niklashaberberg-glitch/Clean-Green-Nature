@@ -132,8 +132,6 @@
           </section>`)}
         </div>
 
-        ${!P.istPlus() ? ui.anzeige('merkliste', 'breit') : ''}
-
         <p class="fein">Der Status lässt sich in jeder Karte umstellen. TrimmoTrade zählt daraus deine Erfolgsquote –
           nützlich, um zu merken, ob die Suche zu eng oder das Anschreiben zu blass ist.</p>
       </div>`

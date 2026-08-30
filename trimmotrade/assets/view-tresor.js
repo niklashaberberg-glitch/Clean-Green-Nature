@@ -33,10 +33,15 @@
       <p>Beim Freigeben wandern die Dokumentschlüssel in den <b>Fragmentteil</b> des Verweises, also hinter das
         Rautezeichen. Browser senden diesen Teil nie an einen Server. Ein Betreiber sähe also die Anfrage,
         aber nie den Schlüssel.</p>
-      <p><b>Was hier fehlt, ist der Server.</b> In dieser Vorführung liegt das Chiffrat in diesem Browser, der
-        Verweis funktioniert deshalb nur auf diesem Gerät. Im Betrieb läge dort das Chiffrat und sonst nichts:
-        kein Schlüssel, keine Datei im Klartext, nichts, was ein Einbruch verwertbar machen würde. Ablauf und
-        Abrufzähler würde der Server durchsetzen – hier tut es die Anwendung selbst.</p>
+      ${T.amServer()
+        ? h`<p><b>Wo das Chiffrat liegt.</b> Auf dem Server – und dort liegt genau das und sonst nichts: kein
+          Schlüssel, keine Datei im Klartext, nichts, was ein Einbruch verwertbar machen würde. Deshalb geht
+          dein Verweis auch bei der Person auf, der du ihn schickst, und deshalb setzt der Server Ablauf,
+          Abrufzähler und Widerruf durch. Täte das dein Browser, zählte der Empfänger in seinem eigenen
+          Speicher – also gar nicht.</p>`
+        : h`<p><b>Was hier fehlt, ist der Server.</b> Diese Kopie läuft ohne Verbindung; das Chiffrat liegt in
+          diesem Browser, und der Verweis geht deshalb nur auf diesem Gerät auf. Auf <b>trimmotrade.de</b>
+          liegt es auf dem Server – auch dort nur das Chiffrat –, und der Verweis funktioniert überall.</p>`}
     </details>`;
   }
 
@@ -563,8 +568,10 @@
             <p>Alles hinter dem Rautezeichen ist der Schlüssel. Wer den Verweis weitergibt, gibt die Unterlagen
               weiter. Verschick ihn deshalb einzeln und nicht in Verteilern.</p></div>
           </div>
-          <p class="fein">In dieser Vorführung liegen die verschlüsselten Dateien in diesem Browser – der
-            Verweis funktioniert deshalb nur auf diesem Gerät.</p>`,
+          ${T.amServer() ? h`<p class="fein">Der Verweis geht auf jedem Gerät auf – die verschlüsselten
+            Dateien liegen auf dem Server, der Schlüssel steht nur in diesem Verweis.</p>`
+            : h`<p class="fein">Diese Kopie läuft ohne Verbindung: Die verschlüsselten Dateien liegen in
+            diesem Browser, der Verweis geht deshalb nur hier auf.</p>`}`,
         fuss: h`<button type="button" class="knopf knopf--still" data-tu="kopieren" data-quelle="#freigabe-link">${ico('kopieren')}Verweis kopieren</button>
           <button type="button" class="knopf" data-tu="dialog-zu">Fertig</button>`
       });
@@ -577,14 +584,20 @@
   });
 
   A_('freigabe-widerrufen', (el) => {
-    T.widerrufen(el.dataset.id);
-    ui.neuZeichnen();
-    ui.toast('Widerrufen. Der Verweis führt ab sofort ins Leere.', 'gut');
+    /* Mit Server wirkt der Widerruf dort – erst danach neu zeichnen,
+       sonst zeigt die Liste noch den alten Stand. */
+    Promise.resolve(T.widerrufen(el.dataset.id)).then(() => {
+      laden();
+      ui.neuZeichnen();
+      ui.toast('Widerrufen. Der Verweis führt ab sofort ins Leere.', 'gut');
+    }, (e) => ui.toast((e && (e.text || e.message)) || 'Das ging nicht.', 'schlecht'));
   });
 
   A_('freigabe-loeschen', (el) => {
-    T.freigabeLoeschen(el.dataset.id);
-    ui.neuZeichnen();
+    Promise.resolve(T.freigabeLoeschen(el.dataset.id)).then(() => {
+      laden();
+      ui.neuZeichnen();
+    }, () => ui.neuZeichnen());
   });
 
   A_('freigabe-ansehen', (el) => {

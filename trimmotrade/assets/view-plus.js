@@ -36,9 +36,8 @@
         '2 Objekte im Vergleich',
         'Vertragslupe: erster Fund',
         'Ringtausch: direkte Tausche',
-        'mit Anzeigen']
+        'Ohne Werbung – die gibt es hier nirgends']
       : ['Alles aus dem freien Tarif',
-        'Keine Anzeigen',
         'Unbegrenzt viele Suchaufträge',
         '6 Objekte im Vergleich',
         'Vertragslupe vollständig, mit Erläuterung zu jedem Fund',
@@ -262,16 +261,20 @@
                 gelöscht, er wird nur nicht mehr geprüft, bis du wieder Platz schaffst.</p>
             </details>
             <details>
-              <summary>Warum gibt es überhaupt Anzeigen?</summary>
-              <p>Weil die Suche sonst nicht vollständig kostenlos bleiben könnte. Wer eine Wohnung sucht, hat oft
-                gerade wenig Geld – ausgerechnet dann eine Bezahlschranke vor die Suche zu stellen, wäre verkehrt.
-                Anzeigen sind deshalb der Preis des freien Tarifs, und sie sind immer als Anzeige gekennzeichnet.</p>
+              <summary>Wie kann der freie Tarif kostenlos sein?</summary>
+              <p>Weil ihn diejenigen tragen, die Plus nehmen oder ein Inserat hervorheben. Wer eine Wohnung
+                sucht, hat oft gerade wenig Geld – ausgerechnet dann eine Bezahlschranke vor die Suche zu
+                stellen, wäre verkehrt. Deshalb ist alles, was vor Schaden bewahrt oder gerechnet werden
+                muss, dauerhaft frei.</p>
+              <p><b>Werbung gibt es hier nicht</b> – keine Banner, kein Werbenetzwerk, keine Anzeigen im
+                Gewand eines Inserats. Das ist keine Einstellung, die sich umlegen ließe: Es ist nichts
+                eingebaut, was Werbung ausspielen könnte.</p>
             </details>
             <details>
-              <summary>Bekommen Werbetreibende meine Daten?</summary>
-              <p>Nein. Welche Anzeige erscheint, entscheidet sich im Browser anhand der Stelle auf der Seite –
-                nicht anhand deines Profils, deiner Suche oder deines Verhaltens. Es gibt kein Werbenetzwerk,
-                keine Kennung und nichts, was übertragen würde.</p>
+              <summary>Bekommt irgendjemand meine Daten?</summary>
+              <p>Nein. Es gibt kein Werbenetzwerk, keine Kennung für Dritte und nichts, was über dein
+                Verhalten übertragen würde. Gezählt wird nur, wie oft eine Ansicht an einem Tag insgesamt
+                geöffnet wurde – ohne Kennung, ohne Adresse, ohne Reihenfolge.</p>
             </details>
             <details>
               <summary>Bringt Plus mir eine Wohnung schneller?</summary>
@@ -328,10 +331,21 @@
 
   A_('tarif-intervall', (el) => { intervall = el.dataset.wert; ui.neuZeichnen(); });
 
-  A_('gruender-sichern', () => {
-    const nummer = P.gruenderSichern();
-    if (!nummer) { ui.toast('Es ist kein Platz mehr frei.', 'schlecht'); ui.neuZeichnen(); return; }
-    ui.neuZeichnen();
+  A_('gruender-sichern', (el) => {
+    /* Die Nummer vergibt der Server. Das Versprechen abzuwarten ist
+       kein Feinschliff: Wer zwei Sekunden früher zeichnet, zeigt eine
+       Nummer, die noch niemandem gehört. */
+    ui.knopfArbeit(el, Promise.resolve(P.gruenderSichern()).then((nummer) => {
+      if (!nummer) { ui.toast('Es ist kein Platz mehr frei.', 'schlecht'); ui.neuZeichnen(); return; }
+      ui.neuZeichnen();
+      gruenderDialog(nummer);
+    }, (e) => {
+      ui.toast((e && e.text) || 'Der Platz ließ sich nicht sichern.', 'schlecht');
+      ui.neuZeichnen();
+    }), 'Wird gesichert …');
+  });
+
+  function gruenderDialog(nummer) {
     ui.dialog({
       titel: 'Gründerplatz ' + U.num(nummer),
       inhalt: h`<p><b>Plus läuft ab sofort für ${P.GRUENDER.monate} Monate</b>, bis zum
@@ -347,12 +361,35 @@
       fuss: h`<a class="knopf knopf--still" href="#/werkzeuge" data-tu="dialog-zu">Werkzeuge ansehen</a>
         <button type="button" class="knopf" data-tu="dialog-zu">Los geht's</button>`
     });
-  });
+  }
 
   A_('plus-buchen', () => {
-    P.wechseln('plus', intervall);
-    ui.toast('Plus ist aktiv. In der Vorführung kostenlos und jederzeit umschaltbar.', 'gut');
-    ui.neuZeichnen();
+    if (P.wechseln('plus', intervall)) {
+      ui.toast('Plus ist aktiv. In der Vorführung kostenlos und jederzeit umschaltbar.', 'gut');
+      ui.neuZeichnen();
+      return;
+    }
+    /* Mit Server, aber ohne eingerichteten Zahlungsweg: Hier wird
+       nichts vorgetäuscht. Was jetzt geht, ist der Gründerplatz. */
+    ui.dialog({
+      titel: 'Plus buchen',
+      inhalt: h`<p>Für die Bezahlung fehlt noch der Zahlungsdienstleister. Solange der nicht
+          angeschlossen ist, gibt es hier keinen Kaufknopf – ein Knopf, der so täte, als hätte er
+          etwas abgebucht, wäre nach § 312j BGB nicht einmal zulässig.</p>
+        ${P.gruenderFrei() > 0 && !P.gruender().nummer
+          ? h`<p><b>Was heute geht:</b> ein Gründerplatz. Zwölf Monate mit allen Plus-Leistungen,
+            ohne Zahlungsdaten und ohne Verlängerung. Noch ${U.num(P.gruenderFrei())}
+            ${U.t(U.plural(P.gruenderFrei(), 'Platz', 'Plätze'))} frei.</p>`
+          : h`<p class="fein">Sobald die Bezahlung eingerichtet ist, steht sie hier.</p>`}`,
+      fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Schließen</button>
+        ${P.gruenderFrei() > 0 && !P.gruender().nummer
+          ? h`<button type="button" class="knopf" data-tu="gruender-sichern-dialog">${ico('stern')}Platz sichern</button>` : ''}`
+    });
+  });
+
+  A_('gruender-sichern-dialog', (el) => {
+    ui.dialogZu();
+    ui.AKTIONEN['gruender-sichern'](el);
   });
 
   ui.ansichten.plus = ansicht;

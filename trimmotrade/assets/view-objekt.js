@@ -524,10 +524,83 @@
 
   /* ------------------------- Termine ------------------------- */
 
+  /* ------------------------------------------------------------------
+     Besichtigungstermine
+
+     Bis hierher kamen die Zeitfenster aus dem erzeugten Bestand und die
+     Buchung stand im Speicher dieses Browsers – die anbietende Seite
+     erfuhr davon nichts. Jetzt legt sie die Fenster selbst an, der
+     Server zählt die Plätze aus den Buchungen, und eine Buchung geht
+     als Mail hinaus.
+
+     Wer sonst gebucht hat, sieht niemand. Sichtbar ist die Zahl der
+     freien Plätze – wer zu einer Besichtigung geht, hat nicht
+     eingewilligt, den Mitbewerbern namentlich bekannt zu werden.
+     ------------------------------------------------------------------ */
+
+  /* Wem das Inserat gehört, sagt der Server mit `meins`. Ohne Server
+     bleibt `eigen` aus dem Browserspeicher. */
+  const eigenesInserat = (l) => !!(l && (l.meins || l.eigen));
+
+  function terminZeile(l, t, meins) {
+    const frei = Math.max(0, t.plaetze - t.belegt);
+    const voll = frei <= 0 && !t.meiner;
+    return h`<li class="${t.meiner ? 'is-gebucht' : ''} ${voll ? 'is-voll' : ''}">
+      <div><b>${U.dateDE(t.datum)}</b><span>${t.zeit} Uhr · ${U.t(t.art)}</span></div>
+      <span class="termine__frei">${voll ? U.t('ausgebucht')
+        : U.t('{0} frei').replace('{0}', frei + ' ' + U.t(U.plural(frei, 'Platz', 'Plätze')))}</span>
+      ${meins
+        ? h`<button type="button" class="ikon-btn" data-tu="termin-weg" data-termin="${t.id}"
+            aria-label="Termin entfernen">${ico('muell')}</button>`
+        : t.meiner
+          ? h`<button type="button" class="knopf knopf--klein knopf--still" data-tu="termin-ab"
+              data-termin="${t.id}">Absagen</button>`
+          : h`<button type="button" class="knopf knopf--klein" data-tu="termin-buchen"
+              data-termin="${t.id}" ${voll ? 'disabled' : ''}>${voll ? 'voll' : 'nehmen'}</button>`}
+    </li>`;
+  }
+
+  /* Die Seite der anbietenden Seite: Fenster anlegen und entfernen. */
+  function termineVerwalten(l) {
+    const termine = l.besichtigungen || [];
+    return h`<section class="block" id="termine">
+      <h2>${ico('kalender')}Besichtigungstermine</h2>
+      <p class="block__unter">Feste Zeitfenster statt Massenandrang. Wer einen Platz nimmt, bekommt ihn –
+        und du bekommst eine Mail. Wie viele dabei sind, entscheidest du je Fenster.</p>
+      ${termine.length ? h`<ul class="termine">${termine.map((t) => terminZeile(l, t, true))}</ul>`
+        : h`<p class="info-meldung">${ico('info')}Noch kein Termin angelegt. Zwei feste Fenster ersparen
+          erfahrungsgemäß ein Dutzend Nachrichten.</p>`}
+      <form class="formraster formraster--drei" data-tu-submit="termin-neu" data-id="${l.id}">
+        <label class="feld"><span>Datum</span>
+          <input type="date" name="datum" required min="${U.isoDate(TT.now())}"></label>
+        <label class="feld"><span>Uhrzeit</span>
+          <input type="time" name="zeit" required></label>
+        <label class="feld"><span>Plätze</span>
+          <input type="number" name="plaetze" min="1" max="50" value="1"></label>
+        <label class="feld"><span>Art</span>
+          <select name="art">
+            <option>Einzeltermin</option>
+            <option>Sammeltermin</option>
+            <option>Videobesichtigung</option>
+            <option>Offene Besichtigung</option>
+          </select></label>
+        <div class="feld feld--knopf">
+          <button type="submit" class="knopf knopf--still">${ico('plus')}Fenster anlegen</button>
+        </div>
+      </form>
+      <p class="fein">Wer gebucht hat, bekommt eine Absage per Mail, wenn du ein Fenster entfernst.
+        Die Namen der Buchenden stehen hier nicht – sie stehen in deinem Posteingang, sobald jemand
+        dir schreibt.</p>
+    </section>`;
+  }
+
   function termineBlock(l) {
-    const eintrag = S.get().merkliste[l.id];
-    const gebucht = eintrag && eintrag.termin;
-    if (!l.besichtigungen || !l.besichtigungen.length) {
+    if (eigenesInserat(l)) return termineVerwalten(l);
+
+    const termine = l.besichtigungen || [];
+    const meiner = termine.find((t) => t.meiner);
+
+    if (!termine.length) {
       return h`<section class="block" id="termine">
         <h2>${ico('kalender')}Besichtigung</h2>
         <p class="info-meldung">${ico('info')}Für dieses Objekt sind keine Termine hinterlegt.
@@ -537,22 +610,12 @@
     return h`<section class="block" id="termine">
       <h2>${ico('kalender')}Besichtigung buchen</h2>
       <p class="block__unter">Feste Zeitfenster statt Massenandrang. Ein Platz gehört dir, sobald du ihn nimmst.</p>
-      ${gebucht ? h`<div class="gut-meldung">${ico('pruefen')}
-        Du hast <b>${U.dateDE(gebucht.datum)} um ${gebucht.zeit}</b> gebucht (${gebucht.art}).
-        <button type="button" class="link" data-tu="termin-ab" data-id="${l.id}">Termin absagen</button></div>` : ''}
-      <ul class="termine">
-        ${l.besichtigungen.map((t) => {
-      const frei = t.plaetze - t.belegt;
-      const dieser = gebucht && gebucht.id === t.id;
-      return h`<li class="${dieser ? 'is-gebucht' : ''}">
-            <div><b>${U.dateDE(t.datum)}</b><span>${t.zeit} Uhr · ${t.art}</span></div>
-            <span class="termine__frei">${frei} ${U.plural(frei, 'Platz frei', 'Plätze frei')}</span>
-            <button type="button" class="knopf knopf--klein ${dieser ? 'knopf--still' : ''}"
-              data-tu="termin-buchen" data-id="${l.id}" data-termin="${t.id}" ${dieser ? 'disabled' : ''}>
-              ${dieser ? 'gebucht' : 'nehmen'}</button>
-          </li>`;
-    })}
-      </ul>
+      ${meiner ? h`<div class="gut-meldung">${ico('pruefen')}
+        ${U.t('Du hast den {0} um {1} Uhr.').replace('{0}', U.dateDE(meiner.datum)).replace('{1}', meiner.zeit)}
+        ${U.t('Die anbietende Seite weiß Bescheid.')}</div>` : ''}
+      <ul class="termine">${termine.map((t) => terminZeile(l, t, false))}</ul>
+      ${gast() ? h`<p class="info-meldung">${ico('info')}Zum Buchen brauchst du ein Konto –
+        sonst wüsste niemand, wer kommt. <a href="#/anmelden">Anmelden</a></p>` : ''}
       <p><button type="button" class="link" data-tu="checkliste" data-id="${l.id}">${ico('blatt')}Besichtigungs-Checkliste öffnen</button></p>
     </section>`;
   }
@@ -762,7 +825,6 @@
                   ${ico('blatt')}Exposé als Datei${P.darf('exposeExport') ? '' : ' (Plus)'}</button>
               </p>
             </div>
-            ${ui.anzeige('objekt-' + l.id, 'schmal')}
           </aside>
         </div>
       </div>`,
@@ -810,13 +872,58 @@
 
   A_('notiz', U.debounce((el) => { S.setNotiz(el.dataset.id, el.value); }, 500));
 
+  /* Die Termine liegen beim Server, nicht im Browser: Ein Platz, den
+     nur dieses Gerät kennt, ist kein Platz. Nach jeder Änderung wird
+     das Inserat neu geholt – die Zahl der freien Plätze hängt an den
+     Buchungen aller. */
+  function terminFertig(id, meldung, ton) {
+    return TT.markt.objekt(id, true).then(() => {
+      ui.neuZeichnen();
+      if (meldung) ui.toast(meldung, ton || 'gut');
+    });
+  }
+
   A_('termin-buchen', (el) => {
-    const t = S.terminBuchen(el.dataset.id, el.dataset.termin);
-    if (t) ui.toast('Termin am ' + U.dateDE(t.datum) + ' um ' + t.zeit + ' gebucht.', 'gut');
-    ui.neuZeichnen();
+    const id = ui.params.arg;
+    ui.knopfArbeit(el, TT.api.ruf('termin/buchen', { id: el.dataset.termin })
+      .then((d) => {
+        const t = (d.termine || []).find((x) => x.meiner);
+        return terminFertig(id, t
+          ? U.t('Termin am {0} um {1} Uhr gebucht.').replace('{0}', U.dateDE(t.datum)).replace('{1}', t.zeit)
+          : 'Termin gebucht.');
+      }, (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')), 'Einen Moment …');
   });
 
-  A_('termin-ab', (el) => { S.terminAbsagen(el.dataset.id); ui.toast('Termin abgesagt.'); ui.neuZeichnen(); });
+  A_('termin-ab', (el) => {
+    const id = ui.params.arg;
+    ui.knopfArbeit(el, TT.api.ruf('termin/absagen', { id: el.dataset.termin })
+      .then(() => terminFertig(id, 'Termin abgesagt. Der Platz ist wieder frei.', 'info'),
+        (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')));
+  });
+
+  A_('termin-neu', (el) => {
+    const f = new FormData(el);
+    const id = el.dataset.id;
+    const knopf = U.$('button[type="submit"]', el) || el;
+    ui.knopfArbeit(knopf, TT.api.ruf('termin/neu', {
+      inserat: id,
+      datum: f.get('datum') || '',
+      zeit: f.get('zeit') || '',
+      plaetze: Number(f.get('plaetze')) || 1,
+      art: f.get('art') || 'Einzeltermin'
+    }).then(() => terminFertig(id, 'Zeitfenster angelegt.'),
+      (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')), 'Wird angelegt …');
+  });
+
+  A_('termin-weg', (el) => {
+    if (!confirm(U.t('Dieses Zeitfenster entfernen? Wer gebucht hat, bekommt eine Absage.'))) return;
+    const id = ui.params.arg;
+    ui.knopfArbeit(el, TT.api.ruf('termin/weg', { id: el.dataset.termin })
+      .then((d) => terminFertig(id, d.abgesagt
+        ? U.t('Entfernt. {0} Buchung abgesagt.').replace('{0}', d.abgesagt)
+        : 'Entfernt.', 'info'),
+        (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')));
+  });
 
   A_('objekt-teilen', (el) => {
     const l = TT.data.byId[el.dataset.id];

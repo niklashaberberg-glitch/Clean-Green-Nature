@@ -212,11 +212,24 @@ final class Selbsttest
         }
 
         foreach (['tt_konto', 'tt_inserat', 'tt_anfrage', 'tt_auftrag', 'tt_meldung',
-                  'tt_gruppe', 'tt_zaehler'] as $t) {
+                  'tt_gruppe', 'tt_zaehler', 'tt_ablage', 'tt_tresor', 'tt_freigabe',
+                  'tt_termin', 'tt_buchung'] as $t) {
             try {
                 Db::wert('SELECT COUNT(*) FROM ' . $t);
             } catch (Throwable $e) {
                 $this->fehlt('Tabelle ' . $t . ' fehlt');
+            }
+        }
+
+        /* Die drei Spalten, die mit Version 4 dazukamen. Eine fehlende
+           Tabelle fällt sofort auf; eine fehlende Spalte erst dann, wenn
+           jemand einen Gründerplatz nehmen will – und das ist zu spät. */
+        foreach (['plus_bis', 'gruender_nr', 'gruender_bis'] as $spalte) {
+            try {
+                Db::wert('SELECT ' . $spalte . ' FROM tt_konto LIMIT 1');
+            } catch (Throwable $e) {
+                $this->fehlt('Spalte tt_konto.' . $spalte . ' fehlt',
+                    'Ohne sie lässt sich kein Gründerplatz vergeben. Ein Aufruf über den Browser legt sie an.');
             }
         }
     }
@@ -292,8 +305,16 @@ final class Selbsttest
         }
         $max = self::alsBytes((string) ini_get('post_max_size'));
         if ($max > 0 && $max < 12 * 1024 * 1024) {
+            /* Auf der Kommandozeile liest PHP keine .user.ini – die gilt
+               nur für Anfragen über den Webserver. Wer diese Zeile beim
+               `pruefen` sieht, obwohl die Datei liegt, hat nichts falsch
+               gemacht; der Wert im Betrieb ist ein anderer. */
+            $userIni = is_file(rtrim($this->wurzel, '/') . '/.user.ini');
             $this->hinweis('post_max_size ist ' . ini_get('post_max_size'),
-                'Für den Bildupload sollten es 16M sein – siehe .user.ini.');
+                $userIni && PHP_SAPI === 'cli'
+                    ? '.user.ini liegt, wird auf der Kommandozeile aber nicht gelesen. '
+                      . 'Was im Betrieb gilt, zeigt api/status – dort steht markt.bilder.'
+                    : 'Für den Bildupload sollten es 16M sein – siehe .user.ini.');
         } else {
             $this->gut('post_max_size', (string) ini_get('post_max_size'));
         }
@@ -322,7 +343,8 @@ final class Selbsttest
         foreach ([
             'melden' => [90000, 'Suchaufträge – ohne ihn kommt niemand zurück.'],
             'erinnern' => [180000, 'Ohne ihn verfallen Inserate ohne Nachfrage.'],
-            'aufraeumen' => [180000, 'Ohne ihn bleiben alte Sitzungen liegen.'],
+            'aufraeumen' => [180000, 'Ohne ihn bleiben alte Sitzungen, abgelaufene Freigaben und '
+                . 'vergangene Besichtigungstermine liegen.'],
         ] as $name => [$frist, $warum]) {
             $wann = (int) (Db::wert('SELECT wert FROM tt_stand WHERE name = ?', ['cron_' . $name]) ?? 0);
             if (!$wann) {
@@ -340,7 +362,7 @@ final class Selbsttest
     {
         $echte = (int) Db::wert("SELECT COUNT(*) FROM tt_inserat WHERE stand = 'aktiv' AND laeuft_ab > ?",
             [time()]);
-        $beispiele = ($this->cfg['beispielmarkt'] ?? true) !== false;
+        $beispiele = ($this->cfg['beispielmarkt'] ?? false) !== false;
         if ($echte >= 300 && $beispiele) {
             $this->hinweis('Der Beispielmarkt läuft neben ' . $echte . ' echten Inseraten',
                 "In api/config.php gehört jetzt 'beispielmarkt' => false.");
@@ -376,6 +398,52 @@ final class Selbsttest
         if ($gesperrt > 0) {
             $this->gut('Gesperrte Inserate', (string) $gesperrt);
         }
+
+        /* Was seit Version 4 mitläuft. Der Tresor ist der einzige Teil,
+           der ungebremst wachsen kann – vierzig Megabyte je Konto sind
+           erlaubt, und ein Webhosting-Paket ist irgendwann voll. Wer das
+           erst merkt, wenn nichts mehr hochlädt, merkt es zu spät. */
+        $tresorBytes = (int) Db::wert('SELECT COALESCE(SUM(LENGTH(chiffrat)), 0) FROM tt_tresor');
+        $tresorZahl = (int) Db::wert('SELECT COUNT(*) FROM tt_tresor');
+        if ($tresorZahl > 0) {
+            $this->gut('Dokumententresor', $tresorZahl
+                . ($tresorZahl === 1 ? ' Unterlage · ' : ' Unterlagen · ')
+                . self::menge($tresorBytes) . ' verschlüsselt');
+        }
+
+        $ablageBytes = (int) Db::wert('SELECT COALESCE(SUM(LENGTH(wert)), 0) FROM tt_ablage');
+        $ablageKonten = (int) Db::wert('SELECT COUNT(DISTINCT konto_id) FROM tt_ablage');
+        if ($ablageKonten > 0) {
+            $this->gut('Ablage für den Gerätewechsel', $ablageKonten
+                . ($ablageKonten === 1 ? ' Konto · ' : ' Konten · ') . self::menge($ablageBytes));
+        }
+
+        $termine = (int) Db::wert('SELECT COUNT(*) FROM tt_termin WHERE datum >= ?', [date('Y-m-d')]);
+        $buchungen = (int) Db::wert(
+            'SELECT COUNT(*) FROM tt_buchung b JOIN tt_termin t ON t.id = b.termin_id WHERE t.datum >= ?',
+            [date('Y-m-d')]
+        );
+        if ($termine > 0) {
+            $this->gut('Besichtigungstermine', $termine . ' anstehend · ' . $buchungen . ' gebucht');
+        }
+
+        $gruender = (int) Db::wert('SELECT COUNT(*) FROM tt_konto WHERE gruender_nr > 0');
+        if ($gruender > 0) {
+            $frei = Tarif::PLAETZE - $gruender;
+            $this->gut('Gründerplätze', $gruender . ' vergeben, ' . max(0, $frei) . ' frei');
+        }
+    }
+
+    /** Byte in etwas, das man vorlesen kann. */
+    private static function menge(int $bytes): string
+    {
+        if ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 1, ',', '.') . ' MB';
+        }
+        if ($bytes >= 1024) {
+            return (int) round($bytes / 1024) . ' kB';
+        }
+        return $bytes . ' B';
     }
 
     /* ------------------------------------------------------------------ */

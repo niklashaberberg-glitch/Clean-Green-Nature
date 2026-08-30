@@ -66,17 +66,20 @@
     },
     {
       id: 'werbung',
-      titel: 'Why am I seeing ads?',
+      titel: 'Are there ads on TrimmoTrade?',
       gruppe: 'Plans',
-      fragen: ['why ads', 'turn off ads', 'ads are annoying', 'do you get my data'],
-      schlag: ['ad', 'ads', 'advert', 'banner', 'tracking', 'marketing'],
-      antwort: 'Ads are the price of the free plan. People looking for an apartment often have little '
-        + 'money right then – putting a paywall in front of the search at exactly that moment would be '
-        + 'wrong.\n\n'
-        + 'What does not happen: no data about you is passed to advertisers. Which ad appears is decided '
-        + 'by the position on the page, not by your profile or your behaviour. That is also why there is '
-        + 'no consent banner – there is nothing to consent to.\n\n'
-        + 'With Plus the ads disappear.',
+      fragen: ['are there ads', 'turn off ads', 'ads are annoying', 'do you get my data',
+        'how is this financed'],
+      schlag: ['ad', 'ads', 'advert', 'banner', 'tracking', 'marketing', 'free', 'financed'],
+      antwort: '<b>No.</b> No advertising is shown – neither our own nor anyone else\'s. No ad network is '
+        + 'embedded, and there is nothing that could be switched on: the application contains no code that '
+        + 'could serve ads at all.\n\n'
+        + 'The free plan is carried by the people who take Plus or promote a listing. Someone looking for an '
+        + 'apartment often has little money right then – putting a paywall in front of the search at exactly '
+        + 'that moment would be wrong. So everything that protects you or has to be calculated stays free.\n\n'
+        + 'No data about you is passed on either. All that is counted is how often a view was opened on a '
+        + 'given day in total – no identifier, no address. That is why there is no consent banner: there is '
+        + 'nothing to consent to.',
       ziele: [['See plans', 'plus'], ['Privacy policy', 'recht/datenschutz']]
     },
     {

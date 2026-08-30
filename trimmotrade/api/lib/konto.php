@@ -196,9 +196,63 @@ final class Konto
      * Alles, was zu diesem Konto gehört, verschwindet: Sitzungen,
      * Passkeys, verknüpfte Fremdkonten, laufende Vorgänge.
      */
+    /**
+     * Ein Konto vollständig löschen – Art. 17 DSGVO.
+     *
+     * Das war lange zu kurz gesprungen: Gelöscht wurden Sitzungen,
+     * Passkeys und die Verknüpfungen zu Google und Microsoft. Stehen
+     * blieben die Inserate – mit Namen darauf –, die Suchaufträge, die
+     * Gruppenmitgliedschaften und alles, was jemand für sich abgelegt
+     * hatte. Wer sein Konto löschte, hatte danach immer noch eine
+     * Wohnung im Angebot, an die niemand mehr herankam.
+     *
+     * Jetzt geht alles mit. Drei Dinge verdienen eine Erklärung:
+     *
+     * ANFRAGEN bleiben bestehen, aber ohne Namen, Adresse und
+     * Telefonnummer. Sie gehören zwei Seiten: Ein Verlauf, der
+     * verschwindet, weil die Gegenseite aufräumt, ist keiner. Was daran
+     * eine Person erkennbar macht, verschwindet trotzdem – bleiben darf
+     * der Text, den die Gegenseite ohnehin gelesen hat.
+     *
+     * GRUPPEN verlieren das Mitglied. Ist es die gründende Person,
+     * löst sich die Gruppe auf: Ohne sie entscheidet niemand mehr über
+     * Aufnahmen, und eine Gruppe, in die niemand mehr hineinkommt, ist
+     * eine Sackgasse für alle Übrigen.
+     *
+     * DER TRESOR verschwindet vollständig, samt Freigaben. Ein Verweis,
+     * der nach dem Löschen noch Gehaltsabrechnungen öffnet, wäre das
+     * Gegenteil dessen, wofür er da ist.
+     */
     public static function loeschen(int $id): void
     {
         $k = self::nachId($id);
+
+        /* Inserate mit Bildern, Bilddateien und Terminen. */
+        foreach (Db::zeilen('SELECT id FROM tt_inserat WHERE konto_id = ?', [$id]) as $z) {
+            Inserat::hartLoeschen((int) $z['id']);
+        }
+
+        /* Gruppen: erst die eigenen auflösen, dann austreten. */
+        foreach (Db::zeilen('SELECT id FROM tt_gruppe WHERE gruender_id = ?', [$id]) as $z) {
+            Db::fuehre('DELETE FROM tt_gruppe_person WHERE gruppe_id = ?', [(int) $z['id']]);
+            Db::fuehre('DELETE FROM tt_gruppe WHERE id = ?', [(int) $z['id']]);
+        }
+        Db::fuehre('DELETE FROM tt_gruppe_person WHERE konto_id = ?', [$id]);
+
+        /* Anfragen: Der Text bleibt, die Person verschwindet daraus. */
+        Db::fuehre(
+            "UPDATE tt_anfrage SET name = '', mail = '', telefon = '', eckdaten = '{}', von_konto_id = 0
+              WHERE von_konto_id = ?",
+            [$id]
+        );
+        Db::fuehre('UPDATE tt_anfrage SET an_konto_id = 0 WHERE an_konto_id = ?', [$id]);
+
+        Db::fuehre('DELETE FROM tt_auftrag WHERE konto_id = ?', [$id]);
+        Db::fuehre('DELETE FROM tt_buchung WHERE konto_id = ?', [$id]);
+        Db::fuehre('DELETE FROM tt_ablage WHERE konto_id = ?', [$id]);
+        Db::fuehre('DELETE FROM tt_tresor WHERE konto_id = ?', [$id]);
+        Db::fuehre('DELETE FROM tt_freigabe WHERE konto_id = ?', [$id]);
+
         Db::fuehre('DELETE FROM tt_sitzung WHERE konto_id = ?', [$id]);
         Db::fuehre('DELETE FROM tt_passkey WHERE konto_id = ?', [$id]);
         Db::fuehre('DELETE FROM tt_fremd WHERE konto_id = ?', [$id]);

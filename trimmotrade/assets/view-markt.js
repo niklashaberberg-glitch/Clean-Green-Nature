@@ -192,7 +192,6 @@
             und das deshalb frei bleibt.</p>
           ${ui.sperrHinweis('marktdaten')}
         </section>
-        ${ui.anzeige('markt', 'breit')}
       </div>`
     };
   }

@@ -1,7 +1,14 @@
 /* =====================================================================
    TrimmoTrade – Zustand
    Ein einziger Zustand, ein einziger Speicherplatz, ein Ereignis für
-   alle Ansichten. Bleibt im Browser; nichts verlässt das Gerät.
+   alle Ansichten.
+
+   Der Speicherplatz ist der Browser: Hier wird geschrieben, hier wird
+   gelesen, und ohne Netz läuft alles weiter. Wer angemeldet ist,
+   bekommt zusätzlich einen Abgleich mit dem Server – damit der Stand
+   den Gerätewechsel überlebt. Wie das zusammengeht, steht in
+   assets/abgleich.js; hier ist davon nur die eine Zeile in
+   `speichern()` zu sehen.
    ===================================================================== */
 (function (TT) {
   'use strict';
@@ -146,7 +153,13 @@
 
   const get = () => state || laden();
 
-  function speichern() { U.saveStore(state); }
+  function speichern() {
+    U.saveStore(state);
+    /* Und, sofern angemeldet und ein Server da ist, gebündelt hinaus.
+       Der Browser bleibt der Maßstab: Er hat schon geschrieben, bevor
+       der Server überhaupt gefragt wurde. */
+    if (TT.abgleich) TT.abgleich.angestossen();
+  }
 
   function melden(grund) {
     hoerer.forEach((fn) => fn(state, grund));

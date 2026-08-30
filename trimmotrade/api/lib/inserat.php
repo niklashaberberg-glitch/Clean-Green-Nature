@@ -629,6 +629,13 @@ final class Inserat
         }
         Db::fuehre('DELETE FROM tt_bild WHERE inserat_id = ?', [$id]);
         Db::fuehre("UPDATE tt_anfrage SET stand = 'weg' WHERE inserat_id = ?", [$id]);
+        /* Termine gehören zum Inserat. Ein Besichtigungstermin zu einer
+           Wohnung, die es nicht mehr gibt, ist kein Termin – und wer
+           gebucht hat, stünde sonst vor der Tür. */
+        $kennung = (string) Db::wert('SELECT kennung FROM tt_inserat WHERE id = ?', [$id]);
+        if ($kennung !== '') {
+            Termin::zuInseratLoeschen($kennung);
+        }
         Db::fuehre('DELETE FROM tt_inserat WHERE id = ?', [$id]);
     }
 
@@ -736,6 +743,55 @@ final class Inserat
        ausfüllen dürfte, könnte sich jedes Siegel geben.
        ------------------------------------------------------------------ */
 
+    /**
+     * Antwortverhalten einer anbietenden Seite – gemessen, nicht gesetzt.
+     *
+     * Die Zahl auf jeder Inseratskarte („antwortet in 78 % der Fälle“)
+     * war bis hierher erfunden: Der Beispielbestand würfelte sie, und
+     * echte Inserate bekamen gar keine. Beides ist schlecht. Eine
+     * erfundene Quote ist eine Aussage über einen Menschen, die niemand
+     * geprüft hat; gar keine hilft dem Suchenden nicht weiter, obwohl
+     * die Auskunft in der Datenbank steht.
+     *
+     * Gezählt wird über die letzten 180 Tage und erst ab fünf Anfragen.
+     * Darunter sagt eine Prozentzahl nichts: Wer zwei Anfragen bekam und
+     * eine beantwortete, hat keine Quote von 50 %, sondern zu wenige
+     * Fälle. Dann bleibt es bei null, und die Oberfläche schreibt, dass
+     * es noch keine Erfahrung gibt.
+     */
+    private static function erfahrung(int $kontoId): array
+    {
+        static $merker = [];
+        if (isset($merker[$kontoId])) {
+            return $merker[$kontoId];
+        }
+
+        $ab = time() - 180 * 86400;
+        $z = Db::zeile(
+            "SELECT COUNT(*) AS n,
+                    SUM(CASE WHEN stand IN ('beantwortet', 'abgelehnt') THEN 1 ELSE 0 END) AS beantwortet,
+                    SUM(CASE WHEN gelesen > 0 AND gelesen >= angelegt THEN gelesen - angelegt ELSE 0 END) AS dauer,
+                    SUM(CASE WHEN gelesen > 0 AND gelesen >= angelegt THEN 1 ELSE 0 END) AS mitDauer
+               FROM tt_anfrage WHERE an_konto_id = ? AND angelegt >= ?",
+            [$kontoId, $ab]
+        );
+
+        $n = (int) ($z['n'] ?? 0);
+        $raus = ['quote' => null, 'antwortStd' => null, 'anfragen' => $n];
+
+        if ($n >= 5) {
+            $raus['quote'] = (int) round(((int) ($z['beantwortet'] ?? 0)) / $n * 100);
+            $mitDauer = (int) ($z['mitDauer'] ?? 0);
+            if ($mitDauer >= 3) {
+                $std = ((int) ($z['dauer'] ?? 0)) / $mitDauer / 3600;
+                $raus['antwortStd'] = max(1, (int) round($std));
+            }
+        }
+
+        $merker[$kontoId] = $raus;
+        return $raus;
+    }
+
     public static function nachAussen(array $z, bool $mitBildern = true): array
     {
         $d = json_decode((string) $z['daten'], true);
@@ -749,6 +805,8 @@ final class Inserat
             [$z['konto_id']]
         );
 
+        $erfahrung = self::erfahrung((int) $z['konto_id']);
+
         $d['id'] = $z['kennung'];
         $d['echt'] = true;
         $d['anbieter'] = [
@@ -758,8 +816,9 @@ final class Inserat
             /* Was hier steht, ist gemessen, nicht behauptet. Wo nichts
                gemessen wurde, steht null – und die Oberfläche schreibt
                „noch keine Erfahrung“ statt einer Zahl. */
-            'quote' => null,
-            'antwortStd' => null,
+            'quote' => $erfahrung['quote'],
+            'antwortStd' => $erfahrung['antwortStd'],
+            'anfragen' => $erfahrung['anfragen'],
             'verifiziert' => (int) ($konto['stufe'] ?? 0) >= 2,
             'stufe' => (int) ($konto['stufe'] ?? 0),
             'seit' => date('Y-m-d', (int) ($konto['angelegt'] ?? time())),
@@ -772,6 +831,12 @@ final class Inserat
             'bewerber' => (int) $z['anfragen'],
             'online' => date('Y-m-d', (int) $z['angelegt']),
         ];
+        /* Wem das Inserat gehört, weiß der Server – der Browser nicht
+           unbedingt. Ohne diese Angabe zeigte die Objektseite dem
+           Eigentümer den Knopf „Termin nehmen“ statt der Verwaltung. */
+        $ich = Sitzung::konto();
+        $d['meins'] = $ich && (int) $ich['id'] === (int) $z['konto_id'];
+        $d['besichtigungen'] = Termin::zuInserat((string) $z['kennung'], $ich['id'] ?? null);
         $d['wgGruendungMoeglich'] = (int) $z['wg_gruendung'] === 1;
         $d['erstellt'] = date('Y-m-d', (int) $z['angelegt']);
         $d['laeuftAb'] = date('Y-m-d', (int) $z['laeuft_ab']);

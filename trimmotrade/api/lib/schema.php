@@ -8,17 +8,26 @@
    einmal und wird für beide ausgegeben. `schema.sql` für die Einrichtung
    über phpMyAdmin entsteht daraus mit `php scripts/schema-ausgeben.php`.
 
-   Der Server kennt zwei Dinge, und nur die beiden:
+   Der Server kennt vier Dinge:
 
      1. Wer jemand ist – Konten, Passkeys, Sitzungen.
      2. Was öffentlich angeboten wird – Inserate, Anfragen darauf,
-        Suchaufträge, Meldungen nach Art. 16 DSA und die Gruppen, die
-        sich zusammentun, um eine Wohnung gemeinsam zu nehmen.
-
-   Alles Übrige bleibt im Browser: Merkliste, Vergleich, Profil, der
-   Dokumententresor, jede Berechnung. Das ist keine Bequemlichkeit,
-   sondern die Trennlinie: Ein Inserat ist eine Veröffentlichung und
-   gehört auf den Server. Ein Profil ist es nicht.
+        Besichtigungstermine, Suchaufträge, Meldungen nach Art. 16 DSA
+        und die Gruppen, die sich zusammentun, um eine Wohnung
+        gemeinsam zu nehmen.
+     3. Was jemand für sich festhält – Profil, Merkliste, Bewerbungs-
+        tafel, Notizen. Das lag lange nur im Browser, und das war der
+        Grund, warum die Anwendung auf dem Telefon nichts von dem
+        wusste, was am Rechner eingetragen worden war. Für eine
+        Vorführung ging das; für einen Dienst, den jemand wirklich
+        benutzt, nicht.
+     4. Verschlüsselte Unterlagen und die befristeten Verweise darauf.
+        Der Server bekommt hier ausschließlich Chiffrat zu sehen: Der
+        Schlüssel entsteht im Browser aus dem Kennwort und wandert beim
+        Freigeben in den Fragmentteil des Verweises, den Browser nie an
+        einen Server senden. Ohne diese Tabelle wäre der Tresor eine
+        Schublade, deren Verweis nur auf demselben Gerät aufgeht – also
+        nutzlos für genau den Zweck, für den es ihn gibt.
    ===================================================================== */
 
 final class Schema
@@ -26,7 +35,7 @@ final class Schema
     /** Wird bei jeder Änderung am Modell erhöht. Die Anwendung legt
         fehlende Tabellen selbst an; diese Zahl verhindert, dass sie das
         bei jedem Aufruf nachprüft. */
-    public const VERSION = 3;
+    public const VERSION = 4;
 
     /** @return string[] */
     public static function anweisungen(string $treiber): array
@@ -353,6 +362,90 @@ final class Schema
   wert VARCHAR(190) NOT NULL
 )$ende";
 
+        /* --- Was jemand für sich festhält -----------------------------
+
+           Ein Feld je Zeile statt einer großen Spalte mit allem darin.
+           Das hat einen praktischen Grund: Der Browser schreibt nach
+           jeder Änderung nur das eine Feld zurück, das sich geändert
+           hat. Läge alles in einem Klumpen, überschriebe das Telefon
+           beim Speichern der Merkliste das Profil, das am Rechner
+           gerade bearbeitet wurde.
+
+           `wert` ist JSON und wird vom Server nicht ausgewertet – er
+           ist hier Schrank, nicht Buchhalter. Geprüft werden Größe und
+           Feldname, sonst nichts. */
+        $t[] = "CREATE TABLE IF NOT EXISTS tt_ablage (
+  konto_id BIGINT NOT NULL,
+  feld VARCHAR(40) NOT NULL,
+  wert MEDIUMTEXT NOT NULL,
+  geaendert $zeit,
+  PRIMARY KEY (konto_id, feld)
+)$ende";
+
+        /* --- Dokumententresor -----------------------------------------
+
+           `chiffrat` ist das mit AES-GCM verschlüsselte Dokument,
+           `huelle` der damit verschlüsselte Dateiname und der mit dem
+           Tresorschlüssel umschlossene Dokumentschlüssel. Beides ist
+           für den Server ein Haufen Zeichen. Er kann es speichern,
+           herausgeben und löschen – lesen kann er es nicht, auch nicht,
+           wer die Datenbank in die Hände bekommt.
+
+           Art, Größe und Datum liegen im Klartext: Ohne sie ließe sich
+           die Liste im gesperrten Tresor nicht zeigen. Sie verraten
+           nichts über den Inhalt. */
+        $t[] = "CREATE TABLE IF NOT EXISTS tt_tresor (
+  id VARCHAR(40) NOT NULL PRIMARY KEY,
+  konto_id BIGINT NOT NULL,
+  art VARCHAR(40) NOT NULL DEFAULT 'sonstiges',
+  typ VARCHAR(80) NOT NULL DEFAULT '',
+  groesse BIGINT NOT NULL DEFAULT 0,
+  huelle MEDIUMTEXT NOT NULL,
+  chiffrat LONGTEXT NOT NULL,
+  hinzu $zeit
+)$ende";
+
+        /* Eine Freigabe ist ein Verweis mit Verfallsdatum und Zähler.
+           `dokumente` nennt die Kennungen, `abrufe` die Zeitpunkte –
+           beides JSON, beides klein. Der Schlüssel steht nicht hier
+           und nirgends sonst auf dem Server. */
+        $t[] = "CREATE TABLE IF NOT EXISTS tt_freigabe (
+  id VARCHAR(40) NOT NULL PRIMARY KEY,
+  konto_id BIGINT NOT NULL,
+  dokumente TEXT NOT NULL,
+  empfaenger VARCHAR(160) NOT NULL DEFAULT '',
+  objekt VARCHAR(40) NOT NULL DEFAULT '',
+  erstellt $zeit,
+  ablauf $zeit,
+  max_abrufe INTEGER NOT NULL DEFAULT 3,
+  abrufe TEXT NOT NULL DEFAULT '[]',
+  widerrufen $ja
+)$ende";
+
+        /* --- Besichtigungstermine -------------------------------------
+
+           Sie gehören zum Inserat, nicht zum Konto: Wer das Inserat
+           löscht, löscht die Termine mit. Ein Platz ist genommen,
+           sobald eine Buchung dazu steht – gezählt wird nicht in einer
+           Spalte, sondern aus den Buchungen. Eine Zählspalte läuft
+           irgendwann auseinander, eine Zeile nicht. */
+        $t[] = "CREATE TABLE IF NOT EXISTS tt_termin (
+  id VARCHAR(40) NOT NULL PRIMARY KEY,
+  inserat_id VARCHAR(40) NOT NULL,
+  datum VARCHAR(10) NOT NULL,
+  zeit VARCHAR(5) NOT NULL,
+  art VARCHAR(40) NOT NULL DEFAULT 'Einzeltermin',
+  plaetze INTEGER NOT NULL DEFAULT 1,
+  angelegt $zeit
+)$ende";
+
+        $t[] = "CREATE TABLE IF NOT EXISTS tt_buchung (
+  termin_id VARCHAR(40) NOT NULL,
+  konto_id BIGINT NOT NULL,
+  angelegt $zeit,
+  PRIMARY KEY (termin_id, konto_id)
+)$ende";
+
         /* --- Nachträglich hinzugekommene Spalten -----------------------
 
            `CREATE TABLE IF NOT EXISTS` legt eine fehlende Tabelle an –
@@ -366,6 +459,16 @@ final class Schema
            scheitert das mit „Spalte gibt es schon“ – und genau das ist
            der Fall, den `istSchonDa` durchgehen lässt. */
         $t[] = "ALTER TABLE tt_inserat ADD COLUMN wg_gruendung $ja";
+
+        /* Plus und der Gründerplatz gehören ans Konto, nicht in den
+           Browser. Vorher stand beides im Speicher des Geräts: Wer sich
+           am Telefon anmeldete, hatte dort kein Plus, und die Zahl der
+           vergebenen Plätze war eine Hochrechnung aus der Zeit seit dem
+           Start – also geraten. § 7 der Geschäftsbedingungen sagt „die
+           ersten 500“, und das lässt sich nur zentral einhalten. */
+        $t[] = "ALTER TABLE tt_konto ADD COLUMN plus_bis $zeit DEFAULT 0";
+        $t[] = "ALTER TABLE tt_konto ADD COLUMN gruender_nr INTEGER DEFAULT 0";
+        $t[] = "ALTER TABLE tt_konto ADD COLUMN gruender_bis $zeit DEFAULT 0";
 
         /* --- Indizes --------------------------------------------------
            Getrennt, weil MariaDB sie in CREATE TABLE erlaubt, SQLite
@@ -392,6 +495,12 @@ final class Schema
         $t[] = 'CREATE INDEX IF NOT EXISTS ix_gruppe_gruender ON tt_gruppe (gruender_id)';
         $t[] = 'CREATE INDEX IF NOT EXISTS ix_person_gruppe ON tt_gruppe_person (gruppe_id, stand)';
         $t[] = 'CREATE INDEX IF NOT EXISTS ix_person_konto ON tt_gruppe_person (konto_id)';
+        $t[] = 'CREATE INDEX IF NOT EXISTS ix_tresor_konto ON tt_tresor (konto_id)';
+        $t[] = 'CREATE INDEX IF NOT EXISTS ix_freigabe_konto ON tt_freigabe (konto_id, erstellt)';
+        $t[] = 'CREATE INDEX IF NOT EXISTS ix_freigabe_ablauf ON tt_freigabe (ablauf)';
+        $t[] = 'CREATE INDEX IF NOT EXISTS ix_termin_inserat ON tt_termin (inserat_id, datum, zeit)';
+        $t[] = 'CREATE INDEX IF NOT EXISTS ix_buchung_konto ON tt_buchung (konto_id)';
+        $t[] = 'CREATE INDEX IF NOT EXISTS ix_konto_gruender ON tt_konto (gruender_nr)';
 
         return $t;
     }

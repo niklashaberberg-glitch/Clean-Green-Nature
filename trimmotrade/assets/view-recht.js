@@ -220,21 +220,26 @@
 
         <div class="block block--betont">
           <h2>${ico('schloss')}Das Wichtigste zuerst</h2>
-          <p>TrimmoTrade rechnet im Browser. Suche, Bewertung, Karte, Ringtausch, Merkliste, Vergleich,
-            Notizen und Profil entstehen auf deinem Gerät und bleiben dort. Sie werden nicht an den
-            Anbieter übertragen und nicht an Dritte weitergegeben.</p>
-          <p>Zum Server geht, was andere erreichen muss – und sonst nichts. Das sind vier Dinge: die
-            <b>Anmeldung</b> (Abschnitt 4), die <b>Inserate</b>, die du veröffentlichst (Abschnitt 5), die
-            <b>Anfragen</b>, die du schreibst oder bekommst (Abschnitt 6), und deine <b>Suchaufträge</b>,
-            damit die Mail auch dann herausgeht, wenn du gerade nicht hier bist (Abschnitt 7). Dazu
-            kommt, was du einer <b>WG-Gruppe</b> über dich erzählst, wenn du eine gründest oder ihr
-            beitrittst (Abschnitt 8).</p>
-          <p>Die Trennlinie verläuft nicht willkürlich: Ein Inserat ist eine Veröffentlichung und muss
-            andere erreichen. Eine Merkliste ist eine Notiz und geht niemanden etwas an.</p>
-          <p>Ohne Anmeldung geht auch das nicht: Suche und Inserate lassen sich ansehen, ohne dass ein
-            Konto entsteht.</p>
+          <p>TrimmoTrade rechnet im Browser. Suche, Bewertung, Karte, Ringtausch, Passung und jede
+            Schätzung entstehen auf deinem Gerät. <b>Ohne Anmeldung verlässt davon nichts deinen Browser</b> –
+            Suche und Inserate lassen sich ansehen, ohne dass ein Konto entsteht und ohne dass etwas über
+            dich gespeichert wird.</p>
+          <p>Mit einem Konto kommt eines hinzu: Dein Arbeitsstand liegt zusätzlich auf dem Server, damit du
+            ihn auf jedem deiner Geräte wiederfindest und nicht verlierst, wenn du die Browserdaten löschst.
+            Der Server verwahrt ihn und wertet ihn nicht aus – keine Suche über Profile, keine Auswertung,
+            keine Statistik (Abschnitt 11).</p>
+          <p>Zum Server geht damit: die <b>Anmeldung</b> (Abschnitt 4), die <b>Inserate</b>, die du
+            veröffentlichst (Abschnitt 5), die <b>Anfragen</b> und <b>Besichtigungstermine</b>
+            (Abschnitt 6), deine <b>Suchaufträge</b>, damit die Mail auch dann herausgeht, wenn du gerade
+            nicht hier bist (Abschnitt 7), was du einer <b>WG-Gruppe</b> über dich erzählst (Abschnitt 8),
+            dein <b>Arbeitsstand</b> für den Gerätewechsel (Abschnitt 11) und der <b>Dokumententresor</b> –
+            der allerdings verschlüsselt wird, bevor er den Browser verlässt, und für den Anbieter nicht
+            lesbar ist (Abschnitt 12).</p>
+          <p>Die Trennlinie verläuft nicht willkürlich: Was andere erreichen muss, gehört auf den Server.
+            Was nur dich angeht, liegt dort so, dass der Anbieter nichts damit anfängt – und die Unterlagen,
+            bei denen das nicht genügt, liegen verschlüsselt.</p>
           <p>Es werden keine Werkzeuge zur Reichweitenmessung eingesetzt, keine Profile über dein Verhalten
-            gebildet und keine Werbung nach deinen Interessen ausgespielt. Gezählt wird nur, wie oft eine
+            gebildet und keine Werbung ausgespielt – es gibt hier keine. Gezählt wird nur, wie oft eine
             Ansicht an einem Tag insgesamt geöffnet wurde – ohne Kennung, ohne Adresse, ohne Verlauf
             (Abschnitt 10). Deshalb erscheint auch kein Fenster, das um Einwilligung bittet: Es gibt nichts,
             wozu eine Einwilligung nötig wäre.</p>
@@ -280,9 +285,11 @@
             <li>${ico('pruefen')}<span>deine offenen Sitzungen: Zeitpunkt, IP-Adresse und Browserangabe des
               Geräts, damit du sie beenden kannst</span></li>
           </ul>
-          <p><b>Nicht auf dem Server liegen:</b> Merkliste, Vergleich, Bewerbungstafel, Notizen, Profil,
-            Suchverlauf, jede Berechnung und der Dokumententresor. Diese Daten verlassen deinen Browser
-            nicht.</p>
+          <p><b>Nicht im Konto stehen:</b> das Farbschema, die gewählte Ansichtsart und jede Berechnung
+            der Rechner – die entsteht bei jedem Aufruf neu auf deinem Gerät. Was du an Profil, Merkliste,
+            Vergleich, Bewerbungstafel und Suchaufträgen anlegst, wird dagegen deinem Konto zugeordnet
+            gespeichert, damit es auf jedem deiner Geräte da ist; Abschnitt 11 beschreibt das im Einzelnen,
+            Abschnitt 12 den Dokumententresor.</p>
           <dl class="rechtsliste">
             <dt>Zweck</dt><dd>Bereitstellung des Zugangs, Zuordnung von Inseraten und Anfragen, Schutz vor
               missbräuchlicher Mehrfachanlage</dd>
@@ -382,6 +389,24 @@
             <dt>Empfänger</dt><dd>die anbietende Seite des jeweiligen Inserats</dd>
           </dl>
 
+          <h3>Besichtigungstermine</h3>
+          <p>Wer inseriert, kann Termine zur Besichtigung eintragen. Buchst du einen davon, wird
+            gespeichert, welches Konto welchen Termin belegt – mehr nicht. Die anbietende Seite erfährt,
+            dass ein Platz genommen wurde, und sieht, wie viele Plätze belegt sind; deinen Namen bekommt sie
+            an dieser Stelle nicht. Auch die übrigen Teilnehmer siehst du nicht, und sie sehen dich nicht:
+            Wer zu einer Besichtigung geht, hat nicht eingewilligt, den Mitbewerbern namentlich bekannt zu
+            werden.</p>
+          <p>Eine Mail geht an dich, wenn die anbietende Seite den Termin absagt. Sagst du selbst ab,
+            verschwindet deine Buchung sofort und der Platz wird wieder frei.</p>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Vereinbarung und Verwaltung von Besichtigungsterminen</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – vorvertragliche Maßnahme auf deine
+              Buchung hin</dd>
+            <dt>Speicherdauer</dt><dd>bis du absagst; im Übrigen 90 Tage nach dem Termin, mit dem Inserat
+              oder mit deinem Konto auch früher</dd>
+            <dt>Empfänger</dt><dd>die anbietende Seite des jeweiligen Inserats</dd>
+          </dl>
+
           <h2>7. Suchaufträge und Erinnerungen</h2>
           <p>Ein Suchauftrag speichert deine Filter und deine E-Mail-Adresse auf dem Server. Kommt ein
             passendes Inserat dazu, geht eine Mail an dich hinaus. Ohne Speicherung auf dem Server ginge das
@@ -462,45 +487,86 @@
           <p class="fein">Warum das hier trotzdem steht: Wer wissen will, was mit ihm passiert, soll nicht
             erst herausfinden müssen, was <em>nicht</em> in der Erklärung steht.</p>
 
-          <h2>11. Speicher deines Browsers</h2>
-          <p>TrimmoTrade legt deine Eingaben im lokalen Speicher deines Browsers ab – Profil, Merkliste,
-            Vergleich, Bewerbungstafel, Notizen, gespeicherte Filter und die Einstellungen zur Darstellung.
-            Diese Daten verlassen dein Gerät nicht. Der Anbieter hat keinen Zugriff darauf.</p>
-          <p class="fein">Zwei Dinge liegen dabei an beiden Stellen, und das hat einen Grund: Ein Inserat,
-            das du veröffentlichst, steht auf dem Server (Abschnitt 5) – sonst könnte es niemand sehen.
-            Ein Suchauftrag, der dir Mails schickt, steht ebenfalls dort (Abschnitt 7) – sonst käme keine
-            Mail, während dein Browser geschlossen ist. Was ohne Server auskommt, bleibt hier.</p>
-          <p>Für den Zugriff auf diesen Speicher ist keine Einwilligung erforderlich: Er ist unbedingt
-            erforderlich, damit der von dir ausdrücklich gewünschte Dienst überhaupt funktioniert
+          <h2>11. Dein Arbeitsstand: Browser und Gerätewechsel</h2>
+          <p>TrimmoTrade legt deine Eingaben zuerst im lokalen Speicher deines Browsers ab – Profil,
+            Merkliste, Vergleich, Bewerbungstafel, Notizen, gespeicherte Filter und die Einstellungen zur
+            Darstellung. <b>Ohne Konto bleibt es dabei:</b> Diese Daten verlassen dein Gerät nicht, und der
+            Anbieter hat keinen Zugriff darauf.</p>
+          <p>Bist du angemeldet, wird derselbe Stand zusätzlich zu deinem Konto auf dem Server abgelegt.
+            Das ist der Grund, warum du die Suche am Rechner beginnen und unterwegs auf dem Telefon
+            fortsetzen kannst – und warum gelöschte Browserdaten nicht mehr alles mitnehmen.</p>
+          <ul class="pruef">
+            <li>${ico('pruefen')}<span><b>Was mitgeht:</b> Profil, Merkliste samt deiner Notizen, Vergleich,
+              Bewerbungstafel, Suchaufträge, zuletzt gesehene Inserate, gespeicherte Filter, Umzugsplan,
+              Übergabeprotokoll, die zuletzt eingegebenen Werte der Rechner und welche Hinweise du
+              weggeklickt hast</span></li>
+            <li>${ico('pruefen')}<span><b>Was nicht mitgeht:</b> Farbschema und Ansichtsart – die gehören
+              zum Gerät und nicht zu dir</span></li>
+            <li>${ico('pruefen')}<span><b>Was der Server damit tut:</b> nichts. Er nimmt die Angaben als
+              Text entgegen, gibt sie unverändert zurück und liest sie nicht aus. Es findet keine Suche über
+              Profile statt, keine Auswertung, keine Statistik, keine Weitergabe.</span></li>
+          </ul>
+          <dl class="rechtsliste">
+            <dt>Zweck</dt><dd>Fortsetzen der Nutzung auf einem anderen Gerät und Schutz deiner Eingaben vor
+              Verlust</dd>
+            <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO – Erfüllung des Nutzungsvertrags über
+              ein Konto, dessen Zweck genau das ist</dd>
+            <dt>Speicherdauer</dt><dd>bis du die Angaben in der Anwendung löschst, längstens bis zur
+              Löschung deines Kontos</dd>
+            <dt>Empfänger</dt><dd>der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO. An Dritte
+              geht nichts.</dd>
+          </dl>
+          <p class="fein">Der Browser bleibt die Wahrheit für den laufenden Besuch, der Server ist die
+            Kopie, die den Gerätewechsel überlebt. Fällt der Server aus, arbeitet die Anwendung weiter –
+            nur eben ohne Abgleich.</p>
+          <p>Für den Zugriff auf den Speicher deines Browsers ist keine Einwilligung erforderlich: Er ist
+            unbedingt erforderlich, damit der von dir ausdrücklich gewünschte Dienst überhaupt funktioniert
             (§ 25 Abs. 2 Nr. 2 des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes).</p>
           <p>Du kannst diese Daten jederzeit im Fußbereich unter „Meine Daten“ als Datei sichern oder
-            vollständig löschen. Sie verschwinden ebenfalls, wenn du die Browserdaten löschst.</p>
+            vollständig löschen. Löschst du sie dort, während du angemeldet bist, verschwinden sie auch auf
+            dem Server.</p>
 
           <h2>12. Dokumententresor</h2>
-          <p>Legst du Unterlagen im Dokumententresor ab, werden sie <b>vor dem Speichern</b> in deinem Browser
-            verschlüsselt – mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem Kennwort und wird
-            nirgends gespeichert. Verschlüsselt werden auch die Dateinamen.</p>
+          <p>Legst du Unterlagen im Dokumententresor ab, werden sie <b>in deinem Browser verschlüsselt,
+            bevor sie ihn verlassen</b> – mit AES-GCM und 256 Bit. Der Schlüssel entsteht aus deinem
+            Kennwort und wird nirgends gespeichert; verschlüsselt wird auch der Dateiname.</p>
+          <p>Erst danach geht das Chiffrat zum Server. Es liegt dort, damit du deine Unterlagen auf einem
+            zweiten Gerät wiederfindest und damit ein Verweis, den du verschickst, auch dann aufgeht, wenn
+            dein Browser geschlossen ist. Ohne das wäre eine Freigabe wertlos.</p>
+          <p><b>Der Anbieter kann diese Dateien nicht lesen.</b> Er hat weder dein Kennwort noch den
+            Schlüssel; im Speicher liegt für ihn Rauschen. Unverschlüsselt liegen genau drei Angaben, ohne
+            die sich der Tresor nicht bedienen ließe: die Art der Unterlage, die du beim Ablegen gewählt
+            hast (etwa „Gehaltsnachweis“), die Größe in Byte und der Zeitpunkt des Ablegens.</p>
           <p>Gibst du Unterlagen frei, wird kein Anhang verschickt, sondern ein Verweis. Der Schlüssel dazu
             steht im Fragmentteil dieses Verweises – dem Teil hinter dem Rautezeichen, den Browser
-            grundsätzlich nicht an Server übertragen. Der Anbieter kann die abgelegten Dateien deshalb auch
-            dann nicht lesen, wenn er Zugriff auf den Speicher hätte.</p>
+            grundsätzlich nicht an Server übertragen. Zur Freigabe selbst wird gespeichert, welche Dokumente
+            sie umfasst, für wen du sie gedacht hast, wann sie abläuft, wie oft sie noch abgerufen werden
+            darf und der Zeitpunkt jedes Abrufs – damit du siehst, ob deine Unterlagen angesehen wurden.
+            Wer abgerufen hat, wird nicht festgehalten.</p>
           <dl class="rechtsliste">
-            <dt>Zweck</dt><dd>Erfüllung des Vertrags über die Nutzung von TrimmoTrade</dd>
+            <dt>Zweck</dt><dd>Erfüllung des Vertrags über die Nutzung von TrimmoTrade; bei einer Freigabe
+              die Übermittlung an die Stelle, der du sie zugedacht hast</dd>
             <dt>Rechtsgrundlage</dt><dd>Art. 6 Abs. 1 lit. b DSGVO; für die Verschlüsselung zugleich
               Art. 32 DSGVO – Sicherheit der Verarbeitung</dd>
-            <dt>Speicherdauer</dt><dd>bis du das Dokument löschst oder den Tresor leerst</dd>
+            <dt>Speicherdauer</dt><dd>bis du das Dokument löschst, den Tresor leerst oder dein Konto
+              beendest. Eine Freigabe verliert ihre Wirkung mit dem Ablauf, den du gesetzt hast – längstens
+              nach 30 Tagen; widerrufen kannst du sie jederzeit vorher, und der Verweis führt danach sofort
+              ins Leere. Der Eintrag selbst bleibt noch 14 Tage stehen, damit du nachsehen kannst, was du
+              wann freigegeben hast, und wird dann gelöscht.</dd>
+            <dt>Empfänger</dt><dd>der Hostinganbieter als Auftragsverarbeiter nach Art. 28 DSGVO; darüber
+              hinaus nur, wem du selbst einen Verweis gibst</dd>
           </dl>
-          <p class="fein">Auch die verschlüsselten Dateien liegen ausschließlich in deinem Browser. Der
-            Server der Anmeldung sieht sie nie – er kennt weder Dateien noch Kennwort noch Schlüssel.</p>
+          <p class="fein">Warum das hier so ausführlich steht: „Ende-zu-Ende-verschlüsselt“ schreiben viele.
+            Prüfbar wird es erst, wenn danebensteht, was <em>nicht</em> verschlüsselt ist.</p>
 
-          <h2>13. Werbung im freien Tarif</h2>
-          <p>Der freie Tarif wird über Anzeigen finanziert. Diese Anzeigen sind fest hinterlegt und werden
-            nach der Stelle ausgewählt, an der sie erscheinen – nicht nach deiner Person, deinem Verhalten
-            oder deinen Eingaben. Es findet kein Abgleich mit Werbenetzwerken statt, es werden keine Kennungen
-            gesetzt und es gehen keine Daten an Werbetreibende. Deshalb ist auch dafür keine Einwilligung
-            erforderlich.</p>
-          <p>Anzeigen sind stets als solche gekennzeichnet (§ 5a Abs. 4 des Gesetzes gegen den unlauteren
-            Wettbewerb) und werden nie im Erscheinungsbild eines Inserats dargestellt.</p>
+          <h2>13. Keine Werbung</h2>
+          <p>Auf TrimmoTrade erscheint keine Werbung – weder eigene noch fremde. Es ist kein Werbenetzwerk
+            eingebunden, es werden keine Werbekennungen gesetzt, und es gehen keine Daten an
+            Werbetreibende. Es gibt auch nichts, was sich zuschalten ließe: Die Anwendung enthält keinen
+            Programmteil, der Anzeigen ausspielen könnte.</p>
+          <p>Getragen wird der freie Tarif von den entgeltlichen Leistungen – TrimmoTrade Plus und die
+            Hervorhebung eigener Inserate. Beide sind dort, wo sie wirken, als bezahlt gekennzeichnet
+            (§ 5b Abs. 1 Nr. 6 des Gesetzes gegen den unlauteren Wettbewerb).</p>
 
           <h2>14. Kontaktaufnahme und Hilfe</h2>
           <p>Schreibst du per E-Mail, verarbeitet der Anbieter die Angaben aus deiner Nachricht, um sie zu
@@ -553,8 +619,11 @@
               (Art. 7 Abs. 3 DSGVO)</span></li>
           </ul>
           <p>Für die Ausübung genügt eine formlose Nachricht an ${rw('email', 'E-Mail-Adresse')}.</p>
-          <p class="fein">Weil deine Eingaben ausschließlich in deinem Browser liegen, kannst du Auskunft,
-            Übertragbarkeit und Löschung dort unmittelbar selbst ausüben: im Fußbereich unter „Meine Daten“.</p>
+          <p class="fein">Auskunft, Übertragbarkeit und Löschung kannst du unmittelbar selbst ausüben, ohne
+            jemanden zu fragen: im Fußbereich unter „Meine Daten“. Was dort als Datei herauskommt, ist
+            derselbe Stand, der zu deinem Konto abgelegt ist; was du dort löschst, verschwindet auch auf dem
+            Server. Für das Konto selbst genügt ein Klick in den Einstellungen – die Löschung wirkt sofort
+            und nimmt Inserate, Ablage und Tresor mit.</p>
 
           <h2>19. Beschwerderecht</h2>
           <p>Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), insbesondere in
@@ -651,12 +720,15 @@
           <p>(8) Der Vertragstext wird nach Abschluss auf einem dauerhaften Datenträger bestätigt
             (§ 312f BGB). Vertragssprache ist Deutsch.</p>
 
-          <h2>§ 4 Freier Tarif und Werbung</h2>
-          <p>(1) Der freie Tarif ist dauerhaft ohne Entgelt nutzbar und über Anzeigen finanziert.</p>
-          <p>(2) Anzeigen sind stets als solche gekennzeichnet und vom übrigen Inhalt deutlich abgesetzt. Sie
-            werden nicht nach dem Verhalten oder den Eingaben der Nutzenden ausgewählt.</p>
-          <p>(3) Der Anbieter behält sich vor, Umfang und Platzierung von Anzeigen zu ändern. Die Funktionen
-            des freien Tarifs bleiben davon unberührt.</p>
+          <h2>§ 4 Freier Tarif</h2>
+          <p>(1) Der freie Tarif ist dauerhaft ohne Entgelt nutzbar. Er umfasst die vollständige Suche, die
+            Karte, die Bewertung nach dem eigenen Profil, den Prüfhinweis auf Betrugsmerkmale, den Abgleich
+            mit der ortsüblichen Vergleichsmiete und sämtliche Rechner.</p>
+          <p>(2) <b>Werbung wird nicht ausgespielt.</b> Der freie Tarif wird durch die entgeltlichen
+            Leistungen nach den §§ 5 und 6 getragen.</p>
+          <p>(3) Der Anbieter behält sich vor, den Umfang des freien Tarifs zu ändern. Leistungen, die dem
+            Schutz der Nutzenden dienen – insbesondere Prüfhinweis, Vergleichsmiete und Meldeweg –, bleiben
+            entgeltfrei.</p>
 
           <h2>§ 5 TrimmoTrade Plus</h2>
           <p>(1) TrimmoTrade Plus umfasst die auf der <a href="#/plus">Tarifseite</a> beschriebenen Leistungen.
@@ -675,6 +747,11 @@
           <p>(5) Erhöht der Anbieter den Preis, teilt er dies mindestens sechs Wochen vor Wirksamwerden in
             Textform mit. Die Nutzenden können den Vertrag bis zum Wirksamwerden zum Zeitpunkt der Erhöhung
             kündigen; darauf wird in der Mitteilung hingewiesen.</p>
+          <p>(6) Ein entgeltlicher Vertrag kommt erst zustande, wenn in der Anwendung ein Zahlungsweg
+            angeboten wird. Solange das nicht der Fall ist, gibt es keine Schaltfläche, mit der sich Plus
+            kaufen ließe, es werden keine Zahlungsdaten erhoben und es entsteht keine Zahlungspflicht;
+            die Absätze 1 bis 5 beschreiben dann die Bedingungen, zu denen ein Vertrag geschlossen würde.
+            Zugänglich sind die Leistungen von Plus in dieser Zeit über einen Gründerplatz nach § 7.</p>
 
           <h2>§ 6 Bezahlte Sichtbarkeit</h2>
           <p>(1) Der Anbieter stellt zwei Formen bezahlter Sichtbarkeit bereit:</p>
@@ -698,6 +775,9 @@
           <p>(5) Hervorhebungen sind digitale Dienstleistungen. Für Verbraucherinnen und Verbraucher gilt das
             <a href="#/recht/widerruf">Widerrufsrecht</a>; beginnt die Leistung auf ausdrücklichen Wunsch
             sofort, erlischt es nach § 356 Abs. 5 BGB.</p>
+          <p>(6) § 5 Abs. 6 gilt entsprechend: Ohne angebotenen Zahlungsweg lässt sich bezahlte Sichtbarkeit
+            nicht buchen. Die Reihenfolge der Treffer entsteht dann ausschließlich aus den Angaben der
+            suchenden Person.</p>
 
           <h2>§ 7 Gründerplätze</h2>
           <p>(1) Der Anbieter vergibt die ersten <b>${U.num(g.plaetze)} Plätze</b> mit den Leistungen von
@@ -1188,11 +1268,12 @@ Datum: __________________
     ui.toast('Gekündigt. Die Bestätigung würde im Betrieb in Textform zugehen.', 'gut');
   });
 
-  A_('gruender-zurueck', () => {
-    if (!confirm('Gründerplatz zurückgeben? Der Platz geht an die nächste Person, und Plus endet sofort.')) return;
-    P.gruenderAufgeben();
-    ui.neuZeichnen();
-    ui.toast('Gründerplatz zurückgegeben.');
+  A_('gruender-zurueck', (el) => {
+    if (!confirm(U.t('Gründerplatz zurückgeben? Der Platz geht an die nächste Person, und Plus endet sofort.'))) return;
+    ui.knopfArbeit(el, Promise.resolve(P.gruenderAufgeben()).then(() => {
+      ui.neuZeichnen();
+      ui.toast('Gründerplatz zurückgegeben.');
+    }, (e) => ui.toast((e && e.text) || 'Das ging nicht.', 'schlecht')));
   });
 
   TT.viewRecht = { SEITEN };

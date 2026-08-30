@@ -178,10 +178,17 @@
 
   /* Ein einzelnes echtes Inserat nachholen – für einen geteilten
      Verweis auf etwas, das nicht in den ersten 120 lag. */
-  function objekt(id) {
-    if (TT.data.byId[id]) return Promise.resolve(TT.data.byId[id]);
+  /**
+   * Ein einzelnes echtes Inserat holen.
+   *
+   * Mit `neu` auch dann, wenn es schon im Bestand liegt – nach einer
+   * Buchung oder einem neuen Zeitfenster hat sich daran etwas geändert,
+   * und die Zahl der freien Plätze hängt an den Buchungen aller.
+   */
+  function objekt(id, neu) {
+    if (TT.data.byId[id] && !neu) return Promise.resolve(TT.data.byId[id]);
     if (!TT.api || !TT.api.da || !/^tt[0-9a-f]{16}$/.test(String(id))) {
-      return Promise.resolve(null);
+      return Promise.resolve(TT.data.byId[id] || null);
     }
     return TT.api.ruf('objekt/' + encodeURIComponent(id))
       .then((d) => {

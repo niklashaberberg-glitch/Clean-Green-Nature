@@ -63,6 +63,10 @@ require_once __DIR__ . '/lib/anfrage.php';
 require_once __DIR__ . '/lib/auftrag.php';
 require_once __DIR__ . '/lib/gruppe.php';
 require_once __DIR__ . '/lib/moderation.php';
+require_once __DIR__ . '/lib/ablage.php';
+require_once __DIR__ . '/lib/tresor.php';
+require_once __DIR__ . '/lib/termin.php';
+require_once __DIR__ . '/lib/tarif.php';
 require_once __DIR__ . '/lib/selbsttest.php';
 
 Db::start($cfg);
@@ -71,6 +75,7 @@ Grenze::start($cfg);
 Post::start($cfg);
 Oauth::start($cfg);
 Bild::start($cfg);
+Tarif::start($cfg);
 
 const ANKER_COOKIE = 'tt_anker';
 
@@ -90,7 +95,8 @@ if (PHP_SAPI === 'cli') {
             . "Für den Cron-Auftrag\n"
             . "  melden        Suchaufträge abarbeiten und neue Treffer verschicken (stündlich)\n"
             . "  erinnern      anbietende Seite fragen, ob ein Inserat noch steht (täglich)\n"
-            . "  aufraeumen    abgelaufene Sitzungen, Vorgänge und Gruppen wegräumen (nachts)\n\n"
+            . "  aufraeumen    abgelaufene Sitzungen, Vorgänge, Gruppen, Freigaben und Termine\n"
+            . "                wegräumen (nachts)\n\n"
             . "Zum Nachsehen\n"
             . "  pruefen       prüft Einrichtung und Betrieb und sagt, was fehlt\n"
             . "  zahlen [tage] den Trichter der letzten 14 Tage ausgeben\n\n"
@@ -106,9 +112,10 @@ if (PHP_SAPI === 'cli') {
     try {
         Db::pdo();
         if ($befehl === 'aufraeumen') {
-            Db::aufraeumen(true);
+            $r = alleAufraeumen(true);
             Selbsttest::laufMerken('aufraeumen');
-            echo "Aufgeräumt.\n";
+            echo "Aufgeräumt: " . $r['freigaben'] . " abgelaufene Freigaben, "
+                . $r['termine'] . " vergangene Termine.\n";
         } elseif ($befehl === 'melden') {
             $n = Auftrag::lauf($BASIS, true);
             Selbsttest::laufMerken('melden');
@@ -179,6 +186,33 @@ if ($pfad === 'bild/neu') {
 
 /* Der Rumpf kommt als JSON. Formulare gibt es hier nicht – und weil es
    sie nicht gibt, kann auch keine fremde Seite eines abschicken. */
+/* Aufräumen an einer Stelle.
+
+   Sitzungen, Vorgänge und abgelaufene Gruppen kennt die Datenbank selbst;
+   abgelaufene Freigaben und vergangene Besichtigungstermine kennen ihre
+   eigenen Klassen. Der Würfel liegt deshalb hier und nicht in `Db`: Läge
+   er dort, entschiede jeder Aufruf für sich, und es käme der Zustand
+   vor, dass die Sitzungen weggeräumt sind und die Termine seit Monaten
+   nicht. */
+function alleAufraeumen(bool $erzwingen = false): array
+{
+    if (!$erzwingen && random_int(1, 50) !== 1) {
+        return [];
+    }
+    Db::aufraeumen(true);
+    $raus = ['freigaben' => 0, 'termine' => 0];
+    try {
+        $raus['freigaben'] = Tresor::aufraeumen();
+        $raus['termine'] = Termin::aufraeumen();
+    } catch (PDOException $e) {
+        /* Ein misslungenes Aufräumen darf keine Anfrage abbrechen – der
+           Besucher kann nichts dafür und der nächste Lauf versucht es
+           erneut. */
+        error_log('TrimmoTrade: Aufräumen fehlgeschlagen – ' . $e->getMessage());
+    }
+    return $raus;
+}
+
 function rumpf(): array
 {
     static $d = null;
@@ -225,7 +259,7 @@ if ($art === 'POST') {
     Sitzung::schutzPruefen();
 }
 
-Db::aufraeumen();
+alleAufraeumen();
 
 /* =====================================================================
    Die einzelnen Wege
@@ -273,7 +307,7 @@ try {
                         "SELECT COUNT(*) FROM tt_gruppe WHERE stand = 'offen' AND offen = 1 AND laeuft_ab > ?",
                         [time()]
                     ),
-                    'beispiele' => (bool) ($cfg['beispielmarkt'] ?? true),
+                    'beispiele' => (bool) ($cfg['beispielmarkt'] ?? false),
                     'bilder' => Bild::moeglich(),
                 ],
             ]);
@@ -1071,6 +1105,192 @@ try {
             $k = Sitzung::verlangen();
             Grenze::sperreOderWeiter('anfrage', (string) $k['kennung']);
             Antwort::gut(['gruppe' => Gruppe::bewerben($k, feld('id'), feld('text'), $BASIS)]);
+
+        /* ==============================================================
+           Was jemand für sich festhält
+
+           Zwei Wege, mehr braucht es nicht: alles holen, Teile
+           schreiben. Der Server wertet nichts davon aus.
+           ============================================================== */
+
+        case 'ablage':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut([
+                'ablage' => Ablage::alles((int) $k['id']),
+                'belegt' => Ablage::belegt((int) $k['id']),
+            ]);
+
+        case 'ablage/setzen':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            $felder = rumpf()['felder'] ?? null;
+            if (!is_array($felder)) {
+                Antwort::fehler('Es kam kein Feld an.', 400);
+            }
+            Antwort::gut(Ablage::setzen((int) $k['id'], $felder));
+
+        /* ==============================================================
+           Dokumententresor
+
+           Der Server sieht ausschließlich Chiffrat. Der einzige Weg
+           ohne Anmeldung ist der Abruf einer Freigabe – er muss es
+           sein: Die Vermieterseite legt für einen Blick in drei
+           Gehaltsabrechnungen kein Konto an.
+           ============================================================== */
+
+        case 'tresor/liste':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut([
+                'dokumente' => Tresor::liste((int) $k['id']),
+                'freigaben' => Tresor::freigaben((int) $k['id']),
+                'belegt'    => Tresor::belegt((int) $k['id']),
+            ]);
+
+        case 'tresor/neu':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Grenze::sperreOderWeiter('bild', (string) $k['kennung']);
+            Antwort::gut(Tresor::hinzufuegen((int) $k['id'], rumpf()));
+
+        case 'tresor/holen':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(['dokument' => Tresor::holen((int) $k['id'], feld('id'))]);
+
+        case 'tresor/loeschen':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Tresor::loeschen((int) $k['id'], feld('id'));
+            Antwort::gut(['dokumente' => Tresor::liste((int) $k['id'])]);
+
+        case 'tresor/leeren':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(['geloescht' => Tresor::alleLoeschen((int) $k['id'])]);
+
+        case 'freigabe/neu':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Grenze::sperreOderWeiter('anfrage', (string) $k['kennung']);
+            Antwort::gut(['freigabe' => Tresor::freigeben((int) $k['id'], rumpf())]);
+
+        case 'freigabe/widerrufen':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Tresor::widerrufen((int) $k['id'], feld('id'));
+            Antwort::gut(['freigaben' => Tresor::freigaben((int) $k['id'])]);
+
+        case 'freigabe/loeschen':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Tresor::freigabeLoeschen((int) $k['id'], feld('id'));
+            Antwort::gut(['freigaben' => Tresor::freigaben((int) $k['id'])]);
+
+        /* Ohne Anmeldung. Gesperrt ist der Weg trotzdem: Ohne den
+           Schlüssel aus dem Fragmentteil des Verweises ist alles, was
+           hier herauskommt, unlesbar. Die Sperre je IP steht gegen das
+           Durchprobieren von Kennungen. */
+        case 'freigabe/abruf':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            Grenze::sperreOderWeiter('melden', '');
+            Antwort::gut(Tresor::abrufen(feld('id')));
+
+        /* ==============================================================
+           Besichtigungstermine
+           ============================================================== */
+
+        case 'termin/neu':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(Termin::anlegen($k, feld('inserat'), rumpf()));
+
+        case 'termin/weg':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(Termin::entfernen($k, feld('id'), $BASIS));
+
+        case 'termin/buchen':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Grenze::sperreOderWeiter('anfrage', (string) $k['kennung']);
+            Antwort::gut(Termin::buchen($k, feld('id'), $BASIS));
+
+        case 'termin/absagen':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(Termin::absagen($k, feld('id')));
+
+        case 'termin/meine':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Antwort::gut(['termine' => Termin::meine((int) $k['id'])]);
+
+        /* ==============================================================
+           Tarif
+           ============================================================== */
+
+        case 'tarif':
+            if ($art !== 'GET') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            Antwort::gut(['tarif' => Tarif::stand(Sitzung::konto())]);
+
+        case 'tarif/gruender':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            $g = Tarif::gruenderSichern($k);
+            /* Frisch aus der Datenbank: Die Zeile in $k stammt von vor
+               dem Schreiben und wüsste noch nichts von der Nummer. */
+            Antwort::gut([
+                'gruender' => $g,
+                'tarif' => Tarif::stand(Db::zeile('SELECT * FROM tt_konto WHERE id = ?', [(int) $k['id']])),
+            ]);
+
+        case 'tarif/aufgeben':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            Tarif::gruenderAufgeben($k);
+            Antwort::gut([
+                'tarif' => Tarif::stand(Db::zeile('SELECT * FROM tt_konto WHERE id = ?', [(int) $k['id']])),
+            ]);
 
         default:
             Antwort::fehler('Diesen Weg gibt es nicht.', 404);

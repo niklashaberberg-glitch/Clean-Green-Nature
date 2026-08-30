@@ -630,9 +630,7 @@
       <div class="kopf__innen">
         <a class="marke" href="#/${gast() ? 'suche' : 'start'}"
           aria-label="${gast() ? 'TrimmoTrade, zur Suche' : 'TrimmoTrade, zur Startseite'}">
-          <span class="marke__zeichen" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none"><path d="M4 16L16 5l12 11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 14v12h17V14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="20" r="3.2" stroke="currentColor" stroke-width="2.4"/></svg>
-          </span>
+          <span class="marke__zeichen" aria-hidden="true"></span>
           <span class="marke__text">TrimmoTrade</span>
         </a>
         <nav class="kopf__nav" aria-label="Hauptbereiche">

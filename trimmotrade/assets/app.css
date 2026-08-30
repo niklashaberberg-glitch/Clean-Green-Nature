@@ -254,8 +254,17 @@ svg { display: block; }
 }
 
 .marke { display: flex; align-items: center; gap: .5em; color: var(--text); text-decoration: none; font-weight: 700; flex: none; }
-.marke__zeichen { width: 30px; height: 30px; color: var(--akzent); }
-.marke__zeichen svg { width: 100%; height: 100%; }
+/* Die Bildmarke. Ein Bild und kein Zeichensatz-Symbol: Das Logo hat
+   Verläufe und zwei Grüntöne, und beides überlebt keine Nachzeichnung
+   als Pfad. Es liegt als WebP vor, weil es dort ein Drittel wiegt.
+
+   Der Verweis steht genau einmal, für beide Stellen zusammen: In der
+   Einzeldatei wird er durch das eingebettete Bild ersetzt, und zweimal
+   dasselbe Bild einzubetten hieße, es zweimal zu tragen. */
+.marke__zeichen,
+.anmeldung__logo { background: url(bilder/logo-zeichen-web.webp) center / contain no-repeat; }
+
+.marke__zeichen { width: 44px; height: 32px; flex: none; }
 .marke__text { font-size: 1.12rem; letter-spacing: -.02em; }
 
 .kopf__nav { display: flex; gap: 2px; margin-left: auto; }
@@ -1235,6 +1244,10 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
    rücken zusammen. Sonst schob sich die rechte Gruppe über den Rand. */
 @media (max-width: 400px) {
   .marke__text { display: none; }
+  /* Und das Zeichen wird kleiner. Es ist breiter als hoch – bei
+     320 Pixeln kostet das die zehn Pixel, die der rechten Gruppe
+     fehlen. Nachgemessen mit scripts/../darstellung. */
+  .marke__zeichen { width: 34px; height: 25px; }
   .kopf__tun { gap: 2px; }
   .kopf__tun .ikon-btn { width: 36px; height: 36px; }
   .sprachknopf { min-width: 32px; height: 36px; padding: 0 .3em; font-size: .72rem; }
@@ -2054,9 +2067,26 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   border: 1px solid var(--rand); border-radius: var(--r-gross); background: var(--flaeche);
   box-shadow: var(--schatten); }
 .anmeldung__kopf { text-align: center; margin-bottom: 20px; }
-.anmeldung__logo { display: inline-grid; place-items: center; width: 52px; height: 52px; margin-bottom: 10px;
-  border-radius: var(--r); background: var(--akzent-hell); color: var(--akzent); }
-.anmeldung__logo .ico { width: 28px; height: 28px; }
+.anmeldung__logo { display: block; width: 98px; height: 72px; margin: 0 auto 14px; }
+
+/* Die Marke im Dunkeln.
+
+   Das Logo ist für helles Papier gezeichnet: Sein dunkelstes Grün liegt
+   nah am dunklen Untergrund. Ein helles Plättchen darunter wäre die
+   naheliegende Lösung – ausprobiert und verworfen, es sieht aus wie ein
+   aufgeklebter Aufkleber und schneidet die Marke aus der Kopfzeile
+   heraus. Eine erfundene helle Zweitfassung wäre keine Marke mehr.
+
+   Bleibt das Anheben der Tiefen. Die Farben bleiben, was dunkel ist
+   kommt hoch. Durchprobiert und angesehen: 1.55 wird in den hellen
+   Grüntönen sauer, ohne alles ist es im Kleinen zu matt – 1.3 trägt in
+   beiden Größen. */
+:root[data-theme="dark"] .marke__zeichen,
+:root[data-theme="dark"] .anmeldung__logo { filter: brightness(1.3); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .marke__zeichen,
+  :root:not([data-theme="light"]) .anmeldung__logo { filter: brightness(1.3); }
+}
 .anmeldung__kopf h1 { margin: 0 0 .3em; font-size: 1.45rem; letter-spacing: -.02em; }
 .anmeldung__kopf p { margin: 0; font-size: .9rem; line-height: 1.6; color: var(--text-leise); }
 

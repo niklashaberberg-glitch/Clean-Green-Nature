@@ -3959,6 +3959,8 @@
     'Wird angelegt …': 'Creating …'
   });
 
+  e({ 'Alle Pflichtangaben sind eingetragen.': 'All mandatory details are filled in.' });
+
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
 })(window.TT = window.TT || {});

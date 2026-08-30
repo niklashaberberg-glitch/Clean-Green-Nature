@@ -1,0 +1,64 @@
+# =====================================================================
+# Clean Green Nature – Apache-Konfiguration für netcup Webhosting
+#
+# Eine statische Seite, deshalb kurz. Die Reihenfolge ist dieselbe wie
+# nebenan bei TrimmoTrade: erst die Umleitungen, damit alles Weitere nur
+# noch auf der endgültigen Adresse passiert, dann Kopfzeilen, dann
+# Kompression und Zwischenspeicher.
+# =====================================================================
+
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # --- Eine einzige richtige Adresse --------------------------------
+  # Ohne das ist dieselbe Seite unter vier Adressen erreichbar (mit und
+  # ohne www, mit und ohne TLS). Suchmaschinen sehen darin vier Seiten
+  # mit gleichem Inhalt und teilen die Bewertung auf. Ziel ist die
+  # Adresse, die auch im canonical steht – www.cleangreennature.de.
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://www.cleangreennature.de%{REQUEST_URI} [R=301,L]
+
+  RewriteCond %{HTTP_HOST} !^www\. [NC]
+  RewriteRule ^ https://www.cleangreennature.de%{REQUEST_URI} [R=301,L]
+</IfModule>
+
+# --- Kopfzeilen -------------------------------------------------------
+<IfModule mod_headers.c>
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+
+  # HSTS erst einschalten, wenn das Zertifikat sicher steht – ein Fehler
+  # hier sperrt Besucher für die angegebene Dauer aus. Zum vorüber-
+  # gehenden Abschalten genügt ein # vor der Zeile.
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+
+  # Die Seite lädt nichts von fremden Servern. 'unsafe-inline' für Stil,
+  # weil der Stil im Dokument steht.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+</IfModule>
+
+# --- Kompression ------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# --- Zwischenspeicher -------------------------------------------------
+# Bilder ändern sich selten und dürfen lange liegen bleiben; das HTML
+# nicht, sonst sieht ein wiederkehrender Besucher tagelang den alten
+# Stand.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>

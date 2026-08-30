@@ -201,7 +201,7 @@
       html: h`<div class="anmeldung">
         <div class="anmeldung__kasten">
           <header class="anmeldung__kopf">
-            <span class="anmeldung__logo">${ico('dach')}</span>
+            <span class="anmeldung__logo" aria-hidden="true"></span>
             <h1>Willkommen bei TrimmoTrade</h1>
               <p>Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil,
               eine Bewerbermappe.</p>

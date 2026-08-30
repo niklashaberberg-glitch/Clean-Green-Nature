@@ -1,6 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="TrimmoTrade">
+  <!-- Die kleine Fassung der Marke.
+
+       Das Logo selbst – Haus, Ringpfeile, Balken, Verläufe – ist bei
+       16 Pixeln ein grüner Fleck; ausprobiert und verworfen. Übrig
+       bleibt, was die Marke ausmacht: ein Haus und die steigenden
+       Balken darin. Beides steht flach und in Akzentgrün, damit es im
+       Browsertab hell wie dunkel steht. Das vollständige Logo liegt in
+       bilder/logo.png und erscheint überall dort, wo es groß genug
+       dargestellt wird. -->
   <rect width="32" height="32" rx="7" fill="#1a5c37"/>
-  <path d="M5 16L16 6l11 10" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M8 14.5V26h16V14.5" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="16" cy="20" r="3.2" stroke="#fff" stroke-width="2.6" fill="none"/>
+  <path fill="#fff" d="M16 5.4 27.2 15.5v2.1h-3.3V26a1.1 1.1 0 0 1-1.1 1.1H9.2A1.1 1.1 0 0 1 8.1 26v-8.4H4.8v-2.1z"/>
+  <g fill="#1a5c37">
+    <rect x="10.6" y="19.7" width="2.4" height="4.8" rx=".5"/>
+    <rect x="14.8" y="17.5" width="2.4" height="7" rx=".5"/>
+    <rect x="19" y="15.3" width="2.4" height="9.2" rx=".5"/>
+  </g>
 </svg>

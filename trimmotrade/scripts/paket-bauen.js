@@ -39,6 +39,8 @@ const DATEIEN = [
   'site.webmanifest',
   '404.html',
   'favicon.svg',
+  'favicon-32.png',
+  'favicon-64.png',
   'icon-192.png',
   'icon-512.png',
   'icon-maskable.png',
@@ -67,6 +69,11 @@ const NICHT = [
   'api/daten',
   'api/schema-ausgeben.php',
 ];
+
+/* bilder/ steht nicht in ORDNER, und das ist Absicht: Dort liegen die
+   Vorlagen der Marke in voller Größe – ein knappes Megabyte, das der
+   Server nie ausliefert. Was die Anwendung wirklich lädt, liegt unter
+   assets/bilder/ und kommt mit assets/ ohnehin mit. */
 
 const istAusgeschlossen = (rel) =>
   NICHT.some((n) => rel === n || rel.startsWith(n + '/'));

@@ -48,7 +48,48 @@ try {
   process.exit(1);
 }
 
-const css = fs.readFileSync(path.join(assets, 'app.css'), 'utf8');
+/* Bilder aus dem Stil einbetten.
+
+   Die Einzeldatei soll per Doppelklick aufgehen – aus einem Ordner, aus
+   dem Downloads-Verzeichnis, als Anhang. Ein `url(bilder/logo.webp)`
+   ginge dort ins Leere, und die Kopfzeile stünde ohne Marke da. Auf der
+   Website bleibt der Verweis dagegen ein Verweis: Eine Datei, die der
+   Browser zwischenspeichert, ist besser als dieselben Bytes in jedem
+   Seitenaufruf.
+
+   Nur `bilder/` wird eingebettet und nichts sonst – ein Muster, das
+   versehentlich auf Inseratsfotos passte, machte aus der Einzeldatei ein
+   Fotoalbum. */
+const TYPEN = { '.webp': 'image/webp', '.png': 'image/png', '.svg': 'image/svg+xml',
+  '.jpg': 'image/jpeg', '.gif': 'image/gif' };
+
+function bilderEinbetten(stil) {
+  let eingebettet = 0;
+  let bytes = 0;
+  const raus = stil.replace(/url\(\s*(['"]?)(bilder\/[^'")]+)\1\s*\)/g, (ganz, q, rel) => {
+    /* Der Pfad steht so im Stil, und ein Stil verweist relativ zu sich
+       selbst – also von assets/ aus, nicht von der Wurzel. */
+    const datei = path.join(assets, rel);
+    if (!fs.existsSync(datei)) {
+      console.error('build.js: ' + rel + ' fehlt – der Stil verweist darauf.');
+      process.exit(1);
+    }
+    const typ = TYPEN[path.extname(rel).toLowerCase()];
+    if (!typ) {
+      console.error('build.js: unbekannte Bildart ' + rel);
+      process.exit(1);
+    }
+    const b64 = fs.readFileSync(datei).toString('base64');
+    eingebettet++;
+    bytes += b64.length;
+    return 'url("data:' + typ + ';base64,' + b64 + '")';
+  });
+  return { stil: raus, eingebettet, bytes };
+}
+
+const cssRoh = fs.readFileSync(path.join(assets, 'app.css'), 'utf8');
+const eingebaut = bilderEinbetten(cssRoh);
+const css = eingebaut.stil;
 const js = SKRIPTE.map((d) => '/* ===== ' + d + ' ===== */\n' + sicher(lies(d))).join('\n');
 
 const noscript =
@@ -76,7 +117,11 @@ const vollseite =
   '<meta name="theme-color" content="#1a5c37" media="(prefers-color-scheme: light)">\n' +
   '<meta name="theme-color" content="#0f120f" media="(prefers-color-scheme: dark)">\n' +
   '<meta name="color-scheme" content="light dark">\n' +
-  '<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 32 32\'%3E%3Crect width=\'32\' height=\'32\' rx=\'7\' fill=\'%231a5c37\'/%3E%3Cpath d=\'M5 16L16 6l11 10\' stroke=\'%23fff\' stroke-width=\'2.6\' fill=\'none\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3Cpath d=\'M8 14.5V26h16V14.5\' stroke=\'%23fff\' stroke-width=\'2.6\' fill=\'none\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3Ccircle cx=\'16\' cy=\'20\' r=\'3.2\' stroke=\'%23fff\' stroke-width=\'2.6\' fill=\'none\'/%3E%3C/svg%3E">\n' +
+  /* Das Browsersymbol aus favicon.svg, nicht noch einmal von Hand
+     hingeschrieben. Zwei Fassungen desselben Zeichens laufen sonst
+     auseinander, sobald jemand eine davon ändert. */
+  '<link rel="icon" href="data:image/svg+xml;base64,'
+    + fs.readFileSync(path.join(wurzel, 'favicon.svg')).toString('base64') + '">\n' +
   '</head>\n<body>\n' + inhalt + '\n</body>\n</html>\n';
 
 /* Für die Artifact-Veröffentlichung: nur Seiteninhalt, aber mit <title>,
@@ -94,4 +139,6 @@ fs.writeFileSync(path.join(dist, 'artifact-web.html'), nurInhalt);
 const kb = (s) => Math.round(Buffer.byteLength(s, 'utf8') / 1024) + ' kB';
 console.log('dist/trimmotrade.html  ' + kb(vollseite));
 console.log('dist/artifact.html  ' + kb(nurInhalt));
-console.log('Skripte: ' + SKRIPTE.length + ', Stil: ' + kb(css));
+console.log('Skripte: ' + SKRIPTE.length + ', Stil: ' + kb(css)
+  + ', Bilder eingebettet: ' + eingebaut.eingebettet
+  + ' (' + Math.round(eingebaut.bytes / 1024) + ' kB)');

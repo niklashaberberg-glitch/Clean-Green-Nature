@@ -33,16 +33,35 @@ final class Konto
         return in_array(end($teil), self::WEGWERF, true);
     }
 
+    /**
+     * Die Vertrauensstufe, die anderen angezeigt wird.
+     *
+     * Die erste Frage ist nicht „wie stark hat sich jemand angemeldet“,
+     * sondern **ob er erreichbar ist**. Eine Stufe steht am Inserat und
+     * an jeder Anfrage; wer sie liest, schließt daraus, dass am anderen
+     * Ende jemand ist, den man erreichen kann. Ohne bestätigte Adresse
+     * stimmt das nicht: Diese Person bekommt keine Anfrage, keine
+     * Terminabsage und keinen Treffer aus einem Suchauftrag.
+     *
+     * Das war vorher anders und war falsch. Die Regel lautete: jeder,
+     * der über einen fremden Anbieter kommt, steht auf Stufe 2. Bei
+     * Google und Microsoft fiel das nicht auf, weil beide eine
+     * bestätigte Adresse mitliefern. Bei Instagram gibt es keine – dort
+     * wäre ein Konto ohne jede Erreichbarkeit mit demselben Abzeichen
+     * erschienen wie ein geprüftes Google-Konto. Genau das darf ein
+     * Vertrauensmerkmal nicht.
+     */
     public static function stufe(array $k): int
     {
-        $n = 0;
-        if (!empty($k['mail']) && !empty($k['mail_bestaetigt'])) {
-            $n = 1;
+        $erreichbar = !empty($k['mail']) && !empty($k['mail_bestaetigt']);
+        if (!$erreichbar) {
+            return 0;
         }
+        $n = 1;
         if (!empty($k['hat_passkey']) || (($k['anbieter'] ?? 'mail') !== 'mail')) {
             $n = 2;
         }
-        if (!empty($k['mail']) && self::istWegwerf($k['mail'])) {
+        if (self::istWegwerf((string) $k['mail'])) {
             $n = min($n, 1);
         }
         return $n;

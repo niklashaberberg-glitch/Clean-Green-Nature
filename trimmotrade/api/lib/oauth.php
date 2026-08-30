@@ -49,19 +49,92 @@ final class Oauth
         self::$cfg = $cfg;
     }
 
+    /** Alle Anbieter, in der Reihenfolge, in der sie angeboten werden. */
+    public const ANBIETER = ['google', 'microsoft', 'apple', 'instagram'];
+
+    /** Wer ein ID-Token nach OpenID Connect ausstellt. Instagram nicht:
+        Dort gibt es nur ein Zugriffstoken und danach eine Abfrage. */
+    private const OIDC = ['google', 'microsoft', 'apple'];
+
+    /** Wer eine E-Mail-Adresse herausgibt. Instagram tut das nicht – es
+        gibt dafür keinen Bereich, den man anfordern könnte. Wer sich so
+        anmeldet, muss die Adresse hinterher nachtragen. */
+    public static function liefertMail(string $anbieter): bool
+    {
+        return $anbieter !== 'instagram';
+    }
+
     /** Welche Anbieter tatsächlich eingerichtet sind. Ein Knopf für einen
         Anbieter ohne Zugangsdaten führt nur in eine Fehlermeldung – der
-        gehört gar nicht erst angezeigt. */
+        gehört gar nicht erst angezeigt.
+
+        Die Zugangsdaten sehen nicht überall gleich aus: Google, Microsoft
+        und Instagram geben ein festes Geheimnis heraus, Apple nicht. Dort
+        bekommt man einen privaten Schlüssel und baut das Geheimnis bei
+        jeder Anfrage selbst – also braucht es dort drei Angaben statt
+        einer. */
     public static function verfuegbar(): array
     {
         $da = [];
-        foreach (['google', 'microsoft'] as $a) {
+        foreach (self::ANBIETER as $a) {
             $c = self::$cfg['oauth'][$a] ?? [];
-            if (($c['client_id'] ?? '') !== '' && ($c['client_secret'] ?? '') !== '') {
+            if (($c['client_id'] ?? '') === '') {
+                continue;
+            }
+            if ($a === 'apple') {
+                if (($c['team_id'] ?? '') !== '' && ($c['key_id'] ?? '') !== ''
+                    && self::appleSchluessel($c) !== '') {
+                    $da[] = $a;
+                }
+                continue;
+            }
+            if (($c['client_secret'] ?? '') !== '') {
                 $da[] = $a;
             }
         }
         return $da;
+    }
+
+    /** Der private Schlüssel für Apple – als Pfad zur .p8-Datei oder
+        unmittelbar als Text. Der Pfad ist der bessere Weg: So steht der
+        Schlüssel nicht in derselben Datei wie alles andere und lässt sich
+        einzeln mit engen Rechten ablegen. */
+    private static function appleSchluessel(array $c): string
+    {
+        $pfad = (string) ($c['key_datei'] ?? '');
+        if ($pfad !== '') {
+            if (!is_readable($pfad)) {
+                return '';
+            }
+            return (string) file_get_contents($pfad);
+        }
+        return (string) ($c['key_pem'] ?? '');
+    }
+
+    /**
+     * Das Client-Geheimnis für den Tokentausch.
+     *
+     * Bei Apple ist es kein hinterlegter Wert, sondern ein JWT, das hier
+     * frisch signiert wird: `iss` die Team-Kennung, `sub` die Services-ID,
+     * `aud` Apple selbst. Apple erlaubt höchstens sechs Monate Laufzeit;
+     * zehn Minuten genügen vollkommen, weil es nur für diesen einen
+     * Tausch gebraucht wird und danach nie wieder. Ein Geheimnis, das
+     * zehn Minuten lebt, kann auch nicht ablaufen und den Betrieb
+     * anhalten – der häufigste Betriebsfehler bei Apple.
+     */
+    private static function geheimnis(string $anbieter, array $c): string
+    {
+        if ($anbieter !== 'apple') {
+            return (string) ($c['client_secret'] ?? '');
+        }
+        $jetzt = time();
+        return Jwt::signierenEs256([
+            'iss' => (string) $c['team_id'],
+            'iat' => $jetzt,
+            'exp' => $jetzt + 600,
+            'aud' => 'https://appleid.apple.com',
+            'sub' => (string) $c['client_id'],
+        ], self::appleSchluessel($c), (string) $c['key_id']);
     }
 
     private static function endpunkte(string $anbieter): array
@@ -90,6 +163,35 @@ final class Oauth
                    passen – das prüft `austellerMicrosoft`. */
                 'iss'     => null,
                 'scope'   => 'openid email profile',
+            ];
+        }
+        if ($anbieter === 'apple') {
+            return [
+                'auth'   => 'https://appleid.apple.com/auth/authorize',
+                'token'  => 'https://appleid.apple.com/auth/token',
+                'jwks'   => 'https://appleid.apple.com/auth/keys',
+                'iss'    => ['https://appleid.apple.com'],
+                'scope'  => 'name email',
+                /* Wer bei Apple Name oder Adresse anfordert, muss die
+                   Rückkehr als Formular entgegennehmen – anders gibt
+                   Apple sie nicht heraus. Das hat eine Folge, die man
+                   erst im Betrieb merkt: Eine anbieterübergreifende
+                   POST-Anfrage bringt keine Cookies mit SameSite=Lax
+                   mit. Der Anker muss deshalb bei Apple anders gesetzt
+                   werden; siehe api/index.php. */
+                'form_post' => true,
+            ];
+        }
+        if ($anbieter === 'instagram') {
+            return [
+                'auth'   => 'https://www.instagram.com/oauth/authorize',
+                'token'  => 'https://api.instagram.com/oauth/access_token',
+                'jwks'   => '',
+                'iss'    => null,
+                /* Es gibt keinen Bereich für die E-Mail-Adresse. Was man
+                   bekommt, ist eine Kennung und ein Benutzername. */
+                'scope'  => 'instagram_business_basic',
+                'ich'    => 'https://graph.instagram.com/v23.0/me',
             ];
         }
         throw new OauthFehler('Unbekannter Anbieter.');
@@ -127,19 +229,34 @@ final class Oauth
             'anker'    => $ankerHash,
         ], 900);
 
-        return $e['auth'] . '?' . http_build_query([
-            'client_id'             => $c['client_id'],
-            'response_type'         => 'code',
-            'redirect_uri'          => $rueckkehr,
-            'scope'                 => $e['scope'],
-            'state'                 => $state,
-            'nonce'                 => $nonce,
-            'code_challenge'        => $pkceHash,
-            'code_challenge_method' => 'S256',
+        $felder = [
+            'client_id'     => $c['client_id'],
+            'response_type' => 'code',
+            'redirect_uri'  => $rueckkehr,
+            'scope'         => $e['scope'],
+            'state'         => $state,
+        ];
+
+        if (in_array($anbieter, self::OIDC, true)) {
+            $felder['nonce'] = $nonce;
+        }
+
+        /* PKCE kennt Instagram nicht, und ein unbekanntes Feld weist es
+           mit einer Fehlerseite ab statt es zu übergehen. Bei den
+           übrigen dreien gehört es dazu. */
+        if ($anbieter !== 'instagram') {
+            $felder['code_challenge'] = $pkceHash;
+            $felder['code_challenge_method'] = 'S256';
             /* Kein `prompt=consent`: Wer schon zugestimmt hat, soll nicht
                bei jeder Anmeldung wieder gefragt werden. */
-            'access_type'           => 'online',
-        ]);
+            $felder['access_type'] = 'online';
+        }
+
+        if (!empty($e['form_post'])) {
+            $felder['response_mode'] = 'form_post';
+        }
+
+        return $e['auth'] . '?' . http_build_query($felder);
     }
 
     /* -----------------------------------------------------------------
@@ -154,7 +271,8 @@ final class Oauth
         string $state,
         string $code,
         string $rueckkehr,
-        string $ankerHash = ''
+        string $ankerHash = '',
+        string $appleNutzer = ''
     ): array {
         $v = Vorgang::holen(self::vorgangKennung($state), 'oauth');
         if (!$v || !gleich_sicher($v['geheim_hash'], merkmal_hash($state))) {
@@ -176,15 +294,21 @@ final class Oauth
         $anbieter = (string) ($v['daten']['anbieter'] ?? '');
         $c = self::$cfg['oauth'][$anbieter] ?? [];
         $e = self::endpunkte($anbieter);
+        $weiter = (string) ($v['daten']['weiter'] ?? '');
 
-        $token = Netz::post($e['token'], [
+        if ($anbieter === 'instagram') {
+            return self::zurueckInstagram($c, $e, $code, $rueckkehr, $weiter);
+        }
+
+        $felder = [
             'grant_type'    => 'authorization_code',
             'code'          => $code,
             'redirect_uri'  => $rueckkehr,
             'client_id'     => $c['client_id'],
-            'client_secret' => $c['client_secret'],
+            'client_secret' => self::geheimnis($anbieter, $c),
             'code_verifier' => (string) ($v['daten']['pkce'] ?? ''),
-        ]);
+        ];
+        $token = Netz::post($e['token'], $felder);
 
         $idToken = (string) ($token['id_token'] ?? '');
         if ($idToken === '') {
@@ -214,14 +338,104 @@ final class Oauth
 
         [$mail, $bestaetigt] = self::mailAus($anbieter, $inhalt);
 
+        $name = mb_substr(trim((string) ($inhalt['name'] ?? '')), 0, 120);
+        if ($anbieter === 'apple' && $name === '') {
+            $name = self::appleName($appleNutzer);
+        }
+
         return [
             'anbieter'        => $anbieter,
             'sub'             => $sub,
             'mail'            => $mail,
             'mail_bestaetigt' => $bestaetigt,
-            'name'            => mb_substr(trim((string) ($inhalt['name'] ?? '')), 0, 120),
-            'weiter'          => (string) ($v['daten']['weiter'] ?? ''),
+            'name'            => $name,
+            'weiter'          => $weiter,
         ];
+    }
+
+    /* -----------------------------------------------------------------
+       Instagram: derselbe Ablauf, aber ohne Ausweis
+
+       Google, Microsoft und Apple stellen ein signiertes ID-Token aus –
+       eine Aussage, die für sich steht und sich prüfen lässt. Instagram
+       nicht. Dort gibt es ein Zugriffstoken, mit dem man anschließend
+       fragen muss, wem es gehört. Das ist schwächer: Die Antwort ist
+       nicht signiert, und ihre Echtheit hängt allein daran, dass sie
+       über TLS von graph.instagram.com kam.
+
+       Und es gibt keine E-Mail-Adresse. Nicht „selten“ oder „nur bei
+       manchen“ – es gibt dafür keinen Bereich, den man anfordern könnte.
+       Wer sich so anmeldet, kann von dieser Seite keine Nachricht
+       bekommen: keine Anfrage auf ein Inserat, keine Absage eines
+       Besichtigungstermins, keinen Treffer aus einem Suchauftrag. Das
+       Konto entsteht deshalb ohne Adresse und bleibt auf Stufe 0, bis
+       eine nachgetragen und bestätigt ist.
+       ----------------------------------------------------------------- */
+
+    private static function zurueckInstagram(
+        array $c,
+        array $e,
+        string $code,
+        string $rueckkehr,
+        string $weiter
+    ): array {
+        $token = Netz::post($e['token'], [
+            'client_id'     => $c['client_id'],
+            'client_secret' => $c['client_secret'],
+            'grant_type'    => 'authorization_code',
+            'redirect_uri'  => $rueckkehr,
+            'code'          => $code,
+        ]);
+
+        $zugriff = (string) ($token['access_token'] ?? '');
+        if ($zugriff === '') {
+            throw new OauthFehler('Instagram hat kein Zugriffstoken geschickt.');
+        }
+
+        $ich = Netz::get($e['ich'] . '?' . http_build_query([
+            'fields'       => 'id,username',
+            'access_token' => $zugriff,
+        ]));
+
+        $sub = (string) ($ich['id'] ?? ($token['user_id'] ?? ''));
+        if ($sub === '') {
+            throw new OauthFehler('Instagram hat keine Kontokennung geschickt.');
+        }
+
+        return [
+            'anbieter'        => 'instagram',
+            'sub'             => $sub,
+            'mail'            => '',
+            'mail_bestaetigt' => false,
+            'name'            => mb_substr(trim((string) ($ich['username'] ?? '')), 0, 120),
+            'weiter'          => $weiter,
+        ];
+    }
+
+    /**
+     * Der Name bei Apple.
+     *
+     * Er steht nicht im Token, sondern kommt einmalig als Formularfeld
+     * mit – beim allerersten Mal und nie wieder. Wer ihn dort nicht
+     * aufhebt, bekommt ihn nie: Auch das Löschen und Neuanlegen des
+     * Kontos hilft nicht, dazu müsste der Nutzer die Anwendung in seinen
+     * Apple-Einstellungen erst wieder abmelden.
+     */
+    private static function appleName(string $roh): string
+    {
+        if ($roh === '') {
+            return '';
+        }
+        $d = json_decode($roh, true);
+        if (!is_array($d)) {
+            return '';
+        }
+        $n = $d['name'] ?? [];
+        $teile = array_filter([
+            trim((string) ($n['firstName'] ?? '')),
+            trim((string) ($n['lastName'] ?? '')),
+        ], static fn ($x) => $x !== '');
+        return mb_substr(implode(' ', $teile), 0, 120);
     }
 
     /**
@@ -239,6 +453,20 @@ final class Oauth
      */
     private static function mailAus(string $anbieter, array $inhalt): array
     {
+        /* Apple sagt es wie Google ausdrücklich. Eine Besonderheit gibt
+           es doch: Wer „E-Mail-Adresse verbergen“ wählt, bekommt eine
+           Weiterleitungsadresse bei privaterelay.appleid.com. Die geht,
+           solange die Anwendung angemeldet bleibt und die Absenderdomain
+           bei Apple hinterlegt ist – ist sie das nicht, kommt keine Mail
+           an und niemand merkt es. Der Hinweis dazu steht in DEPLOY.md. */
+        if ($anbieter === 'apple') {
+            $mail = mail_normal((string) ($inhalt['email'] ?? ''));
+            $bestaetigt = $mail !== '' && (
+                ($inhalt['email_verified'] ?? null) === true
+                || ($inhalt['email_verified'] ?? null) === 'true'
+            );
+            return [$mail, $bestaetigt];
+        }
         if ($anbieter === 'google') {
             $mail = mail_normal((string) ($inhalt['email'] ?? ''));
             return [$mail, $mail !== '' && !empty($inhalt['email_verified'])];

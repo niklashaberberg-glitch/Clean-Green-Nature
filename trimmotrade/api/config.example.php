@@ -85,6 +85,54 @@ return [
       // 'organizations' = nur geschäftliche, oder eine Mandanten-ID.
       'mandant'       => 'common',
     ],
+
+    /* Apple. Als Einziger nicht kostenlos: Es setzt eine Mitgliedschaft
+       im Apple Developer Program voraus (99 € im Jahr).
+
+       Und als Einziger ohne festes Geheimnis. Apple gibt einen privaten
+       Schlüssel als .p8-Datei heraus; das Client-Geheimnis baut der
+       Server daraus bei jeder Anfrage selbst. Deshalb vier Angaben
+       statt zwei. */
+    'apple' => [
+      // Die Services-ID, NICHT die App-ID. Sieht aus wie
+      // 'de.trimmotrade.web'.
+      'client_id' => '',
+      // Zehn Zeichen, steht oben rechts im Developer-Portal.
+      'team_id'   => '',
+      // Zehn Zeichen, gehört zum Schlüssel unten.
+      'key_id'    => '',
+      /* Der Schlüssel. Besser als Pfad: Dann liegt er in einer eigenen
+         Datei mit engen Rechten (chmod 600) und nicht in derselben wie
+         alles andere. Er lässt sich bei Apple genau einmal
+         herunterladen – wer ihn verliert, legt einen neuen an. */
+      'key_datei' => '',    // z. B. __DIR__ . '/AuthKey_ABC1234567.p8'
+      'key_pem'   => '',    // Alternative: der Inhalt unmittelbar hier
+    ],
+
+    /* Instagram. Zwei Dinge vorweg, damit die Enttäuschung nicht auf
+       dem Server passiert:
+
+       ERSTENS gibt Instagram KEINE E-Mail-Adresse heraus. Es gibt dafür
+       keinen Bereich, den man anfordern könnte. Wer sich so anmeldet,
+       hat ein Konto, das nichts empfangen kann – keine Anfrage auf ein
+       Inserat, keine Absage eines Besichtigungstermins, keinen Treffer
+       aus einem Suchauftrag. Die Anwendung fängt das ab: Solche Konten
+       stehen auf Stufe 0 und werden aufgefordert, eine Adresse
+       nachzutragen. Erreichbar sind sie erst danach.
+
+       ZWEITENS geht es nur mit Instagram-Konten vom Typ Business oder
+       Creator, nicht mit privaten. Die meisten Wohnungssuchenden haben
+       ein privates Konto und können diesen Weg gar nicht nutzen.
+
+       Wer beides gelesen hat und ihn trotzdem anbieten will, trägt hier
+       die Zugangsdaten einer Meta-App mit dem Produkt „Instagram API
+       mit Instagram-Login“ ein. Die ältere Basic-Display-Schnittstelle,
+       die viele Anleitungen noch nennen, ist seit Dezember 2024
+       abgeschaltet. */
+    'instagram' => [
+      'client_id'     => '',
+      'client_secret' => '',
+    ],
   ],
 
   /* --- Schrauben ----------------------------------------------------

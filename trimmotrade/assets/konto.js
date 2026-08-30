@@ -89,6 +89,41 @@
         + 'Für private und geschäftliche Konten den Mandanten „common“ verwenden.'
     },
     {
+      id: 'apple',
+      name: 'Weiter mit Apple',
+      unter: 'Apple-ID',
+      icon: 'person',
+      farbe: '#111111',
+      stufe: 2,
+      erklaerung: 'TrimmoTrade erfährt Name und E-Mail-Adresse aus deiner Apple-ID – beim ersten Mal, danach '
+        + 'nie wieder. Wählst du „E-Mail-Adresse verbergen“, bekommt TrimmoTrade eine Weiterleitungsadresse '
+        + 'von Apple statt deiner eigenen; Post kommt trotzdem an, solange du die Anmeldung nicht widerrufst.',
+      einrichtung: 'Apple Developer Program (kostenpflichtig): Services-ID, Domain und Rückkehradresse '
+        + 'bestätigen, privater Schlüssel als .p8. Das Client-Geheimnis ist kein fester Wert, sondern ein '
+        + 'JWT, das der Server bei jeder Anfrage mit ES256 selbst signiert.'
+    },
+    {
+      id: 'instagram',
+      name: 'Weiter mit Instagram',
+      unter: 'ohne E-Mail-Adresse',
+      icon: 'person',
+      farbe: '#c13584',
+      /* Stufe 0, und das ist keine Geringschätzung, sondern eine
+         Tatsache: Instagram gibt keine E-Mail-Adresse heraus. Ohne die
+         ist ein Konto hier nicht erreichbar – es bekommt keine Anfrage,
+         keine Terminabsage, keinen Suchauftragstreffer. Erst mit
+         nachgetragener Adresse steigt es. */
+      stufe: 0,
+      erklaerung: 'Instagram gibt **keine E-Mail-Adresse** heraus – dafür gibt es dort keinen Bereich, den '
+        + 'man anfordern könnte. TrimmoTrade erfährt nur deinen Benutzernamen und eine Kennung. Damit dich '
+        + 'jemand erreichen kann, trägst du danach eine Adresse nach; bis dahin kannst du dich zwar umsehen, '
+        + 'aber nicht anfragen und nicht inserieren.',
+      einrichtung: 'Meta-App mit „Instagram API mit Instagram-Login“. Zwei Einschränkungen: Es funktioniert '
+        + 'nur mit Instagram-Konten vom Typ Business oder Creator, nicht mit privaten – und es liefert keine '
+        + 'E-Mail-Adresse. Die alte Basic-Display-Schnittstelle, die viele Anleitungen noch nennen, ist seit '
+        + 'Dezember 2024 abgeschaltet.'
+    },
+    {
       id: 'mail',
       echt: true,
       name: 'Mit E-Mail-Adresse',
@@ -232,6 +267,48 @@
       versuche: 0
     };
     return versprechen({ gueltig: CODE_GUELTIG_MIN, versuche: CODE_VERSUCHE, code: laufend.code });
+  }
+
+  /* Fehlt dem angemeldeten Konto eine Adresse?
+
+     Das gibt es seit Instagram: Von dort kommt eine Kennung und ein
+     Benutzername, aber keine E-Mail-Adresse. Ohne die ist das Konto
+     nicht erreichbar – keine Anfrage, keine Terminabsage, kein Treffer
+     aus einem Suchauftrag. Dasselbe trifft ein Konto, das mit einem
+     Passkey allein entstanden ist. */
+  function mailFehlt() {
+    const k = aktuell();
+    return !!(k && !(k.mail && k.mailBestaetigt));
+  }
+
+  /* Denselben Code, aber an das angemeldete Konto gehängt statt ein
+     zweites gesucht oder angelegt. */
+  function mailNachtragen(eingabe) {
+    const c = laufend;
+    if (!c) return absage('Es wurde kein Code angefordert.');
+    const rein = String(eingabe || '').replace(/\s/g, '');
+
+    if (echt()) {
+      return API.ruf('konto/mail-nachtragen', { vorgang: c.vorgang, code: rein })
+        .then((d) => { laufend = null; return uebernehmen(API.kontoMerken(d)); });
+    }
+
+    /* Ohne Server: dieselbe Prüfung wie sonst, danach die Adresse ins
+       vorhandene Konto statt in ein neues. */
+    if (Date.now() > c.bis) { laufend = null; return absage('Der Code ist abgelaufen. Fordere einen neuen an.'); }
+    c.versuche++;
+    if (c.versuche > CODE_VERSUCHE) {
+      laufend = null;
+      return absage('Zu viele Fehlversuche. Fordere einen neuen Code an.');
+    }
+    if (rein !== c.code) {
+      const uebrig = CODE_VERSUCHE - c.versuche + 1;
+      return absage('Der Code stimmt nicht. Noch ' + uebrig + ' '
+        + U.plural(uebrig, 'Versuch', 'Versuche') + '.');
+    }
+    const mail = c.mail;
+    laufend = null;
+    return versprechen(aendern({ mail, mailBestaetigt: true }));
   }
 
   function codeEinloesen(eingabe) {
@@ -453,15 +530,25 @@
 
   /* ------------------------- Konto ------------------------- */
 
+  /* Dieselbe Regel wie in api/lib/konto.php, und das ist kein Zufall,
+     sondern Pflicht: Was der Server rechnet, gilt; was hier gerechnet
+     wird, ist die Anzeige daneben. Weichen die beiden voneinander ab,
+     steht am Inserat eine andere Stufe als im Konto, und niemand weiß
+     mehr, welche stimmt.
+
+     Zuerst die Frage nach der Erreichbarkeit, nicht nach der Stärke der
+     Anmeldung. Eine Stufe steht am Inserat und an jeder Anfrage; wer
+     sie liest, schließt daraus, dass am anderen Ende jemand ist, den
+     man erreichen kann. Ohne bestätigte Adresse stimmt das nicht. */
   function stufeBerechnen(k) {
-    let n = 0;
-    if (k.mailBestaetigt) n = 1;
+    if (!k.mailBestaetigt || !k.mail) return 0;
+    let n = 1;
     if ((k.passkeys && k.passkeys.length) || (k.anbieter && k.anbieter !== 'mail')) n = 2;
     if (k.telefonBestaetigt) n = 3;
     if (k.ausweisGeprueft) n = 4;
     /* Eine Wegwerfadresse hebt die Stufe nicht über eins – auch dann
        nicht, wenn ein Passkey daran hängt. */
-    if (k.mail && istWegwerf(k.mail) && !k.telefonBestaetigt) n = Math.min(n, 1);
+    if (istWegwerf(k.mail) && !k.telefonBestaetigt) n = Math.min(n, 1);
     return n;
   }
 
@@ -594,6 +681,7 @@
     abmelden, loeschen, on,
     mailForm, istWegwerf, anzeigeName, passkeys,
     auffrischen, codeAnfordern, codeEinloesen, codeStand,
+    mailFehlt, mailNachtragen,
     passkeyMoeglich, passkeyGrund, passkeyPlattform, passkeyAnlegen, passkeyAnmelden, passkeyLoeschen,
     anbieterStarten
   };

@@ -2084,6 +2084,19 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .anmeldung__kopf { text-align: center; margin-bottom: 20px; }
 .anmeldung__logo { display: block; width: 98px; height: 72px; margin: 0 auto 14px; }
 
+/* Der Weg zur jeweils anderen Tür. Er steht unter den Knöpfen und nicht
+   darüber: Wer schon weiß, was er will, soll nicht erst daran vorbei. */
+.anmeldung__wechsel { margin: 14px 0 0; text-align: center; font-size: .9rem; color: var(--text-leise); }
+.anmeldung__wechsel a { color: var(--akzent); font-weight: 600; }
+
+/* Was ein Konto bringt – nur bei der Registrierung. */
+.anmeldung__nutzen { margin: 18px 0 0; padding: 16px 18px; border-radius: var(--r);
+  background: var(--flaeche2); font-size: .88rem; }
+
+.kopf__anmelden { font-size: .88rem; font-weight: 600; color: var(--text-leise);
+  padding: 0 .4em; white-space: nowrap; }
+.kopf__anmelden:hover { color: var(--text); }
+
 /* Die Marke im Dunkeln.
 
    Das Logo ist für helles Papier gezeichnet: Sein dunkelstes Grün liegt
@@ -5519,7 +5532,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       'No. Which advert appears is decided in the browser from its position on the page – not from your profile, your search or your behaviour. There is no ad network, no identifier and nothing that would be transmitted.',
     'Passkey auf diesem Gerät oder ein bestätigtes Konto bei Google oder Microsoft. Massenhaftes Anlegen wird damit deutlich mühsamer.':
       'A passkey on this device or a verified account with Google or Microsoft. Creating accounts in bulk becomes considerably more laborious.',
-    '„Konto löschen“ entfernt diese Angaben vollständig{27}. Merkliste, Profil und Notizen bleiben erhalten; beides zusammen löschst du über':
+    '„Konto löschen“ entfernt diese Angaben vollständig{28}. Merkliste, Profil und Notizen bleiben erhalten; beides zusammen löschst du über':
       '“Delete account” removes these details completely{27}. Shortlist, profile and notes remain; you delete both together under',
 
     /* Kontoseite mit Server */
@@ -6623,6 +6636,76 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   });
 
   e({ 'Alle Pflichtangaben sind eingetragen.': 'All mandatory details are filled in.' });
+
+  /* Registrierung, Apple und Instagram. */
+  e({
+    'Kostenlos, in unter einer Minute. Es gibt kein Passwort – du wählst einen Weg, und damit meldest du dich künftig auch an.':
+      'Free, in under a minute. There is no password – you pick a method, and that is how you sign in from then on.',
+    'Noch kein Konto?': 'No account yet?',
+    'Eins anlegen – kostet nichts': 'Create one – it’s free',
+    'Schon ein Konto?': 'Already have an account?',
+    'Hier anmelden': 'Sign in here',
+    'Merkliste, Profil und Bewerbungen auf allen deinen Geräten – angefangen am Rechner, weiter im Bus':
+      'Saved list, profile and applications on every one of your devices – start at the computer, carry on from the bus',
+    'Suchaufträge, die dir schreiben, sobald etwas Passendes dazukommt':
+      'Saved searches that write to you as soon as something suitable appears',
+    'Anfragen an Inserate, Besichtigungstermine buchen, selbst inserieren':
+      'Enquire about listings, book viewing appointments, list your own property',
+    'Der Dokumententresor: Unterlagen verschlüsselt ablegen und einzeln freigeben':
+      'The document vault: store papers encrypted and share them one at a time',
+
+    'Weiter mit Apple': 'Continue with Apple',
+    'Apple-ID': 'Apple ID',
+    'Weiter mit Instagram': 'Continue with Instagram',
+    'ohne E-Mail-Adresse': 'no email address',
+
+    'E-Mail-Adresse nachtragen': 'Add your email address',
+    'Dir fehlt noch eine E-Mail-Adresse.': 'You are still missing an email address.',
+    'Ohne sie kann dich niemand erreichen: keine Anfrage auf ein Inserat, keine Absage eines Besichtigungstermins, kein Treffer aus einem Suchauftrag. Umsehen kannst du dich; alles Übrige braucht sie.':
+      'Without one nobody can reach you: no enquiry about a listing, no cancellation of a viewing, no match from a saved search. You can look around; everything else needs it.',
+    'Jetzt nachtragen': 'Add it now',
+    'Deinem Konto fehlt eine Adresse. Solange das so ist, kann dich niemand erreichen: keine Anfrage auf ein Inserat, keine Absage eines Besichtigungstermins, kein Treffer aus einem Suchauftrag. Anfragen und Inserieren sind deshalb gesperrt.':
+      'Your account has no address. As long as that is the case nobody can reach you: no enquiry about a listing, no cancellation of a viewing, no match from a saved search. Enquiring and listing are therefore blocked.',
+    'Deine E-Mail-Adresse': 'Your email address',
+    'Code schicken': 'Send code',
+    'Andere Adresse': 'Different address',
+    'Wird verschickt …': 'Sending …',
+    'Wird geprüft …': 'Checking …',
+    'Code verschickt.': 'Code sent.',
+    'Adresse bestätigt. Jetzt kann dich jemand erreichen.':
+      'Address confirmed. Now people can reach you.',
+
+    'Anmeldung über Google, Microsoft, Apple oder Instagram':
+      'Signing in via Google, Microsoft, Apple or Instagram',
+    'Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei TrimmoTrade anmeldest. Dein dortiges Passwort bekommt TrimmoTrade nie zu sehen, und es besteht kein Zugriff auf Kontakte, Kalender, Dateien oder Postfach. Was übermittelt wird, ist von Anbieter zu Anbieter verschieden:':
+      'If you pick one of these, that provider learns that you are signing in to TrimmoTrade. TrimmoTrade never sees your password there, and there is no access to contacts, calendar, files or mailbox. What is transmitted differs from provider to provider:',
+    'Name, E-Mail-Adresse und die Angabe, ob sie bestätigt ist':
+      'name, email address and whether it is confirmed',
+    'Name und E-Mail-Adresse. Bei einem privaten Konto gilt die Adresse hier nicht als bestätigt, weil sie dort frei wählbar ist; bei einem Geschäfts- oder Schulkonto stammt sie aus dem Verzeichnis des Arbeitgebers.':
+      'Name and email address. For a personal account the address does not count as confirmed here, because it can be chosen freely there; for a work or school account it comes from the employer’s directory.',
+    'Name und E-Mail-Adresse – und zwar nur bei der': 'Name and email address – and only on the',
+    'Anmeldung, danach nie wieder. Wählst du bei Apple „E-Mail-Adresse verbergen“, bekommt TrimmoTrade nicht deine Adresse, sondern eine Weiterleitungsadresse bei':
+      'sign-in, never again after that. If you choose “Hide My Email” at Apple, TrimmoTrade does not get your address but a forwarding address at',
+    '. Post kommt darüber an, solange du die Anmeldung nicht in deinen Apple-Einstellungen widerrufst.':
+      '. Mail arrives through it as long as you do not revoke the sign-in in your Apple settings.',
+    'Benutzername und eine Kontokennung.': 'Username and an account identifier.',
+    'Keine E-Mail-Adresse': 'No email address',
+    '– Instagram gibt keine heraus. Ein so entstandenes Konto ist deshalb nicht erreichbar und steht auf Vertrauensstufe 0, bis du eine Adresse nachträgst und bestätigst.':
+      '– Instagram does not release one. An account created this way is therefore unreachable and sits at trust level 0 until you add and confirm an address.',
+    'Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst: Google Ireland Limited, Microsoft Ireland Operations Limited und Apple Distribution International Ltd., alle drei mit Sitz in Irland, sowie Meta Platforms Ireland Limited für Instagram. Soweit dabei Daten in die Vereinigten Staaten übermittelt werden, stützt sich das auf den Angemessenheitsbeschluss der Europäischen Kommission zum EU-US Data Privacy Framework; alle vier Anbieter sind darunter zertifiziert.':
+      'The providers themselves are the controllers for the processing on their side: Google Ireland Limited, Microsoft Ireland Operations Limited and Apple Distribution International Ltd., all three based in Ireland, plus Meta Platforms Ireland Limited for Instagram. Where data is transferred to the United States, this rests on the European Commission’s adequacy decision for the EU-US Data Privacy Framework; all four providers are certified under it.',
+    'Welche dieser Wege tatsächlich angeboten werden, entscheidet die Einrichtung dieses Servers. Ein Anbieter, für den keine Zugangsdaten hinterlegt sind, erscheint gar nicht erst als Schaltfläche – und dann geht auch nichts an ihn.':
+      'Which of these are actually offered depends on how this server is set up. A provider with no credentials stored does not appear as a button at all – and then nothing goes to it either.',
+    'Wenn die Adresse nachgetragen wird': 'When the address is added later',
+    'Entsteht ein Konto ohne E-Mail-Adresse – über Instagram oder mit einem Passkey allein –, fordert die Anwendung dazu auf, eine nachzutragen. Das ist keine Schikane, sondern die Voraussetzung dafür, dass dich überhaupt jemand erreichen kann. Bis dahin lässt sich die Suche benutzen; anfragen, inserieren und Termine buchen nicht.':
+      'If an account is created without an email address – via Instagram, or with a passkey alone – the application asks you to add one. That is not red tape but the precondition for anyone being able to reach you at all. Until then you can use the search; enquiring, listing and booking appointments you cannot.',
+    'Gehört die nachgetragene Adresse bereits einem anderen Konto, werden die beiden':
+      'If the address you add already belongs to another account, the two are',
+    'zusammengelegt. Zwei Konten zu verschmelzen hieße, über fremde Inserate, Anfragen und Unterlagen zu entscheiden; das erledigt eine Anmeldung nicht nebenbei. Stattdessen erscheint der Hinweis, sich mit dieser Adresse anzumelden.':
+      'merged. Merging two accounts would mean deciding about someone else’s listings, enquiries and documents; a sign-in does not do that in passing. Instead you are told to sign in with that address.',
+    'Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft, Apple oder Instagram hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus und sind deshalb auch die beiden, die oben stehen.':
+      'Beyond the sign-in via Google, Microsoft, Apple or Instagram described in section 4, no personal data is transferred to countries outside the European Union and the European Economic Area. Anyone who wants to avoid this signs in with a passkey or an email address – both work without any external provider, which is also why they are the two listed first.'
+  });
 
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
@@ -13556,6 +13639,41 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         + 'Für private und geschäftliche Konten den Mandanten „common“ verwenden.'
     },
     {
+      id: 'apple',
+      name: 'Weiter mit Apple',
+      unter: 'Apple-ID',
+      icon: 'person',
+      farbe: '#111111',
+      stufe: 2,
+      erklaerung: 'TrimmoTrade erfährt Name und E-Mail-Adresse aus deiner Apple-ID – beim ersten Mal, danach '
+        + 'nie wieder. Wählst du „E-Mail-Adresse verbergen“, bekommt TrimmoTrade eine Weiterleitungsadresse '
+        + 'von Apple statt deiner eigenen; Post kommt trotzdem an, solange du die Anmeldung nicht widerrufst.',
+      einrichtung: 'Apple Developer Program (kostenpflichtig): Services-ID, Domain und Rückkehradresse '
+        + 'bestätigen, privater Schlüssel als .p8. Das Client-Geheimnis ist kein fester Wert, sondern ein '
+        + 'JWT, das der Server bei jeder Anfrage mit ES256 selbst signiert.'
+    },
+    {
+      id: 'instagram',
+      name: 'Weiter mit Instagram',
+      unter: 'ohne E-Mail-Adresse',
+      icon: 'person',
+      farbe: '#c13584',
+      /* Stufe 0, und das ist keine Geringschätzung, sondern eine
+         Tatsache: Instagram gibt keine E-Mail-Adresse heraus. Ohne die
+         ist ein Konto hier nicht erreichbar – es bekommt keine Anfrage,
+         keine Terminabsage, keinen Suchauftragstreffer. Erst mit
+         nachgetragener Adresse steigt es. */
+      stufe: 0,
+      erklaerung: 'Instagram gibt **keine E-Mail-Adresse** heraus – dafür gibt es dort keinen Bereich, den '
+        + 'man anfordern könnte. TrimmoTrade erfährt nur deinen Benutzernamen und eine Kennung. Damit dich '
+        + 'jemand erreichen kann, trägst du danach eine Adresse nach; bis dahin kannst du dich zwar umsehen, '
+        + 'aber nicht anfragen und nicht inserieren.',
+      einrichtung: 'Meta-App mit „Instagram API mit Instagram-Login“. Zwei Einschränkungen: Es funktioniert '
+        + 'nur mit Instagram-Konten vom Typ Business oder Creator, nicht mit privaten – und es liefert keine '
+        + 'E-Mail-Adresse. Die alte Basic-Display-Schnittstelle, die viele Anleitungen noch nennen, ist seit '
+        + 'Dezember 2024 abgeschaltet.'
+    },
+    {
       id: 'mail',
       echt: true,
       name: 'Mit E-Mail-Adresse',
@@ -13699,6 +13817,48 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       versuche: 0
     };
     return versprechen({ gueltig: CODE_GUELTIG_MIN, versuche: CODE_VERSUCHE, code: laufend.code });
+  }
+
+  /* Fehlt dem angemeldeten Konto eine Adresse?
+
+     Das gibt es seit Instagram: Von dort kommt eine Kennung und ein
+     Benutzername, aber keine E-Mail-Adresse. Ohne die ist das Konto
+     nicht erreichbar – keine Anfrage, keine Terminabsage, kein Treffer
+     aus einem Suchauftrag. Dasselbe trifft ein Konto, das mit einem
+     Passkey allein entstanden ist. */
+  function mailFehlt() {
+    const k = aktuell();
+    return !!(k && !(k.mail && k.mailBestaetigt));
+  }
+
+  /* Denselben Code, aber an das angemeldete Konto gehängt statt ein
+     zweites gesucht oder angelegt. */
+  function mailNachtragen(eingabe) {
+    const c = laufend;
+    if (!c) return absage('Es wurde kein Code angefordert.');
+    const rein = String(eingabe || '').replace(/\s/g, '');
+
+    if (echt()) {
+      return API.ruf('konto/mail-nachtragen', { vorgang: c.vorgang, code: rein })
+        .then((d) => { laufend = null; return uebernehmen(API.kontoMerken(d)); });
+    }
+
+    /* Ohne Server: dieselbe Prüfung wie sonst, danach die Adresse ins
+       vorhandene Konto statt in ein neues. */
+    if (Date.now() > c.bis) { laufend = null; return absage('Der Code ist abgelaufen. Fordere einen neuen an.'); }
+    c.versuche++;
+    if (c.versuche > CODE_VERSUCHE) {
+      laufend = null;
+      return absage('Zu viele Fehlversuche. Fordere einen neuen Code an.');
+    }
+    if (rein !== c.code) {
+      const uebrig = CODE_VERSUCHE - c.versuche + 1;
+      return absage('Der Code stimmt nicht. Noch ' + uebrig + ' '
+        + U.plural(uebrig, 'Versuch', 'Versuche') + '.');
+    }
+    const mail = c.mail;
+    laufend = null;
+    return versprechen(aendern({ mail, mailBestaetigt: true }));
   }
 
   function codeEinloesen(eingabe) {
@@ -13920,15 +14080,25 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   /* ------------------------- Konto ------------------------- */
 
+  /* Dieselbe Regel wie in api/lib/konto.php, und das ist kein Zufall,
+     sondern Pflicht: Was der Server rechnet, gilt; was hier gerechnet
+     wird, ist die Anzeige daneben. Weichen die beiden voneinander ab,
+     steht am Inserat eine andere Stufe als im Konto, und niemand weiß
+     mehr, welche stimmt.
+
+     Zuerst die Frage nach der Erreichbarkeit, nicht nach der Stärke der
+     Anmeldung. Eine Stufe steht am Inserat und an jeder Anfrage; wer
+     sie liest, schließt daraus, dass am anderen Ende jemand ist, den
+     man erreichen kann. Ohne bestätigte Adresse stimmt das nicht. */
   function stufeBerechnen(k) {
-    let n = 0;
-    if (k.mailBestaetigt) n = 1;
+    if (!k.mailBestaetigt || !k.mail) return 0;
+    let n = 1;
     if ((k.passkeys && k.passkeys.length) || (k.anbieter && k.anbieter !== 'mail')) n = 2;
     if (k.telefonBestaetigt) n = 3;
     if (k.ausweisGeprueft) n = 4;
     /* Eine Wegwerfadresse hebt die Stufe nicht über eins – auch dann
        nicht, wenn ein Passkey daran hängt. */
-    if (k.mail && istWegwerf(k.mail) && !k.telefonBestaetigt) n = Math.min(n, 1);
+    if (istWegwerf(k.mail) && !k.telefonBestaetigt) n = Math.min(n, 1);
     return n;
   }
 
@@ -14061,6 +14231,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     abmelden, loeschen, on,
     mailForm, istWegwerf, anzeigeName, passkeys,
     auffrischen, codeAnfordern, codeEinloesen, codeStand,
+    mailFehlt, mailNachtragen,
     passkeyMoeglich, passkeyGrund, passkeyPlattform, passkeyAnlegen, passkeyAnmelden, passkeyLoeschen,
     anbieterStarten
   };
@@ -16047,7 +16218,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
        Anschreiben, Suchaufträge, Notizen, Inserieren – alles das braucht
        weiterhin ein Konto. Wo das durchgesetzt wird, steht bei
        `darfOhneKonto`. */
-    const OHNE_ANMELDUNG = ['anmelden', 'recht', 'hilfe', 'freigabe', 'suche', 'objekt'];
+    const OHNE_ANMELDUNG = ['anmelden', 'registrieren', 'recht', 'hilfe', 'freigabe', 'suche', 'objekt'];
     const gesperrt = TT.konto && !TT.konto.angemeldet() && OHNE_ANMELDUNG.indexOf(r.name) < 0;
     if (gesperrt) zielMerken(location.hash);
     const name = gesperrt ? 'anmelden' : r.name;
@@ -16263,7 +16434,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
               : raw('<span>' + U.esc(U.t('Plus entdecken')) + '</span>')}</a>
           <a class="knopf knopf--klein nur-breit" href="#/inserieren">${ico('plus')}<span>Inserieren</span></a>
           <a class="ikon-btn nur-angemeldet" href="#/konto" title="Konto" aria-label="Konto">${ico('person')}</a>
-          <a class="knopf knopf--klein auch-ohne-konto nur-gast" href="#/anmelden">${ico('person')}<span>Anmelden</span></a>
+          <a class="link kopf__anmelden auch-ohne-konto nur-gast" href="#/anmelden">${U.t('Anmelden')}</a>
+          <a class="knopf knopf--klein auch-ohne-konto nur-gast" href="#/registrieren">${ico('person')}<span>Konto anlegen</span></a>
         </div>
       </div>
     </header>
@@ -16317,6 +16489,22 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     const s = TT.store.get();
     const g = P.gruender();
     let inhalt = '';
+
+    /* Zuerst und ohne Wegklicken: Diesem Konto fehlt die Adresse. Es
+       kann nichts empfangen – keine Anfrage, keine Terminabsage, keinen
+       Treffer. Ein Hinweis, den man wegklickt, wäre hier die falsche
+       Freundlichkeit; wer ihn wegklickt, wundert sich einen Monat
+       später, warum sich nie jemand meldet. */
+    if (TT.konto && TT.konto.angemeldet() && TT.konto.mailFehlt()) {
+      el.innerHTML = String(h`<div class="band band--hinweis">
+        ${ico('nachricht')}
+        <p><b>Dir fehlt noch eine E-Mail-Adresse.</b> Ohne sie kann dich niemand erreichen: keine Anfrage
+          auf ein Inserat, keine Absage eines Besichtigungstermins, kein Treffer aus einem Suchauftrag.
+          Umsehen kannst du dich; alles Übrige braucht sie.</p>
+        <a class="knopf knopf--klein" href="#/konto">Jetzt nachtragen</a>
+      </div>`);
+      return;
+    }
 
     if (g.nummer && P.gruenderAktiv() && P.gruenderTageRest() <= 28) {
       const tage = P.gruenderTageRest();
@@ -16582,7 +16770,9 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
   function zielMerken(hash) {
     const w = String(hash || '').replace(/^#\/?/, '');
-    if (!w || w.indexOf('anmelden') === 0) return;
+    /* Weder die Anmeldung noch die Registrierung als Ziel merken –
+       sonst schickte die Anmeldung anschließend wieder dorthin. */
+    if (!w || w.indexOf('anmelden') === 0 || w.indexOf('registrieren') === 0) return;
     zurueckZiel = w;
   }
 
@@ -16609,7 +16799,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             gibt es hier nicht.</p></div>
         </div>`,
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Weiter stöbern</button>
-        <a class="knopf" href="#/anmelden" data-tu="dialog-zu">${ico('person')}Anmelden</a>`
+        <a class="knopf knopf--still" href="#/anmelden" data-tu="dialog-zu">Anmelden</a>
+        <a class="knopf" href="#/registrieren" data-tu="dialog-zu">${ico('person')}Konto anlegen</a>`
     });
   }
 
@@ -25985,16 +26176,33 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             Einwilligung nötig ist (§ 25 Abs. 2 Nr. 2 TDDDG). Cookies zu Werbe- oder Analysezwecken werden
             nicht gesetzt – es gibt keine.</p>
 
-          <h3>Anmeldung über Google oder Microsoft</h3>
-          <p>Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei TrimmoTrade anmeldest.
-            An TrimmoTrade übermittelt werden Name, E-Mail-Adresse und die Angabe, ob sie bestätigt ist – nicht
-            dein dortiges Passwort und keine weiteren Inhalte deines Kontos. Es besteht kein Zugriff auf
-            Kontakte, Kalender, Dateien oder Postfach.</p>
-          <p>Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst:
-            Google Ireland Limited und Microsoft Ireland Operations Limited, beide mit Sitz in Irland. Soweit
-            dabei Daten in die Vereinigten Staaten übermittelt werden, stützt sich das auf den
-            Angemessenheitsbeschluss der Europäischen Kommission zum EU-US Data Privacy Framework; beide
-            Anbieter sind darunter zertifiziert.</p>
+          <h3>Anmeldung über Google, Microsoft, Apple oder Instagram</h3>
+          <p>Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei TrimmoTrade
+            anmeldest. Dein dortiges Passwort bekommt TrimmoTrade nie zu sehen, und es besteht kein Zugriff
+            auf Kontakte, Kalender, Dateien oder Postfach. Was übermittelt wird, ist von Anbieter zu Anbieter
+            verschieden:</p>
+          <dl class="rechtsliste">
+            <dt>Google</dt><dd>Name, E-Mail-Adresse und die Angabe, ob sie bestätigt ist</dd>
+            <dt>Microsoft</dt><dd>Name und E-Mail-Adresse. Bei einem privaten Konto gilt die Adresse hier
+              nicht als bestätigt, weil sie dort frei wählbar ist; bei einem Geschäfts- oder Schulkonto
+              stammt sie aus dem Verzeichnis des Arbeitgebers.</dd>
+            <dt>Apple</dt><dd>Name und E-Mail-Adresse – und zwar nur bei der <b>ersten</b> Anmeldung, danach
+              nie wieder. Wählst du bei Apple „E-Mail-Adresse verbergen“, bekommt TrimmoTrade nicht deine
+              Adresse, sondern eine Weiterleitungsadresse bei <i>privaterelay.appleid.com</i>. Post kommt
+              darüber an, solange du die Anmeldung nicht in deinen Apple-Einstellungen widerrufst.</dd>
+            <dt>Instagram</dt><dd>Benutzername und eine Kontokennung. <b>Keine E-Mail-Adresse</b> – Instagram
+              gibt keine heraus. Ein so entstandenes Konto ist deshalb nicht erreichbar und steht auf
+              Vertrauensstufe 0, bis du eine Adresse nachträgst und bestätigst.</dd>
+          </dl>
+          <p>Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst: Google Ireland
+            Limited, Microsoft Ireland Operations Limited und Apple Distribution International Ltd., alle
+            drei mit Sitz in Irland, sowie Meta Platforms Ireland Limited für Instagram. Soweit dabei Daten
+            in die Vereinigten Staaten übermittelt werden, stützt sich das auf den Angemessenheitsbeschluss
+            der Europäischen Kommission zum EU-US Data Privacy Framework; alle vier Anbieter sind darunter
+            zertifiziert.</p>
+          <p class="fein">Welche dieser Wege tatsächlich angeboten werden, entscheidet die Einrichtung
+            dieses Servers. Ein Anbieter, für den keine Zugangsdaten hinterlegt sind, erscheint gar nicht
+            erst als Schaltfläche – und dann geht auch nichts an ihn.</p>
 
           <h3>Passkey</h3>
           <p>Beim Passkey entsteht das Schlüsselpaar im Sicherheitsbaustein deines Geräts. Der private
@@ -26002,6 +26210,16 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             der öffentliche Teil, mit dem sich Signaturen prüfen, aber keine erzeugen lassen. Biometrische
             Merkmale – Gesicht, Fingerabdruck – werden weder übertragen noch verarbeitet: Sie entsperren
             ausschließlich lokal das Gerät (Art. 9 DSGVO ist damit nicht berührt).</p>
+
+          <h3>Wenn die Adresse nachgetragen wird</h3>
+          <p>Entsteht ein Konto ohne E-Mail-Adresse – über Instagram oder mit einem Passkey allein –, fordert
+            die Anwendung dazu auf, eine nachzutragen. Das ist keine Schikane, sondern die Voraussetzung
+            dafür, dass dich überhaupt jemand erreichen kann. Bis dahin lässt sich die Suche benutzen;
+            anfragen, inserieren und Termine buchen nicht.</p>
+          <p>Gehört die nachgetragene Adresse bereits einem anderen Konto, werden die beiden <b>nicht</b>
+            zusammengelegt. Zwei Konten zu verschmelzen hieße, über fremde Inserate, Anfragen und Unterlagen
+            zu entscheiden; das erledigt eine Anmeldung nicht nebenbei. Stattdessen erscheint der Hinweis,
+            sich mit dieser Adresse anzumelden.</p>
 
           <h3>Bestätigung der Adresse</h3>
           <p>Der Einmalcode dient allein der Bestätigung, dass du die angegebene Adresse abrufen kannst. Er
@@ -26278,10 +26496,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             findet nicht statt.</p>
 
           <h2>17. Übermittlung in Drittländer</h2>
-          <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google oder Microsoft hinaus findet
-            keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des
-            Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit
-            E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus.</p>
+          <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft, Apple oder Instagram
+            hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen
+            Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit
+            Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus und sind
+            deshalb auch die beiden, die oben stehen.</p>
 
           <h2>18. Deine Rechte</h2>
           <ul class="pruef">
@@ -27446,6 +27665,16 @@ Datum: __________________
 
   /* Schritt: 'wahl' | 'mail' | 'code' | 'anbieter' */
   let schritt = 'wahl';
+  /* 'anmelden' | 'registrieren'. Technisch ist es derselbe Weg – wer
+     sich zum ersten Mal anmeldet, bekommt ein Konto. Das ist richtig so
+     und soll auch so bleiben: ein Formular weniger, ein Passwort
+     weniger, kein „Konto existiert bereits“.
+
+     Nur sagen musste man es. Wer zum ersten Mal hier ist und „Anmelden“
+     liest, sucht nach dem Knopf zum Registrieren und findet keinen –
+     und geht davon aus, dass er hier nichts verloren hat. Deshalb zwei
+     Eingänge in denselben Flur, mit unterschiedlicher Beschriftung. */
+  let modus = 'anmelden';
   let entwurf = { mail: '', name: '', anbieter: '', agb: false };
   let meldung = '';
   let hinweis = '';
@@ -27453,6 +27682,12 @@ Datum: __________________
   let laeuft = '';           // Welcher Knopf gerade arbeitet
   let neuAnbieten = false;   // Nach vergeblicher Passkey-Anmeldung
   let demoCode = '';
+
+  /* Der Nachtrag der Adresse hat seinen eigenen kleinen Zustand – er
+     läuft auf der Kontoseite und nicht in der Anmeldung. */
+  let nachtragSchritt = 'mail';
+  let nachtragMail = '';
+  let nachtragMeldung = '';
 
   K.passkeyPlattform().then((ja) => {
     passkeyDa = ja;
@@ -27492,9 +27727,14 @@ Datum: __________________
 
   function wahlSchritt() {
     const wege = K.verfuegbar();
+    const neu = modus === 'registrieren';
     return h`<div class="anmeldung__wege">
         ${wege.map(anbieterKnopf)}
       </div>
+      ${neu ? h`<p class="anmeldung__wechsel">Schon ein Konto?
+        <a href="#/anmelden">Hier anmelden</a></p>`
+        : h`<p class="anmeldung__wechsel">Noch kein Konto?
+        <a href="#/registrieren">Eins anlegen – kostet nichts</a></p>`}
       ${neuAnbieten ? h`<div class="info-meldung">${ico('info')}Noch kein Passkey auf diesem Gerät?
         <button type="button" class="link" data-tu="anmelden-passkey-neu">Jetzt einen anlegen und
         damit ein Konto eröffnen</button></div>` : ''}
@@ -27605,25 +27845,45 @@ Datum: __________________
     </label>`;
   }
 
-  function anmeldeseite() {
+  /* Was ein Konto bringt. Steht nur bei der Registrierung: Wer sich
+     anmeldet, weiß es schon. */
+  function nutzenListe() {
+    return h`<ul class="pruef anmeldung__nutzen">
+      <li>${ico('pruefen')}<span>Merkliste, Profil und Bewerbungen auf allen deinen Geräten – angefangen
+        am Rechner, weiter im Bus</span></li>
+      <li>${ico('pruefen')}<span>Suchaufträge, die dir schreiben, sobald etwas Passendes dazukommt</span></li>
+      <li>${ico('pruefen')}<span>Anfragen an Inserate, Besichtigungstermine buchen, selbst inserieren</span></li>
+      <li>${ico('pruefen')}<span>Der Dokumententresor: Unterlagen verschlüsselt ablegen und einzeln
+        freigeben</span></li>
+    </ul>`;
+  }
+
+  function seite(alsRegistrierung) {
+    modus = alsRegistrierung ? 'registrieren' : 'anmelden';
+
     /* Eine Rückmeldung vom Anbieter wird beim Zeichnen übernommen und
        gleich aus der Adresse entfernt – sonst stünde sie beim nächsten
        Neuladen wieder da. */
     const code = (ui.params && ui.params.params && ui.params.params.fehler) || '';
     if (code && RUECKMELDUNG[code]) {
       meldung = RUECKMELDUNG[code];
-      setTimeout(() => { if (location.hash.indexOf('fehler=') >= 0) location.replace('#/anmelden'); }, 0);
+      const zurueck = '#/' + (alsRegistrierung ? 'registrieren' : 'anmelden');
+      setTimeout(() => { if (location.hash.indexOf('fehler=') >= 0) location.replace(zurueck); }, 0);
     }
 
     return {
-      titel: 'Anmelden',
+      titel: alsRegistrierung ? 'Konto anlegen' : 'Anmelden',
       html: h`<div class="anmeldung">
         <div class="anmeldung__kasten">
           <header class="anmeldung__kopf">
             <span class="anmeldung__logo" aria-hidden="true"></span>
-            <h1>Willkommen bei TrimmoTrade</h1>
+            ${alsRegistrierung
+        ? h`<h1>Konto anlegen</h1>
+              <p>Kostenlos, in unter einer Minute. Es gibt kein Passwort – du wählst einen Weg, und
+              damit meldest du dich künftig auch an.</p>`
+        : h`<h1>Willkommen bei TrimmoTrade</h1>
               <p>Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil,
-              eine Bewerbermappe.</p>
+              eine Bewerbermappe.</p>`}
           </header>
 
           ${meldung ? h`<p class="warn-meldung">${ico('warnung')}${meldung}</p>` : ''}
@@ -27632,6 +27892,8 @@ Datum: __________________
           ${schritt === 'mail' ? mailSchritt()
         : schritt === 'code' ? codeSchritt()
           : schritt === 'anbieter' ? anbieterSchritt() : wahlSchritt()}
+
+          ${alsRegistrierung && schritt === 'wahl' ? nutzenListe() : ''}
 
           <div class="anmeldung__ehrlich">
             ${ico('info')}
@@ -27684,6 +27946,37 @@ Datum: __________________
     </ul>`;
   }
 
+  /* Die Adresse nachtragen – für Konten, die ohne eine entstanden sind.
+     Zwei Schritte im selben Kasten: Adresse eingeben, Code eintragen. */
+  function nachtragKasten() {
+    return h`<section class="block block--warn" id="mail-nachtragen">
+      <h2>${ico('nachricht')}E-Mail-Adresse nachtragen</h2>
+      <p class="block__unter">Deinem Konto fehlt eine Adresse. Solange das so ist, kann dich niemand
+        erreichen: keine Anfrage auf ein Inserat, keine Absage eines Besichtigungstermins, kein Treffer
+        aus einem Suchauftrag. Anfragen und Inserieren sind deshalb gesperrt.</p>
+      ${nachtragMeldung ? h`<p class="warn-meldung">${ico('warnung')}${nachtragMeldung}</p>` : ''}
+      ${nachtragSchritt === 'code'
+        ? h`<form class="formraster" data-tu-submit="nachtrag-code">
+            <p>Ein sechsstelliger Code ist an <b>${nachtragMail}</b> unterwegs.</p>
+            <label class="feld"><span>Code</span>
+              <input type="text" id="nachtrag-code" inputmode="numeric" autocomplete="one-time-code"
+                maxlength="6" required></label>
+            <div class="feld feld--knopf">
+              <button type="submit" class="knopf">${ico('pruefen')}Bestätigen</button>
+              <button type="button" class="link" data-tu="nachtrag-zurueck">Andere Adresse</button>
+            </div>
+          </form>`
+        : h`<form class="formraster" data-tu-submit="nachtrag-mail">
+            <label class="feld"><span>Deine E-Mail-Adresse</span>
+              <input type="email" id="nachtrag-mail" autocomplete="email" required
+                placeholder="name@beispiel.de"></label>
+            <div class="feld feld--knopf">
+              <button type="submit" class="knopf">${ico('nachricht')}Code schicken</button>
+            </div>
+          </form>`}
+    </section>`;
+  }
+
   function kontoseite() {
     const k = K.aktuell();
     if (!k) return anmeldeseite();
@@ -27719,6 +28012,8 @@ Datum: __________________
             <button type="button" class="knopf knopf--still knopf--gefahr" data-tu="konto-loeschen">${ico('muell')}Konto löschen</button>
           </p>
         </section>
+
+        ${K.mailFehlt() ? nachtragKasten() : ''}
 
         <section class="block">
           <h2>${ico('schloss')}Vertrauensstufe</h2>
@@ -28018,6 +28313,49 @@ Datum: __________________
     ui.toast('Angemeldet als ' + K.anzeigeName() + '.', 'gut');
   }
 
+  /* ---------------- Die Adresse nachtragen ---------------- */
+
+  A_('nachtrag-mail', (el) => {
+    const feld = U.$('#nachtrag-mail', el);
+    const adresse = feld ? feld.value.trim() : '';
+    const knopf = U.$('button[type="submit"]', el) || el;
+    nachtragMeldung = '';
+    ui.knopfArbeit(knopf, K.codeAnfordern(adresse, '').then((d) => {
+      nachtragMail = adresse;
+      nachtragSchritt = 'code';
+      if (d && d.code) demoCode = d.code;
+      ui.neuZeichnen();
+      ui.toast('Code verschickt.', 'gut');
+    }, (e) => {
+      nachtragMeldung = (e && e.text) || 'Das ging nicht.';
+      ui.neuZeichnen();
+    }), 'Wird verschickt …');
+  });
+
+  A_('nachtrag-code', (el) => {
+    const feld = U.$('#nachtrag-code', el);
+    const knopf = U.$('button[type="submit"]', el) || el;
+    nachtragMeldung = '';
+    ui.knopfArbeit(knopf, K.mailNachtragen(feld ? feld.value : '').then(() => {
+      nachtragSchritt = 'mail';
+      nachtragMail = '';
+      ui.neuZeichnen();
+      ui.toast('Adresse bestätigt. Jetzt kann dich jemand erreichen.', 'gut');
+    }, (e) => {
+      nachtragMeldung = (e && e.text) || 'Das ging nicht.';
+      /* Ist der Code endgültig verbraucht, zurück auf Anfang – sonst
+         steht ein Eingabefeld da, in das nichts mehr passt. */
+      if (e && e.neu) nachtragSchritt = 'mail';
+      ui.neuZeichnen();
+    }), 'Wird geprüft …');
+  });
+
+  A_('nachtrag-zurueck', () => {
+    nachtragSchritt = 'mail';
+    nachtragMeldung = '';
+    ui.neuZeichnen();
+  });
+
   A_('konto-abmelden', () => {
     if (!confirm('Abmelden? Merkliste, Profil und Notizen bleiben auf diesem Gerät erhalten.')) return;
     K.abmelden().then(() => { ui.gehe('anmelden'); ui.neuZeichnen(); });
@@ -28122,9 +28460,13 @@ Datum: __________________
     ui.toast('Stufe 4 erreicht.', 'gut');
   });
 
+  const anmeldeseite = () => seite(false);
+  const registrierseite = () => seite(true);
+
   ui.ansichten.anmelden = anmeldeseite;
+  ui.ansichten.registrieren = registrierseite;
   ui.ansichten.konto = kontoseite;
-  TT.viewAnmeldung = { anmeldeseite, kontoseite };
+  TT.viewAnmeldung = { anmeldeseite, registrierseite, kontoseite };
 })(window.TT = window.TT || {});
 
 /* ===== app.js ===== */

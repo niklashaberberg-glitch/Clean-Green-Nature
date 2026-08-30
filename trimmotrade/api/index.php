@@ -254,7 +254,24 @@ try {
 /* Änderungen brauchen den Nachweis, dass die Anfrage von dieser Seite
    kommt. Lesende Wege nicht: Sie ändern nichts, und `status` muss auch
    beim allerersten Aufruf funktionieren, bevor es ein Schutzmerkmal gibt. */
-if ($art === 'POST') {
+/* Änderungen brauchen den Nachweis, dass die Anfrage von dieser Seite
+   kommt – mit genau einer Ausnahme.
+
+   Apple gibt Name und E-Mail-Adresse nur heraus, wenn die Rückkehr als
+   Formular kommt (`response_mode=form_post`). Das ist ein POST von
+   appleid.apple.com auf diesen Server, also seitenübergreifend: Es
+   trägt weder unser Schutzmerkmal noch eine Herkunft von hier. Beide
+   Prüfungen würden es abweisen, und die Anmeldung mit Apple wäre
+   unmöglich.
+
+   Diese Ausnahme ist keine Lücke, weil der Weg seine eigenen Schlösser
+   hat, und zwar strengere: ein `state`, der serverseitig zu einem
+   Vorgang gehört und beim ersten Gebrauch gelöscht wird, ein Anker im
+   Cookie, der die Rückkehr an denselben Browser bindet, ein `nonce` im
+   Token und PKCE. Wer den Rückweg fälschen will, müsste alle vier
+   haben. Und anders als bei den übrigen Wegen ändert dieser Aufruf für
+   sich genommen nichts – er meldet an, mehr nicht. */
+if ($art === 'POST' && $pfad !== 'oauth/zurueck') {
     Sitzung::herkunftPruefen($BASIS !== '' ? $BASIS : 'https://' . ($_SERVER['HTTP_HOST'] ?? ''));
     Sitzung::schutzPruefen();
 }
@@ -393,6 +410,81 @@ try {
             Konto::stufeNeu((int) $konto['id']);
             Sitzung::anlegen((int) $konto['id']);
             Antwort::gut(['konto' => Konto::nachAussen(Konto::nachId((int) $konto['id']))]);
+
+        /* --------------------------------------------------------------
+           Die Adresse nachtragen
+
+           Für Konten, die ohne eine entstanden sind. Das gibt es seit
+           Instagram: Von dort kommt eine Kennung und ein Benutzername,
+           aber keine E-Mail-Adresse – es gibt dafür keinen Bereich, den
+           man anfordern könnte. Dasselbe trifft ein Konto, das mit einem
+           Passkey allein angelegt wurde.
+
+           Ohne Adresse ist so ein Konto ein Briefkasten ohne Schlitz:
+           keine Anfrage auf ein Inserat, keine Absage eines Termins,
+           kein Treffer aus einem Suchauftrag. Deshalb steht es auf
+           Stufe 0, und deshalb gibt es diesen Weg.
+
+           Den Code verschickt `mail/code` wie sonst auch. Hier wird nur
+           geprüft – und das Ergebnis hängt an das angemeldete Konto,
+           statt ein zweites zu suchen oder anzulegen.
+           -------------------------------------------------------------- */
+
+        case 'konto/mail-nachtragen':
+            if ($art !== 'POST') {
+                Antwort::fehler('Falsches Verfahren.', 405);
+            }
+            $k = Sitzung::verlangen();
+            if (!empty($k['mail']) && !empty($k['mail_bestaetigt'])) {
+                Antwort::fehler('Für dieses Konto ist schon eine Adresse bestätigt.', 400);
+            }
+            $kennung = feld('vorgang');
+            $eingabe = preg_replace('/\D/', '', feld('code'));
+            $v = Vorgang::holen($kennung, 'mailcode');
+            if (!$v) {
+                Antwort::fehler('Der Code ist abgelaufen. Fordere einen neuen an.', 400, ['neu' => true]);
+            }
+            Grenze::sperreOderWeiter('code_pruefen', (string) $v['bezug']);
+
+            $hoechstens = (int) ($cfg['code_versuche'] ?? 5);
+            if (!gleich_sicher(merkmal_hash((string) $eingabe), (string) $v['geheim_hash'])) {
+                $weiter = Vorgang::fehlversuch($kennung, $hoechstens);
+                $uebrig = $hoechstens - ((int) $v['versuche'] + 1);
+                Antwort::fehler(
+                    $weiter
+                        ? 'Der Code stimmt nicht. Noch ' . max(1, $uebrig) . ($uebrig === 1 ? ' Versuch.' : ' Versuche.')
+                        : 'Zu viele Fehlversuche. Fordere einen neuen Code an.',
+                    400,
+                    ['feld' => 'code', 'neu' => !$weiter]
+                );
+            }
+
+            $neueMail = (string) $v['bezug'];
+
+            /* Gehört die Adresse schon einem anderen Konto, wird hier
+               nichts zusammengelegt. Zwei Konten zu verschmelzen heißt,
+               über fremde Inserate, Anfragen und Unterlagen zu
+               entscheiden – das ist keine Sache, die eine Anmeldung
+               nebenbei erledigt. Stattdessen der Hinweis, sich dort
+               anzumelden und diesen Weg dann im Konto hinzuzufügen. */
+            $fremd = Konto::nachMail($neueMail);
+            if ($fremd && (int) $fremd['id'] !== (int) $k['id']) {
+                Vorgang::loeschen($kennung);
+                Antwort::fehler(
+                    'Zu dieser Adresse gibt es schon ein Konto. Melde dich mit ihr an – '
+                    . 'in den Kontoeinstellungen lässt sich dieser Anmeldeweg dann hinzufügen.',
+                    409,
+                    ['feld' => 'mail']
+                );
+            }
+
+            Vorgang::loeschen($kennung);
+            Grenze::freigeben('code_pruefen', $neueMail);
+            Grenze::freigeben('code_anfordern', $neueMail);
+
+            Konto::aendern((int) $k['id'], ['mail' => $neueMail, 'mail_bestaetigt' => 1]);
+            Konto::stufeNeu((int) $k['id']);
+            Antwort::gut(['konto' => Konto::nachAussen(Konto::nachId((int) $k['id']))]);
 
         /* --------------------------------------------------------------
            Passkey anlegen
@@ -621,10 +713,21 @@ try {
                säße dann unbemerkt im Konto des Angreifers und tippte dort
                seine Daten ein. Der Anker steht nur als Hash beim Vorgang. */
             $anker = zufall_text(16);
+            /* SameSite: Lax genügt überall dort, wo die Rückkehr eine
+               Umleitung ist – bei einer solchen schickt der Browser das
+               Cookie mit. Apple kommt als Formular zurück, und bei einem
+               seitenübergreifenden POST hält Lax das Cookie zurück. Dann
+               fehlte der Anker, die Prüfung schlüge fehl, und die
+               Anmeldung mit Apple ginge nie. Deshalb dort None, was
+               zwingend Secure verlangt – auf einer Seite ohne TLS gibt
+               es diesen Weg also nicht. */
+            $ueberKreuz = $anbieter === 'apple';
+            $sicher = str_starts_with($BASIS, 'https://');
             setcookie(ANKER_COOKIE, $anker, [
                 'expires' => time() + 900, 'path' => '/api/',
-                'secure' => str_starts_with($BASIS, 'https://'),
-                'httponly' => true, 'samesite' => 'Lax',
+                'secure' => $sicher || $ueberKreuz,
+                'httponly' => true,
+                'samesite' => $ueberKreuz ? 'None' : 'Lax',
             ]);
             try {
                 $ziel = Oauth::losUrl(
@@ -640,7 +743,11 @@ try {
             exit;
 
         case 'oauth/zurueck':
-            $fehlerCode = (string) ($_GET['error'] ?? '');
+            /* Google, Microsoft und Instagram kommen als Umleitung
+               zurück, Apple als Formular. Beides landet hier; woher die
+               Felder kommen, entscheidet das Verfahren. */
+            $rueck = $art === 'POST' ? $_POST : $_GET;
+            $fehlerCode = (string) ($rueck['error'] ?? '');
             if ($fehlerCode !== '') {
                 /* `access_denied` heißt: Der Nutzer hat abgelehnt. Das ist
                    kein Fehler, sondern eine Entscheidung – und wird auch
@@ -649,10 +756,13 @@ try {
             }
             try {
                 $d = Oauth::zurueck(
-                    (string) ($_GET['state'] ?? ''),
-                    (string) ($_GET['code'] ?? ''),
+                    (string) ($rueck['state'] ?? ''),
+                    (string) ($rueck['code'] ?? ''),
                     $BASIS . '/api/oauth/zurueck',
-                    merkmal_hash((string) ($_COOKIE[ANKER_COOKIE] ?? ''))
+                    merkmal_hash((string) ($_COOKIE[ANKER_COOKIE] ?? '')),
+                    /* Nur Apple, nur beim allerersten Mal: der Name als
+                       JSON neben dem Code. */
+                    mb_substr((string) ($rueck['user'] ?? ''), 0, 2000)
                 );
             } catch (OauthFehler | NetzFehler | JwtFehler $e) {
                 error_log('TrimmoTrade OAuth: ' . $e->getMessage());

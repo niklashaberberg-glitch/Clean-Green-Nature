@@ -281,6 +281,102 @@ App-Registrierungen*:
 
 ---
 
+## Schritt 6b · Anmeldung über Apple · *kostenpflichtig*
+
+Der einzige Anbieter, der Geld kostet: Es braucht eine Mitgliedschaft im
+**Apple Developer Program**, 99 € im Jahr. Ohne die geht es nicht.
+
+Und der einzige ohne festes Geheimnis. Apple gibt einen privaten
+Schlüssel heraus; das Client-Geheimnis baut der Server daraus bei jeder
+Anfrage selbst — ein JWT, mit ES256 signiert, zehn Minuten gültig.
+
+1. Im **Apple Developer Portal** unter *Certificates, Identifiers &
+   Profiles*:
+   - eine **App ID** anlegen und dort *Sign in with Apple* aktivieren
+   - eine **Services ID** anlegen, etwa `de.trimmotrade.web`. **Diese**
+     ist die Client-ID, nicht die App-ID.
+   - bei der Services ID unter *Sign in with Apple → Configure*
+     eintragen: Domain `www.trimmotrade.de`, Rückkehradresse
+     `https://www.trimmotrade.de/api/oauth/zurueck`
+   - unter *Keys* einen Schlüssel mit *Sign in with Apple* anlegen und
+     die **.p8-Datei herunterladen**. Das geht **genau einmal**; wer sie
+     verliert, legt einen neuen Schlüssel an.
+2. Die .p8-Datei auf den Server laden, am besten neben `config.php`, und
+   die Rechte eng setzen: `chmod 600`.
+3. In `api/config.php`:
+
+   ```php
+   'apple' => [
+     'client_id' => 'de.trimmotrade.web',              // die Services ID
+     'team_id'   => 'ABCDE12345',                      // oben rechts im Portal
+     'key_id'    => 'FGHIJ67890',                      // gehört zur .p8
+     'key_datei' => __DIR__ . '/AuthKey_FGHIJ67890.p8',
+   ],
+   ```
+
+**Drei Dinge, die im Betrieb überraschen:**
+
+- **Der Name kommt genau einmal.** Apple schickt ihn bei der allerersten
+  Anmeldung mit und nie wieder. Die Anwendung hebt ihn deshalb sofort
+  auf. Zum Ausprobieren muss man die Anwendung in den Apple-Einstellungen
+  (*Apple-ID → Anmelden mit Apple*) erst wieder abmelden — ein gelöschtes
+  Konto allein genügt nicht.
+- **„E-Mail-Adresse verbergen“.** Wählt jemand das, kommt statt der
+  Adresse eine Weiterleitung bei `privaterelay.appleid.com`. Damit dort
+  Post ankommt, muss die eigene Absenderdomain bei Apple unter
+  *Certificates, Identifiers & Profiles → Services → Sign in with Apple
+  for Email Communication* eingetragen und bestätigt sein. Fehlt das,
+  verschwinden die Mails **stillschweigend** — kein Fehler, keine
+  Rückmeldung, nur nie eine Antwort.
+- **HTTPS ist Pflicht.** Apple schickt die Rückkehr als Formular, und
+  das Cookie, das die Anmeldung an den Browser bindet, braucht dafür
+  `SameSite=None` — was ohne TLS nicht gesetzt werden darf. Ohne HTTPS
+  gibt es diesen Weg schlicht nicht.
+
+---
+
+## Schritt 6c · Anmeldung über Instagram · *nur mit zwei Einschränkungen*
+
+Bevor du das einrichtest, zwei Sätze, die den Aufwand meist erledigen:
+
+1. **Instagram gibt keine E-Mail-Adresse heraus.** Es gibt dafür keinen
+   Bereich, den man anfordern könnte. Wer sich so anmeldet, hat ein
+   Konto, das nichts empfangen kann: keine Anfrage auf ein Inserat,
+   keine Absage eines Besichtigungstermins, keinen Treffer aus einem
+   Suchauftrag.
+2. **Es geht nur mit Instagram-Konten vom Typ Business oder Creator.**
+   Private Konten können diesen Weg nicht nutzen — und das sind die
+   meisten Wohnungssuchenden.
+
+Die Anwendung fängt Nummer 1 ab: Ein so entstandenes Konto steht auf
+Vertrauensstufe 0 und wird aufgefordert, eine Adresse nachzutragen.
+Anfragen und Inserieren sind bis dahin gesperrt. Es ist trotzdem ein
+Umweg, den die meisten nicht gehen — rechne damit, dass dieser Knopf
+selten benutzt wird und öfter zu einer abgebrochenen Anmeldung führt als
+zu einem Konto.
+
+Wenn du ihn trotzdem willst:
+
+1. Im **Meta-App-Dashboard** eine App anlegen und das Produkt
+   **„Instagram API mit Instagram-Login“** hinzufügen. Die ältere
+   *Basic Display API*, die viele Anleitungen noch nennen, ist seit
+   **Dezember 2024 abgeschaltet**.
+2. Als *OAuth Redirect URI*
+   `https://www.trimmotrade.de/api/oauth/zurueck` eintragen.
+3. In `api/config.php`:
+
+   ```php
+   'instagram' => [
+     'client_id'     => 'DEINE_INSTAGRAM_APP_ID',
+     'client_secret' => 'DEIN_INSTAGRAM_APP_SECRET',
+   ],
+   ```
+
+Solange die Felder leer sind, erscheint der Knopf gar nicht. Das ist der
+empfohlene Zustand.
+
+---
+
 ## Schritt 7 · Impressum und Kontaktangaben
 
 Die Anwendung zeigt selbst an, was noch fehlt: Ruf

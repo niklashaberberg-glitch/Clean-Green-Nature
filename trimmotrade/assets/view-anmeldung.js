@@ -27,6 +27,16 @@
 
   /* Schritt: 'wahl' | 'mail' | 'code' | 'anbieter' */
   let schritt = 'wahl';
+  /* 'anmelden' | 'registrieren'. Technisch ist es derselbe Weg – wer
+     sich zum ersten Mal anmeldet, bekommt ein Konto. Das ist richtig so
+     und soll auch so bleiben: ein Formular weniger, ein Passwort
+     weniger, kein „Konto existiert bereits“.
+
+     Nur sagen musste man es. Wer zum ersten Mal hier ist und „Anmelden“
+     liest, sucht nach dem Knopf zum Registrieren und findet keinen –
+     und geht davon aus, dass er hier nichts verloren hat. Deshalb zwei
+     Eingänge in denselben Flur, mit unterschiedlicher Beschriftung. */
+  let modus = 'anmelden';
   let entwurf = { mail: '', name: '', anbieter: '', agb: false };
   let meldung = '';
   let hinweis = '';
@@ -34,6 +44,12 @@
   let laeuft = '';           // Welcher Knopf gerade arbeitet
   let neuAnbieten = false;   // Nach vergeblicher Passkey-Anmeldung
   let demoCode = '';
+
+  /* Der Nachtrag der Adresse hat seinen eigenen kleinen Zustand – er
+     läuft auf der Kontoseite und nicht in der Anmeldung. */
+  let nachtragSchritt = 'mail';
+  let nachtragMail = '';
+  let nachtragMeldung = '';
 
   K.passkeyPlattform().then((ja) => {
     passkeyDa = ja;
@@ -73,9 +89,14 @@
 
   function wahlSchritt() {
     const wege = K.verfuegbar();
+    const neu = modus === 'registrieren';
     return h`<div class="anmeldung__wege">
         ${wege.map(anbieterKnopf)}
       </div>
+      ${neu ? h`<p class="anmeldung__wechsel">Schon ein Konto?
+        <a href="#/anmelden">Hier anmelden</a></p>`
+        : h`<p class="anmeldung__wechsel">Noch kein Konto?
+        <a href="#/registrieren">Eins anlegen – kostet nichts</a></p>`}
       ${neuAnbieten ? h`<div class="info-meldung">${ico('info')}Noch kein Passkey auf diesem Gerät?
         <button type="button" class="link" data-tu="anmelden-passkey-neu">Jetzt einen anlegen und
         damit ein Konto eröffnen</button></div>` : ''}
@@ -186,25 +207,45 @@
     </label>`;
   }
 
-  function anmeldeseite() {
+  /* Was ein Konto bringt. Steht nur bei der Registrierung: Wer sich
+     anmeldet, weiß es schon. */
+  function nutzenListe() {
+    return h`<ul class="pruef anmeldung__nutzen">
+      <li>${ico('pruefen')}<span>Merkliste, Profil und Bewerbungen auf allen deinen Geräten – angefangen
+        am Rechner, weiter im Bus</span></li>
+      <li>${ico('pruefen')}<span>Suchaufträge, die dir schreiben, sobald etwas Passendes dazukommt</span></li>
+      <li>${ico('pruefen')}<span>Anfragen an Inserate, Besichtigungstermine buchen, selbst inserieren</span></li>
+      <li>${ico('pruefen')}<span>Der Dokumententresor: Unterlagen verschlüsselt ablegen und einzeln
+        freigeben</span></li>
+    </ul>`;
+  }
+
+  function seite(alsRegistrierung) {
+    modus = alsRegistrierung ? 'registrieren' : 'anmelden';
+
     /* Eine Rückmeldung vom Anbieter wird beim Zeichnen übernommen und
        gleich aus der Adresse entfernt – sonst stünde sie beim nächsten
        Neuladen wieder da. */
     const code = (ui.params && ui.params.params && ui.params.params.fehler) || '';
     if (code && RUECKMELDUNG[code]) {
       meldung = RUECKMELDUNG[code];
-      setTimeout(() => { if (location.hash.indexOf('fehler=') >= 0) location.replace('#/anmelden'); }, 0);
+      const zurueck = '#/' + (alsRegistrierung ? 'registrieren' : 'anmelden');
+      setTimeout(() => { if (location.hash.indexOf('fehler=') >= 0) location.replace(zurueck); }, 0);
     }
 
     return {
-      titel: 'Anmelden',
+      titel: alsRegistrierung ? 'Konto anlegen' : 'Anmelden',
       html: h`<div class="anmeldung">
         <div class="anmeldung__kasten">
           <header class="anmeldung__kopf">
             <span class="anmeldung__logo" aria-hidden="true"></span>
-            <h1>Willkommen bei TrimmoTrade</h1>
+            ${alsRegistrierung
+        ? h`<h1>Konto anlegen</h1>
+              <p>Kostenlos, in unter einer Minute. Es gibt kein Passwort – du wählst einen Weg, und
+              damit meldest du dich künftig auch an.</p>`
+        : h`<h1>Willkommen bei TrimmoTrade</h1>
               <p>Mietwohnungen, Eigentum, WG-Zimmer und Wohnungstausch – eine Suche, ein Profil,
-              eine Bewerbermappe.</p>
+              eine Bewerbermappe.</p>`}
           </header>
 
           ${meldung ? h`<p class="warn-meldung">${ico('warnung')}${meldung}</p>` : ''}
@@ -213,6 +254,8 @@
           ${schritt === 'mail' ? mailSchritt()
         : schritt === 'code' ? codeSchritt()
           : schritt === 'anbieter' ? anbieterSchritt() : wahlSchritt()}
+
+          ${alsRegistrierung && schritt === 'wahl' ? nutzenListe() : ''}
 
           <div class="anmeldung__ehrlich">
             ${ico('info')}
@@ -265,6 +308,37 @@
     </ul>`;
   }
 
+  /* Die Adresse nachtragen – für Konten, die ohne eine entstanden sind.
+     Zwei Schritte im selben Kasten: Adresse eingeben, Code eintragen. */
+  function nachtragKasten() {
+    return h`<section class="block block--warn" id="mail-nachtragen">
+      <h2>${ico('nachricht')}E-Mail-Adresse nachtragen</h2>
+      <p class="block__unter">Deinem Konto fehlt eine Adresse. Solange das so ist, kann dich niemand
+        erreichen: keine Anfrage auf ein Inserat, keine Absage eines Besichtigungstermins, kein Treffer
+        aus einem Suchauftrag. Anfragen und Inserieren sind deshalb gesperrt.</p>
+      ${nachtragMeldung ? h`<p class="warn-meldung">${ico('warnung')}${nachtragMeldung}</p>` : ''}
+      ${nachtragSchritt === 'code'
+        ? h`<form class="formraster" data-tu-submit="nachtrag-code">
+            <p>Ein sechsstelliger Code ist an <b>${nachtragMail}</b> unterwegs.</p>
+            <label class="feld"><span>Code</span>
+              <input type="text" id="nachtrag-code" inputmode="numeric" autocomplete="one-time-code"
+                maxlength="6" required></label>
+            <div class="feld feld--knopf">
+              <button type="submit" class="knopf">${ico('pruefen')}Bestätigen</button>
+              <button type="button" class="link" data-tu="nachtrag-zurueck">Andere Adresse</button>
+            </div>
+          </form>`
+        : h`<form class="formraster" data-tu-submit="nachtrag-mail">
+            <label class="feld"><span>Deine E-Mail-Adresse</span>
+              <input type="email" id="nachtrag-mail" autocomplete="email" required
+                placeholder="name@beispiel.de"></label>
+            <div class="feld feld--knopf">
+              <button type="submit" class="knopf">${ico('nachricht')}Code schicken</button>
+            </div>
+          </form>`}
+    </section>`;
+  }
+
   function kontoseite() {
     const k = K.aktuell();
     if (!k) return anmeldeseite();
@@ -300,6 +374,8 @@
             <button type="button" class="knopf knopf--still knopf--gefahr" data-tu="konto-loeschen">${ico('muell')}Konto löschen</button>
           </p>
         </section>
+
+        ${K.mailFehlt() ? nachtragKasten() : ''}
 
         <section class="block">
           <h2>${ico('schloss')}Vertrauensstufe</h2>
@@ -599,6 +675,49 @@
     ui.toast('Angemeldet als ' + K.anzeigeName() + '.', 'gut');
   }
 
+  /* ---------------- Die Adresse nachtragen ---------------- */
+
+  A_('nachtrag-mail', (el) => {
+    const feld = U.$('#nachtrag-mail', el);
+    const adresse = feld ? feld.value.trim() : '';
+    const knopf = U.$('button[type="submit"]', el) || el;
+    nachtragMeldung = '';
+    ui.knopfArbeit(knopf, K.codeAnfordern(adresse, '').then((d) => {
+      nachtragMail = adresse;
+      nachtragSchritt = 'code';
+      if (d && d.code) demoCode = d.code;
+      ui.neuZeichnen();
+      ui.toast('Code verschickt.', 'gut');
+    }, (e) => {
+      nachtragMeldung = (e && e.text) || 'Das ging nicht.';
+      ui.neuZeichnen();
+    }), 'Wird verschickt …');
+  });
+
+  A_('nachtrag-code', (el) => {
+    const feld = U.$('#nachtrag-code', el);
+    const knopf = U.$('button[type="submit"]', el) || el;
+    nachtragMeldung = '';
+    ui.knopfArbeit(knopf, K.mailNachtragen(feld ? feld.value : '').then(() => {
+      nachtragSchritt = 'mail';
+      nachtragMail = '';
+      ui.neuZeichnen();
+      ui.toast('Adresse bestätigt. Jetzt kann dich jemand erreichen.', 'gut');
+    }, (e) => {
+      nachtragMeldung = (e && e.text) || 'Das ging nicht.';
+      /* Ist der Code endgültig verbraucht, zurück auf Anfang – sonst
+         steht ein Eingabefeld da, in das nichts mehr passt. */
+      if (e && e.neu) nachtragSchritt = 'mail';
+      ui.neuZeichnen();
+    }), 'Wird geprüft …');
+  });
+
+  A_('nachtrag-zurueck', () => {
+    nachtragSchritt = 'mail';
+    nachtragMeldung = '';
+    ui.neuZeichnen();
+  });
+
   A_('konto-abmelden', () => {
     if (!confirm('Abmelden? Merkliste, Profil und Notizen bleiben auf diesem Gerät erhalten.')) return;
     K.abmelden().then(() => { ui.gehe('anmelden'); ui.neuZeichnen(); });
@@ -703,7 +822,11 @@
     ui.toast('Stufe 4 erreicht.', 'gut');
   });
 
+  const anmeldeseite = () => seite(false);
+  const registrierseite = () => seite(true);
+
   ui.ansichten.anmelden = anmeldeseite;
+  ui.ansichten.registrieren = registrierseite;
   ui.ansichten.konto = kontoseite;
-  TT.viewAnmeldung = { anmeldeseite, kontoseite };
+  TT.viewAnmeldung = { anmeldeseite, registrierseite, kontoseite };
 })(window.TT = window.TT || {});

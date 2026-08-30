@@ -435,7 +435,7 @@
        Anschreiben, Suchaufträge, Notizen, Inserieren – alles das braucht
        weiterhin ein Konto. Wo das durchgesetzt wird, steht bei
        `darfOhneKonto`. */
-    const OHNE_ANMELDUNG = ['anmelden', 'recht', 'hilfe', 'freigabe', 'suche', 'objekt'];
+    const OHNE_ANMELDUNG = ['anmelden', 'registrieren', 'recht', 'hilfe', 'freigabe', 'suche', 'objekt'];
     const gesperrt = TT.konto && !TT.konto.angemeldet() && OHNE_ANMELDUNG.indexOf(r.name) < 0;
     if (gesperrt) zielMerken(location.hash);
     const name = gesperrt ? 'anmelden' : r.name;
@@ -651,7 +651,8 @@
               : raw('<span>' + U.esc(U.t('Plus entdecken')) + '</span>')}</a>
           <a class="knopf knopf--klein nur-breit" href="#/inserieren">${ico('plus')}<span>Inserieren</span></a>
           <a class="ikon-btn nur-angemeldet" href="#/konto" title="Konto" aria-label="Konto">${ico('person')}</a>
-          <a class="knopf knopf--klein auch-ohne-konto nur-gast" href="#/anmelden">${ico('person')}<span>Anmelden</span></a>
+          <a class="link kopf__anmelden auch-ohne-konto nur-gast" href="#/anmelden">${U.t('Anmelden')}</a>
+          <a class="knopf knopf--klein auch-ohne-konto nur-gast" href="#/registrieren">${ico('person')}<span>Konto anlegen</span></a>
         </div>
       </div>
     </header>
@@ -705,6 +706,22 @@
     const s = TT.store.get();
     const g = P.gruender();
     let inhalt = '';
+
+    /* Zuerst und ohne Wegklicken: Diesem Konto fehlt die Adresse. Es
+       kann nichts empfangen – keine Anfrage, keine Terminabsage, keinen
+       Treffer. Ein Hinweis, den man wegklickt, wäre hier die falsche
+       Freundlichkeit; wer ihn wegklickt, wundert sich einen Monat
+       später, warum sich nie jemand meldet. */
+    if (TT.konto && TT.konto.angemeldet() && TT.konto.mailFehlt()) {
+      el.innerHTML = String(h`<div class="band band--hinweis">
+        ${ico('nachricht')}
+        <p><b>Dir fehlt noch eine E-Mail-Adresse.</b> Ohne sie kann dich niemand erreichen: keine Anfrage
+          auf ein Inserat, keine Absage eines Besichtigungstermins, kein Treffer aus einem Suchauftrag.
+          Umsehen kannst du dich; alles Übrige braucht sie.</p>
+        <a class="knopf knopf--klein" href="#/konto">Jetzt nachtragen</a>
+      </div>`);
+      return;
+    }
 
     if (g.nummer && P.gruenderAktiv() && P.gruenderTageRest() <= 28) {
       const tage = P.gruenderTageRest();
@@ -970,7 +987,9 @@
 
   function zielMerken(hash) {
     const w = String(hash || '').replace(/^#\/?/, '');
-    if (!w || w.indexOf('anmelden') === 0) return;
+    /* Weder die Anmeldung noch die Registrierung als Ziel merken –
+       sonst schickte die Anmeldung anschließend wieder dorthin. */
+    if (!w || w.indexOf('anmelden') === 0 || w.indexOf('registrieren') === 0) return;
     zurueckZiel = w;
   }
 
@@ -997,7 +1016,8 @@
             gibt es hier nicht.</p></div>
         </div>`,
       fuss: h`<button type="button" class="knopf knopf--still" data-tu="dialog-zu">Weiter stöbern</button>
-        <a class="knopf" href="#/anmelden" data-tu="dialog-zu">${ico('person')}Anmelden</a>`
+        <a class="knopf knopf--still" href="#/anmelden" data-tu="dialog-zu">Anmelden</a>
+        <a class="knopf" href="#/registrieren" data-tu="dialog-zu">${ico('person')}Konto anlegen</a>`
     });
   }
 

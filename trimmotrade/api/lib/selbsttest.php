@@ -19,6 +19,7 @@
    ===================================================================== */
 
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/oauth.php';
 
 final class Selbsttest
 {
@@ -55,6 +56,7 @@ final class Selbsttest
         $this->datenbank();
         $this->dateien();
         $this->post();
+        $this->anmeldewege();
         $this->bilder();
         $this->cron();
         $this->betrieb();
@@ -292,6 +294,74 @@ final class Selbsttest
                 'Landet häufig im Spam-Ordner. SMTP über das eigene Postfach ist deutlich besser.');
         } else {
             $this->gut('Mailversand über SMTP', (string) ($this->cfg['mail']['smtp']['host'] ?? ''));
+        }
+    }
+
+    /* Welche Anmeldewege wirklich offenstehen.
+
+       Ein Weg, für den die Zugangsdaten fehlen, erscheint gar nicht als
+       Schaltfläche – das ist richtig, macht aber auch unsichtbar, dass
+       er fehlt. Wer Apple eingerichtet zu haben glaubt und sich beim
+       Team-Kürzel vertippt hat, merkt es sonst nur daran, dass niemand
+       den Knopf drückt. */
+    private function anmeldewege(): void
+    {
+        Oauth::start($this->cfg);
+        $da = Oauth::verfuegbar();
+        $wege = array_merge(['passkey'], $da);
+        if (Post::moeglich()) {
+            $wege[] = 'mail';
+        }
+        $this->gut('Anmeldewege', implode(', ', $wege));
+
+        foreach (Oauth::ANBIETER as $a) {
+            $c = $this->cfg['oauth'][$a] ?? [];
+            /* Angefangen und nicht zu Ende gebracht: Es stehen
+               Zugangsdaten da, aber nicht alle. Das ist der Fall, den
+               niemand von selbst bemerkt – leer wäre eine Entscheidung,
+               halb ausgefüllt ist ein Versehen.
+
+               Gezählt werden nur Zugangsdaten. `mandant` bei Microsoft
+               steht mit einem Vorgabewert in der Beispieldatei und wäre
+               sonst der Beweis dafür, dass jemand angefangen hätte –
+               beim ersten Lauf gegen eine unveränderte Vorlage meldete
+               genau das einen Fehler, den es nicht gab. */
+            $zugang = ['client_id', 'client_secret', 'team_id', 'key_id', 'key_datei', 'key_pem'];
+            $angefangen = false;
+            foreach ($zugang as $feld) {
+                if (is_string($c[$feld] ?? null) && trim($c[$feld]) !== '') {
+                    $angefangen = true;
+                }
+            }
+            if ($angefangen && !in_array($a, $da, true)) {
+                $this->fehlt('Anmeldeweg „' . $a . '“ ist unvollständig eingerichtet',
+                    $a === 'apple'
+                        ? 'Apple braucht client_id (die Services-ID), team_id, key_id und einen lesbaren '
+                          . 'privaten Schlüssel. Der Knopf erscheint erst, wenn alle vier stimmen.'
+                        : 'Es fehlt client_id oder client_secret. Der Knopf erscheint erst, wenn beide da sind.');
+            }
+        }
+
+        if (in_array('apple', $da, true) && !str_starts_with((string) ($this->cfg['basis'] ?? ''), 'https://')) {
+            $this->fehlt('Apple ist eingerichtet, aber die Seite läuft ohne https',
+                'Apple schickt die Rückkehr als Formular. Das Cookie dafür braucht SameSite=None, '
+                . 'und das darf ohne TLS nicht gesetzt werden – der Weg funktioniert so nicht.');
+        }
+
+        if (in_array('instagram', $da, true)) {
+            $this->hinweis('Instagram ist als Anmeldeweg eingerichtet',
+                'Es liefert keine E-Mail-Adresse; solche Konten stehen auf Stufe 0, bis eine nachgetragen '
+                . 'ist. Und es geht nur mit Instagram-Konten vom Typ Business oder Creator.');
+        }
+
+        /* Konten, die dort hängen geblieben sind. Eine Zahl, die wächst,
+           ohne dass jemand nachträgt, sagt mehr über den Weg aus als
+           jede Vermutung. */
+        $ohne = (int) Db::wert('SELECT COUNT(*) FROM tt_konto WHERE mail IS NULL OR mail = ?', ['']);
+        if ($ohne > 0) {
+            $this->hinweis($ohne . ($ohne === 1 ? ' Konto ohne E-Mail-Adresse' : ' Konten ohne E-Mail-Adresse'),
+                'Sie können nichts empfangen und stehen auf Stufe 0. Die Anwendung fordert beim '
+                . 'nächsten Besuch zum Nachtragen auf.');
         }
     }
 

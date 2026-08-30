@@ -2856,7 +2856,7 @@
       'No. Which advert appears is decided in the browser from its position on the page – not from your profile, your search or your behaviour. There is no ad network, no identifier and nothing that would be transmitted.',
     'Passkey auf diesem Gerät oder ein bestätigtes Konto bei Google oder Microsoft. Massenhaftes Anlegen wird damit deutlich mühsamer.':
       'A passkey on this device or a verified account with Google or Microsoft. Creating accounts in bulk becomes considerably more laborious.',
-    '„Konto löschen“ entfernt diese Angaben vollständig{27}. Merkliste, Profil und Notizen bleiben erhalten; beides zusammen löschst du über':
+    '„Konto löschen“ entfernt diese Angaben vollständig{28}. Merkliste, Profil und Notizen bleiben erhalten; beides zusammen löschst du über':
       '“Delete account” removes these details completely{27}. Shortlist, profile and notes remain; you delete both together under',
 
     /* Kontoseite mit Server */
@@ -3960,6 +3960,76 @@
   });
 
   e({ 'Alle Pflichtangaben sind eingetragen.': 'All mandatory details are filled in.' });
+
+  /* Registrierung, Apple und Instagram. */
+  e({
+    'Kostenlos, in unter einer Minute. Es gibt kein Passwort – du wählst einen Weg, und damit meldest du dich künftig auch an.':
+      'Free, in under a minute. There is no password – you pick a method, and that is how you sign in from then on.',
+    'Noch kein Konto?': 'No account yet?',
+    'Eins anlegen – kostet nichts': 'Create one – it’s free',
+    'Schon ein Konto?': 'Already have an account?',
+    'Hier anmelden': 'Sign in here',
+    'Merkliste, Profil und Bewerbungen auf allen deinen Geräten – angefangen am Rechner, weiter im Bus':
+      'Saved list, profile and applications on every one of your devices – start at the computer, carry on from the bus',
+    'Suchaufträge, die dir schreiben, sobald etwas Passendes dazukommt':
+      'Saved searches that write to you as soon as something suitable appears',
+    'Anfragen an Inserate, Besichtigungstermine buchen, selbst inserieren':
+      'Enquire about listings, book viewing appointments, list your own property',
+    'Der Dokumententresor: Unterlagen verschlüsselt ablegen und einzeln freigeben':
+      'The document vault: store papers encrypted and share them one at a time',
+
+    'Weiter mit Apple': 'Continue with Apple',
+    'Apple-ID': 'Apple ID',
+    'Weiter mit Instagram': 'Continue with Instagram',
+    'ohne E-Mail-Adresse': 'no email address',
+
+    'E-Mail-Adresse nachtragen': 'Add your email address',
+    'Dir fehlt noch eine E-Mail-Adresse.': 'You are still missing an email address.',
+    'Ohne sie kann dich niemand erreichen: keine Anfrage auf ein Inserat, keine Absage eines Besichtigungstermins, kein Treffer aus einem Suchauftrag. Umsehen kannst du dich; alles Übrige braucht sie.':
+      'Without one nobody can reach you: no enquiry about a listing, no cancellation of a viewing, no match from a saved search. You can look around; everything else needs it.',
+    'Jetzt nachtragen': 'Add it now',
+    'Deinem Konto fehlt eine Adresse. Solange das so ist, kann dich niemand erreichen: keine Anfrage auf ein Inserat, keine Absage eines Besichtigungstermins, kein Treffer aus einem Suchauftrag. Anfragen und Inserieren sind deshalb gesperrt.':
+      'Your account has no address. As long as that is the case nobody can reach you: no enquiry about a listing, no cancellation of a viewing, no match from a saved search. Enquiring and listing are therefore blocked.',
+    'Deine E-Mail-Adresse': 'Your email address',
+    'Code schicken': 'Send code',
+    'Andere Adresse': 'Different address',
+    'Wird verschickt …': 'Sending …',
+    'Wird geprüft …': 'Checking …',
+    'Code verschickt.': 'Code sent.',
+    'Adresse bestätigt. Jetzt kann dich jemand erreichen.':
+      'Address confirmed. Now people can reach you.',
+
+    'Anmeldung über Google, Microsoft, Apple oder Instagram':
+      'Signing in via Google, Microsoft, Apple or Instagram',
+    'Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei TrimmoTrade anmeldest. Dein dortiges Passwort bekommt TrimmoTrade nie zu sehen, und es besteht kein Zugriff auf Kontakte, Kalender, Dateien oder Postfach. Was übermittelt wird, ist von Anbieter zu Anbieter verschieden:':
+      'If you pick one of these, that provider learns that you are signing in to TrimmoTrade. TrimmoTrade never sees your password there, and there is no access to contacts, calendar, files or mailbox. What is transmitted differs from provider to provider:',
+    'Name, E-Mail-Adresse und die Angabe, ob sie bestätigt ist':
+      'name, email address and whether it is confirmed',
+    'Name und E-Mail-Adresse. Bei einem privaten Konto gilt die Adresse hier nicht als bestätigt, weil sie dort frei wählbar ist; bei einem Geschäfts- oder Schulkonto stammt sie aus dem Verzeichnis des Arbeitgebers.':
+      'Name and email address. For a personal account the address does not count as confirmed here, because it can be chosen freely there; for a work or school account it comes from the employer’s directory.',
+    'Name und E-Mail-Adresse – und zwar nur bei der': 'Name and email address – and only on the',
+    'Anmeldung, danach nie wieder. Wählst du bei Apple „E-Mail-Adresse verbergen“, bekommt TrimmoTrade nicht deine Adresse, sondern eine Weiterleitungsadresse bei':
+      'sign-in, never again after that. If you choose “Hide My Email” at Apple, TrimmoTrade does not get your address but a forwarding address at',
+    '. Post kommt darüber an, solange du die Anmeldung nicht in deinen Apple-Einstellungen widerrufst.':
+      '. Mail arrives through it as long as you do not revoke the sign-in in your Apple settings.',
+    'Benutzername und eine Kontokennung.': 'Username and an account identifier.',
+    'Keine E-Mail-Adresse': 'No email address',
+    '– Instagram gibt keine heraus. Ein so entstandenes Konto ist deshalb nicht erreichbar und steht auf Vertrauensstufe 0, bis du eine Adresse nachträgst und bestätigst.':
+      '– Instagram does not release one. An account created this way is therefore unreachable and sits at trust level 0 until you add and confirm an address.',
+    'Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst: Google Ireland Limited, Microsoft Ireland Operations Limited und Apple Distribution International Ltd., alle drei mit Sitz in Irland, sowie Meta Platforms Ireland Limited für Instagram. Soweit dabei Daten in die Vereinigten Staaten übermittelt werden, stützt sich das auf den Angemessenheitsbeschluss der Europäischen Kommission zum EU-US Data Privacy Framework; alle vier Anbieter sind darunter zertifiziert.':
+      'The providers themselves are the controllers for the processing on their side: Google Ireland Limited, Microsoft Ireland Operations Limited and Apple Distribution International Ltd., all three based in Ireland, plus Meta Platforms Ireland Limited for Instagram. Where data is transferred to the United States, this rests on the European Commission’s adequacy decision for the EU-US Data Privacy Framework; all four providers are certified under it.',
+    'Welche dieser Wege tatsächlich angeboten werden, entscheidet die Einrichtung dieses Servers. Ein Anbieter, für den keine Zugangsdaten hinterlegt sind, erscheint gar nicht erst als Schaltfläche – und dann geht auch nichts an ihn.':
+      'Which of these are actually offered depends on how this server is set up. A provider with no credentials stored does not appear as a button at all – and then nothing goes to it either.',
+    'Wenn die Adresse nachgetragen wird': 'When the address is added later',
+    'Entsteht ein Konto ohne E-Mail-Adresse – über Instagram oder mit einem Passkey allein –, fordert die Anwendung dazu auf, eine nachzutragen. Das ist keine Schikane, sondern die Voraussetzung dafür, dass dich überhaupt jemand erreichen kann. Bis dahin lässt sich die Suche benutzen; anfragen, inserieren und Termine buchen nicht.':
+      'If an account is created without an email address – via Instagram, or with a passkey alone – the application asks you to add one. That is not red tape but the precondition for anyone being able to reach you at all. Until then you can use the search; enquiring, listing and booking appointments you cannot.',
+    'Gehört die nachgetragene Adresse bereits einem anderen Konto, werden die beiden':
+      'If the address you add already belongs to another account, the two are',
+    'zusammengelegt. Zwei Konten zu verschmelzen hieße, über fremde Inserate, Anfragen und Unterlagen zu entscheiden; das erledigt eine Anmeldung nicht nebenbei. Stattdessen erscheint der Hinweis, sich mit dieser Adresse anzumelden.':
+      'merged. Merging two accounts would mean deciding about someone else’s listings, enquiries and documents; a sign-in does not do that in passing. Instead you are told to sign in with that address.',
+    'Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft, Apple oder Instagram hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus und sind deshalb auch die beiden, die oben stehen.':
+      'Beyond the sign-in via Google, Microsoft, Apple or Instagram described in section 4, no personal data is transferred to countries outside the European Union and the European Economic Area. Anyone who wants to avoid this signs in with a passkey or an email address – both work without any external provider, which is also why they are the two listed first.'
+  });
 
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 

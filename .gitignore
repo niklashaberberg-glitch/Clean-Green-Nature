@@ -1,0 +1,5 @@
+# Das Auslieferungspaket für netcup. Es entsteht aus diesem Verzeichnis
+# (node scripts/netcup-paket.js) und wäre eingecheckt eine zweite Kopie
+# beider Websites, die ab dem nächsten Commit veraltet ist.
+netcup/
+netcup-*.zip

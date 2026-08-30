@@ -3978,8 +3978,6 @@
     'Der Dokumententresor: Unterlagen verschlüsselt ablegen und einzeln freigeben':
       'The document vault: store papers encrypted and share them one at a time',
 
-    'Weiter mit Apple': 'Continue with Apple',
-    'Apple-ID': 'Apple ID',
     'Weiter mit Instagram': 'Continue with Instagram',
     'ohne E-Mail-Adresse': 'no email address',
 
@@ -3999,19 +3997,12 @@
     'Adresse bestätigt. Jetzt kann dich jemand erreichen.':
       'Address confirmed. Now people can reach you.',
 
-    'Anmeldung über Google, Microsoft, Apple oder Instagram':
-      'Signing in via Google, Microsoft, Apple or Instagram',
     'Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei TrimmoTrade anmeldest. Dein dortiges Passwort bekommt TrimmoTrade nie zu sehen, und es besteht kein Zugriff auf Kontakte, Kalender, Dateien oder Postfach. Was übermittelt wird, ist von Anbieter zu Anbieter verschieden:':
       'If you pick one of these, that provider learns that you are signing in to TrimmoTrade. TrimmoTrade never sees your password there, and there is no access to contacts, calendar, files or mailbox. What is transmitted differs from provider to provider:',
     'Name, E-Mail-Adresse und die Angabe, ob sie bestätigt ist':
       'name, email address and whether it is confirmed',
     'Name und E-Mail-Adresse. Bei einem privaten Konto gilt die Adresse hier nicht als bestätigt, weil sie dort frei wählbar ist; bei einem Geschäfts- oder Schulkonto stammt sie aus dem Verzeichnis des Arbeitgebers.':
       'Name and email address. For a personal account the address does not count as confirmed here, because it can be chosen freely there; for a work or school account it comes from the employer’s directory.',
-    'Name und E-Mail-Adresse – und zwar nur bei der': 'Name and email address – and only on the',
-    'Anmeldung, danach nie wieder. Wählst du bei Apple „E-Mail-Adresse verbergen“, bekommt TrimmoTrade nicht deine Adresse, sondern eine Weiterleitungsadresse bei':
-      'sign-in, never again after that. If you choose “Hide My Email” at Apple, TrimmoTrade does not get your address but a forwarding address at',
-    '. Post kommt darüber an, solange du die Anmeldung nicht in deinen Apple-Einstellungen widerrufst.':
-      '. Mail arrives through it as long as you do not revoke the sign-in in your Apple settings.',
     'Benutzername und eine Kontokennung.': 'Username and an account identifier.',
     'Keine E-Mail-Adresse': 'No email address',
     '– Instagram gibt keine heraus. Ein so entstandenes Konto ist deshalb nicht erreichbar und steht auf Vertrauensstufe 0, bis du eine Adresse nachträgst und bestätigst.':
@@ -4029,6 +4020,38 @@
       'merged. Merging two accounts would mean deciding about someone else’s listings, enquiries and documents; a sign-in does not do that in passing. Instead you are told to sign in with that address.',
     'Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft, Apple oder Instagram hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus und sind deshalb auch die beiden, die oben stehen.':
       'Beyond the sign-in via Google, Microsoft, Apple or Instagram described in section 4, no personal data is transferred to countries outside the European Union and the European Economic Area. Anyone who wants to avoid this signs in with a passkey or an email address – both work without any external provider, which is also why they are the two listed first.'
+  });
+
+  /* Nachgezogen: Apple ist wieder raus, dafür die Gerätewörter für den
+     Passkey und der Hinweis in der serverlosen Vorschau. */
+  e({
+    'Anmeldung über Google, Microsoft oder Instagram':
+      'Signing in via Google, Microsoft or Instagram',
+    'Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst: Google Ireland Limited und Microsoft Ireland Operations Limited, beide mit Sitz in Irland, sowie Meta Platforms Ireland Limited für Instagram. Soweit dabei Daten in die Vereinigten Staaten übermittelt werden, stützt sich das auf den Angemessenheitsbeschluss der Europäischen Kommission zum EU-US Data Privacy Framework; alle drei Anbieter sind darunter zertifiziert.':
+      'The providers themselves are the controllers for the processing on their side: Google Ireland Limited and Microsoft Ireland Operations Limited, both based in Ireland, plus Meta Platforms Ireland Limited for Instagram. Where data is transferred to the United States, this rests on the European Commission’s adequacy decision for the EU-US Data Privacy Framework; all three providers are certified under it.',
+    'Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft oder Instagram hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus und sind deshalb auch die beiden, die oben stehen.':
+      'Beyond the sign-in via Google, Microsoft or Instagram described in section 4, no personal data is transferred to countries outside the European Union and the European Economic Area. Anyone who wants to avoid this signs in with a passkey or an email address – both work without any external provider, which is also why they are the two listed first.',
+
+    /* Wie der Passkey auf dem jeweiligen Gerät heißt. */
+    'Mit Face ID oder Touch ID': 'With Face ID or Touch ID',
+    'Mit Windows Hello': 'With Windows Hello',
+    'Mit Fingerabdruck oder Gesicht': 'With fingerprint or face',
+    'Kein Passwort. Dein Gerät bestätigt, dass du es bist – beim nächsten Mal genügt ein Blick.':
+      'No password. Your device confirms it is you – next time a glance is enough.',
+
+    /* Die Vorschau ohne Server. */
+    'Diese Vorschau läuft ohne Server.': 'This preview runs without a server.',
+    'Passkey und E-Mail-Code funktionieren hier wirklich':
+      'Passkey and email code really do work here',
+    '– Google, Microsoft und Instagram brauchen den Server und sind nur angedeutet.':
+      '– Google, Microsoft and Instagram need the server and are only indicated.',
+
+    'Dokumententresor': 'Document vault'
+  });
+
+  e({
+    'Instagram ist der eine Weg, der keine E-Mail-Adresse liefert – die gibt es dort nicht zum Anfordern. Wer so hereinkommt, trägt sie danach nach; ohne sie kann dich niemand erreichen.':
+      'Instagram is the one route that does not supply an email address – there is nothing to request there. Anyone coming in that way adds one afterwards; without it nobody can reach you.'
   });
 
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });

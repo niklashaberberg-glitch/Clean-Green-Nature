@@ -68,8 +68,49 @@
     route: '<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3 3 0 010 6H9a3 3 0 000 6h6.5"/>'
   };
 
+  /* -------------------- Markenzeichen --------------------
+
+     Google, Microsoft und Instagram haben eigene Zeichen, und die
+     gehören auf ihre Knöpfe: Ihre Gestaltungsrichtlinien sehen genau
+     das vor, und ein Knopf mit einem allgemeinen Personensymbol wird
+     schlicht nicht als „mit Google anmelden“ erkannt.
+
+     Sie können nicht durch den Sprite oben laufen. Der zwingt jedem
+     Symbol `fill:none` und eine einzige Strichfarbe auf – richtig für
+     Symbole, die die Textfarbe annehmen, unmöglich für ein Zeichen aus
+     vier Farbflächen. Deshalb hier vollständige SVG mit eigenen Farben.
+
+     Nichts daran wird umgefärbt, auch im dunklen Erscheinungsbild
+     nicht: Ein blau-rot-gelb-grünes G in Waldgrün wäre kein Google-
+     Zeichen mehr. */
+  const MARKEN = {
+    google: '<path fill="#4285F4" d="M23.06 12.25c0-.8-.07-1.56-.2-2.3H12v4.35h6.05a5.17 5.17 0 01-2.24 3.4v2.82h3.63c2.13-1.96 3.35-4.84 3.35-8.27z"/>'
+      + '<path fill="#34A853" d="M12 23.5c3.03 0 5.57-1 7.43-2.72l-3.63-2.82c-1 .68-2.3 1.08-3.8 1.08-2.93 0-5.4-1.98-6.29-4.63H1.96v2.91A11.5 11.5 0 0012 23.5z"/>'
+      + '<path fill="#FBBC05" d="M5.71 14.41a6.9 6.9 0 010-4.4V7.1H1.96a11.5 11.5 0 000 10.22l3.75-2.91z"/>'
+      + '<path fill="#EA4335" d="M12 5.02c1.65 0 3.13.57 4.3 1.68l3.22-3.22C17.56 1.63 15.03.5 12 .5A11.5 11.5 0 001.96 7.1l3.75 2.91C6.6 7.36 9.07 5.02 12 5.02z"/>',
+    microsoft: '<path fill="#F25022" d="M2.5 2.5h9v9h-9z"/><path fill="#7FBA00" d="M12.5 2.5h9v9h-9z"/>'
+      + '<path fill="#00A4EF" d="M2.5 12.5h9v9h-9z"/><path fill="#FFB900" d="M12.5 12.5h9v9h-9z"/>',
+    /* Der Verlauf steht im Sprite, damit es ihn genau einmal gibt –
+       zwei gleich benannte Verläufe im selben Dokument wären ein
+       Namenskonflikt, und welcher dann gewinnt, ist Glückssache. */
+    instagram: '<rect x="2.9" y="2.9" width="18.2" height="18.2" rx="5.2" fill="none" '
+      + 'stroke="url(#tt-instagram)" stroke-width="2"/>'
+      + '<circle cx="12" cy="12" r="4.1" fill="none" stroke="url(#tt-instagram)" stroke-width="2"/>'
+      + '<circle cx="17.4" cy="6.6" r="1.25" fill="url(#tt-instagram)"/>'
+  };
+
+  function markeSvg(id) {
+    if (!MARKEN[id]) return '';
+    return '<svg class="markenzeichen" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+      + MARKEN[id] + '</svg>';
+  }
+
   function sprite() {
     return '<svg class="sprite" aria-hidden="true" focusable="false"><defs>' +
+      '<linearGradient id="tt-instagram" x1="3" y1="21" x2="21" y2="3" gradientUnits="userSpaceOnUse">' +
+      '<stop offset="0" stop-color="#FEDA75"/><stop offset=".25" stop-color="#FA7E1E"/>' +
+      '<stop offset=".5" stop-color="#D62976"/><stop offset=".75" stop-color="#962FBF"/>' +
+      '<stop offset="1" stop-color="#4F5BD5"/></linearGradient>' +
       Object.keys(ICONS).map((k) =>
         '<symbol id="i-' + k + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" ' +
         'stroke-linecap="round" stroke-linejoin="round">' + ICONS[k] + '</symbol>').join('') +
@@ -642,6 +683,12 @@
           <button type="button" class="ikon-btn" data-tu="palette" title="Schnellsuche (Strg + K)" aria-label="Schnellsuche">${ico('lupe')}</button>
           <a class="ikon-btn" href="#/agenten" title="Suchaufträge" aria-label="Suchaufträge">${ico('glocke')}<b class="zaehler" data-zaehler="agenten" hidden></b></a>
           <a class="ikon-btn" href="#/vergleich" title="Vergleich" aria-label="Vergleich">${ico('waage')}<b class="zaehler" data-zaehler="vergleich" hidden></b></a>
+          <!-- Der Dokumententresor stand bis hierher nur im Fußbereich.
+               Für eine Hauptfunktion ist das der falsche Ort: Wer seine
+               Gehaltsabrechnung freigeben will, sucht sie oben und nicht
+               unter dem Impressum. -->
+          <a class="ikon-btn nur-angemeldet" href="#/tresor" title="Dokumententresor"
+            aria-label="Dokumententresor">${ico('schloss')}</a>
           <button type="button" class="ikon-btn auch-ohne-konto" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
             ${ico('sonne', 'nur-hell')}${ico('mond', 'nur-dunkel')}</button>
           ${sprachknopf()}
@@ -1389,7 +1436,7 @@
   Object.assign(ui, {
     start, gehe, zeichnen, neuZeichnen, schaleZeichnen, toast, dialog, dialogZu, knopfArbeit,
     zielMerken, zielHolen,
-    badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
+    badge, markeSvg, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
     ART_LABEL, ART_ICON, artLabel, artIcon, ico, aktionRegistrieren, AKTIONEN,
     sperrHinweis, NAV, dateiSichern,
     aktualisiereZaehler, themeSetzen, paletteOeffnen, kartenMarken, preisZeile

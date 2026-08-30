@@ -86,29 +86,6 @@ return [
       'mandant'       => 'common',
     ],
 
-    /* Apple. Als Einziger nicht kostenlos: Es setzt eine Mitgliedschaft
-       im Apple Developer Program voraus (99 € im Jahr).
-
-       Und als Einziger ohne festes Geheimnis. Apple gibt einen privaten
-       Schlüssel als .p8-Datei heraus; das Client-Geheimnis baut der
-       Server daraus bei jeder Anfrage selbst. Deshalb vier Angaben
-       statt zwei. */
-    'apple' => [
-      // Die Services-ID, NICHT die App-ID. Sieht aus wie
-      // 'de.trimmotrade.web'.
-      'client_id' => '',
-      // Zehn Zeichen, steht oben rechts im Developer-Portal.
-      'team_id'   => '',
-      // Zehn Zeichen, gehört zum Schlüssel unten.
-      'key_id'    => '',
-      /* Der Schlüssel. Besser als Pfad: Dann liegt er in einer eigenen
-         Datei mit engen Rechten (chmod 600) und nicht in derselben wie
-         alles andere. Er lässt sich bei Apple genau einmal
-         herunterladen – wer ihn verliert, legt einen neuen an. */
-      'key_datei' => '',    // z. B. __DIR__ . '/AuthKey_ABC1234567.p8'
-      'key_pem'   => '',    // Alternative: der Inhalt unmittelbar hier
-    ],
-
     /* Instagram. Zwei Dinge vorweg, damit die Enttäuschung nicht auf
        dem Server passiert:
 

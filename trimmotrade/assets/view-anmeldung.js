@@ -73,24 +73,39 @@
   function anbieterKnopf(a) {
     const gesperrt = a.id === 'passkey' && !K.passkeyMoeglich();
     const arbeitet = laeuft === a.id;
+    /* Google, Microsoft und Instagram bringen ihr eigenes Zeichen mit.
+       Ein Knopf mit allgemeinem Personensymbol wird nicht als „mit
+       Google anmelden“ erkannt, und die Gestaltungsrichtlinien der drei
+       verlangen ohnehin ihr Zeichen. */
+    const marke = ui.markeSvg(a.id);
     return h`<button type="button" class="anmeldung__weg ${a.empfohlen ? 'is-empfohlen' : ''}"
       data-tu="anmelden-weg" data-id="${a.id}" ${gesperrt || laeuft ? 'disabled' : ''}>
-      <span class="anmeldung__zeichen" style="color:${a.farbe || 'currentColor'}">${ico(a.icon)}</span>
+      <span class="anmeldung__zeichen ${marke ? 'anmeldung__zeichen--marke' : ''}"
+        style="${marke ? '' : 'color:' + (a.farbe || 'currentColor')}">${marke ? raw(marke) : ico(a.icon)}</span>
       <span class="anmeldung__wort">
-        <b>${a.name}</b>
+        <b>${a.id === 'passkey' ? K.passkeyWort() : a.name}</b>
         <i>${gesperrt ? K.passkeyGrund()
         : arbeitet ? 'einen Moment …' : a.unter}</i>
       </span>
       ${a.empfohlen && !gesperrt ? h`<span class="anmeldung__marke">${passkeyDa ? 'am sichersten' : 'empfohlen'}</span>` : ''}
-      ${!K.echt() && !a.echt ? h`<span class="anmeldung__nachbau"
-        title="In dieser Vorführung nachgebildet">nachgebildet</span>` : ''}
     </button>`;
   }
 
   function wahlSchritt() {
     const wege = K.verfuegbar();
     const neu = modus === 'registrieren';
-    return h`<div class="anmeldung__wege">
+    /* Ohne Server können Google, Microsoft und Instagram nicht wirklich
+       antworten. Das gehört gesagt – aber einmal und als Satz, nicht als
+       Etikett an jedem einzelnen Knopf. Mehrere Warnschilder
+       nebeneinander lesen sich wie ein Hinweis darauf, dass das ganze
+       Angebot eine Attrappe wäre. Auf der Website erscheint hier ohnehin
+       nichts davon: Dort stehen nur die Wege, die eingerichtet sind. */
+    const nachbau = !K.echt() && wege.some((a) => !a.echt);
+    return h`${nachbau ? h`<p class="info-meldung anmeldung__vorschau">${ico('info')}
+        <span>Diese Vorschau läuft ohne Server. <b>Passkey und E-Mail-Code funktionieren hier
+        wirklich</b> – Google, Microsoft und Instagram brauchen den Server und sind nur
+        angedeutet.</span></p>` : ''}
+      <div class="anmeldung__wege">
         ${wege.map(anbieterKnopf)}
       </div>
       ${neu ? h`<p class="anmeldung__wechsel">Schon ein Konto?
@@ -112,6 +127,8 @@
         <p>Bei Google und Microsoft bekommt TrimmoTrade Name und E-Mail-Adresse, dein Passwort dort aber
           nie zu sehen. Beim Weg über die E-Mail-Adresse gibt es gar kein Passwort, sondern einen Code, der
           zehn Minuten gilt.</p>
+        <p>Instagram ist der eine Weg, der keine E-Mail-Adresse liefert – die gibt es dort nicht zum
+          Anfordern. Wer so hereinkommt, trägt sie danach nach; ohne sie kann dich niemand erreichen.</p>
       </details>`;
   }
 

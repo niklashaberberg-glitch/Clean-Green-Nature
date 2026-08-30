@@ -2115,6 +2115,18 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .anmeldung__zeichen { flex: none; display: grid; place-items: center; width: 34px; height: 34px;
   border-radius: var(--r-klein); background: var(--flaeche2); }
 .anmeldung__zeichen .ico { width: 19px; height: 19px; }
+
+/* Markenzeichen bringen ihre eigenen Farben mit und stehen deshalb auf
+   einer neutralen Fläche – ein Google-G auf grünlichem Grund sieht aus
+   wie ein Fehler. Auch im dunklen Erscheinungsbild bleibt sie hell:
+   Alle drei Zeichen sind für hellen Untergrund gezeichnet. */
+.anmeldung__zeichen--marke { background: #fff; border: 1px solid var(--rand); }
+.markenzeichen { width: 20px; height: 20px; display: block; }
+
+/* Der Hinweis in der Vorschau ohne Server. Er steht über den Knöpfen,
+   weil er für alle gilt – und ist ein Hinweis, keine Warnung: Zwei der
+   Wege funktionieren hier ja wirklich. */
+.anmeldung__vorschau { margin: 0 0 14px; font-size: .84rem; line-height: 1.55; }
 .anmeldung__wort { flex: 1 1 auto; min-width: 0; }
 .anmeldung__wort b { display: block; font-size: .95rem; }
 .anmeldung__wort i { display: block; margin-top: .1em; font-style: normal; font-size: .8rem;

@@ -24,11 +24,6 @@
    · `aud` ist die eigene Client-ID. Sonst genügte ein Token, das
      derselbe Nutzer bei einer anderen Anwendung erzeugt hat.
    · `exp` ist noch nicht erreicht, `iat` nicht in der Zukunft.
-
-   Am Ende steht die Gegenrichtung: `signierenEs256` erzeugt ein Token,
-   statt eines zu prüfen. Das braucht genau ein Anbieter – Apple will
-   kein festes Client-Geheimnis, sondern bei jeder Anfrage ein frisch
-   signiertes JWT.
    ===================================================================== */
 
 require_once __DIR__ . '/antwort.php';
@@ -120,83 +115,6 @@ final class Jwt
     /* -----------------------------------------------------------------
        Das Schlüsselverzeichnis des Anbieters
        ----------------------------------------------------------------- */
-
-    /* -----------------------------------------------------------------
-       Ein Token erzeugen: ES256
-
-       Apple gibt kein Client-Geheimnis heraus. Stattdessen bekommt man
-       einen privaten Schlüssel als .p8-Datei und baut sich das Geheimnis
-       bei jeder Anfrage selbst: ein JWT, signiert mit ES256, höchstens
-       sechs Monate gültig.
-
-       Der Stolperstein steckt im Signaturformat. OpenSSL liefert ECDSA
-       als DER-Sequenz mit zwei Ganzzahlen; JOSE erwartet 64 Byte, r und
-       s hintereinander, jede genau 32 Byte lang und links mit Nullen
-       aufgefüllt. Wer die DER-Bytes direkt einsetzt, bekommt von Apple
-       „invalid_client“ und sucht lange – die Meldung sagt nicht, dass
-       es an der Form liegt.
-       ----------------------------------------------------------------- */
-
-    public static function signierenEs256(array $inhalt, string $pem, string $kid): string
-    {
-        $schluessel = openssl_pkey_get_private($pem);
-        if ($schluessel === false) {
-            throw new JwtFehler('Der private Schlüssel ließ sich nicht lesen.');
-        }
-        $kopf = ['alg' => 'ES256', 'kid' => $kid, 'typ' => 'JWT'];
-        $daten = b64u_kodieren(json_encode($kopf, JSON_UNESCAPED_SLASHES))
-            . '.' . b64u_kodieren(json_encode($inhalt, JSON_UNESCAPED_SLASHES));
-
-        $der = '';
-        if (!openssl_sign($daten, $der, $schluessel, OPENSSL_ALGO_SHA256)) {
-            throw new JwtFehler('Das Token ließ sich nicht signieren.');
-        }
-        return $daten . '.' . b64u_kodieren(self::derZuJose($der));
-    }
-
-    /** DER-Sequenz zweier Ganzzahlen zu 64 Byte r‖s. */
-    private static function derZuJose(string $der): string
-    {
-        $p = 0;
-        $lies = function () use ($der, &$p): string {
-            if (($der[$p] ?? '') !== "\x02") {
-                throw new JwtFehler('Die Signatur hat nicht die erwartete Form.');
-            }
-            $p++;
-            $laenge = ord($der[$p]);
-            $p++;
-            if ($laenge > 0x80) {
-                /* Lange Form: das Byte sagt, wie viele Längenbytes folgen. */
-                $n = $laenge - 0x80;
-                $laenge = 0;
-                for ($i = 0; $i < $n; $i++) {
-                    $laenge = ($laenge << 8) | ord($der[$p + $i]);
-                }
-                $p += $n;
-            }
-            $wert = substr($der, $p, $laenge);
-            $p += $laenge;
-            /* DER schreibt eine führende Null, damit die Zahl nicht als
-               negativ gilt. Für JOSE muss sie wieder weg. */
-            return ltrim($wert, "\x00");
-        };
-
-        if (($der[0] ?? '') !== "\x30") {
-            throw new JwtFehler('Die Signatur hat nicht die erwartete Form.');
-        }
-        $p = 1;
-        $laenge = ord($der[$p]);
-        $p++;
-        if ($laenge > 0x80) {
-            $p += $laenge - 0x80;
-        }
-        $r = $lies();
-        $s = $lies();
-        if (strlen($r) > 32 || strlen($s) > 32) {
-            throw new JwtFehler('Die Signatur ist zu lang für ES256.');
-        }
-        return str_pad($r, 32, "\x00", STR_PAD_LEFT) . str_pad($s, 32, "\x00", STR_PAD_LEFT);
-    }
 
     private static function schluessel(string $jwksUrl, string $kid): string
     {

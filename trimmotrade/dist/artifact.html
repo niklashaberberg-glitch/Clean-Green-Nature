@@ -2117,6 +2117,18 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 .anmeldung__zeichen { flex: none; display: grid; place-items: center; width: 34px; height: 34px;
   border-radius: var(--r-klein); background: var(--flaeche2); }
 .anmeldung__zeichen .ico { width: 19px; height: 19px; }
+
+/* Markenzeichen bringen ihre eigenen Farben mit und stehen deshalb auf
+   einer neutralen Fläche – ein Google-G auf grünlichem Grund sieht aus
+   wie ein Fehler. Auch im dunklen Erscheinungsbild bleibt sie hell:
+   Alle drei Zeichen sind für hellen Untergrund gezeichnet. */
+.anmeldung__zeichen--marke { background: #fff; border: 1px solid var(--rand); }
+.markenzeichen { width: 20px; height: 20px; display: block; }
+
+/* Der Hinweis in der Vorschau ohne Server. Er steht über den Knöpfen,
+   weil er für alle gilt – und ist ein Hinweis, keine Warnung: Zwei der
+   Wege funktionieren hier ja wirklich. */
+.anmeldung__vorschau { margin: 0 0 14px; font-size: .84rem; line-height: 1.55; }
 .anmeldung__wort { flex: 1 1 auto; min-width: 0; }
 .anmeldung__wort b { display: block; font-size: .95rem; }
 .anmeldung__wort i { display: block; margin-top: .1em; font-style: normal; font-size: .8rem;
@@ -6641,8 +6653,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     'Der Dokumententresor: Unterlagen verschlüsselt ablegen und einzeln freigeben':
       'The document vault: store papers encrypted and share them one at a time',
 
-    'Weiter mit Apple': 'Continue with Apple',
-    'Apple-ID': 'Apple ID',
     'Weiter mit Instagram': 'Continue with Instagram',
     'ohne E-Mail-Adresse': 'no email address',
 
@@ -6662,19 +6672,12 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     'Adresse bestätigt. Jetzt kann dich jemand erreichen.':
       'Address confirmed. Now people can reach you.',
 
-    'Anmeldung über Google, Microsoft, Apple oder Instagram':
-      'Signing in via Google, Microsoft, Apple or Instagram',
     'Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei TrimmoTrade anmeldest. Dein dortiges Passwort bekommt TrimmoTrade nie zu sehen, und es besteht kein Zugriff auf Kontakte, Kalender, Dateien oder Postfach. Was übermittelt wird, ist von Anbieter zu Anbieter verschieden:':
       'If you pick one of these, that provider learns that you are signing in to TrimmoTrade. TrimmoTrade never sees your password there, and there is no access to contacts, calendar, files or mailbox. What is transmitted differs from provider to provider:',
     'Name, E-Mail-Adresse und die Angabe, ob sie bestätigt ist':
       'name, email address and whether it is confirmed',
     'Name und E-Mail-Adresse. Bei einem privaten Konto gilt die Adresse hier nicht als bestätigt, weil sie dort frei wählbar ist; bei einem Geschäfts- oder Schulkonto stammt sie aus dem Verzeichnis des Arbeitgebers.':
       'Name and email address. For a personal account the address does not count as confirmed here, because it can be chosen freely there; for a work or school account it comes from the employer’s directory.',
-    'Name und E-Mail-Adresse – und zwar nur bei der': 'Name and email address – and only on the',
-    'Anmeldung, danach nie wieder. Wählst du bei Apple „E-Mail-Adresse verbergen“, bekommt TrimmoTrade nicht deine Adresse, sondern eine Weiterleitungsadresse bei':
-      'sign-in, never again after that. If you choose “Hide My Email” at Apple, TrimmoTrade does not get your address but a forwarding address at',
-    '. Post kommt darüber an, solange du die Anmeldung nicht in deinen Apple-Einstellungen widerrufst.':
-      '. Mail arrives through it as long as you do not revoke the sign-in in your Apple settings.',
     'Benutzername und eine Kontokennung.': 'Username and an account identifier.',
     'Keine E-Mail-Adresse': 'No email address',
     '– Instagram gibt keine heraus. Ein so entstandenes Konto ist deshalb nicht erreichbar und steht auf Vertrauensstufe 0, bis du eine Adresse nachträgst und bestätigst.':
@@ -6692,6 +6695,38 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       'merged. Merging two accounts would mean deciding about someone else’s listings, enquiries and documents; a sign-in does not do that in passing. Instead you are told to sign in with that address.',
     'Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft, Apple oder Instagram hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus und sind deshalb auch die beiden, die oben stehen.':
       'Beyond the sign-in via Google, Microsoft, Apple or Instagram described in section 4, no personal data is transferred to countries outside the European Union and the European Economic Area. Anyone who wants to avoid this signs in with a passkey or an email address – both work without any external provider, which is also why they are the two listed first.'
+  });
+
+  /* Nachgezogen: Apple ist wieder raus, dafür die Gerätewörter für den
+     Passkey und der Hinweis in der serverlosen Vorschau. */
+  e({
+    'Anmeldung über Google, Microsoft oder Instagram':
+      'Signing in via Google, Microsoft or Instagram',
+    'Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst: Google Ireland Limited und Microsoft Ireland Operations Limited, beide mit Sitz in Irland, sowie Meta Platforms Ireland Limited für Instagram. Soweit dabei Daten in die Vereinigten Staaten übermittelt werden, stützt sich das auf den Angemessenheitsbeschluss der Europäischen Kommission zum EU-US Data Privacy Framework; alle drei Anbieter sind darunter zertifiziert.':
+      'The providers themselves are the controllers for the processing on their side: Google Ireland Limited and Microsoft Ireland Operations Limited, both based in Ireland, plus Meta Platforms Ireland Limited for Instagram. Where data is transferred to the United States, this rests on the European Commission’s adequacy decision for the EU-US Data Privacy Framework; all three providers are certified under it.',
+    'Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft oder Instagram hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus und sind deshalb auch die beiden, die oben stehen.':
+      'Beyond the sign-in via Google, Microsoft or Instagram described in section 4, no personal data is transferred to countries outside the European Union and the European Economic Area. Anyone who wants to avoid this signs in with a passkey or an email address – both work without any external provider, which is also why they are the two listed first.',
+
+    /* Wie der Passkey auf dem jeweiligen Gerät heißt. */
+    'Mit Face ID oder Touch ID': 'With Face ID or Touch ID',
+    'Mit Windows Hello': 'With Windows Hello',
+    'Mit Fingerabdruck oder Gesicht': 'With fingerprint or face',
+    'Kein Passwort. Dein Gerät bestätigt, dass du es bist – beim nächsten Mal genügt ein Blick.':
+      'No password. Your device confirms it is you – next time a glance is enough.',
+
+    /* Die Vorschau ohne Server. */
+    'Diese Vorschau läuft ohne Server.': 'This preview runs without a server.',
+    'Passkey und E-Mail-Code funktionieren hier wirklich':
+      'Passkey and email code really do work here',
+    '– Google, Microsoft und Instagram brauchen den Server und sind nur angedeutet.':
+      '– Google, Microsoft and Instagram need the server and are only indicated.',
+
+    'Dokumententresor': 'Document vault'
+  });
+
+  e({
+    'Instagram ist der eine Weg, der keine E-Mail-Adresse liefert – die gibt es dort nicht zum Anfordern. Wer so hereinkommt, trägt sie danach nach; ohne sie kann dich niemand erreichen.':
+      'Instagram is the one route that does not supply an email address – there is nothing to request there. Anyone coming in that way adds one afterwards; without it nobody can reach you.'
   });
 
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
@@ -13586,8 +13621,10 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   const ANBIETER = [
     {
       id: 'passkey',
+      /* Wird beim Zeichnen durch das ersetzt, was auf diesem Gerät
+         wirklich dransteht – siehe passkeyWort(). */
       name: 'Mit Passkey',
-      unter: 'Face ID, Windows Hello oder Fingerabdruck',
+      unter: 'Kein Passwort. Dein Gerät bestätigt, dass du es bist – beim nächsten Mal genügt ein Blick.',
       icon: 'schluessel',
       echt: true,
       empfohlen: true,
@@ -13624,20 +13661,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         + 'Postfach, kein OneDrive.',
       einrichtung: 'Microsoft Entra ID: App-Registrierung, Weiterleitungs-URI, Bereiche openid/email/profile. '
         + 'Für private und geschäftliche Konten den Mandanten „common“ verwenden.'
-    },
-    {
-      id: 'apple',
-      name: 'Weiter mit Apple',
-      unter: 'Apple-ID',
-      icon: 'person',
-      farbe: '#111111',
-      stufe: 2,
-      erklaerung: 'TrimmoTrade erfährt Name und E-Mail-Adresse aus deiner Apple-ID – beim ersten Mal, danach '
-        + 'nie wieder. Wählst du „E-Mail-Adresse verbergen“, bekommt TrimmoTrade eine Weiterleitungsadresse '
-        + 'von Apple statt deiner eigenen; Post kommt trotzdem an, solange du die Anmeldung nicht widerrufst.',
-      einrichtung: 'Apple Developer Program (kostenpflichtig): Services-ID, Domain und Rückkehradresse '
-        + 'bestätigen, privater Schlüssel als .p8. Das Client-Geheimnis ist kein fester Wert, sondern ein '
-        + 'JWT, das der Server bei jeder Anfrage mit ES256 selbst signiert.'
     },
     {
       id: 'instagram',
@@ -13896,6 +13919,25 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
       return 'Geht nur im Web – ein Passkey braucht eine Domain, eine Datei auf der Platte hat keine';
     }
     return '';
+  }
+
+  /* Wie das Verfahren auf diesem Gerät heißt.
+
+     „Passkey“ ist das richtige Wort und für die meisten Menschen keins.
+     Wer ein iPhone hat, kennt Face ID; wer einen Windows-Rechner hat,
+     kennt Windows Hello. Beides ist dasselbe – ein Schlüssel im
+     Sicherheitschip, den das Gerät nach einem Blick oder einem
+     Fingerabdruck freigibt.
+
+     Die Kennung des Browsers ist für Sicherheitsfragen untauglich, für
+     eine Beschriftung genügt sie: Rät sie falsch, steht dort ein
+     anderes richtiges Wort für dieselbe Sache. */
+  function passkeyWort() {
+    const u = (navigator.userAgent || '');
+    if (/iPhone|iPad|Mac OS X|Macintosh/i.test(u)) return 'Mit Face ID oder Touch ID';
+    if (/Windows/i.test(u)) return 'Mit Windows Hello';
+    if (/Android/i.test(u)) return 'Mit Fingerabdruck oder Gesicht';
+    return 'Mit Passkey';
   }
 
   function passkeyPlattform() {
@@ -14219,7 +14261,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     mailForm, istWegwerf, anzeigeName, passkeys,
     auffrischen, codeAnfordern, codeEinloesen, codeStand,
     mailFehlt, mailNachtragen,
-    passkeyMoeglich, passkeyGrund, passkeyPlattform, passkeyAnlegen, passkeyAnmelden, passkeyLoeschen,
+    passkeyMoeglich, passkeyGrund, passkeyPlattform, passkeyWort,
+    passkeyAnlegen, passkeyAnmelden, passkeyLoeschen,
     anbieterStarten
   };
 })(window.TT = window.TT || {});
@@ -15838,8 +15881,49 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     route: '<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3 3 0 010 6H9a3 3 0 000 6h6.5"/>'
   };
 
+  /* -------------------- Markenzeichen --------------------
+
+     Google, Microsoft und Instagram haben eigene Zeichen, und die
+     gehören auf ihre Knöpfe: Ihre Gestaltungsrichtlinien sehen genau
+     das vor, und ein Knopf mit einem allgemeinen Personensymbol wird
+     schlicht nicht als „mit Google anmelden“ erkannt.
+
+     Sie können nicht durch den Sprite oben laufen. Der zwingt jedem
+     Symbol `fill:none` und eine einzige Strichfarbe auf – richtig für
+     Symbole, die die Textfarbe annehmen, unmöglich für ein Zeichen aus
+     vier Farbflächen. Deshalb hier vollständige SVG mit eigenen Farben.
+
+     Nichts daran wird umgefärbt, auch im dunklen Erscheinungsbild
+     nicht: Ein blau-rot-gelb-grünes G in Waldgrün wäre kein Google-
+     Zeichen mehr. */
+  const MARKEN = {
+    google: '<path fill="#4285F4" d="M23.06 12.25c0-.8-.07-1.56-.2-2.3H12v4.35h6.05a5.17 5.17 0 01-2.24 3.4v2.82h3.63c2.13-1.96 3.35-4.84 3.35-8.27z"/>'
+      + '<path fill="#34A853" d="M12 23.5c3.03 0 5.57-1 7.43-2.72l-3.63-2.82c-1 .68-2.3 1.08-3.8 1.08-2.93 0-5.4-1.98-6.29-4.63H1.96v2.91A11.5 11.5 0 0012 23.5z"/>'
+      + '<path fill="#FBBC05" d="M5.71 14.41a6.9 6.9 0 010-4.4V7.1H1.96a11.5 11.5 0 000 10.22l3.75-2.91z"/>'
+      + '<path fill="#EA4335" d="M12 5.02c1.65 0 3.13.57 4.3 1.68l3.22-3.22C17.56 1.63 15.03.5 12 .5A11.5 11.5 0 001.96 7.1l3.75 2.91C6.6 7.36 9.07 5.02 12 5.02z"/>',
+    microsoft: '<path fill="#F25022" d="M2.5 2.5h9v9h-9z"/><path fill="#7FBA00" d="M12.5 2.5h9v9h-9z"/>'
+      + '<path fill="#00A4EF" d="M2.5 12.5h9v9h-9z"/><path fill="#FFB900" d="M12.5 12.5h9v9h-9z"/>',
+    /* Der Verlauf steht im Sprite, damit es ihn genau einmal gibt –
+       zwei gleich benannte Verläufe im selben Dokument wären ein
+       Namenskonflikt, und welcher dann gewinnt, ist Glückssache. */
+    instagram: '<rect x="2.9" y="2.9" width="18.2" height="18.2" rx="5.2" fill="none" '
+      + 'stroke="url(#tt-instagram)" stroke-width="2"/>'
+      + '<circle cx="12" cy="12" r="4.1" fill="none" stroke="url(#tt-instagram)" stroke-width="2"/>'
+      + '<circle cx="17.4" cy="6.6" r="1.25" fill="url(#tt-instagram)"/>'
+  };
+
+  function markeSvg(id) {
+    if (!MARKEN[id]) return '';
+    return '<svg class="markenzeichen" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+      + MARKEN[id] + '</svg>';
+  }
+
   function sprite() {
     return '<svg class="sprite" aria-hidden="true" focusable="false"><defs>' +
+      '<linearGradient id="tt-instagram" x1="3" y1="21" x2="21" y2="3" gradientUnits="userSpaceOnUse">' +
+      '<stop offset="0" stop-color="#FEDA75"/><stop offset=".25" stop-color="#FA7E1E"/>' +
+      '<stop offset=".5" stop-color="#D62976"/><stop offset=".75" stop-color="#962FBF"/>' +
+      '<stop offset="1" stop-color="#4F5BD5"/></linearGradient>' +
       Object.keys(ICONS).map((k) =>
         '<symbol id="i-' + k + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" ' +
         'stroke-linecap="round" stroke-linejoin="round">' + ICONS[k] + '</symbol>').join('') +
@@ -16412,6 +16496,12 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           <button type="button" class="ikon-btn" data-tu="palette" title="Schnellsuche (Strg + K)" aria-label="Schnellsuche">${ico('lupe')}</button>
           <a class="ikon-btn" href="#/agenten" title="Suchaufträge" aria-label="Suchaufträge">${ico('glocke')}<b class="zaehler" data-zaehler="agenten" hidden></b></a>
           <a class="ikon-btn" href="#/vergleich" title="Vergleich" aria-label="Vergleich">${ico('waage')}<b class="zaehler" data-zaehler="vergleich" hidden></b></a>
+          <!-- Der Dokumententresor stand bis hierher nur im Fußbereich.
+               Für eine Hauptfunktion ist das der falsche Ort: Wer seine
+               Gehaltsabrechnung freigeben will, sucht sie oben und nicht
+               unter dem Impressum. -->
+          <a class="ikon-btn nur-angemeldet" href="#/tresor" title="Dokumententresor"
+            aria-label="Dokumententresor">${ico('schloss')}</a>
           <button type="button" class="ikon-btn auch-ohne-konto" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
             ${ico('sonne', 'nur-hell')}${ico('mond', 'nur-dunkel')}</button>
           ${sprachknopf()}
@@ -17159,7 +17249,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   Object.assign(ui, {
     start, gehe, zeichnen, neuZeichnen, schaleZeichnen, toast, dialog, dialogZu, knopfArbeit,
     zielMerken, zielHolen,
-    badge, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
+    badge, markeSvg, passungsRing, energieBalken, inseratsKarte, ampelFarbe,
     ART_LABEL, ART_ICON, artLabel, artIcon, ico, aktionRegistrieren, AKTIONEN,
     sperrHinweis, NAV, dateiSichern,
     aktualisiereZaehler, themeSetzen, paletteOeffnen, kartenMarken, preisZeile
@@ -26163,7 +26253,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             Einwilligung nötig ist (§ 25 Abs. 2 Nr. 2 TDDDG). Cookies zu Werbe- oder Analysezwecken werden
             nicht gesetzt – es gibt keine.</p>
 
-          <h3>Anmeldung über Google, Microsoft, Apple oder Instagram</h3>
+          <h3>Anmeldung über Google, Microsoft oder Instagram</h3>
           <p>Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei TrimmoTrade
             anmeldest. Dein dortiges Passwort bekommt TrimmoTrade nie zu sehen, und es besteht kein Zugriff
             auf Kontakte, Kalender, Dateien oder Postfach. Was übermittelt wird, ist von Anbieter zu Anbieter
@@ -26173,20 +26263,15 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             <dt>Microsoft</dt><dd>Name und E-Mail-Adresse. Bei einem privaten Konto gilt die Adresse hier
               nicht als bestätigt, weil sie dort frei wählbar ist; bei einem Geschäfts- oder Schulkonto
               stammt sie aus dem Verzeichnis des Arbeitgebers.</dd>
-            <dt>Apple</dt><dd>Name und E-Mail-Adresse – und zwar nur bei der <b>ersten</b> Anmeldung, danach
-              nie wieder. Wählst du bei Apple „E-Mail-Adresse verbergen“, bekommt TrimmoTrade nicht deine
-              Adresse, sondern eine Weiterleitungsadresse bei <i>privaterelay.appleid.com</i>. Post kommt
-              darüber an, solange du die Anmeldung nicht in deinen Apple-Einstellungen widerrufst.</dd>
             <dt>Instagram</dt><dd>Benutzername und eine Kontokennung. <b>Keine E-Mail-Adresse</b> – Instagram
               gibt keine heraus. Ein so entstandenes Konto ist deshalb nicht erreichbar und steht auf
               Vertrauensstufe 0, bis du eine Adresse nachträgst und bestätigst.</dd>
           </dl>
           <p>Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst: Google Ireland
-            Limited, Microsoft Ireland Operations Limited und Apple Distribution International Ltd., alle
-            drei mit Sitz in Irland, sowie Meta Platforms Ireland Limited für Instagram. Soweit dabei Daten
-            in die Vereinigten Staaten übermittelt werden, stützt sich das auf den Angemessenheitsbeschluss
-            der Europäischen Kommission zum EU-US Data Privacy Framework; alle vier Anbieter sind darunter
-            zertifiziert.</p>
+            Limited und Microsoft Ireland Operations Limited, beide mit Sitz in Irland, sowie Meta Platforms
+            Ireland Limited für Instagram. Soweit dabei Daten in die Vereinigten Staaten übermittelt werden,
+            stützt sich das auf den Angemessenheitsbeschluss der Europäischen Kommission zum EU-US Data
+            Privacy Framework; alle drei Anbieter sind darunter zertifiziert.</p>
           <p class="fein">Welche dieser Wege tatsächlich angeboten werden, entscheidet die Einrichtung
             dieses Servers. Ein Anbieter, für den keine Zugangsdaten hinterlegt sind, erscheint gar nicht
             erst als Schaltfläche – und dann geht auch nichts an ihn.</p>
@@ -26483,8 +26568,8 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             findet nicht statt.</p>
 
           <h2>17. Übermittlung in Drittländer</h2>
-          <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft, Apple oder Instagram
-            hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen
+          <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft oder Instagram hinaus
+            findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen
             Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit
             Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus und sind
             deshalb auch die beiden, die oben stehen.</p>
@@ -27698,24 +27783,39 @@ Datum: __________________
   function anbieterKnopf(a) {
     const gesperrt = a.id === 'passkey' && !K.passkeyMoeglich();
     const arbeitet = laeuft === a.id;
+    /* Google, Microsoft und Instagram bringen ihr eigenes Zeichen mit.
+       Ein Knopf mit allgemeinem Personensymbol wird nicht als „mit
+       Google anmelden“ erkannt, und die Gestaltungsrichtlinien der drei
+       verlangen ohnehin ihr Zeichen. */
+    const marke = ui.markeSvg(a.id);
     return h`<button type="button" class="anmeldung__weg ${a.empfohlen ? 'is-empfohlen' : ''}"
       data-tu="anmelden-weg" data-id="${a.id}" ${gesperrt || laeuft ? 'disabled' : ''}>
-      <span class="anmeldung__zeichen" style="color:${a.farbe || 'currentColor'}">${ico(a.icon)}</span>
+      <span class="anmeldung__zeichen ${marke ? 'anmeldung__zeichen--marke' : ''}"
+        style="${marke ? '' : 'color:' + (a.farbe || 'currentColor')}">${marke ? raw(marke) : ico(a.icon)}</span>
       <span class="anmeldung__wort">
-        <b>${a.name}</b>
+        <b>${a.id === 'passkey' ? K.passkeyWort() : a.name}</b>
         <i>${gesperrt ? K.passkeyGrund()
         : arbeitet ? 'einen Moment …' : a.unter}</i>
       </span>
       ${a.empfohlen && !gesperrt ? h`<span class="anmeldung__marke">${passkeyDa ? 'am sichersten' : 'empfohlen'}</span>` : ''}
-      ${!K.echt() && !a.echt ? h`<span class="anmeldung__nachbau"
-        title="In dieser Vorführung nachgebildet">nachgebildet</span>` : ''}
     </button>`;
   }
 
   function wahlSchritt() {
     const wege = K.verfuegbar();
     const neu = modus === 'registrieren';
-    return h`<div class="anmeldung__wege">
+    /* Ohne Server können Google, Microsoft und Instagram nicht wirklich
+       antworten. Das gehört gesagt – aber einmal und als Satz, nicht als
+       Etikett an jedem einzelnen Knopf. Mehrere Warnschilder
+       nebeneinander lesen sich wie ein Hinweis darauf, dass das ganze
+       Angebot eine Attrappe wäre. Auf der Website erscheint hier ohnehin
+       nichts davon: Dort stehen nur die Wege, die eingerichtet sind. */
+    const nachbau = !K.echt() && wege.some((a) => !a.echt);
+    return h`${nachbau ? h`<p class="info-meldung anmeldung__vorschau">${ico('info')}
+        <span>Diese Vorschau läuft ohne Server. <b>Passkey und E-Mail-Code funktionieren hier
+        wirklich</b> – Google, Microsoft und Instagram brauchen den Server und sind nur
+        angedeutet.</span></p>` : ''}
+      <div class="anmeldung__wege">
         ${wege.map(anbieterKnopf)}
       </div>
       ${neu ? h`<p class="anmeldung__wechsel">Schon ein Konto?
@@ -27737,6 +27837,8 @@ Datum: __________________
         <p>Bei Google und Microsoft bekommt TrimmoTrade Name und E-Mail-Adresse, dein Passwort dort aber
           nie zu sehen. Beim Weg über die E-Mail-Adresse gibt es gar kein Passwort, sondern einen Code, der
           zehn Minuten gilt.</p>
+        <p>Instagram ist der eine Weg, der keine E-Mail-Adresse liefert – die gibt es dort nicht zum
+          Anfordern. Wer so hereinkommt, trägt sie danach nach; ohne sie kann dich niemand erreichen.</p>
       </details>`;
   }
 

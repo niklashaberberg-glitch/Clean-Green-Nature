@@ -49,8 +49,10 @@
   const ANBIETER = [
     {
       id: 'passkey',
+      /* Wird beim Zeichnen durch das ersetzt, was auf diesem Gerät
+         wirklich dransteht – siehe passkeyWort(). */
       name: 'Mit Passkey',
-      unter: 'Face ID, Windows Hello oder Fingerabdruck',
+      unter: 'Kein Passwort. Dein Gerät bestätigt, dass du es bist – beim nächsten Mal genügt ein Blick.',
       icon: 'schluessel',
       echt: true,
       empfohlen: true,
@@ -87,20 +89,6 @@
         + 'Postfach, kein OneDrive.',
       einrichtung: 'Microsoft Entra ID: App-Registrierung, Weiterleitungs-URI, Bereiche openid/email/profile. '
         + 'Für private und geschäftliche Konten den Mandanten „common“ verwenden.'
-    },
-    {
-      id: 'apple',
-      name: 'Weiter mit Apple',
-      unter: 'Apple-ID',
-      icon: 'person',
-      farbe: '#111111',
-      stufe: 2,
-      erklaerung: 'TrimmoTrade erfährt Name und E-Mail-Adresse aus deiner Apple-ID – beim ersten Mal, danach '
-        + 'nie wieder. Wählst du „E-Mail-Adresse verbergen“, bekommt TrimmoTrade eine Weiterleitungsadresse '
-        + 'von Apple statt deiner eigenen; Post kommt trotzdem an, solange du die Anmeldung nicht widerrufst.',
-      einrichtung: 'Apple Developer Program (kostenpflichtig): Services-ID, Domain und Rückkehradresse '
-        + 'bestätigen, privater Schlüssel als .p8. Das Client-Geheimnis ist kein fester Wert, sondern ein '
-        + 'JWT, das der Server bei jeder Anfrage mit ES256 selbst signiert.'
     },
     {
       id: 'instagram',
@@ -359,6 +347,25 @@
       return 'Geht nur im Web – ein Passkey braucht eine Domain, eine Datei auf der Platte hat keine';
     }
     return '';
+  }
+
+  /* Wie das Verfahren auf diesem Gerät heißt.
+
+     „Passkey“ ist das richtige Wort und für die meisten Menschen keins.
+     Wer ein iPhone hat, kennt Face ID; wer einen Windows-Rechner hat,
+     kennt Windows Hello. Beides ist dasselbe – ein Schlüssel im
+     Sicherheitschip, den das Gerät nach einem Blick oder einem
+     Fingerabdruck freigibt.
+
+     Die Kennung des Browsers ist für Sicherheitsfragen untauglich, für
+     eine Beschriftung genügt sie: Rät sie falsch, steht dort ein
+     anderes richtiges Wort für dieselbe Sache. */
+  function passkeyWort() {
+    const u = (navigator.userAgent || '');
+    if (/iPhone|iPad|Mac OS X|Macintosh/i.test(u)) return 'Mit Face ID oder Touch ID';
+    if (/Windows/i.test(u)) return 'Mit Windows Hello';
+    if (/Android/i.test(u)) return 'Mit Fingerabdruck oder Gesicht';
+    return 'Mit Passkey';
   }
 
   function passkeyPlattform() {
@@ -682,7 +689,8 @@
     mailForm, istWegwerf, anzeigeName, passkeys,
     auffrischen, codeAnfordern, codeEinloesen, codeStand,
     mailFehlt, mailNachtragen,
-    passkeyMoeglich, passkeyGrund, passkeyPlattform, passkeyAnlegen, passkeyAnmelden, passkeyLoeschen,
+    passkeyMoeglich, passkeyGrund, passkeyPlattform, passkeyWort,
+    passkeyAnlegen, passkeyAnmelden, passkeyLoeschen,
     anbieterStarten
   };
 })(window.TT = window.TT || {});

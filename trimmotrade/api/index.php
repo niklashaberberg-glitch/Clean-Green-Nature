@@ -254,24 +254,7 @@ try {
 /* Änderungen brauchen den Nachweis, dass die Anfrage von dieser Seite
    kommt. Lesende Wege nicht: Sie ändern nichts, und `status` muss auch
    beim allerersten Aufruf funktionieren, bevor es ein Schutzmerkmal gibt. */
-/* Änderungen brauchen den Nachweis, dass die Anfrage von dieser Seite
-   kommt – mit genau einer Ausnahme.
-
-   Apple gibt Name und E-Mail-Adresse nur heraus, wenn die Rückkehr als
-   Formular kommt (`response_mode=form_post`). Das ist ein POST von
-   appleid.apple.com auf diesen Server, also seitenübergreifend: Es
-   trägt weder unser Schutzmerkmal noch eine Herkunft von hier. Beide
-   Prüfungen würden es abweisen, und die Anmeldung mit Apple wäre
-   unmöglich.
-
-   Diese Ausnahme ist keine Lücke, weil der Weg seine eigenen Schlösser
-   hat, und zwar strengere: ein `state`, der serverseitig zu einem
-   Vorgang gehört und beim ersten Gebrauch gelöscht wird, ein Anker im
-   Cookie, der die Rückkehr an denselben Browser bindet, ein `nonce` im
-   Token und PKCE. Wer den Rückweg fälschen will, müsste alle vier
-   haben. Und anders als bei den übrigen Wegen ändert dieser Aufruf für
-   sich genommen nichts – er meldet an, mehr nicht. */
-if ($art === 'POST' && $pfad !== 'oauth/zurueck') {
+if ($art === 'POST') {
     Sitzung::herkunftPruefen($BASIS !== '' ? $BASIS : 'https://' . ($_SERVER['HTTP_HOST'] ?? ''));
     Sitzung::schutzPruefen();
 }
@@ -713,21 +696,10 @@ try {
                säße dann unbemerkt im Konto des Angreifers und tippte dort
                seine Daten ein. Der Anker steht nur als Hash beim Vorgang. */
             $anker = zufall_text(16);
-            /* SameSite: Lax genügt überall dort, wo die Rückkehr eine
-               Umleitung ist – bei einer solchen schickt der Browser das
-               Cookie mit. Apple kommt als Formular zurück, und bei einem
-               seitenübergreifenden POST hält Lax das Cookie zurück. Dann
-               fehlte der Anker, die Prüfung schlüge fehl, und die
-               Anmeldung mit Apple ginge nie. Deshalb dort None, was
-               zwingend Secure verlangt – auf einer Seite ohne TLS gibt
-               es diesen Weg also nicht. */
-            $ueberKreuz = $anbieter === 'apple';
-            $sicher = str_starts_with($BASIS, 'https://');
             setcookie(ANKER_COOKIE, $anker, [
                 'expires' => time() + 900, 'path' => '/api/',
-                'secure' => $sicher || $ueberKreuz,
-                'httponly' => true,
-                'samesite' => $ueberKreuz ? 'None' : 'Lax',
+                'secure' => str_starts_with($BASIS, 'https://'),
+                'httponly' => true, 'samesite' => 'Lax',
             ]);
             try {
                 $ziel = Oauth::losUrl(
@@ -743,11 +715,7 @@ try {
             exit;
 
         case 'oauth/zurueck':
-            /* Google, Microsoft und Instagram kommen als Umleitung
-               zurück, Apple als Formular. Beides landet hier; woher die
-               Felder kommen, entscheidet das Verfahren. */
-            $rueck = $art === 'POST' ? $_POST : $_GET;
-            $fehlerCode = (string) ($rueck['error'] ?? '');
+            $fehlerCode = (string) ($_GET['error'] ?? '');
             if ($fehlerCode !== '') {
                 /* `access_denied` heißt: Der Nutzer hat abgelehnt. Das ist
                    kein Fehler, sondern eine Entscheidung – und wird auch
@@ -756,13 +724,10 @@ try {
             }
             try {
                 $d = Oauth::zurueck(
-                    (string) ($rueck['state'] ?? ''),
-                    (string) ($rueck['code'] ?? ''),
+                    (string) ($_GET['state'] ?? ''),
+                    (string) ($_GET['code'] ?? ''),
                     $BASIS . '/api/oauth/zurueck',
-                    merkmal_hash((string) ($_COOKIE[ANKER_COOKIE] ?? '')),
-                    /* Nur Apple, nur beim allerersten Mal: der Name als
-                       JSON neben dem Code. */
-                    mb_substr((string) ($rueck['user'] ?? ''), 0, 2000)
+                    merkmal_hash((string) ($_COOKIE[ANKER_COOKIE] ?? ''))
                 );
             } catch (OauthFehler | NetzFehler | JwtFehler $e) {
                 error_log('TrimmoTrade OAuth: ' . $e->getMessage());

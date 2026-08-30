@@ -281,61 +281,7 @@ App-Registrierungen*:
 
 ---
 
-## Schritt 6b · Anmeldung über Apple · *kostenpflichtig*
-
-Der einzige Anbieter, der Geld kostet: Es braucht eine Mitgliedschaft im
-**Apple Developer Program**, 99 € im Jahr. Ohne die geht es nicht.
-
-Und der einzige ohne festes Geheimnis. Apple gibt einen privaten
-Schlüssel heraus; das Client-Geheimnis baut der Server daraus bei jeder
-Anfrage selbst — ein JWT, mit ES256 signiert, zehn Minuten gültig.
-
-1. Im **Apple Developer Portal** unter *Certificates, Identifiers &
-   Profiles*:
-   - eine **App ID** anlegen und dort *Sign in with Apple* aktivieren
-   - eine **Services ID** anlegen, etwa `de.trimmotrade.web`. **Diese**
-     ist die Client-ID, nicht die App-ID.
-   - bei der Services ID unter *Sign in with Apple → Configure*
-     eintragen: Domain `www.trimmotrade.de`, Rückkehradresse
-     `https://www.trimmotrade.de/api/oauth/zurueck`
-   - unter *Keys* einen Schlüssel mit *Sign in with Apple* anlegen und
-     die **.p8-Datei herunterladen**. Das geht **genau einmal**; wer sie
-     verliert, legt einen neuen Schlüssel an.
-2. Die .p8-Datei auf den Server laden, am besten neben `config.php`, und
-   die Rechte eng setzen: `chmod 600`.
-3. In `api/config.php`:
-
-   ```php
-   'apple' => [
-     'client_id' => 'de.trimmotrade.web',              // die Services ID
-     'team_id'   => 'ABCDE12345',                      // oben rechts im Portal
-     'key_id'    => 'FGHIJ67890',                      // gehört zur .p8
-     'key_datei' => __DIR__ . '/AuthKey_FGHIJ67890.p8',
-   ],
-   ```
-
-**Drei Dinge, die im Betrieb überraschen:**
-
-- **Der Name kommt genau einmal.** Apple schickt ihn bei der allerersten
-  Anmeldung mit und nie wieder. Die Anwendung hebt ihn deshalb sofort
-  auf. Zum Ausprobieren muss man die Anwendung in den Apple-Einstellungen
-  (*Apple-ID → Anmelden mit Apple*) erst wieder abmelden — ein gelöschtes
-  Konto allein genügt nicht.
-- **„E-Mail-Adresse verbergen“.** Wählt jemand das, kommt statt der
-  Adresse eine Weiterleitung bei `privaterelay.appleid.com`. Damit dort
-  Post ankommt, muss die eigene Absenderdomain bei Apple unter
-  *Certificates, Identifiers & Profiles → Services → Sign in with Apple
-  for Email Communication* eingetragen und bestätigt sein. Fehlt das,
-  verschwinden die Mails **stillschweigend** — kein Fehler, keine
-  Rückmeldung, nur nie eine Antwort.
-- **HTTPS ist Pflicht.** Apple schickt die Rückkehr als Formular, und
-  das Cookie, das die Anmeldung an den Browser bindet, braucht dafür
-  `SameSite=None` — was ohne TLS nicht gesetzt werden darf. Ohne HTTPS
-  gibt es diesen Weg schlicht nicht.
-
----
-
-## Schritt 6c · Anmeldung über Instagram · *nur mit zwei Einschränkungen*
+## Schritt 6b · Anmeldung über Instagram · *nur mit zwei Einschränkungen*
 
 Bevor du das einrichtest, zwei Sätze, die den Aufwand meist erledigen:
 

@@ -308,7 +308,7 @@
             Einwilligung nötig ist (§ 25 Abs. 2 Nr. 2 TDDDG). Cookies zu Werbe- oder Analysezwecken werden
             nicht gesetzt – es gibt keine.</p>
 
-          <h3>Anmeldung über Google, Microsoft, Apple oder Instagram</h3>
+          <h3>Anmeldung über Google, Microsoft oder Instagram</h3>
           <p>Wählst du einen dieser Wege, erfährt der jeweilige Anbieter, dass du dich bei TrimmoTrade
             anmeldest. Dein dortiges Passwort bekommt TrimmoTrade nie zu sehen, und es besteht kein Zugriff
             auf Kontakte, Kalender, Dateien oder Postfach. Was übermittelt wird, ist von Anbieter zu Anbieter
@@ -318,20 +318,15 @@
             <dt>Microsoft</dt><dd>Name und E-Mail-Adresse. Bei einem privaten Konto gilt die Adresse hier
               nicht als bestätigt, weil sie dort frei wählbar ist; bei einem Geschäfts- oder Schulkonto
               stammt sie aus dem Verzeichnis des Arbeitgebers.</dd>
-            <dt>Apple</dt><dd>Name und E-Mail-Adresse – und zwar nur bei der <b>ersten</b> Anmeldung, danach
-              nie wieder. Wählst du bei Apple „E-Mail-Adresse verbergen“, bekommt TrimmoTrade nicht deine
-              Adresse, sondern eine Weiterleitungsadresse bei <i>privaterelay.appleid.com</i>. Post kommt
-              darüber an, solange du die Anmeldung nicht in deinen Apple-Einstellungen widerrufst.</dd>
             <dt>Instagram</dt><dd>Benutzername und eine Kontokennung. <b>Keine E-Mail-Adresse</b> – Instagram
               gibt keine heraus. Ein so entstandenes Konto ist deshalb nicht erreichbar und steht auf
               Vertrauensstufe 0, bis du eine Adresse nachträgst und bestätigst.</dd>
           </dl>
           <p>Verantwortlich für die Verarbeitung auf ihrer Seite sind die Anbieter selbst: Google Ireland
-            Limited, Microsoft Ireland Operations Limited und Apple Distribution International Ltd., alle
-            drei mit Sitz in Irland, sowie Meta Platforms Ireland Limited für Instagram. Soweit dabei Daten
-            in die Vereinigten Staaten übermittelt werden, stützt sich das auf den Angemessenheitsbeschluss
-            der Europäischen Kommission zum EU-US Data Privacy Framework; alle vier Anbieter sind darunter
-            zertifiziert.</p>
+            Limited und Microsoft Ireland Operations Limited, beide mit Sitz in Irland, sowie Meta Platforms
+            Ireland Limited für Instagram. Soweit dabei Daten in die Vereinigten Staaten übermittelt werden,
+            stützt sich das auf den Angemessenheitsbeschluss der Europäischen Kommission zum EU-US Data
+            Privacy Framework; alle drei Anbieter sind darunter zertifiziert.</p>
           <p class="fein">Welche dieser Wege tatsächlich angeboten werden, entscheidet die Einrichtung
             dieses Servers. Ein Anbieter, für den keine Zugangsdaten hinterlegt sind, erscheint gar nicht
             erst als Schaltfläche – und dann geht auch nichts an ihn.</p>
@@ -628,8 +623,8 @@
             findet nicht statt.</p>
 
           <h2>17. Übermittlung in Drittländer</h2>
-          <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft, Apple oder Instagram
-            hinaus findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen
+          <p>Über die in Abschnitt 4 beschriebene Anmeldung bei Google, Microsoft oder Instagram hinaus
+            findet keine Übermittlung personenbezogener Daten in Länder außerhalb der Europäischen
             Union und des Europäischen Wirtschaftsraums statt. Wer das vermeiden möchte, meldet sich mit
             Passkey oder mit E-Mail-Adresse an – beide Wege kommen ohne fremden Anbieter aus und sind
             deshalb auch die beiden, die oben stehen.</p>

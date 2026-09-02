@@ -68,14 +68,24 @@
   --wg: #79155e;
   --tausch: #a3730c;
 
-  --r-klein: 8px;
-  --r: 14px;
-  --r-gross: 22px;
+  /* Die Radien stehen im Verhältnis 1 : 1.6 : 2.4 zueinander. Das ist
+     keine Zahlenspielerei: Ein Knopf mit 8 px in einer Karte mit 14 px
+     sieht aus, als sei er aus einem anderen Bausatz. Mit einer Reihe
+     bleibt die Rundung eine Aussage über die Größe des Dings, nicht über
+     die Laune beim Schreiben der Regel. */
+  --r-klein: 10px;
+  --r: 16px;
+  --r-gross: 24px;
 
   --schatten: 0 1px 2px rgba(20, 28, 20, .07), 0 4px 14px rgba(20, 28, 20, .07);
   --schatten-hoch: 0 12px 40px rgba(20, 28, 20, .18);
+  /* Der ruhende Schatten einer Karte. Er soll nicht als Schatten
+     auffallen, sondern die Karte vom Papier lösen – ohne ihn trägt der
+     Rahmen die ganze Arbeit, und eine Seite aus lauter umrandeten
+     Kästchen sieht aus wie ein Formular. */
+  --schatten-fein: 0 1px 2px rgba(20, 28, 20, .045);
 
-  --kopf-hoehe: 60px;
+  --kopf-hoehe: 64px;
   --breite: 1420px;
 
   --schrift: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -126,6 +136,7 @@
 
     --schatten: 0 1px 2px rgba(0, 0, 0, .45), 0 4px 16px rgba(0, 0, 0, .4);
     --schatten-hoch: 0 16px 48px rgba(0, 0, 0, .65);
+    --schatten-fein: 0 1px 2px rgba(0, 0, 0, .34);
   }
 }
 
@@ -167,6 +178,7 @@
 
   --schatten: 0 1px 2px rgba(0, 0, 0, .45), 0 4px 16px rgba(0, 0, 0, .4);
   --schatten-hoch: 0 16px 48px rgba(0, 0, 0, .65);
+  --schatten-fein: 0 1px 2px rgba(0, 0, 0, .34);
 
 }
 
@@ -201,11 +213,26 @@ body {
 
 body.hat-dialog { overflow: hidden; }
 
-h1, h2, h3, h4 { margin: 0 0 .4em; line-height: 1.22; font-weight: 650; letter-spacing: -.011em; }
-h1 { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.2rem); }
-h2 { font-size: clamp(1.15rem, 1rem + .6vw, 1.4rem); }
-h3 { font-size: 1.02rem; }
-p { margin: 0 0 .8em; }
+/* Große Grade brauchen enge Laufweite. Ein Zeichensatz wird für Fließtext
+   gezeichnet; in 40 Pixeln stehen dieselben Abstände zu weit, und die
+   Überschrift zerfällt in Buchstaben. Deshalb wird die Laufweite mit dem
+   Grad enger und die Zeilenhöhe kleiner – das ist der Unterschied
+   zwischen „groß gesetzt“ und „gestaltet“.
+
+   text-wrap: balance verteilt die Wörter einer Überschrift gleichmäßig
+   auf die Zeilen, statt die letzte mit einem einzelnen Wort enden zu
+   lassen. Wo der Browser es nicht kann, bricht er wie bisher um. */
+h1, h2, h3, h4 {
+  margin: 0 0 .4em; line-height: 1.2; font-weight: 650;
+  letter-spacing: -.018em; text-wrap: balance;
+}
+h1 { font-size: clamp(1.62rem, 1.14rem + 1.95vw, 2.45rem); line-height: 1.08; letter-spacing: -.032em; font-weight: 700; }
+h2 { font-size: clamp(1.16rem, 1rem + .64vw, 1.45rem); letter-spacing: -.024em; }
+h3 { font-size: 1.02rem; letter-spacing: -.014em; }
+/* pretty verhindert Schusterjungen – eine letzte Zeile mit einem Wort.
+   Anders als balance kostet es nichts, weil es nur das Zeilenende
+   nachbessert. */
+p { margin: 0 0 .8em; text-wrap: pretty; }
 p:last-child { margin-bottom: 0; }
 
 a { color: var(--akzent); text-decoration-color: color-mix(in srgb, var(--akzent) 40%, transparent); text-underline-offset: .18em; }
@@ -279,7 +306,20 @@ svg { display: block; }
 .kopf__nav a:hover { background: var(--flaeche2); color: var(--text); }
 .kopf__nav a.is-aktiv { background: var(--akzent-hell); color: var(--akzent); }
 
-.kopf__tun { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.kopf__tun { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+
+/* Die Werkzeugschale. Eine gemeinsame, sehr helle Fläche fasst die
+   Zeichen zu einer Gruppe zusammen; die runden Knöpfe darin sitzen wie
+   Tasten in einer Leiste statt wie fünf verstreute Marken. */
+.kopf__zeug {
+  display: flex; align-items: center; gap: 1px;
+  padding: 3px; border-radius: 999px; background: var(--flaeche2);
+}
+.kopf__zeug .ikon-btn, .kopf__zeug .sprachknopf { width: 34px; height: 34px; border-radius: 999px; }
+.kopf__zeug .sprachknopf { width: auto; min-width: 34px; }
+.kopf__zeug .ikon-btn:hover, .kopf__zeug .sprachknopf:hover { background: var(--flaeche); color: var(--text); }
+.kopf__zeug .ikon-btn.is-an { background: var(--akzent-hell); }
+
 
 .zaehler {
   min-width: 17px; height: 17px; padding: 0 4px;
@@ -349,12 +389,17 @@ svg { display: block; }
 
 /* ---------------------------- Marken und Chips ---------------------------- */
 
+/* Die farblose Marke ist der Normalfall und soll es auch aussehen: eine
+   Fläche, die man erst bemerkt, wenn man hinsieht. Vorher war sie so
+   dunkel wie eine Schaltfläche und stand damit auf einer Stufe mit den
+   Warnungen daneben. */
 .badge {
   display: inline-flex; align-items: center; gap: .3em;
-  padding: .2em .55em; border-radius: 999px;
+  padding: .22em .6em; border-radius: 999px;
   font-size: .74rem; font-weight: 650; line-height: 1.5;
-  background: var(--flaeche3); color: var(--text-leise);
+  background: var(--flaeche2); color: var(--text-leise);
 }
+.badge--neutral { background: var(--flaeche2); color: var(--text-leise); }
 .badge .ico { width: 13px; height: 13px; }
 .badge--gut { background: var(--gut-hell); color: var(--gut); }
 .badge--warn { background: var(--warn-hell); color: var(--warn); }
@@ -482,8 +527,8 @@ input[type="range"] {
 
 .block {
   background: var(--flaeche); border: 1px solid var(--rand);
-  border-radius: var(--r); padding: clamp(14px, 2.4vw, 24px);
-  margin-bottom: 16px;
+  border-radius: var(--r); padding: clamp(16px, 2.4vw, 26px);
+  margin-bottom: 14px; box-shadow: var(--schatten-fein);
 }
 .block h2 { display: flex; align-items: center; gap: .45em; }
 .block h2 .ico { width: .9em; height: .9em; color: var(--akzent); }
@@ -492,13 +537,24 @@ input[type="range"] {
 .block__kopfzeile { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 /* Verweise in Abschnittsköpfen bekommen eine greifbare Höhe. */
 .block__kopfzeile .link, .block__kopfzeile a { min-height: 24px; display: inline-flex; align-items: center; }
-.block--betont { border-color: var(--akzent); background: linear-gradient(var(--akzent-hell), transparent 130px), var(--flaeche); }
-.block--warn { border-color: var(--warn); background: linear-gradient(var(--warn-hell), transparent 130px), var(--flaeche); }
-.block--schlecht { border-color: var(--schlecht); background: linear-gradient(var(--schlecht-hell), transparent 160px), var(--flaeche); }
+/* Betonte Blöcke ohne Verlauf.
+
+   Der alte Farbschleier lief nach 130 Pixeln aus. Bei einem kurzen Block
+   färbte er fast alles, bei einem langen nur den Kopf – dieselbe Regel
+   sah bei jedem Block anders aus. Und zwei betonte Blöcke untereinander
+   wurden zu einer grünen Wand; auf der Startseite stand genau das.
+
+   Eine flache, sehr helle Tönung sagt dasselbe ruhiger: gleich stark,
+   egal wie hoch der Block ist. Der Rahmen nimmt die Farbe nur zu einem
+   Drittel auf – volle Akzentfarbe als Rahmen schreit, und das tut ein
+   Hinweis nicht. */
+.block--betont { border-color: color-mix(in srgb, var(--akzent) 32%, var(--rand)); background: color-mix(in srgb, var(--akzent-hell) 46%, var(--flaeche)); }
+.block--warn { border-color: color-mix(in srgb, var(--warn) 32%, var(--rand)); background: color-mix(in srgb, var(--warn-hell) 46%, var(--flaeche)); }
+.block--schlecht { border-color: color-mix(in srgb, var(--schlecht) 32%, var(--rand)); background: color-mix(in srgb, var(--schlecht-hell) 46%, var(--flaeche)); }
 /* Ein grünes Warndreieck über einer Warnmeldung liest sich als Entwarnung. */
 .block--warn > h2 > .ico { color: var(--warn); }
 .block--schlecht > h2 > .ico { color: var(--schlecht); }
-.block--info { border-color: var(--info); }
+.block--info { border-color: color-mix(in srgb, var(--info) 32%, var(--rand)); background: color-mix(in srgb, var(--info-hell) 46%, var(--flaeche)); }
 
 .hinweisbox {
   display: flex; gap: .7em; padding: .85em 1em; margin: 12px 0;
@@ -595,6 +651,14 @@ input[type="range"] {
 /* ---------------------------- Inseratskarte ---------------------------- */
 
 .ergebnisse__liste { display: grid; gap: 14px; }
+/* In der reinen Listenansicht steht neben den Filtern über tausend Pixel
+   für eine Karte zur Verfügung, deren Text dreihundert braucht – rechts
+   blieb eine leere Hälfte, die aussah, als fehle dort etwas. Zwei
+   Spalten füllen die Breite und zeigen doppelt so viele Wohnungen, ohne
+   dass eine Karte anders gebaut wäre. */
+@media (min-width: 1250px) {
+  .suche[data-ansicht="liste"] .ergebnisse__liste { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 .ergebnisse__liste--drei { grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); }
 .ergebnisse__liste--vier { grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr)); }
 
@@ -603,7 +667,11 @@ input[type="range"] {
   background: var(--flaeche); border: 1px solid var(--rand); border-radius: var(--r);
   overflow: hidden; transition: border-color var(--tempo), box-shadow var(--tempo), transform var(--tempo);
 }
-.karte-inserat:hover { border-color: var(--rand-stark); box-shadow: var(--schatten); }
+/* Ein Pixel Hub beim Überfahren. Mehr nicht: Eine Karte, die springt,
+   lenkt vom Inhalt ab; eine, die sich gar nicht rührt, wirkt wie ein
+   Bild. Bei „Bewegung reduzieren“ bleibt sie stehen – die Regel dafür
+   steht ganz oben und gilt für alle Übergänge. */
+.karte-inserat:hover { border-color: var(--rand-stark); box-shadow: var(--schatten); transform: translateY(-1px); }
 /* 1fr entspricht minmax(auto, 1fr) – die Spalte darf also nicht unter
    die Mindestbreite ihres Inhalts fallen und sprengt sonst die Karte.
    minmax(0, 1fr) erlaubt das Schrumpfen; der Text bricht dann um. */
@@ -631,7 +699,7 @@ input[type="range"] {
   min-width: 0; overflow-wrap: anywhere; }
 .karte-inserat__ort .ico { width: 14px; height: 14px; }
 .karte-inserat__preis { margin: 0; display: flex; align-items: baseline; gap: .5em; flex-wrap: wrap; }
-.karte-inserat__preis b { font-size: 1.2rem; letter-spacing: -.02em; }
+.karte-inserat__preis b { font-size: 1.2rem; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .karte-inserat__preis span { font-size: .82rem; color: var(--text-leise); }
 .karte-inserat__eck { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 0; padding: 0; font-size: .84rem; color: var(--text-leise); }
 .karte-inserat__eck li:not(:last-child)::after { content: "·"; margin-left: 10px; color: var(--rand-stark); }
@@ -695,9 +763,31 @@ input[type="range"] {
 .filter { background: var(--flaeche); border: 1px solid var(--rand); border-radius: var(--r); padding: 14px; }
 .filter__kopf { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
 .filter__kopf h2 { margin: 0; font-size: 1rem; }
-.filter__gruppe { border: 0; border-top: 1px solid var(--rand); margin: 0; padding: 12px 0 0; }
-.filter__gruppe:first-of-type { border-top: 0; padding-top: 0; }
-.filter__gruppe legend { display: flex; align-items: center; gap: .35em; padding: 0 0 8px; font-size: .84rem; font-weight: 650; color: var(--text); }
+/* Ohne Trennstriche.
+
+   Ein <legend> wird vom Browser in den oberen Rand des <fieldset>
+   gezeichnet, nicht darunter. Der Strich, der die Gruppen trennen
+   sollte, landete deshalb unter der Beschriftung statt über ihr – jede
+   Beschriftung sah aus, als gehöre sie zur Gruppe darüber. Statt den
+   Strich mit Kunstgriffen an die richtige Stelle zu zwingen: weglassen.
+   Ein Abstand trennt genauso, und eine Filterspalte aus zwölf
+   unterstrichenen Wörtern war ohnehin unruhig. */
+/* Der Abstand steht als margin, nicht als padding: Das <legend> sitzt am
+   oberen Rand des <fieldset>, ein padding-top schiebt also nicht die
+   Beschriftung von der Gruppe darüber weg, sondern die Felder von ihrer
+   eigenen Beschriftung. */
+.filter__gruppe { border: 0; margin: 20px 0 0; padding: 0; }
+.filter__gruppe:first-of-type { margin-top: 0; }
+/* Klein und fett, aber in normaler Schreibung. Versalien wurden hier
+   ausprobiert und wieder verworfen: In der Filterspalte stehen ein oder
+   zwei Wörter und das sah gut aus, im Profil stehen ganze Sätze
+   („Wann du zur Besichtigung kannst“) – und ein Satz in Großbuchstaben
+   ist schwer zu lesen und klingt, als würde er gerufen. */
+.filter__gruppe legend {
+  display: flex; align-items: center; gap: .35em; padding: 0 0 9px;
+  font-size: .82rem; font-weight: 700; letter-spacing: -.005em;
+  color: var(--text);
+}
 .filter__gruppe legend .ico { width: 15px; height: 15px; color: var(--akzent); }
 .filter__gruppe legend i { font-style: normal; font-weight: 400; color: var(--text-still); }
 .filter__gruppe > * + * { margin-top: 8px; }
@@ -859,7 +949,11 @@ input[type="range"] {
 .kosten__fein { font-size: .78rem; color: var(--text-still); margin: .2em 0 0; }
 .kosten__jahr { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--rand); }
 
+/* min-width: 0 an den Kindern: Ein Flexkind darf sonst nicht unter die
+   Mindestbreite seines Inhalts schrumpfen und drückt den Kasten auf
+   schmalen Geräten auf. */
 .ampel { display: flex; align-items: center; gap: 14px; padding: .9em 1.1em; border-radius: var(--r-klein); background: var(--flaeche2); }
+.ampel > * { min-width: 0; }
 .ampel__zahl { font-size: 1.7rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
 .ampel p { margin: 0; font-size: .86rem; color: var(--text-leise); }
 .ampel--gut { background: var(--gut-hell); } .ampel--gut .ampel__zahl { color: var(--gut); }
@@ -981,15 +1075,31 @@ input[type="range"] {
   transition: border-color var(--tempo), box-shadow var(--tempo);
 }
 .grosseSuche:hover { border-color: var(--akzent); box-shadow: var(--schatten); }
-.grosseSuche span { flex: 1; }
+/* Auf schmalen Geräten braucht der Satz zwei Zeilen. Abschneiden wäre
+   die bequemere Lösung und die schlechtere: Wer „Stadt, Viertel oder …“
+   liest, weiß nicht, wonach er suchen kann. Also darf er umbrechen, nur
+   enger – dann sieht die zweite Zeile nach Absicht aus. */
+.grosseSuche span { flex: 1; min-width: 0; line-height: 1.3; }
 .start__schnell { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 
 kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-width: 2px; border-radius: 5px; background: var(--flaeche2); font: inherit; font-size: .74rem; font-family: var(--schrift); color: var(--text-leise); }
 
-.aufgaben { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
-.aufgaben li { display: flex; align-items: center; gap: .8em; padding: .7em .9em; background: var(--flaeche2); border-radius: var(--r-klein); flex-wrap: wrap; }
-.aufgaben li.is-dringend { background: var(--akzent-hell); }
-.aufgaben > li > .ico { color: var(--akzent); flex: none; width: 20px; height: 20px; }
+/* Umriss statt Füllung: In einem betonten Block standen gefüllte Zeilen
+   als dritte Ebene übereinander – Seite, Block, Zeile, jede mit eigener
+   Fläche. Der Umriss trennt genauso deutlich und legt keine Farbe nach.
+   Nur was drängt, bekommt weiterhin Fläche; dadurch heißt Fläche wieder
+   etwas. */
+.aufgaben { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 6px; }
+.aufgaben li { display: flex; align-items: flex-start; gap: .8em; padding: .78em .9em;
+  border: 1px solid var(--rand); border-radius: var(--r-klein); background: var(--flaeche); flex-wrap: wrap; }
+.aufgaben li.is-dringend { border-color: color-mix(in srgb, var(--akzent) 40%, var(--rand));
+  background: color-mix(in srgb, var(--akzent-hell) 52%, var(--flaeche)); }
+/* Das Zeichen steht auf der Höhe der Überschrift, nicht in der Mitte der
+   Zeile: Bricht der Text auf drei Zeilen um – auf dem Telefon der
+   Normalfall –, rutscht ein mittig gesetztes Zeichen neben den
+   Fließtext und zeigt auf nichts. */
+.aufgaben > li > .ico { color: var(--akzent); flex: none; width: 20px; height: 20px; margin-top: .18em; }
+.aufgaben li > .knopf { margin-left: auto; }
 .aufgaben li > div { flex: 1; min-width: 190px; }
 .aufgaben b { display: block; font-size: .93rem; }
 .aufgaben span { font-size: .82rem; color: var(--text-leise); }
@@ -1003,11 +1113,18 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .pipeline__stufe--warn { background: var(--warn-hell); }
 .pipeline__stufe--info { background: var(--info-hell); }
 
-.vorteile { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 14px; margin-top: 12px; }
-.vorteile article { padding: 1em; background: var(--flaeche2); border-radius: var(--r-klein); }
-.vorteile__zeichen { display: grid; place-items: center; width: 34px; height: 34px; border-radius: var(--r-klein); background: var(--akzent-hell); color: var(--akzent); margin-bottom: .5em; }
-.vorteile b { display: block; margin-bottom: .25em; }
+/* Acht graue Kästen in einem weißen Kasten sind ein Kasten zu viel. Was
+   die Spalten trennt, ist jetzt der Abstand und ein Haarstrich über
+   jedem Eintrag – dieselbe Ordnung, ein Drittel der Fläche. */
+.vorteile { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 4px 30px; margin-top: 6px; }
+.vorteile article { padding: 18px 0 4px; border-top: 1px solid var(--rand); }
+.vorteile__zeichen { display: grid; place-items: center; width: 30px; height: 30px; border-radius: var(--r-klein); background: var(--akzent-hell); color: var(--akzent); margin-bottom: .6em; }
+.vorteile__zeichen .ico { width: 16px; height: 16px; }
+.vorteile b { display: block; margin-bottom: .3em; letter-spacing: -.012em; }
 .vorteile p { font-size: .87rem; color: var(--text-leise); }
+/* Zwei Verweise hintereinander liefen ohne Trennung ineinander
+   („in vier Bildern erklärtKetten ansehen“). */
+.vorteile article > .link + .link, .vorteile article > .link + a, .vorteile article > a + .link { margin-left: 1em; }
 
 /* ---------------------------- Merkliste ---------------------------- */
 
@@ -1189,6 +1306,13 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .palette__feld > .ico { color: var(--text-still); }
 .palette__feld input { border: 0; padding: 0; font-size: 1.02rem; background: none; }
 .palette__feld input:focus { box-shadow: none; }
+/* Das Löschkreuz eines Suchfeldes malt der Browser selbst, in seiner
+   eigenen Farbe – ein blauschwarzes X mitten in einer Oberfläche, in der
+   es sonst kein Blau gibt. Es lässt sich nicht einfärben, aber
+   entsättigen: dann ist es ein graues Kreuz und fällt nicht mehr auf. */
+.palette__feld input::-webkit-search-cancel-button {
+  filter: grayscale(1) opacity(.55); cursor: pointer;
+}
 .palette__liste { max-height: 52vh; overflow-y: auto; padding: 6px; }
 .palette__eintrag { display: flex; align-items: center; gap: .7em; width: 100%; padding: .6em .7em; border: 0; border-radius: var(--r-klein); background: none; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
 .palette__eintrag:hover, .palette__eintrag.is-markiert { background: var(--akzent-hell); }
@@ -1205,10 +1329,38 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 
 .unten { display: none; }
 
-.fuss { border-top: 1px solid var(--rand); background: var(--flaeche); padding: 24px clamp(12px, 2vw, 24px) 40px; }
-.fuss > * { max-width: 900px; margin-left: auto; margin-right: auto; }
-.fuss__hinweis { font-size: .82rem; color: var(--text-still); }
-.fuss__links { display: flex; gap: 16px; flex-wrap: wrap; font-size: .85rem; }
+.fuss { border-top: 1px solid var(--rand); background: var(--flaeche); padding: 40px clamp(12px, 2vw, 24px) 44px; }
+/* Dieselbe Breite und dieselbe Kante wie der Inhalt darüber. Vorher waren
+   es 900 statt 1420 Pixel, und die linke Kante sprang am Seitenende um
+   gut zweihundert Pixel nach innen – der einzige Bruch in einer sonst
+   durchgehenden Achse. */
+.fuss > * { max-width: var(--breite); margin-left: auto; margin-right: auto; }
+/* Gleichrangige Spalten, die von selbst umbrechen. Eine feste erste
+   Spalte von 220 Pixeln plus eine Verweisspalte von 150 passte auf einem
+   Telefon nicht mehr nebeneinander und lief 96 Pixel über den rechten
+   Rand – das min() sorgt dafür, dass eine Spalte nie breiter verlangt
+   wird, als der Fußbereich hergibt. */
+.fuss__innen {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 30px 34px; align-items: start;
+}
+.fuss__marke { max-width: 34ch; }
+.fuss__marke .marke { margin-bottom: .6em; }
+.fuss__marke p { font-size: .85rem; color: var(--text-leise); margin: 0; }
+.fuss__spalte { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; font-size: .85rem; }
+.fuss__titel {
+  margin: 0 0 2px; font-size: .72rem; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--text-still);
+}
+.fuss__spalte > a, .fuss__spalte > .link { color: var(--text-leise); text-decoration: none; }
+.fuss__spalte > a:hover, .fuss__spalte > .link:hover { color: var(--akzent); text-decoration: underline; }
+/* Der Hinweis läuft nicht über die volle Breite: Eine Zeile von 1400
+   Pixeln liest niemand zu Ende, und rechts unten sitzt der Hilfeknopf,
+   unter dem das Zeilenende sonst verschwindet. */
+.fuss__hinweis {
+  font-size: .8rem; color: var(--text-still); line-height: 1.6; max-width: 96ch;
+  margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--rand);
+}
 
 /* ---------------------------- Anpassungen für schmale Fenster ---------------------------- */
 
@@ -1224,12 +1376,24 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
    Pixel breit. Bei 1440 lief die rechte Gruppe damit über den Rand. */
 @media (min-width: 901px) and (max-width: 1500px) {
   .kopf__innen { gap: 10px; }
-  .kopf__nav a { padding: .5em .48em; font-size: .855rem; gap: 0; }
+  .kopf__nav a { padding: .5em .38em; font-size: .855rem; gap: 0; }
   .kopf__nav a > .ico { display: none; }
-  .tarifknopf { padding-left: .6em; padding-right: .6em; }
+  /* Über .kopf angesprochen, und das ist kein Zierrat: Die Grundregel
+     für .tarifknopf steht weiter unten in der Datei und trägt dieselbe
+     Spezifität – bei Gleichstand gewinnt die spätere Regel, also stand
+     diese Zeile hier wirkungslos da, seit es sie gibt. Eine Klasse mehr
+     im Pfad dreht das um. */
+  .kopf .tarifknopf { padding-left: .6em; padding-right: .6em; }
+  .kopf__innen { gap: 8px; }
   .kopf__tun { gap: 2px; }
   .kopf__tun .ikon-btn { width: 34px; height: 34px; }
   .sprachknopf { min-width: 30px; padding: 0 .35em; }
+  /* Die Schale gibt in der Enge ihre Polsterung ab. Sie bleibt sichtbar –
+     die Gruppierung ist gerade hier am nützlichsten –, kostet aber
+     neun Pixel weniger. */
+  .kopf__zeug { padding: 2px; gap: 0; }
+  .kopf .tarifknopf { margin-left: 3px; }
+  .kopf .tarifknopf::before { left: -6px; }
 }
 /* Der Schriftzug weicht dem Zeichen, solange die Zeile sonst über den
    Rand liefe. Gemessen, nicht geschätzt: Bei 1024 Pixeln stehen der
@@ -1239,13 +1403,16 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
    es fehlen wieder 27. Ohne den Schriftzug bleiben in beiden Fällen
    dreißig Pixel Luft. Ab 1280 passt alles, dort steht er wieder. */
 @media (min-width: 901px) and (max-width: 1279px) {
-  .marke__text { display: none; }
+  /* Nur in der Kopfzeile. Der Fußbereich hat eine eigene Spalte für die
+     Marke; dort den Namen wegzunehmen hieße, ein Zeichen ohne Erklärung
+     stehen zu lassen. */
+  .kopf .marke__text { display: none; }
 }
 
 /* Ganz schmale Geräte: Der Schriftzug weicht dem Zeichen, die Schaltflächen
    rücken zusammen. Sonst schob sich die rechte Gruppe über den Rand. */
 @media (max-width: 400px) {
-  .marke__text { display: none; }
+  .kopf .marke__text { display: none; }
   /* Und das Zeichen wird kleiner. Es ist breiter als hoch – bei
      320 Pixeln kostet das die zehn Pixel, die der rechten Gruppe
      fehlen. Nachgemessen mit scripts/../darstellung. */
@@ -1253,10 +1420,17 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .kopf__tun { gap: 2px; }
   .kopf__tun .ikon-btn { width: 36px; height: 36px; }
   .sprachknopf { min-width: 32px; height: 36px; padding: 0 .3em; font-size: .72rem; }
+  /* Unter 400 Pixeln fällt die Schale weg: Ihre Fläche braucht Polsterung,
+     und die Polsterung ist genau der Platz, der der rechten Gruppe fehlt.
+     Vier Zeichen nebeneinander gruppieren sich auch ohne sie. */
+  .kopf__zeug { padding: 0; gap: 2px; background: none; }
+  .kopf__zeug .ikon-btn, .kopf__zeug .sprachknopf { height: 36px; }
+  .kopf .tarifknopf { margin-left: 0; padding: .42em .55em; font-size: .78rem; }
+  .kopf .tarifknopf::before { display: none; }
   /* Auf 320 Pixeln passt eine Schaltfläche nicht mehr in die Reihe. Der
      Vergleich weicht: Er ist von jeder Objektseite und aus der
      Schnellsuche erreichbar, die Sprache dagegen nur von hier. */
-  .kopf__tun > a[href="#/vergleich"] { display: none; }
+  .kopf__zeug > a[href="#/vergleich"] { display: none; }
   /* Auf 320 Pixeln passt die rechte Gruppe sonst nicht. Das Konto bleibt
      über Profil, Fußbereich und Schnellsuche erreichbar. */
   body.ist-angemeldet .kopf__tun .nur-angemeldet { display: none; }
@@ -1295,10 +1469,14 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
     padding: 4px 4px calc(4px + env(safe-area-inset-bottom, 0px));
   }
   .unten a {
-    flex: 1; display: grid; place-items: center; gap: 1px; padding: .4em .2em;
+    flex: 1; display: grid; place-items: center; gap: 2px; padding: .45em .2em;
     color: var(--text-still); text-decoration: none; font-size: .66rem; border-radius: var(--r-klein);
+    margin: 0 2px;
   }
   .unten a .ico { width: 21px; height: 21px; }
+  /* Die Fläche des aktiven Punktes bekommt Luft nach außen. Ohne den Rand
+     stieß sie oben und unten an die Leiste und las sich als Block, nicht
+     als Markierung. */
   .unten a.is-aktiv { color: var(--akzent); background: var(--akzent-hell); }
   body { padding-bottom: 58px; }
   body:not(.ist-angemeldet) { padding-bottom: 0; }
@@ -1311,7 +1489,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
   .kosten { grid-template-columns: minmax(0, 1fr); }
   .tafel { grid-template-columns: repeat(6, 78vw); }
   .feld__paar { grid-template-columns: 1fr; }
-  .marke__text { display: none; }
+  .kopf .marke__text { display: none; }
   .blase { max-width: 90%; }
 }
 
@@ -1331,11 +1509,19 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
    ===================================================================== */
 
 .tarifknopf {
+  position: relative; margin-left: 5px;
   display: inline-flex; align-items: center; gap: .3em;
   padding: .4em .75em; border: 1px solid var(--rand-feld); border-radius: 999px;
   color: var(--text-leise); text-decoration: none; font-size: .82rem; font-weight: 600;
   white-space: nowrap;
   transition: border-color var(--tempo), color var(--tempo), background var(--tempo);
+}
+/* Ein Haarstrich zwischen Werkzeugen und Handlungsknöpfen. Ohne ihn läuft
+   die rechte Hälfte der Kopfzeile als eine einzige Reihe durch, und
+   „Inserieren“ steht optisch auf derselben Stufe wie ein Zahnrad. */
+.tarifknopf::before {
+  content: ""; position: absolute; left: -9px; top: 50%; transform: translateY(-50%);
+  width: 1px; height: 22px; background: var(--rand);
 }
 .tarifknopf:hover { border-color: var(--akzent); color: var(--akzent); }
 .tarifknopf.is-plus { background: var(--akzent-hell); border-color: var(--akzent); color: var(--akzent); }
@@ -1418,9 +1604,9 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .werkzeugkachel {
   display: block; padding: 1em; background: var(--flaeche); border: 1px solid var(--rand);
   border-radius: var(--r); text-decoration: none; color: var(--text);
-  transition: border-color var(--tempo), box-shadow var(--tempo);
+  transition: border-color var(--tempo), box-shadow var(--tempo), transform var(--tempo);
 }
-.werkzeugkachel:hover { border-color: var(--akzent); box-shadow: var(--schatten); }
+.werkzeugkachel:hover { border-color: var(--akzent); box-shadow: var(--schatten); transform: translateY(-1px); }
 .werkzeugkachel__zeichen { display: grid; place-items: center; width: 34px; height: 34px; margin-bottom: .5em;
   border-radius: var(--r-klein); background: var(--akzent-hell); color: var(--akzent); }
 .werkzeugkachel b { display: flex; align-items: center; gap: .4em; flex-wrap: wrap; margin-bottom: .25em; }
@@ -1772,9 +1958,6 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .rechtsfrage[open] > summary::before { transform: rotate(90deg); }
 .rechtsfrage p { margin: 0 .9em .9em 2em; font-size: .87rem; line-height: 1.65; color: var(--text-leise); }
 
-.fuss__links--recht { font-size: .82rem; }
-.fuss__links--recht a { color: var(--text-leise); }
-.fuss__links--recht a:hover { color: var(--akzent); }
 
 /* =====================================================================
    Ringtausch als Bild
@@ -1807,10 +1990,29 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
    Gründerplätze
    ===================================================================== */
 
-.gruender { position: relative; margin: 0 0 18px; padding: 20px 22px;
-  border: 1px solid var(--akzent); border-radius: var(--r);
-  background: linear-gradient(140deg, var(--akzent-hell) 0%, var(--flaeche) 70%); }
-.gruender--schmal { margin-bottom: 16px; padding: 16px 18px; }
+/* Der einzige werbende Kasten der Anwendung, und deshalb der einzige mit
+   Tönung. Der schräge Verlauf ist raus: Er ließ die linke obere Ecke
+   grün und die rechte untere weiß, sodass der Text je nach Zeilenlänge
+   auf zwei verschiedenen Untergründen stand. */
+.gruender { position: relative; margin: 0 0 18px; padding: 22px 24px;
+  border: 1px solid color-mix(in srgb, var(--akzent) 38%, var(--rand)); border-radius: var(--r);
+  box-shadow: var(--schatten-fein);
+  background: color-mix(in srgb, var(--akzent-hell) 58%, var(--flaeche)); }
+/* Die schmale Fassung auf der Startseite. Über die volle Breite gesetzt
+   stand der Text links und rechts daneben eine halbe Bildschirmbreite
+   nichts – ein Kasten, der aussieht, als fehle etwas. Zwei Spalten
+   füllen ihn, ohne dass eine Zeile länger wird: links die Aussage,
+   rechts der Weg dorthin. */
+.gruender--schmal { margin-bottom: 16px; padding: 18px 22px; }
+@media (min-width: 780px) {
+  .gruender--schmal { display: flex; align-items: center; gap: 34px; }
+  .gruender--schmal .gruender__text { flex: 1; min-width: 0; }
+  .gruender--schmal .gruender__text > p:last-child { margin-bottom: 0; }
+  .gruender--schmal .werkzeug__weiter {
+    flex: none; flex-direction: column; align-items: stretch;
+    gap: 9px; text-align: center; margin: 0;
+  }
+}
 .gruender.is-abgelaufen, .gruender.is-leer { border-color: var(--rand-stark);
   background: var(--flaeche2); }
 .gruender__marke { display: inline-flex; align-items: center; gap: .35em; margin-bottom: .5em;
@@ -1818,7 +2020,7 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .gruender.is-abgelaufen .gruender__marke, .gruender.is-leer .gruender__marke { color: var(--text-still); }
 .gruender__marke .ico { width: 15px; height: 15px; }
 .gruender h2 { margin: 0 0 .35em; font-size: 1.2rem; line-height: 1.28; letter-spacing: -.015em; }
-.gruender > p { margin: 0 0 .6em; font-size: .91rem; line-height: 1.6; color: var(--text-leise); max-width: 62ch; }
+.gruender > p, .gruender__text > p { margin: 0 0 .6em; font-size: .91rem; line-height: 1.6; color: var(--text-leise); max-width: 62ch; }
 .gruender__balken { height: 8px; margin: .9em 0 .5em; border-radius: 999px;
   background: var(--flaeche3); overflow: hidden; }
 .gruender__balken span { display: block; height: 100%; border-radius: 999px; background: var(--akzent); }
@@ -2036,7 +2238,8 @@ body.ist-angemeldet .nur-angemeldet { display: grid; }
    einen neuen hinzufügte, musste sie kennen. */
 body:not(.ist-angemeldet) .kopf__nav a:not([data-route="suche"]),
 body:not(.ist-angemeldet) .unten,
-body:not(.ist-angemeldet) .kopf__tun > :not(.auch-ohne-konto) { display: none; }
+body:not(.ist-angemeldet) .kopf__tun > :not(.auch-ohne-konto),
+body:not(.ist-angemeldet) .kopf__zeug > :not(.auch-ohne-konto) { display: none; }
 body:not(.ist-angemeldet) .kopf__innen { justify-content: space-between; }
 /* Ein einzelner Punkt, den der automatische Rand in die Mitte schiebt,
    sieht aus wie vergessen. Ohne Anmeldung steht „Suchen“ deshalb dort,
@@ -2282,7 +2485,14 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   font-size: .88rem; line-height: 1.55;
 }
 .bestand > .ico { flex: none; margin-top: .15em; }
-.bestand b:first-child { display: block; margin-bottom: .2em; }
+/* Nur die Zeile ganz oben steht allein – nicht jedes fette Wort im Text.
+
+   Vorher stand hier „.bestand b:first-child“. Textknoten zählen für
+   :first-child nicht mit, also traf die Regel auch das hervorgehobene
+   Wort „Beispiel“ mitten im Satz: Es sprang auf eine eigene Zeile, und
+   der Rest des Satzes begann mit einem Punkt. Der Pfad über das
+   umschließende div trifft nur die Überschrift. */
+.bestand > div > b:first-child { display: block; margin-bottom: .2em; }
 .bestand p { margin: .35em 0 0; }
 .bestand p:first-of-type { margin-top: .2em; }
 /* Der Verweis muss sich vom Warnton abheben, ohne die 4,5:1 zu
@@ -2403,7 +2613,6 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
 
 /* Die Ratgeberzeile im Fuß. Etwas kleiner als die Rechtszeile darüber:
    Sie ist Angebot, nicht Pflicht. */
-.fuss__links--ratgeber { font-size: .82rem; opacity: .9; }
 
 /* =====================================================================
    WG-Gründung
@@ -6730,6 +6939,15 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   });
 
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
+
+  /* Der Fußbereich in Spalten */
+  e({
+    'Rechtliches': 'Legal',
+    'Ratgeber': 'Guides',
+    'In der Anwendung': 'In the app',
+    'Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche – mit einem Profil und einer Bewerbermappe.':
+      'Rentals, flatshares and apartment swaps in one interface – with one profile and one application folder.'
+  });
 
 })(window.TT = window.TT || {});
 
@@ -15993,8 +16211,14 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
   function kartenMarken(l, b) {
     const marken = [];
     const tage = U.daysSince(l.stats.online);
-    if (tage <= 2) marken.push(badge('neu', 'gut'));
-    if (l.kind === 'miete' && l.provision === 0) marken.push(badge('provisionsfrei', 'info'));
+    /* Beide ohne Farbe, und das ist eine Entscheidung über Bedeutung, nicht
+       über Geschmack: Farbe auf einer Karte soll heißen „hier musst du
+       hinsehen“. „Neu“ und „provisionsfrei“ sind gute Nachrichten, aber
+       keine Warnungen – und wenn jede Karte drei bunte Marken trägt,
+       bedeutet Farbe irgendwann gar nichts mehr. Der Wortlaut bleibt, die
+       Angabe geht also nicht verloren. */
+    if (tage <= 2) marken.push(badge('neu', 'neutral'));
+    if (l.kind === 'miete' && l.provision === 0) marken.push(badge('provisionsfrei', 'neutral'));
     /* Die Vertrauensstufe der anbietenden Seite gehört auf die Karte, nicht
        nur auf die Objektseite: Wer sie erst nach dem Klick sieht, hat schon
        Zeit verloren. Unter Stufe 2 wird gewarnt statt geschwiegen. */
@@ -16493,18 +16717,32 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
             ${n.route === 'nachrichten' ? raw('<b class="zaehler" data-zaehler="nachrichten" hidden></b>') : ''}</a>`)}
         </nav>
         <div class="kopf__tun">
-          <button type="button" class="ikon-btn" data-tu="palette" title="Schnellsuche (Strg + K)" aria-label="Schnellsuche">${ico('lupe')}</button>
-          <a class="ikon-btn" href="#/agenten" title="Suchaufträge" aria-label="Suchaufträge">${ico('glocke')}<b class="zaehler" data-zaehler="agenten" hidden></b></a>
-          <a class="ikon-btn" href="#/vergleich" title="Vergleich" aria-label="Vergleich">${ico('waage')}<b class="zaehler" data-zaehler="vergleich" hidden></b></a>
-          <!-- Der Dokumententresor stand bis hierher nur im Fußbereich.
-               Für eine Hauptfunktion ist das der falsche Ort: Wer seine
-               Gehaltsabrechnung freigeben will, sucht sie oben und nicht
-               unter dem Impressum. -->
-          <a class="ikon-btn nur-angemeldet" href="#/tresor" title="Dokumententresor"
-            aria-label="Dokumententresor">${ico('schloss')}</a>
-          <button type="button" class="ikon-btn auch-ohne-konto" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
-            ${ico('sonne', 'nur-hell')}${ico('mond', 'nur-dunkel')}</button>
-          ${sprachknopf()}
+          <!-- Die Werkzeugsymbole stehen in einer eigenen Schale.
+
+               Vorher lagen fünf einzelne Zeichen zwischen der Navigation
+               und den beiden Handlungsknöpfen und wurden als fünf
+               gleichrangige Dinge gelesen – die Kopfzeile wirkte voll,
+               obwohl sie es nicht war. Eine gemeinsame Fläche macht aus
+               den fünf Zeichen eine Gruppe, und eine Gruppe zählt beim
+               Hinsehen als eins.
+
+               Die Schale trägt selbst die Klasse „auch-ohne-konto“, damit sie ohne
+               Anmeldung stehen bleibt; welche Zeichen darin dann sichtbar
+               sind, entscheidet dieselbe Regel eine Ebene tiefer. -->
+          <div class="kopf__zeug auch-ohne-konto">
+            <button type="button" class="ikon-btn auch-ohne-konto" data-tu="palette" title="Schnellsuche (Strg + K)" aria-label="Schnellsuche">${ico('lupe')}</button>
+            <a class="ikon-btn" href="#/agenten" title="Suchaufträge" aria-label="Suchaufträge">${ico('glocke')}<b class="zaehler" data-zaehler="agenten" hidden></b></a>
+            <a class="ikon-btn" href="#/vergleich" title="Vergleich" aria-label="Vergleich">${ico('waage')}<b class="zaehler" data-zaehler="vergleich" hidden></b></a>
+            <!-- Der Dokumententresor stand bis hierher nur im Fußbereich.
+                 Für eine Hauptfunktion ist das der falsche Ort: Wer seine
+                 Gehaltsabrechnung freigeben will, sucht sie oben und nicht
+                 unter dem Impressum. -->
+            <a class="ikon-btn nur-angemeldet" href="#/tresor" title="Dokumententresor"
+              aria-label="Dokumententresor">${ico('schloss')}</a>
+            <button type="button" class="ikon-btn auch-ohne-konto" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
+              ${ico('sonne', 'nur-hell')}${ico('mond', 'nur-dunkel')}</button>
+            ${sprachknopf()}
+          </div>
           <a class="tarifknopf ${TT.plan.istPlus() ? 'is-plus' : ''}" href="#/plus"
             title="${TT.plan.istPlus() ? 'TrimmoTrade Plus aktiv' : 'Tarife ansehen'}">
             ${TT.plan.istPlus() ? raw(ico('plus5').__raw + '<span>Plus</span>')
@@ -16524,30 +16762,52 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         ${n.route === 'merkliste' ? raw('<b class="zaehler zaehler--eck" data-zaehler="merkliste" hidden></b>') : ''}
         ${n.route === 'nachrichten' ? raw('<b class="zaehler zaehler--eck" data-zaehler="nachrichten" hidden></b>') : ''}</a>`)}
     </nav>
+    <!-- Der Fußbereich in Spalten.
+
+         Vorher standen zweiundzwanzig Verweise in drei umbrechenden
+         Reihen untereinander – eine Wand aus Wörtern, in der man das
+         Impressum genauso lange sucht wie den Umzugsplan. Und er war
+         auf 900 Pixel begrenzt, während der Inhalt darüber 1420 breit
+         ist; die linke Kante sprang also am Seitenende nach innen.
+
+         Drei benannte Spalten sagen in einem Blick, welche Art von
+         Verweis wo steht. Jede ist ein eigener nav-Bereich, damit ein
+         Screenreader sie einzeln anspringen kann. -->
     <footer class="fuss">
-      <p><b>TrimmoTrade</b> führt Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche zusammen.</p>
+      <div class="fuss__innen">
+        <div class="fuss__marke">
+          <a class="marke" href="#/${gast() ? 'suche' : 'start'}" tabindex="-1" aria-hidden="true">
+            <span class="marke__zeichen"></span><span class="marke__text">TrimmoTrade</span>
+          </a>
+          <p>Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche – mit einem Profil
+            und einer Bewerbermappe.</p>
+        </div>
+        <nav class="fuss__spalte" aria-label="Rechtliches">
+          <h2 class="fuss__titel">Rechtliches</h2>
+          <a href="#/recht/impressum">Impressum</a>
+          <a href="#/recht/datenschutz">Datenschutz</a>
+          <a href="#/recht/agb">AGB</a>
+          <a href="#/recht/widerruf">Widerruf</a>
+          <a href="#/recht/kuendigen">Verträge kündigen</a>
+          <a href="#/recht/melden">Inhalt melden</a>
+          <a href="#/recht/barrierefreiheit">Barrierefreiheit</a>
+        </nav>
+        ${RATGEBER_DA ? h`<nav class="fuss__spalte" aria-label="Ratgeber">
+          <h2 class="fuss__titel">Ratgeber</h2>
+          ${RATGEBER.map((r) => h`<a href="/${r[0]}">${r[1]}</a>`)}
+        </nav>` : ''}
+        <nav class="fuss__spalte" aria-label="In der Anwendung">
+          <h2 class="fuss__titel">In der Anwendung</h2>
+          <button type="button" class="link" data-tu="hilfe-oeffnen">Hilfe</button>
+          <a class="nur-innen" href="#/konto">Konto</a>
+          <a class="nur-innen" href="#/plus">Tarife</a>
+          <a class="nur-innen" href="#/werkzeuge">Werkzeuge</a>
+          <a class="nur-innen" href="#/tresor">Dokumententresor</a>
+          <button type="button" class="link" data-tu="hilfe">Tastaturbefehle</button>
+          <button type="button" class="link" data-tu="daten">Meine Daten</button>
+        </nav>
+      </div>
       <p class="fuss__hinweis">${fussHinweis()}</p>
-      <p class="fuss__links fuss__links--recht">
-        <a href="#/recht/impressum">Impressum</a>
-        <a href="#/recht/datenschutz">Datenschutz</a>
-        <a href="#/recht/agb">AGB</a>
-        <a href="#/recht/widerruf">Widerruf</a>
-        <a href="#/recht/kuendigen">Verträge kündigen</a>
-        <a href="#/recht/melden">Inhalt melden</a>
-        <a href="#/recht/barrierefreiheit">Barrierefreiheit</a>
-      </p>
-      ${RATGEBER_DA ? h`<p class="fuss__links fuss__links--ratgeber">
-        ${RATGEBER.map((r) => h`<a href="/${r[0]}">${r[1]}</a>`)}
-      </p>` : ''}
-      <p class="fuss__links">
-        <button type="button" class="link" data-tu="hilfe-oeffnen">Hilfe</button>
-        <a class="nur-innen" href="#/konto">Konto</a>
-        <a class="nur-innen" href="#/plus">Tarife</a>
-        <a class="nur-innen" href="#/werkzeuge">Werkzeuge</a>
-        <a class="nur-innen" href="#/tresor">Dokumententresor</a>
-        <button type="button" class="link" data-tu="hilfe">Tastaturbefehle</button>
-        <button type="button" class="link" data-tu="daten">Meine Daten</button>
-      </p>
     </footer>
     <div id="hilfe" class="hilfe"></div>
     <div id="dialog" class="dialog" hidden></div>
@@ -17375,7 +17635,11 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     const passend = A.sortieren(
       A.filtern(TT.data.listings, Object.assign({}, s.filter, { sort: 'neu' }), s.profil),
       'neu', s.profil
-    ).slice(0, 6);
+    /* Acht statt sechs. Auf einem breiten Bildschirm stehen vier Karten
+       nebeneinander; sechs ergaben eine volle und eine halbe Reihe. Acht
+       füllen zwei Reihen – und zeigen nebenbei ein Drittel mehr vom
+       Bestand, was auf einer Startseite selten schadet. */
+    ).slice(0, 8);
     return passend;
   }
 
@@ -17408,16 +17672,32 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
         </header>
 
         ${!P.gruender().nummer && P.gruenderFrei() ? h`<section class="gruender gruender--schmal">
-          <div class="gruender__marke">${ico('stern')}Gründerplätze</div>
-          <h2>Die ersten ${U.num(P.GRUENDER.plaetze)} bekommen Plus ein Jahr geschenkt</h2>
-          <p>${U.t('Noch')} <b>${U.num(P.gruenderFrei())}</b> ${U.t(U.plural(P.gruenderFrei(), 'Platz frei.', 'Plätze frei.'))}
-            ${U.t('Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.')}</p>
+          <div class="gruender__text">
+            <div class="gruender__marke">${ico('stern')}Gründerplätze</div>
+            <h2>Die ersten ${U.num(P.GRUENDER.plaetze)} bekommen Plus ein Jahr geschenkt</h2>
+            <p>${U.t('Noch')} <b>${U.num(P.gruenderFrei())}</b> ${U.t(U.plural(P.gruenderFrei(), 'Platz frei.', 'Plätze frei.'))}
+              ${U.t('Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.')}</p>
+          </div>
           <p class="werkzeug__weiter">
             <a class="knopf" href="#/plus">${ico('stern')}Platz sichern</a>
             <a class="link" href="#/plus">was Plus enthält</a></p>
         </section>` : ''}
 
-        ${tun.length ? h`<section class="block block--betont">
+        <!-- Ein schlichter Block, kein betonter. „Als Nächstes“ ist eine
+             Aufgabenliste und keine Werbung; direkt unter dem getönten
+             Gründerkasten stand vorher ein zweiter getönter Kasten, und
+             zwei grüne Flächen übereinander lesen sich als eine große
+             grüne Fläche. Die Dringlichkeit sitzt jetzt an der einzelnen
+             Zeile, wo sie hingehört.
+
+             Als Kommentar in der Vorlage und nicht als eingesetzter
+             Ausdruck geschrieben, und das mit Grund:
+             Die Platzhalter {0}, {1} … in den Übersetzungen zählen die
+             Einsetzungen der ganzen Vorlage durch. Ein zusätzlicher
+             Ausdruck verschiebt jeden Schlüssel dahinter um eins – und
+             genau das hat den Satz über den Ringtausch aus der
+             englischen Fassung fallen lassen. -->
+        ${tun.length ? h`<section class="block">
           <h2>${ico('check')}Als Nächstes</h2>
           <ul class="aufgaben">
             ${tun.map((a) => h`<li class="${a.dringend ? 'is-dringend' : ''}">

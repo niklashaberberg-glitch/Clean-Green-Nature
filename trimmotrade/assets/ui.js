@@ -180,8 +180,14 @@
   function kartenMarken(l, b) {
     const marken = [];
     const tage = U.daysSince(l.stats.online);
-    if (tage <= 2) marken.push(badge('neu', 'gut'));
-    if (l.kind === 'miete' && l.provision === 0) marken.push(badge('provisionsfrei', 'info'));
+    /* Beide ohne Farbe, und das ist eine Entscheidung über Bedeutung, nicht
+       über Geschmack: Farbe auf einer Karte soll heißen „hier musst du
+       hinsehen“. „Neu“ und „provisionsfrei“ sind gute Nachrichten, aber
+       keine Warnungen – und wenn jede Karte drei bunte Marken trägt,
+       bedeutet Farbe irgendwann gar nichts mehr. Der Wortlaut bleibt, die
+       Angabe geht also nicht verloren. */
+    if (tage <= 2) marken.push(badge('neu', 'neutral'));
+    if (l.kind === 'miete' && l.provision === 0) marken.push(badge('provisionsfrei', 'neutral'));
     /* Die Vertrauensstufe der anbietenden Seite gehört auf die Karte, nicht
        nur auf die Objektseite: Wer sie erst nach dem Klick sieht, hat schon
        Zeit verloren. Unter Stufe 2 wird gewarnt statt geschwiegen. */
@@ -680,18 +686,32 @@
             ${n.route === 'nachrichten' ? raw('<b class="zaehler" data-zaehler="nachrichten" hidden></b>') : ''}</a>`)}
         </nav>
         <div class="kopf__tun">
-          <button type="button" class="ikon-btn" data-tu="palette" title="Schnellsuche (Strg + K)" aria-label="Schnellsuche">${ico('lupe')}</button>
-          <a class="ikon-btn" href="#/agenten" title="Suchaufträge" aria-label="Suchaufträge">${ico('glocke')}<b class="zaehler" data-zaehler="agenten" hidden></b></a>
-          <a class="ikon-btn" href="#/vergleich" title="Vergleich" aria-label="Vergleich">${ico('waage')}<b class="zaehler" data-zaehler="vergleich" hidden></b></a>
-          <!-- Der Dokumententresor stand bis hierher nur im Fußbereich.
-               Für eine Hauptfunktion ist das der falsche Ort: Wer seine
-               Gehaltsabrechnung freigeben will, sucht sie oben und nicht
-               unter dem Impressum. -->
-          <a class="ikon-btn nur-angemeldet" href="#/tresor" title="Dokumententresor"
-            aria-label="Dokumententresor">${ico('schloss')}</a>
-          <button type="button" class="ikon-btn auch-ohne-konto" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
-            ${ico('sonne', 'nur-hell')}${ico('mond', 'nur-dunkel')}</button>
-          ${sprachknopf()}
+          <!-- Die Werkzeugsymbole stehen in einer eigenen Schale.
+
+               Vorher lagen fünf einzelne Zeichen zwischen der Navigation
+               und den beiden Handlungsknöpfen und wurden als fünf
+               gleichrangige Dinge gelesen – die Kopfzeile wirkte voll,
+               obwohl sie es nicht war. Eine gemeinsame Fläche macht aus
+               den fünf Zeichen eine Gruppe, und eine Gruppe zählt beim
+               Hinsehen als eins.
+
+               Die Schale trägt selbst die Klasse „auch-ohne-konto“, damit sie ohne
+               Anmeldung stehen bleibt; welche Zeichen darin dann sichtbar
+               sind, entscheidet dieselbe Regel eine Ebene tiefer. -->
+          <div class="kopf__zeug auch-ohne-konto">
+            <button type="button" class="ikon-btn auch-ohne-konto" data-tu="palette" title="Schnellsuche (Strg + K)" aria-label="Schnellsuche">${ico('lupe')}</button>
+            <a class="ikon-btn" href="#/agenten" title="Suchaufträge" aria-label="Suchaufträge">${ico('glocke')}<b class="zaehler" data-zaehler="agenten" hidden></b></a>
+            <a class="ikon-btn" href="#/vergleich" title="Vergleich" aria-label="Vergleich">${ico('waage')}<b class="zaehler" data-zaehler="vergleich" hidden></b></a>
+            <!-- Der Dokumententresor stand bis hierher nur im Fußbereich.
+                 Für eine Hauptfunktion ist das der falsche Ort: Wer seine
+                 Gehaltsabrechnung freigeben will, sucht sie oben und nicht
+                 unter dem Impressum. -->
+            <a class="ikon-btn nur-angemeldet" href="#/tresor" title="Dokumententresor"
+              aria-label="Dokumententresor">${ico('schloss')}</a>
+            <button type="button" class="ikon-btn auch-ohne-konto" data-tu="theme" title="Hell oder dunkel" aria-label="Darstellung wechseln">
+              ${ico('sonne', 'nur-hell')}${ico('mond', 'nur-dunkel')}</button>
+            ${sprachknopf()}
+          </div>
           <a class="tarifknopf ${TT.plan.istPlus() ? 'is-plus' : ''}" href="#/plus"
             title="${TT.plan.istPlus() ? 'TrimmoTrade Plus aktiv' : 'Tarife ansehen'}">
             ${TT.plan.istPlus() ? raw(ico('plus5').__raw + '<span>Plus</span>')
@@ -711,30 +731,52 @@
         ${n.route === 'merkliste' ? raw('<b class="zaehler zaehler--eck" data-zaehler="merkliste" hidden></b>') : ''}
         ${n.route === 'nachrichten' ? raw('<b class="zaehler zaehler--eck" data-zaehler="nachrichten" hidden></b>') : ''}</a>`)}
     </nav>
+    <!-- Der Fußbereich in Spalten.
+
+         Vorher standen zweiundzwanzig Verweise in drei umbrechenden
+         Reihen untereinander – eine Wand aus Wörtern, in der man das
+         Impressum genauso lange sucht wie den Umzugsplan. Und er war
+         auf 900 Pixel begrenzt, während der Inhalt darüber 1420 breit
+         ist; die linke Kante sprang also am Seitenende nach innen.
+
+         Drei benannte Spalten sagen in einem Blick, welche Art von
+         Verweis wo steht. Jede ist ein eigener nav-Bereich, damit ein
+         Screenreader sie einzeln anspringen kann. -->
     <footer class="fuss">
-      <p><b>TrimmoTrade</b> führt Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche zusammen.</p>
+      <div class="fuss__innen">
+        <div class="fuss__marke">
+          <a class="marke" href="#/${gast() ? 'suche' : 'start'}" tabindex="-1" aria-hidden="true">
+            <span class="marke__zeichen"></span><span class="marke__text">TrimmoTrade</span>
+          </a>
+          <p>Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche – mit einem Profil
+            und einer Bewerbermappe.</p>
+        </div>
+        <nav class="fuss__spalte" aria-label="Rechtliches">
+          <h2 class="fuss__titel">Rechtliches</h2>
+          <a href="#/recht/impressum">Impressum</a>
+          <a href="#/recht/datenschutz">Datenschutz</a>
+          <a href="#/recht/agb">AGB</a>
+          <a href="#/recht/widerruf">Widerruf</a>
+          <a href="#/recht/kuendigen">Verträge kündigen</a>
+          <a href="#/recht/melden">Inhalt melden</a>
+          <a href="#/recht/barrierefreiheit">Barrierefreiheit</a>
+        </nav>
+        ${RATGEBER_DA ? h`<nav class="fuss__spalte" aria-label="Ratgeber">
+          <h2 class="fuss__titel">Ratgeber</h2>
+          ${RATGEBER.map((r) => h`<a href="/${r[0]}">${r[1]}</a>`)}
+        </nav>` : ''}
+        <nav class="fuss__spalte" aria-label="In der Anwendung">
+          <h2 class="fuss__titel">In der Anwendung</h2>
+          <button type="button" class="link" data-tu="hilfe-oeffnen">Hilfe</button>
+          <a class="nur-innen" href="#/konto">Konto</a>
+          <a class="nur-innen" href="#/plus">Tarife</a>
+          <a class="nur-innen" href="#/werkzeuge">Werkzeuge</a>
+          <a class="nur-innen" href="#/tresor">Dokumententresor</a>
+          <button type="button" class="link" data-tu="hilfe">Tastaturbefehle</button>
+          <button type="button" class="link" data-tu="daten">Meine Daten</button>
+        </nav>
+      </div>
       <p class="fuss__hinweis">${fussHinweis()}</p>
-      <p class="fuss__links fuss__links--recht">
-        <a href="#/recht/impressum">Impressum</a>
-        <a href="#/recht/datenschutz">Datenschutz</a>
-        <a href="#/recht/agb">AGB</a>
-        <a href="#/recht/widerruf">Widerruf</a>
-        <a href="#/recht/kuendigen">Verträge kündigen</a>
-        <a href="#/recht/melden">Inhalt melden</a>
-        <a href="#/recht/barrierefreiheit">Barrierefreiheit</a>
-      </p>
-      ${RATGEBER_DA ? h`<p class="fuss__links fuss__links--ratgeber">
-        ${RATGEBER.map((r) => h`<a href="/${r[0]}">${r[1]}</a>`)}
-      </p>` : ''}
-      <p class="fuss__links">
-        <button type="button" class="link" data-tu="hilfe-oeffnen">Hilfe</button>
-        <a class="nur-innen" href="#/konto">Konto</a>
-        <a class="nur-innen" href="#/plus">Tarife</a>
-        <a class="nur-innen" href="#/werkzeuge">Werkzeuge</a>
-        <a class="nur-innen" href="#/tresor">Dokumententresor</a>
-        <button type="button" class="link" data-tu="hilfe">Tastaturbefehle</button>
-        <button type="button" class="link" data-tu="daten">Meine Daten</button>
-      </p>
     </footer>
     <div id="hilfe" class="hilfe"></div>
     <div id="dialog" class="dialog" hidden></div>

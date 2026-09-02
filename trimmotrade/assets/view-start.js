@@ -116,7 +116,11 @@
     const passend = A.sortieren(
       A.filtern(TT.data.listings, Object.assign({}, s.filter, { sort: 'neu' }), s.profil),
       'neu', s.profil
-    ).slice(0, 6);
+    /* Acht statt sechs. Auf einem breiten Bildschirm stehen vier Karten
+       nebeneinander; sechs ergaben eine volle und eine halbe Reihe. Acht
+       füllen zwei Reihen – und zeigen nebenbei ein Drittel mehr vom
+       Bestand, was auf einer Startseite selten schadet. */
+    ).slice(0, 8);
     return passend;
   }
 
@@ -149,16 +153,32 @@
         </header>
 
         ${!P.gruender().nummer && P.gruenderFrei() ? h`<section class="gruender gruender--schmal">
-          <div class="gruender__marke">${ico('stern')}Gründerplätze</div>
-          <h2>Die ersten ${U.num(P.GRUENDER.plaetze)} bekommen Plus ein Jahr geschenkt</h2>
-          <p>${U.t('Noch')} <b>${U.num(P.gruenderFrei())}</b> ${U.t(U.plural(P.gruenderFrei(), 'Platz frei.', 'Plätze frei.'))}
-            ${U.t('Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.')}</p>
+          <div class="gruender__text">
+            <div class="gruender__marke">${ico('stern')}Gründerplätze</div>
+            <h2>Die ersten ${U.num(P.GRUENDER.plaetze)} bekommen Plus ein Jahr geschenkt</h2>
+            <p>${U.t('Noch')} <b>${U.num(P.gruenderFrei())}</b> ${U.t(U.plural(P.gruenderFrei(), 'Platz frei.', 'Plätze frei.'))}
+              ${U.t('Kein Abo, keine Zahlungsdaten, keine Verlängerung – nach zwölf Monaten endet der Platz von selbst.')}</p>
+          </div>
           <p class="werkzeug__weiter">
             <a class="knopf" href="#/plus">${ico('stern')}Platz sichern</a>
             <a class="link" href="#/plus">was Plus enthält</a></p>
         </section>` : ''}
 
-        ${tun.length ? h`<section class="block block--betont">
+        <!-- Ein schlichter Block, kein betonter. „Als Nächstes“ ist eine
+             Aufgabenliste und keine Werbung; direkt unter dem getönten
+             Gründerkasten stand vorher ein zweiter getönter Kasten, und
+             zwei grüne Flächen übereinander lesen sich als eine große
+             grüne Fläche. Die Dringlichkeit sitzt jetzt an der einzelnen
+             Zeile, wo sie hingehört.
+
+             Als Kommentar in der Vorlage und nicht als eingesetzter
+             Ausdruck geschrieben, und das mit Grund:
+             Die Platzhalter {0}, {1} … in den Übersetzungen zählen die
+             Einsetzungen der ganzen Vorlage durch. Ein zusätzlicher
+             Ausdruck verschiebt jeden Schlüssel dahinter um eins – und
+             genau das hat den Satz über den Ringtausch aus der
+             englischen Fassung fallen lassen. -->
+        ${tun.length ? h`<section class="block">
           <h2>${ico('check')}Als Nächstes</h2>
           <ul class="aufgaben">
             ${tun.map((a) => h`<li class="${a.dringend ? 'is-dringend' : ''}">

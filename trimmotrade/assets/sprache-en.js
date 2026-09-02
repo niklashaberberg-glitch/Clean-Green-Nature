@@ -4056,4 +4056,13 @@
 
   e({ 'TrimmoTrade Plus aktiv': 'TrimmoTrade Plus active' });
 
+  /* Der Fußbereich in Spalten */
+  e({
+    'Rechtliches': 'Legal',
+    'Ratgeber': 'Guides',
+    'In der Anwendung': 'In the app',
+    'Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche – mit einem Profil und einer Bewerbermappe.':
+      'Rentals, flatshares and apartment swaps in one interface – with one profile and one application folder.'
+  });
+
 })(window.TT = window.TT || {});

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pflichtbuch – Schlüssel erzeugen</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root{color-scheme:light dark}
+body{font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0;
+     background:#f4f7f8;color:#0d1729;padding:28px 18px 70px}
+@media (prefers-color-scheme:dark){body{background:#0b1220;color:#eaf1f7}}
+main{max-width:760px;margin-inline:auto}
+h1{font-size:1.45rem;margin:0 0 6px}
+h2{font-size:1.05rem;margin:0 0 12px}
+.sub{color:#5e7082;margin:0 0 26px}
+@media (prefers-color-scheme:dark){.sub{color:#8496a8}}
+section{background:#fff;border:1px solid #dce5ea;border-radius:18px;padding:20px;margin-bottom:18px}
+@media (prefers-color-scheme:dark){section{background:#121c2c;border-color:#24334a}}
+label{display:block;font-size:.85rem;font-weight:600;margin:12px 0 5px}
+input,textarea{width:100%;box-sizing:border-box;padding:11px 13px;border-radius:12px;
+  border:1px solid #c2d1d9;background:#fff;color:inherit;font:inherit}
+@media (prefers-color-scheme:dark){input,textarea{background:#0f1826;border-color:#3a4c66}}
+textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;min-height:104px;resize:vertical}
+button{margin-top:16px;padding:13px 22px;border:none;border-radius:12px;background:#0d7c72;color:#fff;
+  font:inherit;font-weight:640;cursor:pointer}
+button:hover{background:#0a655d}
+button.zweit{background:transparent;border:1px solid #c2d1d9;color:inherit}
+.warn{background:#fff5e2;border:1px solid #f0dcae;color:#6b4e10;border-radius:12px;padding:13px 15px;font-size:.9rem}
+@media (prefers-color-scheme:dark){.warn{background:#2a2313;border-color:#574722;color:#f2d79a}}
+.zeile{display:flex;gap:12px;flex-wrap:wrap}
+.zeile>div{flex:1 1 180px}
+code{background:#e7eef1;padding:1px 5px;border-radius:5px;font-size:.88em}
+@media (prefers-color-scheme:dark){code{background:#0f1826}}
+ol{padding-left:20px}li{margin-bottom:7px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Pflichtbuch – Schlüssel erzeugen</h1>
+  <p class="sub">Läuft vollständig im Browser. Nichts wird gesendet oder gespeichert.</p>
+
+  <div class="warn" style="margin-bottom:18px">
+    <strong>Diese Datei gehört nicht auf den Webserver.</strong> Sie ist nur für Sie bestimmt.
+    Wer den privaten Schlüssel besitzt, kann beliebig viele Freischaltungen erzeugen.
+  </div>
+
+  <section>
+    <h2>Schritt 1 – Schlüsselpaar (einmalig)</h2>
+    <p class="sub" style="margin:0">Nur ein einziges Mal ausführen. Danach den privaten Schlüssel
+       sicher verwahren – bei Verlust werden alle bereits ausgegebenen Schlüssel ungültig,
+       sobald Sie ein neues Paar einsetzen.</p>
+    <button type="button" id="btn-paar">Schlüsselpaar erzeugen</button>
+    <div id="paar-aus" hidden>
+      <label for="pub">Öffentlicher Schlüssel – diese Zeile in <code>app/index.html</code> einsetzen</label>
+      <textarea id="pub" readonly></textarea>
+      <label for="priv">Privater Schlüssel – sicher verwahren, niemals weitergeben</label>
+      <textarea id="priv" readonly></textarea>
+      <button type="button" class="zweit" id="btn-priv-sichern">Privaten Schlüssel als Datei sichern</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Schritt 2 – Schlüssel für einen Kunden ausstellen</h2>
+    <label for="priv-ein">Privater Schlüssel (JSON aus Schritt 1)</label>
+    <textarea id="priv-ein" placeholder='{"kty":"EC","crv":"P-256","d":"…","x":"…","y":"…"}'></textarea>
+    <label for="name">Lizenznehmer (erscheint in der App)</label>
+    <input id="name" type="text" placeholder="Hausmeisterservice Schneider GmbH">
+    <div class="zeile">
+      <div>
+        <label for="objekte">Objekte (0 = unbegrenzt)</label>
+        <input id="objekte" type="number" min="0" step="1" value="25">
+      </div>
+      <div>
+        <label for="bis">Gültig bis (leer = unbefristet)</label>
+        <input id="bis" type="date">
+      </div>
+    </div>
+    <button type="button" id="btn-key">Schlüssel ausstellen</button>
+    <div id="key-aus" hidden>
+      <label for="key">Schlüssel – an den Kunden weitergeben</label>
+      <textarea id="key" readonly style="min-height:130px"></textarea>
+      <button type="button" class="zweit" id="btn-kopieren">In die Zwischenablage</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Einbau in die App</h2>
+    <ol>
+      <li>In <code>app/index.html</code> die Zeile <code>const LIZENZ_PUBKEY = null;</code> suchen.</li>
+      <li><code>null</code> durch den öffentlichen Schlüssel aus Schritt 1 ersetzen.</li>
+      <li>Datei hochladen. Die Prüfung läuft danach auf dem Gerät des Kunden – ohne Internet.</li>
+    </ol>
+    <p class="sub" style="margin:0">Ein Kunde kann seinen Schlüssel weitergeben; die Prüfung erfolgt
+       offline und kennt keine Gerätebindung. Für den Verkauf an Firmen ist das üblich und
+       ausreichend – gegen entschlossenes Umgehen schützt keine rein lokale App.</p>
+  </section>
+</main>
+
+<script>
+"use strict";
+const $ = (s) => document.querySelector(s);
+const b64url = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)))
+  .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+$('#btn-paar').addEventListener('click', async () => {
+  const paar = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+  const pub = await crypto.subtle.exportKey('jwk', paar.publicKey);
+  const priv = await crypto.subtle.exportKey('jwk', paar.privateKey);
+  delete pub.key_ops; delete pub.ext;
+  $('#pub').value = 'const LIZENZ_PUBKEY = ' + JSON.stringify(pub) + ';';
+  $('#priv').value = JSON.stringify(priv);
+  $('#priv-ein').value = JSON.stringify(priv);
+  $('#paar-aus').hidden = false;
+});
+
+$('#btn-priv-sichern').addEventListener('click', () => {
+  const b = new Blob([$('#priv').value], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b);
+  a.download = 'pflichtbuch-privater-schluessel.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+});
+
+$('#btn-key').addEventListener('click', async () => {
+  try {
+    const jwk = JSON.parse($('#priv-ein').value.trim());
+    const name = $('#name').value.trim();
+    if (!name) { alert('Bitte einen Lizenznehmer eintragen.'); return; }
+    const key = await crypto.subtle.importKey('jwk', jwk, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign']);
+    const nutz = {
+      k: 'pflichtbuch',
+      n: name,
+      o: Number($('#objekte').value) || 0,
+      b: $('#bis').value || null,
+      id: crypto.randomUUID().slice(0, 8)
+    };
+    const daten = new TextEncoder().encode(JSON.stringify(nutz));
+    const sig = await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, key, daten);
+    $('#key').value = b64url(daten) + '.' + b64url(sig);
+    $('#key-aus').hidden = false;
+  } catch (e) {
+    alert('Der private Schlüssel liess sich nicht lesen: ' + e.message);
+  }
+});
+
+$('#btn-kopieren').addEventListener('click', async () => {
+  await navigator.clipboard.writeText($('#key').value);
+  $('#btn-kopieren').textContent = 'Kopiert';
+  setTimeout(() => ($('#btn-kopieren').textContent = 'In die Zwischenablage'), 1800);
+});
+</script>
+</body>
+</html>

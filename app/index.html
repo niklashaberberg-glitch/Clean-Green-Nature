@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pflichtbuch – Streuprotokoll &amp; Verkehrssicherung</title>
+<meta name="description" content="Räum- und Streupflicht, Sichtkontrollen und Begehungen in 30 Sekunden manipulationssicher dokumentieren. Offline, ohne Cloud, mit prüfbarer Hash-Kette.">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0d7c72" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pflichtbuch">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+/* ============================================================
+   Pflichtbuch – vollstaendiges Design-System, keine Fremdquellen
+   ============================================================ */
+:root{
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --bg:#f4f7f8; --surface:#ffffff; --surface-2:#eef3f5; --sunken:#e7eef1;
+  --border:#dce5ea; --border-strong:#c2d1d9;
+  --text:#0d1729; --muted:#4a5a6b; --soft:#63747f;
+
+  --brand:#0d7c72; --brand-hover:#0a655d; --brand-soft:#e7f8f5; --brand-line:#b6e6de;
+  --on-brand:#ffffff;
+  --ok:#0d7c72; --ok-soft:#e7f8f5;
+  --warn:#8a5a00; --warn-soft:#fff5e2; --warn-line:#f0dcae;
+  --danger:#b8123a; --danger-soft:#fdeaee; --danger-line:#f4c2cd;
+  --ring:#14b8a6;
+
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-full:999px;
+  --shadow:0 1px 2px rgba(13,23,41,.06), 0 8px 24px rgba(13,23,41,.07);
+  --shadow-lg:0 12px 40px rgba(13,23,41,.18);
+  --tap:52px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b1220; --surface:#121c2c; --surface-2:#162234; --sunken:#0f1826;
+    --border:#24334a; --border-strong:#3a4c66;
+    --text:#eaf1f7; --muted:#a8b8c8; --soft:#8496a8;
+    --brand:#2fbfae; --brand-hover:#4fd8c6; --brand-soft:#0f2f2c; --brand-line:#1d4d47;
+    --on-brand:#04211e;
+    --ok:#4fd8c6; --ok-soft:#0f2f2c;
+    --warn:#f2d79a; --warn-soft:#2a2313; --warn-line:#574722;
+    --danger:#fb7185; --danger-soft:#2c1520; --danger-line:#5d2436;
+    --ring:#2dd4bf;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    --shadow-lg:0 12px 40px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b1220; --surface:#121c2c; --surface-2:#162234; --sunken:#0f1826;
+  --border:#24334a; --border-strong:#3a4c66;
+  --text:#eaf1f7; --muted:#a8b8c8; --soft:#8496a8;
+  --brand:#2fbfae; --brand-hover:#4fd8c6; --brand-soft:#0f2f2c; --brand-line:#1d4d47;
+  --on-brand:#04211e;
+  --ok:#4fd8c6; --ok-soft:#0f2f2c;
+  --warn:#f2d79a; --warn-soft:#2a2313; --warn-line:#574722;
+  --danger:#fb7185; --danger-soft:#2c1520; --danger-line:#5d2436;
+  --ring:#2dd4bf;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.55);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:var(--font); background:var(--bg); color:var(--text);
+  font-size:16px; line-height:1.5; -webkit-text-size-adjust:100%;
+  overscroll-behavior-y:none; -webkit-tap-highlight-color:transparent;
+}
+h1,h2,h3{margin:0; line-height:1.25; font-weight:650; letter-spacing:-.01em}
+p{margin:0}
+button,input,select,textarea{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--ring); outline-offset:2px; border-radius:6px}
+:focus:not(:focus-visible){outline:none}
+.sr{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+/* ---------- Schale ---------- */
+.app{display:grid; grid-template-rows:auto minmax(0,1fr) auto; height:100dvh; max-width:760px; margin-inline:auto; background:var(--bg)}
+.top{
+  display:flex; align-items:center; gap:12px; padding:calc(var(--safe-t) + 10px) 16px 10px;
+  background:var(--surface); border-bottom:1px solid var(--border); position:relative; z-index:5;
+}
+.top__mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(160deg,#0d7c72,#085c54);display:grid;place-items:center;flex:none}
+.top__mark svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.top__title{font-size:1.02rem;font-weight:680;letter-spacing:-.015em}
+.top__sub{font-size:.74rem;color:var(--soft);letter-spacing:.02em}
+.top__spacer{margin-left:auto}
+.iconbtn{
+  width:42px;height:42px;border-radius:var(--r-sm);border:1px solid var(--border);
+  background:var(--surface);display:grid;place-items:center;cursor:pointer;flex:none;
+}
+.iconbtn:hover{background:var(--surface-2)}
+.iconbtn svg{width:20px;height:20px;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+main{overflow-y:auto; overscroll-behavior:contain; padding:16px 16px 22px; -webkit-overflow-scrolling:touch}
+.view[hidden]{display:none}
+.stack{display:grid; gap:14px}
+
+/* ---------- Karten ---------- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;box-shadow:var(--shadow)}
+.card--flat{box-shadow:none}
+.card__head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.card__title{font-size:.98rem;font-weight:650}
+.card__hint{font-size:.8rem;color:var(--soft);margin-left:auto}
+.lede{color:var(--muted);font-size:.9rem}
+
+/* ---------- Knoepfe ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  min-height:var(--tap);padding:0 20px;border-radius:var(--r-md);
+  border:1px solid transparent;background:var(--surface-2);color:var(--text);
+  font-weight:620;font-size:.95rem;cursor:pointer;text-decoration:none;
+  transition:background .15s, border-color .15s, transform .06s;
+}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.btn--primary{background:var(--brand);color:var(--on-brand)}
+.btn--primary:hover:not(:disabled){background:var(--brand-hover)}
+.btn--ghost{background:transparent;border-color:var(--border-strong);color:var(--text)}
+.btn--ghost:hover:not(:disabled){background:var(--surface-2)}
+.btn--danger{background:transparent;border-color:var(--danger-line);color:var(--danger)}
+.btn--danger:hover:not(:disabled){background:var(--danger-soft)}
+.btn--block{display:flex;width:100%}
+.btn--sm{min-height:40px;padding:0 14px;font-size:.86rem;border-radius:var(--r-sm)}
+.btn--hero{min-height:84px;font-size:1.14rem;border-radius:var(--r-lg);font-weight:700}
+.btn--hero svg{width:26px;height:26px;stroke-width:2.2}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.btnrow>.btn{flex:1 1 auto}
+
+/* ---------- Formulare ---------- */
+.field{display:grid;gap:6px}
+.field>label,.lbl{font-size:.84rem;font-weight:600;color:var(--muted)}
+.inp{
+  width:100%;min-height:var(--tap);padding:12px 14px;border-radius:var(--r-md);
+  border:1px solid var(--border-strong);background:var(--surface);color:var(--text);
+  font-size:16px; /* verhindert Zoom auf iOS */
+}
+.inp:focus{border-color:var(--brand)}
+textarea.inp{min-height:92px;resize:vertical;line-height:1.45}
+select.inp{
+  appearance:none;-webkit-appearance:none;padding-right:42px;
+  background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7d8c' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;background-size:19px;
+}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:400px){.grid2{grid-template-columns:1fr}}
+.hint{font-size:.79rem;color:var(--soft);line-height:1.45}
+
+/* ---------- Chips (Mehrfachauswahl) ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 15px;
+  border-radius:var(--r-full);border:1px solid var(--border-strong);
+  background:var(--surface);color:var(--text);font-size:.9rem;font-weight:560;cursor:pointer;
+}
+.chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--on-brand);font-weight:640}
+.chip__tick{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.chip[aria-pressed="true"] .chip__tick{opacity:1}
+
+/* ---------- laufender Einsatz ---------- */
+.live{border:1px solid var(--brand-line);background:var(--brand-soft);border-radius:var(--r-lg);padding:16px;box-shadow:var(--shadow)}
+.live__row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.live__pulse{width:12px;height:12px;border-radius:50%;background:var(--brand);flex:none;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.82)}}
+.live__obj{font-weight:660;font-size:1rem}
+.live__meta{font-size:.8rem;color:var(--muted)}
+.live__timer{margin-left:auto;font-family:var(--mono);font-size:1.35rem;font-weight:640;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+
+/* ---------- Fotos ---------- */
+.shots{display:flex;gap:9px;flex-wrap:wrap;margin-top:4px}
+.shot{position:relative;width:76px;height:76px;border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--border);background:var(--sunken);flex:none}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot__x{
+  position:absolute;top:3px;right:3px;width:24px;height:24px;border-radius:50%;
+  border:none;background:rgba(10,16,26,.78);color:#fff;display:grid;place-items:center;cursor:pointer;
+}
+.shot__x svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
+.shot--add{display:grid;place-items:center;cursor:pointer;border-style:dashed;border-color:var(--border-strong);background:transparent}
+.shot--add svg{width:24px;height:24px;fill:none;stroke:var(--soft);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- Listen ---------- */
+.list{display:grid;gap:9px}
+.item{
+  display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:13px 14px;cursor:pointer;box-shadow:var(--shadow)
+}
+.item:hover{border-color:var(--border-strong)}
+.item__dot{width:9px;height:9px;border-radius:50%;background:var(--brand);margin-top:7px;flex:none}
+.item__body{min-width:0;flex:1}
+.item__t{display:block;font-weight:620;font-size:.95rem;overflow-wrap:anywhere}
+.item__s{display:block;font-size:.82rem;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+.item__r{margin-left:auto;text-align:right;font-size:.78rem;color:var(--soft);flex:none;font-variant-numeric:tabular-nums}
+.empty{text-align:center;padding:34px 18px;color:var(--soft)}
+.empty svg{width:44px;height:44px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:.5;margin-bottom:10px}
+.empty p{font-size:.9rem}
+
+/* ---------- Kennzeichen ---------- */
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:650;padding:3px 9px;border-radius:var(--r-full);background:var(--surface-2);color:var(--muted);border:1px solid var(--border);letter-spacing:.01em}
+.tag--ok{background:var(--ok-soft);color:var(--ok);border-color:var(--brand-line)}
+.tag--warn{background:var(--warn-soft);color:var(--warn);border-color:var(--warn-line)}
+.tag--bad{background:var(--danger-soft);color:var(--danger);border-color:var(--danger-line)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+
+/* ---------- Hinweiskasten ---------- */
+.note{border-radius:var(--r-md);padding:12px 14px;font-size:.85rem;line-height:1.5;border:1px solid}
+.note--warn{background:var(--warn-soft);border-color:var(--warn-line);color:var(--warn)}
+.note--info{background:var(--brand-soft);border-color:var(--brand-line);color:var(--text)}
+.note--bad{background:var(--danger-soft);border-color:var(--danger-line);color:var(--danger)}
+.note strong{font-weight:680}
+
+/* ---------- Fussnavigation ---------- */
+.nav{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
+  background:var(--surface);border-top:1px solid var(--border);
+  padding:6px 6px calc(var(--safe-b) + 6px);
+}
+.nav__b{
+  display:grid;justify-items:center;gap:3px;padding:7px 2px;border:none;background:none;
+  border-radius:var(--r-sm);cursor:pointer;color:var(--soft);font-size:.7rem;font-weight:600;
+}
+.nav__b svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.nav__b[aria-current="page"]{color:var(--brand)}
+.nav__b[aria-current="page"] svg{stroke-width:2.3}
+
+/* ---------- Bogen (Sheet) ---------- */
+.scrim{position:fixed;inset:0;background:rgba(6,12,20,.55);backdrop-filter:blur(2px);z-index:40;opacity:0;transition:opacity .2s}
+.scrim.on{opacity:1}
+.scrim[hidden]{display:none}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:41;max-width:760px;margin-inline:auto;
+  background:var(--surface);border-radius:var(--r-lg) var(--r-lg) 0 0;
+  box-shadow:var(--shadow-lg);max-height:92dvh;display:flex;flex-direction:column;
+  transform:translateY(100%);transition:transform .24s cubic-bezier(.22,.68,.28,1);
+}
+.sheet.on{transform:translateY(0)}
+.sheet[hidden]{display:none}
+.sheet__head{display:flex;align-items:center;gap:12px;padding:16px 16px 12px;border-bottom:1px solid var(--border);flex:none}
+.sheet__title{font-size:1.05rem;font-weight:660}
+.sheet__body{overflow-y:auto;padding:16px;display:grid;gap:14px;overscroll-behavior:contain}
+.sheet__foot{padding:12px 16px calc(var(--safe-b) + 14px);border-top:1px solid var(--border);flex:none;display:flex;gap:10px}
+.sheet__foot>.btn{flex:1}
+.grip{width:38px;height:4px;border-radius:2px;background:var(--border-strong);margin:8px auto 0}
+
+/* ---------- Toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:calc(var(--safe-b) + 84px);transform:translate(-50%,14px);
+  z-index:60;background:#0d1729;color:#fff;padding:13px 20px;border-radius:var(--r-full);
+  font-size:.88rem;font-weight:580;box-shadow:var(--shadow-lg);opacity:0;transition:opacity .2s,transform .2s;
+  max-width:calc(100vw - 32px);text-align:center;pointer-events:none;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+:root[data-theme="dark"] .toast{background:#eaf1f7;color:#0b1220}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .toast{background:#eaf1f7;color:#0b1220}}
+
+/* ---------- Kette / Pruefung ---------- */
+.hash{font-family:var(--mono);font-size:.72rem;color:var(--soft);overflow-wrap:anywhere;letter-spacing:-.02em}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;font-size:.85rem}
+.kv dt{color:var(--soft)}
+.kv dd{margin:0;overflow-wrap:anywhere}
+
+/* ---------- Statistik ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 10px;text-align:center}
+.stat__n{font-size:1.4rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stat__l{font-size:.72rem;color:var(--soft);margin-top:1px}
+
+/* ---------- Druckansicht ---------- */
+#druck{display:none}
+@media print{
+  @page{size:A4;margin:16mm 14mm}
+  html,body{height:auto;background:#fff;color:#000;font-size:10.5pt}
+  .app,.scrim,.sheet,.toast{display:none!important}
+  #druck{display:block!important}
+  .p-h{border-bottom:2px solid #000;padding-bottom:8pt;margin-bottom:12pt;display:flex;justify-content:space-between;align-items:flex-end;gap:16pt}
+  .p-h h1{font-size:16pt;margin:0}
+  .p-h .p-meta{font-size:8.5pt;text-align:right;line-height:1.4}
+  .p-obj{margin:0 0 12pt;font-size:10pt;line-height:1.5}
+  .p-obj strong{display:inline-block;min-width:96pt}
+  table.p-t{width:100%;border-collapse:collapse;font-size:8.6pt;margin-bottom:10pt}
+  table.p-t th,table.p-t td{border:.6pt solid #666;padding:3.6pt 4.4pt;text-align:left;vertical-align:top}
+  table.p-t th{background:#e8e8e8;font-weight:700;font-size:8.2pt}
+  table.p-t tr{page-break-inside:avoid}
+  .p-mono{font-family:var(--mono);font-size:7.2pt;letter-spacing:-.02em;word-break:break-all}
+  .p-f{margin-top:14pt;padding-top:8pt;border-top:.6pt solid #666;font-size:8pt;line-height:1.5}
+  .p-sig{margin-top:22pt;display:flex;gap:40pt}
+  .p-sig div{flex:1;border-top:.6pt solid #000;padding-top:4pt;font-size:8pt}
+  .p-demo{border:1.4pt solid #000;padding:6pt 9pt;margin-bottom:10pt;font-size:9pt;font-weight:700}
+  .p-break{page-break-before:always}
+}
+</style>
+</head>
+<body>
+
+<svg class="sr" aria-hidden="true" focusable="false"><defs>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.53.85l11.2-7.2a1 1 0 0 0 0-1.7L8.53 3.95A1 1 0 0 0 7 4.8Z"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24"><rect x="5.5" y="5.5" width="13" height="13" rx="2.5"/></symbol>
+<symbol id="i-cam" viewBox="0 0 24 24"><path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h1.7a2 2 0 0 0 1.7-.95l.6-1.1A2 2 0 0 1 11.2 3h1.6a2 2 0 0 1 1.7.95l.6 1.1A2 2 0 0 0 16.8 6h1.7A2.5 2.5 0 0 1 21 8.5v9A2.5 2.5 0 0 1 18.5 20h-13A2.5 2.5 0 0 1 3 17.5Z"/><circle cx="12" cy="13" r="3.6"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19Z"/><path d="M9.5 20.5v-6h5v6"/></symbol>
+<symbol id="i-bldg" viewBox="0 0 24 24"><path d="M4 20.5V5.2a1.2 1.2 0 0 1 1.2-1.2h8.6A1.2 1.2 0 0 1 15 5.2v15.3"/><path d="M15 10h3.8A1.2 1.2 0 0 1 20 11.2v9.3"/><path d="M2.6 20.5h18.8"/><path d="M7.4 8h4.2M7.4 12h4.2M7.4 16h4.2"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a1.6 1.6 0 0 0-1.6 1.6v14.8A1.6 1.6 0 0 0 7 21h10a1.6 1.6 0 0 0 1.6-1.6V7.6Z"/><path d="M14 3v4.6h4.6"/><path d="M8.8 12.5h6.4M8.8 16h4.4"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.5" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.2 5 6v6c0 4.2 2.9 7.5 7 8.8 4.1-1.3 7-4.6 7-8.8V6Z"/><path d="m9 12 2.2 2.2L15.3 10"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11M7.4 10.6 12 15.2l4.6-4.6"/><path d="M4.5 19.5h15"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><path d="M12 15.4V4.4M7.4 9l4.6-4.6L16.6 9"/><path d="M4.5 19.5h15"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.8 6.6h14.4M9.6 6.6V4.8a1.2 1.2 0 0 1 1.2-1.2h2.4a1.2 1.2 0 0 1 1.2 1.2v1.8"/><path d="M6.6 6.6 7.4 19a1.4 1.4 0 0 0 1.4 1.3h6.4A1.4 1.4 0 0 0 16.6 19l.8-12.4"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4.2 2.8 20.2h18.4Z"/><path d="M12 10v4.2"/><circle cx="12" cy="17.4" r="1" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></symbol>
+<symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="8" r="4.2"/><path d="m11 11 9 9M17 17l2-2M14 14l2-2"/></symbol>
+<symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V3.8h10V9"/><path d="M7 17H5.2A1.2 1.2 0 0 1 4 15.8V10.2A1.2 1.2 0 0 1 5.2 9h13.6A1.2 1.2 0 0 1 20 10.2v5.6a1.2 1.2 0 0 1-1.2 1.2H17"/><path d="M7 14h10v6.2H7Z"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.4V12l3 2"/></symbol>
+<symbol id="i-pencil" viewBox="0 0 24 24"><path d="M15.2 5.2 18.8 8.8M4.5 19.5l.9-3.9L15.9 5.1a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L8.4 18.6Z"/></symbol>
+<symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9"/><path d="M9.4 4.6 12 7.2l2.6-2.6M9.4 19.4 12 16.8l2.6 2.6"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 11.2v5"/><circle cx="12" cy="8.2" r="1" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-theme" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.4"/><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M6.3 6.3 4.8 4.8M19.2 19.2l-1.5-1.5M6.3 17.7l-1.5 1.5M19.2 4.8l-1.5 1.5"/></symbol>
+</defs></svg>
+
+<div class="app">
+
+  <header class="top">
+    <span class="top__mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11"/></svg></span>
+    <span>
+      <span class="top__title">Pflichtbuch</span><br>
+      <span class="top__sub" id="top-sub">Verkehrssicherungspflicht</span>
+    </span>
+    <span class="top__spacer"></span>
+    <button class="iconbtn" id="btn-theme" type="button" aria-label="Heller oder dunkler Modus">
+      <svg><use href="#i-theme"/></svg>
+    </button>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HEUTE ============ -->
+    <section class="view stack" id="v-heute" aria-labelledby="h-heute">
+      <h1 class="sr" id="h-heute">Heute</h1>
+      <div id="heute-inhalt" class="stack"></div>
+    </section>
+
+    <!-- ============ OBJEKTE ============ -->
+    <section class="view stack" id="v-objekte" hidden aria-labelledby="h-objekte">
+      <div class="card__head" style="margin:0">
+        <h1 class="card__title" id="h-objekte" style="font-size:1.15rem">Objekte</h1>
+        <span class="card__hint" id="obj-zaehler"></span>
+      </div>
+      <button class="btn btn--primary btn--block" type="button" id="btn-neues-objekt">
+        <svg><use href="#i-plus"/></svg> Objekt anlegen
+      </button>
+      <div id="objekt-liste" class="list"></div>
+      <div id="objekt-limit"></div>
+    </section>
+
+    <!-- ============ PROTOKOLL ============ -->
+    <section class="view stack" id="v-protokoll" hidden aria-labelledby="h-protokoll">
+      <h1 class="card__title" id="h-protokoll" style="font-size:1.15rem">Protokoll</h1>
+
+      <div class="card card--flat">
+        <div class="grid2">
+          <div class="field">
+            <label for="f-objekt">Objekt</label>
+            <select class="inp" id="f-objekt"><option value="">Alle Objekte</option></select>
+          </div>
+          <div class="field">
+            <label for="f-zeit">Zeitraum</label>
+            <select class="inp" id="f-zeit">
+              <option value="7">Letzte 7 Tage</option>
+              <option value="30" selected>Letzte 30 Tage</option>
+              <option value="90">Letzte 90 Tage</option>
+              <option value="saison">Winterhalbjahr (Okt–Apr)</option>
+              <option value="0">Gesamter Zeitraum</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats" id="p-stats"></div>
+
+      <div class="btnrow">
+        <button class="btn btn--ghost" type="button" id="btn-pruefen">
+          <svg><use href="#i-shield"/></svg> Kette prüfen
+        </button>
+        <button class="btn btn--primary" type="button" id="btn-drucken">
+          <svg><use href="#i-print"/></svg> Als PDF sichern
+        </button>
+      </div>
+
+      <div id="pruef-ergebnis"></div>
+      <div id="protokoll-liste" class="list"></div>
+    </section>
+
+    <!-- ============ MEHR ============ -->
+    <section class="view stack" id="v-mehr" hidden aria-labelledby="h-mehr">
+      <h1 class="card__title" id="h-mehr" style="font-size:1.15rem">Einstellungen</h1>
+
+      <div class="card">
+        <div class="card__head"><h2 class="card__title">Wer dokumentiert</h2></div>
+        <div class="stack">
+          <div class="field">
+            <label for="s-bearbeiter">Name des Bearbeiters</label>
+            <input class="inp" id="s-bearbeiter" type="text" autocomplete="name" placeholder="z. B. M. Schneider">
+          </div>
+          <div class="field">
+            <label for="s-firma">Firma / Auftraggeber</label>
+            <input class="inp" id="s-firma" type="text" autocomplete="organization" placeholder="z. B. Hausmeisterservice Müller">
+          </div>
+          <p class="hint">Beides steht in jedem neuen Eintrag und im Kopf des Protokolls.</p>
+        </div>
+      </div>
+
+      <div class="card" id="lizenz-karte"></div>
+
+      <div class="card">
+        <div class="card__head"><h2 class="card__title">Datensicherung</h2></div>
+        <p class="hint" style="margin-bottom:12px">
+          Alle Daten liegen ausschliesslich auf diesem Gerät. Geht das Gerät verloren,
+          sind sie ohne Sicherung weg. Sichern Sie regelmässig – am besten monatlich.
+        </p>
+        <div class="btnrow">
+          <button class="btn btn--ghost" type="button" id="btn-export">
+            <svg><use href="#i-down"/></svg> Sicherung
+          </button>
+          <button class="btn btn--ghost" type="button" id="btn-import">
+            <svg><use href="#i-up"/></svg> Einlesen
+          </button>
+        </div>
+        <input type="file" id="import-datei" accept="application/json,.json" class="sr">
+        <p class="hint" id="speicher-info" style="margin-top:10px"></p>
+      </div>
+
+      <div class="card">
+        <div class="card__head"><h2 class="card__title">Über die Nachweisführung</h2></div>
+        <p class="hint">
+          Jeder abgeschlossene Eintrag wird mit einer Prüfsumme (SHA-256) versiegelt,
+          die auch die Prüfsumme des vorherigen Eintrags enthält. Dadurch entsteht eine
+          fortlaufende Kette. Wird ein Eintrag nachträglich verändert oder gelöscht,
+          bricht die Kette an dieser Stelle sichtbar. Korrekturen sind deshalb nur als
+          zusätzlicher, ebenfalls versiegelter Eintrag möglich – nie durch Überschreiben.
+        </p>
+        <p class="hint" style="margin-top:10px">
+          <strong>Wichtig:</strong> Die Kette belegt die Unverändertheit ab dem Zeitpunkt
+          der Eintragung. Sie ersetzt keine rechtliche Beratung und trifft keine Aussage
+          darüber, wie ein Gericht den Nachweis im Einzelfall würdigt.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card__head"><h2 class="card__title">Alles löschen</h2></div>
+        <p class="hint" style="margin-bottom:12px">Entfernt Objekte, Einträge und Fotos unwiderruflich von diesem Gerät.</p>
+        <button class="btn btn--danger btn--block" type="button" id="btn-alles-loeschen">
+          <svg><use href="#i-trash"/></svg> Alle Daten löschen
+        </button>
+      </div>
+
+      <p class="hint" style="text-align:center">
+        Pflichtbuch <span id="version"></span> · Daten bleiben auf dem Gerät · keine Konten, keine Server
+      </p>
+    </section>
+
+  </main>
+
+  <nav class="nav" aria-label="Hauptbereiche">
+    <button class="nav__b" type="button" data-view="heute" aria-current="page">
+      <svg><use href="#i-home"/></svg> Heute
+    </button>
+    <button class="nav__b" type="button" data-view="objekte">
+      <svg><use href="#i-bldg"/></svg> Objekte
+    </button>
+    <button class="nav__b" type="button" data-view="protokoll">
+      <svg><use href="#i-doc"/></svg> Protokoll
+    </button>
+    <button class="nav__b" type="button" data-view="mehr">
+      <svg><use href="#i-more"/></svg> Mehr
+    </button>
+  </nav>
+
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-titel">
+  <div class="grip" aria-hidden="true"></div>
+  <div class="sheet__head">
+    <h2 class="sheet__title" id="sheet-titel"></h2>
+    <span class="top__spacer"></span>
+    <button class="iconbtn" type="button" id="sheet-zu" aria-label="Schliessen"><svg><use href="#i-x"/></svg></button>
+  </div>
+  <div class="sheet__body" id="sheet-body"></div>
+  <div class="sheet__foot" id="sheet-foot"></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="druck" aria-hidden="true"></div>
+
+<script>
+"use strict";
+/* ================================================================
+   Pflichtbuch – gesamte Anwendungslogik.
+   Keine Fremdbibliotheken. Alle Daten bleiben auf dem Geraet.
+   ================================================================ */
+
+const VERSION = '1.0.0';
+const FREI_OBJEKTE = 1;          // Objekte in der kostenfreien Fassung
+const MAX_FOTOS = 6;             // Fotos je Eintrag
+const FOTO_KANTE = 1600;         // laengste Kante nach dem Verkleinern
+const FOTO_GUETE = 0.82;
+
+/* Oeffentlicher Schluessel fuer die Freischaltung.
+   Wird einmalig mit tools/lizenz-generator.html erzeugt und hier eingesetzt.
+   Der zugehoerige private Schluessel gehoert NICHT in diese Datei.        */
+const LIZENZ_PUBKEY = null;
+
+/* ---------------- kleine Helfer ---------------- */
+const $  = (s, w = document) => w.querySelector(s);
+const $$ = (s, w = document) => [...w.querySelectorAll(s)];
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => (Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
+
+const fmtDatum = new Intl.DateTimeFormat('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+const fmtZeit  = new Intl.DateTimeFormat('de-DE', { hour: '2-digit', minute: '2-digit' });
+const fmtLang  = new Intl.DateTimeFormat('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
+const dat = (ms) => fmtDatum.format(new Date(ms));
+const zeit = (ms) => fmtZeit.format(new Date(ms));
+const langDat = (ms) => fmtLang.format(new Date(ms));
+
+function dauer(ms) {
+  const s = Math.max(0, Math.round(ms / 1000));
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), r = s % 60;
+  return (h ? String(h).padStart(2, '0') + ':' : '') + String(m).padStart(2, '0') + ':' + String(r).padStart(2, '0');
+}
+function dauerKurz(ms) {
+  const m = Math.max(0, Math.round(ms / 60000));
+  return m < 60 ? m + ' Min.' : Math.floor(m / 60) + ' Std. ' + (m % 60) + ' Min.';
+}
+const tagesBeginn = (d = new Date()) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+
+let toastTimer = null;
+function toast(text) {
+  const t = $('#toast');
+  t.textContent = text;
+  t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('on'), 3200);
+}
+
+/* ---------------- SHA-256 ----------------
+   Bevorzugt die WebCrypto-Umsetzung des Browsers. Der eigene Weg greift,
+   wenn die Seite nicht in einem sicheren Kontext laeuft (z. B. file://),
+   damit die Kette auch dort vollstaendig arbeitet.                        */
+const K256 = new Uint32Array([
+  0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+  0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+  0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+  0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+  0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+  0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+  0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+  0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+
+function sha256Eigen(bytes) {
+  const H = new Uint32Array([0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19]);
+  const len = bytes.length;
+  const bitLenHi = Math.floor(len / 536870912);
+  const bitLenLo = (len << 3) >>> 0;
+  const total = ((len + 9 + 63) >> 6) << 6;
+  const m = new Uint8Array(total);
+  m.set(bytes);
+  m[len] = 0x80;
+  const dv = new DataView(m.buffer);
+  dv.setUint32(total - 8, bitLenHi, false);
+  dv.setUint32(total - 4, bitLenLo, false);
+
+  const w = new Uint32Array(64);
+  const rr = (x, n) => (x >>> n) | (x << (32 - n));
+  for (let off = 0; off < total; off += 64) {
+    for (let i = 0; i < 16; i++) w[i] = dv.getUint32(off + i * 4, false);
+    for (let i = 16; i < 64; i++) {
+      const a = w[i - 15], b = w[i - 2];
+      const s0 = rr(a, 7) ^ rr(a, 18) ^ (a >>> 3);
+      const s1 = rr(b, 17) ^ rr(b, 19) ^ (b >>> 10);
+      w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;
+    }
+    let [a, b, c, d, e, f, g, h] = H;
+    for (let i = 0; i < 64; i++) {
+      const S1 = rr(e, 6) ^ rr(e, 11) ^ rr(e, 25);
+      const ch = (e & f) ^ (~e & g);
+      const t1 = (h + S1 + ch + K256[i] + w[i]) >>> 0;
+      const S0 = rr(a, 2) ^ rr(a, 13) ^ rr(a, 22);
+      const mj = (a & b) ^ (a & c) ^ (b & c);
+      const t2 = (S0 + mj) >>> 0;
+      h = g; g = f; f = e; e = (d + t1) >>> 0;
+      d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+    }
+    H[0] = (H[0] + a) >>> 0; H[1] = (H[1] + b) >>> 0; H[2] = (H[2] + c) >>> 0; H[3] = (H[3] + d) >>> 0;
+    H[4] = (H[4] + e) >>> 0; H[5] = (H[5] + f) >>> 0; H[6] = (H[6] + g) >>> 0; H[7] = (H[7] + h) >>> 0;
+  }
+  let out = '';
+  for (let i = 0; i < 8; i++) out += H[i].toString(16).padStart(8, '0');
+  return out;
+}
+
+const hatWebCrypto = !!(globalThis.crypto && crypto.subtle && crypto.subtle.digest);
+
+async function hashBytes(bytes) {
+  if (hatWebCrypto) {
+    try {
+      const d = await crypto.subtle.digest('SHA-256', bytes);
+      return [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    } catch (_) { /* faellt unten durch */ }
+  }
+  return sha256Eigen(bytes);
+}
+const hashText = (s) => hashBytes(new TextEncoder().encode(s));
+
+/* Feste Reihenfolge, damit derselbe Inhalt immer denselben Hash ergibt. */
+function kanon(v) {
+  if (v === null || v === undefined) return 'n';
+  if (Array.isArray(v)) return '[' + v.map(kanon).join(',') + ']';
+  if (typeof v === 'object') {
+    return '{' + Object.keys(v).sort().map((k) => JSON.stringify(k) + ':' + kanon(v[k])).join(',') + '}';
+  }
+  return JSON.stringify(v);
+}
+
+/* ---------------- IndexedDB ---------------- */
+const DB = {
+  _p: null,
+  open() {
+    if (this._p) return this._p;
+    this._p = new Promise((ok, fail) => {
+      const r = indexedDB.open('pflichtbuch', 1);
+      r.onupgradeneeded = () => {
+        const db = r.result;
+        if (!db.objectStoreNames.contains('objekte')) db.createObjectStore('objekte', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains('eintraege')) {
+          const s = db.createObjectStore('eintraege', { keyPath: 'id' });
+          s.createIndex('seq', 'seq', { unique: true });
+          s.createIndex('objektId', 'objektId');
+        }
+        if (!db.objectStoreNames.contains('fotos')) db.createObjectStore('fotos', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains('meta')) db.createObjectStore('meta', { keyPath: 'k' });
+      };
+      r.onsuccess = () => ok(r.result);
+      r.onerror = () => fail(r.error);
+    });
+    return this._p;
+  },
+  async _run(store, modus, fn) {
+    const db = await this.open();
+    return new Promise((ok, fail) => {
+      const tx = db.transaction(store, modus);
+      const req = fn(tx.objectStore(store));
+      tx.oncomplete = () => ok(req ? req.result : undefined);
+      tx.onerror = () => fail(tx.error);
+      tx.onabort = () => fail(tx.error);
+    });
+  },
+  get(s, k)      { return this._run(s, 'readonly',  (o) => o.get(k)); },
+  alle(s)        { return this._run(s, 'readonly',  (o) => o.getAll()); },
+  setze(s, v)    { return this._run(s, 'readwrite', (o) => o.put(v)); },
+  loesche(s, k)  { return this._run(s, 'readwrite', (o) => o.delete(k)); },
+  leere(s)       { return this._run(s, 'readwrite', (o) => o.clear()); }
+};
+
+const metaLies = async (k, vor = null) => ((await DB.get('meta', k))?.v ?? vor);
+const metaSetz = (k, v) => DB.setze('meta', { k, v });
+
+/* ---------------- Zustand ---------------- */
+const S = {
+  ansicht: 'heute',
+  objekte: [],
+  eintraege: [],
+  laufend: null,
+  einst: { bearbeiter: '', firma: '' },
+  lizenz: null,
+  tickt: null
+};
+
+const proAktiv = () => !!(S.lizenz && (!S.lizenz.b || Date.parse(S.lizenz.b) > Date.now()));
+const objektGrenze = () => (proAktiv() ? (S.lizenz.o || Infinity) : FREI_OBJEKTE);
+const darfObjekt = () => S.objekte.filter((o) => !o.archiviert).length < objektGrenze();
+
+/* ---------------- Freischaltung ---------------- */
+const b64urlZuBytes = (s) => {
+  const b = atob(s.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(s.length / 4) * 4, '='));
+  return Uint8Array.from(b, (c) => c.charCodeAt(0));
+};
+
+async function lizenzPruefen(schluessel) {
+  if (!LIZENZ_PUBKEY) throw new Error('Die Freischaltung ist in dieser Fassung noch nicht eingerichtet.');
+  if (!hatWebCrypto) throw new Error('Die Freischaltung benötigt eine über HTTPS geladene Seite.');
+  const teile = String(schluessel).trim().replace(/\s+/g, '').split('.');
+  if (teile.length !== 2) throw new Error('Der Schlüssel hat nicht das erwartete Format.');
+  const daten = b64urlZuBytes(teile[0]);
+  const sig = b64urlZuBytes(teile[1]);
+  const pk = await crypto.subtle.importKey('jwk', LIZENZ_PUBKEY,
+    { name: 'ECDSA', namedCurve: 'P-256' }, false, ['verify']);
+  const gut = await crypto.subtle.verify({ name: 'ECDSA', hash: 'SHA-256' }, pk, sig, daten);
+  if (!gut) throw new Error('Der Schlüssel ist ungültig.');
+  const nutz = JSON.parse(new TextDecoder().decode(daten));
+  if (nutz.k !== 'pflichtbuch') throw new Error('Der Schlüssel gehört zu einem anderen Programm.');
+  if (nutz.b && Date.parse(nutz.b) < Date.now()) throw new Error('Der Schlüssel ist am ' + dat(Date.parse(nutz.b)) + ' abgelaufen.');
+  return nutz;
+}
+
+/* ---------------- Einsatzarten ---------------- */
+const ARTEN = {
+  winterdienst: {
+    name: 'Winterdienst', kurz: 'Winterdienst', icon: 'i-snow',
+    massnahmen: ['Geräumt (Schnee)', 'Gestreut: Splitt/Granulat', 'Gestreut: Salz/Sole',
+                 'Eisfläche beseitigt', 'Kontrolle: nichts erforderlich', 'Nachgestreut']
+  },
+  kontrolle: {
+    name: 'Sichtkontrolle', kurz: 'Kontrolle', icon: 'i-shield',
+    massnahmen: ['Wege und Stufen', 'Beleuchtung', 'Geländer und Absperrungen',
+                 'Spielgeräte', 'Baumbestand', 'Ohne Beanstandung']
+  },
+  reinigung: {
+    name: 'Reinigung', kurz: 'Reinigung', icon: 'i-check',
+    massnahmen: ['Gehweg gereinigt', 'Laub beseitigt', 'Abfall entfernt',
+                 'Graffiti entfernt', 'Grünschnitt', 'Winterstreugut aufgenommen']
+  },
+  maengel: {
+    name: 'Mangel festgestellt', kurz: 'Mangel', icon: 'i-alert',
+    massnahmen: ['Stolperstelle', 'Beleuchtung defekt', 'Geländer/Absperrung schadhaft',
+                 'Vandalismus/Graffiti', 'Ast-/Baumschaden', 'An Auftraggeber gemeldet',
+                 'Stelle gesichert']
+  }
+};
+const WETTER = ['Schneefall', 'Schneeglätte', 'Eisregen / Glatteis', 'Reifglätte',
+                'Tauwetter', 'Regen', 'Trocken, frostfrei', 'Bedeckt, trocken'];
+
+const artOf = (k) => ARTEN[k] || ARTEN.kontrolle;
+const objOf = (id) => S.objekte.find((o) => o.id === id) || null;
+const objName = (id) => objOf(id)?.name || 'Gelöschtes Objekt';
+
+/* ---------------- Hash-Kette ---------------- */
+const NULLHASH = '0'.repeat(64);
+
+function eintragNutzlast(e) {
+  return {
+    v: 1, seq: e.seq, prev: e.prev,
+    objektId: e.objektId, objektName: e.objektName, art: e.art,
+    begonnen: e.begonnen, beendet: e.beendet,
+    massnahmen: [...(e.massnahmen || [])].sort(),
+    wetter: e.wetter || '', temperatur: (e.temperatur === '' || e.temperatur == null) ? null : Number(e.temperatur),
+    bemerkung: e.bemerkung || '', bearbeiter: e.bearbeiter || '', firma: e.firma || '',
+    gpsStart: e.gpsStart || null, gpsEnde: e.gpsEnde || null,
+    fotos: (e.fotos || []).map((f) => f.hash),
+    korrekturZu: e.korrekturZu || null
+  };
+}
+const eintragHash = (e) => hashText(kanon(eintragNutzlast(e)));
+
+function letzterInKette() {
+  let best = { seq: 0, hash: NULLHASH };
+  for (const e of S.eintraege) if (e.seq > best.seq) best = e;
+  return best;
+}
+
+async function eintragVersiegeln(e) {
+  const vor = letzterInKette();
+  e.seq = vor.seq + 1;
+  e.prev = vor.hash;
+  e.hash = await eintragHash(e);
+  await DB.setze('eintraege', e);
+  S.eintraege.push(e);
+  return e;
+}
+
+/* Prueft Nummernfolge, Verkettung, Inhalt und – auf Wunsch – die Fotos. */
+async function ketteVerifizieren(mitFotos = true) {
+  const liste = [...S.eintraege].sort((a, b) => a.seq - b.seq);
+  let prev = NULLHASH, erwartet = 1, fotosGeprueft = 0;
+  for (const e of liste) {
+    if (e.seq !== erwartet) {
+      return { ok: false, grund: `Die Nummerierung springt von ${erwartet - 1} auf ${e.seq}. Es fehlt mindestens ein Eintrag.`, bei: e };
+    }
+    if (e.prev !== prev) return { ok: false, grund: `Eintrag Nr. ${e.seq} verweist nicht auf seinen Vorgänger.`, bei: e };
+    if (await eintragHash(e) !== e.hash) return { ok: false, grund: `Der Inhalt von Eintrag Nr. ${e.seq} weicht von seiner Prüfsumme ab.`, bei: e };
+    if (mitFotos) {
+      for (const f of (e.fotos || [])) {
+        const rec = await DB.get('fotos', f.id);
+        if (!rec) return { ok: false, grund: `Ein Foto aus Eintrag Nr. ${e.seq} fehlt auf diesem Gerät.`, bei: e };
+        const h = await hashBytes(new Uint8Array(await rec.blob.arrayBuffer()));
+        if (h !== f.hash) return { ok: false, grund: `Ein Foto aus Eintrag Nr. ${e.seq} wurde verändert.`, bei: e };
+        fotosGeprueft++;
+      }
+    }
+    prev = e.hash;
+    erwartet++;
+  }
+  return { ok: true, anzahl: liste.length, fotos: fotosGeprueft, kopf: prev };
+}
+
+/* ---------------- Standort ---------------- */
+function standort() {
+  return new Promise((ok) => {
+    if (!navigator.geolocation) return ok(null);
+    let fertig = false;
+    const schluss = (v) => { if (!fertig) { fertig = true; ok(v); } };
+    navigator.geolocation.getCurrentPosition(
+      (p) => schluss({
+        lat: +p.coords.latitude.toFixed(6), lon: +p.coords.longitude.toFixed(6),
+        gen: Math.round(p.coords.accuracy || 0), zeit: p.timestamp
+      }),
+      () => schluss(null),
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 30000 }
+    );
+    setTimeout(() => schluss(null), 13000);
+  });
+}
+const gpsText = (g) => (g ? `${g.lat.toFixed(5)}, ${g.lon.toFixed(5)} (±${g.gen} m)` : 'ohne Standort');
+
+/* ---------------- Fotos ---------------- */
+async function bildVerkleinern(datei) {
+  let breite, hoehe, quelle;
+  try {
+    quelle = await createImageBitmap(datei, { imageOrientation: 'from-image' });
+    breite = quelle.width; hoehe = quelle.height;
+  } catch (_) {
+    quelle = await new Promise((ok, fail) => {
+      const url = URL.createObjectURL(datei);
+      const im = new Image();
+      im.onload = () => { URL.revokeObjectURL(url); ok(im); };
+      im.onerror = () => { URL.revokeObjectURL(url); fail(new Error('Bild nicht lesbar')); };
+      im.src = url;
+    });
+    breite = quelle.naturalWidth; hoehe = quelle.naturalHeight;
+  }
+  const s = Math.min(1, FOTO_KANTE / Math.max(breite, hoehe));
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(breite * s));
+  c.height = Math.max(1, Math.round(hoehe * s));
+  const ctx = c.getContext('2d');
+  ctx.drawImage(quelle, 0, 0, c.width, c.height);
+  if (quelle.close) quelle.close();
+  const blob = await new Promise((ok) => c.toBlob(ok, 'image/jpeg', FOTO_GUETE));
+  if (!blob) throw new Error('Bild konnte nicht umgewandelt werden.');
+  return blob;
+}
+
+async function fotoAblegen(datei) {
+  const blob = await bildVerkleinern(datei);
+  const hash = await hashBytes(new Uint8Array(await blob.arrayBuffer()));
+  const id = uid();
+  await DB.setze('fotos', { id, blob, hash, angelegt: Date.now() });
+  return { id, hash, zeit: Date.now() };
+}
+
+const bildUrls = new Map();
+async function bildUrl(id) {
+  if (bildUrls.has(id)) return bildUrls.get(id);
+  const rec = await DB.get('fotos', id);
+  if (!rec) return null;
+  const url = URL.createObjectURL(rec.blob);
+  bildUrls.set(id, url);
+  return url;
+}
+
+/* ---------------- laufender Einsatz ---------------- */
+async function laufendSichern() { await metaSetz('laufend', S.laufend); }
+
+async function einsatzStarten(objektId, art) {
+  const o = objOf(objektId);
+  S.laufend = {
+    objektId, objektName: o ? o.name : '', art,
+    begonnen: Date.now(), massnahmen: [], wetter: '', temperatur: '',
+    bemerkung: '', fotos: [], gpsStart: null
+  };
+  await laufendSichern();
+  zeigeAnsicht('heute');
+  toast('Einsatz läuft – Zeit wird erfasst');
+  standort().then(async (g) => {
+    if (S.laufend && !S.laufend.gpsStart) { S.laufend.gpsStart = g; await laufendSichern(); renderHeute(); }
+  });
+}
+
+async function einsatzAbbrechen() {
+  for (const f of (S.laufend?.fotos || [])) await DB.loesche('fotos', f.id);
+  S.laufend = null;
+  await metaSetz('laufend', null);
+  renderHeute();
+  toast('Einsatz verworfen');
+}
+
+async function einsatzBeenden() {
+  const L = S.laufend;
+  if (!L) return;
+  if (!L.massnahmen.length) { toast('Bitte mindestens eine Maßnahme wählen'); return; }
+  const gpsEnde = await standort();
+  const e = {
+    id: uid(), objektId: L.objektId, objektName: objName(L.objektId), art: L.art,
+    begonnen: L.begonnen, beendet: Date.now(),
+    massnahmen: L.massnahmen, wetter: L.wetter, temperatur: L.temperatur,
+    bemerkung: L.bemerkung, bearbeiter: S.einst.bearbeiter, firma: S.einst.firma,
+    gpsStart: L.gpsStart, gpsEnde, fotos: L.fotos, korrekturZu: null, angelegt: Date.now()
+  };
+  await eintragVersiegeln(e);
+  S.laufend = null;
+  await metaSetz('laufend', null);
+  renderAlles();
+  toast(`Eintrag Nr. ${e.seq} versiegelt`);
+}
+
+/* Korrekturen ueberschreiben nie – sie haengen einen eigenen Eintrag an. */
+async function korrekturAnlegen(original, text) {
+  const e = {
+    id: uid(), objektId: original.objektId, objektName: original.objektName,
+    art: original.art, begonnen: Date.now(), beendet: Date.now(),
+    massnahmen: ['Korrektur / Nachtrag'], wetter: '', temperatur: '',
+    bemerkung: text, bearbeiter: S.einst.bearbeiter, firma: S.einst.firma,
+    gpsStart: null, gpsEnde: null, fotos: [],
+    korrekturZu: { seq: original.seq, hash: original.hash }, angelegt: Date.now()
+  };
+  await eintragVersiegeln(e);
+  renderAlles();
+  toast(`Korrektur als Eintrag Nr. ${e.seq} angehängt`);
+}
+
+/* ================================================================
+   Oberflaeche
+   ================================================================ */
+
+/* ---------------- Bogen (Sheet) ---------------- */
+let sheetZurueck = null;
+function sheetOeffnen(titel, bauen, aktionen = []) {
+  sheetZurueck = document.activeElement;
+  $('#sheet-titel').textContent = titel;
+  const body = $('#sheet-body');
+  body.innerHTML = '';
+  const inhalt = bauen();
+  if (typeof inhalt === 'string') body.innerHTML = inhalt; else if (inhalt) body.append(inhalt);
+  const foot = $('#sheet-foot');
+  foot.innerHTML = '';
+  foot.hidden = !aktionen.length;
+  aktionen.forEach((a) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'btn ' + (a.stil || 'btn--ghost');
+    b.textContent = a.text;
+    b.addEventListener('click', a.tu);
+    foot.append(b);
+  });
+  $('#scrim').hidden = false;
+  $('#sheet').hidden = false;
+  requestAnimationFrame(() => { $('#scrim').classList.add('on'); $('#sheet').classList.add('on'); });
+  const erste = $('#sheet-body input, #sheet-body select, #sheet-body textarea, #sheet-body button') || $('#sheet-zu');
+  setTimeout(() => erste?.focus(), 220);
+}
+function sheetSchliessen() {
+  $('#scrim').classList.remove('on');
+  $('#sheet').classList.remove('on');
+  setTimeout(() => { $('#scrim').hidden = true; $('#sheet').hidden = true; $('#sheet-body').innerHTML = ''; }, 220);
+  sheetZurueck?.focus?.();
+  sheetZurueck = null;
+}
+const sheetOffen = () => !$('#sheet').hidden;
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && sheetOffen()) { e.preventDefault(); sheetSchliessen(); return; }
+  if (e.key === 'Tab' && sheetOffen()) {
+    const f = $$('#sheet button, #sheet input, #sheet select, #sheet textarea, #sheet a[href]')
+      .filter((x) => !x.disabled && x.offsetParent !== null);
+    if (!f.length) return;
+    const [a, z] = [f[0], f[f.length - 1]];
+    if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); }
+    else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+  }
+});
+
+function frage(titel, text, knopfText, tu, stil = 'btn--danger') {
+  sheetOeffnen(titel, () => `<p class="lede">${esc(text)}</p>`, [
+    { text: 'Abbrechen', tu: sheetSchliessen },
+    { text: knopfText, stil, tu: () => { sheetSchliessen(); tu(); } }
+  ]);
+}
+
+/* ---------------- Ansichtswechsel ---------------- */
+function zeigeAnsicht(name) {
+  S.ansicht = name;
+  ['heute', 'objekte', 'protokoll', 'mehr'].forEach((v) => {
+    $('#v-' + v).hidden = v !== name;
+    const b = $(`.nav__b[data-view="${v}"]`);
+    if (v === name) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  $('#main').scrollTop = 0;
+  if (name === 'objekte') renderObjekte();
+  if (name === 'protokoll') renderProtokoll();
+  if (name === 'mehr') { renderMehr(); installKarteZeigen(); }
+  if (name === 'heute') renderHeute();
+}
+
+/* ---------------- Ansicht: Heute ---------------- */
+function chipReihe(art, gewaehlt) {
+  return artOf(art).massnahmen.map((m) => `
+    <button class="chip" type="button" data-mass="${esc(m)}" aria-pressed="${gewaehlt.includes(m)}">
+      <svg class="chip__tick" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11"/></svg>${esc(m)}
+    </button>`).join('');
+}
+
+function liveHtml() {
+  const L = S.laufend, a = artOf(L.art);
+  return `
+  <div class="live">
+    <div class="live__row">
+      <span class="live__pulse" aria-hidden="true"></span>
+      <span>
+        <span class="live__obj">${esc(objName(L.objektId))}</span><br>
+        <span class="live__meta">${esc(a.name)} · seit ${zeit(L.begonnen)} Uhr</span>
+      </span>
+      <span class="live__timer" id="live-timer" aria-label="Bisherige Dauer">00:00</span>
+    </div>
+    <p class="live__meta" id="live-gps">Standort wird ermittelt …</p>
+  </div>
+
+  <div class="card">
+    <div class="card__head"><h2 class="card__title">Maßnahmen</h2><span class="card__hint">Mehrfachauswahl</span></div>
+    <div class="chips" id="live-chips">${chipReihe(L.art, L.massnahmen)}</div>
+  </div>
+
+  <div class="card">
+    <div class="card__head"><h2 class="card__title">Bedingungen</h2></div>
+    <div class="grid2">
+      <div class="field">
+        <label for="live-wetter">Witterung</label>
+        <select class="inp" id="live-wetter">
+          <option value="">– keine Angabe –</option>
+          ${WETTER.map((w) => `<option${L.wetter === w ? ' selected' : ''}>${esc(w)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field">
+        <label for="live-temp">Temperatur (°C)</label>
+        <input class="inp" id="live-temp" type="number" inputmode="decimal" step="0.5" min="-40" max="50"
+               placeholder="z. B. -3" value="${esc(L.temperatur)}">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__head"><h2 class="card__title">Fotos</h2><span class="card__hint">max. ${MAX_FOTOS}</span></div>
+    <div class="shots" id="live-shots"></div>
+    <input type="file" id="foto-eingabe" accept="image/*" capture="environment" multiple class="sr">
+  </div>
+
+  <div class="card">
+    <div class="card__head"><h2 class="card__title">Bemerkung</h2></div>
+    <textarea class="inp" id="live-bem" placeholder="Besonderheiten, Hinweise, Absprachen …">${esc(L.bemerkung)}</textarea>
+  </div>
+
+  <button class="btn btn--primary btn--hero btn--block" type="button" id="btn-beenden">
+    <svg><use href="#i-stop"/></svg> Beenden und versiegeln
+  </button>
+  <button class="btn btn--danger btn--block" type="button" id="btn-verwerfen">Einsatz verwerfen</button>`;
+}
+
+function bindLive() {
+  $('#live-chips').addEventListener('click', async (e) => {
+    const c = e.target.closest('.chip'); if (!c) return;
+    const m = c.dataset.mass;
+    const i = S.laufend.massnahmen.indexOf(m);
+    if (i < 0) S.laufend.massnahmen.push(m); else S.laufend.massnahmen.splice(i, 1);
+    c.setAttribute('aria-pressed', i < 0);
+    await laufendSichern();
+  });
+  $('#live-wetter').addEventListener('change', async (e) => { S.laufend.wetter = e.target.value; await laufendSichern(); });
+  $('#live-temp').addEventListener('input', async (e) => { S.laufend.temperatur = e.target.value; await laufendSichern(); });
+  $('#live-bem').addEventListener('input', async (e) => { S.laufend.bemerkung = e.target.value; await laufendSichern(); });
+  $('#btn-beenden').addEventListener('click', einsatzBeenden);
+  $('#btn-verwerfen').addEventListener('click', () =>
+    frage('Einsatz verwerfen?', 'Der laufende Einsatz und seine Fotos werden gelöscht. Es entsteht kein Eintrag.',
+      'Verwerfen', einsatzAbbrechen));
+
+  $('#live-shots').addEventListener('click', (e) => {
+    if (e.target.closest('.shot--add')) { $('#foto-eingabe').click(); return; }
+    const x = e.target.closest('.shot__x');
+    if (x) {
+      const id = x.dataset.id;
+      S.laufend.fotos = S.laufend.fotos.filter((f) => f.id !== id);
+      DB.loesche('fotos', id);
+      laufendSichern().then(renderShots);
+    }
+  });
+  $('#foto-eingabe').addEventListener('change', async (e) => {
+    const dateien = [...e.target.files].slice(0, MAX_FOTOS - S.laufend.fotos.length);
+    e.target.value = '';
+    if (!dateien.length) { toast(`Höchstens ${MAX_FOTOS} Fotos je Eintrag`); return; }
+    for (const d of dateien) {
+      try { S.laufend.fotos.push(await fotoAblegen(d)); }
+      catch (_) { toast('Ein Bild konnte nicht gelesen werden'); }
+    }
+    await laufendSichern();
+    renderShots();
+  });
+}
+
+async function renderShots() {
+  const box = $('#live-shots'); if (!box) return;
+  const teile = [];
+  for (const f of S.laufend.fotos) {
+    const u = await bildUrl(f.id);
+    teile.push(`<div class="shot"><img src="${u}" alt="Foto zum laufenden Einsatz">
+      <button class="shot__x" type="button" data-id="${f.id}" aria-label="Foto entfernen"><svg><use href="#i-x"/></svg></button></div>`);
+  }
+  if (S.laufend.fotos.length < MAX_FOTOS) {
+    teile.push(`<button class="shot shot--add" type="button" aria-label="Foto aufnehmen"><svg><use href="#i-cam"/></svg></button>`);
+  }
+  box.innerHTML = teile.join('');
+}
+
+function aktualisiereLive() {
+  const t = $('#live-timer');
+  if (t && S.laufend) t.textContent = dauer(Date.now() - S.laufend.begonnen);
+  const g = $('#live-gps');
+  if (g && S.laufend) {
+    g.textContent = S.laufend.gpsStart
+      ? 'Standort erfasst: ' + gpsText(S.laufend.gpsStart)
+      : 'Ohne Standort – der Eintrag bleibt gültig.';
+  }
+}
+
+function ruheHtml() {
+  const heute = tagesBeginn();
+  const heutige = S.eintraege.filter((e) => e.beendet >= heute).sort((a, b) => b.beendet - a.beendet);
+  const monat = new Date(); monat.setDate(1);
+  const imMonat = S.eintraege.filter((e) => e.beendet >= tagesBeginn(monat)).length;
+  const aktive = S.objekte.filter((o) => !o.archiviert);
+
+  if (!aktive.length) {
+    return `<div class="card">
+      <div class="empty">
+        <svg><use href="#i-bldg"/></svg>
+        <h2 class="card__title" style="margin-bottom:6px">Noch kein Objekt angelegt</h2>
+        <p>Legen Sie zuerst das Objekt an, für das Sie dokumentieren – Anschrift und Bezeichnung genügen.</p>
+      </div>
+      <button class="btn btn--primary btn--block" type="button" id="btn-erstes-objekt">
+        <svg><use href="#i-plus"/></svg> Erstes Objekt anlegen
+      </button>
+    </div>`;
+  }
+
+  return `
+  <button class="btn btn--primary btn--hero btn--block" type="button" id="btn-start">
+    <svg><use href="#i-play"/></svg> Einsatz starten
+  </button>
+
+  <div class="stats">
+    <div class="stat"><div class="stat__n">${heutige.length}</div><div class="stat__l">heute</div></div>
+    <div class="stat"><div class="stat__n">${imMonat}</div><div class="stat__l">diesen Monat</div></div>
+    <div class="stat"><div class="stat__n">${aktive.length}</div><div class="stat__l">Objekte</div></div>
+  </div>
+
+  <div class="card card--flat">
+    <div class="card__head"><h2 class="card__title">Heute dokumentiert</h2>
+      <span class="card__hint">${esc(langDat(Date.now()))}</span></div>
+    ${heutige.length
+      ? `<div class="list">${heutige.map(eintragZeile).join('')}</div>`
+      : `<div class="empty"><svg><use href="#i-clock"/></svg><p>Für heute ist noch nichts eingetragen.</p></div>`}
+  </div>`;
+}
+
+function eintragZeile(e) {
+  const a = artOf(e.art);
+  const korr = e.korrekturZu ? `<span class="tag tag--warn">Korrektur zu Nr. ${e.korrekturZu.seq}</span>` : '';
+  const foto = e.fotos?.length ? `<span class="tag">${e.fotos.length} Foto${e.fotos.length > 1 ? 's' : ''}</span>` : '';
+  const gps = e.gpsStart ? `<span class="tag"><svg style="width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.4" viewBox="0 0 24 24"><use href="#i-pin"/></svg>Standort</span>` : '';
+  return `<button class="item" type="button" data-eintrag="${e.id}">
+    <span class="item__dot" aria-hidden="true"></span>
+    <span class="item__body">
+      <span class="item__t">${esc(objName(e.objektId))}</span>
+      <span class="item__s">${esc(a.kurz)} · ${esc(e.massnahmen.join(', ') || '–')}</span>
+      <span class="tags"><span class="tag tag--ok">Nr. ${e.seq}</span>${korr}${foto}${gps}</span>
+    </span>
+    <span class="item__r">${esc(dat(e.beendet))}<br>${esc(zeit(e.beendet))}</span>
+  </button>`;
+}
+
+function renderHeute() {
+  const box = $('#heute-inhalt');
+  if (S.laufend) {
+    if (box.dataset.modus !== 'live') {
+      box.dataset.modus = 'live';
+      box.innerHTML = liveHtml();
+      bindLive();
+      renderShots();
+    }
+    aktualisiereLive();
+  } else {
+    box.dataset.modus = 'ruhe';
+    box.innerHTML = ruheHtml();
+    $('#btn-erstes-objekt')?.addEventListener('click', () => objektBogen());
+    $('#btn-start')?.addEventListener('click', startBogen);
+  }
+}
+
+function startBogen() {
+  let art = 'winterdienst';
+  sheetOeffnen('Einsatz starten', () => {
+    const d = document.createElement('div');
+    d.className = 'stack';
+    d.innerHTML = `
+      <div>
+        <p class="lbl" style="margin-bottom:8px">Art des Einsatzes</p>
+        <div class="chips" id="start-art">
+          ${Object.entries(ARTEN).map(([k, v]) => `
+            <button class="chip" type="button" data-art="${k}" aria-pressed="${k === art}">
+              <svg class="chip__tick" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11"/></svg>${esc(v.name)}
+            </button>`).join('')}
+        </div>
+      </div>
+      <div>
+        <p class="lbl" style="margin-bottom:8px">Objekt wählen – der Einsatz startet sofort</p>
+        <div class="list" id="start-objekte">
+          ${S.objekte.filter((o) => !o.archiviert).map((o) => `
+            <button class="item" type="button" data-objekt="${o.id}">
+              <span class="item__body">
+                <span class="item__t">${esc(o.name)}</span>
+                <span class="item__s">${esc([o.strasse, [o.plz, o.ort].filter(Boolean).join(' ')].filter(Boolean).join(', ') || 'ohne Anschrift')}</span>
+              </span>
+              <span class="item__r"><svg style="width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24"><use href="#i-right"/></svg></span>
+            </button>`).join('')}
+        </div>
+      </div>`;
+    d.querySelector('#start-art').addEventListener('click', (e) => {
+      const c = e.target.closest('.chip'); if (!c) return;
+      art = c.dataset.art;
+      $$('#start-art .chip').forEach((x) => x.setAttribute('aria-pressed', x === c));
+    });
+    d.querySelector('#start-objekte').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-objekt]'); if (!b) return;
+      sheetSchliessen();
+      einsatzStarten(b.dataset.objekt, art);
+    });
+    return d;
+  });
+}
+
+/* ---------------- Ansicht: Objekte ---------------- */
+const KAUF_MAIL = 'info@cleangreennature.de';   // Anlaufstelle fuer Freischaltungen
+const anschrift = (o) => [o.strasse, [o.plz, o.ort].filter(Boolean).join(' ')].filter(Boolean).join(', ');
+
+function renderObjekte() {
+  const aktive = S.objekte.filter((o) => !o.archiviert);
+  const grenze = objektGrenze();
+  $('#obj-zaehler').textContent = aktive.length + (grenze === Infinity ? ' angelegt' : ' von ' + grenze);
+  $('#btn-neues-objekt').disabled = !darfObjekt();
+
+  $('#objekt-liste').innerHTML = aktive.length ? aktive.map((o) => {
+    const n = S.eintraege.filter((e) => e.objektId === o.id).length;
+    const letzt = S.eintraege.filter((e) => e.objektId === o.id).sort((a, b) => b.beendet - a.beendet)[0];
+    return `<button class="item" type="button" data-objekt="${o.id}">
+      <span class="item__body">
+        <span class="item__t">${esc(o.name)}</span>
+        <span class="item__s">${esc(anschrift(o) || 'ohne Anschrift')}</span>
+        <span class="tags">
+          <span class="tag">${n} Eintrag${n === 1 ? '' : 'e'}</span>
+          ${letzt ? `<span class="tag">zuletzt ${esc(dat(letzt.beendet))}</span>` : '<span class="tag tag--warn">noch nichts erfasst</span>'}
+        </span>
+      </span>
+      <span class="item__r"><svg style="width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24"><use href="#i-pencil"/></svg></span>
+    </button>`;
+  }).join('') : `<div class="empty"><svg><use href="#i-bldg"/></svg><p>Noch kein Objekt angelegt.</p></div>`;
+
+  $('#objekt-limit').innerHTML = darfObjekt() ? '' : `
+    <div class="note note--info">
+      <strong>Grenze der kostenfreien Fassung erreicht.</strong><br>
+      Mit der Freischaltung dokumentieren Sie beliebig viele Objekte in einer gemeinsamen,
+      durchgehend geprüften Kette. Zu finden unter „Mehr“.
+    </div>`;
+}
+
+function objektBogen(vorhanden = null) {
+  const o = vorhanden || { id: uid(), name: '', strasse: '', plz: '', ort: '', notiz: '', angelegt: Date.now() };
+  const neu = !vorhanden;
+  if (neu && !darfObjekt()) {
+    sheetOeffnen('Weitere Objekte freischalten', () => `
+      <p class="lede">In der kostenfreien Fassung führen Sie ein Objekt. Für Hausverwaltungen,
+      Hausmeisterdienste und Kommunen gibt es die Freischaltung für beliebig viele Objekte.</p>
+      <p class="lede">Schlüssel anfordern: <strong>${esc(KAUF_MAIL)}</strong></p>`,
+      [{ text: 'Schliessen', tu: sheetSchliessen }]);
+    return;
+  }
+  sheetOeffnen(neu ? 'Objekt anlegen' : 'Objekt bearbeiten', () => {
+    const d = document.createElement('div');
+    d.className = 'stack';
+    d.innerHTML = `
+      <div class="field"><label for="o-name">Bezeichnung *</label>
+        <input class="inp" id="o-name" type="text" required maxlength="80"
+               placeholder="z. B. Wohnanlage Lindenweg 4–8" value="${esc(o.name)}"></div>
+      <div class="field"><label for="o-str">Strasse und Hausnummer</label>
+        <input class="inp" id="o-str" type="text" maxlength="90" autocomplete="street-address" value="${esc(o.strasse)}"></div>
+      <div class="grid2">
+        <div class="field"><label for="o-plz">PLZ</label>
+          <input class="inp" id="o-plz" type="text" inputmode="numeric" maxlength="5" value="${esc(o.plz)}"></div>
+        <div class="field"><label for="o-ort">Ort</label>
+          <input class="inp" id="o-ort" type="text" maxlength="60" value="${esc(o.ort)}"></div>
+      </div>
+      <div class="field"><label for="o-notiz">Vermerk zum Objekt</label>
+        <textarea class="inp" id="o-notiz" maxlength="500"
+          placeholder="z. B. Streupflicht werktags 7–20 Uhr, Zugang über Hof">${esc(o.notiz)}</textarea></div>
+      ${neu ? '' : `<button class="btn btn--danger btn--block" type="button" id="o-weg">
+        <svg><use href="#i-trash"/></svg> Objekt archivieren</button>
+      <p class="hint">Vorhandene Einträge bleiben im Protokoll und in der Kette erhalten.</p>`}`;
+    d.querySelector('#o-weg')?.addEventListener('click', () => {
+      sheetSchliessen();
+      frage('Objekt archivieren?', 'Das Objekt erscheint nicht mehr in der Auswahl. Alle bisherigen Einträge bleiben unverändert im Protokoll.',
+        'Archivieren', async () => {
+          o.archiviert = true;
+          await DB.setze('objekte', o);
+          renderAlles();
+          toast('Objekt archiviert');
+        });
+    });
+    return d;
+  }, [
+    { text: 'Abbrechen', tu: sheetSchliessen },
+    { text: 'Speichern', stil: 'btn--primary', tu: async () => {
+        const name = $('#o-name').value.trim();
+        if (!name) { toast('Bitte eine Bezeichnung eingeben'); $('#o-name').focus(); return; }
+        Object.assign(o, {
+          name, strasse: $('#o-str').value.trim(), plz: $('#o-plz').value.trim(),
+          ort: $('#o-ort').value.trim(), notiz: $('#o-notiz').value.trim()
+        });
+        await DB.setze('objekte', o);
+        if (neu) S.objekte.push(o);
+        sheetSchliessen();
+        renderAlles();
+        toast(neu ? 'Objekt angelegt' : 'Objekt gespeichert');
+      } }
+  ]);
+}
+
+/* ---------------- Ansicht: Protokoll ---------------- */
+function auswahl() {
+  const objektId = $('#f-objekt').value;
+  const wahl = $('#f-zeit').value;
+  let von = 0, bis = Date.now() + 864e5, text = 'gesamter Zeitraum';
+  if (wahl === 'saison') {
+    const j = new Date().getMonth() < 7 ? new Date().getFullYear() - 1 : new Date().getFullYear();
+    von = new Date(j, 9, 1).getTime();
+    bis = new Date(j + 1, 3, 30, 23, 59, 59).getTime();
+    text = `Winterhalbjahr 1.10.${j} – 30.4.${j + 1}`;
+  } else if (wahl !== '0') {
+    von = tagesBeginn() - (Number(wahl) - 1) * 864e5;
+    text = `${dat(von)} – ${dat(Date.now())}`;
+  }
+  const liste = S.eintraege
+    .filter((e) => (!objektId || e.objektId === objektId) && e.beendet >= von && e.beendet <= bis)
+    .sort((a, b) => b.beendet - a.beendet);
+  return { liste, objektId, von, bis, text };
+}
+
+function renderProtokoll() {
+  const sel = $('#f-objekt');
+  const merk = sel.value;
+  sel.innerHTML = '<option value="">Alle Objekte</option>' +
+    S.objekte.map((o) => `<option value="${o.id}">${esc(o.name)}${o.archiviert ? ' (archiviert)' : ''}</option>`).join('');
+  sel.value = merk;
+
+  const { liste } = auswahl();
+  const gesamtzeit = liste.reduce((s, e) => s + Math.max(0, e.beendet - e.begonnen), 0);
+  const fotos = liste.reduce((s, e) => s + (e.fotos?.length || 0), 0);
+  $('#p-stats').innerHTML = `
+    <div class="stat"><div class="stat__n">${liste.length}</div><div class="stat__l">Einträge</div></div>
+    <div class="stat"><div class="stat__n">${Math.round(gesamtzeit / 60000)}</div><div class="stat__l">Minuten</div></div>
+    <div class="stat"><div class="stat__n">${fotos}</div><div class="stat__l">Fotos</div></div>`;
+
+  $('#protokoll-liste').innerHTML = liste.length ? liste.map(eintragZeile).join('')
+    : `<div class="empty"><svg><use href="#i-doc"/></svg><p>Für diese Auswahl gibt es keine Einträge.</p></div>`;
+  $('#btn-drucken').disabled = !liste.length;
+}
+
+async function eintragBogen(id) {
+  const e = S.eintraege.find((x) => x.id === id);
+  if (!e) return;
+  const a = artOf(e.art);
+  const bilder = [];
+  for (const f of (e.fotos || [])) {
+    const u = await bildUrl(f.id);
+    if (u) bilder.push(`<div class="shot" style="width:92px;height:92px"><img src="${u}" alt="Foto zu Eintrag Nr. ${e.seq}"></div>`);
+  }
+  sheetOeffnen(`Eintrag Nr. ${e.seq}`, () => `
+    <div class="note note--info"><strong>${esc(objName(e.objektId))}</strong><br>${esc(a.name)}</div>
+    <dl class="kv">
+      <dt>Datum</dt><dd>${esc(langDat(e.beendet))}</dd>
+      <dt>Zeit</dt><dd>${esc(zeit(e.begonnen))} – ${esc(zeit(e.beendet))} Uhr (${esc(dauerKurz(e.beendet - e.begonnen))})</dd>
+      <dt>Maßnahmen</dt><dd>${esc(e.massnahmen.join(', ') || '–')}</dd>
+      ${e.wetter ? `<dt>Witterung</dt><dd>${esc(e.wetter)}</dd>` : ''}
+      ${e.temperatur !== '' && e.temperatur != null ? `<dt>Temperatur</dt><dd>${esc(e.temperatur)} °C</dd>` : ''}
+      <dt>Bearbeiter</dt><dd>${esc(e.bearbeiter || '–')}${e.firma ? ' · ' + esc(e.firma) : ''}</dd>
+      <dt>Standort Beginn</dt><dd>${esc(gpsText(e.gpsStart))}</dd>
+      <dt>Standort Ende</dt><dd>${esc(gpsText(e.gpsEnde))}</dd>
+      ${e.bemerkung ? `<dt>Bemerkung</dt><dd>${esc(e.bemerkung)}</dd>` : ''}
+      ${e.korrekturZu ? `<dt>Korrektur zu</dt><dd>Eintrag Nr. ${e.korrekturZu.seq}</dd>` : ''}
+    </dl>
+    ${bilder.length ? `<div><p class="lbl" style="margin-bottom:7px">Fotos</p><div class="shots">${bilder.join('')}</div></div>` : ''}
+    <div>
+      <p class="lbl" style="margin-bottom:5px">Prüfsumme dieses Eintrags</p>
+      <p class="hash">${esc(e.hash)}</p>
+      <p class="lbl" style="margin:9px 0 5px">Prüfsumme des Vorgängers</p>
+      <p class="hash">${esc(e.prev)}</p>
+    </div>
+    <p class="hint">Einträge lassen sich nicht ändern. Ergänzungen werden als eigener,
+       ebenfalls versiegelter Eintrag angehängt.</p>`,
+    [
+      { text: 'Schliessen', tu: sheetSchliessen },
+      { text: 'Korrektur anhängen', stil: 'btn--primary', tu: () => { sheetSchliessen(); setTimeout(() => korrekturBogen(e), 260); } }
+    ]);
+}
+
+function korrekturBogen(original) {
+  sheetOeffnen(`Korrektur zu Nr. ${original.seq}`, () => `
+    <p class="lede">Der ursprüngliche Eintrag bleibt unverändert. Ihre Ergänzung wird als
+       neuer Eintrag angehängt und verweist auf Nr. ${original.seq}.</p>
+    <div class="field"><label for="k-text">Was ist zu ergänzen oder richtigzustellen?</label>
+      <textarea class="inp" id="k-text" maxlength="800" style="min-height:130px"
+        placeholder="z. B. Streuzeit war 06:40 statt 06:10 – Uhrzeit beim Start versehentlich später erfasst."></textarea></div>`,
+    [
+      { text: 'Abbrechen', tu: sheetSchliessen },
+      { text: 'Anhängen', stil: 'btn--primary', tu: async () => {
+          const t = $('#k-text').value.trim();
+          if (t.length < 5) { toast('Bitte den Grund kurz beschreiben'); return; }
+          sheetSchliessen();
+          await korrekturAnlegen(original, t);
+        } }
+    ]);
+}
+
+async function ketteAnzeigen() {
+  const box = $('#pruef-ergebnis');
+  box.innerHTML = `<div class="note note--info">Kette wird geprüft …</div>`;
+  const r = await ketteVerifizieren(true);
+  box.innerHTML = r.ok
+    ? `<div class="note note--info"><strong>Kette vollständig und unverändert.</strong><br>
+        ${r.anzahl} Eintr${r.anzahl === 1 ? 'ag' : 'äge'} und ${r.fotos} Foto${r.fotos === 1 ? '' : 's'} geprüft.
+        Abschluss der Kette:<br><span class="hash">${esc(r.kopf)}</span></div>`
+    : `<div class="note note--bad"><strong>Die Kette ist unterbrochen.</strong><br>${esc(r.grund)}</div>`;
+}
+
+/* ---------------- Ansicht: Mehr ---------------- */
+function renderMehr() {
+  $('#s-bearbeiter').value = S.einst.bearbeiter || '';
+  $('#s-firma').value = S.einst.firma || '';
+  $('#version').textContent = VERSION;
+
+  const k = $('#lizenz-karte');
+  if (proAktiv()) {
+    const grenze = S.lizenz.o ? `${S.lizenz.o} Objekte` : 'unbegrenzt viele Objekte';
+    k.innerHTML = `
+      <div class="card__head"><h2 class="card__title">Freischaltung</h2>
+        <span class="card__hint"><span class="tag tag--ok">aktiv</span></span></div>
+      <dl class="kv">
+        <dt>Lizenznehmer</dt><dd>${esc(S.lizenz.n || '–')}</dd>
+        <dt>Umfang</dt><dd>${esc(grenze)}</dd>
+        <dt>Gültig bis</dt><dd>${S.lizenz.b ? esc(dat(Date.parse(S.lizenz.b))) : 'unbefristet'}</dd>
+      </dl>
+      <button class="btn btn--ghost btn--block btn--sm" type="button" id="btn-lizenz-weg" style="margin-top:12px">
+        Freischaltung von diesem Gerät entfernen</button>`;
+    k.querySelector('#btn-lizenz-weg').addEventListener('click', () =>
+      frage('Freischaltung entfernen?', 'Ihre Daten bleiben erhalten. Neue Objekte lassen sich danach nur noch im kostenfreien Umfang anlegen.',
+        'Entfernen', async () => { S.lizenz = null; await metaSetz('lizenz', null); renderAlles(); toast('Freischaltung entfernt'); }));
+  } else {
+    k.innerHTML = `
+      <div class="card__head"><h2 class="card__title">Mehr Objekte führen</h2></div>
+      <p class="hint" style="margin-bottom:12px">
+        Kostenfrei dokumentieren Sie ein Objekt vollständig – mit Fotos, Standort, Kette und PDF.
+        Für mehrere Objekte gibt es die Freischaltung; alle Objekte laufen dann in einer
+        gemeinsamen, durchgehend geprüften Kette.</p>
+      <button class="btn btn--primary btn--block" type="button" id="btn-lizenz">
+        <svg><use href="#i-key"/></svg> Schlüssel eingeben</button>`;
+    k.querySelector('#btn-lizenz').addEventListener('click', lizenzBogen);
+  }
+  speicherAnzeigen();
+}
+
+function lizenzBogen() {
+  sheetOeffnen('Freischalten', () => `
+    <p class="lede">Geben Sie den Schlüssel ein, den Sie beim Kauf erhalten haben.
+       Die Prüfung läuft auf dem Gerät – ohne Internetverbindung, ohne Konto.</p>
+    <div class="field"><label for="l-key">Schlüssel</label>
+      <textarea class="inp" id="l-key" style="min-height:110px;font-family:var(--mono);font-size:13px"
+        placeholder="eyJrIjoicGZsaWNodGJ1Y2gi… . MEUCIQ…"></textarea></div>
+    <p class="hint">Noch keinen Schlüssel? Anfragen unter <strong>${esc(KAUF_MAIL)}</strong>.</p>`,
+    [
+      { text: 'Abbrechen', tu: sheetSchliessen },
+      { text: 'Prüfen', stil: 'btn--primary', tu: async () => {
+          try {
+            const nutz = await lizenzPruefen($('#l-key').value);
+            S.lizenz = nutz;
+            await metaSetz('lizenz', nutz);
+            sheetSchliessen();
+            renderAlles();
+            toast('Freischaltung aktiv');
+          } catch (err) { toast(err.message); }
+        } }
+    ]);
+}
+
+async function speicherAnzeigen() {
+  const el = $('#speicher-info');
+  if (!el) return;
+  const fotos = await DB.alle('fotos');
+  const bytes = fotos.reduce((s, f) => s + (f.blob?.size || 0), 0);
+  const mb = (bytes / 1048576).toFixed(1);
+  let text = `${S.eintraege.length} Einträge, ${fotos.length} Fotos, rund ${mb} MB auf diesem Gerät.`;
+  if (navigator.storage?.persist) {
+    const dauerhaft = await navigator.storage.persisted?.();
+    if (!dauerhaft) text += ' Der Browser darf diesen Speicher bei Platzmangel leeren – bitte sichern Sie regelmässig.';
+  }
+  el.textContent = text;
+}
+
+/* ---------------- Sicherung ---------------- */
+function dateiSpeichern(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+const blobZuB64 = (blob) => new Promise((ok, fail) => {
+  const r = new FileReader();
+  r.onload = () => ok(String(r.result).split(',')[1] || '');
+  r.onerror = () => fail(r.error);
+  r.readAsDataURL(blob);
+});
+
+async function sicherungErstellen() {
+  toast('Sicherung wird erstellt …');
+  const fotos = await DB.alle('fotos');
+  /* Als Blob-Teile zusammensetzen, damit nie die gesamte Datei im Speicher steht. */
+  const teile = ['{\n"typ":"pflichtbuch-sicherung","version":1,"erstellt":' + JSON.stringify(new Date().toISOString()) +
+    ',\n"einstellungen":' + JSON.stringify(S.einst) +
+    ',\n"lizenz":' + JSON.stringify(S.lizenz) +
+    ',\n"objekte":' + JSON.stringify(S.objekte) +
+    ',\n"eintraege":' + JSON.stringify([...S.eintraege].sort((a, b) => a.seq - b.seq)) +
+    ',\n"fotos":['];
+  for (let i = 0; i < fotos.length; i++) {
+    const f = fotos[i];
+    teile.push((i ? ',' : '') + '{"id":' + JSON.stringify(f.id) + ',"hash":' + JSON.stringify(f.hash) +
+      ',"typ":' + JSON.stringify(f.blob.type || 'image/jpeg') + ',"daten":"' + await blobZuB64(f.blob) + '"}');
+  }
+  teile.push(']\n}\n');
+  const name = 'pflichtbuch-sicherung-' + new Date().toISOString().slice(0, 10) + '.json';
+  dateiSpeichern(new Blob(teile, { type: 'application/json' }), name);
+  toast('Sicherung gespeichert');
+}
+
+const b64ZuBlob = (b64, typ) => {
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return new Blob([arr], { type: typ });
+};
+
+async function sicherungEinlesen(datei) {
+  let d;
+  try { d = JSON.parse(await datei.text()); }
+  catch (_) { toast('Die Datei liess sich nicht lesen'); return; }
+  if (d.typ !== 'pflichtbuch-sicherung') { toast('Das ist keine Pflichtbuch-Sicherung'); return; }
+
+  frage('Sicherung einlesen?', `Die Sicherung enthält ${d.objekte?.length || 0} Objekte und ${d.eintraege?.length || 0} Einträge. Der aktuelle Bestand auf diesem Gerät wird vollständig ersetzt.`,
+    'Einlesen', async () => {
+      await Promise.all([DB.leere('objekte'), DB.leere('eintraege'), DB.leere('fotos')]);
+      for (const o of (d.objekte || [])) await DB.setze('objekte', o);
+      for (const e of (d.eintraege || [])) await DB.setze('eintraege', e);
+      for (const f of (d.fotos || [])) {
+        await DB.setze('fotos', { id: f.id, hash: f.hash, blob: b64ZuBlob(f.daten, f.typ || 'image/jpeg'), angelegt: Date.now() });
+      }
+      S.einst = d.einstellungen || S.einst;
+      S.lizenz = d.lizenz || null;
+      await metaSetz('einst', S.einst);
+      await metaSetz('lizenz', S.lizenz);
+      bildUrls.forEach((u) => URL.revokeObjectURL(u));
+      bildUrls.clear();
+      await datenLaden();
+      renderAlles();
+      toast('Sicherung eingelesen');
+    }, 'btn--primary');
+}
+
+/* ---------------- Druck / PDF ---------------- */
+async function protokollDrucken() {
+  const { liste, objektId, text } = auswahl();
+  if (!liste.length) { toast('Für diese Auswahl gibt es nichts zu drucken'); return; }
+  toast('Protokoll wird aufbereitet …');
+  const pruef = await ketteVerifizieren(false);
+  const chron = [...liste].sort((a, b) => a.seq - b.seq);
+  const o = objektId ? objOf(objektId) : null;
+
+  const zeilen = chron.map((e) => `<tr>
+    <td>${e.seq}</td>
+    <td>${esc(dat(e.beendet))}</td>
+    <td>${esc(zeit(e.begonnen))}–${esc(zeit(e.beendet))}</td>
+    ${objektId ? '' : `<td>${esc(objName(e.objektId))}</td>`}
+    <td>${esc(artOf(e.art).kurz)}</td>
+    <td>${esc(e.massnahmen.join(', ') || '–')}${e.bemerkung ? '<br><em>' + esc(e.bemerkung) + '</em>' : ''}${e.korrekturZu ? '<br><strong>Korrektur zu Nr. ' + e.korrekturZu.seq + '</strong>' : ''}</td>
+    <td>${esc(e.wetter || '–')}${(e.temperatur !== '' && e.temperatur != null) ? '<br>' + esc(e.temperatur) + ' °C' : ''}</td>
+    <td>${esc(e.bearbeiter || '–')}</td>
+    <td>${e.gpsStart ? esc(e.gpsStart.lat.toFixed(5)) + '<br>' + esc(e.gpsStart.lon.toFixed(5)) : '–'}</td>
+    <td class="p-mono">${esc(e.hash.slice(0, 16))}</td>
+  </tr>`).join('');
+
+  const mitFotos = chron.filter((e) => e.fotos?.length);
+  let anhang = '';
+  if (mitFotos.length) {
+    const bloecke = [];
+    for (const e of mitFotos) {
+      const bilder = [];
+      for (const f of e.fotos) {
+        const u = await bildUrl(f.id);
+        if (u) bilder.push(`<figure style="margin:0;width:47%">
+          <img src="${u}" alt="" style="width:100%;border:.6pt solid #666">
+          <figcaption class="p-mono" style="margin-top:2pt">${esc(f.hash.slice(0, 24))}…</figcaption></figure>`);
+      }
+      bloecke.push(`<div style="page-break-inside:avoid;margin-bottom:12pt">
+        <p style="font-weight:700;margin:0 0 4pt">Nr. ${e.seq} · ${esc(dat(e.beendet))} ${esc(zeit(e.begonnen))} Uhr · ${esc(objName(e.objektId))}</p>
+        <div style="display:flex;gap:6pt;flex-wrap:wrap">${bilder.join('')}</div></div>`);
+    }
+    anhang = `<div class="p-break"><h2 style="font-size:13pt;margin:0 0 10pt">Fotoanhang</h2>${bloecke.join('')}</div>`;
+  }
+
+  $('#druck').innerHTML = `
+    <div class="p-h">
+      <div>
+        <h1>Nachweis der Verkehrssicherungspflicht</h1>
+        <p style="margin:3pt 0 0;font-size:10pt">${esc(text)}</p>
+      </div>
+      <div class="p-meta">
+        ${esc(S.einst.firma || '')}<br>
+        erstellt ${esc(dat(Date.now()))} ${esc(zeit(Date.now()))} Uhr<br>
+        Pflichtbuch ${esc(VERSION)}
+      </div>
+    </div>
+
+    <p class="p-obj">
+      <strong>Objekt</strong>${esc(o ? o.name : 'alle Objekte')}<br>
+      ${o && anschrift(o) ? `<strong>Anschrift</strong>${esc(anschrift(o))}<br>` : ''}
+      ${o && o.notiz ? `<strong>Vermerk</strong>${esc(o.notiz)}<br>` : ''}
+      <strong>Einträge</strong>${chron.length}
+    </p>
+
+    <table class="p-t">
+      <thead><tr>
+        <th>Nr.</th><th>Datum</th><th>Zeit</th>${objektId ? '' : '<th>Objekt</th>'}
+        <th>Art</th><th>Maßnahmen / Bemerkung</th><th>Witterung</th><th>Bearbeiter</th><th>Standort</th><th>Prüfsumme</th>
+      </tr></thead>
+      <tbody>${zeilen}</tbody>
+    </table>
+
+    <div class="p-f">
+      <strong>Zur Fälschungssicherheit:</strong> Jeder Eintrag ist mit einer Prüfsumme (SHA-256) versiegelt,
+      die den vollständigen Inhalt des Eintrags und die Prüfsumme des vorherigen Eintrags einschliesst.
+      Nachträgliche Änderungen oder das Entfernen einzelner Einträge brechen die Kette nachweisbar.
+      Angezeigt sind die ersten 16 Zeichen jeder Prüfsumme.<br>
+      <strong>Prüfung am ${esc(dat(Date.now()))}:</strong>
+      ${pruef.ok
+        ? `Kette über alle ${pruef.anzahl} Einträge vollständig und unverändert. Abschluss: <span class="p-mono">${esc(pruef.kopf)}</span>`
+        : `<span style="font-weight:700">Kette unterbrochen – ${esc(pruef.grund)}</span>`}
+    </div>
+
+    <div class="p-sig">
+      <div>Ort, Datum</div>
+      <div>${esc(S.einst.bearbeiter || 'Unterschrift Bearbeiter')}</div>
+    </div>
+
+    ${anhang}`;
+
+  await Promise.all([...$$('#druck img')].map((i) => (i.decode ? i.decode().catch(() => {}) : Promise.resolve())));
+  setTimeout(() => window.print(), 120);
+}
+
+/* ---------------- Laden, Verdrahtung, Start ---------------- */
+function renderAlles() {
+  renderHeute();
+  renderObjekte();
+  renderProtokoll();
+  renderMehr();
+}
+
+async function datenLaden() {
+  S.objekte = await DB.alle('objekte');
+  S.eintraege = await DB.alle('eintraege');
+  S.einst = await metaLies('einst', { bearbeiter: '', firma: '' });
+  S.lizenz = await metaLies('lizenz', null);
+  S.laufend = await metaLies('laufend', null);
+  if (S.lizenz && S.lizenz.b && Date.parse(S.lizenz.b) < Date.now()) {
+    S.lizenz = null;
+    await metaSetz('lizenz', null);
+  }
+}
+
+function themaSetzen(t) {
+  if (t) document.documentElement.setAttribute('data-theme', t);
+  else document.documentElement.removeAttribute('data-theme');
+  try { t ? localStorage.setItem('pb-thema', t) : localStorage.removeItem('pb-thema'); } catch (_) {}
+}
+
+let installEreignis = null;
+function installKarteZeigen() {
+  if (!installEreignis || $('#install-karte')) return;
+  const d = document.createElement('div');
+  d.className = 'card';
+  d.id = 'install-karte';
+  d.innerHTML = `<div class="card__head"><h2 class="card__title">Auf den Startbildschirm</h2></div>
+    <p class="hint" style="margin-bottom:12px">So öffnet sich Pflichtbuch wie eine gewöhnliche App –
+       im Vollbild und ohne Adresszeile.</p>
+    <button class="btn btn--primary btn--block" type="button" id="btn-install">
+      <svg><use href="#i-down"/></svg> Jetzt hinzufügen</button>`;
+  $('#v-mehr').insertBefore(d, $('#v-mehr').children[1]);
+  $('#btn-install').addEventListener('click', async () => {
+    installEreignis.prompt();
+    const { outcome } = await installEreignis.userChoice;
+    if (outcome === 'accepted') { d.remove(); installEreignis = null; }
+  });
+}
+
+function verdrahten() {
+  $$('.nav__b').forEach((b) => b.addEventListener('click', () => zeigeAnsicht(b.dataset.view)));
+  $('#scrim').addEventListener('click', sheetSchliessen);
+  $('#sheet-zu').addEventListener('click', sheetSchliessen);
+
+  $('#btn-theme').addEventListener('click', () => {
+    const jetzt = document.documentElement.getAttribute('data-theme');
+    const dunkelSystem = matchMedia('(prefers-color-scheme: dark)').matches;
+    const effektiv = jetzt || (dunkelSystem ? 'dark' : 'light');
+    themaSetzen(effektiv === 'dark' ? 'light' : 'dark');
+  });
+
+  $('#btn-neues-objekt').addEventListener('click', () => objektBogen());
+  $('#f-objekt').addEventListener('change', renderProtokoll);
+  $('#f-zeit').addEventListener('change', renderProtokoll);
+  $('#btn-pruefen').addEventListener('click', ketteAnzeigen);
+  $('#btn-drucken').addEventListener('click', protokollDrucken);
+
+  $('#s-bearbeiter').addEventListener('input', async (e) => { S.einst.bearbeiter = e.target.value; await metaSetz('einst', S.einst); });
+  $('#s-firma').addEventListener('input', async (e) => { S.einst.firma = e.target.value; await metaSetz('einst', S.einst); });
+
+  $('#btn-export').addEventListener('click', sicherungErstellen);
+  $('#btn-import').addEventListener('click', () => $('#import-datei').click());
+  $('#import-datei').addEventListener('change', (e) => {
+    const f = e.target.files[0];
+    e.target.value = '';
+    if (f) sicherungEinlesen(f);
+  });
+
+  $('#btn-alles-loeschen').addEventListener('click', () =>
+    frage('Wirklich alles löschen?', 'Objekte, Einträge, Fotos und die gesamte Kette werden von diesem Gerät entfernt. Das lässt sich nicht rückgängig machen – erstellen Sie vorher eine Sicherung.',
+      'Endgültig löschen', async () => {
+        await Promise.all([DB.leere('objekte'), DB.leere('eintraege'), DB.leere('fotos')]);
+        await metaSetz('laufend', null);
+        bildUrls.forEach((u) => URL.revokeObjectURL(u));
+        bildUrls.clear();
+        await datenLaden();
+        renderAlles();
+        zeigeAnsicht('heute');
+        toast('Alle Daten gelöscht');
+      }));
+
+  document.addEventListener('click', (ev) => {
+    const e = ev.target.closest('[data-eintrag]');
+    if (e) { eintragBogen(e.dataset.eintrag); return; }
+    const o = ev.target.closest('#objekt-liste [data-objekt]');
+    if (o) objektBogen(objOf(o.dataset.objekt));
+  });
+
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && S.laufend) aktualisiereLive(); });
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    installEreignis = e;
+    if (S.ansicht === 'mehr') installKarteZeigen();
+  });
+
+  window.addEventListener('beforeunload', (e) => {
+    if (S.laufend) { e.preventDefault(); e.returnValue = ''; }
+  });
+}
+
+async function start() {
+  try { themaSetzen(localStorage.getItem('pb-thema')); } catch (_) {}
+
+  try {
+    await datenLaden();
+  } catch (_) {
+    document.body.innerHTML = '<p style="padding:28px;font:16px system-ui">Der Speicher dieses Browsers ist nicht verfügbar. ' +
+      'Pflichtbuch benötigt IndexedDB – bitte den privaten Modus verlassen oder einen anderen Browser verwenden.</p>';
+    return;
+  }
+
+  verdrahten();
+  renderAlles();
+  setInterval(() => { if (S.laufend) aktualisiereLive(); }, 1000);
+
+  if (S.eintraege.length && navigator.storage?.persist) navigator.storage.persist().catch(() => {});
+
+  const p = new URLSearchParams(location.search);
+  if (p.get('ansicht') === 'protokoll') zeigeAnsicht('protokoll');
+  else zeigeAnsicht('heute');
+  if (p.get('aktion') === 'start' && !S.laufend && S.objekte.some((o) => !o.archiviert)) startBogen();
+  if (p.has('ansicht') || p.has('aktion') || p.has('quelle')) history.replaceState({}, '', location.pathname);
+
+  const t = $('#top-sub');
+  if (proAktiv()) t.textContent = S.lizenz.n || 'Freigeschaltet';
+
+  if ('serviceWorker' in navigator && window.isSecureContext) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+}
+
+start();
+</script>
+</body>
+</html>

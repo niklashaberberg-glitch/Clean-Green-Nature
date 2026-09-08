@@ -16,7 +16,26 @@ index.html      die gesamte Website
 images/         drei Bilddateien – siehe images/README.md
 robots.txt      Freigabe für Suchmaschinen + Verweis auf die Sitemap
 sitemap.xml     Seitenverzeichnis für Google & Co.
+app/            Pflichtbuch – eigenständige App, siehe app/README.md
+tools/          internes Werkzeug, gehört NICHT auf den Webserver
 ```
+
+## Pflichtbuch – die App
+
+Im Ordner `app/` liegt ein zweites, eigenständiges Erzeugnis: **Pflichtbuch**,
+eine App zum Nachweis der Verkehrssicherungspflicht (Räum- und Streupflicht,
+Sichtkontrollen, Mängel). Sie richtet sich an Hausverwaltungen,
+Hausmeisterdienste und Bauhöfe – also an dieselben Ansprechpartner wie die
+Laserreinigung.
+
+Die App läuft offline, speichert ausschliesslich auf dem Gerät und versiegelt
+jeden Eintrag mit einer verketteten Prüfsumme. Sie lässt sich unverändert als
+Web-App betreiben und als Paket in den Google Play Store und den App Store
+bringen. Einbau, Preismodell, Freischaltung und der Weg in beide Stores stehen
+in `app/README.md`.
+
+Der Ordner `tools/` enthält das Werkzeug zum Erzeugen der Freischalt-Schlüssel
+und darf nicht mit hochgeladen werden.
 
 ## Veröffentlichen
 

@@ -1,0 +1,26 @@
+{
+  "name": "Pflichtbuch – Streuprotokoll & Verkehrssicherung",
+  "short_name": "Pflichtbuch",
+  "description": "Räum- und Streupflicht, Sichtkontrollen und Objektbegehungen in 30 Sekunden manipulationssicher dokumentieren. Offline, ohne Cloud.",
+  "lang": "de",
+  "dir": "ltr",
+  "start_url": "./?quelle=pwa",
+  "scope": "./",
+  "id": "/app/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#0b1220",
+  "theme_color": "#0d7c72",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-192-maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Einsatz starten", "short_name": "Einsatz", "url": "./?aktion=start", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Protokoll", "short_name": "Protokoll", "url": "./?ansicht=protokoll", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

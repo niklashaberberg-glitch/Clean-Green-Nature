@@ -16,6 +16,10 @@
    ===================================================================== */
 const fs = require('fs');
 const path = require('path');
+/* Die Preise stehen nicht hier, sondern in scripts/preise.js – dieselbe
+   Quelle, aus der auch das Angebot als PDF entsteht. Zwei Orte für
+   dieselbe Zahl wären einer zu viel. */
+const P = require('./preise.js');
 
 const WURZEL = path.join(__dirname, '..');
 const BASIS = 'https://www.trimmotrade.de';
@@ -129,7 +133,12 @@ ${seite.nichtIndexieren ? '' : `<script type="application/ld+json">${JSON.string
 }
 
 function fuss(seite) {
-  const andere = SEITEN.filter((s) => s.datei !== seite.datei);
+  /* „Weiterlesen“ führt zu Ratgebern, nicht zu einer Verkaufsseite.
+     Wer gerade nachliest, wie das maßgebliche Einkommen für einen WBS
+     gerechnet wird, sucht keinen Softwarevertrag. Die Seite für
+     Unternehmen wird gezielt von den beiden Ratgebern verlinkt, in
+     denen sie hingehört – Vermieten und Wohnungstausch. */
+  const andere = SEITEN.filter((s) => s.datei !== seite.datei && !s.ausserhalb);
   return `
   <section class="block">
     <h2>Weiterlesen</h2>
@@ -218,6 +227,10 @@ const SEITEN = [
     </ul>
     <p>Praktisch heißt das: Frag früh nach der Zustimmung, nicht erst, wenn die Kette steht. Eine
       Kette, die an einer einzigen Absage zerbricht, kostet alle Beteiligten Wochen.</p>
+    <p class="hinweisbox hinweisbox--tipp"><span><b>Sie verwalten selbst Wohnungen?</b>
+      Für Genossenschaften und Hausverwaltungen gibt es die Ringsuche als interne Tauschbörse –
+      jeder Tausch im eigenen Bestand ist eine Neuvermietung, die nicht stattfindet.
+      <a href="/fuer-unternehmen.html">Was das kostet und wie es abläuft</a></span></p>
   </section>
 `,
     fragen: [
@@ -607,6 +620,10 @@ const SEITEN = [
       <li><span><b>Betrugsprüfung.</b> Jedes Inserat wird auf die üblichen Muster geprüft. Das
         schützt auch Sie: Betrugsanzeigen mit gestohlenen Fotos laufen häufig auf Ihre Wohnung.</span></li>
     </ul>
+    <p class="hinweisbox hinweisbox--tipp"><span><b>Mehr als eine Wohnung?</b> Für Hausverwaltungen
+      und Genossenschaften gibt es die begründete Vorauswahl der Anfragen und eine interne
+      Tauschbörse mit Ringsuche.
+      <a href="/fuer-unternehmen.html">Leistungen und Preise für Unternehmen</a></span></p>
   </section>
 `,
     fragen: [
@@ -873,7 +890,149 @@ const SEITEN = [
         antwort: 'Nein. Der Beitrag fällt einmal je Wohnung an. Eine WG zahlt zusammen einen Beitrag; wer ihn anmeldet und wie er geteilt wird, sollte beim Einzug geklärt werden.' }
     ],
     tun: { text: 'Wohnungen für eine WG-Gründung', ziel: '/#/suche?wg=1' }
-  }
+  },
+  {
+    /* Die einzige Seite hier, die nicht für Wohnungssuchende gebaut ist.
+
+       Der Geschäftsplan nennt Genossenschaften und Hausverwaltungen als
+       den realistischsten Weg zu tragfähigem Umsatz – und dieser
+       Kundenkreis hatte bis hierher keine Seite, auf die ein Anschreiben
+       verweisen konnte. Ein Brief ohne Adresse zum Nachlesen ist ein
+       halber Brief.
+
+       `ausserhalb: true` hält sie aus dem „Weiterlesen“ der Ratgeber
+       heraus. Wer nachliest, wie ein Wohnberechtigungsschein gerechnet
+       wird, sucht keinen Softwarevertrag. */
+    datei: 'fuer-unternehmen.html',
+    ausserhalb: true,
+    rang: '0.7',
+    kurz: 'Für Unternehmen',
+    titel: 'Tauschbörse für Genossenschaften – TrimmoTrade',
+    h1: 'Für Genossenschaften und Hausverwaltungen',
+    beschreibung: 'Interne Tauschbörse mit Ringsuche über mehrere Haushalte und eine begründete Vorauswahl der Bewerbungen. Pilot ab 900 Euro, Vertrag nach Art. 28 DSGVO liegt vor.',
+    vorspann: 'Zwei Dinge, die jede Wohnungsverwaltung kennt: Mitglieder, die tauschen würden und niemanden finden. Und achtzig Anfragen auf ein Inserat, von denen zehn gelesen werden.',
+    stand: STAND,
+    inhalt: `
+  <section class="block">
+    <h2>Der Tausch, der heute am Aushang scheitert</h2>
+    <p>In jedem größeren Bestand wohnen zwei Gruppen aneinander vorbei: ältere Mitglieder in
+      Wohnungen, die zu groß geworden sind, und Familien in Wohnungen, die zu klein sind. Beide
+      stehen in derselben Kartei. Zusammen kommen sie trotzdem selten, weil ein direkter Tausch
+      einen doppelten Zufall verlangt – zwei Haushalte, die jeweils genau das anbieten, was der
+      andere sucht.</p>
+    <p>TrimmoTrade sucht deshalb nicht nach Paaren, sondern nach <b>Ketten</b>: A zieht in die
+      Wohnung von B, B in die von C, C in die von A. Damit funktioniert der Tausch auch dann,
+      wenn kein einziges Paar direkt zusammenpasst. Wie das rechnerisch abläuft, steht im
+      <a href="/wohnungstausch.html">Ratgeber zum Wohnungstausch</a>.</p>
+    <p>Was das für Sie bedeutet, ist eine Rechnung mit vier Posten: Ein interner Tausch ist eine
+      Neuvermietung, die nicht stattfindet. Kein Leerstand zwischen Aus- und Einzug, kein Inserat,
+      keine Auswahl unter Fremden – und zwei Mitglieder, die bleiben.</p>
+  </section>
+
+  <section class="block">
+    <h2>Achtzig Anfragen, zehn gelesen</h2>
+    <p>Auf ein gutes Inserat kommen achtzig Anfragen. Gelesen werden zehn, und welche zehn das
+      sind, entscheidet in der Praxis die Uhrzeit des Eingangs.</p>
+    <p>TrimmoTrade sortiert sie nach Eignung: Mietbelastung, Einkommensart, Bürgschaft, vorhandene
+      Unterlagen, gewünschte Mietdauer, Besichtigungstermin, Haushaltsgröße. Jede Teilzahl steht
+      mit ihrer Begründung daneben. Ausgeblendet wird nichts – Sie sehen alle achtzig Anfragen,
+      nur in einer anderen Reihenfolge.</p>
+    <p><b>Alter, Geschlecht und Herkunft kommen in der Rechnung nicht vor.</b> Sie stehen in keiner
+      Anfrage, also kann keine Formel sie gewichten. Für eine Auswahl, die sich an §§ 19, 21 AGG
+      messen lassen muss, ist das der Unterschied zwischen „lässt sich begründen“ und „war halt
+      so“. Und weil die Vorauswahl eine Reihenfolge erzeugt und keine Entscheidung, liegt keine
+      automatisierte Entscheidung im Einzelfall nach Art. 22 DSGVO vor: Entschieden wird bei
+      Ihnen.</p>
+  </section>
+
+  <section class="block">
+    <h2>Was heute läuft – und was nicht</h2>
+    <p>Dieser Abschnitt steht bewusst vor dem Preis. Wer einen geschlossenen Bereich verkauft, den
+      es noch nicht gibt, verliert den Kunden beim Einrichten.</p>
+    <h3>Läuft, geprüft, ohne eine Zeile neuen Code</h3>
+    <ul class="merkmale">
+      <li>Ringtausch über zwei bis vier Haushalte</li>
+      <li>Vorauswahl der Anfragen mit offengelegter Begründung</li>
+      <li>Inserate mit Bildern, Ablauf nach 60 Tagen, Erinnerung vorher</li>
+      <li>WG-Gründung: mehrere Fremde bewerben sich gemeinsam</li>
+      <li>Betrugsmuster-Erkennung und Meldeweg nach Art. 16 DSA</li>
+      <li>Unterlagen Ende-zu-Ende verschlüsselt im Dokumententresor</li>
+    </ul>
+    <h3>Gibt es noch nicht</h3>
+    <ul class="liste-schlicht">
+      <li>Ein eigener, geschlossener Bereich je Haus. Der Pilot läuft auf der offenen Plattform.</li>
+      <li>Eigenes Erscheinungsbild je Kunde.</li>
+      <li>Anbindung an eine Wohnungswirtschafts-Software.</li>
+      <li>Rollen und Rechte für mehrere Mitarbeitende.</li>
+    </ul>
+    <p>Der Pilotpreis ist deshalb kein Rabatt. Er ist der Preis dafür, der erste zu sein und
+      mitzubestimmen, was als Nächstes gebaut wird.</p>
+  </section>
+
+  <section class="block">
+    <h2>Was es kostet</h2>
+    <p><b>Pilot: ${P.eur(P.pilotPreis)} für drei Monate</b>, vollständig anrechenbar auf das erste
+      Jahresentgelt. Danach gestaffelt nach verwalteten Wohneinheiten:</p>
+    <dl class="fakten">
+      ${P.stufenZeilen().map(([a, b]) => `<div><dt>${esc(a)}</dt><dd>${esc(b)}</dd></div>`).join('\n      ')}
+      <div><dt>Einrichtung einmalig</dt><dd>${P.eur(P.einrichtung)}</dd></div>
+    </dl>
+    <p class="fein">Alle Preise netto. Laufzeit ein Jahr, danach monatlich kündbar – keine
+      automatische Verlängerung um ein weiteres Jahr.</p>
+    <p><b>Hausverwaltungen</b> rechnen je vermieteter Wohnung ab: ${P.eur(P.hv.einzeln)}, im
+      Zehnerpaket ${P.eur(P.hv.zehnerJe)}. Wird nicht vermietet, fällt nichts an.</p>
+  </section>
+
+  <section class="block">
+    <h2>Datenschutz</h2>
+    <p>Sie bleiben Verantwortlicher, TrimmoTrade ist Auftragsverarbeiter. Der Vertrag nach
+      <b>Art. 28 DSGVO</b> liegt fertig vor und geht Ihnen vor jedem Gespräch zu – mit einer
+      Anlage, in der auch steht, was <i>nicht</i> vorhanden ist, etwa eine ISO-Zertifizierung.</p>
+    <ul class="merkmale">
+      <li>Verarbeitung ausschließlich in Deutschland</li>
+      <li>Keine Kennwörter: Anmeldung per Passkey oder Einmalcode</li>
+      <li>Meldung einer Datenpanne innerhalb von 24 Stunden</li>
+      <li>Rückgabe Ihrer Daten in maschinenlesbarer Form bei Vertragsende</li>
+      <li>Keine Weitergabe von Bewerberdaten, auch nicht als „Marktdaten“</li>
+    </ul>
+  </section>
+
+  <section class="block block--betont">
+    <h2>Ein Gespräch, dreißig Minuten</h2>
+    <p>Ich bringe eine Rechnung mit Ihren Zahlen mit, nicht mit meinen: Fluktuationsquote,
+      durchschnittliche Leerstandsdauer, Zahl der Wechsel im Jahr. Daraus ergibt sich, ob sich das
+      für Sie lohnt – oder eben nicht.</p>
+    <p><b>Niklas Haberberg</b><br>
+      Telefon <a href="tel:+491635021968">+49 163 502 1968</a><br>
+      E-Mail <a href="mailto:info@trimmotrade.de">info@trimmotrade.de</a></p>
+    <p class="fein">TrimmoTrade ist ein Einzelunternehmen aus Köln. Das ist ein Risiko, und Sie
+      sollten es einpreisen – deshalb beträgt die Laufzeit ein Jahr und nicht fünf, und deshalb
+      steht die Rückgabe Ihrer Daten im Vertrag.</p>
+  </section>
+`,
+    fragen: [
+      {
+        frage: 'Wir haben schon eine Verwaltungssoftware. Wozu noch etwas?',
+        antwort: 'Für die Verwaltung sicher. Den Tausch bildet keine gängige Verwaltungssoftware ab: Sie verwaltet Bestand und Verträge, sie sucht keine Ketten über mehrere Haushalte. Falls Ihre es doch tut, sagen Sie es gern – dann ist die Frage beantwortet.'
+      },
+      {
+        frage: 'Wie viel Arbeit macht die Einrichtung?',
+        antwort: 'Rund zwei Stunden, davon eine gemeinsam. Danach stellen Ihre Mitglieder selbst ein. Enthalten sind die Ersteinrichtung, die Übernahme des vorhandenen Bestands im Rahmen des Möglichen und eine Schulung von zwei Stunden.'
+      },
+      {
+        frage: 'Hält eine automatische Vorauswahl dem AGG stand?',
+        antwort: 'Die Vorauswahl erzeugt eine Reihenfolge, keine Entscheidung, und sie schließt niemanden aus. Alter, Geschlecht und Herkunft werden gar nicht erst erhoben, können also auch nicht gewichtet werden. Jede Teilzahl steht mit ihrer Begründung daneben. Eine Auswahl, deren Gründe nachlesbar sind, hält einer Frage nach §§ 19, 21 AGG eher stand als die stille Reihenfolge im Posteingang. Die abschließende Entscheidung treffen weiterhin Sie.'
+      },
+      {
+        frage: 'Was passiert mit unseren Daten, wenn wir aufhören?',
+        antwort: 'Sie wählen: Löschung oder Rückgabe. Die Rückgabe erfolgt in einem strukturierten, gängigen und maschinenlesbaren Format. Das steht in Ziffer 11 des Vertrags nach Art. 28 DSGVO, nicht in einer Zusage am Telefon.'
+      },
+      {
+        frage: 'Können wir das erst einmal kostenlos testen?',
+        antwort: 'Der Pilot kostet ' + P.pilotPreis + ' Euro für drei Monate und wird vollständig auf das erste Jahr angerechnet. Das ist bewusst so gesetzt: Kostenlose Pilotprojekte werden nicht besetzt, nicht beworben und nicht ausgewertet. Wenn Sie nach drei Monaten nicht weitermachen, war es der Preis einer Marktprüfung – und die Auswertung bleibt bei Ihnen.'
+      }
+    ]
+  },
 ];
 
 /* ------------------------- Bauen ------------------------- */

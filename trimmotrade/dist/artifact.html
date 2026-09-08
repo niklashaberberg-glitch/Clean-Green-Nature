@@ -598,6 +598,18 @@ input[type="range"] {
 .liste-schlicht { margin: .4em 0; padding-left: 1.2em; }
 .liste-schlicht li { margin-bottom: .25em; }
 
+/* Eine nummerierte Folge von Schritten auf den Ratgeberseiten.
+
+   Diese Klasse stand seit jeher in vier Ratgebern und hatte nie eine
+   Regel – die Listen liefen als Browservorgabe mit, mit zu engem
+   Zeilenabstand und einer Nummer, die zwischen den fetten Anfängen
+   unterging. Gefunden hat es die Klassenprüfung in
+   scripts/seiten-pruefen.js, nicht das Auge. */
+.schritte { margin: .6em 0 0; padding-left: 1.6em; display: grid; gap: .7em; }
+.schritte li { padding-left: .2em; line-height: 1.6; }
+.schritte li::marker { color: var(--akzent); font-weight: 700; }
+.schritte li > b { display: block; }
+
 .fliesstext { max-width: 72ch; line-height: 1.68; }
 
 .kennzahlen { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr)); gap: 12px; margin: 14px 0; }
@@ -1348,12 +1360,32 @@ kbd { padding: .1em .4em; border: 1px solid var(--rand-stark); border-bottom-wid
 .fuss__marke .marke { margin-bottom: .6em; }
 .fuss__marke p { font-size: .85rem; color: var(--text-leise); margin: 0; }
 .fuss__spalte { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; font-size: .85rem; }
+/* Der eine Verweis in der Markenspalte, der kein Verweis unter vielen
+   ist. Er trägt deshalb die Akzentfarbe und ein Zeichen davor. */
+.fuss__mehr { margin: .9em 0 0; font-size: .85rem; }
+.fuss__mehr a { display: inline-flex; align-items: center; gap: .45em; font-weight: 600; text-decoration: none; }
+.fuss__mehr a:hover { text-decoration: underline; }
+.fuss__mehr .ico { width: 15px; height: 15px; }
 .fuss__titel {
   margin: 0 0 2px; font-size: .72rem; font-weight: 700; letter-spacing: .07em;
   text-transform: uppercase; color: var(--text-still);
 }
 .fuss__spalte > a, .fuss__spalte > .link { color: var(--text-leise); text-decoration: none; }
 .fuss__spalte > a:hover, .fuss__spalte > .link:hover { color: var(--akzent); text-decoration: underline; }
+
+/* Der einfache Fußbereich der statischen Seiten.
+
+   Die neun Seiten außerhalb der Anwendung – acht Ratgeber und die
+   Fehlerseite – tragen einen eigenen, kürzeren Fuß aus zwei Reihen.
+   Beim Umbau auf Spalten ist diese Regel versehentlich mit
+   verschwunden; die Verweise standen danach als nackte Zeile ohne
+   Abstand da. Aufgefallen ist es beim Nachsehen, nicht beim Prüflauf –
+   deshalb prüft seiten-pruefen.js jetzt auch, ob jede benutzte Klasse
+   eine Regel hat. */
+.fuss__links { display: flex; gap: 8px 18px; flex-wrap: wrap; font-size: .85rem; margin-top: .7em; }
+.fuss__links a, .fuss__links .link { color: var(--text-leise); text-decoration: none; }
+.fuss__links a:hover, .fuss__links .link:hover { color: var(--akzent); text-decoration: underline; }
+.fuss__links--recht { font-size: .82rem; }
 /* Der Hinweis läuft nicht über die volle Breite: Eine Zeile von 1400
    Pixeln liest niemand zu Ende, und rechts unten sitzt der Hilfeknopf,
    unter dem das Zeilenende sonst verschwindet. */
@@ -6945,6 +6977,7 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
     'Rechtliches': 'Legal',
     'Ratgeber': 'Guides',
     'In der Anwendung': 'In the app',
+    'Für Genossenschaften und Hausverwaltungen': 'For housing co-operatives and property managers',
     'Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche – mit einem Profil und einer Bewerbermappe.':
       'Rentals, flatshares and apartment swaps in one interface – with one profile and one application folder.'
   });
@@ -16781,6 +16814,12 @@ body:not(.ist-angemeldet) .nur-innen { display: none; }
           </a>
           <p>Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche – mit einem Profil
             und einer Bewerbermappe.</p>
+          <!-- Der Weg zum wichtigsten Kundenkreis. Er steht hier und nicht
+               in der Ratgeberspalte: Eine Seite über Preise und Verträge
+               ist kein Ratgeber, und wer sie sucht, sucht sie unter dem
+               Namen des Betriebs. Nur auf der Website – in der
+               Einzeldatei wäre es ein toter Verweis. -->
+          ${RATGEBER_DA ? h`<p class="fuss__mehr"><a href="/fuer-unternehmen.html">${ico('haus')}Für Genossenschaften und Hausverwaltungen</a></p>` : ''}
         </div>
         <nav class="fuss__spalte" aria-label="Rechtliches">
           <h2 class="fuss__titel">Rechtliches</h2>

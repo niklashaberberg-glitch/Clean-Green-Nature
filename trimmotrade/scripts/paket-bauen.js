@@ -57,6 +57,10 @@ const DATEIEN = [
   'wohnberechtigungsschein.html',
   'wohnung-verkaufen-vorbereiten.html',
   'nachmieter-finden.html',
+  /* Nicht für Wohnungssuchende, sondern für Genossenschaften und
+     Hausverwaltungen. Sie steht in der Sitemap und wird aus zwei
+     Ratgebern verlinkt – fehlte sie hier, liefen beide ins Leere. */
+  'fuer-unternehmen.html',
 ];
 
 /* Was aus den Ordnern trotzdem draußen bleibt. `config.php` ist die
@@ -134,6 +138,32 @@ for (const rel of ['api/daten/.htaccess']) {
 /* config.example.php heißt im Paket weiterhin so. Sie umzubenennen wäre
    bequem und falsch: Wer sie als config.php vorfindet, lädt sie beim
    nächsten Aktualisieren versehentlich über seine eigene. */
+
+/* ------------------------------------------------------------------
+   Die Gegenprobe: Was die Sitemap verspricht, muss im Paket liegen.
+
+   Die Liste oben ist von Hand geführt, und das ist Absicht – eine
+   vergessene Ausnahme fährt sonst still mit. Eine von Hand geführte
+   Liste hat aber den entgegengesetzten Fehler: eine vergessene
+   Aufnahme. Genau das ist mit fuer-unternehmen.html passiert; die Seite
+   stand in der Sitemap und wurde aus zwei Ratgebern verlinkt, lag aber
+   nicht im Paket. Auf dem Server wären das ein toter Verweis und eine
+   Sitemap, die auf eine 404 zeigt – und beides sieht man erst, wenn
+   jemand darauf klickt.
+   ------------------------------------------------------------------ */
+const sitemapDatei = path.join(WURZEL, 'sitemap.xml');
+if (fs.existsSync(sitemapDatei)) {
+  const roh = fs.readFileSync(sitemapDatei, 'utf8');
+  const fehlend = [...roh.matchAll(/<loc>[^<]*?\/([^<\/]*)<\/loc>/g)]
+    .map((m) => m[1] || 'index.html')
+    .filter((d) => d.endsWith('.html'))
+    .filter((d) => !fs.existsSync(path.join(ZIEL, d)));
+  if (fehlend.length) {
+    console.error('FEHLT im Paket, steht aber in der Sitemap: ' + fehlend.join(', '));
+    console.error('  → in scripts/paket-bauen.js unter DATEIEN eintragen.');
+    process.exitCode = 1;
+  }
+}
 
 const stand = new Date().toISOString().slice(0, 10);
 const kopf =

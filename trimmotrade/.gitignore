@@ -15,3 +15,9 @@ api/daten/*
 # zweite Kopie, die sofort veraltet.
 paket/
 trimmotrade-*.zip
+
+# Die Unterlagen für Kunden. Sie entstehen aus AVV.md und
+# scripts/preise.js (node scripts/unterlagen-bauen.js). Als Kopie im
+# Versionsverzeichnis wären sie beim nächsten Preiswechsel falsch – und
+# zwar in genau dem Exemplar, das schon verschickt ist.
+unterlagen/

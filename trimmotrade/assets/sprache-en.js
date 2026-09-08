@@ -4061,6 +4061,7 @@
     'Rechtliches': 'Legal',
     'Ratgeber': 'Guides',
     'In der Anwendung': 'In the app',
+    'Für Genossenschaften und Hausverwaltungen': 'For housing co-operatives and property managers',
     'Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche – mit einem Profil und einer Bewerbermappe.':
       'Rentals, flatshares and apartment swaps in one interface – with one profile and one application folder.'
   });

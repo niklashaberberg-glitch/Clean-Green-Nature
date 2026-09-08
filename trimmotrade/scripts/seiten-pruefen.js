@@ -38,6 +38,13 @@ const seiten = fs.readdirSync(wurzel).filter((f) => f.endsWith('.html')).sort();
 const titel = new Map();
 const beschreibungen = new Map();
 
+/* Alle Klassennamen, für die es im Stil eine Regel gibt. Kommentare
+   fliegen vorher raus – in ihnen stehen Beispiele. */
+const cssRoh = fs.readFileSync(path.join(wurzel, 'assets', 'app.css'), 'utf8')
+  .replace(/\/\*[\s\S]*?\*\//g, ' ');
+const cssKlassen = new Set([...cssRoh.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map((m) => m[1]));
+const benutzteKlassen = new Set();
+
 /* Anführungszeichen im Attribut sind hier immer gerade – die Seiten
    entstehen aus scripts/seiten-bauen.js und nicht von Hand. */
 const attr = (html, re) => { const m = html.match(re); return m ? m[1].trim() : ''; };
@@ -154,6 +161,24 @@ for (const datei of seiten) {
 
   /* ---------- Sprache ---------- */
   if (!/<html[^>]+lang="de"/i.test(html)) melden(datei, 'kein lang="de" am <html>');
+
+  /* ---------- Klassen ohne Regel ----------
+     Diese Seiten binden denselben Stil ein wie die Anwendung, benutzen
+     davon aber nur einen Ausschnitt. Verschwindet beim Umbauen der
+     Anwendung eine Regel, die nur hier gebraucht wird, fällt es nirgends
+     auf: Die Seite bleibt lesbar, sie sieht nur falsch aus – und
+     niemand sieht sie sich täglich an. Genau so ist .fuss__links einmal
+     verlorengegangen.
+
+     Geprüft werden nur eigene Klassen. Zustandsklassen (is-…) werden
+     vom Skript gesetzt und stehen manchmal nur dort. */
+  for (const [, liste] of html.matchAll(/\bclass="([^"]+)"/gi)) {
+    for (const k of liste.split(/\s+/)) {
+      if (!k || k.startsWith('is-') || benutzteKlassen.has(k)) continue;
+      benutzteKlassen.add(k);
+      if (!cssKlassen.has(k)) melden(datei, 'Klasse „' + k + '“ hat keine Regel in assets/app.css');
+    }
+  }
 }
 
 /* ---------- Sitemap gegen das Verzeichnis ---------- */

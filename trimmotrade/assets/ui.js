@@ -750,6 +750,12 @@
           </a>
           <p>Mietmarkt, WG-Suche und Wohnungstausch in einer Oberfläche – mit einem Profil
             und einer Bewerbermappe.</p>
+          <!-- Der Weg zum wichtigsten Kundenkreis. Er steht hier und nicht
+               in der Ratgeberspalte: Eine Seite über Preise und Verträge
+               ist kein Ratgeber, und wer sie sucht, sucht sie unter dem
+               Namen des Betriebs. Nur auf der Website – in der
+               Einzeldatei wäre es ein toter Verweis. -->
+          ${RATGEBER_DA ? h`<p class="fuss__mehr"><a href="/fuer-unternehmen.html">${ico('haus')}Für Genossenschaften und Hausverwaltungen</a></p>` : ''}
         </div>
         <nav class="fuss__spalte" aria-label="Rechtliches">
           <h2 class="fuss__titel">Rechtliches</h2>

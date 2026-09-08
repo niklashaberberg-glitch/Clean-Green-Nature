@@ -150,6 +150,10 @@ in Suchmaschinen und den Ruf, dass hier jemand die Sache versteht.
 
 ### Was heute eingebaut ist
 
+> Die Preise selbst stehen seit dem Umbau in **`PREISE.md`** und in
+> `scripts/preise.js`, aus dem auch die Website und das Angebot als PDF
+> entstehen. Hier steht nur noch, warum.
+
 | Quelle | Preis | Einschätzung |
 |---|---|---|
 | TrimmoTrade Plus | 7,90 €/Monat, 69 €/Jahr | Trägt sich erst bei vielen tausend Nutzern |
@@ -174,6 +178,17 @@ gebaut ist:
 - Ein interner Tausch spart der Genossenschaft Leerstand, Inserat,
   Besichtigungen und Neuvermietungsaufwand – und hält Mitglieder.
 
+> **Die Voraussetzung, ohne die dieser ganze Abschnitt Theorie bleibt:
+> ein Auftragsverarbeitungsvertrag nach Art. 28 DSGVO.** Keine
+> Genossenschaft und keine kommunale Wohnungsgesellschaft unterschreibt
+> einen Vertrag über eine Software, in die Mitgliederdaten fließen, ohne
+> ihn. Das ist keine Formalie: Es ist die erste Frage der
+> Datenschutzbeauftragten, und sie kommt vor dem Preis. Der Vertrag
+> liegt seit dem Umbau als **`AVV.md`** vor, samt Anlage über die
+> tatsächlichen technischen Maßnahmen – einschließlich der Tabelle
+> darüber, was **nicht** vorhanden ist. Einmal anwaltlich prüfen lassen,
+> dann steht er für alle Kunden.
+
 Fast alle organisieren das heute mit einem Aushang oder einer
 Excel-Tabelle. Eine gehostete Tauschbörse für den eigenen Bestand ist
 ein Produkt, das aus der vorhandenen Technik entsteht: dieselbe
@@ -181,9 +196,10 @@ Matching-Rechnung, dieselbe Oberfläche, ein Mandant je Genossenschaft.
 
 Warum das geschäftlich besser ist als der Verbrauchermarkt:
 
-- **Zehn Kunden statt zehntausend.** Ein einziger Vertrag über einige
-  hundert Euro im Monat **[Preise am Markt prüfen]** ersetzt hunderte
-  Plus-Abos.
+- **Zehn Kunden statt zehntausend.** Ein Vertrag über 299 € im Monat
+  ersetzt rund vierzig Plus-Abos. Zehn solcher Kunden sind 2.990 € im
+  Monat – dieselbe Summe über Plus verlangte 6.300 aktive Nutzer.
+  Zehn Gespräche sind führbar, sechstausend Nutzer nicht.
 - **Kein Kaltstart.** Der Bestand ist schon da; die Mitglieder sind
   schon da.
 - **Kein Wettbewerb.** ImmoScout verkauft das nicht.
@@ -301,7 +317,10 @@ einzige, was es zu verkaufen hat.
 | Betrugsinserate | Rufschaden, sofort | Serverseitige Musterprüfung, Meldeweg nach Art. 16 DSA, Vertrauensstufen |
 | Karteileichen | Nutzer bleiben weg | Inserate laufen nach 60 Tagen aus, Erinnerung vorher |
 | Beispielmarkt wirkt echt | Irreführung nach § 5 UWG | Marke an jedem Beispiel, Hinweis über der Liste, abschaltbar |
-| Abmahnung Impressum | Kosten, vermeidbar | Anschrift und beide E-Mail-Adressen stehen in `api/config.php` und gehen an jeden Browser – **die Telefonnummer fehlt noch** (§ 5 Abs. 1 Nr. 2 DDG) |
+| Abmahnung Impressum | Kosten, vermeidbar | Anschrift, beide E-Mail-Adressen und die Telefonnummer stehen in `api/config.php` und gehen an jeden Browser (§ 5 Abs. 1 Nr. 2 DDG) |
+| Kalte Werbe-E-Mail | Abmahnung, drei- bis vierstellig je Fall | § 7 Abs. 2 Nr. 2 UWG gilt auch gegenüber Firmen. Der Weg ist Brief → Anruf → E-Mail; ausgeführt in `VERTRIEB.md` Abschnitt 1 |
+| Kein AVV zur Hand | Der B2B-Weg endet im ersten Gespräch | `AVV.md` liegt fertig vor, mit Anlage über die tatsächlichen Maßnahmen |
+| Umsatzsteuerpflicht übersehen | Nachzahlung | Ab drei bis vier B2B-Kunden ist die Grenze des § 19 UStG überschritten. Gerechnet in `PREISE.md` Abschnitt 5 |
 | Datenpanne | Meldepflicht Art. 33 DSGVO | Wenig Daten auf dem Server, Tresor Ende-zu-Ende verschlüsselt |
 | Zeit reicht nicht | Wahrscheinlichster Fall | Eine Stadt, ein Keil, nichts parallel |
 
@@ -318,22 +337,43 @@ Die technische Seite ist weit: Inserate, Anfragen, Suchaufträge,
 Meldewege, Messung, Bilder, Betrugsprüfung – alles läuft und ist
 geprüft. Was jetzt fehlt, ist kein Code.
 
-**In dieser Reihenfolge:**
+**Die Reihenfolge steht als Wochenplan in `WOCHE.md`** – ein Ziel je
+Woche, freitags gemessen, über zwölf Wochen. Kurz gefasst:
 
-1. Die Telefonnummer ins Impressum eintragen. Anschrift und beide
-   E-Mail-Adressen stehen; § 5 Abs. 1 Nr. 2 DDG verlangt zusätzlich
-   eine Nummer, unter der man den Betreiber erreicht. Ein Feld in
-   `api/config.php`. Siehe `START.md`, Abschnitt 1.
-2. Die Cron-Aufträge einrichten (`melden`, `erinnern`, `aufraeumen`).
-   Ohne sie verschickt der Suchauftrag nichts.
-3. Fünf eigene oder erfragte Inserate einstellen – aus dem eigenen
+1. Die Einrichtung abschließen, vor allem die drei Cron-Aufträge
+   (`melden`, `erinnern`, `aufraeumen`). Ohne sie verschickt der
+   Suchauftrag nichts – der häufigste stille Ausfall.
+2. Fünf eigene oder erfragte Inserate einstellen – aus dem eigenen
    Umfeld, echt, mit Fotos. Damit prüft sich der ganze Ablauf ein
    letztes Mal an echten Menschen.
-4. Zwanzig Nachmieter-Suchende in Köln ansprechen.
-5. Drei Genossenschaften anschreiben, mit dem Ringtausch als Thema.
-6. Nach vier Wochen `php api/index.php zahlen` ansehen und entscheiden,
-   welcher der drei Keile trägt. Die anderen beiden dann liegen lassen.
+3. Zwanzig Wohnungsgenossenschaften **anschreiben, per Brief**, mit dem
+   Angebot als Anlage. Die Briefe stehen fertig in `VERTRIEB.md`, das
+   Angebot entsteht als PDF aus `scripts/unterlagen-bauen.js`.
+4. Zehn Tage später alle zwanzig anrufen. Das ist die Woche, in der die
+   meisten aufgeben, und sie entscheidet über alles Weitere.
+5. **Nachmieter-Suchende nicht kalt anschreiben.** Der frühere Punkt
+   dieser Liste war rechtlich nicht haltbar: Eine Werbe-E-Mail an einen
+   Verbraucher ohne dessen ausdrückliche Einwilligung verstößt gegen
+   § 7 Abs. 2 Nr. 2 UWG. Der Weg zu diesen Menschen führt über
+   Auffindbarkeit, nicht über Ansprache – die Ratgeberseite
+   `nachmieter-finden.html` steht dafür.
+6. Nach zwölf Wochen `php api/index.php zahlen` ansehen und
+   entscheiden, welcher Weg sich bewegt hat. Der andere wird liegen
+   gelassen.
 
 Punkt 6 ist der wichtigste. Es ist gut möglich, dass der B2B-Weg trägt
 und der Verbrauchermarkt nicht – oder umgekehrt. Diese Frage lässt sich
 nicht am Schreibtisch beantworten, nur an Zahlen.
+
+---
+
+## Die Unterlagen dazu
+
+| Datei | Wofür |
+|---|---|
+| `PREISE.md` | Was es kostet, warum – und die Umsatzsteuerfrage |
+| `VERTRIEB.md` | Die Anschreiben, wörtlich, plus die Grenzen des § 7 UWG |
+| `AVV.md` | Der Vertrag nach Art. 28 DSGVO, ohne den nichts geht |
+| `WOCHE.md` | Zwölf Wochen, ein Ziel je Woche |
+| `START.md` | Die Einrichtung, rechtlich und technisch |
+| `unterlagen/` | Angebot und Vertrag als PDF, aus denselben Quellen erzeugt |

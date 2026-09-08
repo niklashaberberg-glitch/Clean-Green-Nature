@@ -18,7 +18,9 @@ und an jeder Stelle steht, dass es eine Vorführung ist.
 
 > **Was jetzt zu tun ist**, damit daraus ein Betrieb wird, steht in
 > [`START.md`](START.md). Warum – und woran ein Wohnungsportal in Deutschland
-> scheitert – steht in [`GESCHAEFT.md`](GESCHAEFT.md).
+> scheitert – steht in [`GESCHAEFT.md`](GESCHAEFT.md). Wann was zu tun ist,
+> steht in [`WOCHE.md`](WOCHE.md); was es kostet und wie das Gespräch darüber
+> geführt wird, in [`PREISE.md`](PREISE.md) und [`VERTRIEB.md`](VERTRIEB.md).
 
 ---
 
@@ -999,12 +1001,19 @@ trimmotrade/
   build.js              baut daraus die Einzeldatei (node build.js)
   GESCHAEFT.md          Markt, Keil, Kaltstart, Zahlen, Risiken
   START.md              die ersten 90 Tage: Recht, Betrieb, erste Inserate
+  WOCHE.md              zwölf Wochen, ein Ziel je Woche, freitags gemessen
+  PREISE.md             was es kostet, warum – und die Umsatzsteuerfrage
+  VERTRIEB.md           die Anschreiben wörtlich, plus die Grenzen des UWG
+  AVV.md                Auftragsverarbeitungsvertrag nach Art. 28 DSGVO
   DEPLOY.md             Schritt für Schritt zu netcup
   .user.ini             PHP-Einstellungen (Bildupload braucht 16 MB)
   scripts/
     farben-pruefen.js   rechnet Kontraste und Farbabstände nach
     seiten-bauen.js     baut die Ratgeberseiten, 404 und sitemap.xml
+    seiten-pruefen.js   Verweise, canonical, Überschriften, Klassen ohne Regel
     orte-bauen.js       erzeugt api/lib/orte.php aus assets/geo.js
+    preise.js           die Preise – einmal, für Website und Angebot
+    unterlagen-bauen.js Angebot.pdf und AVV.pdf zum Verschicken
   dist/
     trimmotrade.html       vollständige Seite in einer Datei
     artifact.html       nur der Seiteninhalt, zum Einbetten
